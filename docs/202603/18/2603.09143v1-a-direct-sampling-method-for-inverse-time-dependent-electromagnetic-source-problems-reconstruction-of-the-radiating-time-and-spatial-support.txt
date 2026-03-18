@@ -1,0 +1,1544 @@
+Title: A direct sampling method for inverse time-dependent electromagnetic source problems: reconstruction of the radiating time and spatial support
+
+URL Source: https://arxiv.org/pdf/2603.09143v1
+
+Published Time: Wed, 11 Mar 2026 00:28:59 GMT
+
+Number of Pages: 27
+
+Markdown Content:
+# A direct sampling method for inverse time-dependent electromagnetic source problems: reconstruction of the radiating time and spatial support 
+
+Fengling Sun ∗ Hongxia Guo †
+
+Abstract 
+
+This paper investigates inverse source problems for time-dependent electromagnetic waves governed by Maxwell’s equations. After applying the Fourier transform with respect to time, the problem leads to a frequency-domain electromagnetic system with a frequency-dependent source term. We propose a novel direct sampling method for reconstructing such radiating time and spatial spaces of sources from multi-frequency far-field measurements. By using a pair of multi-frequency data from opposite observation directions, we can obtain the radiating time of the signal. Based on this, the smallest region between two hyperplanes containing the support of source can be reconstructed using multi frequency data from one observation direc-tion. The Θ convex hull of the source support can be reconstructed from multi-frequency data from sparse observation directions. Compared with existing sampling methods that mainly focus on reconstructing the spatial support, the proposed approach allows for the simulta-neous reconstruction of both spatial and temporal features of the source.Three-dimensional numerical examples are conducted to validate the effectiveness of the algorithm. 
+
+Keywords: Electromagnetic inverse source problem, direct sampling method, multi-frequency data. 
+
+# 1 Introduction 
+
+1.1 Mathematical formulations 
+
+Consider the time-dependent inverse source problem in electrodynamics, where the source de-pends on both time and spatial variables. The electromagnetic radiated wave propagation in an isotropic homogeneous dielectric medium in R3 with constant electric permittivity ϵ and magnetic 
+
+> ∗
+
+School of Mathematical Sciences, Tianjin Normal University, 300387 Tianjin, P. R. China, (fenglinsun@tjnu.edu.cn )
+
+> †
+
+(Corresponding author) School of Mathematical Sciences, and Institute of Mathematics and Interdisciplinary Sciences, Tianjin Normal University, 300387 Tianjin, P. R. China. ( hxguo@tjnu.edu.cn )
+
+1
+
+> arXiv:2603.09143v1 [math.NA] 10 Mar 2026
+
+permeability μ, described by the electric field E and magnetic field H satisfying the Maxwell equations 
+
+μ∂ tH(x, t ) + ∇ × E(x, t ) = 0 ,ϵ∂ tE(x, t ) − ∇ × H(x, t ) = −J(x, t ), (x, t ) ∈ R3 × R+, (1.1) which is supplemented by the homogeneous initial conditions: 
+
+E(x, 0) = ∂tE(x, 0) = 0 ,
+
+H(x, 0) = ∂tH(x, 0) = 0 , x ∈ R3,
+
+where J represents the electric current density. Let D ⊂ R3 is a bounded Lipschitz domain such that R3\D is connected. We assume that J ∈ (L∞(( BR)3)) 3 was compactly supported within the domain D enclosed in the ball BR = {x ∈ R3 : |x| < R } for some R > 0. Further assume that the compact support of the source term remains unchanged as time varies. In this paper, we consider the following two types of source: (i)The source is assumed to emit a radiation wave signal at an unknown time t0, which has the following expression with Dirac delta function δ:
+
+J(x, t ) = J(x)δ(t − t0).
+
+(ii) The electric current density is supposed to radiate over a finite time period [tmin , t max ] with 
+
+tmax > t min ≥ 0, where tmin denotes the initiation time of the electromagnetic wave signal and 
+
+tmax denotes the termination time of the signal. Further assume that J(x, t ) ∈ L∞(L2(BR)3 ×
+
+(tmin , t max )) 3 satisfies supp J(x, t ) = D ⊂ BR for all t ∈ (tmin , t max ).Taking the inverse Fourier transform on the wave equation (1.1) with respect to the time variable yields the inhomogeneous Maxwell equation 
+
+iωμ cH(x, ω ) − ∇ × bE(x, ω ) = 0 ,
+
+iωϵ bE(x, ω ) + ∇ × cH(x, ω ) = −bJ(x, ω ), (1.2) where ω is angle frequency, bE, cH and bJ denote the inverse Fourier transforms of the E, H
+
+and J with respect to the time t, respectively. Eliminating the magnetic field cH from (1.2), we obtain the Maxwell system for the electric field bE:
+
+∇ × ∇ × bE(x, ω ) − ω2ϵμ bE(x, ω ) = i ωμ bJ(x, ω ) := i ωμ F (x, ω ) (x, t ) ∈ R3 × R+,
+
+Furthermore, the scattered fields bE have to satisfy the Silver-Müller radiation condition 
+
+lim 
+
+> |x|→∞
+
+(( ∇ × bE) × x − iκ|x| bE) = 0 ,
+
+where κ = ω√ϵμ > 0 is the wavenumber. 2Denote by G the dyadic Green’s tensor associated with Maxwell equations, satisfying 
+
+∇ × ∇ × G(x, y) − κ2G(x, y) = δ(x − y)I.
+
+where I is the matrix of identification 3 × 3. Explicitly, the dyadic Green’s function G can be expressed as 
+
+G(x, y) = g(x, y)I + 1
+
+κ2 ∇∇ Tg(x, y),
+
+∇∇ Tg(x, y) is the Hessian matrix for g(x, y) defined by 
+
+
+
+∇∇ Tg(x, y)
+
+ 
+
+> m,n
+
+= ∂2g∂x m∂x n
+
+, 1 ≤ m, n ≤ 3.
+
+We recall g is the fundamental solution of the scalar Helmholtz equation in R3 and is given by 
+
+g(x, y) = eiκ|x−y|
+
+4π|x − y| , x̸ = y.
+
+Then the scattered field bE has the representation 
+
+bE(x, ω ) = i ωμ 
+
+Z
+
+> R3
+
+G(x, y)F (y, ω )d y, x ∈ R3.
+
+It is well known that the Silver-Müller radiation condition gives rise to the following asymptotic behavior of bE at infinity: 
+
+bE(x, ω ) = eiω√ϵμ |x|
+
+4π|x| {E∞(ˆ x, ω ) + O( 1
+
+|x| )}, |x| → ∞ ,
+
+where E∞(ˆ x, ω ) is known as the electric far field pattern of bE, which is an analytic function on the unit sphere S2 with respect to the observation direction ˆx ∈ S2. Straightforward calculations shows that the corresponding electric far-field pattern E∞(ˆ x, ω ) of bE is given by 
+
+E∞(ˆ x, ω ) = i ωμ (I − ˆxˆxT)
+
+Z
+
+> R3
+
+e−iω√ϵμ ˆx·yF (y, ω ) d y, ˆx ∈ S2. (1.3) Based on different assumptions concerning the source terms, we consider the following two inverse source problems with far-field data measured in sparse observation directions for some 
+
+L ∈ N:
+
+{E∞(±ˆxl, ω ) : ω ∈ [ωmin , ω max ], l = 1 , 2, · · · , L }.
+
+(i)IP1: The inverse problem is to determine the unknown excitation time t0 of the signal, then reconstruct the position and shape of the support D.(ii)IP2: This inverse problem is to determine the unknown initiation time or termination time of the process, then reconstruct the position and shape of the support D.The aim of this paper is to explore a direct sampling method to tackle the two inverse source problems from a numerical point of view. 31.2 Literature review 
+
+This paper investigates the inverse source problem associated with the Maxwell equations. Due to its fundamental importance in applications such as antenna synthesis [1] and biomedical imaging [2, 3], this problem has attracted sustained attention from engineers, physicists and mathematicians. However, the inverse source problem at a fixed frequency is severely ill-posed and does not admit a unique solution because of the existence of non-radiating sources [4, 5, 6, 7]. To overcome this difficulty, two main strategies have been widely adopted: incorporating a priori information about the source or exploiting multi-frequency data [8, 9, 10, 11, 12]. In particular, the authors of [13] established, for the first time, a unified increasing-stability estimate for inverse source problems governed by both the Navier and Maxwell equations using multi-frequency data. Further uniqueness and stability results can be found in [14, 15, 16, 17, 18, 19] and the references therein. When the source term is independent of the wavenumber or frequency, the far-field pattern coincides with the Fourier transform of the spatial source distribution with the Fourier variable 
+
+ξ = kˆx. This property enables the development of various numerical reconstruction methods. Representative examples include recursive algorithms [20], Fourier-based reconstruction methods [21, 22], and sampling-type techniques [23, 24, 25, 26, 27]. These approaches can generally be classified into iterative and non-iterative methods. Iterative methods are capable of recovering quantitative information about the source but usually require repeatedly solving the forward problem and depend on the choice of initial guesses, which results in considerable computational cost. To alleviate this difficulty, various non-iterative methods have been proposed. Since their indicator functions typically involve only inner products between measured data and suitably chosen test functions, these methods avoid repeated forward simulations and do not require prior information about the target, while maintaining high computational efficiency and good robustness. In general, sampling-type methods are qualitative in the sense that they primarily recover the support of the source rather than its amplitude. Recently, it has been shown in [28, 29] that sampling methods can even recover the source function itself provided that sufficiently many observation directions are available, leading to significantly improved reconstruction resolution. In many practical situations, the source depends on the wavenumber or frequency. Such wavenumber-dependent sources naturally arise when applying the Fourier transform to time-dependent source terms. In this case, however, the far-field pattern no longer coincides with the Fourier transform of the source function, which significantly complicates the theoretical analysis and the design of reconstruction algorithms. For the acoustic case, the authors of [30] showed that multi-frequency data measured from a single observation direction or point can provide useful information about the position and size of the support of the source term. Subsequently, factorization-type approaches were extended to wavenumber-dependent source problems with known radiation periods, providing necessary and sufficient conditions for imaging the slab that 4contains the support of the source term [31]. To improve practical implementability, a direct sam-pling method under weaker mathematical assumptions was further proposed in [32]. Moreover, uniqueness and increasing-stability results for acoustic inverse source problems with unknown wavenumber dependence were established in [33], together with two reconstruction algorithms. More recently, [34] employed multi-frequency far-field data from two opposite observation direc-tions and applied the factorization method to determine the pulse moment of a moving extended source. Despite these developments, the study of wavenumber-dependent inverse source problems in the electromagnetic setting remains relatively limited. Extending acoustic reconstruction tech-niques to Maxwell equations is generally non-trivial due to the vectorial nature of electromagnetic fields and the presence of polarization effects. Motivated by the ideas in [25, 34], we preprocess the electromagnetic far-field data by selecting suitable polarization directions, which allows the vectorial Maxwell system to be reduced to a form that can be handled using direct sampling techniques. From a physical perspective, this strategy also provides a natural way to analyze time-varying electromagnetic inverse source problems in the frequency domain. The main contributions of this work are summarized as follows. To the best of our knowl-edge, this is the first direct sampling framework for wavenumber-dependent electromagnetic inverse source problems using multi-frequency far-field measurements. First, we extend the di-rect sampling framework developed for wavenumber-dependent acoustic inverse source problems to the electromagnetic case governed by the Maxwell equations. Second, by utilizing multi-frequency far-field data measured from a pair of symmetric observation directions, we construct indicator functions that allow the identification of the excitation starting and starting/terminal times of the signal. Third, based on these temporal reconstructions, we determine the smallest slab region bounded by two hyperplanes that contains the support of the source term. Com-pared with the work published in [32], where the reconstruction primarily focused on spatial information under a different measurement configuration, the present work employs symmet-ric multi-frequency observations and provides a unified framework for simultaneously recovering both temporal information and the spatial support of the source. The remainder of this paper is structured as follows. In Section 2, we first present the inverse Fourier transform of far-field data and then concentrate on the selection of test and indicator functions using multi-frequency far-field data. Additionally, in Section 3, we will extend the direct sampling method to the situations in which the source term radiates signals over a finite time period. Numerical tests will be implemented in Section 4. Finally, some concluding remarks are given in Section 5. Below we introduce several notations that will be used throughout the paper. Let ˆx ∈ S2 be an observation direction and D ⊂ R3 be a bounded domain with a C2 boundary. Define 
+
+ˆx · D = {t ∈ R : t = ˆ x · y for some y ∈ D}. (1.4) 5Obviously, ˆx · D is an interval of R. Moreover, it holds that 
+
+inf( −ˆx · D) = − sup(ˆ x · D), sup( −ˆx · D) = − inf(ˆ x · D). (1.5) Throughout the paper, the one-dimensional Fourier transform and its inverse are defined by 
+
+(Fg)( α) = 1
+
+√2π
+
+Z
+
+> R
+
+g(ω)e −iωα dω, α ∈ R,
+
+(F−1f )( ω) = 1
+
+√2π
+
+Z
+
+> R
+
+f (α)e iωα dα, ω ∈ R.
+
+Definition 1.1. Let J ∈ L2(R)3. The supporting interval of J is defined as the minimal interval 
+
+I ⊂ R such that J vanishes almost everywhere outside I.
+
+# 2 Inverse source problem 1 
+
+2.1 Inverse Fourier transform of far-field pattern 
+
+In this section, we suppose that the source emits a signal at unknown time t0. Then F (x, ω )
+
+can be expressed as 
+
+F (x, ω ) = J(x)e iωt 0 . (2.6) 
+
+Remark 2.1. If t0 = 0 , then the source term becomes 
+
+F (x, ω ) = J(x),
+
+which is independent of the frequency ω. Therefore, the considered model reduces to the classical inverse source problem with frequency-independent sources. Hence the present formulation can be regarded as a natural extension of the standard frequency-independent inverse source problem that has been widely studied in the literature. 
+
+Firstly, for any fixed ˆx ∈ S2, we preprocess the electric far-field field data and denote the preprocessed data as the blackboard bold E∞(ˆ x, ω ), or explicitly 
+
+E∞(ˆ x, ω ) := 1iωμ p(ˆ x) · E∞(ˆ x, ω ),
+
+where p(ˆ x) ∈ S2 denotes an arbitrary vector orthogonal to the observation direction ˆx. Below we describe the supporting interval of the inverse Fourier transform of the preprocessed far-field pattern with respect to frequency at a fixed observation direction. Moreover, for simplicity, we denote the wave speed c = 1
+
+√ϵμ .
+
+Lemma 2.1. For any fixed ˆx ∈ S2. The supporting interval of F−1(E∞(ˆ x, ω ))( t) is H := (c−1 inf(ˆ x · D) − t0, c −1 sup(ˆ x · D) − t0).
+
+6Proof. According to (1.3) and (2.6), for any ˆx ∈ S2, the inner product of p(ˆ x) and the electric far-field pattern E∞(ˆ x, ω ) can be expressed as 
+
+p(ˆ x) · E∞(ˆ x, ω ) = p(ˆ x) · iωμ (I − ˆxˆxT)
+
+Z
+
+> R3
+
+e−iωc −1(ˆ x·y−ct 0)J(y) d y
+
+= i ωμ 
+
+Z
+
+> R3
+
+e−iωc −1(ˆ x·y−ct 0)p(ˆ x) · J(y) d y.
+
+To write the above expression as a Fourier transform, we observe that 
+
+Z
+
+> R3
+
+e−iωc −1(ˆ x·y−ct 0)p(ˆ x) · J(y) d y =
+
+Z
+
+> R
+
+e−iωα 
+
+Z
+
+> Γ( c(t0+α))
+
+p(ˆ x) · J(y)d s(y)d α
+
+where Γ( t0 + α) ⊂ R is defined as 
+
+Γ( c(t0 + α)) := {y ∈ D : ˆ x · y = c(t0 + α)} , t0 ∈ R.
+
+Note that when Γ( c(t0 + α)) = ∅, the aforementioned integral over Γ( c(t0 + α)) is taken as zero. Thus, E∞(ˆ x, ω ) admits the following expression 
+
+E∞(ˆ x, ω ) = 
+
+Z
+
+> R
+
+e−iωα g(α)d α = ( Fg)( ω), (2.7) with 
+
+g(α) = 
+
+Z
+
+> Γ( c(t0+α))
+
+p(ˆ x) · J(y)d s(y). (2.8) Since Γ( c(t0 + α)) = ∅ for c(t0 + α) < inf(ˆ x · D) or c(t0 + α) > sup(ˆ x · D), it is obvious that 
+
+g(α) = 0 if α < c −1 inf(ˆ x · D) − t0 or α > c −1 sup(ˆ x · D) − t0,
+
+which implies 
+
+supp g(α) ⊂ (c−1 inf(ˆ x · D) − t0, c −1 sup(ˆ x · D) − t0).
+
+Let H := ( c−1 inf(ˆ x · D) − t0, c −1 sup(ˆ x · D) − t0), we deduce that the supporting interval of 
+
+F−1(E∞(ˆ x, ω ))( t) is H.
+
+Definition 2.1. For any fixed unit vector ˆx ∈ S2, we define the slab S(ˆ x; J, t 0) as the region between two parallel hyperplanes orthogonal to ˆx, given by 
+
+S(ˆ x; J, t 0) := {y ∈ R3 : c−1 inf (ˆ x · D) − t0 < ˆx · y < c −1 sup (ˆ x · D) − t0}. (2.9) Building on the preceding analysis, we establish the following uniqueness theorem for the slab. 
+
+Theorem 2.1. For any fixed ˆx ∈ S2, choose a vector p(ˆ x) ∈ S2 such that p(ˆ x) · ˆx = 0 . If the set 
+
+{α ∈ R : Γ( c(t0 + α)) ⊂ S(ˆ x; J, t 0), g(α) = 0 } (2.10) 
+
+has Lebesgue measure zero, then the slab S(ˆ x; J, t 0) can be uniquely determined by the data 
+
+E∞(ˆ x, ω ) for all ω ∈ (ωmin , ω max ) at the observation direction ˆx ∈ S2.
+
+7Proof. From the representation (2.7), we deduce that the the preprocessed data E∞(ˆ x, ω ) is just the Fourier transform of g(α). This implies that g(α) can be uniquely determined by E∞(ˆ x, ω ),where ω ∈ (ωmin , ω max ). Note that the electric far field pattern is analytic in angle frequency ω.Under the assumption that the Lebesgue measure of (2.10) is zero, we can conclude that 
+
+S(ˆ x; J, t 0) = [
+
+> α∈R
+
+{Γ( c(t0 + α)) |g(α)̸ = 0 }.
+
+which implies that the slab S(ˆ x; J, t 0) is uniquely determined by g(α), also by the data E∞(ˆ x, ω ).
+
+Remark 2.2. The set in (2.10) has Lebesgue measure zero if the real part of a complex multiple of the source projection function p(ˆ x) · J(y) is bounded away from zero on their support, i.e., we assume that for some α ∈ R and c > 0, p(ˆ x) · J(y) ∈ L∞(D) satisfies 
+
+Re (e iαp(ˆ x) · J(y)) ≥ c0 a.e. y ∈ D. (2.11) 
+
+2.2 Indicator and test functions 
+
+From Theorem 2.1, one can extract information on the interval (c inf(ˆ x · D) − t0, c sup(ˆ x · D) − t0)
+
+by taking the inverse Fourier transform of the data E∞(ˆ x, ω ). In this section, we first design a proper indicator function and employ the far-field data collected from two opposite observation directions to determine the excitation time t0.For any sampling point y ∈ R3 and a given time parameter η ≥ 0, we define the test function 
+
+ϕ(ˆ x) 
+
+> η
+
+(y, ω ) by 
+
+ϕ(ˆ x) 
+
+> η
+
+(y, ω ) := e −iω(c−1 ˆx·y−η).
+
+Here y represents the spatial sampling point, while η denotes a time sampling parameter. In the proposed sampling scheme, the parameter y is used to probe the spatial location of the source, whereas η serves to extract temporal information of the emitted signal. Then we introduce the following auxiliary indicator function 
+
+I(ˆ x) 
+
+> η
+
+(y) = 
+
+Z
+
+> R
+
+E∞(ˆ x, ω )ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω. (2.12) To characterize the spatial behavior of the indicator function, we introduce several slab regions associated with the projection of the domain D along the observation direction ˆx. Recall the definition of ˆx · D in (1.4) and the relation in (1.5). Based on these quantities, we define the following unbounded parallel slabs 
+
+K(ˆ x) 
+
+> D
+
+:= {y ∈ R3 : inf(ˆ x · D) < ˆx · y < sup(ˆ x · D)},K(ˆ x) 
+
+> D,η
+
+:= {y ∈ R3 : inf(ˆ x · D) − c(t0 − η) < ˆx · y < sup(ˆ x · D) − c(t0 − η)},K(−ˆx) 
+
+> D,η
+
+:= {y ∈ R3 : inf(ˆ x · D) + c(t0 − η) < ˆx · y < sup(ˆ x · D) + c(t0 − η)}.
+
+(2.13) 8These slabs are perpendicular to the observation direction ˆx. Obviously, K(ˆ x) 
+
+> D
+
+is the smallest slab containing D. Moreover, the slabs K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+can be viewed as translations of K(ˆ x)
+
+> D
+
+along or opposite to the direction ˆx by the distance c(t0 − η), respectively. The following theorem reveals the fundamental property of the indicator function and explains how the support information of the source is encoded in the slab K(ˆ x)
+
+> D,η
+
+.
+
+Theorem 2.2. Let ˆx ∈ S2 be fixed. Then the indicator function satisfies 
+
+I(ˆ x) 
+
+> η
+
+(y) = 
+
+
+
+a finite positive number , for y ∈ K(ˆ x)
+
+> D,η
+
+,
+
+0, for y /∈ K(ˆ x)
+
+> D,η
+
+.
+
+(2.14) 
+
+Proof. The test function ϕ(ˆ x) 
+
+> η
+
+(y, ω ) can be rephrased as 
+
+ϕ(ˆ x) 
+
+> η
+
+(y, ω ) := 
+
+Z
+
+> R
+
+e−iωα δ[α − (c−1 ˆx · y − η)]d α = [ F(δ(α − c−1 ˆx · y + η))]( ω).
+
+Applying the Parserval’s identity and properties of Fourier transform, we deduce from (2.7) and (2.2) that 
+
+I(ˆ x) 
+
+> η
+
+(y, ω ) = 
+
+Z
+
+> R
+
+E∞(ˆ x, ω )ϕ(ˆ x) 
+
+> η
+
+(y, ω )d ω
+
+=
+
+Z
+
+> R
+
+[Fg(α)]( ω)[ F(δ(α − c−1 ˆx · y + η))]( ω)d ω
+
+=
+
+Z
+
+> R
+
+g(α)δ(α − c−1 ˆx · y + η)d α
+
+= g(c−1 ˆx · y − η),
+
+where g(α) is defined by (2.8). From (2.1), we know that supp g(α) ⊂ (c−1 inf(ˆ x · D) −
+
+t0, c −1 sup(ˆ x · D) − t0). Therefore g(c−1 ˆx · y − η)̸ = 0 for all y ∈ R3 such that c−1 ˆx · y − η ∈
+
+(c−1 inf(ˆ x · D) − t0, c −1 sup(ˆ x · D) − t0), that is y ∈ K(ˆ x)
+
+> D,η
+
+. On the other hand, it is also obvious that g(c−1 ˆx · y − η) = 0 for all y /∈ K(ˆ x)
+
+> D,η
+
+. which proves (2.14). Now we turn to the recovery of the unknown excitation time t0. To this end, we combine the indicator functions corresponding to a pair of opposite observation directions. Specifically, we introduce the following auxiliary indicator function 
+
+W(ˆ x) 
+
+> η
+
+(y) := 
+
+"
+
+1
+
+I(ˆ x) 
+
+> η
+
+(y) + 1
+
+I(−ˆx) 
+
+> η
+
+(y)
+
+#−1
+
+= I(ˆ x) 
+
+> η
+
+(y) I(−ˆx) 
+
+> η
+
+(y)
+
+I(ˆ x) 
+
+> η
+
+(y) + I(−ˆx) 
+
+> η
+
+(y) .
+
+This construction allows us to extract the common spatial region determined by the two opposite observation directions. As a consequence, the following result follows directly from Theorem 2.2 together with the definition of the slabs in (2.13). 9Theorem 2.3. Let ˆx ∈ S2 be fixed. Then 
+
+W(ˆ x) 
+
+> η
+
+(y) = 
+
+
+
+a finite positive number , for y ∈ K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+,
+
+0, for y /∈ K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+.
+
+(2.15) 
+
+Proof. From (2.14) and (2.15), it is obvious that for y ∈ K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+, both I(ˆ x) 
+
+> η
+
+(y, ω ) and 
+
+I(−ˆx) 
+
+> η
+
+(y, ω ) are finite positive number. Implying that 0 < W(ˆ x) 
+
+> η
+
+(y, ω ) < ∞.On the other hand, for y /∈ K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+, without loss of generality, one can assume that 
+
+y /∈ K(ˆ x)
+
+> D,η
+
+. In this case, I(ˆ x) 
+
+> η
+
+(y, ω ) = 0 and then W(ˆ x) 
+
+> η
+
+(y, ω ) = 0 .
+
+Remark 2.3. The construction of W(ˆ x) 
+
+> η
+
+acts as a filtering mechanism that extracts the intersec-tion of the supports of the two indicator functions I(ˆ x) 
+
+> η
+
+and I(−ˆx) 
+
+> η
+
+. Consequently, the resulting indicator localizes the spatial region determined simultaneously by the two opposite observation directions. 
+
+When η deviates from the true excitation time, the two reconstructed slabs remain separated and the corresponding indicator function vanishes over most of the sampling region. As η ap-proaches the true excitation moment, the two slabs gradually overlap and the intersection region enlarges. The overlap reaches its maximal extent when η is closest to the true excitation time. This geometric transition provides a stable numerical mechanism for identifying the unknown excitation time. To determine t0, we consider the one-dimensional function 
+
+η 7 → max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y),
+
+whose behavior enables the recovery of the excitation time. 
+
+Theorem 2.4. Define the function 
+
+T (ˆ x) 
+
+> t0
+
+(η) = max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y).
+
+Then the following property holds 
+
+T (ˆ x) 
+
+> t0
+
+(η) = 
+
+(
+
+positive for η ∈ [η1, η 2],
+
+0 for η / ∈ [η1, η 2]. (2.16) 
+
+Consequently, the unknown excitation time is given by 
+
+t0 = η1 + η2
+
+2 .
+
+Proof. Combining the definition of the slabs in (2.13) with Theorem 2.3, we observe that η1
+
+and η2 correspond to the critical moments when the slabs K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+start to overlap and become completely separated, respectively. A direct calculation yields 
+
+η1 = t0 − 12c
+
+ sup(ˆ x · D) − inf(ˆ x · D),η2 = t0 − 12c
+
+ inf(ˆ x · D) − sup(ˆ x · D).
+
+10 Taking the average of η1 and η2 immediately gives 
+
+t0 = η1 + η2
+
+2 ,
+
+which completes the proof. 
+
+Remark 2.4. The relation t0 = ( η1 + η2)/2 admits a clear geometric interpretation. The slabs 
+
+K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+can be viewed as translations of the smallest slab K(ˆ x) 
+
+> D
+
+along the directions ˆx
+
+and −ˆx, respectively, with a shift distance proportional to c−1(t0 − η). When η varies, these two slabs move in opposite directions and their intersection changes accordingly. The parameters 
+
+η1 and η2 correspond to the two critical moments when the slabs begin to intersect and finally separate. Due to the symmetric propagation of electromagnetic waves along opposite directions, these two moments are located symmetrically around the true excitation time t0. Therefore, the midpoint of the interval [η1, η 2] naturally yields the excitation time. 
+
+Once the excitation time t0 has been determined according to Theorem 2.5, the smallest slab K(ˆ x) 
+
+> D
+
+containing the source support can be reconstructed by the following indicator function using the multi-frequency electric far-field pattern measured in a single observation direction 
+
+I(ˆ x)(y) = 
+
+Z
+
+> R
+
+E∞(ˆ x, ω )ϕ(ˆ x)(y, ω ) d ω, (2.17) where 
+
+ϕ(ˆ x)(y, ω ) := e −iω(c−1 ˆx·y−t0), y ∈ R3.
+
+Clearly, the indicator function I(ˆ x)(y) satisfies 
+
+I(ˆ x)(y) = 
+
+( a finite positive number for y ∈ K(ˆ x) 
+
+> D
+
+,
+
+0 for y /∈ K(ˆ x) 
+
+> D
+
+. (2.18) When multiple but sparse observation directions {ˆxl}Ll=1 are available, we denote by I( ˆ xl)(y)
+
+the indicator function corresponding to the l-th observation direction. To combine the informa-tion from different directions, we introduce the following composite indicator function 
+
+I(y) = 
+
+" LX
+
+> l=1
+
+1
+
+I(ˆ xl)(y)
+
+#−1
+
+. (2.19) When η deviates from the true excitation moment, the reconstructed slabs remain separated and the indicator function vanishes in most of the sampling region. As η approaches the correct excitation time, the intersection region gradually enlarges and reaches its maximal extent. This transition provides a stable numerical mechanism for identifying the unknown excitation time. By plotting the one-dimensional function η → max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y, ω ), the unknown excitation time t0
+
+can be recovered. 11 Theorem 2.5. The function T (ˆ x) 
+
+> t0
+
+(η) = max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y, ω ) fulfills that 
+
+T (ˆ x) 
+
+> t0
+
+(η) = 
+
+(
+
+≥ 0 for η ∈ [η1, η 2],
+
+0 for η / ∈ [η1, η 2]. (2.20) 
+
+Then the unknown excitation time t0 is 
+
+t0 = η1 + η2
+
+2 .
+
+Proof. Combining the definition of (2.13) and Theorem 2.3, we know that η1 and η2 denote the moment when K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+begin to converge and completely separate, respectively. Furthermore, we can infer that 
+
+η1 = t0 − 12c [sup(ˆ x · D) − inf(ˆ x · D)] ,η2 = t0 − 12c [inf(ˆ x · D) − sup(ˆ x · D)] .
+
+By simple calculation, it can be concluded that t0 = η1 + η2
+
+2 .After determining the source excitation time t0 according to Theorem 2.5, the smallest slab 
+
+K(ˆ x) 
+
+> D
+
+containing the source support can be determined by the following indicator function using multi-frequency electricity far field pattern at a single direction, 
+
+I(ˆ x)(y, ω ) = 
+
+Z
+
+> R
+
+E∞(ˆ x, ω )ϕ(ˆ x)(y, ω )d ω. 
+
+where ϕ(ˆ x)(y, ω ) := e −iω(c−1 ˆx·y−t0), y ∈ R3. Clearly, the indicator function I(ˆ x)(y, ω ) fulfills that 
+
+I(ˆ x)(y, ω ) = 
+
+( finite positive number for y ∈ K(ˆ x) 
+
+> D
+
+,
+
+0 for y /∈ K(ˆ x) 
+
+> D
+
+. (2.21) With multiple but sparse observations directions ˆxl, we use I( ˆ xl)(y, ω ) to denote the indicator function corresponding to each observation direction, where l = 1 , 2, ..., L . Next, we construct a new indicator function by summing these functions and taking the reciprocal, namely 
+
+I(y, ω ) = 
+
+" LX
+
+> l=1
+
+1
+
+I(ˆ xl)(y, ω )
+
+#−1
+
+. (2.22) Recall that the convex hull of the source region D, defined as the intersection of all half-spaces containing D, can be approximated by the intersection of the slabs K(ˆ xl) 
+
+> D
+
+. We therefore define the Θ-convex hull of D associated with the observation directions ˆxl as 
+
+ΘD := 
+
+> L
+
+\
+
+> l=1
+
+K(ˆ xl) 
+
+> D
+
+.
+
+Here K(ˆ xl) 
+
+> D
+
+denotes the slab determined by the electric far-field data measured in the observation directions ˆxl. In this manner, the geometry of the Θ-convex hull of the source support can be recovered. 12 Theorem 2.6. Let D be connected. Then we have 
+
+I(y, ω ) = 
+
+(
+
+finite positive number for y ∈ ΘD,
+
+0 for y /∈ ΘD.
+
+Proof. Since ΘD is the intersection of the slabs K(ˆ xl) 
+
+> D
+
+, it follows immediately that ΘD ⊂ K(ˆ xl) 
+
+> D
+
+for all l = 1 , 2, · · · , L . If y ∈ ΘD, then y ∈ K(ˆ xl) 
+
+> D
+
+, using the indicator function (2.21), we conclude that I(y, ω ) is finite and positive. On the other hand, if y /∈ ΘD, then there exists at least one 
+
+ˆxl such that y /∈ K(ˆ xl) 
+
+> D
+
+and 1
+
+I( ˆ xl)(y, ω ) = ∞. It then follows that I(y, ω ) = 0 .With all observations ˆx ∈ S2, one can easily obtain the following uniqueness result. 
+
+Theorem 2.7. Assume the condition (2.11) holds on the connected domain D ⊂ R3. Then the convex hull of D is uniquely determined by the multi-frequency far-field patterns {E∞(ˆ x, ω ) : ˆ x ∈
+
+S2, ω ∈ [0 , W ]} with some W > 0.
+
+Remark 2.5. It should be noted that the information contained in E∞(ˆ x, ω ) for W > 0 is equivalent to the complete far-field data for all ω > 0, due to the analytic dependence of E∞(ˆ x, ω )
+
+on ω.
+
+# 3 Inverse source problem 2 
+
+3.1 Inverse Fourier transform of far-field pattern 
+
+In this section, we assume that the source radiates over a finite time interval [tmin , t max ] , for which either the excitation time or the termination time is known. Obviously, F (x, ω ) can be expressed as 
+
+F (x, ω ) = 
+
+Z tmax 
+
+> tmin
+
+J(x, t )e iωt dt. 
+
+It is clear that the time-dependent source function considered in the previous section can be expressed as a function separable into temporal and spatial variables, and the frequency- or wavenumber-dependent portion of the source function can be explicitly isolated via the inverse Fourier transform. By contrast, the source considered in the present section is characterized by a coupling between its spatial and frequency components, such that it can no longer be decoupled through the inverse Fourier transform. We still adopt the ideas from Section 3, for ˆx ∈ S2 and 
+
+k > 0, the far-field pattern of the electric field is 
+
+E∞(ˆ x, ω ) = i ωμ (I − ˆxˆxT)
+
+Z tmax 
+
+> tmin
+
+Z
+
+> R3
+
+e−iωc −1(ˆ x·y−t)J(y, t ) d ydt. 
+
+Analogous to the preceding text, for any fixed ˆx ∈ S2, choose the vertical vector p(ˆ x) ∈ S2 of 
+
+ˆx. Then the inner product of p(ˆ x) and the electric far-field pattern E∞ can be expressed as 
+
+p(ˆ x) · E∞(ˆ x, ω ) = i ωμ (Fh)( ω),
+
+13 with 
+
+h(α) = 
+
+Z tmax 
+
+> tmin
+
+Z
+
+> Γ( t+α)
+
+p(ˆ x) · J(y, t )d s(y)d t
+
+=
+
+Z tmax +αtmin +α
+
+Z
+
+> Γ( t)
+
+p(ˆ x) · J(y, t − α)d s(y)d t. 
+
+Theorem 3.1. Define the region between two parallel hyperplanes as a slab S(ˆ x; J, t ) and rep-resent it as 
+
+S(ˆ x; J, t ) := {y ∈ R3 : c−1 inf (ˆ x · D) − tmax < ˆx · y < c −1 sup (ˆ x · D) − tmin }.
+
+If the set 
+
+{α ∈ R : Γ( t + α) ⊂ S(ˆ x; J, t ), h(α) = 0 }
+
+has Lebesgue measure zero, then the slab S(ˆ x; J, t ) can be uniquely determined by the data p(ˆ x) ·
+
+E∞(ˆ x, ω ) for all ω ∈ (ωmin , ω max ) at the observation direction ˆx ∈ S2.
+
+Remark 3.1. Clearly, we can deduce that 
+
+supp h(α) ⊂ (c−1 inf(ˆ x · D) − tmax , c −1 sup(ˆ x · D) − tmin ).
+
+Remark 3.2. The proof of Theorem 3.1, Theorem3.2 and Theorem 3.3 closely resembles the proof of Theorem 2.1, Theorem 2.2 and Theorem 2.3, consequently, it has been omitted here for brevity. 
+
+3.2 Indicator and test functions 
+
+For any vector y ∈ R3 and a fixed time instant η, we define the test function ϕˆx 
+
+> η
+
+(y, ω ) and the auxiliary indicator function I(ˆ x) 
+
+> η
+
+(y, ω ), both of which are identical to those described in Section 2.2. Define the unbounded parallel slabs which are perpendicular to the observation direction ˆx
+
+T (ˆ x) 
+
+> D,η
+
+:= {y ∈ R3 : inf(ˆ x · D) − c(tmax − η) < ˆx · y < sup(ˆ x · D) − c(tmin − η)},T (−ˆx) 
+
+> D,η
+
+:= {y ∈ R3 : inf(ˆ x · D) + c(tmin − η) < ˆx · y < sup(ˆ x · D) + c(tmax − η)},
+
+(3.23) We can still consider it as the result of translating K(ˆ x) 
+
+> D
+
+along or away from ˆx, respectively. Next we can draw the following conclusion. 
+
+Theorem 3.2. Let ˆx ∈ R2 be fixed, we have 
+
+I(ˆ x) 
+
+> η
+
+(y, ω ) = 
+
+( finite positive number for y ∈ T (ˆ x)
+
+> D,η
+
+,
+
+0 for y /∈ T (ˆ x)
+
+> D,η
+
+.
+
+14 Now we turn to recover the unknown excitation time tmin or termination time tmax , to begin with the indicator function determined by a pair of opposite directions 
+
+W(ˆ x) 
+
+> η
+
+(y) := 
+
+"
+
+1
+
+I(ˆ x) 
+
+> η
+
+(y) + 1
+
+I(−ˆx) 
+
+> η
+
+(y)
+
+#−1
+
+= I(ˆ x) 
+
+> η
+
+(y) I(−ˆx) 
+
+> η
+
+(y)
+
+I(ˆ x) 
+
+> η
+
+(y) + I(−ˆx) 
+
+> η
+
+(y) .
+
+Clearly, Theorem 3.2 and the definition in (3.23) yields the following theorem. 
+
+Theorem 3.3. Let ˆx ∈ R2 be fixed, we have 
+
+W(ˆ x) 
+
+> η
+
+(y, ω ) = 
+
+( finite positive number for y ∈ K(ˆ x) 
+
+> D,η
+
+∩ T (−ˆx) 
+
+> D,η
+
+,
+
+0 for y /∈ K(ˆ x) 
+
+> D,η
+
+∩ T (−ˆx) 
+
+> D,η
+
+.
+
+By plotting the one-dimensional function 
+
+η 7 → max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y, ω ),
+
+we define 
+
+T (ˆ x) 
+
+> t
+
+(η) := max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y, ω ).
+
+Theorem 3.4. The function T (ˆ x) 
+
+> t
+
+(η) satisfies 
+
+T (ˆ x) 
+
+> t
+
+(η) = 
+
+
+
+≥ 0, η ∈ [η1, η 2],
+
+0, η / ∈ [η1, η 2].
+
+Moreover, 
+
+tmax = η1 + η2 − tmin .
+
+Proof. Recall that η1 and η2 denote the moments when T (ˆ x) 
+
+> D,η
+
+and T (−ˆx) 
+
+> D,η
+
+begin to converge and become completely separated, respectively. By the definition of these transition points and the propagation geometry of the signal, we obtain 
+
+η1 = tmin − 12c
+
+  sup(ˆ x · D) − inf(ˆ x · D),η2 = tmax + 12c
+
+  sup(ˆ x · D) − inf(ˆ x · D).
+
+Adding the two identities yields 
+
+tmin + tmax = η1 + η2,
+
+which completes the proof. 
+
+Remark 3.3. Similarly, when the termination time tmax is known, the unknown excitation time 
+
+tmin can be uniquely determined. In other words, whenever only one of the tmin or tmax is known, the other can always be uniquely determined by Theorem 3.4. If both tmin and tmax are unknown, a priori information on the diameter of the support of the source term in the direction perpendicular to some fixed direction is required to recover its location and the radiation interval. Otherwise, the proposed method is not applicable, and this case remains under investigation. 
+
+15 After determining the source radiation time period [tmin , t max ], according to Theorem 3.4, the smallest slab K(ˆ x) 
+
+> D
+
+containing the source support can be determined by the indicator function 
+
+S(ˆ x)(y, ω ) using multi-frequency electricity far field pattern at a single direction, 
+
+S(ˆ x)(y, ω ) := 
+
+"
+
+1
+
+I(ˆ x)1 (y) + 1
+
+I(−ˆx)2 (y)
+
+#−1
+
+= I(ˆ x)1 (y) I(−ˆx)2 (y)
+
+I(ˆ x)1 (y) + I(−ˆx)2 (y) ,
+
+where 
+
+I(ˆ x) 
+
+> j
+
+(y, ω ) = 
+
+Z
+
+> R
+
+E∞(ˆ x, ω )ϕ(ˆ x) 
+
+> j
+
+(y, ω )d ω, j = 1 , 2, (3.24) with test functions ϕ(ˆ x)1 (y, ω ) := e iω(c−1 ˆx·y−tmin ), ϕ(ˆ x)2 (y, ω ) := e iω(c−1 ˆx·y−tmax ), y ∈ R3.Clearly, the indicator function S(ˆ x)(y, ω ) fulfills that 
+
+S(ˆ x)(y, ω ) = 
+
+( finite positive number for y ∈ K(ˆ x) 
+
+> D
+
+,
+
+0 for y /∈ K(ˆ x) 
+
+> D
+
+.
+
+With multiple but sparse observation directions, the shape and location of the source support can be reconstructed. Analogous to the preceding section, after determining the smallest slab containing the source support for a given observation direction, the geometry and location of the source support can be recovered from multiple but sparse observation directions. Since the derivation follows exactly the same steps as above, we omit here. 
+
+# 4 Numerical examples 
+
+In this section, we present several three-dimensional numerical experiments to demonstrate the performance of the proposed direct sampling method for reconstructing the support of electro-magnetic sources from multi-frequency far-field measurements. The numerical experiments are designed to verify the theoretical results established in Section 3, including the recovery of shifted slabs, the determination of the excitation time, and the reconstruction of the source support. For simplicity, we restrict our attention to the inverse problem IP1, where the source emits an impulsive signal at an unknown excitation time t0.Synthetic multi-frequency electric far-field data are generated according to the analytical representation derived in (1.3). The indicator functions are evaluated on a uniform sampling grid covering a bounded reconstruction domain. The reconstructed regions are visualized using slices and iso-surfaces of the corresponding indicator functions. 
+
+4.1 Frequency discretization and implementation details 
+
+In the theoretical formulation of the indicator function, the frequency variable is integrated over the whole real axis, i.e., ω ∈ (−∞ , +∞). However, in practical computations only a finite 16 frequency band is available. Therefore, the integration over (−∞ , +∞) is truncated to a bounded interval (−W, W ).The function ω 7 → E∞(ˆ x, ω ) admits an analytic extension to negative frequencies via the Hermitian symmetry 
+
+E∞(ˆ x, −ω) = E∞(ˆ x, ω ), ω > 0.
+
+Using this symmetry (and the same property for the test function), the indicator function (2.12) is approximated on the truncated frequency band as 
+
+I(ˆ x) 
+
+> η
+
+(y) ≈
+
+Z W
+
+> −W
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω 
+
+=
+
+Z W
+
+> 0
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω +
+
+Z 0
+
+> −W
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω 
+
+=
+
+Z W
+
+> 0
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω +
+
+Z W
+
+> 0
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω 
+
+= 2 Re 
+
+Z W
+
+> 0
+
+1iωμ p(ˆ x) · E∞(ˆ x, ω ) ϕ(ˆ x) 
+
+> η
+
+(y, ω ) dω 
+
+
+
+.
+
+In our numerical experiments, we choose the truncated frequency interval 
+
+ω ∈ (0 , 20) ,
+
+which is uniformly discretized into Nω = 200 sampling points. More precisely, 
+
+ωn = n∆ω, n = 1 , 2, . . . , 200 ,
+
+with 
+
+∆ω = 20 200 .
+
+The truncation from (−∞ , +∞) to (−W, W ) and the subsequent restriction to positive fre-quencies, together with the uniform discretization, lead to a practical implementation of the proposed indicator function. All indicator functions are evaluated using this discrete formula-tion on a uniform Cartesian sampling grid. Since the reconstruction procedure only requires explicit evaluations of the indicator func-tions and does not involve solving additional forward problems, the overall computational cost grows linearly with respect to both the number of sampling points and the number of discrete frequencies. 
+
+4.2 Recovery of the shifted slabs K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+in R3
+
+We first verify Theorem 3.2 by reconstructing the shifted slabs 
+
+K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+,
+
+17 using multi-frequency far-field data collected from a single observation direction. Throughout this subsection, the observation direction is chosen as ˆx = (0 , 0, 1) , and the source support D is assumed to be cube-shaped. Figures 1 and 2 present the reconstructions of K(ˆ x),η D and K(−ˆx),η D , corresponding to the observation directions ˆx = (0 , 0, 1) and −ˆx = (0 , 0, −1) , respectively. Different electromagnetic parameters (μ, ε ) and shifting moments η are considered. For visualization, we display the cross-sections on the plane y1oy 3.In Figure 1, the three subfigures (a)–(c) correspond to 
+
+−(εμ )−1/2(t0 − η) = 
+
+
+
+0, in (a) ,
+
+0.5, in (b) ,
+
+1, in (c) .
+
+As η varies, the reconstructed slab is translated along the positive ˆx-direction with increasing shift magnitude. In Figure 2, the three subfigures (a)–(c) correspond to 
+
+(εμ )−1/2(t0 − η) = 
+
+
+
+0, in (a) ,
+
+−0.5, in (b) ,
+
+−1, in (c) .
+
+In this case, the reconstructed slab is translated along the negative ˆx-direction, in full agreement with the theoretical prediction. In both figures, the numerical shifts coincide precisely with the values predicted by The-orem 3.2. The reconstructed regions clearly exhibit slab-like structures perpendicular to the observation direction. Moreover, varying η induces only a rigid translational shift of the slab, while its geometric profile remains unchanged. This confirms that the proposed indicator func-tion correctly captures the directional projection of the source support from single-direction observation data.                     
+
+> (a) μ= 1; ϵ= 1 , t 0= 1 , η = 1 (b) μ= 2; ϵ= 2 , t 0= 1 , η = 2; (c) μ= 4; ϵ= 1 , t 0= 1 , η = 3
+
+Figure 1: Reconstruction of K(ˆ x) 
+
+> D,η
+
+using multi-frequency data from a single observation direction 
+
+ˆx = (0 , 0, 1) , the source is supported in a cube-shaped. 18 (a) μ = 1; ϵ = 1 , t 0 = 1 , η = 1 (b) μ = 2; ϵ = 2 , t 0 = 1 , η = 2; (c) μ = 4; ϵ = 1 , t 0 = 1 , η = 3 
+
+Figure 2: Reconstruction of K(−ˆx) 
+
+> D,η
+
+using multi-frequency data from a single observation direction 
+
+−ˆx = (0 , 0, −1) , the source is supported in a cube-shaped. Figures 3(a)–3(d) illustrate the reconstruction of the intersection region 
+
+K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+,
+
+which provides a numerical verification of Theorem 3.3. According to the theorem, the indicator function W (ˆ x) 
+
+> η
+
+(y) takes positive values precisely inside the intersection of the two shifted slabs and vanishes outside it. When the shifting parameter η is small, the slabs K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+are spatially separated, and therefore their intersection is empty or very limited, as shown in Figure 3(a). As η increases, the two slabs gradually move toward each other, leading to an expanding overlap region. When 
+
+η approaches the correct excitation moment, a maximal intersection region appears, which cor-responds to the situation predicted by Theorem 3.3; see Figure 3(b). As η increases further away from the correct excitation time, the slabs K(ˆ x) 
+
+> D,η
+
+and K(−ˆx) 
+
+> D,η
+
+move apart again in opposite direc-tions. Consequently, their overlap region gradually shrinks and eventually vanishes, as illustrated in Figures 3(c)–3(d). These numerical results clearly demonstrate that the proposed indicator function successfully characterizes the intersection structure of the shifted slabs. The evolution of the overlap region with respect to η provides a reliable numerical mechanism for determining the unknown excitation time. 19 (a) t0 = 1 , η = 0 (b) t0 = 1 , η = 1;        
+
+> (c) t0= 1 , η = 2 (d) t0= 1 , η = 3
+
+Figure 3: Reconstruction of K(ˆ x)
+
+> D,η
+
+T K(−ˆx) 
+
+> D,η
+
+using multi-frequency data from a single observation direction ˆx = (0 , 0, 1) , μ = 4 , ϵ = 1 , the source is supported in a cube-shaped. 
+
+4.3 Determination of the excitation time t0 and reconstruction of source sup-ports 
+
+Next, we demonstrate the recovery of the unknown excitation time t0 based on Theorem 3.4. In practice, the excitation time is determined by evaluating 
+
+T (ˆ x) 
+
+> t0
+
+(η) = max 
+
+> y∈BR
+
+W(ˆ x) 
+
+> η
+
+(y),
+
+from which the interval [η1, η 2] is detected numerically and the excitation time is recovered via 
+
+t0 = η1 + η2
+
+2 .
+
+We next consider several examples with different source geometries to illustrate the perfor-mance of the proposed reconstruction method. 
+
+Example 1: Cubic source. The source support is chosen as a cube with excitation time 
+
+t0 = 3 . Figure 4(a) displays the original cubic source support. Figure 4(b) presents the re-construction of the excitation time obtained from the indicator function T (ˆ x) 
+
+> t0
+
+(η). The plateau region of the curve allows one to determine the interval [η1, η 2], from which the excitation time is accurately recovered as t0 = 3 . After determining the excitation moment, the source support 20 is reconstructed by combining multi-frequency far-field data from three mutually orthogonal observation directions parallel to the coordinate axes. The reconstructed support is shown in Figure 4(c), where an appropriate iso-surface value is selected. The recovered region accurately captures both the location and the cubic geometry of the true source support. Figure 5 further presents reconstructions obtained from single observation direction, as 
+
+(1 , 0, 0) , (0 , 1, 0) , (0 , 0, 1) . By combining information from multiple directions, the recon-structed region provides an accurate approximation of the convex hull of the source support; as shown in Figure 5(c). 
+
+Example 2: Spherical source. In this example, the source support is chosen as a ball with excitation time t0 = 4 . The reconstruction shown in Figure 6 demonstrates that the proposed method performs stably for smoothly curved geometries, and the reconstructed iso-surface agrees well with the exact support. 
+
+Example 3: Ellipsoidal source. Finally, an ellipsoidal source support with excitation time 
+
+t0 = 5 is considered; see Figure 7. Despite the anisotropic geometry, the reconstructed support successfully captures the elongation and orientation of the true source region, indicating that the proposed method is insensitive to the specific shape of the source.      
+
+> (a) A cubic support (b) t0= 3 (c) Iso-surface value = 1
+
+Figure 4: Reconstruction of a cubic support. μ = 1 , ϵ = 1 , t 0 = 3 .        
+
+> (a) ˆx= (1 0 0) (b) ˆx= (0 1 0) (c) ˆx= (0 0 1)
+
+Figure 5: Reconstruction of K(ˆ x) 
+
+> D,η
+
+∩ K(−ˆx) 
+
+> D,η
+
+. μ = 1 , ϵ = 1 , t 0 = 3 .21 (a) A ball support (b) t0 = 4 (c) Iso-surface = 0 .06 and M = 15 
+
+Figure 6: Reconstruction of a ball-shaped support. μ = 1 , ϵ = 1 , t 0 = 4 .       
+
+> (a) A elliptic support (b) t0= 5 (c) Iso-surface = 0 .006 ,M= 20
+
+Figure 7: Reconstruction of an elliptic support. μ = 1 , ϵ = 1 , t 0 = 5 .
+
+4.4 Robustness with respect to measurement noise 
+
+To investigate the stability of the proposed method, noisy far-field data are generated according to 
+
+E∞ 
+
+> δ
+
+(ˆ x, ω ) = E∞(ˆ x, ω ) 1 + δ ξ ,
+
+where δ > 0 denotes the relative noise level and ξ ∼ N (0 , 1) is Gaussian noise. Numerical experiments indicate that the reconstructed slabs remain stable under moderate noise levels. In particular, the location of the reconstructed support and the recovered excita-tion time are only mildly affected, while noise mainly reduces the sharpness of reconstructed boundaries. This stability can be attributed to the intrinsic averaging effect induced by the multi-frequency integration in the indicator functions, which suppresses random perturbations in the measurement data. 22 (a) δ = 0 (b) δ = 30%      
+
+> (c) δ= 50% (d) δ= 80%
+
+Figure 8: Reconstruction of a cube-shaped support with multi-frequency data from single obser-vation direction at different noise levels δ.To investigate the stability of the proposed method, noisy far-field data are generated ac-cording to 
+
+E∞ 
+
+> δ
+
+(ˆ x, ω ) = E∞(ˆ x, ω ) 1 + δ ξ ,
+
+where δ > 0 denotes the relative noise level and ξ ∼ N (0 , 1) represents complex Gaussian noise. Figure 8 presents the reconstruction results for different noise levels. Figure 8(a) corresponds to the noise-free case ( δ = 0 ), where the reconstructed slab clearly matches the exact projection region of the cubic source support. Figure 8(b)–(d) display the results with δ = 30% , 50% , and 
+
+80% , respectively. It can be observed that for moderate noise levels ( δ = 30% and 50% ), the slab structure remains clearly identifiable and the location of the reconstructed region is only slightly affected. Even when the noise level reaches δ = 80% , the principal slab structure is still visible, although boundary oscillations become more pronounced. The strong robustness of the proposed method can be explained by the intrinsic averaging effect induced by the frequency integration in the indicator function. Since the reconstruction is based on integrating the multi-frequency data against oscillatory test functions, random per-turbations in the measurements tend to cancel out, while the coherent structural information associated with the true source support is reinforced. This mechanism significantly enhances the noise tolerance of the method. 23 5 Conslusion 
+
+In this work, we extend the direct sampling method to the time-domain electromagnetic inverse source problem governed by the vector Maxwell equations by developing a frequency-domain approach. Using sparse far-field data, we first accurately determine the excitation time of the signal, and then reconstruct the convex hull of the source support. Moreover, the proposed approach remains valid for sources radiating continuously over a finite time interval, provided that either the initiation time or termination time of the radiation is known. Notably, it does not require the source function to be divergence-free. Finally, we consider this approach suitable for elastic waves and capable of being generalized to inverse problems involving extended moving sources. 24 Acknowledgements 
+
+The work of Fenglin Sun was supported by the NSFC (No.12271404) and the work of Hongxia Guo was supported by NSFC (No.12501591) and Natural Science Foundation of Tianjin (No.24JCQNJC00850). The authors wish to express particular gratitude to Professor Guanghui Hu for his insightful and detailed discussions, which have contributed to notable improvements in the results and presentation of this work. 
+
+# References 
+
+[1] G. Bao, H. Ammari, and J. Fleming, An inverse source problem for Maxwell’s equation in magnetoencephalography, SIAM Journal on Applied Mathematics, 62 (2002), 1369-1382. [2] C. A. Balanis, Antenna Theory: Analysis and Design, Wiley, Hoboken, NJ, 2005. [3] G. Dassios, A. Fokas and F. Kariotou, On the non-uniqueness of the inverse MEG problem, Inverse Problems, 21(2005): L1-5. [4] N. Bleistein and J. Cohen, Nonuniqueness in the inverse source problem in acoustics and electromagnetics, Journal of Mathematical Physics, 18(1977): 194-201. [5] R. Albanese, and P. Monk, The inverse source problem for Maxwell’s equations, Inverse problems 22(2006): 1023. [6] N P. Valdivia, Electromagnetic source identification using multiple frequency information, Inverse Problems, 28(2012):115002. [7] P. Li and J. Wang, Nonradiating sources of Maxwell’s equations, arxiv:2402.10407 (2024). [8] G. Bao, H. Ammari and J. Fleming, An inverse source problem for Maxwell’s equation in magnetoencephalography, SIAM Journal on Applied Mathematics, 62(2002): 1369-1382. [9] G. Bao, J.Lin and F. Triki, A multi-frequency inverse source problem, Journal of Differential Equations, 249(2010): 3443-3465. [10] G. Bao, P. Li, J. Lin and F. Triki, Inverse scattering problems with multi-frequencies, Inverse Problems, 31(2015):093001. [11] H. Liu and G. Uhlmann, Determining both sound speed and internal source in thermo- and photo-acoustic tomography, Inverse Problems, 31(2015):105005. [12] J. Cheng, V. Isakov and S. Lu, Increasing stability in the inverse source problem with many frequencies, Journal of Differential Equations, 260 (2016): 4786-4804. 25 [13] G. Bao, P. Li and Y. Zhao, Stability for the inverse source problems in elastic and electro-magnetic waves, Journal de Mathématiques Pures et Appliquées 134 (2020): 122-178. [14] S. Li and M. Yamamoto, An inverse source problem for Maxwell’s equations in anisotropic media, Applicable Analysis 84(2005): 1051-1067. [15] G. Hu, P. Li, X. Liu and Y. Zhao, Inverse source problems in electrodynamics, Inverse Problems and Imaging, 12(2018): 1411–1428. [16] G. Hu, Y. Kian, P. Li and Y. Zhao, Inverse moving source problems in electrodynamics, Inverse Problems, 35(2019):075001. [17] G. Hu and J. Li, Uniqueness to inverse source problems in an inhomogeneous medium with a single far-field pattern, SIAM Journal on Mathematical Analysis, 52(2020): 5213-5231. [18] V. Isakov and J N. Wang, Uniqueness and increasing stability in electromagnetic inverse source problems, Journal of Differential Equations, 283(2021): 110-135. [19] G. Yuan and Y. Zhao, Increasing stability for the inverse source problem in electromagnetic waves with conductivity, Applied Mathematics Letters, 144(2023): 108722. [20] G. Bao, S. Lu, W. Rundell and B. Xu, A recursive algorithm for multifrequency acoustic inverse source problems, SIAM Journal on Numerical Analysis, 53(2015): 1608-1628. [21] G. Wang, F. Ma, Y. Guo and J. Li, Solving the multi-frequency electromagnetic inverse source problem by the Fourier method, Journal of Differential Equations, 265(2018): 417-443. [22] X. Wang, M. Song, Y. Guo, H. Li and H. Liu, Fourier method for identifying electromag-netic source with multi-frequency far field data, Journal of Computational and Applied Mathematics, 358(2019): 279-292. [23] R. Griesmaire and C. Schmiedecke, A Factorization method for multifrequency inverse source problem with sparse far-field measurements, SIAM Journal on Imaging Sciences, 10 (2017): 2119-2139. [24] R. Griesmaier and R K. Mishra and C. Schmiedecke, Inverse Source Problems for Maxwell’s Equations and the Windowed Fourier Transform, SIAM Journal on Scientific Computing 40(2018): A1204-A1223. [25] X. Ji and X. Liu, Inverse electromagnetic source scattering problems with multifrequency sparse phased and phaseless far field data, SIAM Journal on Scientific Computing, 41(2019): B1368-B1388. 26 [26] J. Li and X. Liu, Reconstruction of multiscale electromagnetic sources from multifrequency electric far field patterns at sparse observation directions, Multiscale Modeling & Simulation, 21(2023): 753-775. [27] I. Harris, T. Le and D. Nguyen, A direct reconstruction method for radiating sources in Maxwell’s equations with single-frequency data, Inverse Problems, 41(2024): 015003. [28] X. Liu and Q. Shi, The high resolution sampling methods for acoustic sources from multi-frequency far field patterns at sparse observation directions, arxiv:2408.10829, 2024. [29] X. Liu and Q. Shi, A quantitative sampling method for elastic and electromagnetic sources, Journal of Computational Physics (2025): 114251. [30] A. Alzaalig, G. Hu, X. Liu and J. Sun, Fast acoustic source imaging using multi-frequency sparse data, Inverse Problems, 36 (2020): 025009. [31] H. Guo and G. Hu, Inverse wave-number-dependent source problems for the Helmholtz equation, SIAM Journal on Numerical Analysis, 62(2024): 1372-1393. [32] H. Guo, G. Hu and M. Zhao, Direct sampling method to inverse wave-number-dependent source problems: determination of the support of a stationary source, Inverse Problems, 39(2023): 105008. [33] M. Zhao, S. Si and G. Hu, Uniqueness, stability and algorithm for an inverse wave-number-dependent source problem, Inverse Problems, 40(2024): 125019. [34] G. Ma, H. Guo and G. Hu, A frequency-domain method to inverse moving source problem with unknown radiating moment, arXiv:2602.04207. 27

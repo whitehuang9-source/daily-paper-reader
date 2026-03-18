@@ -1,0 +1,286 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-18T20:04:59.770716+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 7,
+    "quick_skim_target": 11,
+    "quick_selected": 7
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.09143v1",
+      "title": "A direct sampling method for inverse time-dependent electromagnetic source problems: reconstruction of the radiating time and spatial support",
+      "abstract": "This paper investigates inverse source problems for time-dependent electromagnetic waves governed by Maxwell's equations. After applying the Fourier transform with respect to time, the problem leads to a frequency-domain electromagnetic system with a frequency-dependent source term. We propose a novel direct sampling method for reconstructing such radiating time and spatial space of sources from multi-frequency far-field measurements. By using a pair of multi-frequency data from opposite observation directions, we can obtain the radiating time of the signal. Based on this, the smallest region between two hyperplanes containing the support of source can be reconstructed using multi frequency data from one observation direction. The Theta convex hull of the source support can be reconstructed from multi-frequency data from sparse observation directions. Compared with existing sampling methods that mainly focus on reconstructing the spatial support, the proposed approach allows for the simultaneous reconstruction of both spatial and temporal features of the source.Three-dimensional numerical examples are conducted to validate the effectiveness of the algorithm.",
+      "authors": [
+        "Fenglin Sun",
+        "Hongxia Guo"
+      ],
+      "primary_category": "math.NA",
+      "categories": [
+        "math.NA"
+      ],
+      "published": "2026-03-10T03:29:13+00:00",
+      "link": "https://arxiv.org/pdf/2603.09143v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "direct sampling method for source reconstruction from multi-frequency measurements",
+      "llm_evidence_cn": "基于多频测量的源重建直接采样方法",
+      "llm_evidence": "基于多频测量的源重建直接采样方法",
+      "canonical_evidence": "基于多频测量的源重建直接采样方法",
+      "llm_tldr_en": "Proposes a direct sampling method for reconstructing electromagnetic source spatial support from measurements.",
+      "llm_tldr_cn": "提出了一种从电磁测量中重建源空间支撑集的直接采样方法。",
+      "llm_tldr": "提出了一种从电磁测量中重建源空间支撑集的直接采样方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.10059v1",
+      "title": "Model-Free Co-Optimization of Manufacturable Sensor Layouts and Deformation Proprioception",
+      "abstract": "Flexible sensors are increasingly employed in soft robotics and wearable devices to provide proprioception of freeform deformations.Although supervised learning can train shape predictors from sensor signals, prediction accuracy strongly depends on sensor layout, which is typically determined heuristically or through trial-and-error. This work introduces a model-free, data-driven computational pipeline that jointly optimizes the number, length, and placement of flexible length-measurement sensors together with the parameters of a shape prediction network for large freeform deformations. Unlike model-based approaches, the proposed method relies solely on datasets of deformed shapes, without requiring physical simulation models, and is therefore broadly applicable to diverse robotic sensing tasks. The pipeline incorporates differentiable loss functions that account for both prediction accuracy and manufacturability constraints. By co-optimizing sensor layouts and network parameters, the method significantly improves deformation prediction accuracy over unoptimized layouts while ensuring practical feasibility. The effectiveness and generality of the approach are validated through numerical and physical experiments on multiple soft robotic and wearable systems.",
+      "authors": [
+        "Yingjun Tian",
+        "Guoxin Fang",
+        "Aoran Lyu",
+        "Xilong Wang",
+        "Zikang Shi",
+        "Yuhu Guo",
+        "Weiming Wang",
+        "Charlie C. L. Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-03-09T20:40:38+00:00",
+      "link": "https://arxiv.org/pdf/2603.10059v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "optimization of sensor layouts and placement for signal prediction",
+      "llm_evidence_cn": "传感器布局和位置优化以进行信号预测",
+      "llm_evidence": "传感器布局和位置优化以进行信号预测",
+      "canonical_evidence": "传感器布局和位置优化以进行信号预测",
+      "llm_tldr_en": "Optimizes flexible sensor layouts and shape prediction networks using a model-free data-driven pipeline.",
+      "llm_tldr_cn": "利用无模型数据驱动流水线优化柔性传感器布局和形状预测网络。",
+      "llm_tldr": "利用无模型数据驱动流水线优化柔性传感器布局和形状预测网络。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.10678v1",
+      "title": "Surrogate models for nuclear fusion with parametric Shallow Recurrent Decoder Networks: applications to magnetohydrodynamics",
+      "abstract": "Magnetohydrodynamic (MHD) effects play a key role in the design and operation of nuclear fusion systems, where electrically conducting fluids (such as liquid metals or molten salts in reactor blankets) interact with magnetic fields of varying intensity and orientation, which affect the resulting flow. The numerical resolution of MHD models involves highly nonlinear multiphysics systems of equations and can become computationally expensive, particularly in multi-query, parametric, or real-time contexts. This work investigates a fully data-driven framework for MHD state reconstruction that combines dimensionality reduction via Singular Value Decomposition (SVD) with the SHallow REcurrent Decoder (SHRED), a neural network architecture designed to recover the full spatio-temporal state from sparse time-series measurements of a limited number of observables. The methodology is applied to a parametric MHD test case involving compressible lead-lithium flow in a stepped channel subjected to thermal gradients and magnetic fields spanning a broad range of intensities. To improve efficiency, the full-order dataset is first compressed using SVD, yielding a reduced representation used as reference truth for training. Only temperature measurements from three sensors are provided as input, while the network reconstructs the full fields of velocity, pressure, and temperature. To assess robustness with respect to sensor placement, thirty randomly generated sensor configurations are tested in ensemble mode. Results show that SHRED accurately reconstructs the full MHD state even for magnetic field intensities not included in the training set. These findings demonstrate the potential of SHRED as a computationally efficient surrogate modeling strategy for fusion-relevant multiphysics problems, enabling low-cost state estimation with possible applications in real-time monitoring and control.",
+      "authors": [
+        "M. Lo Verso",
+        "C. Introini",
+        "E. Cervi",
+        "L. Savoldi",
+        "J. N. Kutz",
+        "A. Cammi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-03-11T11:43:39+00:00",
+      "link": "https://arxiv.org/pdf/2603.10678v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "MHD state reconstruction with magnetic fields",
+      "llm_evidence_cn": "结合磁场的磁流体动力学状态重建",
+      "llm_evidence": "结合磁场的磁流体动力学状态重建",
+      "canonical_evidence": "结合磁场的磁流体动力学状态重建",
+      "llm_tldr_en": "Uses data-driven frameworks for magnetohydrodynamic state reconstruction involving magnetic field interactions.",
+      "llm_tldr_cn": "使用数据驱动框架进行涉及磁场相互作用的磁流体动力学状态重建。",
+      "llm_tldr": "使用数据驱动框架进行涉及磁场相互作用的磁流体动力学状态重建。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.10798v1",
+      "title": "Engineering Magnetic Anisotropy in Permalloy Films via Atomic Force Nanolithography",
+      "abstract": "Atomic force nanolithography provides a precise method for sculpting magnetic thin films, enabling controlled engineering of magnetic anisotropy in soft ferromagnets at the microscale. We demonstrate that nanoscale groove arrays patterned into permalloy (Ni80Fe20) films induce a robust in-plane uniaxial anisotropy, with the easy axis aligned along the groove direction. The anisotropy field is shown to increase with decreasing groove period and increasing engraving depth, offering continuous tunability of magnetic hardness within a single fabrication step. Artificially engraved microstructures further allow domain configurations and domain-wall trajectories to be directed along predefined pathways, exemplified by the creation of a chessboard-like magnetic landscape. Owing to its adaptability to diverse ferromagnetic materials and arbitrary corrugation geometries, this approach provides a versatile platform for tailoring in-plane magnetic anisotropy. Concrete applications are demonstrated in the design of magnonic elements and anisotropic magnetoresistance sensors.",
+      "authors": [
+        "Abhishek Naik",
+        "Cyril Delforge",
+        "Nicolas Lejeune",
+        "Daniel Stoffels",
+        "Joris Van de Vondel",
+        "Kristiaan Temst",
+        "Alejandro V. Silhanek",
+        "Emile Fourneau"
+      ],
+      "primary_category": "cond-mat.mtrl-sci",
+      "categories": [
+        "cond-mat.mtrl-sci",
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-03-11T14:09:30+00:00",
+      "link": "https://arxiv.org/pdf/2603.10798v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "engineering magnetic anisotropy in permalloy films for sensors",
+      "llm_evidence_cn": "在坡莫合金薄膜中工程化磁各向异性以用于传感器",
+      "llm_evidence": "在坡莫合金薄膜中工程化磁各向异性以用于传感器",
+      "canonical_evidence": "在坡莫合金薄膜中工程化磁各向异性以用于传感器",
+      "llm_tldr_en": "Method for controlling magnetic anisotropy in permalloy films, relevant for magnetic sensor fabrication.",
+      "llm_tldr_cn": "一种控制坡莫合金薄膜磁各向异性的方法，与磁传感器制造相关。",
+      "llm_tldr": "一种控制坡莫合金薄膜磁各向异性的方法，与磁传感器制造相关。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.12562v1",
+      "title": "Variational Garrote for Sparse Inverse Problems",
+      "abstract": "Sparse regularization plays a central role in solving inverse problems arising from incomplete or corrupted measurements. Different regularizers correspond to different prior assumptions about the structure of the unknown signal, and reconstruction performance depends on how well these priors match the intrinsic sparsity of the data. This work investigates the effect of sparsity priors in inverse problems by comparing conventional L1 regularization with the Variational Garrote (VG), a probabilistic method that approximates L0 sparsity through variational binary gating variables. A unified experimental framework is constructed across multiple reconstruction tasks including signal resampling, signal denoising, and sparse-view computed tomography. To enable consistent comparison across models with different parameterizations, regularization strength is swept across wide ranges and reconstruction behavior is analyzed through train-generalization error curves. Experiments reveal characteristic bias-variance tradeoff patterns across tasks and demonstrate that VG frequently achieves lower minimum generalization error and improved stability in strongly underdetermined regimes where accurate support recovery is critical. These results suggest that sparsity priors closer to spike-and-slab structure can provide advantages when the underlying coefficient distribution is strongly sparse. The study highlights the importance of prior-data alignment in sparse inverse problems and provides empirical insights into the behavior of variational L0-type methods across different information bottlenecks.",
+      "authors": [
+        "Kanghun Lee",
+        "Hyungjoon Soh",
+        "Junghyo Jo"
+      ],
+      "primary_category": "stat.ML",
+      "categories": [
+        "stat.ML",
+        "cs.CV",
+        "cs.LG"
+      ],
+      "published": "2026-03-13T01:50:27+00:00",
+      "link": "https://arxiv.org/pdf/2603.12562v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Sparse inverse problem algorithms for signal reconstruction",
+      "llm_evidence_cn": "用于信号重建的稀疏反问题算法",
+      "llm_evidence": "用于信号重建的稀疏反问题算法",
+      "canonical_evidence": "用于信号重建的稀疏反问题算法",
+      "llm_tldr_en": "Investigates Variational Garrote for sparse inverse problems, potentially applicable to current reconstruction.",
+      "llm_tldr_cn": "研究用于稀疏反问题的 Variational Garrote 方法，可应用于电流重建任务。",
+      "llm_tldr": "研究用于稀疏反问题的 Variational Garrote 方法，可应用于电流重建任务。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.15288v1",
+      "title": "Neural Network-Based Time-Frequency-Bin-Wise Linear Combination of Beamformers for Underdetermined Target Source Extraction",
+      "abstract": "Extracting a target source from underdetermined mixtures is challenging for beamforming approaches. Recently proposed time-frequency-bin-wise switching (TFS) and linear combination (TFLC) strategies mitigate this by combining multiple beamformers in each time-frequency (TF) bin and choosing combination weights that minimize the output power. However, making this decision independently for each TF bin can weaken temporal-spectral coherence, causing discontinuities and consequently degrading extraction performance. In this paper, we propose a novel neural network-based time-frequency-bin-wise linear combination (NN-TFLC) framework that constructs minimum power distortionless response (MPDR) beamformers without explicit noise covariance estimation. The network encodes the mixture and beamformer outputs, and predicts temporally and spectrally coherent linear combination weights via a cross-attention mechanism. On dual-microphone mixtures with multiple interferers, NN-TFLC-MPDR consistently outperforms TFS/TFLC-MPDR and achieves competitive performance with TFS/TFLC built on the minimum variance distortionless response (MVDR) beamformers that require noise priors.",
+      "authors": [
+        "Changda Chen",
+        "Yichen Yang",
+        "Wei Liu",
+        "Shoji Makino"
+      ],
+      "primary_category": "eess.AS",
+      "categories": [
+        "eess.AS"
+      ],
+      "published": "2026-03-16T13:52:09+00:00",
+      "link": "https://arxiv.org/pdf/2603.15288v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "neural network-based beamforming for target source extraction and interference mitigation",
+      "llm_evidence_cn": "基于神经网络的波束成形用于目标源提取和干扰抑制",
+      "llm_evidence": "基于神经网络的波束成形用于目标源提取和干扰抑制",
+      "canonical_evidence": "基于神经网络的波束成形用于目标源提取和干扰抑制",
+      "llm_tldr_en": "Proposes a neural network-based beamforming framework to extract target sources from underdetermined mixtures.",
+      "llm_tldr_cn": "提出了一种基于神经网络的波束成形框架，用于从欠定混合物中提取目标源。",
+      "llm_tldr": "提出了一种基于神经网络的波束成形框架，用于从欠定混合物中提取目标源。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.16768v1",
+      "title": "Overlapping Covariance Intersection: Fusion with Partial Structural Knowledge of Correlation from Multiple Sources",
+      "abstract": "Emerging large-scale engineering systems rely on distributed fusion for situational awareness, where agents combine noisy local sensor measurements with exchanged information to obtain fused estimates. However, at the sheer scale of these systems, tracking cross-correlations becomes infeasible, preventing the use of optimal filters. Covariance intersection (CI) methods address fusion problems with unknown correlations by minimizing worst-case uncertainty based on available information. Existing CI extensions exploit limited correlation knowledge but cannot incorporate structural knowledge of correlation from multiple sources, which naturally arises in distributed fusion problems. This paper introduces Overlapping Covariance Intersection (OCI), a generalized CI framework that accommodates this novel information structure. We formalize the OCI problem and establish necessary and sufficient conditions for feasibility. We show that a family-optimal solution can be computed efficiently via semidefinite programming, enabling real-time implementation. The proposed tools enable improved fusion performance for large-scale systems while retaining robustness to unknown correlations.",
+      "authors": [
+        "Leonardo Pedroso",
+        "Pedro Batista",
+        "W. P. M. H. Heemels"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY",
+        "eess.SP"
+      ],
+      "published": "2026-03-17T16:46:24+00:00",
+      "link": "https://arxiv.org/pdf/2603.16768v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fusion of noisy sensor measurements with unknown correlations",
+      "llm_evidence_cn": "融合具有未知相关性的噪声传感器测量值",
+      "llm_evidence": "融合具有未知相关性的噪声传感器测量值",
+      "canonical_evidence": "融合具有未知相关性的噪声传感器测量值",
+      "llm_tldr_en": "Introduces a covariance intersection method for fusing distributed sensor data with partial structural knowledge.",
+      "llm_tldr_cn": "引入了一种协方差交叉方法，用于融合具有部分结构知识的分布式传感器数据。",
+      "llm_tldr": "引入了一种协方差交叉方法，用于融合具有部分结构知识的分布式传感器数据。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
