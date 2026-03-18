@@ -1,0 +1,1395 @@
+Title: 2602.21460v1.pdf
+
+URL Source: https://arxiv.org/pdf/2602.21460v1
+
+Published Time: Thu, 26 Feb 2026 01:16:31 GMT
+
+Number of Pages: 24
+
+Markdown Content:
+1 / 24 
+
+Intrinsic Spin Filter Effect in a d-wave altermagnet KV 2Se 2O with Open Fermi Surface 
+
+Bin Liu, 1 Pei -Hao Fu, 1, 2, # Yu -Xuan Sun, 1 Xiao -Lin Zhang, 3 Si -Cong Zhu, 4 Xiang -Long Yu, 1, * Hua 
+
+Wu, 5, † Yuan -Zhi Shao 1, 6, ‡ 
+
+> 1
+
+School of Science, Sun Yat -sen University, Shenzhen 518107, China  
+
+> 2
+
+Department of Physics and Astronomy, University of Florence, I -50019 Sesto Fiorentino, Italy  
+
+> 3
+
+Key Laboratory of Artificial Micro - and Nano -structures of Ministry of Education, School of Physics 
+
+and Technology, Wuhan University, Wuhan 430072, China  
+
+> 4
+
+The State Key Laboratory for Refractories and Metallurgy, Wuhan University of Science and 
+
+Technology, Wuhan 430081, China  
+
+> 5
+
+Laboratory for Computational Physical Sciences (MOE), State Key Laboratory of Surface Physics, 
+
+and Department of Physics, Fudan University, Shanghai 200433, China  
+
+> 6
+
+Guangdong Provincial Key Laboratory of Magnetoelectric Physics and Devices, Sun Yat -sen 
+
+University, Guangzhou 510275, China  
+
+> #
+
+Corresponding author: phy.phfu@gmail.com  
+
+> *
+
+Corresponding author: yuxlong6@mail.sysu.edu.cn  
+
+> †
+
+Corresponding author: wuh@fudan.edu.cn  
+
+> ‡
+
+Corresponding author: stssyz@mail.sysu.edu.cn 
+
+ABSTRACT 
+
+Altermagnets offer a unique pathway to functional spintronics by combining vanishing 
+
+magnetization with large spin splitting. Here, we demonstrate that the canonical d-wave 
+
+altermagnet KV 2Se 2O can deliver giant tunneling magnetoresistance through orientation -
+
+dependent spin filtering. By analyzing the crystallographic spin segregation, we show that 
+
+transport along specific crystallographic axes is nearly fully spin -polarized within the 
+
+symmetry -protected ballistic channels . We implement this mechanism in a lattice -match ed 
+
+KV 2Se 2O/Bi 2O2Se /KV 2Se 2O magnetic tunnel junction, which achieves a robust half -metallic 
+
+transport regime. The symmetry -protected spectral gap in the parallel/ anti -parallel 
+
+configuration ensures a high tunneling magnetoresistance ratio, resulting in substantial 
+
+tunneling magnetoresistance , robust thermally driven spin filtering , and spin Seebeck effect at 
+
+room temperature . These findings provide a path of altermagnetic heterostructures as a high -
+
+performance platform for scalable, field -free, and thermally stable spin logic. 2 / 24 
+
+1. INTRODUCTION 
+
+Spin -polarized charge currents constitute the fundamental information carrier in spintronic 
+
+technologies, underpinning key functionalities such as nonvolatile memory, logic operations, 
+
+and spin -torque -driven switching [1] . Achieving robust spin polarization without sacrificing 
+
+device scalability and stability remains a central challenge. Ferromagnets (FM) naturally 
+
+generate longitudinal spin -polarized currents but suffer from stray magnetic fields that limit 
+
+device density and introduce cross -talk [2 -5] . Antiferromagnets (AFM) eliminate stray fields and 
+
+exhibit ultrafast spin dynamics, yet their compensated spin symmetry typically enforces spin -
+
+degenerate electronic bands, resulting in negligible longitudinal spin polarization and severely 
+
+restricting their applicability in spi n-charge conversion and transport [6 -9] . Altermagnetism (AM) 
+
+has recently emerged as a distinct magnetic order that bridges this long -standing dichotomy by 
+
+unifying key attributes of ferromagnets and antiferromagnets [10 -12] . Altermagnets host large, 
+
+exchange -driven spin splitting comparable to ferromagnets and unconventional spin Hall 
+
+responses enabled by magnetic crystal symmetries , while maintaining a strictly vanishing net 
+
+magnetization enforced by combined crystal rotation and time -reversal symmetries [13 -17] .
+
+Owing to the absence of net magnetization, AM avoids the stray fields that challenge FM -based 
+
+devices. At the same time, the presence of spin splitting enables spin -dependent transport, in 
+
+contrast to AFM -based systems in which the spin information is larg ely hidden [18 -23] .
+
+However, the symmetry protection that stabilizes altermagnetism also imposes a fundamental 
+
+constraint: spin textures related by combined crystalline and time -reversal symmetries, exhibit 
+
+an orientation -dependent compensation that leads to an exact cancellation of spin polarization 
+
+when integrated over the Brillouin -zone, thereby prohibiting the emergence of sizable 
+
+macroscopic spin -polarized charge currents in equilibrium. In this sense, the defining advantage 
+
+of altermagnetism simultaneously constitutes its central obstacle for spintronic functionality [24 -
+
+> 27]
+
+. From a symmetry perspective, both strain - and electric -field -based approaches rely on 
+
+explicit symmetry breaking to enable spin polarization in altermagnets. Uniaxial strain induces 
+
+fully spin -polarized transport by breaking mirror and rotational symmetries, analogous to 
+
+electric -field -based schemes that rely on strong gate fields to lift symmetry constraints. 
+
+Crucially, both mechanisms yield momentum -dependent and valley -confined spin responses [28, 3 / 24 
+
+> 29]
+
+. Such strong external perturbations raise concerns regarding robustness, scalability, and 
+
+experimental feasibility . In terms of physical mechanisms , these strategies rely on explicit 
+
+symmetry breaking to lift the symmetry -enforced momentum -space cancellation of spin 
+
+polarization. The resulting spin -polarized transport can be interpreted as arising from an 
+
+effective Zeeman -like field that induces a finite net magnetization [30 -34] . While this route enables 
+
+longitudinal spin polarization, it effectively drives the system back to a
+
+ferromagnetic/ferrimagnetic -like regime, undermining the symmetry -protected nature of 
+
+altermagnetism and potentially reintroducing familiar limitations such as stray -field coupling 
+
+and reduced device robustness. These considerations underscore a critical open challenge in 
+
+altermagnetic spintronics: achieving intrinsic longitudinal spin -polarized charge transport 
+
+without resorting to external symmetry -breaking fields or net magnetization .
+
+In this work, we propose an intrinsic spin -filter effect in AM driven by open Fermi -surface 
+
+geometry, enabling highly spin -polarized charge transport without net magnetization. Focusing 
+
+on KV 2Se 2O as a representative material platform, we first establish the microscopic 
+
+mechanism underlying the intrinsic spin -filter effect using a simple low -energy effective model. 
+
+We show that the closed -to -open Fermi surface transition selectively suppresses one spin 
+
+channel in a direction -selective manner, resulting in ideal spin polarization in longitudinal 
+
+transport. We then provide a proof of concept by investigating KV 2Se 2O—a material exhibiting 
+
+strong crystalline and magnetic anisotropy that enables pronounced directional modulation of 
+
+spin -dependent charge transport. Owing to its quasi -two -dimensional lattice, strong in -plane 
+
+anisotropy, and intrinsic magnetic order, KV 2Se 2O supports symmetry -constrained, direction -
+
+dependent spin textures, enabling field -free spin -polarized transport within a realistic materials 
+
+platform [14, 35] . By combining first -principles electronic -structure calculations with device -level 
+
+transport modeling, we elucidate the symmetry origin of the anisotropic spin splitting, track the 
+
+evolution of momentum -resolved spin textures under different transport geo metries, and 
+
+identify specific crystallographic directions along which nearly approaching fully longitudinal 
+
+spin polarization emerges despite the absence of net magnetization. Guided by the Density 
+
+Functional Theory (DFT) results, we further propose lattice -matched tunneling heterostructures 
+
+based on KV 2Se 2O. The sharp contrast between the conducting parallel -configuration (PC) state 4 / 24 
+
+and the insulating antiparallel -configuration (APC) state yields a giant tunneling 
+
+magnetoresistance (TMR) ratio of approximately 2.24 × 10 3 % in the absence of any external 
+
+magnetic field. Moreover, we predict a colossal thermal tunneling magnetoresistance exceeding 
+
+750% at low temperatures, which remains substantial even at room temperature. Our findings 
+
+demonstrate that altermagnets with op en Fermi surfaces enable a distinct class of spintronic 
+
+functionalities, including nearly fully spin filters and gia nt tunneling magnetoresistance, 
+
+without requiring magnetic fields, spin --orbit coupling, or ferromagnetic components .
+
+2. RESULTS 
+
+2.1 Low -Energy Effective Model for Fermi Surface Controlled Spin Transport 
+
+In this section, we use a low -energy effective model for a two -dimensional d-wave altermagnet 
+
+to elucidate the mechanism of the geometry of the Fermi surface enabling theoretically perfect 
+
+spin -polarized charge transport. The purpose of this effective model is to capture, in a minimal 
+
+but analytically transparent manner, how the closed -to -open Fermi -surface transition in 
+
+altermagnets controls (i) the density of states (DOS) and (ii) the direction -dependent spin -
+
+resolved carrier velocity, which together dictate the spin polarization of the longitudinal 
+
+conductance. 
+
+The effective Hamiltonian for two -dimensional  𝑑 𝑥 2−𝑦 2 -wave altermagnet is [10, 14] 
+
+𝐻  
+
+> ^
+> AM
+> 𝜎
+
+(𝑘 𝑥 , 𝑘 𝑦 ) = 𝑡 𝑥 
+
+> 𝜎
+
+𝑎 2𝑘 𝑥  
+
+> 2
+
++ 𝑡 𝑦 
+
+> 𝜎
+
+𝑎 2𝑘 𝑦  
+
+> 2
+
++ 𝐸 𝐹 , (1)
+
+where  𝑎  is the lattice constant and  𝐸 𝐹  denotes the Fermi level , 𝜎  = +/ - for spin -up/down 
+
+states . The d-wave altermagnetic anisotropic spin splitting is encoded in the spin - and direction -
+
+dependent hopping parameters  𝑡 𝑥 (𝑦 ) 
+
+> 𝜎
+
+= 𝑡 0 ± 𝜎 𝑡 𝐴𝑀  , with  𝑡 0 representing the isotropic 
+
+nearest -neighbor hopping amplitude and  𝑡 𝐴𝑀  the anisotropic spin -dependent hopping that 
+
+captures the d-wave altermagnetic spin splitting. This anisotropic spin splitting is directly 
+
+manifested in the spin -resolved equal -energy contours and dispersions of Eq. (1), shown in Fig. 
+
+1. For  𝑡 𝐴𝑀 /𝑡 0 < 1 [Fig. 1(a)], the dispersion consists of two upward -opening parabolic bands 
+
+with spin - and direction -dependent curvature, leading to two spin -dependent closed elliptical 
+
+Fermi surfaces whose principal axes are mutually orthogonal [see the insert of Fig. 1(a)]. For 5 / 24 
+
+𝑡 𝐴𝑀 /𝑡 0 > 1 [Fig. 1(b)], the dispersion consists of two parabolic bands with opposite opening 
+
+directions (along one momentum axis) and spin -dependent curvature. This yields open Fermi 
+
+surfaces: within a finite momentum window, only a single spin species is present at the Fermi 
+
+level as exhibited in the insert of Fig. 1(b). Moreover, the band structure hosts a saddle point at 
+
+the spin -degenerate momentum ( 𝑘 𝑥 , 𝑘 𝑦 ) = (0, 0) [36] , where the curvature is positive along one 
+
+direction and negative along the other. Notably, at the critical point  𝑡 𝐴𝑀 /𝑡 0 = 1 [Fig. S1], a 
+
+flat band emerges: along one direction, only one spin sub -band remains dispersive, while the 
+
+other is dispersionless. 
+
+FIG. 1. Mechanism of open -Fermi -surface -driven perfectly spin -polarized transport. (a), and (b) Energy dispersion of the 
+
+low -energy effective d-wave altermagnetic model [Eq. (1)] along  𝒌 𝒙  with  𝒌 𝒚 = 𝟎 , together with the corresponding density 
+
+of states [Eq. (2)] as a function of energy. Blue and red represent different spins, and the direction of the arrows indicate s
+
+the direction of the speed. Insets illustrate the Fermi -surface geometry determined by the altermagnetic parameter  𝒕 𝐀𝐌 /𝒕 𝟎 :
+
+closed Fermi surfaces with positive curvature for  𝒕 𝐀𝐌 /𝒕 𝟎 < 𝟏 , open Fermi surfaces with negative curvature for  𝒕 𝐀𝐌 /𝒕 𝟎 >
+
+𝟏 . (c), and (d) Schematic illustration of the spin -resolved transport corresponding to the different Fermi -surface geometries. 
+
+For Fermi surfaces with nonpositive curvature ( 𝒕 𝐀𝐌 /𝒕 𝟎 ≥ 1), direction -dependent and nearly perfectly spin -polarized 
+
+charge transport emerges. 6 / 24 
+
+In the altermagnet with the open Fermi surface, the occurrence of the flat band and saddle 
+
+point gives rise to a van Hove singularity in the DOS near the corresponding energy [36] . A 
+
+straightforward calculation yields the spin -resolved DOS [37] 
+
+𝐷 𝜎 (𝐸 ) = 1
+
+8𝜋 
+
+1
+
+√|𝑡 AM  
+
+> 2
+
+− 𝑡 0
+
+> 2
+
+| {
+
+2Θ(𝐸 − 𝐸 𝐹 ), 𝑡 AM 
+
+𝑡 0
+
+< 1,
+
+ln ( 𝐸 cut 
+
+|𝐸 −𝐸 𝐹 |) , 𝑡 AM 
+
+𝑡 0
+
+≥ 1,
+
+(2)
+
+where  𝐸 cut = 8𝑡 0 is a bandwidth cutoff , Θ(𝑥 ) is the Heaviside step function. Importantly, 
+
+𝐷 𝜎 (𝐸 ) = 𝐷 −𝜎 (𝐸 ), so the spin density  𝐷 ↑(𝐸 ) − 𝐷 ↓(𝐸 ) = 0, consistent with the absence of net 
+
+magnetization. The total DOS is then  𝐷 (𝐸 ) = 𝐷 ↑(𝐸 ) + 𝐷 ↓(𝐸 ) = 2𝐷 𝜎 (𝐸 ) . Fig s. 1(a -b)
+
+summarize the energy dependence of  𝐷 (𝐸 ) for representative  𝑡 AM /𝑡 0 . For  𝑡 AM /𝑡 0 < 1 ,
+
+𝐷 (𝐸 ) is essentially the constant DOS of a two -dimensional parabolic band [37] , with 
+
+modification induced by the altermagnetism via  𝑡 AM , but no singular behavior. By contrast, 
+
+when  𝑡 AM /𝑡 0 ≥ 1, the flat band and saddle point generate a logarithmic van Hove singularity 
+
+near  𝐸 ≃ 𝐸 𝐹 . Notably, in the vicinity of the critical point  𝑡 AM /𝑡 0 = 1, 𝐷 (𝐸 ) → ∞ within the 
+
+present effective description, implying a strong enhancement of the transport response. This 
+
+sharp contrast between the DOS of closed and open Fermi surfaces is a direct signature of the 
+
+distinct Fermi -surface geometries. 
+
+The impact of Fermi -surface geometry is also encoded in the carrier velocity. For Eq. (1), the 
+
+velocity expectation value along  𝛼 -direction ( 𝛼 = 𝑥 , 𝑦 ) reads 
+
+𝑣 𝛼  
+
+> 𝜎
+
+= 1
+
+ℏ ⟨𝜕 𝑘 𝛼 𝐻  
+
+> ^
+> AM
+> 𝜎
+
+⟩ = 2𝑡 𝛼 
+
+> 𝜎
+
+𝑎 2𝑘 𝛼 
+
+ℏ , (3)
+
+where  𝑣 𝛼  
+
+> 𝜎
+
+denotes the quantum -mechanical expectation value in the spin -𝜎  eigenstate. The d-
+
+wave altermagnetic symmetry implies  𝑣 𝑥  
+
+> 𝜎
+
+= 𝑣 𝑦 
+
+> −𝜎
+
+, inherited from Eq. (1). As illustrated in Fig. 
+
+1( c), for  𝑡 AM < 𝑡 0 (closed Fermi surfaces), both spin channels have finite velocities along both 
+
+directions, so spin -up and spin -down electrons contribute comparably to transport. In contrast, 
+
+for  𝑡 AM ≳ 𝑡 0 [Figs. 1( d)], one spin channel becomes nearly blocked along a given direction 
+
+while the other channel remains highly conductive . In particular,  𝑣 𝑥  
+
+> ↑
+
+= 𝑣 𝑦  
+
+> ↓
+
+∝ 𝑡 0 + 𝑡 AM ,whereas 
+
+𝑣 𝑥  
+
+> ↓
+
+= 𝑣 𝑦  
+
+> ↑
+
+∝ 𝑡 0 − 𝑡 AM ≃ 0 , so transport along  𝑥 (𝑦 ) is dominated by spin - (↑↓) carriers, 
+
+providing the kinematic basis for perfectly spin -polarized currents. 
+
+The effect of the Fermi -surface geometry on the DOS [Eq. (2)] and the velocity [Eq. (3)] is 7 / 24 
+
+then manifested in the longitudinal conductance. To demonstrate how the Fermi -surface 
+
+geometry controls transport, we evaluate the longitudinal conductance within semiclassical 
+
+Boltzmann theory using the relaxation -time approximation. In the linear -respons e regime, 
+
+𝐼 𝛼 = 𝐺 𝛼𝛽 𝑉 𝛽  , and we focus on the longitudinal component  𝛼 = 𝛽  . At zero temperature, the 
+
+conductance can be written as 
+
+𝐺 𝛼𝛼 (𝐸 ) = 𝜏 𝑒 2 ∑ 𝑣 𝛼 
+
+> 2
+> 𝐤
+
+𝐷 (𝐸 ), (4)
+
+where  𝜏  is the momentum relaxation time . For the  𝑥 direction, substituting Eq. (3) into Eq. (4) 
+
+yields the scaling form 
+
+𝐺 𝑥𝑥  
+
+> 𝜎
+
+(𝐸 ) ∝ (𝑣 𝑥 
+
+> 𝜎
+
+)2𝐷 𝜎 (𝐸 ) ∼ 𝑡 0 
+
+> 2
+
+(1+𝜎 𝑡 𝐴𝑀 
+
+𝑡 0 )2
+
+𝐷 𝜎 (𝐸 ), (5)
+
+which explicitly contains  𝑡 AM /𝑡 0 through the spin - and direction -dependent velocity. For  ∣
+
+𝑡 AM /𝑡 0 ∣< 1 , both  𝐺 𝑥𝑥  
+
+> ↑
+
+and  𝐺 𝑥𝑥  
+
+> ↓
+
+are comparable, and the net conductance contains 
+
+contributions from both spins. For  ∣ 𝑡 AM /𝑡 0 ∣≳ 1 , however,  𝐺 𝑥𝑥  
+
+> ↑
+
+is strongly enhanced 
+
+(particularly near the van Hove singularity at  𝐸 ≃ 𝐸 𝐹  ), whereas  𝐺 𝑥𝑥  
+
+> ↓
+
+becomes negligible, 
+
+yielding a nearly perfect spin polarization 
+
+𝑃 𝑥𝑥 = 𝐺 𝑥𝑥  
+
+> ↑
+
+− 𝐺 𝑥𝑥 
+
+> ↓
+
+𝐺 𝑥𝑥  
+
+> ↑
+
++ 𝐺 𝑥𝑥  
+
+> ↓
+
+≃ 1, (6)
+
+Repeating the same analysis for transport along  𝑦 gives the opposite polarization,  𝑃 𝑦𝑦 ≃ −1 =
+
+−𝑃 𝑥𝑥 , consistent with the  𝑑 -wave altermagnetic symmetry and the relation  𝐺 𝑦𝑦  
+
+> 𝜎
+
+(𝐸 ) = 𝐺 𝑥𝑥 
+
+> −𝜎
+
+(𝐸 ),
+
+as illustrated in Fig. 1. 
+
+We emphasize that Eq. (1) is a minimal effective description. In realistic materials such as 
+
+RuO 2[38 -41] , La 2O3Mn 2Se 2, and Ba 2CaOsO 6[42] , 𝑑  -wave altermagnetism often involves 
+
+additional orbital and sublattice degrees of freedom (e.g., two -sublattice tetragonal [38 -40] or 
+
+Lieb -lattice models [42] ). Here we isolate the universal role of Fermi -surface geometry, for which 
+
+Eq. (1) already captures the key distinction between closed and open Fermi surfaces. We also 
+
+note that the divergence in Eq. (2) is regularized in real systems by disorder and finit e
+
+quasiparticle lifetimes [43] . A standard phenomenological broadening amounts to the 
+
+replacement  ∣ 𝐸 − 𝐸 𝐹 ∣→ √(𝐸 − 𝐸 𝐹 )2 + Γ2 , with  𝛤 ∼ ℏ/(2𝜏 ′) set by the elastic lifetime 
+
+𝜏 ′ due to impurity scattering [44 -46] . Finally, the Boltzmann treatment in Eq. (4) assumes a 8 / 24 
+
+constant (isotropic) relaxation time  𝜏 , weak disorder, zero temperature, and a small bias  𝑉 𝛽 .
+
+Despite these approximations, the analysis demonstrates the central point: open Fermi surfaces 
+
+naturally suppress one spin channel in a direction -dependent manner, enabling giant and nearly 
+
+perfectly spin -polarized longitudinal conductance when the chemi cal potential is tuned close to 
+
+the flat -band or saddle -point energies. In the next section, we substantiate this mechanism using 
+
+material -based calculations. 
+
+2. 2 Nearly Perfectly Directional Spin Polarization in KV 2Se 2O
+
+To validate the mechanism proposed in Eq. (1) , in this section and the following we perform 
+
+DFT calculations for the altermagnetic candidate material KV 2Se 2O. The calculations were 
+
+performed using the nonequilibrium Green’s function formalism combined with density 
+
+functional theory (DFT+NEGF), as implemented in QuantumATK (version T -2022.03, 
+
+Synopsys QuantumATK) [47 -49] , A Hubbard 𝑈 value of 1 eV was applied to the V 3 𝑑 orbitals of 
+
+one pair of V atoms with opposite spin orientations [50 -52] , thereby explicitly treating spin 
+
+polarization. The electrically -driven spin transport performance can be quantitatively 
+
+analyzed from the Landauer -Buttiker equation [53] :
+
+I(𝑉 𝑏 ) = 2𝑒 2
+
+ℎ ∫ 𝑇 (𝐸 , 𝑉 𝑏 )[𝑓 𝐿 (𝐸 − 𝜇 𝐿 ) − 𝑓 𝑅 (𝐸 − 𝜇 𝑅 )]𝑑𝐸 
+
+> +∞
+> −∞
+
+(7)
+
+where  𝑓 𝐿 (𝑅 )(𝐸 , 𝜇 )is the equilibrium Fermi distribution of the left (right) electrode, and  𝜇  is 
+
+the electrochemical potential of the electron. Fig. 2(a) shows the crystal structure of KV 2Se 2O,
+
+where the magnetic V atoms form a square lattice separated by Se and O ligands. The 
+
+corresponding spin -resolved Fermi surfaces ar e shown in Fig. 2(b). Two bands (labeled as 
+
+Bands 35 and 36) cross the Fermi energy and exhibit pronounced anisotropy: one spin sub band 
+
+is dispersive along one direction (e.g. spin -up is dispersive along Γ-X direction, spin -down is 
+
+dispersive along Γ-Y direction), it becomes flat band without dispersion along the orthogonal 
+
+direction . As a result, the Fermi surfaces are open, extending across the Brillouin zone rather 
+
+than forming closed contours. As what is expected in other altermagnetic candidate material s
+
+such as MnTe , Nb 2FeB 2, and V2Se 2O[54 -56] . This geometry closely resembles the open -Fermi -9 / 24 
+
+surface regime of the effective model Eq. (1) for  𝑡 AM ≳ 𝑡 0.
+
+FIG. 2. Realization of crystallographic spin segregation in the d-wave altermagnet KV 2Se 2O. (a) Crystal and magnetic 
+
+structure of KV 2Se 2O. Vanadium (V) atoms form two antiferromagnetically aligned magnetic sublattices (V M↑ and V M↓ ), 
+
+which are related by a crystallographic rotation symmetry. (b) Spin -resolved Fermi surface in the kz = 0 plane. The Fermi 
+
+surface exhibits complete spin separation: electronic states along the Γ–X direction is exclusively spin -up (blue), whereas 
+
+those along the orthogonal Γ–Y direction is entirely spin -down (red). (c) V -atom projected spin -resolved band structure. 
+
+The marker size is proportional to the spectral weight from the V M↑ (open circles) and V M↓ (solid circles) sublattices, with 
+
+blue and red denoting spin -up and spin -down states, respectively. Transport channels along Γ–X are dominated by V M↑ 
+
+spin -up states, while those along Γ–Y are dominated by V M↓ spin -down states, demonstrating sublattice -selective transport. 
+
+(d) Projected density of states (PDOS) of the V 3 d orbitals. The spin -symmetric total spectral weight reflects complete 
+
+magnetization compensation, w hile the pronounced local exchange splitting ensures robust metallic transport channels. 
+
+The origin of this open Fermi surface can be traced back to the orbital character and bonding 
+
+geometry of KV 2Se 2O. As a results, in Fig . 2 (c), the band structure near the Fermi level consists 
+
+of two parabolic bands with opposite opening directions (along one momentum axis) and spin -
+
+dependent curvature, as shown in Fig. 1(b) via the effective model [Eq. (1)] . Using a 
+
+dimensionless parametrization with  𝑡 0 = 1, the band evolution shown in Fig. 1 corresponds to 
+
+𝑡 am = 0.5, 1.0, 1.5 , representing the closed -Fermi -surface, critical, and open -Fermi -surface 10 / 24 
+
+regimes, respectively, and the DFT bands of KV 2Se 2O are consistent with the  𝑡 am ≳ 𝑡 0. In 
+
+particular, one spin channel remains dispersive along one in -plane direction while becoming 
+
+nearly flat along the orthogonal direction. In particular, the presence of Se atoms strongly 
+
+suppresses the effective V -V hopping along one in -plane direction, whereas hopping along the 
+
+perpendicular direction remains sizable. This anisotropic hybridization leads to an almost 
+
+dispersionless band along one momentum axis, giving rise to a quasi -flat band and a saddle -
+
+point -li ke structure near the Fermi energy. This band anisotropy is further reflected in the spin -
+
+resolved DOS, shown in Fig. 2(d). While the total DOS remains spin compensated, consistent 
+
+with the absence of net magnetization, a pronounced enhancement of the DOS appears near E F,
+
+originating from the flat -band and saddle -point features. This behavior is qualitatively 
+
+consistent with the logarithmic van Hove singularity predicted by the effective model in Eq. (2) 
+
+for the open -Fermi -surface regime. Taken together, Figs. 2(a -d) demonstrate that KV 2Se 2O
+
+realizes, at the material level, the key ingredients of the low -energy d-wave altermagnetic model: 
+
+direction -dependent hopping, open spin -resolved Fermi surfaces, and a strong DOS 
+
+enhancement near the Fermi level. These features provid e the microscopic foundation for the 
+
+giant and nearly perfectly spin -polarized transport discussed in the following sections. 
+
+2. 3 Tunneling Magnetoresistance in Lattice -Matched Heterostructures 
+
+In the following, we investigate two fundamental spintronic phenomena: tunneling 
+
+magnetoresistance and spin -dependent thermoelectric transport, that are strongly enhanced by 
+
+the nearly perfect spin polarization realized in altermagnetic spintronic devices constructed 
+
+from KV 2Se 2O -based heterostructures. 
+
+To transform the crystal spin filtering of KV 2Se 2O into a functional device, we construct a 
+
+fully epitaxial magnetic tunnel junction (MTJ) in which a Bi 2O2Se barrier is sandwiched 
+
+between two KV 2Se 2O electrodes in Fig. S 2. Owing to the small lattice mismatch between 
+
+Bi 2O2Se and KV 2Se 2O, Bi 2O2Se is chosen as the tunnel barrier, which preserves the intrinsic d-
+
+wave spin texture at the interface without introducing significant momentum scattering. Here, 
+
+the parallel (PC) and antiparallel (APC) configurations refer to the relative orientation of the 11 / 24 
+
+alternating magnetic sublattice spin textures projected along the transport direction, rather than 
+
+a net magnetization alignment. In both configurations, the net magnetization remains zero. The 
+
+detailed device geometry and the local spin -resolved electron density are shown in Fig. S 3. Fig .
+
+3 presents the spin -dependent transport characteristics by directly linking the microscopic 
+
+energy -resolved state, described by the projected local density of states (PLDOS) [Figs. 3 (a)-
+
+(d) ], to the macroscopic momentum -resolved transmission [(Figs. 3(e) -(h)] . In the PC 
+
+configuration, the junction exhibits a half -metallic -like transport behavior. For the spin -down 
+
+channel, the PLDOS [Fig. 3(b)] reveals a continuous electronic -state bridge connecting the 
+
+source and drain across the Bi 2O2Se barrier. This transportation channel connectivity gives rise 
+
+to a robust transmission peak near the Fermi energy, as indicated by the red curve, which 
+
+directly corresponds to a high -transparency window (brigh t region) in momentum space [Fig. 
+
+3(f)]. In contrast, the spin -up channel [Fig. 3(a)] is strictly blocked due to a symmetry -enforced 
+
+spectral gap along the transport direction, resulting in a vanishing transmission coefficient [T(E) ]
+
+and a dark momentum -resolved map [Fig. 3(e)]. As a consequence, the tunnel current becomes 
+
+highly spin polarized, with a spin polarization reaching approximately 92.5% in the absence of 
+
+any external field. This performance significantly surpasses that of the benchmark altermagnet 
+
+RuO 2[22] , and rivals the efficiency of conventional ferromagnetic spin injectors [57 -59] . In the APC 
+
+configuration , the crystal spin filter of the drain electrode is opposite to the spin -polarized 
+
+current injected from the source. As shown in Figs. 3(c) and 3(d), although transport states may 
+
+exist in one electrode, they lack matching counterparts in the other electrode, leading to rapid 
+
+decay of the wave function at the interf ace. As a result, the total transmission for both spin 
+
+channels is strongly suppressed, with the red curves remaining close to zero, and the 
+
+momentum -resolved spectra [F igs. 3(g ) and ( h)] show no propagating channels. The sharp 
+
+contrast between the conducting PC state and the insulating APC state gives rise to a giant 
+
+tunneling magnetoresistance (TMR) ratio of approximately 2 .24 × 10 3 % in the absence of any 
+
+external magnetic field, which is more than an order of magnitude larger than the previously 
+
+reported TM R of about 93% in RuO 2-based devices. [22] . These results establish the KV 2Se 2O
+
+/Bi 2O2Se heterostructure as a promising platform for field -free spintronic logic applications. 12 / 24 
+
+FIG. 3. Ballistic spin transport and tunneling magnetoresistance effect in a KV 2Se 2O/Bi 2O2Se /KV 2Se 2O junction . (a –d) 
+
+Energy -resolved transport mechanism. The colormaps display the Projected Local Density of States (PLDOS) along the 
+
+transport direction ( kz), while the overlaid red curves represent the energy -dependent transmission coefficient T(E). The 
+
+dashed grey line indicates the Fermi level (E F). (a, b) Parallel Configuration (PC): An effective half -metallic state is realized. 
+
+The spin -down channel (b) shows a continuous conducting pathway and a high transmission peak at EF, whereas the spin -
+
+up channel (a) is strictly gapped with vanishing transmission. (c, d) Anti -Parallel Configuration (APC): Transport is 
+
+blocked for both spins. The mismatch between th e source and drain band structures leads to interface -localized states and 
+
+negligible transmission coefficients (flat red curves), explaining the high resistance state. (e –h) Momentum -resolved 
+
+transmission spectra at EF corresponding to the cases in (a –d). The bright yellow region in (f) confirms the highly 
+
+transparent spin -down channel in the PC state, while the dark regions in (e, g, h) indicate the effective spin blockade driven 
+
+by spin segregation. 
+
+2. 4 Giant Spin -Dependent Thermoelectricity 
+
+Benefiting from the high -temperature altermagnetic nature of KV₂Se₂O, which stabilizes spin 
+
+order under thermal gradients, we can explore thermally generated spin currents in 
+
+KV 2Se 2O/ Bi 2O2Se /KV 2Se 2O heterostructures. Here, we explore the potential of 
+
+KV 2Se 2O/Bi 2O2Se heterostructures for spin caloritronic by investigating thermally generated 
+
+spin currents. The thermal transport properties were evaluated under two distinct regimes: (i) 
+
+fixed temperature difference ( ΔT) with varying base left electrode temperature (T L), and (ii) 
+
+fixed base left electrode temperature near room temperature with varying ΔT. Fig . 4(a) 
+
+illustrates the thermally induced currents under a fixed ΔT. In the parallel configuration (PC), 
+
+the device operates as a highly efficient thermal spin generator. The spin -down current (red) 
+
+rises significantly with temperature, driven by the Seebeck effect in the metallic minority 13 / 24 
+
+channel. Conversely, the spin -up current (blue) remains suppressed which blocks thermally 
+
+excited carriers just as effectively as electrically injected ones. This asymmetry results in a 
+
+colossal thermal tunneling magnetoresistance, exceeding 750% at low te mperatures and 
+
+remaining substantial even at 300 K [Fig. 4(b)]. The robustness of this effect for ambient 
+
+applications is demonstrated in Figs. 4(c) and 4(d), where the TL is fixed near room temperature 
+
+(T L in [290, 300, 310] K). A nearly linear dependence of the spin -polarized current on ΔT is 
+
+observed in the PC state, confirming the diffusive nature of the thermal transport. Most notably, 
+
+the spin filtration efficiency remains remarkably high (>80%) across the entire temperature 
+
+range tested [Fig. 4(d)] , which indicates that the crystallographic spin segregation mechanism 
+
+is energetically robust against thermal broadening, positioning KV 2Se 2O as a promising 
+
+candidate for zero -bias spin logic and waste -heat spin harvestin g devices.                     
+
+> FIG. 4.Thermally driven spin currents and magnetoresistance. Spin -dependent thermoelectric transport properties of the
+> KV 2Se 2O/Bi 2O2Se /KV 2Se 2Ojunction. (a, b) Fixed Temperature Difference ( ΔT). (a) Thermally generated current as a
+> function of the left electrode temperature (T L) for ΔT = 10, 20, 30 K. In the PC state, a pure spin -down current (red) is
+> generated, while the spin -up current (blue) is blocked. (b) The corresponding spin filtration efficiency (SFE) and thermal
+> TMR ratio. The TMR remains robust up to room temperature. (c, d) Fixed left electrode temperature (T L). (c) Thermal
+> current as a function of ΔTwith T Lfixed near room temperature (290 –310 K). (d) The device maintains a near -unity SFE
+> (>80%) and a rising TMR with increasing thermal gradient, confirming that the crystal orientation filtering mechanism is
+> stable against thermal fluctuations at room temperature. 14 /24
+
+3 DISCUSSION 
+
+Our investigation establishes a unified framework for realizing high -performance spintronics 
+
+in compensated magnetic systems, governed by the principle of crystallographic spin 
+
+segregation. By bridging the symmetry -resolved toy model (Fig. 1) with specific material 
+
+realizations (Figs. 2-4), we demonstrate that robust spin filtering can be rigorously enforced by 
+
+magnetic crystal symmetries that allow a d-wave spin splitting , providing a deterministic route 
+
+to generate pure spin currents without net magnetiza tion. 
+
+Our approach is conceptually based on the distinction between direction -selective spin 
+
+transport and symmetry -compensated spin splitting . While previous studies have classified 
+
+altermagnets primarily based on global Fermi surface topology, our work highlights that 
+
+functional spin selectivity is fundamentally dictated by local momentum -space connectivity. In 
+
+KV 2Se 2O, the characteristic d-wave symmetry imposes a strict orthogonal segregation of spin 
+
+channels along the principal axes. Consequently, ballistic transport along the Γ-X (or Γ-Y) 
+
+direction is populated exclusively by a single spin species. This crystallographic locking 
+
+effectivel y utilizes the anisotropic band structure to "switch on" high spin polarization simply 
+
+by aligning the device geometry with the symmetry -broken crystal axes. The translation of this 
+
+intrinsic quantization into macroscopic device performance is validated by the giant tunneling 
+
+magnetoresistance observed in the all -epitaxial KV 2Se 2O/Bi 2O2Se heterostructure. The 
+
+calculated TMR ratio of 2.24 × 10 3 % represents an order -of -magnitude improvement over 
+
+previously reported values in RuO 2-based devices. 
+
+Crucially, our results extend the utility of altermagnets into the domain of spin caloritronic .
+
+The persistence of a high spin filtration efficiency (SFE> 80%) and substantial thermal TMR 
+
+at room temperature indicates that the energy scale of the symmetry -protected spin splitting 
+
+significantly exceeds the thermal broadening. This resilience is a direct consequence of the 
+
+large spectral gaps identified in the PLDOS analysis, which effectively block thermally excited 
+
+carriers in the forbidden channel. The abi lity to harvest pure spin currents from waste heat 
+
+without external magnetic fields positions KV 2Se 2O as a versatile platform for energy -efficient, 
+
+zero -bias spin logic. 15 / 24 
+
+We emphasize that the orientation -dependent filtering mechanism identified here is generic 
+
+to the d-wave symmetry class. By exploiting the synergy between altermagnetic ordering and 
+
+epitaxial engineering, our work paves the way for a new generation of scalable, field -free, and 
+
+room -temperature spintronic devices that combine the ultrafast dynamics of an tiferromagnets 
+
+with the high readout fidelity of ferromagnets. 
+
+DATA AVAILABILITY 
+
+The data supporting the findings of this study are available from the corresponding authors 
+
+upon reasonable request .
+
+ACKNOWLEDGEMENTS 
+
+This work is supported by the Shenzhen Science and Technology Program (Grant No. 
+
+JCYJ20250604174400001), the Guangdong Basic and Applied Basic Research Foundation 
+
+(Grant No. 2023A1515011852), and the Guangdong Science and Technology Innovation 
+
+Strategy Special Fund (Grant No. pdjh2025bk012). P. -H. F. acknowledges the financial support 
+
+from the Fondazione Cariplo under the grant 2023 -2594. T he authors would like to thank 
+
+National Supercomputer Center in Guangzhou for providing high performance computational 
+
+resources. 
+
+REFERENCE 
+
+[1] Song Cheng, Bai Hua, Zhou Zhiyuan, et al. Altermagnets as a new class of functional 
+
+materials [J]. Nature Reviews Materials, 2025, 10(6): 473 -85. 10.1038/s41578 -025 -
+
+00779 -1
+
+[2] Wolf S. A., Awschalom D. D., Buhrman R. A., et al. Spintronics: A Spin -Based 
+
+Electronics Vision for the Future [J]. Science, 2001, 294(5546): 1488 -95. 
+
+10.1126/science.1065389 
+
+[3] Žutić Igor, Fabian Jaroslav, Das Sarma S. Spintronics: Fundamentals and applications 
+
+[J]. Reviews of Modern Physics, 2004, 76(2): 323 -410. 10.1103/RevModPhys.76.323 
+
+[4] Chappert Claude, Fert Albert, Van Dau Frédéric Nguyen. The emergence of spin 
+
+electronics in data storage [J]. Nature Materials, 2007, 6(11): 813 -23. 
+
+10.1038/nmat2024 
+
+[5] Bader S.D., Parkin S.S.P. Spintronics [J]. 2010, 1(Volume 1, 2010): 71 -88. 16 / 24 
+
+https://doi.org/10.1146/annurev -conmatphys -070909 -104123 
+
+[6] Jungwirth T., Marti X., Wadley P., et al. Antiferromagnetic spintronics [J]. Nature 
+
+Nanotechnology, 2016, 11(3): 231 -41.  10.1038/nnano.2016.18 
+
+[7]  Baltz V., Manchon A., Tsoi M., et al. Antiferromagnetic spintronics [J].  Reviews of 
+
+Modern Physics, 2018, 90(1): 015005. 10.1103/RevModPhys.90.015005 
+
+[8] Šmejkal Libor, Mokrousov Yuriy, Yan Binghai, et al. Topological antiferromagnetic 
+
+spintronics [J]. Nature Physics, 2018, 14(3): 242 -51. 10.1038/s41567 -018 -0064 -5
+
+[9] Chen Hongyu, Liu Li, Zhou Xiaorong, et al. Emerging Antiferromagnets for 
+
+Spintronics [J]. Advanced Materials, 2024, 36(14): 2310379. 
+
+https://doi.org/10.1002/adma.202310379 
+
+[10] Šmejkal Libor, Sinova Jairo, Jungwirth Tomas. Emerging Research Landscape of 
+
+Altermagnetism [J]. Physical Review X, 2022, 12(4): 040501. 
+
+10.1103/PhysRevX.12.040501 
+
+[11] Fukaya Yuri, Lu Bo, Yada Keiji, et al. Superconducting phenomena in systems with 
+
+unconventional magnets [J]. Journal of Physics: Condensed Matter, 2025, 37(31): 
+
+313003. 10.1088/1361 -648X/adf1cf 
+
+[12] Ashcroft Neil W., Mermin N. David. Solid State Physics [M]. New York, NY: Holt, 
+
+Rinehart and Winston, 1976. 
+
+[13] Šmejkal Libor, Hellenes Anna Birk, González -Hernández Rafael, et al. Giant and 
+
+Tunneling Magnetoresistance in Unconventional Collinear Antiferromagnets with 
+
+Nonrelativistic Spin -Momentum Coupling [J]. Physical Review X, 2022, 12(1): 
+
+011028. 10.1103/PhysRevX.12.011028 
+
+[14] Šmejkal Libor, Sinova Jairo, Jungwirth Tomas. Beyond Conventional Ferromagnetism 
+
+and Antiferromagnetism: A Phase with Nonrelativistic Spin and Crystal Rotation 
+
+Symmetry [J]. Physical Review X, 2022, 12(3): 031042. 
+
+10.1103/PhysRevX.12.031042 
+
+[15] Chen Xiaobing, Liu Yuntian, Liu Pengfei, et al. Unconventional magnons in collinear 
+
+magnets dictated by spin space groups [J]. Nature, 2025, 640(8058): 349 -54. 
+
+10.1038/s41586 -025 -08715 -7
+
+[16] Bai H., Han L., Feng X. Y, et al. Observation of Spin Splitting Torque in a Collinear 
+
+Antiferromagnet RuO2 [J]. Physical Review Letters, 2022, 128(19): 197202. 
+
+10.1103/PhysRevLett.128.197202 
+
+[17] Karube Shutaro, Tanaka Takahiro, Sugawara Daichi, et al. Observation of Spin -Splitter 
+
+Torque in Collinear Antiferromagnetic RuO2 [J]. Physical Review Letters, 2022, 
+
+129(13): 137201. 10.1103/PhysRevLett.129.137201 
+
+[18] Lai Junwen, Yu Tianye, Liu Peitao, et al. d -Wave Flat Fermi Surface in Altermagnets 
+
+Enables Maximum Charge -to -Spin Conversion [J]. Physical Review Letters, 2025, 
+
+135(25): 256702. 10.1103/bf1n -sxdl 
+
+[19] Zhu Haiyuan, Li Jiayu, Chen Xiaobing, et al. Magnetic geometry induced quantum 
+
+geometry and nonlinear transports [J]. Nature Communications, 2025, 16(1): 4882. 
+
+10.1038/s41467 -025 -60128 -2
+
+[20] Peng Rui, Fang Shibo, Ho Pin, et al. Ferroelastic altermagnetism [J]. npj Quantum 
+
+Materials, 2025. 10.1038/s41535 -025 -00835 -717 / 24 
+
+[21] Yang Zongmeng, Yang Xingyue, Wang Jianhua, et al. Unconventional thickness 
+
+scaling of coherent tunnel magnetoresistance in altermagnets [J]. Physical Review B, 
+
+2025, 112(20): 205202. 10.1103/2thy -fzzj 
+
+[22] Shao Ding -Fu, Jiang Yuan -Yuan, Ding Jun, et al. N'eel Spin Currents in 
+
+Antiferromagnets [J]. Physical Review Letters, 2023, 130(21): 216702. 
+
+10.1103/PhysRevLett.130.216702 
+
+[23] Shao Ding -Fu, Tsymbal Evgeny Y. Antiferromagnetic tunnel junctions for spintronics 
+
+[J]. npj Spintronics, 2024, 2(1): 13. 10.1038/s44306 -024 -00014 -7
+
+[24] Fu Pei -Hao, Lv Qianqian, Xu Yong, et al. All -electrically controlled spintronics in 
+
+altermagnetic heterostructures [J]. npj Quantum Materials, 2025, 10(1): 111. 
+
+10.1038/s41535 -025 -00827 -7
+
+[25] Gonzalez Betancourt R. D, Zubáč J., Gonzalez -Hernandez R., et al. Spontaneous 
+
+Anomalous Hall Effect Arising from an Unconventional Compensated Magnetic Phase 
+
+in a Semiconductor [J]. Physical Review Letters, 2023, 130(3): 036702. 
+
+10.1103/PhysRevLett.130.036702 
+
+[26] Chi Boyuan, Jiang Leina, Zhu Yu, et al. Crystal -facet -oriented altermagnets for 
+
+detecting ferromagnetic and antiferromagnetic states by giant tunneling 
+
+magnetoresistance [J]. Physical Review Applied, 2024, 21(3): 034038. 
+
+10.1103/PhysRevApplied.21.034038 
+
+[27] Yan Zhi, Yang Ruixia, Fang Cheng, et al. Giant electrode effect on tunneling 
+
+magnetoresistance and electroresistance in van der Waals intrinsic multiferroic tunnel 
+
+junctions using VS2 [J]. Physical Review B, 2024, 109(20): 205409. 
+
+10.1103/PhysRevB.109.205409 
+
+[28] Wu Yanzhao, Deng Li, Yin Xiang, et al. Valley -Related Multipiezo Effect and 
+
+Noncollinear Spin Current in an Altermagnet Fe2Se2O Monolayer [J].  Nano Letters, 
+
+2024, 24(34): 10534 -9.  10.1021/acs.nanolett.4c02554 
+
+[29]  Zhang Run -Wu, Cui Chaoxi, Li Runze, et al.  Predictable Gate -Field Control of Spin in 
+
+Altermagnets with Spin -Layer Coupling [J]. Physical Review Letters, 2024, 133(5): 
+
+056401. 10.1103/PhysRevLett.133.056401 
+
+[30] Fernandes Rafael M., De Carvalho Vanuildo S., Birol Turan, et al. Topological 
+
+transition from nodal to nodeless Zeeman splitting in altermagnets [J]. Physical Review 
+
+B, 2024, 109(2): 024404. 10.1103/PhysRevB.109.024404 
+
+[31] Zhai Yahui, Yu Longju, Lv Jian, et al. Zeeman -type spin splittings in strained $d$ -wave 
+
+altermagnets [J]. Physical Review B, 2025, 112(17): 174411. 10.1103/7q2d -jcqg 
+
+[32] Sumita Shuntaro, Naka Makoto, Seo Hitoshi. Phase -modulated superconductivity via 
+
+altermagnetism [J]. Physical Review B, 2025, 112(14): 144510. 10.1103/3k12 -2467 
+
+[33] Fu Pei -Hao, Mondal Sayan, Liu Jun -Feng, et al. Light -induced Floquet spin -triplet 
+
+Cooper pairs in unconventional magnets [J]. 2025. 
+
+[34]  Fu Pei -Hao, Mondal Sayan, Liu Jun -Feng, et al.  Floquet engineering spin triplet states 
+
+in unconventional magnets [J]. Physical Review Letters, 2026. 10.1103/lkf9 -jgv6 
+
+[35] Yang Xin -Ren, Fang Shibo, Yang Zongmeng, et al. Altermagnetic Flatband -Driven 
+
+Fermi Surface Geometry for Giant Tunneling Magnetoresistance, F, 2025 [C]. 
+
+[36] Ziletti A., Huang S. M., Coker D. F., et al. Van Hove singularity and ferromagnetic 18 / 24 
+
+instability in phosphorene [J]. Physical Review B, 2015, 92(8): 085423. 
+
+10.1103/PhysRevB.92.085423 
+
+[37] Datta Supriyo. Electronic Transport in Mesoscopic Systems [M]. Cambridge: 
+
+Cambridge University Press, 1995. 
+
+[38] Liu Jiayu, Zhan Jie, Li Tongrui, et al. Absence of Altermagnetic Spin Splitting 
+
+Character in Rutile Oxide RuO2 [J]. Physical Review Letters, 2024, 133(17): 176401. 
+
+10.1103/PhysRevLett.133.176401 
+
+[39] Feng Zexin, Zhou Xiaorong, Šmejkal Libor, et al. An anomalous Hall effect in 
+
+altermagnetic ruthenium dioxide [J]. Nature Electronics, 2022, 5(11): 735 -43. 
+
+10.1038/s41928 -022 -00866 -z
+
+[40] Tschirner Teresa, Keßler Philipp, Gonzalez Betancourt Ruben Dario, et al. Saturation 
+
+of the anomalous Hall effect at high magnetic fields in altermagnetic RuO2 [J]. APL 
+
+Materials, 2023, 11(10): 101103. 10.1063/5.0160335 
+
+[41] Li Yu -Xin, Chen Yiyuan, Pan Liqing, et al. Exploration of Altermagnetism in RuO2 [J]. 
+
+2025. 
+
+[42] Jaeschke -Ubiergo Rodrigo, Bharadwaj Venkata -Krishna, Campos Warlley, et al. 
+
+Atomic altermagnetism [J]. 2025.  https://doi.org/10.48550/arXiv.2503.10797 
+
+[43] Von N. W. Ashcroft Und N. D. Mermin; Holt Rinehart and Winston. Solid State Physics. 
+
+New York 1976, [J]. Physik in unserer Zeit, 1978, 9(1): 33 -.
+
+https://doi.org/10.1002/piuz.19780090109 
+
+[44]  Borda László, Fritz Lars, Andrei Natan, et al.  Theory of inelastic scattering from 
+
+quantum impurities [J]. Physical Review B, 2007, 75(23): 235112. 
+
+10.1103/PhysRevB.75.235112 
+
+[45] Zaránd Gergely, Borda László, Von Delft Jan, et al. Theory of Inelastic Scattering from 
+
+Magnetic Impurities [J]. Physical Review Letters, 2004, 93(10): 107204. 
+
+10.1103/PhysRevLett.93.107204 
+
+[46] Quang Doan Nhat, Tung Nguyen Huyen, Tuoc Vu Ngoc, et al. Quantum and transport 
+
+lifetimes due to roughness -induced scattering of a two -dimensional electron gas in 
+
+wurtzite group -III -nitride heterostructures [J]. Physical Review B, 2006, 74(20): 
+
+205312. 10.1103/PhysRevB.74.205312 
+
+[47] Smidstrup Søren, Markussen Troels, Vancraeyveld Pieter, et al. QuantumATK: an 
+
+integrated platform of electronic and atomic -scale modelling tools [J]. Journal of 
+
+Physics: Condensed Matter, 2020, 32(1): 015901. 10.1088/1361 -648X/ab4007 
+
+[48] Smidstrup Søren, Stradi Daniele, Wellendorff Jess, et al. First -principles Green's -
+
+function method for surface calculations: A pseudopotential localized basis set 
+
+approach [J]. Physical Review B, 2017, 96(19): 195309. 
+
+10.1103/PhysRevB.96.195309 
+
+[49] Brandbyge Mads, Mozos José -Luis, Ordejón Pablo, et al. Density -functional method 
+
+for nonequilibrium electron transport [J]. Physical Review B, 2002, 65(16): 165401. 
+
+10.1103/PhysRevB.65.165401 
+
+[50] Jiang Bei, Hu Mingzhe, Bai Jianli, et al. A metallic room -temperature d -wave 
+
+altermagnet [J]. Nature Physics, 2025, 21(5): 754 -9. 10.1038/s41567 -025 -02822 -y
+
+[51] Anisimov Vladimir I., Zaanen Jan, Andersen Ole K. Band theory and Mott insulators: 19 / 24 
+
+Hubbard U instead of Stoner I [J]. Physical Review B, 1991, 44(3): 943 -54. 
+
+10.1103/PhysRevB.44.943 
+
+[52] Dudarev S. L., Botton G. A., Savrasov S. Y., et al. Electron -energy -loss spectra and the 
+
+structural stability of nickel oxide: An LSDA+U study [J]. Physical Review B, 1998, 
+
+57(3): 1505 -9. 10.1103/PhysRevB.57.1505 
+
+[53] Büttiker M., Imry Y., Landauer R., et al. Generalized many -channel conductance 
+
+formula with application to small rings [J]. Physical Review B, 1985, 31(10): 6207 -15. 
+
+10.1103/PhysRevB.31.6207 
+
+[54] Li Shuyi, Zhang Yu, Bahri Adrian, et al. Altermagnetism and strain induced 
+
+altermagnetic transition in Cairo pentagonal monolayer [J]. npj Quantum Materials, 
+
+2025, 10(1): 83.  10.1038/s41535 -025 -00793 -0
+
+[55]  Ma Hai -Yang, Hu Mengli, Li Nana, et al.  Multifunctional antiferromagnetic materials 
+
+with giant piezomagnetism and noncollinear spin current [J]. Nature Communications, 
+
+2021, 12(1): 2846. 10.1038/s41467 -021 -23127 -7
+
+[56] Zhu Yu -Peng, Chen Xiaobing, Liu Xiang -Rui, et al. Observation of plaid -like spin 
+
+splitting in a noncoplanar antiferromagnet [J]. Nature, 2024, 626(7999): 523 -8. 
+
+10.1038/s41586 -024 -07023 -w
+
+[57] Moodera Jagadeesh S., Mathon George. Spin polarized tunneling in ferromagnetic 
+
+junctions [J]. Journal of Magnetism and Magnetic Materials, 1999, 200(1): 248 -73. 
+
+https://doi.org/10.1016/S0304 -8853(99)00515 -6
+
+[58] Manno M., Frakie R., Bolon B., et al. Spin -dependent intergranular transport in highly 
+
+spin -polarized Co1−xFexS2 thin films [J]. Applied Physics Letters, 2009, 95(18): 
+
+182510. 10.1063/1.3262958 
+
+[59] Yang Zhi, Qin Shen -Ao, Ruan Bao -Fu, et al. Van der Waals multiferroic tunnel junction 
+
+with giant tunneling electroresistance and magnetoresistance toward bidirectional 
+
+photoresponse and photoassisted memory [J]. Physical Review B, 2025, 112(11): 
+
+115312. 10.1103/9m1x -q7dn 20 / 24 
+
+Supplemental Material of “Intrinsic Spin Filter Effect in a d-wave altermagnet KV 2Se 2O
+
+with Open Fermi Surface ”
+
+Bin Liu, 1 Pei -Hao Fu, 1, 2, # Yu -Xuan Sun, 1 Xiao -Lin Zhang, 3 Si -Cong Zhu, 4 Xiang -Long Yu, 1, * Hua 
+
+Wu, 5, † Yuan -Zhi Shao 1, 6, ‡  
+
+> 1
+
+School of Science, Sun Yat -sen University, Shenzhen 518107, China  
+
+> 2
+
+Department of Physics and Astronomy, University of Florence, I -50019 Sesto Fiorentino, Italy  
+
+> 3
+
+Key Laboratory of Artificial Micro - and Nano -structures of Ministry of Education, School of Physics 
+
+and Technology, Wuhan University, Wuhan 430072, China  
+
+> 4
+
+The State Key Laboratory for Refractories and Metallurgy, Wuhan University of Science and 
+
+Technology, Wuhan 430081, China  
+
+> 5
+
+Laboratory for Computational Physical Sciences (MOE), State Key Laboratory of Surface Physics, 
+
+and Department of Physics, Fudan University, Shanghai 200433, China  
+
+> 6
+
+Guangdong Provincial Key Laboratory of Magnetoelectric Physics and Devices, Sun Yat -sen 
+
+University, Guangzhou 510275, China  
+
+> #
+
+Corresponding author: phy.phfu@gmail.com  
+
+> *
+
+Corresponding author: yuxlong6@mail.sysu.edu.cn  
+
+> †
+
+Corresponding author: wuh@fudan.edu.cn  
+
+> ‡
+
+Corresponding author: stssyz@mail.sysu.edu.cn 21 / 24 
+
+Fig. S1. Energy dispersion of the low -energy effective d -wave altermagnetic model [Eq. (1)] along 
+
+𝒌 𝒙  with  𝒌 𝒚 = 𝟎 , together with the corresponding density of states [Eq. (2)] as a function of energy ,
+
+Insets illustrate the Fermi -surface geometry determined by the altermagnetic parameter  𝒕 𝐀𝐌 /𝒕 𝟎 :
+
+a critical (flat) Fermi surface with zero curvature at  𝒕 𝐀𝐌 /𝒕 𝟎 = 𝟏 22 / 24            
+
+> FIG. S2.Atomic geometry of the all -epitaxial magnetic tunnel junction. Schematic illustration of
+> the KV 2Se 2O/Bi 2O2Se/KV 2Se 2O heterostructure used for quantum transport calculations. (a) Top
+> view: The device consists of a central Bi 2O2Se tunnel barrier (scattering region, blue background)
+> sandwiched between two semi -infinite KV 2Se 2Oelectrodes (beige background). Transport is
+> defined along the z-axis. (b) Front view: Illustrating the periodic arrangement perpendicular to
+> the transport direction. (c) Side view: The atomic stacking viewed along the transport axis,
+> highlighting the epitaxial registry at the interface.
+
+Fig . S2 displays the spin -resolved local density of states (LDOS) projected onto th e scattering 
+
+region of the magnetic tunnel junction (MTJ). The heterostructure is constructed using Bi 2O2Se 
+
+as the tunnel barrier, selected for its excellent lattice matching and chemical compatibility with 
+
+the KV 2Se 2O electrodes, which minimizes interface scattering and preserves the intrinsic d-
+
+wave spin texture. In the parallel configuration (PC), a striking dichotomy in wavefunction 
+
+penetration is observed. The spin -down channel [Fig. S2 (b)] exhibits continuous, delocalized 
+
+states extendin g from the source electrode, through the Bi 2O2Se barrier, and into the drain, 
+
+confirming the high -transparency state predicted by the orientation -dependent spin filter model. 
+
+In contrast, the spin -up channel [Fig. S2 (a)] shows strong localization within the el ectrodes 
+
+with negligible spectral weight inside the barrier region, indicative of the symmetry -forbidden 
+
+transport gap along the stacking direction. The blocking mechanism is further visualized in the 
+
+anti -parallel configuration (APC). Here, the mismatch between the spin -projected pass -bands 
+
+of the two electrodes leads to a suppression of wavefunction overlap. As shown in 23 / 24 
+
+Supplementary Fig s. S2 (c, d), electronic states are confined to the injection side of the junction, 
+
+decaying rapidly within the barrier without coupling to the collector. This spatial segregation 
+
+of states in the APC limit, contrasted with the robust tunneling channel in the PC spin -down 
+
+limit, visually corroborates the giant magnetoresistance effect arising from the crystallographic 
+
+spin filtering. 24 / 24 
+
+FIG. S3. Real -space projection of spin -dependent transport states. Spatial distribution of the spin -
+
+resolved Local Density of States (LDOS) at the Fermi energy for a KV 2Se 2O/Bi 2O2Se /KV 2Se 2O
+
+magnetic tunnel junction. (a, b) Parallel Configuration (PC): The spin -up channel (green) is 
+
+strongly attenuated due to the absence of bulk transport states, whereas the spin -down channel 
+
+(blue) demonstrates significant wavefunction penetration across the Bi 2O2Se barrier, 
+
+corresponding to the high -conductance state. (c, d) Anti -Parallel Configuration (APC): Both spin -
+
+up (c) and spin -down (d) states exhibit spin -selective mismatch between the source and drain 
+
+electrodes .
