@@ -1,23 +1,9 @@
 {
   "label": "2026-02-17 ~ 2026-03-18",
   "date": "2026-02-17 ~ 2026-03-18",
-  "generated_at": "2026-03-18T08:42:40",
-  "count": 3,
+  "generated_at": "2026-03-18T09:05:40",
+  "count": 1,
   "papers": [
-    {
-      "paper_id": "20260217-20260318/2602.21460v1-intrinsic-spin-filter-effect-in-a-d-wave-altermagnet-kv2se2o-with-open-fermi-surface",
-      "section": "quick",
-      "title_en": "Intrinsic Spin Filter Effect in a $d$-wave altermagnet KV$_2$Se$_2$O with Open Fermi Surface",
-      "authors": "Bin Liu, Pei-Hao Fu, Yu-Xuan Sun, Xiao-Lin Zhang, Si-Cong Zhu, Xiang-Long Yu, Hua Wu, Yuan-Zhi Shao",
-      "date": "2026-02-25",
-      "pdf": "https://arxiv.org/pdf/2602.21460v1",
-      "score": "9.0",
-      "evidence": "磁隧道结中的巨隧道磁阻效应",
-      "tldr": "本研究探讨了d波交错磁体KV2Se2O中的本征自旋过滤效应。通过分析晶体学自旋偏析，发现沿特定轴的输运具有高度自旋极化。研究者设计了KV2Se2O/Bi2O2Se/KV2Se2O磁隧道结，实现了半金属输运特性。该结构在室温下表现出巨大的隧穿磁电阻（TMR）、稳健的自旋过滤及自旋塞贝克效应，为开发高性能、无磁场、可扩展的自旋逻辑器件提供了新路径。",
-      "tags": "query:tmr",
-      "abstract_en": "Altermagnets offer a unique pathway to functional spintronics by combining vanishing magnetization with large spin splitting. Here, we demonstrate that the canonical d-wave altermagnet KV2Se2O can deliver giant tunneling magnetoresistance through orientation-dependent spin filtering. By analyzing the crystallographic spin segregation, we show that transport along specific crystallographic axes is nearly fully spin-polarized within the symmetry-protected ballistic channels. We implement this mechanism in a lattice-matched KV2Se2O/Bi2O2Se/KV2Se2O magnetic tunnel junction, which achieves a robust half-metallic transport regime. The symmetry-protected spectral gap in the parallel/anti-parallel configuration ensures a high tunneling magnetoresistance ratio, resulting in substantial tunneling magnetoresistance, robust thermally driven spin filtering, and spin Seebeck effect at room temperature. These findings provide a path of altermagnetic heterostructures as a high-performance platform for scalable, field-free, and thermally stable spin logic.",
-      "selection_source": "fresh_fetch"
-    },
     {
       "paper_id": "20260217-20260318/2602.18338v1-modeling-of-a-magnetic-field-sensor-based-on-spin-hall-magnetoresistance",
       "section": "quick",
@@ -30,20 +16,6 @@
       "tldr": "本研究针对传统TMR传感器制造复杂及噪声高等问题，提出了一种基于自旋霍尔磁电阻（SMR）的磁场传感器建模与实验验证方案。通过结合Stoner-Wohlfarth模型、Fuchs-Sondheimer电流分布分析及改进的磁畴模型，研究了惠斯通桥配置下的SMR、AMR与SOT相互作用。实验验证了Pt/FeCoB和Ta/FeCoB双层膜器件，为优化SMR传感器灵敏度与功耗提供了关键设计准则。",
       "tags": "query:tmr",
       "abstract_en": "Next-generation spintronic sensors aim to overcome the limitations of traditional tunneling-magnetoresistance (TMR) devices, such as complex manufacturing, high $1/f$ noise, and significant offsets. This work presents a comprehensive modeling and experimental validation of a magnetic field sensor based on Spin Hall Magnetoresistance (SMR) in a Wheatstone bridge configuration. Utilizing a multiphysics approach, we simulate the interplay between SMR, Anisotropic Magnetoresistance (AMR), and Spin-Orbit Torque (SOT) using a Stoner-Wohlfarth model complemented by a Fuchs-Sondheimer analysis of current distribution. To account for the presence of magnetic domains, we incorporate a modified Stoner-Wohlfarth framework that considers non-uniform magnetization and domain wall motion through a \"truncated astroid\" approach, allowing for a statistical distribution of single-domain particles. The model is validated against experimental measurements of Pt/$\\text{Fe}_{60}\\text{Co}_{20}\\text{B}_{20}$ and Ta/$\\text{Fe}_{60}\\text{Co}_{20}\\text{B}_{20}$ bilayers patterned into Hall bars and Wheatstone bridges. The model provides critical design guidelines for optimizing material properties, layer thickness, and device layout to minimize power consumption and maximize sensitivity in SMR-based sensing applications.",
-      "selection_source": "fresh_fetch"
-    },
-    {
-      "paper_id": "20260217-20260318/2603.10615v1-topological-tunneling-magnetoresistance-driven-by-type-ii-weyl-like-states-in-the-room-temperature-half-metal-mn2pc-monolayer",
-      "section": "quick",
-      "title_en": "Topological Tunneling Magnetoresistance Driven by Type-II Weyl-Like States in the Room-Temperature Half-Metal Mn2PC Monolayer",
-      "authors": "Wei Ma, Yu-Ting Wang, Wen-Bo Sun, Zhiheng Lv, Shuai Shi, Jian-Hong Rong, Tie-Lei Song, Zhi-Feng Liu",
-      "date": "2026-03-11",
-      "pdf": "https://arxiv.org/pdf/2603.10615v1",
-      "score": "8.0",
-      "evidence": "磁隧道结中的拓扑隧道磁阻",
-      "tldr": "本研究预测了四方相Mn2PC单层是一种居里温度高达554 K的室温铁磁半金属。其自旋向上通道在费米能级处具有II型类外尔能带交叉，而自旋向下通道为宽禁带半导体。基于此特性，研究提出了一种拓扑隧穿磁电阻（TTMR）器件，在平行配置下利用全自旋极化的类外尔载流子导电，而在反平行配置下受半金属能隙抑制，从而实现巨大的磁电阻比，为室温拓扑自旋电子器件提供了理想平台。",
-      "tags": "query:tmr",
-      "abstract_en": "We predict the tetragonal Mn2PC monolayer to be a room-temperature ferromagnetic half-metal with a Curie temperature of 554 K. The spin-up channel hosts type-II Weyl-like crossings at the Fermi level with highly anisotropic band dispersion, whereas the spin-down channel is a wide-gap semiconductor. Topological edge states obtained from tight-binding calculations confirm the non-trivial bulk topology. Spin-orbit coupling opens a small gap of 11.2 meV at the Weyl-like crossings, generating pronounced Berry curvature and a sizable anomalous Hall conductivity near the Fermi level. Based on these properties, we propose topological tunneling magnetoresistance in a Mn2PC-based magnetic tunnel junction: the parallel configuration conducts through fully spin-polarized Weyl-like carriers, while the antiparallel configuration is suppressed by the half-metallic gap, yielding a giant magnetoresistance ratio. The concurrent anomalous Hall effect in the conducting state provides an experimentally accessible signature of the topological carriers. These results identify the Mn2PC monolayer as a promising platform for room-temperature topological spintronic devices.",
       "selection_source": "fresh_fetch"
     }
   ],
