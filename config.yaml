@@ -25,4 +25,37 @@ subscriptions:
     stage: A
     diff_threshold_pct: 15
   keyword_recall_mode: or
-  intent_profiles: []
+  intent_profiles:
+    - tag: TMR
+      description: 请帮我查找与TMR电流传感器阵列有关的论文
+      enabled: true
+      keywords:
+        - keyword: TMR sensor
+          keyword_cn: TMR传感器
+          query: Tunneling Magnetoresistance sensor technology
+        - keyword: current sensor array
+          keyword_cn: 电流传感器阵列
+          query: multi-sensor array for current measurement
+        - keyword: magnetic sensor array
+          keyword_cn: 磁传感器阵列
+          query: magnetic field sensor array for current sensing
+        - keyword: current reconstruction
+          keyword_cn: 电流重构
+          query: algorithms for current reconstruction using sensor arrays
+      intent_queries:
+        - query: non contact current measurement using TMR magnetic sensor arrays
+          query_cn: 基于TMR磁传感器阵列的非接触式电流测量
+          enabled: true
+          source: manual
+          note: ''
+        - query: interference suppression techniques for TMR current sensor arrays
+          query_cn: TMR电流传感器阵列的抗干扰技术
+          enabled: true
+          source: manual
+          note: ''
+        - query: application of TMR sensors in multi conductor current monitoring
+          query_cn: TMR传感器在多导体电流监测中的应用
+          enabled: true
+          source: manual
+          note: ''
+      updated_at: '2026-03-18T08:35:55.498Z'
