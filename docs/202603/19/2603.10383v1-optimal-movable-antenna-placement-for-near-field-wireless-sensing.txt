@@ -1,0 +1,672 @@
+Title: Optimal Movable Antenna Placement for Near-Field Wireless Sensing
+
+URL Source: https://arxiv.org/pdf/2603.10383v1
+
+Published Time: Thu, 12 Mar 2026 00:34:26 GMT
+
+Number of Pages: 6
+
+Markdown Content:
+# Optimal Movable Antenna Placement for Near-Field Wireless Sensing 
+
+Jinjian Liu, Xianxin Song, and Xianghao Yu 
+
+Department of Electrical Engineering, City University of Hong Kong, Hong Kong Emails: jinjian.liu@my.cityu.edu.hk, xianxin.song@cityu.edu.hk, alex.yu@cityu.edu.hk 
+
+Abstract —Movable antennas (MAs) have emerged as a promis-ing technology for wireless sensing by reconfiguring antenna positions to exploit additional spatial degrees of freedom (DoFs). This paper investigates a robust movable antenna placement strategy for near-field wireless sensing to minimize the worst-case squared position error bound (SPEB). By temporarily relaxing the minimum inter-element spacing constraint, we first establish the optimality of centro-symmetric antenna position distribution, which simplifies the identification of the worst-case source, locating it at the array broadside on the Rayleigh boundary. Moreover, by leveraging moment-based analysis with the Richter-Tchakaloff theorem, we derive a closed-form optimal solution with three points supported on the center and two edges of the array. Guided by this structural insight, we finally develop an efficient three-point discrete deployment strategy to ensure the minimum inter-element spacing. Simulations demonstrate that the proposed design consistently outperforms conventional fixed antenna arrays and matches the exhaustive search benchmark at negligible computational complexity. 
+
+I. I NTRODUCTION 
+
+Movable antenna (MA) has emerged as a key enabling tech-nology for sixth-generation (6G) wireless networks to fulfill the stringent requirements of ultra-reliable and high-precision wireless sensing. Unlike the traditional antenna configurations with uniform distribution [1], MAs can reconfigure the electro-magnetic channel conditions by adjusting the antenna positions within a spatial region [2]. This capability unlocks additional spatial degrees of freedom (DoFs), offering great potential to enhance wireless sensing performance [2]. To fully exploit this potential, MA systems typically em-ploy large array apertures, thereby effectively enlarging the near-field region and rendering spherical-wave effects non-negligible [3]. Driven by this physical reality, MA-enabled sensing in the near-field region has attracted significant re-search attention [4]–[7]. Specifically, authors in [4] derived the Cram´ er-Rao bound (CRB) expression with respect to antenna positions in the near-field scenario, numerically demonstrated that centro-symmetric array geometries can improve both range and angle estimation performance compared to tradi-tional uniform-linear-array (ULA). Furthermore, prior work [5] adopted worst-case CRB as the estimation performance metric, and accordingly optimized the antenna location to minimize the worst-case estimation CRB in the near-field region by utilizing an iterative algorithm. Moreover, the potential of MA-enabled sensing has been explored to enhance near-field integrated sensing and com-munications (ISAC) performance in [6], [7]. Specifically, [6] maximized a weighted sum of sensing mutual information and communication rate by jointly optimizing the MA positions, sensing-signal covariance matrices and transmit/receive beam-formers. Similarly, [7] investigated rotatable MAs to balance the angle-range CRB and communication sum-rate through the joint design of transmit beamformers and the rotatable MA positions/rotations. However, current studies on near-field MA sensing [5] and ISAC [6], [7] primarily rely on iterative algorithms to optimize the antenna position variables, which obscures structural insights of the optimal array geometry and incurs extremely high computational costs, especially for large-scale antenna arrays. In this paper, we investigate near-field device-based sens-ing enabled by linear MA arrays, aiming to characterize the closed-form optimal antenna geometry for minimizing the worst estimation error of the source’s position. We first establish a near-field sensing model and adopt the squared position error bound (SPEB) as the sensing performance metric [8] to avoid the dimensional mismatch between an-gle and range error. By temporarily relaxing the minimum inter-element spacing constraint, we prove that the optimal antenna position distribution is centro-symmetric and further demonstrate that the array broadside on the Rayleigh boundary yields the worst-case SPEB. Furthermore, Richter-Tchakaloff theorem is leveraged to reveal that the optimal solution can be characterized by a three-point centro-symmetric structure, leading to a practical discrete deployment strategy that satisfies the spacing constraint. Simulation results demonstrate that the proposed design significantly outperforms traditional fixed-position antenna arrays and achieves performance comparable to exhaustive search with orders-of-magnitude lower compu-tational complexity. 
+
+Notations: We use normal-face letters to denote scalars, boldface lowercase and uppercase letters to denote column vectors and matrices, respectively. The transpose is denoted by (·)T. The imaginary unit is denoted by ȷ = √−1. For a vector x, xn denotes its n-th entry. The N × N identity matrix is denoted by IN . The set of M × N real matrices is denoted by RM ×N . The set of complex numbers is denoted by 
+
+C. The trace is denoted by tr( ·). The variance and covariance operations are denoted by Var( ·) and Cov( ·, ·), respectively. The notation arg max denotes the set of maximizers. Acircularly symmetric complex Gaussian vector with mean μ
+
+and covariance A is denoted by CN (μ, A). The set of n × n
+
+real symmetric positive definite matrices is denoted by Sn
+
+> ++
+
+, 
+
+> arXiv:2603.10383v1 [eess.SP] 11 Mar 2026 Fig. 1. The 1D MA array geometry for single-source sensing in the near field.
+
+and ⪯/⪰ denotes the Loewner partial order. II. S YSTEM MODEL AND PROBLEM FORMULATION 
+
+We consider a single-source near-field sensing scenario, as shown in Fig. 1. The system consists of a radiating source acting as the transmitter and a linear MA array serving as the sensing receiver. In this work, the sensing region of interest is restricted in the radiating near-field region of the MA [3], i.e., the Fresnel region, which is denoted by Γ. Over Γ, we adopt the uniform spherical wave (USW) channel model in [3]. To ensure the validity of the USW model, we restrict the source range to r ∈ [dF, d R], where dF and dR denote the Fresnel and Rayleigh distances, respectively. Specifically, the linear MA array is equipped with N receive antennas aligned along the x-axis. Let Cn = ( xn, 0) denote the location of n-th receive antenna with xn ∈ [−a, a ],
+
+n = 1 , . . . , N , where the aperture is given by D = 2 a. Let 
+
+x = [ x1, . . . , x N ]T collect the antenna coordinates. Without loss of generality, the antennas are indexed in ascending order of their locations, i.e., −a ≤ x1 < x 2 · · · < x N ≤ a. Let 
+
+θ ∈ [0 , π ] denote the angle of arrival (AoA), defined as the angle between the source-to-array-center line and the positive 
+
+x-axis. Accounting for the effective aperture loss [3], [9], we define the effective aperture as Deff = D sin θ for any given θ.Accordingly, the Fresnel and Rayleigh distances are implicitly represented by dF = 0 .62 
+
+q D3eff  
+
+> λ
+
+and dR = 2D2eff  
+
+> λ
+
+, respectively [10]. The source emits a narrowband signal st with wavelength 
+
+λ toward the MA array, where t ∈ { 1, . . . , T } denotes the snapshot index and T is the total number of snapshots. The signal st is modeled as a deterministic sensing waveform satisfying 1
+
+> T
+
+PTt=1 |st|2 = P , with P representing the transmit power. The position of the source can be characterized either by its Cartesian coordinates 
+
+p = [ p1, p 2]T, (1) or, equivalently, by the polar coordinates η = [ u, r ]T, where 
+
+u = cos θ and r = pp21 + p22 represents the range from the array origin to the source. Denote rn as the propagation distance between the source and the n-th antenna: 
+
+rn = pr2 − 2rux n + x2
+
+> n
+
+. (2) Using the Fresnel approximation [3] of (2) and after removing the common range-dependent phase term eȷ 2πλ r , the array manifold vector at the transmitter can be written as [5] 
+
+α(x, η) ≈
+
+
+
+eȷ 2πλ  
+
+> 
+> ux 1−1−u22rx21
+> 
+
+, . . . , e ȷ 2πλ   
+
+> 
+> ux N−1−u22rx2
+> N
+> 
+
+T
+
+.
+
+(3) Under the adopted USW model, which assumes uniform path loss amplitudes across the array elements while capturing the phase variations, we now formulate the received signal. Specifically, the received signal at the MA array collected over 
+
+T snapshots can be expressed as 
+
+yt = β α(x, η) st + nt, t = 1 , . . . , T, (4) where β ∈ C is a unified channel coefficient, and nt ∼CN (0, σ 2IN ) is the additive white Gaussian noise (AWGN) at the sensing receiver. We stack the transmit signals, receive signals, and the noise across T snapshots as s = [ s1, . . . , s T ]T,
+
+Y = [ y1, . . . , yT ], and N = [ n1, . . . , nT ], respectively, and accordingly, 
+
+Y = α(x, η)sT + N . (5) To evaluate the fundamental limits of the source position estimation performance, let CRB η ∈ R2×2 denote the CRB matrix for estimating η. Based on the received signal model in (5), the diagonal entries of CRB η representing the theoretical variance lower bounds for the parameters u and r, are denoted by CRB u and CRB r , respectively, given by [5] 
+
+CRB u(x) = κ G1( ˜ x)
+
+G1(x) G1( ˜ x) − G22(x, ˜x) ,
+
+CRB r (x, η) = κ 4r4G1(x) + 8 ur 3G2(x, ˜x) + 4 u2r2G1( ˜ x)(1 − u2)2 G1(x)G1( ˜ x) − G22(x, ˜x) .
+
+(6) Here κ = σ2λ2  
+
+> 8π2T P N |β|2
+
+and ˜x = [ x21, . . . , x 2 
+
+> N
+
+]T. The G1(·) and 
+
+G2(·, ·) functions are defined as G1(x) = 1
+
+> N
+
+PNn=1 x2 
+
+> n
+
+−g(x)2
+
+and G2(x, ˜x) = 1
+
+> N
+
+PNn=1 x3 
+
+> n
+
+− g(x)g( ˜ x), respectively, with 
+
+g(x) = 1
+
+> N
+
+PNn=1 xn.
+
+Remark 1. It is worth noting that directly minimizing the trace of the CRB matrix with respect to η = [ u, r ]T involves mismatched units (i.e., the dimensionless u versus r in meters), leading to a physically ambiguous objective. This motivates us to consider a dimensionally unified metric. 
+
+To evaluate the sensing performance for the source’s po-sition, we adopt the SPEB as the metric [8]. The SPEB serves as the theoretical lower bound on the mean squared position error in Cartesian coordinates p for any unbiased estimator. Mathematically, it is defined as the trace of the Cartesian CRB matrix and denoted by SPEB( x, p), i.e., 
+
+SPEB( x, p) = tr(CRB( x, p)) [8]. Its relationship with the polar CRB is given in the following lemma. 
+
+Lemma 1. The source SPEB is given by 
+
+SPEB( x, p) = r2
+
+1 − u2 CRB u(x) + CRB r (x, η). (7) Proof: See Appendix A. In this paper, we aim to ensure robust performance against the worst-case source location within the prescribed near-field region Γ. This is achieved by minimizing the maximum 
+
+SPEB( x, p), i.e., (P1) : min  
+
+> x
+
+max  
+
+> p∈Γ
+
+SPEB( x, p) (8a) 
+
+s.t. xn ∈ [−a, a ], ∀n = 1 , . . . , N, (8b) 
+
+xn+1 − xn ≥ λ
+
+2 , ∀n = 1 , . . . , N − 1,
+
+(8c) where constraint (8c) ensures minimum inter-element spacing to avoid mutual coupling. III. P ROBLEM REFORMULATION AND ANALYSIS 
+
+In problem (P1), the minimum spacing constraint (8c) cou-ples adjacent antenna positions, which makes the placement design mathematically intractable. To facilitate our analysis and gain theoretical insight, we temporarily relax (8c). More-over, from (6), we observe that both G1(x) and G2(x, ˜x) are closely related to the term g(x) = 1
+
+> N
+
+PNn=1 xn. This term can be naturally interpreted as an average over N samples 
+
+{xn}Nn=1 , which are drawn from a certain distribution of a random variable X. Specifically, let X be a discrete random variable supported on S ⊆ [−a, a ] that models the distribution of antenna locations, and view elements in x as N realizations of X. As N → ∞ , functions G1(x) and G2(x, ˜x) can be identified with the variance and covariance associated with 
+
+X, i.e., Var( X) and Cov( X, X 2), respectively. Therefore, we can reformulate the discrete antenna placement problem as a distribution design problem for X. To characterize the distribution of X, we introduce its probability mass function 
+
+w(·) on S by w(ζ) = Pr( X = ζ) for all ζ ∈ S .This transformation leads to the reformulated problem (P1 ′)
+
+which is explicitly expressed as 
+
+(P1 ′) : min  
+
+> w(·)
+
+max  
+
+> p∈Γ
+
+SPEB( w(·), p) (9a) 
+
+s.t. X
+
+> ζ∈S
+
+w(ζ) = 1 , (9b) 
+
+w(ζ) ≥ 0, ∀ζ ∈ S . (9c) Here, SPEB( w(·), p) denotes the SPEB evaluated under the distribution w(·).Based on the theoretical optimal solution for (P1 ′), we will finally construct a feasible discrete antenna placement for (P1) that strictly satisfies the spacing constraint. To solve (P1 ′), we adopt a two-stage approach to decouple the min-max structure. We first address the inner maximization stage by defining the worst-case design metric F (w(·)) as 
+
+F (w(·)) = max  
+
+> p∈Γ
+
+SPEB( w(·), p). (10) 
+
+Proposition 1. For any distribution w(·) supported on [−a, a ],let wsym (·) denote its symmetrized counterpart constructed as a mixture of w(·) and its reflected distribution. Then, the following inequality holds: 
+
+F (wsym (·)) ≤ F (w(·)) . (11) 
+
+Proof: See Appendix B. In light of Proposition 1, which implies that an optimal solution to the distribution design problem can be found within the class of distributions that are symmetric about the origin. Hence, we restrict the search to such centro-symmetric distributions. Under symmetry, the covariance term vanishes, i.e., Cov( X, X 2) = 0 . Consequently, for any centro-symmetric distribution w(·), SPEB is reduced to 
+
+SPEB( w(·), p) = κ
+
+ k1
+
+Var( X) + k2
+
+Var( X2)
+
+
+
+, (12) where k1 = r2(1+3 u2)(1 −u2)2 and k2 = 4r4 
+
+> (1 −u2)2
+
+. Then, F (w(·)) 
+
+reduces to 
+
+F (w(·)) = κ
+
+ k1′
+
+Var( X) + k2′
+
+Var( X2)
+
+
+
+. (13) Here, k′ 
+
+> 1
+
+and k′ 
+
+> 2
+
+denote the coefficients defined in (12) evaluated at the worst-case source location pworst , i.e., 
+
+pworst = arg max  
+
+> p∈Γ
+
+SPEB( w(·), p). (14) In general, the worst-case location(s) pworst may depend on distribution w(·). However, for centro-symmetric distributions, 
+
+pworst becomes independent of w(·) and is located on the broadside of the MA array. 
+
+Proposition 2. For any centro-symmetric distribution w(·)
+
+supported on [−a, a ], the worst-case source location is in-dependent of w(·), and is given by 
+
+pworst = [ 0 , d R,max ]T, (15) 
+
+where dR,max = 2D2 
+
+> λ
+
+denotes the broadside Rayleigh distance. Proof: See Appendix C. According to Proposition 2, the coefficients k′ 
+
+> 1
+
+and k′
+
+> 2
+
+take the specific values of d2R,max and 4d4R,max , respectively. Substituting these values back into (13) yields the simplified worst-case metric. 
+
+F (w(·)) = κ d2R,max 
+
+Var( X) + 4d4R,max 
+
+Var( X2)
+
+!
+
+. (16) Accordingly, the optimization problem (P1 ′) reduces to (P2): 
+
+(P2 ) : min  
+
+> w(·)
+
+κ d2R,max 
+
+Var( X) + 4d4R,max 
+
+Var( X2)
+
+!
+
+(17a) 
+
+s.t. X
+
+> ζ∈S
+
+w(ζ) = 1 , (17b) 
+
+w(ζ) ≥ 0, ∀ζ ∈ S . (17c) It is worth noting that the objective function of (P2) depends on w(·) solely through the moments Var( X) and Var( X2).This explicit dependence plays a crucial role in the subsequent analysis. IV. O PTIMAL MA G EOMETRY ANALYSIS VIA MOMENT 
+
+METHODS 
+
+In this section, we first employ the moment problem theory to analyze the optimal antenna distribution, proving that the optimum solution is achieved by a specific distribution with at most three points at the center and two edges. Building upon this structural insight, we subsequently develop a discrete closed-form antenna placement strategy that strictly satisfies the minimum inter-element spacing constraint in (8c). 
+
+A. Moment-Based Structural Analysis for Symmetric Distribu-tion 
+
+Denote the second and fourth moments of X as m2 =
+
+E[X2] and m4 = E[X4]. Then, 
+
+Var( X) = m2, Var( X2) = m4 − m22, (18) Hence, problem (P2) can be recast purely in terms of moments (m2, m 4).
+
+min  
+
+> w(·)
+
+κ d2R,max 
+
+m2
+
++ 4d4R,max 
+
+m4 − m22
+
+!
+
+,
+
+s.t. X
+
+> ζ∈S
+
+w(ζ) = 1 ,w(ζ) ≥ 0, ∀ζ ∈ S .
+
+(19) Let M = m0, m 2, m 4 denote the attainable moment set. By inspecting the structure of (19), we establish the following two structural lemmas for the optimization over M
+
+Lemma 2. The minimum of (19) over M can be attained by a centro-symmetric discrete distribution supported on at most three points (locations) of the array. 1
+
+Proof: See Appendix D. 
+
+Lemma 3. The minimum of (19) over M can be achieved by a centro-symmetric discrete distribution supported at the center and two edges of array, i.e., {− a, 0, +a}.Proof: See Appendix E. 
+
+B. Closed-Form Optimal Array Design 
+
+By Proposition 1, the search for optimal distribution is restricted to centro-symmetric distributions. Furthermore, Lemma 2 and Lemma 3 imply that, within the class of centro-symmetric distributions, the optimum can be achieved by a three-point distribution supported on {− a, 0, +a}. This yields the following theorem. 
+
+Theorem 1. The optimal distribution of (17) is obtained by a three-point distribution supported on {− a, 0, +a}.
+
+Consider such a three-point centro-symmetric distribution supported on {− a, 0, +a} with corresponding probability           
+
+> 1Any such centro-symmetric three-point distribution must include a location at the origin. 00.1 0.2 0.3 0.4 0.5 0.6
+> a= 6
+> 0.4 0.5 0.6 0.7 0.8 0.9 1
+> q?
+> q?
+> 0:5 (asymptote)
+> Fig. 2. Optimal q⋆versus a/λ .
+
+masses ( q 
+
+> 2
+
+, 1 − q, q 
+
+> 2
+
+), where q ∈ [0 , 1] . The corresponding moments are given by 
+
+Var( X) = q a 2, Var( X2) = q(1 − q)a4. (20) Hence, problem (17) becomes a one-dimensional minimiza-tion over q:
+
+min 
+
+> q∈[0 ,1]
+
+κ d 2R,max 
+
+a2
+
+ 1
+
+q + γq(1 − q)
+
+
+
+, (21) where γ = 4d2R,max  
+
+> a2
+
+= 256 a2 
+
+> λ2
+
+. This is a convex optimization problem and admits a unique minimizer q⋆ ∈ ( 12 , 1] obtained by taking the derivative with respect to q, yielding 
+
+q⋆ = 1 + γ − pγ(1 + γ). (22) It is worth noting that q⋆ monotonically decreases from 
+
+1 and asymptotically approaches 0.5 as the value of a/λ 
+
+increases, as shown in Fig. 2. In practical deployments where the aperture spans several wavelengths ( a ≫ λ), q⋆ rapidly converges to its asymptotic limit. Hence, we can directly set 
+
+q⋆ = 0.5, yielding a fixed probability mass allocation of 
+
+(0 .25 , 0.5, 0.25) for an efficient near-optimal array design. Having derived the closed-form solution for problem (P1 ′),we now incorporate the inter-element spacing constraint and the given number of antennas N to ensure practical feasibility. Based on the optimal three-point centro-symmetric distribution obtained above, we propose a discrete realization strategy that approximates the theoretical optimum while satisfying the minimum spacing d.Specifically, we allocate Nleft = Nright = round(0 .25 N )
+
+antennas (where round( ·) rounds to the nearest integer) to form clusters at the left and right aperture endpoints, respec-tively, while the remaining Nc = N − Nleft − Nright antennas are placed around the aperture center. Within each of these three clusters (i.e., the center and two edges), the antennas are placed uniformly with the fixed minimum spacing d.V. N UMERICAL RESULTS 
+
+This section presents simulation results to validate the effectiveness of the proposed closed-form array design. Specif-ically, we evaluate its sensing performance against three fixed geometry benchmarks and an exhaustive-search baseline:  
+
+> •
+
+ULA ( λ/ 2 spacing) [10]: A conventional uniform linear array with half-wavelength inter-element spacing, cen-tered within the aperture. Fig. 3. The heatmap for near field region. -10 -5 0 5 10 15 20 
+
+> Received SNR (dB)
+> 10 !2
+> 10 !1
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> SPEB (m 2)
+> ULA ( 6=2 spacing) Two-edge array Sparse ULA Proposed Exhaustive search
+
+(a) 10 15 20 25 30 35 40 45   
+
+> Number of Antennas N
+> 10 !1
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> SPEB (m 2)
+> ULA ( 6=2 spacing) Two-edge array Sparse ULA Proposed Exhaustive search
+
+(b)     
+
+> Fig. 4. Worst-case SPEB performance comparison versus (a) Received SNR; (b) Number of antennas N.
+> •
+
+Sparse ULA [11]: A uniformly spaced array stretched to span the full aperture, resulting in a larger inter-element spacing than λ/ 2. 
+
+> •
+
+Two-edge array [12]: An array with antennas equally divided and clustered at the two edges of the aperture.  
+
+> •
+
+Exhaustive search: A numerically optimized array ob-tained via exhaustive searching over all possible antenna locations, serving as a high-complexity benchmark with the best achievable performance. The simulation parameters are set as follows. Carrier fre-quency f0 = 28 GHz [13] (i.e., wavelength λ ≈ 0.01 m), minimum inter-antenna spacing d = λ/ 2, and number of snapshots T = 1024 . Unless otherwise specified, the half-aperture a = 25 λ, number of antennas N = 25 , and average received signal-to-noise ratio SNR = 5 dB [14]. Fig. 3 illustrates the spatial distribution of log 10 (SPEB) 
+
+across the near-field region Γ for the array geometry ob-tained via the proposed closed-form solution. As shown, the estimation performance is the best (lowest SPEB, indicated by the blue region) near the array origin, while it degrades significantly as the source approaches the outer boundary of 
+
+Γ, with the worst performance at the broadside. This result aligns with Proposition 2, which mathematically demonstrates that the worst-case estimation bound occurs at the broadside. Fig. 4 evaluates the worst-case SPEB against variations in received SNR and number of antennas N . Across both investigated regimes, the proposed closed-form design consis-tently achieves the lowest estimation error, significantly out-performing traditional fixed-geometry benchmarks. Notably, our theoretical solution exhibits a remarkable alignment with the exhaustive search baseline (red crosses), corroborating its effectiveness. While increasing SNR and N yields expected performance gains due to enhanced power and additional DoFs. These results prove the proposed design maintains robust superiority, confirming its efficiency in diverse near-field sensing scenarios. VI. C ONCLUSION 
+
+In this paper, we investigated the optimal design of a linear MA array for near-field single-source sensing. We formulated a worst-case optimization problem with the SPEB as perfor-mance metric. By leveraging the Richter-Tchakaloff theorem, we proved that the optimal antenna position distribution admits a centro-symmetric three-point structure. This structural result further enables a closed-form design and an efficient discrete deployment strategy. Simulation results show that the pro-posed design consistently outperforms conventional uniform distributed antenna configurations and achieves performance comparable to exhaustive search at substantially reduced com-putational complexity. APPENDIX APROOF OF LEMMA 1The Cartesian position parameter p = ( p1, p 2)T is related to η = ( u, r )T through p1 = ru, p 2 = r√1 − u2, whose Jaco-bian transform matrix is J(η) = ∂p 
+
+> ∂η
+
+=
+
+h r u
+
+− ru √1−u2
+
+√1 − u2
+
+i
+
+.
+
+According to [15], the CRB matrix w.r.t. parameter p,is given as CRB p(x, η) = J(η) CRB η (x, η) J(η)T. By calculating J(η)TJ(η) = 
+
+ r2 
+
+> 1−u2
+
+00 1
+
+
+
+, we finally obtain 
+
+SPEB( x, p) = tr  CRB η (x, η) J(η)TJ(η)
+
+= r2
+
+1 − u2 CRB u(x) + CRB r (x, η). (23) 
+
+APPENDIX BPROOF OF PROPOSITION 1Define the covariance matrix Σ( w(·)) = Var( X) Cov( X, X 2)Cov( X, X 2) Var( X2)
+
+
+
+. Set e1 = [1 , 0] T and 
+
+v(u, r ) = [2 ur, −2r2]T, define Lu,r (Z) for any positive definite matrix Z ∈ S2++ :
+
+Lu,r (Z) = κ r2
+
+1 − u2 eT1 Ze 1 + κ
+
+(1 − u2)2 v(u, r )TZv (u, r ) (24) 
+
+Then, F (w(·)) = max (u,r )∈Γ Lu,r 
+
+ Σ( w(·)) −1, let ˇw(ζ) = 
+
+w(−ζ) and wsym (ζ) = 12
+
+ w(ζ) + w(−ζ). A straightforward computation gives Σ( wsym (·)) ⪰ 12
+
+ Σ( w(·)) + Σ( ˇ w(·)) ,Since inverse operation is monotone decreasing and convex on S2++ , so Σ( wsym (·)) −1 ⪯ 12
+
+ Σ( w(·)) −1 + Σ( ˇ w(·)) −1. We note that map Z to Lu,r (Z) is linear and Loewner-monotone on S2++ . Hence we accordingly obtain Lu,r 
+
+ Σ( wsym (·)) −1 ≤
+
+> 12
+
+
+
+Lu,r 
+
+ Σ( w(·)) −1 + Lu,r 
+
+ Σ( ˇ w(·)) −1
+
+, which implies 
+
+F (wsym (·)) ≤ 12
+
+ F (w(·)) + F ( ˇ w(·)) .
+
+Since Γ is symmetric, the change of variable (u, r ) to 
+
+(−u, r ) leaves the maximization set invariant, and therefore 
+
+F ( ˇ w(·)) = F (w(·)) . Combining this with the inequality above gives 12
+
+ F (w(·)) + F ( ˇ w(·))  = F (w(·)) . Thus F (wsym (·)) ≤
+
+F (w(·)) , which proves Proposition 1. APPENDIX CPROOF OF PROPOSITION 2It can be observed (17) is strictly increasing in r for any 
+
+u ∈ [−1, 1] . This indicates the maximum over the near-field region is attained on the Rayleigh boundary r = dR(u). We define T (u; w(·)) = κ
+
+h k1 
+
+> Var( X)
+
++ k2
+
+> Var( X2)
+
+i
+
+. Substituting r =
+
+dR(u) = dR,max (1 − u2) and the coefficients k1, k 2 from (12) into the T (u; w(·)) yields 
+
+1
+
+κ T (u; w(·)) = d2R,max (1 + 3 u2)Var( X) + 4d4R,max (1 − u2)2
+
+Var( X2) . (25) 
+
+Set υ = u2 ∈ [0 , 1] and rewrite (25) as f (υ). Then f ′′ (υ) =  
+
+> 8d4R,max
+> Var( X2)
+
+> 0. So f is strictly convex on [0 , 1] , and hence its maximum on [0 , 1] is attained at an endpoint υ ∈ { 0, 1}, i.e., 
+
+u2worst ∈ { 0, 1}. Then, compare the value of two endpoints 
+
+1
+
+κ (T (0; w(·)) − T (1; w(·))) = 4 d2R,max 
+
+ d2R,max 
+
+Var( X2) − 34Var( X)
+
+
+
+.
+
+(26) 
+
+For practical MA arrays systems, the aperture typically spans multiple wavelengths, yielding dR,max > √32 a. There-fore 
+
+Var( X2) ≤ E[X4] ≤ a2E[X2] = a2Var( X) < 43 d2R,max Var( X).
+
+(27) This indicates T (0; w(·)) > T (1; w(·)) , so the maximum is attained at (u, r ) = (0 , d R,max ). Hence the worst-case location 
+
+pworst = [ 0 , d R,max ]T, which proves Proposition 2. APPENDIX DPROOF OF LEMMA 2We first invoke Richter-Tchakaloff Theorem [16]. It says: Suppose that (Y, μ ) is a measure space, and let V ⊂ L1
+
+> R
+
+(Y, μ )
+
+be a finite-dimensional linear subspace of finite dimension 
+
+dim( V ), where L1
+
+> R
+
+(Y, μ ) denotes the space of real-valued integrable functions on Y. Let Lμ : V → R be the moment functional defined by Lμ(f ) = R f for f ∈ V . Then there exists a k-atomic measure ν = Pkj=1 zj δxj with k ≤ dim( V ),such that Lμ = Lν .Now we apply this theorem to prove Lemma 2. Observing (19) depends on the measure μ solely through the moments 
+
+(m0, m 2, m 4). Let V = span {1, x 2, x 4} ⊂ L1
+
+> R
+
+([ −a, a ]) be the subspace with dim( V ) = 3 . According to the Richter-Tchakaloff Theorem, for any arbitrary probability measure 
+
+μ on [−a, a ], there exists a k-atomic measure ν with k ≤
+
+dim( V ) = 3 such that ν preserves the moments of μ, the objective values for both measures are identical: 
+
+J (ν) = φ m0(ν), m 2(ν), m 4(ν)
+
+= φ m0(μ), m 2(μ), m 4(μ) = J (μ). (28) where J (·) denotes the objective functional defined on the measure space, and φ(·) represents the mapping from the moment vector (m0, m 2, m 4) to the objective value. This indicates that the performance achievable by a general proba-bility measure can be equally attained by a discrete measure supported on at most three points. Therefore we can restrict the optimization domain to the set of measures with at most three atoms. This completes the proof. APPENDIX EPROOF OF LEMMA 3Let μ be a probability measure supported on [−a, a ]. Since 
+
+x4 ≤ a2x2 for all x ∈ [−a, a ], we have m4 ≤ a2m2. By the Cauchy-Schwarz inequality 
+
+m22 =
+
+Z
+
+x2dμ (x)
+
+2
+
+≤
+
+Z
+
+x4dμ (x)
+
+ Z
+
+1 dμ (x)
+
+
+
+= m4.
+
+(29) Thus any feasible pair (m2, m 4) satisfies m22 ≤ m4 ≤ a2m2.
+
+For each fixed m2, the objective in (19) is strictly decreasing in m4 on [m22, a 2m2], so for each m2 there exists an optimal solution lying on the boundary m4 = a2m2. Moreover, equality in m4 ≤ a2m2 holds if and only if x4 = a2x2 for all x in the support of μ, which implies x2 ∈ { 0, a 2} and hence x ∈ {− a, 0, +a}. Together with Lemma 2, the global optimum can be attained by a centro-symmetric three-point measure supported on {− a, 0, +a}, proving Lemma 3. REFERENCES [1] W. Roberts, L. Xu, J. Li, and P. Stoica, “Sparse antenna array design for MIMO active sensing applications,” IEEE Trans. Antennas Propag. ,vol. 59, no. 3, pp. 846–858, Mar. 2011. [2] L. Zhu, W. Ma, W. Mei, Y. Zeng, Q. Wu, B. Ning, Z. Xiao, X. Shao, J. Zhang, and R. Zhang, “A tutorial on movable antennas for wireless networks,” IEEE Commun. Surveys Tuts. , vol. 28, pp. 3002–3054, 4th Quart. 2025. [3] Y. Liu, Z. Wang, J. Xu, C. Ouyang, X. Mu, and R. Schober, “Near-field communications: A tutorial review,” IEEE Open J. Commun. Soc. ,vol. 4, pp. 1999–2049, Aug. 2023. [4] H. Gazzah and J. P. Delmas, “CRB-based design of linear antenna arrays for near-field source localization,” IEEE Trans. Antennas Propag. ,vol. 62, no. 4, pp. 1965–1974, Apr. 2014. [5] Y. Wang, W. Mei, X. Wei, Y. F. Wu, Z. Chen, and B. Ning, “Movable antenna empowered near-field sensing via antenna position optimization,” 2025. [Online]. Available: https://arxiv.org/abs/2512.00758 [6] J. Ding, Z. Zhou, X. Shao, B. Jiao, and R. Zhang, “Movable antenna-aided near-field integrated sensing and communication,” IEEE Trans. Wireless Commun. , vol. 25, pp. 493–508, 2026. [7] Y. Sun, H. Xu, C. Ouyang, and H. Yang, “Rotatable and movable antenna-enabled near-field integrated sensing and communication,” IEEE Internet Things J. , vol. 12, no. 21, pp. 45 119–45 132, Nov. 2025. [8] Y. Shen and M. Z. Win, “Fundamental limits of wideband localization— Part I: A general framework,” IEEE Trans. Inf. Theory , vol. 56, no. 10, pp. 4956–4980, Sept. 2010. [9] H. Lu and Y. Zeng, “Communicating with extremely large-scale ar-ray/surface: Unified modeling and performance analysis,” IEEE Trans. Wireless Commun. , vol. 21, no. 6, pp. 4039–4053, June 2022. [10] C. A. Balanis, Antenna Theory Analysis and Design . Wiley-Interscience, 2005. [11] W. Shi, S. A. Vorobyov, and Y. Li, “ULA fitting for sparse array design,” 
+
+IEEE Trans. Signal Process. , vol. 69, pp. 6431–6447, 2021. [12] W. Ma, L. Zhu, and R. Zhang, “Movable antenna enhanced wireless sensing via antenna position optimization,” IEEE Trans. Wireless Com-mun. , vol. 23, no. 11, pp. 16 575–16 589, Nov. 2024. [13] H. Zhang, N. Shlezinger, F. Guidi, D. Dardari, M. F. Imani, and Y. C. Eldar, “Beam focusing for near-field multiuser MIMO communications,” 
+
+IEEE Trans. Wireless Commun. , vol. 21, no. 9, pp. 7476–7490, Sept. 2022. [14] J.-H. Jo, J.-N. Shim, B. Kim, C.-B. Chae, and D. K. Kim, “AoA-based position and orientation estimation using lens MIMO in cooperative vehicle-to-vehicle systems,” IEEE J. Sel. Areas Commun. , vol. 41, no. 12, pp. 3719–3735, Oct. 2023. [15] S. M. Kay, Fundamentals of Statistical Signal Processing: Estimation Theory . PTR Prentice-Hall, 1993. [16] K. Schm¨ udgen, The Moment Problem . Springer International Publish-ing, 2017.

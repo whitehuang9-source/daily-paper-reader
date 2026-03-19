@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-03-19 <!--dpr-date:20260319-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/19/2603.10383v1-optimal-movable-antenna-placement-for-near-field-wireless-sensing" data-sidebar-item="{&quot;title&quot;: &quot;Optimal Movable Antenna Placement for Near-Field Wireless Sensing&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.10383v1-optimal-movable-antenna-placement-for-near-field-wireless-sensing&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;近场传感阵列的最佳天线布局&quot;}">Optimal Movable Antenna Placement for Near-Field Wireless Sensing</a>
   * 2026-03-18 <!--dpr-date:20260318-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/18/2603.09143v1-a-direct-sampling-method-for-inverse-time-dependent-electromagnetic-source-problems-reconstruction-of-the-radiating-time-and-spatial-support" data-sidebar-item="{&quot;title&quot;: &quot;A direct sampling method for inverse time-dependent electromagnetic source problems: reconstruction of the radiating time and spatial support&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.09143v1-a-direct-sampling-method-for-inverse-time-dependent-electromagnetic-source-problems-reconstruction-of-the-radiating-time-and-spatial-support&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;基于多频测量的源重建直接采样方法&quot;}">A direct sampling method for inverse time-dependent electromagnetic source problems: reconstruction of the radiating time and spatial support</a>

@@ -1,0 +1,54 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-19T21:04:27.696042+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.10383v1",
+      "title": "Optimal Movable Antenna Placement for Near-Field Wireless Sensing",
+      "abstract": "Movable antennas (MAs) have emerged as a promising technology for wireless sensing by reconfiguring antenna positions to exploit additional spatial degrees of freedom (DoFs). This paper investigates a robust movable antenna placement strategy for near-field wireless sensing to minimize the worst-case squared position error bound (SPEB). By temporarily relaxing the minimum inter-element spacing constraint, we first establish the optimality of centro-symmetric antenna position distribution, which simplifies the identification of the worst-case source, locating it at the array broadside on the Rayleigh boundary. Moreover, by leveraging moment-based analysis with the Richter-Tchakaloff theorem, we derive a closed-form optimal solution with three points supported on the center and two edges of the array. Guided by this structural insight, we finally develop an efficient three-point discrete deployment strategy to ensure the minimum inter-element spacing. Simulations demonstrate that the proposed design consistently outperforms conventional fixed antenna arrays and matches the exhaustive search benchmark at negligible computational complexity.",
+      "authors": [
+        "Jinjian Liu",
+        "Xianxin Song",
+        "Xianghao Yu"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "cs.IT"
+      ],
+      "published": "2026-03-11T03:57:01+00:00",
+      "link": "https://arxiv.org/pdf/2603.10383v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "optimal antenna placement for near-field sensing arrays",
+      "llm_evidence_cn": "近场传感阵列的最佳天线布局",
+      "llm_evidence": "近场传感阵列的最佳天线布局",
+      "canonical_evidence": "近场传感阵列的最佳天线布局",
+      "llm_tldr_en": "Optimizes antenna placement in arrays to minimize position error bounds in near-field sensing.",
+      "llm_tldr_cn": "优化阵列中的天线布局，以最小化近场传感中的位置误差界限。",
+      "llm_tldr": "优化阵列中的天线布局，以最小化近场传感中的位置误差界限。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
