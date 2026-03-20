@@ -6,26 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-19
-- 运行时间：2026-03-19 21:05:51 UTC
+- 最新运行日期：2026-03-20
+- 运行时间：2026-03-20 20:06:30 UTC
 - 运行状态：成功
-- 本次总论文数：1
+- 本次总论文数：3
 - 精读区：0
-- 速读区：1
+- 速读区：3
 
 ### 今日简报（AI）
-今日聚焦近场无线感知，深入探讨了可移动天线（MA）的最优布局策略。
-研究表明，通过动态优化天线位置可显著提升近场感知性能，突破了传统固定阵列的自由度限制。
-建议关注可移动天线在 6G 智能反射面与感知网络中的应用潜力。
-- 详情：[/202603/19/README](/202603/19/README)
+今日聚焦感知技术的跨界应用，涵盖城市交通声学监测、通感算一体化优化及机器人高精度扭矩传感。
+重点推荐分布式声学传感（DAS）在交通监控中的时空注意力模型，以及联邦边缘学习在通感协作中的多目标优化策略。
+建议关注传感器硬件小型化与智能算法结合在提升复杂环境感知精度上的巨大潜力。
+- 详情：[/202603/20/README](/202603/20/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Optimal Movable Antenna Placement for Near-Field Wireless Sensing](/202603/19/2603.10383v1-optimal-movable-antenna-placement-for-near-field-wireless-sensing)  
+1. [Distributed Acoustic Sensing for Urban Traffic Monitoring: Spatio-Temporal Attention in Recurrent Neural Networks](/202603/20/2603.13903v1-distributed-acoustic-sensing-for-urban-traffic-monitoring-spatio-temporal-attention-in-recurrent-neural-networks)  
    标签：评分：6.0/10、query:tmr
-   evidence：近场传感阵列的最佳天线布局
+   evidence：对密集振动传感器阵列的时空结构进行建模
+2. [Multi-objective Optimization for Over-the-Air Federated Edge Learning-enabled Collaborative Integrated Sensing and Communications](/202603/20/2603.15783v1-multi-objective-optimization-for-over-the-air-federated-edge-learning-enabled-collaborative-integrated-sensing-and-communications)  
+   标签：评分：6.0/10、query:tmr
+   evidence：协作传感中上行传输的干扰抑制
+3. [Compact Optical Single-axis Joint Torque Sensor Using Redundant Photo-Reflectors and Quadratic-Programming Calibration](/202603/20/2603.16040v1-compact-optical-single-axis-joint-torque-sensor-using-redundant-photo-reflectors-and-quadratic-programming-calibration)  
+   标签：评分：6.0/10、query:tmr
+   evidence：冗余传感器阵列和用于噪声抑制的二次规划算法
 
 
 <div class="dpr-home-promo-card">

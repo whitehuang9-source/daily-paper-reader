@@ -1,0 +1,338 @@
+Title: Compact Optical Single-axis Joint Torque Sensor Using Redundant Photo-Reflectors and Quadratic-Programming Calibration
+
+URL Source: https://arxiv.org/pdf/2603.16040v1
+
+Published Time: Wed, 18 Mar 2026 00:35:38 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+> 1
+
+# Compact Optical Single-axis Joint Torque Sensor Using Redundant Photo-Reflectors and Quadratic-Programming Calibration 
+
+Hyun-Bin Kim, Member, IEEE, Byeong-Il Ham, Graduate Student Member, IEEE, and Kyung-Soo Kim, Member, IEEE 
+
+Abstract —This study proposes a non-contact photo-reflector-based joint torque sensor for precise joint-level torque control and safe physical interaction. Current-sensor-based torque esti-mation in many collaborative robots suffers from poor low-torque accuracy due to gearbox stiction/friction and current–torque nonlinearity, especially near static conditions. The proposed sen-sor optically measures micro-deformation of an elastic structure and employs a redundant array of photo-reflectors arranged in four directions to improve sensitivity and signal-to-noise ratio. We further present a quadratic-programming-based calibration method that exploits redundancy to suppress noise and enhance resolution compared to least-squares calibration. The sensor is implemented in a compact form factor (96 mm diameter, 12 mm thickness). Experiments demonstrate a maximum error of 0.083% FS and an RMS error of 0.0266 N·m for z-axis torque measurement. Calibration tests show that the proposed calibra-tion achieves a 3σ resolution of 0.0224 N·m at 1 kHz without filtering, corresponding to a 2.14 × improvement over the least-squares baseline. Temperature-chamber characterization and rational-fitting-based compensation mitigate zero drift induced by MCU self-heating and motor heat. Motor-level validation via torque control and admittance control confirms improved low-torque tracking and disturbance robustness relative to current-sensor-based control. 
+
+Index Terms —Torque measurement, Optimization methods, Sensor systems, Actuator systems 
+
+I. I NTRODUCTION 
+
+# RECENT advances in artificial intelligence and actuation technologies have accelerated research across a wide range of robotic platforms, including collaborative robots [1], [2], quadruped robots [3]–[5], and humanoid robots [6]. To enable safe and compliant interaction in human environments, precise joint-level force/torque perception and control-i.e., joint torque sensing-is critically required. However, many commercial collaborative robots estimate joint torque from motor current measurements and perform force control based on the estimated torque. For instance, the UR5e collaborative robot provides a force range of up to 50 N and a torque range of up to 10 N ·m, yet its force and torque resolutions are reported to be approximately 3.5 N and 0.2 N ·m, respectively, which are insufficient for high-precision manipulation and delicate interaction tasks [7]. In particular, manipulators with high gear ratios suffer from gear-induced stiction and friction that dominate in static or near-static regimes, making precise low-torque control even more challenging when relying solely on current-based torque estimation. 
+
+> Manuscript created September, 2025; This research was developed by the MSC (Mechatronics, Systems and Control) lab in the KAIST(Korea Advanced Institute of Science and Technology which is in the Daehak-Ro 291, Dae-jeon, South Korea(e-mail: youfree22@kaist.ac.kr; byeongil ham@kaist.ac.kr; kyungsookim@kaist.ac.kr). (Corresponding author: Kyung-Soo Kim).
+
+A common approach for precise interaction is to mount a six-axis force/torque sensor at the end-effector. However, end-effector sensing provides only the wrench at the tool, which imposes inherent limitations for per-joint torque de-composition, compensation of gear friction/stiction, and joint-level impedance/admittance interaction control. To address these issues, robots equipped with joint torque sensors have been commercialized; nevertheless, such sensors are typically expensive and insufficiently compact, limiting their adoption and scalability. Most joint torque sensors rely on strain-gauge technology, which offers high resolution. However, strain-gauge-based sensors are costly and require a Wheatstone bridge and signal amplification circuitry, increasing hardware complexity [8]– [12]. Moreover, strain gauges are commonly bonded manu-ally, which limits scalability for mass production. Capacitive sensing approaches have also been investigated, where torque-induced deformation changes capacitance through variations in electrode spacing [13]–[17]. Although capacitive interface chips such as the Analog Devices AD7147 enable relatively simple circuitry, they are sensitive to external electrostatic disturbances. Furthermore, their sampling rate is limited (typ-ically up to 1 kHz), and their achievable precision is generally lower than that of strain-gauge-based sensors. In this paper, to overcome the limitations of current-based torque estimation and the lack of a compact torque-sensing solution that can be directly integrated at the joint, we propose a novel photo-reflector-based joint torque sensor using a type of photo-coupler. The proposed sensor employs non-contact optical sensing to convert mechanical deformation into an electrical signal, and multiple sensing elements are placed redundantly (e.g., two sensors in each of four directions) to increase sensitivity. We further present an optimization-based calibration method to enhance precision in the low-torque regime, and experimentally validate improvements in low-torque regulation and interaction control (e.g., admittance control) compared to current-based torque control. 
+
+A. Contributions 
+
+The key contributions of this study are as follows:  
+
+> •
+
+Photo-reflector-based joint torque sensor architecture: 
+
+We propose a non-contact torque sensing mechanism using a photo-reflector (photo-coupler) and a redundant four-direction sensor array to improve sensitivity.  
+
+> •
+
+Compact and manufacturable system design: We de-velop a modular sensing/readout system that reduces wiring and assembly complexity and enables compact joint integration for scalable deployment.             
+
+> arXiv:2603.16040v1 [cs.RO] 17 Mar 2026 2
+> Fig. 1. Configuration and operating principle of the proposed sensor. When an external torque is applied, the reflective surface rotates, altering the amount of light reflected toward the photo-reflector; this change in reflected intensity causes the output voltage to increase or decrease accordingly.
+> Fig. 2. Assembly of the printed circuit board (PCB) and the elastic structure, and parameters of the elastic beam.
+> Fig. 3. Schematic illustration of the elastic structure. Here, ∆rtdenotes the bending angle induced by Tz, and FArepresents the force applied due to Tz.
+> •
+
+Redundancy-exploiting optimization-based calibra-tion: We present an optimization-based calibration that leverages redundant measurements to mitigate mismatch, nonlinearity, and cross-axis coupling, improving resolu-tion and reducing error.  
+
+> •
+
+Experimental validation and robotic demonstration: 
+
+We evaluate the sensor under static to dynamic con-ditions (resolution, nonlinearity, hysteresis) and demon-strate motor-level applicability for force/torque control. II. D ESIGN OF THE PROPOSED SENSOR 
+
+A. Principle of the Proposed Sensor 
+
+Fig. 1 shows the overall configuration of the torque sensor. The components enclosed by the red and black boxes indicate the infrared LED and the phototransistor, respectively, and the sensor is oriented toward the horizontal plane (the x–y
+
+plane). When a displacement occurs on the reflective surface due to a torque about the z-axis, the photo-reflector detects this displacement, enabling the measurement of torque. In Fig. 1, the green line corresponds to the case where a positive z-axis torque is applied, whereas the blue line corresponds to the case where a negative torque is applied. The resulting angular deflection can be expressed as θ.Fig. 2 illustrates the assembled configuration of the sensor, consisting of the printed circuit board (PCB) and the elastic structure, where the black region indicates the location of the photo-reflector. Here, hbody denotes the overall height of the sensor assembly, while l, b, and h represent the length, width, and height of the elastic beam, respectively. By tuning these three parameters, the sensor sensitivity and measurement range can be determined. In this work, the Vishay TCRT1000 was used as the photo-reflector. ri denotes the inner radius, and ro
+
+denotes the overall radius of the sensor. 
+
+B. Modeling of Elastic Beam 
+
+As shown in Fig. 2, the elastic beams (spokes) consist of four members. Although three spokes can be sufficient, this study employs four spokes to improve the resolution by exploiting redundancy. Fig. 3 presents a schematic illustration of the elastic structure. When a torque Tz is applied, a force 
+
+FA is generated at point A, and the resulting bending can be modeled accordingly, where δA denotes the displacement at A
+
+under the applied force FA. In addition, the angular rotation of the central part of the elastic structure can be represented by ∆rt. The radius of the central ring is denoted by ri, and 
+
+ls indicates the distance from the center to the sensor. 
+
+δA = ∆ rt (1) 
+
+δA = FAl3
+
+3EI + FAlκGA (2) Here, E denotes Young’s modulus, G denotes the shear modulus, and κ denotes the shear correction factor, which is commonly taken as 5/6 for a rectangular cross-section. The cross-sectional area is given by A = bh , and the second moment of area with respect to bending is I = hb 3 
+
+> 12
+
+. Therefore, the equivalent linear stiffness of a single spoke, kb, can be expressed as follows [18]–[20]. 
+
+kb ≡ FA
+
+δA
+
+= ( l3
+
+3EI + lκGA )−1 (3) Since there are four spokes in total, the overall equivalent linear stiffness is given by 
+
+Tz = 4 FAri (4) 
+
+FA = kbδA = kbrtθ (5) 
+
+Tz = 4( kbriθ)rt = nk br2 
+
+> i
+
+θ (6) 
+
+Kt ≡ Tz
+
+θ = 4 r2 
+
+> i
+
+( l3
+
+3EI + lκGA )−1 (7) Here, ls was set to 30 mm and ri was fixed at 19 mm, as con-strained by the mechanical structure of the target motor. The actuator used in this study was the GIM8108 motor (Steady-Win), which can produce a maximum torque of 18 N·m, and 3
+
+accepts current-control inputs up to 2 kHz. Conservatively, the nominal measurement target was set to 20 N·m, and the maximum load was defined as 400% . Accordingly, the design maximum torque was set to T max  
+
+> z
+
+= 80 N·m. The corresponding design parameters are summarized in Table I. The design was carried out using the optimization frame-work developed in our previous study [21], [22]. In this work, the optimization was formulated primarily based on the sensing range for the z-axis torque and the dimensional constraints. The resulting design was then validated via finite element analysis (FEA) in SolidWorks, as shown in Fig. 4(c).            
+
+> TABLE I VALUE OF PARAMETERS
+> Parameter lbhrils
+> Value (mm) 21 4719 30
+
+In addition, since the motor diameter is 96 mm, the sensor diameter was also set to 96 mm. The overall dimensions are 
+
+96 mm in diameter and 12 mm in thickness, resulting in a slim form factor, and the total mass is 114 .5 g. The load capacity, as summarized in Table II, is ±7700 N for the x- and y-axis forces, ±3180 N for the z-axis force, ±62 N·m for the x- and 
+
+y-axis torques, and ±80 N·m for the z-axis torque.                         
+
+> TABLE II SPECIFICATIONS OF THE PROPOSED TORQUE SENSOR
+> Property Value Unit Dimension ϕ96 ×12 mm Weight 114.5 gLoad capacity Fxy :7700, Fz:3180, Txy :62, Tz:80 N,N,N ·m,N ·mCommunication CAN-FD -Electronic bandwidth Effective bandwidth (rise-time-limited) ∼5[23] kHz Resonant frequency 3.407 kHz
+
+The ∼5 kHz value in Table II denotes the rise-time-limited effective bandwidth of the sensing chain, inferred from the measured 10–90% rise time using fBW ≈ 0.35 /t 10 –90 , as characterized in our prior work [23]. This is distinct from the ADC sampling capability, which can be higher; the ex-periments/control were run at 1 kHz for system-level synchro-nization. Although Table II lists multi-axis load capacities for structural safety, this paper focuses on the Tz (joint-axis) torque sensing channel and its calibration/validation; the other-axis values are reported only as mechanical load limits. The resonant frequency of the elastic structure provides an indicative upper bound for the mechanically achievable bandwidth; in practice, the operational bandwidth is chosen sufficiently below the first structural mode. A back-of-the-envelope estimate of the z-axis torsional mode was obtained as 
+
+fn,z = 12π
+
+r kz
+
+Jz
+
+,
+
+where kz is the torsional stiffness about the z-axis and Jz
+
+is the equivalent z-axis inertia of the moving central part (computed from its mass distribution). This calculation yielded 
+
+fn,z ≈ 5.975 kHz. In parallel, a SolidWorks modal analysis of the assembled elastic structure produced the first five natural frequencies of 3.407, 4.230, 5.178, 5.233, and 5.310 kHz. 
+
+> Fig. 4. Assembly overview: (a) photograph of the assembled PCB and elastic structure; (b) PCB layout showing the sensor location; (c) FEA of the elastic structure.
+> Fig. 5. Calibration setup: (a) photograph of the calibration setup using the ATI MINI85, the proposed sensor, and a lever arm; (b) schematic diagram of the communication interfaces and experimental devices used for the calibration setup.
+
+Since the lowest mode (3.407 kHz) bounds all higher modes regardless of mode shape, we conservatively report 3.407 kHz as the effective structural resonance for subsequent bandwidth considerations. 
+
+C. PCB Design and Assembly 
+
+The complete assembly is shown in Fig. 4(a). The PCB, presented in Fig. 4(b), is built around an STM32H7-series micro-controller unit(MCU) and incorporates a 16-bit analog-to-digital converter(ADC). Communication is implemented via CAN-FD with a data rate of 5 Mbps. In addition, passive com-ponents were included on the PCB to stabilize the ground and improve the integrity of the analog signals, and a TI TMP117 IC was used for temperature sensing. For the photo-reflector, only one resistor is required for the LED and one resistor for the phototransistor, since the phototransistor provides inherent current amplification [23], [24]. Therefore, unlike conventional strain-gauge approaches, this design reduces the number of passive components and eliminates the need for an external amplifier. III. C ALIBRATION AND EXPERIMENT 
+
+A. Calibration Method and Experiment 
+
+For calibration, the proposed sensor was directly coupled to a reference force/torque sensor (ATI MINI85), and experi-ments were conducted using a lever arm with calibrated test weights. The calibration setup is illustrated in Fig. 5(a), and the overall communication architecture and data acquisition scheme are shown in Fig. 5(b). The MINI85 data were streamed to the PC via UDP through its control box. The proposed sensor data were acquired via CAN using a PCAN-USB interface. In addition, the CALT DYJN-104 sensor was 4 
+
+> Fig. 6. Calibration experiment: (a) measured responses obtained by applying test weights five times in the negative and positive directions; (b) ADC outputs of each sensor as a function of the applied torque.
+
+read through a load-cell amplifier and an NI DAQ (PCIe-6363) to the PC. All experiments were executed in Simulink Desktop Real-Time with a sampling rate of 1 kHz. The specifications of each sensor are as follows. The ATI MINI85 (SI-1900-80) provides a z-axis torque resolution of 
+
+7/748 N·m and a measurement range of 80 N·m. It has a resonant frequency of up to 2.4 kHz and an accuracy of 1% 
+
+full scale. The CALT DYJN-104 has a sensitivity of 2.0 mV/V, a nonlinearity of 0.05% full scale, and a repeatability of 
+
+0.05% full scale, with a measurement range of 50 N·m. In our experiments, the MINI85 was used as the primary reference sensor due to its higher resolution, while the DYJN-104 was used for accuracy cross-checking and compensation. The calibration was performed using an optimization-based approach rather than the commonly used least-squares method. In the proposed sensor, the gain of each sensing element differs slightly, and the voltage response of each sensor with respect to the applied torque can be observed as shown in Fig. 6(b). In this study, a total of eight sensors were employed; each sensor exhibits different gain characteristics and measured noise levels. Although a single sensing element is theoretically sufficient to measure the z-axis torque, using multiple sensors is essential to reduce crosstalk. Moreover, since the sensors are arranged on a single plane, redundancy arises when three or more sensors are used. By exploiting this redundancy and formulating the calibration as an optimization problem, the measurement noise can be reduced. The details are described as follows. The conventional calibration method based on least squares is given in Eqs. 8 and 9. Here, y denotes the ground-truth torque about the z-axis, and A denotes the design matrix constructed from x = [V1 V2 V3 V4 V5 V6 V7 V8] (Vk
+
+denotes the voltage output of the k-th sensor.), where A = 
+
+> Fig. 7. Nonlinearity and hysteresis experiments: (a) upper- and lower-bound average curve and the corresponding linear fit used for nonlinearity evaluation; (b) magnified view of (a); (c) nonlinearity deviation as a function of the applied torque; (d) hysteresis deviation as a function of the applied torque.
+
+x3 x2 x 1 (N × 25) . Moreover, θ (25 × 1) denotes the calibration matrix. 
+
+ˆy = Aθ (8) 
+
+min  
+
+> θ
+
+∥Aθ − y∥22 (9) However, in this study, the calibration matrix was obtained by incorporating a quiet-segment-based optimization so as to preferentially utilize sensing elements with lower noise. Specifically, we propose a noise-reducing calibration method formulated as a quadratic programming problem. 5       
+
+> Fig. 8. Crosstalk test and resolution experiments: (a) test setup for the crosstalk experiments, where weights were applied to generate moments about the x-and y-axes; (b) measured responses under the applied x- and y-axis torques; (c) sensor voltage variation under an x-axis torque; (d) sensor voltage variation under a y-axis torque; (e) noise level after calibration using the least-squares method; (f) noise level after calibration using the proposed method.
+
+Let the index set of the quiet segment be denoted by I0,and let the corresponding design matrix over this segment be 
+
+A0.
+
+A0c = A0 − 1μ⊤, μ = 1
+
+| I 0| 1⊤A0 (10) Then, the output variation in the quiet segment can be defined as above. In particular, the variation of the predicted output in the quiet segment is represented as A0cθ, and the noise-suppression penalty can be expressed as γ∥A0cθ∥22. Further-more, let the full-scale span be denoted by F S .
+
+emax = 0 .002 · F S (11) If the maximum error is set to 0.2% of full scale (FS), the constraint can be written as in the above equation. Enforcing this bound for all data samples indexed by k, the inequality can be rearranged into the form of Eq. 12, and its matrix representation is given in Eq. 14. Consequently, the calibration can be formulated as the optimization problem in Eq. 15, whose solution yields the calibration matrix θ.
+
+|a⊤ 
+
+> k
+
+θ − yk|≤ emax , ∀k (12) 
+
+−Aθ ≤ − y + emax 1, Aθ ≤ y + emax 1 (13) 
+
+ A
+
+−A
+
+
+
+θ ≤
+
+ y + emax 1
+
+−y + emax 1
+
+
+
+. (14) 
+
+min  
+
+> θ
+
+∥Aθ − y∥22+γ∥A0cθ∥22 s.t. |Aθ − y|≤ emax (15) which is a convex quadratic program (QP) since the ob-jective is quadratic with H = 2( A⊤A + γA ⊤
+
+> 0c
+
+A0c) ⪰ 0 and the constraints are linear; thus the global optimum is obtained reliably. The quiet segment I0 is selected automatically as in-dices satisfying near-static/no-load conditions (e.g., |τ |≤ τth ), and A0c is built from those samples. τ denotes the reference torque (ATI MINI85). We choose γ from a logarithmic grid by minimizing a data-driven criterion that balances overall fit and low-torque stability, e.g., RMSE(ˆ τ , τ )2 + λ Var(ˆ τ )|I0 .With this formulation, the calibration can be solved via quadratic programming. As shown in Fig. 6(a), the calibration trials were conducted by applying forces to the lever arm using test weights five times in each direction (loading and unload-ing). The experiments were performed in MATLAB/Simulink using a real-time kernel, and the quadratic programming problem was solved using the lsqlin function in MATLAB. 
+
+B. Sensor Evaluation 
+
+During the calibration experiments, Fig. 6(a) shows the response under an applied torque of approximately ±25 N·m, and the corresponding outputs of each sensing element are presented in Fig. 6(b). Since the target motor can produce a maximum torque of 18 N ·m, the calibration range was conservatively set to 25 N ·m. As shown in Fig. 6(b), the sensor voltage changes by approximately 0.6 ∼ 1 V at 25 N ·m. This corresponds to a sensitivity of approximately 
+
+0.024 ∼ 0.04 V/(N ·m). With a 3.3 V-referenced ADC, this voltage range corresponds to approximately 39,718 digital counts. For error analysis, Table III shows that the maximum percentage error was 0.083% of full scale, and the Root Mean Square(RMS) error was 0.0266 N·m. In all error metrics reported in %FS, the full-scale (FS) is defined as the design maximum T max  
+
+> z
+
+= 80 N·m unless otherwise specified.          
+
+> TABLE III ERROR ANALYSIS , N ONLINEARITY AND HYSTERESIS
+> Max Percentage Error(FS%) RMS Error(N ·m) Nonlinearity(FS%) Hysteresis(FS%) z-axis Torque 0.0830 0.0266 0.111 0.139
+> TABLE IV REPEATABILITY TEST AND CROSSTALK ANALYSIS
+
+Repeatability (FS%) Crosstalk Tx (FS%) Crosstalk Ty (FS%) 0.0849 0.148 0.126 6
+
+In addition, as summarized in Table IV, the repeatability test yielded 0.0849 FS %. The nonlinearity and hysteresis were evaluated as 0.111 FS % and 0.139 FS %, respectively, as reported in Table III. These results are visualized in Fig. 7. Fig. 7(a) shows the overall nonlinearity behavior, and Fig. 7(b) presents a magnified view around −0.3 N·m. Fig. 7(c) and (d) plot the deviations corresponding to nonlinearity and hysteresis, respectively, showing peak values of 0.1106 FS %
+
+and 0.1389 FS %.A crosstalk test was also conducted. As shown in Fig. 8(a), the test was performed by applying moments about the x-and y-axes over a range of approximately 25 N ·m, following the procedure illustrated in Fig. 8(b). When the x- and y-axis torques were applied, the sensor output voltage changed by approximately 0.06 V, as shown in Fig. 8(c) and (d). Here, ”crosstalk” refers to the apparent output of the Tz
+
+channel induced by applied Tx/Ty moments (i.e., cross-axis sensitivity), rather than multi-axis torque estimation. The difference between the conventional least-squares (LS) calibration and the proposed quadratic-programming-based calibration can be observed in Fig. 8(e) and (f). With LS calibration, the standard deviation of the estimated torque was approximately 0.0160 N ·m, corresponding to a 3σ-based reso-lution of approximately 0.0480 N ·m. In contrast, the proposed calibration reduced the standard deviation to approximately 0.00746 N·m, yielding a 3σ resolution of approximately 0.0224 N ·m, i.e., a 2.14 × improvement. This improvement is also visually evident in Fig. 8(f). The standard deviation was computed from 10 s of data acquired at a 1 kHz sampling rate without any filtering. Therefore, the proposed sensor achieves a resolution of approximately 0.0224 N ·m, which is sufficient for use as a joint torque sensor. Moreover, since this value is obtained at 1 kHz without filtering, even higher resolution can be achieved by applying appropriate filtering. 
+
+C. Temperature Compensation Experiment 
+
+Torque sensors typically incorporate an internal MCU, which generates self-heating and induces drift; consequently, both zero drift and gain drift can occur as a function of temperature. Since the sensor is intended for integration with a motor, heat generated by the motor cannot be neglected; therefore, zero-drift compensation with respect to temperature is required. To address this issue, a temperature-chamber experiment was conducted to characterize the temperature-dependent drift, as illustrated in Fig. 9. Our previous study using the same sensing principle [25] showed that temperature-induced drift has a larger effect than gain variation. Therefore, to compensate for the zero drift, the internal temperature was measured using the on-board TMP117 IC, and the experiment was performed in a temperature chamber as shown in Fig. 9(a). As shown in Fig. 9(b), the chamber temperature was set to −10 ◦C, 0◦C, 10 ◦C, 20 ◦C, 30 ◦C, 40 ◦C, and 50 ◦C. Each setpoint was held for 20 min to reach a steady state. The collected data were then used to perform rational fitting to  
+
+> Fig. 9. Temperature compensation experiment: (a) temperature chamber and the sensor placement inside the chamber; (b) temperature-dependent drift and the corresponding rational fitting curve; (c) drift at zero external torque, before and after temperature compensation; (d) drift under an external torque of 10 N ·m, before and after temperature compensation.
+
+compensate for the zero drift. The rational fitting model is given as follows. 
+
+Tz drift = a1t2 + a2t + a3
+
+a4t2 + a5t + 1 (16) Here, t denotes the temperature and ak denotes the k-th constant, where a total of five constants are used. The result of the rational fitting in Eq. 16 is shown as the black dashed line in Fig. 9(b). A five-constant model provided the best fit among the tested candidates (e.g., a fourth-order polynomial and Gaussian models), and was therefore adopted in this work. Although the fitting could alternatively be performed using a 7
+
+gated recurrent unit (GRU) as in [25], the proposed system is not as complex as a six-axis force/torque sensor, and rational fitting was found to be sufficient. Fig. 9(c) and (d) show the results at room temperature when no external torque is applied and when a torque of 10 N ·mis applied, respectively. The black curve corresponds to the strain-gauge-based ATI MINI85. The blue markers indicate the uncompensated output, whereas the red markers represent the compensated output.              
+
+> TABLE V RMS E RROR OF ONE HOUR DRIFT
+> Sensor MINI85 DYJN-104 Proposed Sensor Proposed Sensor (Uncompensated) (Compensated) Zero Torque RMS Error(N ·m) 0.0074 0.0442 0.0123 0.0091 10 N ·m Torque RMS Error(N ·m) 0.0061 0.0314 0.0326 0.0224
+
+Table V summarizes the RMS errors corresponding to Fig. 9(c) and (d). The RMSE of the proposed sensor was 
+
+0.0123 N·m and 0.0326 N·m before compensation, which decreased to 0.0091 N·m and 0.0224 N·m after compensation, corresponding to reductions of 27% and 31% , respectively. In addition, a maximum temperature change of 1◦C resulted in an approximately 0.014% FS error variation. IV. M OTOR APPLICATION EXPERIMENT 
+
+In the motor experiments, as shown in Fig. 10, the proposed torque sensor was mounted in front of the motor, followed by a 0.1 m lever arm and a load cell at the end of the arm to provide a redundant measurement. The motor supports direct torque commands by using an internal current-sensing element, en-abling torque-control inputs up to 2 kHz. Experiments were conducted to compare the performance obtained when using only the motor torque command versus using the proposed sensor as an additional feedback signal in the control loop. As mentioned earlier, the motor is equipped with a gearbox, and thus exhibits backlash and stiction. Due to stiction, a minimum input torque is required to initiate motion; the stiction threshold ( ≈ 0.13 N·m) was defined as the smallest commanded torque at which the measured motor velocity first exceeded a small threshold for a sustained duration ( > 100 ms) under chirp/PRBS/ramp excitation. Fig. 10(a) shows the experimental setup, and Fig. 10(b) illustrates the communication architecture. All experiments were performed in MATLAB/Simulink Desktop Real-Time 
+
+> Fig. 10. Motor application experiment setup: (a) photograph of the application setup integrating the motor, the proposed sensor, and the load cell; (b) schematic diagram of the communication interfaces and experimental devices used for the motor application experiments.
+
+with a 1 kHz control cycle. The load cell used in this setup was the SBA-50L (CAS), which has a measurement capacity of up to 500 N. The experiments were conducted in three configurations to highlight the benefits of integrating the proposed sensor: (i) a step-reference tracking test, (ii) a sinusoidal tracking test, and (iii) an application-level demonstration using admittance control. To focus on the sensor-level application in these experi-ments, a simple PI controller was used. For all tests, the proportional and integral gains were set to 0.12 and 12 .0,respectively, and the anti-windup back-calculation gain was set to 5.
+
+A. Step-Reference Tracking Test 
+
+First, a step-reference tracking test was conducted. Step torque references of 0.05 N·m, 0.1 N·m, and 0.2 N·m were applied, and an additional test was performed to evaluate how well the torque could be maintained under external distur-bances. Fig. 11(a), (b), and (c) correspond to the experiments at 0.05 , 0.1, and 0.2 N·m, respectively, whereas Fig. 11(d) shows the disturbance-rejection test while regulating the torque to 0.5 N·m. The light green shaded region indicates torque control using the motor’s internal current sensor, while the light gray shaded region indicates torque control using the proposed sensor as feedback. For more reliable evaluation, the force measured by the load cell was also recorded, allowing the corresponding torque at the 0.1 m lever arm to be computed. Based on these measurements, the RMSE with respect to the reference torque was calculated, and the results are summarized in Table VI. A key point to note is                
+
+> TABLE VI STEP -R EFERENCE TRACKING TEST ANALYSIS
+> Experiment 0.05 N ·m0.1 N ·m0.2 N ·m0.5 N ·m with Disturbance Current Sensor RMS Error(N ·m) 0.0329 0.0566 0.0685 0.1893 Torque Sensor RMS Error(N ·m) 0.0026 0.0026 0.0025 0.0058
+
+the motor stiction of approximately 0.13 N·m. Because the actual output torque is difficult to estimate accurately from the motor current sensor in the low-torque regime, experiments were intentionally conducted in this range. In the higher-torque regime where stiction is no longer dominant (e.g., at 0.2 N·m), the current-sensor-based torque control still yields insufficient output, indicating limited accuracy of the current-based torque estimate. Moreover, the fact that the output levels correspond to approximately 30% , 40% , and 65% (mean values) of the expected values at the three reference levels suggests that the current-based estimate also exhibits nonlinearity. As reported in Table VI, when the proposed sensor was used, the RMS error was reduced to 0.079 ×, 0.046 ×, and 0.036 × of the base-line values. Under external disturbances, current-sensor-only control failed to maintain regulation even at approximately 
+
+0.3 N·m, whereas torque-sensor feedback maintained stable regulation under disturbances exceeding 2 N·m. 8 
+
+> Fig. 11. Step-response experiments. The light green shaded region indicates the results obtained using only the motor current sensor (without the torque sensor), whereas the gray shaded region indicates the results obtained using feedback from the proposed sensor: (a) 0.05 N ·m; (b) 0.1 N ·m; (c) 0.2 N ·m; (d) disturbance-rejection test while regulating 0.5 N ·m under an external disturbance.
+
+B. Sinusoidal Tracking Test 
+
+Second, to evaluate whether stable control can be achieved in the low-torque regime affected by stiction, a low-amplitude sinusoidal test was performed. In addition, a low-torque square-wave input was applied to examine the behavior around the zero-crossing region, and a higher-torque test was also conducted to verify tracking performance in the non-stiction regime. Fig. 12(a–c) present the results obtained using only the motor current sensor, whereas Fig. 12(d–f) show the results when the proposed sensor is used for feedback. In the low-torque sinusoidal and square-wave tests, current-sensor-only control exhibits a one-sided actuation behavior (i.e., generating torque predominantly in a single direction), which is strongly associated with gearbox stiction. In contrast, using the proposed sensor enables accurate torque control even in the low-torque regime. Table VII summarizes the RMS errors                   
+
+> TABLE VII SINUSOIDAL AND SQUARE -W AVE TRACKING PERFORMANCE
+> Experiment 0.05 N ·m Sinusoidal 0.1 N ·m Square 10 N ·m Sinusoidal Current Sensor RMS Error(N ·m) 0.0685 0.0924 1.2022 Peak Error(N ·m) 0.0505 0.1426 2.2611 Torque Sensor RMS Error(N ·m) 0.0205 0.0436 0.1520 Peak Error(N ·m) 0.0301 0.0797 0.4244
+
+for each experiment, showing that both the peak error and the RMS error are reduced for the 0.05 N ·m sinusoidal test, the 0.1 N ·m square-wave test, and the 10 N ·m sinusoidal test. Specifically, the RMS error decreases by 29.9%, 47.2%, and 12.6%, respectively, while the peak error decreases by 59.6%, 55.9%, and 18.8%, respectively. Note that the peak error is influenced by overshoot because torque regulation was implemented using only a PI controller; with improved controller tuning or a more advanced control scheme, a larger performance gain is expected. 
+
+C. Application-Level Demonstration Using Admittance Con-trol 
+
+Finally, an application-level demonstration was conducted using admittance control. A key advantage of integrating a torque sensor is that, under external interaction, the applied wrench can be estimated and used to regulate the robot joint, which is essential for interaction controllers such as admittance control [26]–[28]. The admittance controller was implemented according to Eqs. 17-21. The desired inertia, damping, and stiffness parameters were set to Md = 0 .03 , Bd = 0 .6, and 
+
+Kd = 0 , respectively, resulting in a virtual dynamics that exhibits inertia and damping without a restoring spring term. This setting is analogous to the compliant behavior commonly used in collaborative robots when a human guides the robot by hand. 
+
+Md ¨θr + Bd ˙θr + Kd(θr − θ0) = τext (17) 
+
+¨θr (k) = τext (k) − Bdωr (k) − Kd(θr (k) − θ0)
+
+Md
+
+(18) 
+
+ωr (k + 1) = ωr (k) + Ts ¨θr (k) (19) 
+
+eθ (k) = θr (k) − θ(k), e ω (k) = ωr (k) − ω(k) (20) 
+
+τcmd (k) = Kpeθ (k) + Kv eω (k) (21) Here, θr denotes the reference angle and θ0 denotes the initial position. τext represents the external torque of the proposed 9 
+
+> Fig. 12. Sinusoidal and square-wave experiments: (a) sinusoidal test with an amplitude of 0.05 N ·m at 0.2 Hz (current-sensor-only control); (b) square-wave test with an amplitude of 0.1 N ·m at 1 Hz (current-sensor-only control); (c) sinusoidal test with an amplitude of 10 N ·m at 0.2 Hz (current-sensor-only control); (d) proposed-sensor-based control for the test in (a); (e) proposed-sensor-based control for the test in (b); (f) proposed-sensor-based control for the test in (c).
+> Fig. 13. Admittance control experiment: (a) low-torque, low-speed interaction, exhibiting mild damping behavior; (b) high-torque, high-speed interaction, exhibiting pronounced damping behavior.
+
+sensor and ωr (k) denotes the angular velocity at the k-th sample in discrete time. Ts is the sampling period, which is set to 0.001 s in this study. The terms eθ and eω denote the angle error and angular-velocity error, respectively. A PD controller is then used to compute the command torque input, τcmd .The experimental results are shown in Fig. 13. Fig. 13(a) presents the response under slowly applied external torque, whereas Fig. 13(b) shows the response under rapidly applied external torque. At low speeds, the motor motion follows the direction of the applied interaction torque. At higher speeds, a resistive feel arises due to the damping term, which is also clearly reflected in the motor velocity response. V. C ONCLUSION 
+
+This paper presents a joint torque sensor based on a novel photo-reflector (photocoupler) sensing scheme and introduces an optimization-based calibration method that reduces mea-surement noise. By suppressing noise, the proposed approach improves the effective resolution, which is validated exper-imentally. The sensor is designed to be compact and self-contained, eliminating the need for additional external instru-mentation compared to conventional torque-sensing solutions. Temperature-induced drift is characterized and compensated using temperature-chamber experiments, and the compensated sensor is then integrated with an actual motor to demonstrate torque-control performance as well as an application-level admittance-control experiment. These experiments provide a clear comparison between motor control performance with and without the proposed sensor, showing that precise control is achievable even in the low-torque regime where motor performance is limited. The proposed sensor and calibration framework are ex-pected to be beneficial for recent trends in collaborative and articulated robots, where accurate joint torque feedback is crit-ical. In addition, this work proposes a calibration strategy that exploits redundancy in a sensor array to enhance resolution while maintaining accuracy via optimization, which is likely applicable to other sensing systems employing redundant measurements. REFERENCES [1] L. Zhou, Z. Li, Y. Li, and S. Bai, “Parallel mppi with gradient-velocity modulated sdf cost for high-performance real-time dynamic obstacle avoidance by robot manipulators,” IEEE Transactions on Robotics ,vol. 41, pp. 5149–5168, 2025. 10 
+
+[2] X. Zhao, Y. Zhang, W. Ding, B. Tao, and H. Ding, “A dual-arm robot cooperation framework based on a nonlinear model predictive coopera-tive control,” IEEE/ASME Transactions on Mechatronics , vol. 29, no. 5, pp. 3993–4005, 2024. [3] J. Di Carlo, P. M. Wensing, B. Katz, G. Bledt, and S. Kim, “Dynamic locomotion in the mit cheetah 3 through convex model-predictive control,” in 2018 IEEE/RSJ international conference on intelligent robots and systems (IROS) . IEEE, 2018, pp. 1–9. [4] M. Hutter, C. Gehring, D. Jud, A. Lauber, C. D. Bellicoso, V. Tsounis, J. Hwangbo, K. Bodie, P. Fankhauser, M. Bloesch et al. , “Anymal-a highly mobile and dynamic quadrupedal robot,” in 2016 IEEE/RSJ in-ternational conference on intelligent robots and systems (IROS) . IEEE, 2016, pp. 38–44. [5] Y.-H. Shin, S. Hong, S. Woo, J. Choe, H. Son, G. Kim, J.-H. Kim, K. Lee, J. Hwangbo, and H.-W. Park, “Design of kaist hound, aquadruped robot platform for fast and efficient locomotion with mixed-integer nonlinear optimization of a gear train,” in 2022 International Conference on Robotics and Automation (ICRA) . IEEE, 2022, pp. 6614–6620. [6] “Unitree robotics,” https://www.unitree.com/, accessed: 2025-01-21. [7] “Ur5e datasheet,” https://www.universal-robots.com/media/1807465/ ur5e e-series datasheets web.pdf, accessed: 2026-03-04. [8] D.-D. Nguyen and C.-H. Kuo, “Design and optimization of a joint torque sensor for lightweight robots,” IEEE Sensors Journal , vol. 21, no. 8, pp. 9788–9797, 2021. [9] B. Fu and G. Cai, “Design and optimization of a joint torque sensor with small crosstalk error for robots,” Measurement , vol. 200, p. 111629, 2022. [10] S. M. Mohandas, R. K. Megalingam, and D. Raghavan, “Design of highly sensitive joint torque sensor for collision detection in robotic manipulators,” IEEE Sensors Journal , vol. 24, no. 12, pp. 18 916–18 927, 2024. [11] X. Tian, Z. Cheng, M. Bi, and J. Zhu, “Ultracompact joint torque sensor units with enhanced resolution for collaborative robots,” IEEE Sensors Journal , vol. 24, no. 8, pp. 12 074–12 084, 2024. [12] S.-H. Kim, J.-H. Meng, and J.-B. Song, “Design and optimization of high-stiffness joint torque sensor with taper lock spokes,” IEEE Sensors Journal , vol. 24, no. 21, pp. 34 026–34 034, 2024. [13] Y. B. Kim, U. Kim, D.-Y. Seok, J. So, Y. H. Lee, and H. R. Choi, “Torque sensor embedded actuator module for robotic applications,” IEEE/ASME Transactions on Mechatronics , vol. 23, no. 4, pp. 1662–1672, 2018. [14] J. Kim, Y. B. Kim, D.-Y. Seok, S. Y. Lee, J. Y. Sim, and H. R. Choi, “Performance enhancement of capacitive-type torque sensor by using resonant circuit,” IEEE Transactions on Industrial Electronics , vol. 69, no. 1, pp. 560–569, 2022. [15] D.-Y. Seok, Y. B. Kim, S. Y. Lee, J. Kim, and H. R. Choi, “Ultra–thin joint torque sensor with enhanced sensitivity for robotic application,” 
+
+IEEE Robotics and Automation Letters , vol. 5, no. 4, pp. 5873–5880, 2020. [16] C. Chen, T. Ma, H. Jin, Y. Wu, Z. Hou, and F. Li, “Torque and rotational speed sensor based on resistance and capacitive grating for rotational shaft of mechanical systems,” Mechanical Systems and Signal Processing , vol. 142, p. 106737, 2020. [Online]. Available: https://www.sciencedirect.com/science/article/pii/S0888327020301230 [17] Y. H. Lee, Y. H. Lee, H. Lee, H. Kang, L. T. Phan, S. Jin, Y. B. Kim, D.-Y. Seok, S. Y. Lee, H. Moon, J. C. Koo, and H. R. Choi, “Force-controllable quadruped robot system with capacitive-type joint torque sensor,” in 2019 International Conference on Robotics and Automation (ICRA) , 2019, pp. 6777–6782. [18] M. Pu, Q. Luo, Q. Liang, and J. Zhang, “Modeling for elastomer displacement analysis of capacitive six-axis force/torque sensor,” IEEE Sensors Journal , vol. 22, no. 2, pp. 1356–1365, 2021. [19] K. Wu, G. Zheng, and G. Chen, “Extending timoshenko beam theory for large deflections in compliant mechanisms,” Journal of Mechanisms and Robotics , vol. 15, no. 6, p. 061012, 2023. [20] M. Ling, H. Zhou, and L. Chen, “Dynamic stiffness matrix with timo-shenko beam theory and linear frequency solution for use in compliant mechanisms,” Journal of Mechanisms and Robotics , vol. 15, no. 6, p. 061002, 2023. [21] H.-B. Kim, B.-I. Ham, K.-H. Choi, and K.-S. Kim, “Parameter opti-mization of optical six-axis force/torque sensor for legged robots,” arXiv preprint arXiv:2502.07196 , 2025. [22] H.-B. Kim, B.-I. Ham, K. Ha Choi, and K.-S. Kim, “Compact and optimized optical six-axis force/torque sensor for legged robots,” IEEE Transactions on Instrumentation and Measurement , vol. 74, pp. 1–12, 2025. [23] H.-B. Kim, K.-H. Choi, and K.-S. Kim, “A compact six-axis force/torque sensor using photocouplers for impact robustness,” Review of Scientific Instruments , vol. 95, no. 4, 2024. [24] H.-B. Kim, B.-I. Ham, and K.-S. Kim, “A miniature high-resolution tension sensor based on a photo-reflector for robotic hands and grippers,” 
+
+IEEE Sensors Journal , vol. 25, no. 20, pp. 38 916–38 924, 2025. [25] H.-B. Kim, S. Lee, B.-I. Ham, K. H. Choi, and K.-S. Kim, “Temperature compensation method for a six-axis force/torque sensor using a gated recurrent unit,” IEEE Sensors Journal , vol. 25, no. 14, pp. 26 581– 26 590, 2025. [26] D. Lee, D. Ko, M. J. Kim, and W. K. Chung, “Bidirectional energy flow modulation for passive admittance control,” IEEE Transactions on Robotics , vol. 40, pp. 3917–3932, 2024. [27] G. Peng, T. Li, C. Yang, and C. L. Philip Chen, “Approximation-based admittance control of robot-environment interaction with guaranteed performance,” IEEE Transactions on Systems, Man, and Cybernetics: Systems , vol. 54, no. 10, pp. 6482–6494, 2024. [28] J. Chen, Z.-Y. Dong, S. Shi, Y. Wei, X. Yu, and L. Ou, “Adaptive-constrained admittance control for physical human–robot interac-tion,” Transactions of the Institute of Measurement and Control , p. 01423312241298351, 2025. 
+
+Hyun-Bin Kim (Member, IEEE) obtained his B.S., M.S., and Ph.D. degrees in Mechanical Engineer-ing from Korea Advanced Institute of Science and Technology(KAIST), Daejeon, Republic of Korea, in 2020, 2022, and 2025 respectively. Currently serving as a post-doctoral researcher at KAIST, his cur-rent research interests include force/torque sensors, legged robot control, robot design, and mechatronics systems. 
+
+Byeong-Il Ham (Graduate Student Member, IEEE) obtained his B.S. degree in the School of Robotics from University of Kwangwoon, Seoul, and his M.S. degree in Robotics Program from Korea Advanced Institute of Science and Technology(KAIST), Dae-jeon, Republic of Korea, in 2022 and 2024, respec-tively. He is currently pursuing his Doctor Program in KAIST, Daejeon, Korea, from 2024. His current research interests include legged systems, optimal control, and motion planning. 
+
+Kyung-Soo Kim (Member, IEEE) obtained his B.S., M.S., and Ph.D. degrees in Mechanical En-gineering from Korea Advanced Institute of Sci-ence and Technology (KAIST), Daejeon, Republic of Korea, in 1993, 1995, and 1999, respectively. Since 2007, he has been with the Department of Mechanical Engineering, KAIST.

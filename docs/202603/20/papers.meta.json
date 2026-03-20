@@ -1,0 +1,51 @@
+{
+  "label": "2026-03-20",
+  "date": "2026-03-20",
+  "generated_at": "2026-03-20T20:06:39",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202603/20/2603.13903v1-distributed-acoustic-sensing-for-urban-traffic-monitoring-spatio-temporal-attention-in-recurrent-neural-networks",
+      "section": "quick",
+      "title_en": "Distributed Acoustic Sensing for Urban Traffic Monitoring: Spatio-Temporal Attention in Recurrent Neural Networks",
+      "authors": "Izhan Fakhruzi, Manuel Titos, Carmen Benítez, Luz García",
+      "date": "2026-03-14",
+      "pdf": "https://arxiv.org/pdf/2603.13903v1",
+      "score": "6.0",
+      "evidence": "对密集振动传感器阵列的时空结构进行建模",
+      "tldr": "本研究探讨了利用分布式声学传感（DAS）技术进行城市交通监测，通过将现有光纤基础设施转化为高密度振动传感器阵列。针对DAS数据复杂的时空结构，提出了一种集成空间和时间注意力机制的循环神经网络（RNN）模型。实验表明，该方法在提高识别准确率的同时优化了模型复杂度，并具有良好的可解释性和空间迁移能力，为构建可扩展的城市交通监测系统提供了技术支持。",
+      "tags": "query:tmr",
+      "abstract_en": "Effective urban traffic monitoring is essential for improving mobility, enhancing safety, and supporting sustainable cities. Distributed Acoustic Sensing (DAS) enables large-scale traffic observation by transforming existing fiber-optic infrastructure into dense arrays of vibration sensors. However, modeling the high-resolution spatio-temporal structure of DAS data for reliable traffic event recognition remains challenging. This study presents a real-world DAS-based traffic monitoring experiment conducted in Granada, Spain, where vehicles cross a fiber deployed perpendicular to the roadway. Recurrent neural networks (RNNs) are employed to model intra- and inter-event temporal dependencies. Spatial and temporal attention mechanisms are systematically integrated within the RNN architecture to analyze their impact on recognition performance, parameter efficiency, and interpretability. Results show that an appropriate and complementary placement of attention modules improves the balance between accuracy and model complexity. Attention heatmaps provide physically meaningful interpretations of classification decisions by highlighting informative spatial locations and temporal segments. Furthermore, the proposed SA-bi-TA configuration demonstrates spatial transferability, successfully recognizing traffic events at sensing locations different from those used during training, with only moderate performance degradation. These findings support the development of scalable and interpretable DAS-based traffic monitoring systems capable of operating under heterogeneous urban sensing conditions.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/20/2603.15783v1-multi-objective-optimization-for-over-the-air-federated-edge-learning-enabled-collaborative-integrated-sensing-and-communications",
+      "section": "quick",
+      "title_en": "Multi-objective Optimization for Over-the-Air Federated Edge Learning-enabled Collaborative Integrated Sensing and Communications",
+      "authors": "Saba Asaad, Hina Tabassum, Ping Wang",
+      "date": "2026-03-16",
+      "pdf": "https://arxiv.org/pdf/2603.15783v1",
+      "score": "6.0",
+      "evidence": "协作传感中上行传输的干扰抑制",
+      "tldr": "本研究提出了一种支持空中联邦边缘学习（OTA-FEEL）的多目标集成感知与通信（ISAC）框架。该框架利用双用途上行信号同时实现感知与学习任务，通过正交脉冲整形抑制干扰，并采用分布式似然最大化估计目标坐标。通过多目标优化平衡学习均方误差与感知误差界，在不损害联邦学习性能的前提下显著提升了协作感知精度。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper introduces a novel multi-objective integrated sensing and communications (ISAC) framework to enable collaborative wireless sensing in conjunction with over-the-air federated-edge learning (OTA-FEEL). The framework enables multi-task OTA aggregation to handle sensing and learning simultaneously, while benefiting from dual-purpose uplink signals for both communications and target sensing. Starting from characterizing the local sufficient statistics at each edge device and establishing its stationary, we develop a tractable analytical expression for the local sufficient statistics. To suppress the interference from uplink transmissions of other devices through matched filtering, we then propose a novel orthogonal pulse shaping method. Then, we derive the optimal unbiased estimate of the target's coordinates by casting the centralized problem of joint likelihood function maximization of all devices as the distributed likelihood maximization of each device (which requires only local sufficient statistics). A lower bound on the sensing error variance is then characterized using the Cramer-Rao bound (CRB). We then formulate a multi-objective optimization (MOOP) problem to minimize the mean square error (MSE) and sensing error bound simultaneously. The considered problem is then solved using the epsilon-constrained method. Numerical results demonstrate that the proposed dual-purpose OTA-FEEL-enabled collaborative ISAC framework enhances sensing accuracy without adversely affecting the performance of the primary OTA-FEEL task. While conventional single-shot collaborative sensing schemes are limited by the average error of local estimators, the proposed algorithm achieves the CRB of the considered problem.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/20/2603.16040v1-compact-optical-single-axis-joint-torque-sensor-using-redundant-photo-reflectors-and-quadratic-programming-calibration",
+      "section": "quick",
+      "title_en": "Compact Optical Single-axis Joint Torque Sensor Using Redundant Photo-Reflectors and Quadratic-Programming Calibration",
+      "authors": "Hyun-Bin Kim, Byeong-Il Ham, Kyung-Soo Kim",
+      "date": "2026-03-17",
+      "pdf": "https://arxiv.org/pdf/2603.16040v1",
+      "score": "6.0",
+      "evidence": "冗余传感器阵列和用于噪声抑制的二次规划算法",
+      "tldr": "针对协作机器人关节扭矩测量精度受减速器摩擦和电流非线性影响的问题，本文提出一种紧凑型非接触式光学关节扭矩传感器。该传感器利用冗余光电反射器阵列测量弹性结构的微小形变，并采用基于二次规划（QP）的标定方法来抑制噪声并提升分辨率。实验表明，该传感器在保持紧凑尺寸的同时，显著提高了低扭矩下的测量精度和控制性能，有效解决了传统电流估算方法的局限性。",
+      "tags": "query:tmr",
+      "abstract_en": "This study proposes a non-contact photo-reflector-based joint torque sensor for precise joint-level torque control and safe physical interaction. Current-sensor-based torque estimation in many collaborative robots suffers from poor low-torque accuracy due to gearbox stiction/friction and current-torque nonlinearity, especially near static conditions. The proposed sensor optically measures micro-deformation of an elastic structure and employs a redundant array of photo-reflectors arranged in four directions to improve sensitivity and signal-to-noise ratio. We further present a quadratic-programming-based calibration method that exploits redundancy to suppress noise and enhance resolution compared to least-squares calibration. The sensor is implemented in a compact form factor (96 mm diameter, 12 mm thickness). Experiments demonstrate a maximum error of 0.083%FS and an RMS error of 0.0266 Nm for z-axis torque measurement. Calibration tests show that the proposed calibration achieves a 3 sigma resolution of 0.0224 Nm at 1 kHz without filtering, corresponding to a 2.14 times improvement over the least-squares baseline. Temperature chamber characterization and rational fitting based compensation mitigate zero drift induced by MCU self heating and motor heat. Motor-level validation via torque control and admittance control confirms improved low torque tracking and disturbance robustness relative to current-sensor-based control.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,1964 @@
+Title: Multi-objective Optimization for Over-the-Air Federated Edge Learning-enabled Collaborative Integrated Sensing and Communications
+
+URL Source: https://arxiv.org/pdf/2603.15783v1
+
+Published Time: Wed, 18 Mar 2026 00:08:24 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+> 1
+
+# Multi-objective Optimization for Over-the-Air Federated Edge Learning-enabled Collaborative Integrated Sensing and Communications 
+
+Saba Asaad, Hina Tabassum, Senior Member, IEEE and Ping Wang, Fellow, IEEE 
+
+Abstract —This paper introduces a novel multi-objective inte-grated sensing and communications (ISAC) framework to enable collaborative wireless sensing in conjunction with over-the-air federated-edge learning (OTA-FEEL). The framework enables multi-task OTA aggregation to handle sensing and learning simultaneously, while benefiting from dual-purpose uplink signals for both communications and target sensing. Starting from characterizing the local sufficient statistics at each edge device and establishing its stationarity, we develop a tractable analytical expression for the local sufficient statistics. To suppress the interference from uplink transmissions of other devices through matched filtering, we then propose a novel orthogonal pulse shaping method. Then, we derive optimal unbiased estimate of the target’s coordinates by casting the centralized problem of joint likelihood function maximization of all devices as the distributed likelihood maximization of each device (which requires only local sufficient statistics). A lower bound on the sensing error variance is then characterized using the Cram´ er-Rao bound (CRB). We then formulate multi-objective optimization (MOOP) problem to minimize the mean square error (MSE) and sensing error bound simultaneously. The considered problem is then solved using ϵ-constrain method. Numerical results demonstrate that the proposed dual-purpose OTA-FEEL-enabled collaborative ISAC framework enhances sensing accuracy without adversely affecting the performance of the primary OTA-FEEL task. While conventional single-shot collaborative sensing schemes are limited by the average error of local estimators, the proposed algorithm achieves the CRB of the considered problem. 
+
+Index Terms —Over-the-air federated learning, multi-objective optimization, integrated sensing and communication. 
+
+I. I NTRODUCTION 
+
+With the continuous advancements in wireless communica-tions, the need for systems capable of performing multiple tasks using shared resources is becoming increasingly critical. For instance, integrated sensing and communication (ISAC) enables communication and sensing tasks within the same platform. ISAC is designed to efficiently share spectrum, hard-ware, and signal processing resources between communication and radar-like sensing applications [1]. This dual functionality enables enhanced sensing capabilities at minimal cost while opening up frequency resources. Researchers have explored numerous techniques for the joint design of communication and sensing systems, such as waveform design, joint re-source allocation and advanced signal processing algorithms [2]. These approaches enable simultaneous transmission of communication and sensing data, requiring advanced signal 
+
+Saba Asaad, Hina Tabassum and Ping Wang are with the Department of Electrical Engineering and Computer Science at York University, Toronto, Canada; emails: {asaads, hinat, pingw }@yorku.ca. 
+
+processing across multiple aspects of the ISAC system. Initial research studies in ISAC typically considered cen-tralized sensing where a centralized unit, e.g., a base station (BS), is responsible for both sensing and communications. For instance, in [3], multiple-input multiple-output (MIMO)-ISAC beamforming has been designed for shared and separate radar-communication deployments with sensing at the BS to detect the target. In [4], mmWave MIMO-ISAC with hybrid beam-forming was analyzed, framing the hybrid beamformer design as an optimization problem that balances communication and sensing performance performed at the BS. While centralized approaches can be effective under ideal conditions—when the central unit has sufficient computational and communication resources—they often become impractical in real-world de-ployments due to high signaling overhead, limited scalability, and elevated energy consumption [5]. For instance, in cloud-RAN ISAC systems, centralized sensing imposes substantial signaling load due to fronthaul transmission of raw signals. As shown in [6], distributed sensing can reduce this load by up to 70% under realistic system parameters. Similarly, [7] demonstrates that distributed estimation in UAV networks eliminates the need for long-range communication with a central controller, significantly reducing energy consumption while maintaining estimation accuracy close to that of central-ized methods. In asynchronous sensor networks, [8] shows that distributed localization reduces communication overhead by a factor of 10, achieves comparable accuracy, converges rapidly, and offers greater resilience to link failures. These results highlight the limitations of centralized sensing in bandwidth and energy-constrained environments, motivating the need for scalable distributed solutions. 1
+
+To address these challenges, we propose an over-the-air federated edge learning (OTA-FEEL)-enabled collaborative ISAC framework in which target estimation is performed in a distributed manner across multiple network nodes. The proposed framework enables sensing objects in a collaborative manner, while using a single signal optimized for both sensing and communications. That is, when the users transmit local parameters of sensing and computation tasks to the parame-ter server (PS), they simultaneously receive reflections from nearby objects. These reflections are then utilized for local estimation, and the resulting estimates are further improved using OTA-FEEL framework. This approach enables reducing communication overhead and resource consumption. 
+
+> 1
+
+See Section V.C for further quantitative discussions in this respect. 
+
+> arXiv:2603.15783v1 [cs.IT] 16 Mar 2026 2
+
+A. Related Work 
+
+Distributed sensing offers promising benefits in terms of scalability and reduced reliance on centralized infrastructure, yet practical realizations remain limited in the literature. A closely related study is [9], which proposed a decentralized approach for target localization, where each sensor locally estimates the target’s position using reflected radar signals and sends it over-the-air in a single round for averaging at the server. This one-shot method focuses solely on sensing, without federated learning or multiple communication rounds. Subsequently, designing a fully distributed sensing approach with performance levels comparable to centralized methods is crucial. In this context, recent research has begun to explore the integration of centralized sensing into OTA-FEEL systems. In [10], the authors focused on executing a federated learning task alongside radar sensing within an ISAC framework. In this system, the PS efficiently transmits integrated signals to communicate with edge devices while performing target detection based on the reflections of these signals. This approach highlights the ISAC concept by enabling the PS to perform sensing and communication simultaneously, but without involving edge devices in sensing. Unlike [10] where centralized sensing was considered, [11] explores standard federated edge learning (FEEL) with the objective of loss function minimization while considering time-switching ISAC waveform. The waveform allows each device to perform sensing and communication in an orthogonal manner. This work assumes interference-free transmissions due to sufficient device separation, which may not hold in practical settings. In [12], a joint client selection and power allocation problem was studied for centralized sensing in an OTA-FEEL system, where all clients send their sufficient statistics to the central server for joint detection via hypothesis testing. A flexible client selection scheme was proposed, allowing devices to either join FEEL training or only send sensing data. The study in [11] considered collaborative sensing solely , and [12] separates sensing from learning tasks. Our study, however, focuses on proposing a dual-purpose ISAC signaling design that simul-taneously executes distributed sensing and data transmission using a common signaling method. In dual-purpose ISAC design, sensing data is collected through a common signal. This approach is distinct from sensing-specific designs, where signals are pre-designed to satisfy favorable properties, such as orthogonality. These pre-designed signals are unsuitable for dual-purpose signaling because the transmitted signal is primarily optimized to transfer data. This leads to strong undesired interference that degrades sensing performance. 
+
+B. Contributions 
+
+Joint sensing and FEEL in wireless systems can be considered in two settings: ( i) sensing coexists with FEEL (i.e., FEEL does not assist sensing), e.g., [13], and ( ii ) FEEL is used solely for sensing, i.e., users collect data, train local models, and then perform global model aggregation. The former reflects centralized sensing, while the latter represents a distributed setting that can potentially benefit from integration with dis-tributed learning. In this paper, we develop a novel multi-objective ISAC framework, referred to as CollabSenseFed , to enable OTA-FEEL-empowered collaborative wireless sensing. The framework utilizes multi-task OTA aggregation to handle both sensing and learning, while benefiting from dual-purpose uplink signals for both communications and sensing. 2 The key contributions of this paper can be summarized as: 
+
+• Multi-task OTA Aggregation: We develop a framework for multi-task OTA computation, in which uplink-downlink array beamforming is optimized to enable simultaneous com-putation and aggregation of multiple tasks. This extension to OTA computation enables us to process multiple models over-the-air in parallel, thus allowing for gradient aggregation for the localization task and the FEEL model aggregation. 
+
+• Dual-Purpose Signaling: We propose a dual-purpose ISAC signaling in which the reflections from uplink transmit signals are used to sample the target’s position. The dual-signaling prevents us from using a pre-defined orthogonal sensing signals. This causes interference on the received reflection of each device from reflections of the other devices’ information-bearing signals, leading to very noisy sensing samples. To address this issue, we propose a novel pulse shap-ing in which the devices modulate their uplink transmission by predefined orthogonal pulses. This approach enables devices to effectively suppress interference from uplink transmissions of other devices while preserving OTA model aggregation. 
+
+• Collaborative sensing via OTA-FEEL: Starting from characterizing the local sufficient statistics at each device, we establish its stationarity to simplify the local sufficient statistics. Then, we derive optimal unbiased estimate of the target’s coordinates by casting the centralized problem of joint likelihood function maximization of all devices as the distributed likelihood maximization of each device. To further quantify the sensing error, we invoke the Cram´ er-Rao bound (CRB), which determines a lower bound on the variance the target location estimate. This bound is given in terms of the inverse of the Fisher information matrix, which cannot be derived analytically. We leverage its basic properties to obtain an analytic bound to analytically quantify the sensing error. 
+
+• Multi-objective Optimization: We formulate a multi-objective optimization (MOOP) to minimize the aggregation error and sensing error bound with respect to uplink and downlink beamformers. We invoke the ϵ-constraint method to transform the MOOP into a constrained single-objective optimization (SOOP). We then utilize a block coordinate descent (BCD) scheme to approximate the optimal beamform-ers by alternating between two marginal problems: one that minimizes the aggregation error while constraining the sensing error, and the other that optimizes the sensing metric subject to power constraints. We approximate the latter problem with a relaxed convex optimization whose solution can be readily computed via convex programming. Using this result, we develop a low-complexity algorithm that approximates the optimal beamformers iteratively. 
+
+• We validate the proposed scheme through extensive numerical experiments on MNIST and CIFAR-10. Results show that CollabSenseFed’s localization error closely tracks 
+
+> 2We use standard Federated Averaging for model aggregation, given its effectiveness in synchronous networks. Alternative methods, e.g., [14] may enhance performance and can be incorporated into our framework in future. 3
+> Fig. 1: Illustration of the multi-task OTA-FEEL set-up.
+
+the CRB for joint estimation, offering a notable improvement over conventional methods, where the error is bounded by the average of individual estimators. 
+
+Notations : Scalars, vectors, and matrices are denoted by non-bold, bold lowercase, and bold uppercase letters, re-spectively. For any matrix H, HT, H∗, and HH denote the transpose, conjugate, and Hermitian transpose. IN is the 
+
+N × N identity matrix; R and C denote the real and complex sets. CN (η, σ 2) is the complex Gaussian distribution with mean η and variance σ2. † denotes the pseudo-inverse, ⊗
+
+the Kronecker product, and E {.} the expectation. We write 
+
+1, . . . , N as [N ], ∇ for gradient, and ∥·∥ F for Frobenius norm. II. S YSTEM MODEL AND ASSUMPTIONS 
+
+We consider a FEEL setting in which a single PS and K
+
+devices are training a global model over a wireless network. We assume that the devices and the PS are equipped with M
+
+and N -antennas, respectively. In addition to the FEEL training, the devices share sensing parameters, such as gradients of local localization losses, with the PS. At this stage, we focus on the over-the-air computation aspect of the system, while the nature of these sensing parameters will be discussed in Section III-B. We assume that the devices perform I simultaneous computa-tion tasks over-the-air. Setting I = 1 reduces the problem to the classical single-function over-the-air computation, while 
+
+I = 2 models the scenario where both FEEL and localization-related computations are carried out simultaneously. We refer to this problem as multi-function or multi-task computation 
+
+and formulate it precisely in the presence of a reflecting target. 
+
+A. Multi-function (or Multi-task) Computation Model 
+
+The devices aim to transmit their parameters for the I different tasks simultaneously. These parameters may include model updates for the FEEL task or gradients of localization losses for the sensing task. We assume that these parameters are computed locally at the devices and then shared with the PS. Let gik[t] denote the parameter of task i ∈ [I] computed locally by device k at symbol interval t, e.g., a model parameter in FEEL problem or an entry of localization loss’s gradient. Device k then computes its analog transmit symbol at time t
+
+from its I parameters g1
+
+> k
+
+[t], . . . , g Ik[t] as sk[t] = PIi=1 cikgik[t]
+
+for some cik ∈ CM that precodes the parameter gik[t]. This can be written as follows: 
+
+sk[t] = Ckgk[t], (1) where Ck = [c1
+
+> k
+
+, . . . , cIk] and gk[t] = [g1
+
+> k
+
+[t], . . . , g Ik[t]] T.We assume that for all k and i, gik[t] describes a station-ary process with auto-correlation Rk[τ ] defined as Rk[τ ] = 
+
+E gik[t]gik[t − τ ]∗ that decays against τ , i.e., Rk[τ ] ≤ Rk[0] 
+
+for all τ . In practice, parameter updates across various tasks often show similar temporal correlations, thus we consider the auto-correlation is the same across tasks (i.e., the same for all i) [15]. The mean and variance of these processes are assumed to be zero and one, respectively, i.e., E gik[t] = 0 
+
+and E gik[t]gik[t]∗ = Rk[0] = 1 .3 We further assume that the computations are performed over independent functions, e.g., independent mini-batches of data, and hence the pa-rameters gik[t] are independent across devices and tasks, i.e., 
+
+E
+
+n
+
+gik[t]gjℓ [t]∗
+
+o
+
+= 0 for all k̸ = ℓ and i̸ = j. The devices are limited in transmit power with upper bound value P , i.e., 
+
+E
+
+n
+
+∥sk[t]∥2o
+
+≤ P . Considering the statistical model of the local parameters, this concludes that the scaling factors satisfy 
+
+PIi=1 cik 
+
+> 2
+
+= ∥Ck∥2F ≤ P for k ∈ [K].
+
+B. Dual-Purpose ISAC Signal Model 
+
+We consider a stationary target whose reflections are received by the devices after a delay that depends on the distance of each device from the target. We assume that the target is located within the sight of the devices, i.e., the reflections are received only by the devices. The devices aim to utilize the target’s reflections within a fixed time-frame to jointly localize the target’s position. To this end, they construct a dual-purpose transmit signal from the symbol sk[t] and a predefined pulse, which can be used for both OTA computation and localization. We focus on a time-frame consisting of T symbol intervals. Device k constructs its transmit signal by multiplying its transmit symbols by a predefined pulse pk[t] of length T . This means that it sends in interval t ∈ [T ] the signal 
+
+xk[t] = sk[t]pk[t]. (2) The pulses pk[t] for k ∈ [K] build an orthogonal basis, i.e., for any k̸ = ℓ, we have PTt=1 p∗
+
+> k
+
+[t]pℓ[t] = 0. As we show later, this enables the devices to cancel out the interference on their received reflections 4.To keep the pulse not impacting the transmit power, we assume |pk[t]|2 = 1 
+
+for t ∈ [T ]. This simply implies that 1
+
+> T
+
+PTt=1 |pk[t]|2 = 1 .Examples of such orthogonal pulses are given by discrete Fourier Transform (DFT) and Walsh-Hadamard matrices [18]. Note that due to the use of over-the-air computation, the devices are synchronized. As a result, their pulses can be designed to be perfectly orthogonal. It is assumed that the pulses pk[t] for k ∈ [K] are predefined and known to all the         
+
+> 3This is consistent with the fact that parameters are typically centered and scaled before transmission in distributed learning [16], [17].
+> 4Although orthogonal pulse shaping theoretically eliminates inter-device interference as T→∞, practical implementations with finite Tmay experience residual interference. This can perturb ˜Ξk, degrade the quality of sufficient statistics, and bias the estimate of v⋆. However, these effects can be mitigated by longer pulse durations, improved pulse design, or interference-aware estimation techniques. 4
+
+devices and PS. As shown in Fig. 1, the devices send their transmit signals over the wireless channel to the PS. These signals serve two purposes: 1) they superimpose over-the-air and are used by the PS to compute the aggregated parameters, and 2) they provide the devices with reflections from the target, which are used to localize the target. 
+
+C. Over-the-Air Computation Model 
+
+At interval t, the PS receives a superimposed version of the transmitted signals, i.e., 
+
+y[t] = 
+
+> K
+
+X
+
+> k=1
+
+Hkxk[t] + z[t] = 
+
+> K
+
+X
+
+> k=1
+
+Hksk[t]pk[t] + z[t], (3) where z[t] ∼ CN  0, σ 2IN
+
+ is the additive white Gaussian noise at the PS, and Hk ∈ CN ×M is the matrix of channel coefficients between device k and the PS which is assumed to be constant within the time-frame, i.e., the channel coherence time is larger than T . By plugging (1) into (3), we can see that the received signal at the PS contains the superimposed version of all local parameters, i.e., 
+
+y[t] = 
+
+> K
+
+X
+
+> k=1
+
+HkCkgk[t]pk[t] + z[t]. (4a) The PS intends to compute a predefined aggregation on the local parameters for each function directly over the air, i.e., in the analog domain. This means that for each i = 1 , . . . , I , it desires to compute ¯gi[t] = PKk=1 wikgik[t] for some averaging weights wik with i = 1 , . . . , I and k = 1 , . . . , K . To this end, it uses I separate linear receivers m1[t], . . . , mI [t] to compute I
+
+different post-processing components from the received signal as rj [t] = mH 
+
+> j
+
+[t]y[t]. By defining the receive beamforming matrix M[t] = [ m1[t], . . . , mI [t]] and, the vector of aggre-gated parameters as r[t] = [ r1[t], . . . , r I [t]] T, we can express the aggregated model parameter compactly as follows: 
+
+r[t] = MH[t]y[t], (5a) 
+
+=
+
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkgk[t]pk[t] + MH[t]z[t]. (5b) From (5b) it can be seen that the PS through transmit and receive beamforming can recover a distorted version of the desired aggregations. This describes the concept of over-the-air computation. The ultimate goal in this setting is to find beamformers for the PS and devices such that rj [t] closely approximates the desired ¯gj [t], ∀j. Due to channel noise and task/device interference, this goal is only achieved with some error, which we refer to as the aggregation error . At time t,the aggregation sum-error is given by (6) at the top of the next page. In this expression, we define ¯g[t] = [¯ g1[t], . . . , ¯gI [t]] T,and Wk ∈ RI×I is a diagonal matrix whose diagonal entries are w1
+
+> k
+
+, . . . , w Ik. The main goal of the PS and the devices is to minimize the time average of the aggregation sum-error, i.e., 
+
+MSE ( {M[t]}, {Ck}) = 1
+
+T
+
+> T
+
+X
+
+> t=1
+
+MSE ( M[t], {Ck}) . (7) In the following, we take this metric as a measure that quantifies the quality of over-the-air computation. Note that the MSE model in (7) captures the impact of both communication and sensing. The sensing-related gradients contribute to the transmitted signal and introduce an additional source of inter-ference, which propagates through the aggregation function. Thus, the derived MSE expression inherently accounts for the impact of sensing by incorporating the errors arising from the estimated parameters within the computation process. To address this, the precoding matrix Ck = [ c1
+
+> k
+
+, . . . , cIk] is designed to balance both computation and sensing tasks. This trade-off is explicitly addressed in the MOOP in Section IV. 
+
+D. Received Echo Signal Model 
+
+Given the radiated signals, each device receives a superpo-sition of echoes from the target, including the echoes of all transmitted signals. These reflections can be used to jointly estimate the location of the target. Let the coordinates of the target be denoted by v = [ ℓx, ℓ y , ℓ z ]. The echo received from the target at device k at time t is given by 
+
+uk[t] = 
+
+> K
+
+X
+
+> ℓ=1
+
+ak (v) aℓ (v)T xℓ[t] + νk[t], (8) where ak (v) represents the array response of device k at the angle-of-arrival corresponding to the line connecting device 
+
+k to the target at position v. The term νk[t] ∈ CM further denotes additive white Gaussian noise with mean zero and variance ς2 
+
+> k
+
+. Using the far-field propagation model [19], the array response of device k is then given by: 
+
+ak (v) = αk[1 , e −j 2πd λ sin θk (v), . . . , e −j 2π(M −1) dλ sin θk (v)], (9) where αk = α0  
+
+> ∥v−vk∥2
+
+with α0 being a constant that represents the reference path-loss. vk = [ℓkx, ℓ ky , ℓ kz ] is the location of device k, θk(v) denotes the angle-of-arrival by the line connecting v to vk. This relationship satisfies sin θk (v) =    
+
+> ℓz−ℓkz
+> ∥v−vk∥
+
+, where ℓz and ℓkz are z-coordinates of the target and device k, respectively. Thus, the angle is influenced by their height difference in 3D space. λ is the wavelength of the transmitted signal, and d = ∥v − vk∥ is the distance between the target and device k. Given the reflections uk[1] , . . . , uk[T ],devices aim to localize target by estimating v. They filter the received signals to compute sufficient statistics, which are then used to derive an estimator for v.III. OTA-FEEL-ENABLED COLLABORATIVE SENSING 
+
+The ultimate goal of the devices is to address both sensing problem, i.e., estimating v from uk[1] , . . . , uk[T ], and the aggregation simultaneously. To this end, upon receiving the reflections, they design uplink signals that contain some in-formation regarding both sensing and learning tasks. They then transmit their uplink signals and receive the next set of reflections. To accomplish this joint task efficiently, there are two design problems to be addressed: (1) designing precoders 
+
+Ck and beamformers mi[t] to enhance both learning and sensing performance, and (2) eveloping a joint algorithmic approach. We tackle these through the following steps:  
+
+> •
+
+We first specify how the device k, upon receiving 
+
+uk[1] , . . . , uk[T ], extracts sufficient statistics Ξk. 
+
+> •
+
+We study properties of the sufficient statistics in Lem-mas 1 and 2 , which help us derive simplified sufficient statistics denoted by ˆΞk. 
+
+> •
+
+Given ˆΞk, we determine the optimal unbiased estimate of the target coordinate v by maximizing joint likelihood 
+
+p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+. We show that this estimator reduces 5
+
+MSE ( M[t], {Ck}) = E
+
+n
+
+∥r[t] − ¯g[t]∥2o
+
+= E
+
+
+
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkgk[t]pk[t] + MH[t]z[t] −
+
+> K
+
+X
+
+> k=1
+
+Wkgk[t]
+
+> 2
+
+ ,
+
+= E
+
+
+
+> K
+
+X
+
+> k=1
+
+ MH[t]HkCkpk[t] − Wk
+
+ gk[t] + MH[t]z[t]
+
+> 2
+
+ =
+
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t] − Wk 
+
+> 2
+> F
+
++ σ2 ∥M[t]∥2F . (6) to optimizing the sum of local log-likelihoods, where the likelihood of device k depends only on its local sufficient statistics ˆΞk. Leveraging this, we frame the localization problem as a distributed learning task.  
+
+> •
+
+We find an analytic metric for sensing performance by deriving a lower bound on the sensing error variance. Specifically, Theorem 1 provides an explicit expression for the Fisher information matrix in the collaborative sensing setup. Invoking the Cram´ er-Rao theorem, we use the Fisher information to bound the sensing error when the clients solve the maximum-likelihood estima-tion problem jointly .Although the CRB is explicit, it lacks a closed-form in terms of design parameters (e.g., precoders Ck for k ∈ [K]). To address this, we use basic properties of the Fisher information matrix to obtain an analytic bound in Theorem 2, which serves as a performance metric for collaborative sensing.  
+
+> •
+
+We formulate MOOP problem in which both the learning metric, i.e., MSE ( M[t], {Ck}), and sensing metric, i.e., lower bound on sensing error CRB L ({Ck}) determined in Theorem 2 , are to be minimized simultaneously. 
+
+A. Sufficient Statistics at each Device 
+
+The sensing task of the devices is to use their received reflections over an interval of length T to estimate the tar-get location. To this end, upon receiving uk[1] , . . . , uk[T ],device k extracts sufficient statistics by matching its received sequence with its transmit signal xk[t], i.e., it computes 
+
+Ξk (v) = 1
+
+P T 
+
+> T
+
+X
+
+> t=1
+
+uk[t]xH 
+
+> k
+
+[t],
+
+= 1
+
+P T 
+
+> T
+
+X
+
+> t=1
+> K
+
+X
+
+> ℓ=1
+
+ak(v) aℓ(v)T xℓ[t]xH 
+
+> k
+
+[t] + 1
+
+P T 
+
+> T
+
+X
+
+> t=1
+
+νk[t]xH 
+
+> k
+
+[t],
+
+= ak(v)ak(v)TRk,k +
+
+> K
+
+X
+
+> ℓ=1 ,ℓ ̸=k
+
+ak(v) aℓ(v)TRℓ,k +
+
+> T
+
+X
+
+> t=1
+
+νk[t]xH 
+
+> k
+
+[t]
+
+P T ,
+
+where the sample correlation matrix Rk,ℓ is defined as Rℓ,k =
+
+> 1
+> P T
+
+PTt=1 xℓ[t]xH 
+
+> k
+
+[t]. Due to the orthogonality of the transmit pulses, the match filtering suppresses the interference of other devices at device k. Precisely, with large choices of T , Rℓ,k →
+
+0 for ℓ̸ = k as T → ∞ . This is shown in the following lemmas. 
+
+Lemma 1 Let sk[t] be a zero-mean stationary process with auto-correlation matrix ˜Rk[τ ] = E sk[t]sH 
+
+> k
+
+[t − τ ] whose trace decays against τ . As T → ∞ , for any ℓ̸ = k, we have 
+
+Rk,k → 1
+
+P ˜Rk[0] , (10a) 
+
+Rℓ,k → 0. (10b) 
+
+Proof: See Appendix A .Given the definition of sk[t], it is straightforward to show that its covariance matrix satisfies the decaying constraint stated in 
+
+Lemma 1 . This is shown in Lemma 2 .
+
+Lemma 2 The random process sk[t] is a zero-mean stationary process with auto-correlation matrix ˜Rk[τ ] = Rk[τ ]CkCH
+
+> k
+
+with Rk[τ ] denoting the common auto-correlation of local processes gik[t].Proof: See Appendix B .We can now use Lemma 1 to simplify the expression for sufficient statistics. We assume that T is large enough, such that the limits of the law of large number hold. In this case, the sufficient statistics is approximately given by: 
+
+Ξk (v) ≈ ak(v) ak(v)T CkCH
+
+> k
+
+P + ςk
+
+√P T 
+
+ˆZk
+
+ CkCH
+
+> k
+
+P
+
+1/2
+
+, (11) where ˆZk ∈ CM ×M is a zero-mean unit variance Gaussian matrix. We can further whiten the noise term and compute the alternative sufficient statistics ˆΞk (v) as follows: 
+
+ˆΞk (v) = 
+
+√P T ςk
+
+Ξk (v)
+
+ CkCH
+
+> k
+
+P
+
+−1/2
+
+. (12) Let define ˆAk (v) = Ak (v)  CkCH
+
+> k
+
+1/2 where 
+
+Ak (v) = 
+
+s
+
+Tς2
+
+> k
+
+ak (v) ak (v)T , (13) then ˆΞk (v) can be rewritten as 
+
+ˆΞk (v) = ˆAk(v) + ˆZk, (14) which simplifies the likelihood expression 5.
+
+B. Joint ML Estimation for OTA-FEEL-enabled Localization 
+
+Given the sufficient statistics ˆΞk, the optimal unbiased esti-mate of the target coordinate v is obtained by maximizing the likelihood of location v, i.e., p
+
+ˆΞ1 (v) , . . . , ˆΞK (v) |v
+
+
+
+.Thus, we can write 
+
+v⋆ = arg max  
+
+> v∈R3
+
+p
+
+ˆΞ1 (v) , . . . , ˆΞK (v) |v
+
+
+
+, (15) where ˆΞk (v) is defined in (14). Since ˆZk is independent and identically distributed (i.i.d.) standard Gaussian, the likelihood function can be expressed as: 
+
+p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+=
+
+> K
+
+Y
+
+> k=1
+
+p
+
+ˆΞk|v
+
+
+
+, (16a) 
+
+∝
+
+> K
+
+Y
+
+> k=1
+
+exp 
+
+
+
+− ˆΞk − ˆAk (v) 2
+
+> F
+
+
+
+, (16b)         
+
+> 5The array response ak(v)is expressed as a deterministic function of the target’s location through the wave-propagation model. As a result, ˆAk(v)
+> is fully specified by the estimation parameters and does not require separate CSI acquisition. Consequently, the estimation of ˆAk(v)directly yields an estimate of the target parameters. 6
+
+where we drop the argument v and denote ˆΞk (v) as ˆΞk for sake of brevity. Since the logarithm is an ascending function and that the likelihood is always non-zero, we can rewrite the joint maximum-likelihood (ML) localization problem as 
+
+v⋆ = arg max  
+
+> v∈R3
+
+log p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+, (17a) 
+
+= arg max 
+
+> v∈R3
+> K
+
+X
+
+> k=1
+
+− ˆΞk − ˆAk (v) 2
+
+> F
+
+. (17b) Noting that device k only knows its own location, it is ev-ident that (17a) describes a distributed optimization problem. The distributed localization problem can be solved by invoking the federated averaging algorithm [20], and hence incorporated into the proposed multi-function computation framework. To illustrate this, let us denote the local loss of device k in ML localization as follows: 
+
+ℓk(v) = ˆΞk − ˆAk (v) 2
+
+> F
+
+. (18) The optimization in (17a) is equivalent to min v∈R3 ℓ(v),where ℓ(v) = PKk=1 ℓk(v). By interpreting ℓk(v) and ℓ(v)
+
+as local and global loss functions, respectively, we can frame this problem as a distributed learning task. 
+
+Remark 1 In practical scenarios with finite-length pulses and/or imperfect orthogonality due to impairments (such as multipath fading, Carrier Frequency Offset, hardware im-perfections), the inter-device interference is not completely suppressed. This leads to an extra interference term in (12) ,reducing the accuracy of the sufficient statistics and potentially introducing a bias and/or increasing the variance in the esti-mate of v⋆. To mitigate such impacts, one may consider using strategies such as long pulse duration, adopting improved pulse design, and interference-aware estimation methods in practice. The discussion on these approaches is out of the scope of this study and is left as a direction for future work. C. Deriving the Cram´ er-Rao Bound 
+
+In radar sensing, we focus on target estimation performance using the CRB, which provides a lower bound on the variance of any unbiased estimator [21] and is a widely used benchmark in radar systems. To this end, let ˆv represent the estimator of target location v. The CRB matrix can then be given as the inverse of the Fisher Information Matrix (FIM) [22], i.e., 
+
+CRB ( {Ck}| v) = tr {J−1 (v)}, (19) with J ∈ C3×3 representing the FIM 6 defined as follows: 
+
+J (v) = −E
+
+n
+
+∇2 
+
+> v
+
+log p
+
+ˆΞ1, . . . , ˆΞK |v
+
+o 
+
+. (20) Moreover, we denote {Ck} as an argument in (19), as the reflection signals depend on the precoders {Ck} through the transmit signals {xk[t]}. In general, CRB ( {Ck}| v) is a function of unknown v, which is the target location. Noting that v is unknown, we consider the worst-case CRB as the sensing error metric, i.e., the maximum CRB against all possible choices of unknown v. We call this metric worst-case CRB and denote it as follows: 
+
+CRB worst ({Ck}) = max  
+
+> v∈P
+
+CRB ( {Ck}| v) . (21) To derive CRB ( {Ck}) |v), we derive the FIM in Theorem-1 .  
+
+> 6This framework can be easily extended to cases with more than three estimation variables, accommodating a higher-dimensional vas required by different application scenarios.
+
+Theorem 1 Let matrix Ak (v) be defined as in (13) , and denote its derivative with respect to ℓi for i ∈ { x, y, z }, as 
+
+Aik (v) = ∂∂ℓ i Ak (v). The FIM is then specified by a 3 × 3
+
+matrix whose entry (i, j ) is given by 
+
+[J (v)] i,j =
+
+> K
+
+X
+
+> k=1
+
+tr {Aik (v) CkCH 
+
+> k
+
+AjH 
+
+> k
+
+(v)} (22) 
+
+where in this indexing x ≡ 1, y ≡ 2 and z ≡ 3.Proof: To derive the FIM, note that conditioned on v, the matrices ˆΞ1, . . . , ˆΞK are i.i.d. Guassian. We can hence write 
+
+p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+=
+
+> K
+
+Y
+
+> k=1
+
+p
+
+ˆΞk|v
+
+
+
+, (23a) 
+
+∝
+
+> K
+
+Y
+
+> k=1
+
+exp {− ˆΞk − Ak (v)  CkCH
+
+> k
+
+1/2 2
+
+> F
+
+}. (23b) Using the identity |X|2 
+
+> F
+
+= tr {XHX}, we conclude equation (24) on the top of next page. Recall that v = [ ℓx, ℓ y , ℓ z ]T.Using chain rule, it is readily shown that for i, j ∈ { x, y, z }
+
+∂2
+
+∂ℓ i∂ℓ j
+
+log p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+= −
+
+> K
+
+X
+
+> k=1
+
+tr {Aik (v)  CkCH
+
+> k
+
+ AjH 
+
+> k
+
+(v)},
+
+which concludes the proof. Computing the CRB involves inverting the matrix (22) as established in Theorem 1 . However, obtaining an analytic solution for this inversion will not always be feasible. To address this, we seek an alternative approach to establish a lower bound for the worst-case CRB. We begin with Lemma 3 
+
+given below that provides an upper bound on each entry of the FIM. Using this result, we derive in Theorem 2 auniversal lower bound for the CRB that does not require explicit inversion of the FIM, thus providing an efficient alternative to the expression in Theorem 1 .
+
+Lemma 3 For entry (i, j ) of the FIM, we have 
+
+[J (v)] i,j ≤ E ({Ck})
+
+> K
+
+X
+
+> k=1
+
+Aik (v) F Ajk (v) F
+
+,
+
+where E ({Ck}) = PKk=1 tr {CkCH 
+
+> k
+
+} = PKk=1 ∥Ck∥2 
+
+> F
+
+.Proof: We start the proof by noting that CkCH 
+
+> k
+
+is positive semi-definite. We hence can write 
+
+[J (v)] i,j =
+
+> K
+
+X
+
+> k=1
+
+tr {Aik (v) CkCH 
+
+> k
+
+AjH 
+
+> k
+
+(v)}, (25a) 
+
+=
+
+> K
+
+X
+
+> k=1
+
+tr {CkCH 
+
+> k
+
+AjH 
+
+> k
+
+(v) Aik (v)}, (25b) 
+
+≤
+
+> K
+
+X
+
+> k=1
+
+tr {CkCH 
+
+> k
+
+} AjH 
+
+> k
+
+(v) Aik (v) F
+
+, (25c) 
+
+≤
+
+> K
+
+X
+
+> k=1
+
+tr {CkCH 
+
+> k
+
+} Ajk (v) F
+
+Aik (v) F . (25d) As all arguments under the summand are positive, we can use Jenesen’s inequality to write 
+
+> K
+
+X
+
+> k=1
+
+tr {CkCH 
+
+> k
+
+} Ajk (v) F
+
+Aik (v) F (26) 
+
+≤
+
+> K
+
+X
+
+> k=1
+
+tr {CkCH 
+
+> k
+
+}
+
+! KX
+
+> k=1
+
+Ajk (v) F
+
+Aik (v) F ,
+
+which concludes the proof. 7
+
+log p
+
+ˆΞ1, . . . , ˆΞK |v
+
+
+
+= −
+
+> K
+
+X
+
+> k=1
+
+tr {
+
+ˆΞk − Ak (v)  CkCH
+
+> k
+
+1/2H ˆΞk − Ak (v)  CkCH
+
+> k
+
+1/2
+
+}. (24) 
+
+Theorem 2 (Universal bound on sensing error) There ex-ists a constant ϱ > 0, such that for any {Ck}, we have 
+
+CRB worst ({Ck}) ≥ CRB L ({Ck}) , (27) 
+
+where E ({Ck}) = PKk=1 ∥Ck∥2 
+
+> F
+
+, 1¯ς2 = PKk=1 1
+
+> ς2
+> k
+
+, and 
+
+CRB L ({Ck}) = ϱ¯ς2
+
+T E ({Ck}) .
+
+Proof: See Appendix C .This bound is universal in the sense that it does not depend on position v, and hence can be used for system design. Inter-estingly, the bound indicates that the sensing error is reversely proportional to ∥Ck∥2 
+
+> F
+
+. This is intuitive, as by increasing 
+
+∥Ck∥2 
+
+> F
+
+, the signal-to-noise ratio (SNR) at the devices grows, leading to better estimation of v. In the sequel, we adopt this bound as the sensing metric for MOOP in the next section. IV. MOOP F ORMULATION AND SOLUTION 
+
+Our ultimate goal is to design {Ck} and M[t], for k =1, . . . , K and t = 1 , . . . , T , such that the sensing and aggrega-tion perform efficiently in the considered OTA-FEEL-enabled collaborative ISAC framework. Given the performance metrics derived in the previous section, we formulate the following multi-objective optimization problem: 
+
+MOOP1 : min  
+
+> M[t],{Ck}
+
+{MSE ( M[t], {Ck}) , CRB L ({Ck})}
+
+subject to ∥Ck∥2F ≤ P, for k = 1 , . . . ,K, (28a) 
+
+CRB L ({Ck}) ≤ ε0, (28b) 
+
+MSE ( M[t], {Ck}) ≤ ε1. (28c) In this problem, two objectives are to be minimized under the transmit power constraints of the devices, sensing, and ag-gregation quality constraints. Intuitively, MOOP1 suppresses destructive impacts of the channel by minimizing both the aggregation and sensing error. Due to the competing nature of these objectives, it is not possible to optimize both simulta-neously: the first objective aims to find a precoder that beam-forms towards the PS and hence minimizes computation MSE, while the second objective aims to push the beamforming vectors towards the target, such that the sensing error reduces. The classical approach is to define the so-called Pareto front, which consists of Pareto-optimal solutions [23], [24]. 
+
+Definition 1 The beamforming matrix design {C⋆k} for k ∈
+
+[K] is Pareto optimal if and only if there exists no other design 
+
+C′ 
+
+> k
+
+satisfying MSE ( M[t], {C′
+
+> k
+
+}) ≤ MSE ( M[t], {C⋆k}) and 
+
+CRB L ({C′
+
+> k
+
+}) < CRB L ({C⋆k}), simultaneously. 
+
+Intuitively, a Pareto-optimal solution is a design that is optimal to a combined form of those two objectives. The Pareto-front is then the collection of all these optimal solutions. Similar to SOOP, Pareto-optimal solutions are either local or global: if the functions and constraints are convex, the global Pareto-optimal solution is feasible. In the non-convex case, however, algorithmic approaches can compute local Pareto-optimal solutions [24]. Various methods exist to determine the Pareto front of an MOOP, among which we can name the Tchebycheff method, scalarization, and ϵ-constraint method. In the sequel, we adopt the ϵ-constraint method, which allows us to convert the MOOP problem into a parameterized SOOP and facilitates the exploration of the Pareto front. 
+
+A. MOOP via ε-constraint method 
+
+A classical approach to jointly optimize the two objectives is the ε-constraint method, where one objective is optimized while keeping other objectives within tolerable thresholds. In our setting, we minimize the MSE objective while constraining the CRB objective to remain within a permissible threshold. This approach aligns with PS’s primary role of estimating the aggregated model, with localization as an auxiliary task. Thus, we address the following constrained minimization problem: 
+
+min   
+
+> M[t],{Ck}
+
+MSE ( M[t], {Ck}) ,
+
+subject to ∥Ck∥2F ≤ P, for k = 1 , . . . , K, (29a) 
+
+CRB L ({Ck}) ≤ ε0, (29b) 
+
+MSE ( M[t], {Ck}) ≤ ε1, (29c) where ε0 and ε1 that are proportional to the maximum tolerable sensing and aggregation error, respectively. Noting that the ε-constraint (29c) imposes an upper-bound on the objective function that is being minimized, it is straightforward to conclude that (29) is mathematically equivalent to an optimization in which (29c) is dropped, i.e., the minimal objective is either smaller than ε1, which makes (29c) inactive, or larger than ε1 which makes the feasible set empty. We hence drop the ε-constraint (29c) in the sequel and assume that ε1 is always chosen such that the feasible set is non-empty. Using the definition of CRB L ({Ck}), we can rewrite the optimization problem in (29) with (29c) dropped as follows 
+
+P1 : min   
+
+> M[t],{Ck}
+
+MSE ( M[t], {Ck}) ,
+
+subject to ∥Ck∥2F ≤ P, for k = 1 , . . . , K, (30a) 
+
+> K
+
+X
+
+> k=1
+
+∥Ck∥2F ≥ ε−1, (30b) where ε = ε0Tϱ¯ς2 . The problem P1 is non-convex in terms of 
+
+M[t] and {Ck}. To address this, we employ a BCD approach, decomposing P1 into two marginal subproblems: M1, which optimizes M[t] for fixed Ck, and M2, which optimizes Ck for fixed M[t]. These subproblems are solved iteratively, where the solution of each subproblem updates the variables for the other until convergence, leading to a balanced solution for P1.The corresponding marginal problems are formulated as: 
+
+M1 : min  
+
+> M[t]
+
+MSE ( M[t], {Ck}) ,
+
+and 
+
+M2 : min   
+
+> {Ck}
+
+MSE ( M[t], {Ck}) ,
+
+subject to ∥Ck∥2F ≤ P for k = 1 , . . . , K, (31a) 
+
+> K
+
+X
+
+> k=1
+
+∥Ck∥2F ≥ ε−1. (31b) 8
+
+Algorithm 1 MOOP1 Solution 
+
+Require: Hk, Wk, and pk[t] for k ∈ [K], power P , noise variance σ2, and threshold ε 
+
+> 1:
+
+while not converged do ▷ Using some convergence criteria  
+
+> 2:
+
+for t = 1 : T do  
+
+> 3:
+
+Compute M⋆[t] via (32)  
+
+> 4:
+
+end for  
+
+> 5:
+
+Compute αk and Ck for k ∈ [K] by solving M⋆ ▷
+
+Convex programming  
+
+> 6:
+
+for k = 1 : K do  
+
+> 7:
+
+Set C⋆k ← √αkCk/ ∥Ck∥F 
+
+> 8:
+
+end for  
+
+> 9:
+
+end while Ensure: M⋆[t] and C⋆k
+
+The first marginal problem, M1, minimizes the MSE with respect to the PS’s receive beamforming matrix M[t], treating 
+
+Ck as fixed. The solution to this subproblem is determined analytically in the next section. The second marginal prob-lem, M2, optimizes the device transmit beamformers Ck to minimize MSE while ensuring power constraints and a lower bound on sensing accuracy. This marginal problem is non-convex, making it challenging to solve directly. To overcome this, we reformulate it into a variational form and solve it using iterative projection, as detailed in Section IV.C. 
+
+B. First Marginal Problem 
+
+The marginal problem M1 is a standard quadratic problem. Considering MSE ( M[t], {Ck}), M1 is rewritten as follows: 
+
+min 
+
+> M[t]
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t]−Wk 
+
+> 2
+> F
+
++ σ2
+
+T
+
+> T
+
+X
+
+> t=1
+
+∥M[t]∥2F ,
+
+which reduces to a sequence of T decoupled problems for 
+
+M[1] , . . . , M[T ]. For t ∈ [T ], this problem reads 
+
+min 
+
+> M[t]
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t] − Wk 
+
+> 2
+> F
+
++ σ2 ∥M[t]∥2F ,
+
+whose solution is given by: 
+
+M⋆[t] = 
+
+> K
+
+X
+
+> k=1
+
+HkCkCH 
+
+> k
+
+HH 
+
+> k
+
++σ2IN
+
+!−1KX
+
+> k=1
+
+pk[t]HkCkWH 
+
+> k
+
+.
+
+(32) 
+
+C. Second Marginal Problem 
+
+The second marginal problem minimizes the objective with respect to {Ck}. We can rewrite M2 as follows: 
+
+min  
+
+> {Ck}
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t] − Wk 
+
+> 2
+> F
+
+,
+
+subject to ∥Ck∥2F ≤ P, for k = 1 , . . . , K, (33a) 
+
+> K
+
+X
+
+> k=1
+
+∥Ck∥2 
+
+> F
+
+≥ ε−1. (33b) Unlike M1, this problem is not convex as the objective rep-resents a difference-of-convex functions which is challenging to solve [25]. To tackle this problem, we thus perform the following steps: 1) We transform the problem into variational form using an auxiliary variable. 2) We relax the variational problem and use iterative projection to solve the problem. These two steps are explained below. 
+
+1) Variational Form: Let us define the auxiliary variable 
+
+αk = ∥Ck∥2 
+
+> F
+
+. Hence, the marginal problem is rewritten as: 
+
+min   
+
+> {αk,Ck}
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t] − Wk 
+
+> 2
+> F
+
+,
+
+subject to αk − P ≤ 0 for k = 1 , . . . , K, (34a) 
+
+ε−1 −
+
+> K
+
+X
+
+> k=1
+
+αk ≤ 0, (34b) 
+
+∥Ck∥2 
+
+> F
+
+− αk = 0 for k = 1 , . . . , K. (34c) In this variational form, the first two constraints are linear that can be handled by linear programming. However, the last constraint imposes a unit-modulus restriction on the problem. 
+
+2) Iterative Projection: To approximate the solution effi-ciently, we relax the problem into 
+
+M⋆ : min   
+
+> {αk,Ck}
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+> K
+
+X
+
+> k=1
+
+MH[t]HkCkpk[t] − Wk 
+
+> 2
+> F
+
+,
+
+subject to αk − P ≤ 0, for k = 1 , . . . , K, (35a) 
+
+ε−1 −
+
+> K
+
+X
+
+> k=1
+
+αk ≤ 0, (35b) 
+
+∥Ck∥2 
+
+> F
+
+− αk ≤ 0, for k = 1 , . . . , K. (35c) This problem is convex and can hence be solved via a convex programming algorithm. Nevertheless, the equality constraint of the variational problem does not necessary hold. To enforce this constraint to the solution, we invoke iterative projection algorithm [26] in each iteration of the BCD loop, i.e.,  
+
+> •
+
+We solve the relaxed problem for αk, Ck. 
+
+> •
+
+We normalize Ck as Ck ← √αkCk/ ∥Ck∥F to satisfy the equality constraint. We keep iterating till a convergence criterion is satisfied. 
+
+Algorithm 1 outlines the solution approach for MOOP1, while 
+
+Algorithm 2 demonstrates the CollabSenseFed Algorithm as an OTA-FEEL-enabled collaborative ISAC framework. 
+
+D. Discussions on Overhead, Complexity and Convergence 
+
+To quantitatively evaluate the advantages of distributed sensing over centralized sensing , we introduced the concept of sensing signaling load (SSL), which measures the communication overhead involved in each approach. For centralized sensing, as outlined in [27], the SSL corresponds to forwarding raw sensing signals from all devices to the PS, mathematically expressed as TCS = 2 KM s , where s represents the number of time-domain samples per antenna collected by the PS for signal reconstruction. According to the Nyquist sampling theorem, s ≈ 2BT s, where B is the sensing bandwidth and 
+
+Ts is the sensing duration in seconds. On the other hand, the SSL of the distributed approach is TDS = dR/τ , where d
+
+is the dimension of the target parameter, R is the number of iterations required by the distributed algorithm, and τ is the number of local iterations at the devices. In practice, 
+
+dR/τ ≪ s is typically a small integer, e.g., d = 3 in localiza-tion, and τ could be set relatively large for efficient distributed approaches. In OTA computation, the devices transmit over the same frequency band and time to perform the computation in the analog domain. Thus, the SSL does not scale with K.The complexity of MOOP solution per iteration is deter-9
+
+mined by three main steps. First, computing M⋆[t] involves summing K terms, where each term requires matrix multi-plications (e.g., HkCkCH 
+
+> k
+
+HH 
+
+> k
+
+) and a matrix inversion. The cost for these operations is O(KN M 2) for the multiplica-tions, O(KN M I ) for additional products involving Wk, and 
+
+O(N 3) for the inversion, leading to a total complexity of 
+
+O(KN M 2 +KN M I +N 3). Second, solving the convex prob-lem M⋆ requires minimizing a Frobenius norm-based objec-tive function with K variables, each involving matrices of size 
+
+M × I. This results in a complexity of O(( K(M I + 1)) 3) due to the cubic scaling of convex optimization algorithms. Third, normalizing Ck involves computing its Frobenius norm and scaling, costing O(KM I ). Combining these, the per-iteration complexity is approximately O(KN M 2 + N 3 + ( KM I )3).Assuming L iterations for convergence, the overall complexity becomes approximately O(L(KN M 2 + N 3 + ( KM I )3)) .Throughout the numerical experiments, we evaluated the aver-age runtime per epoch of Algorithm 2 against various system parameters and fitted the results using curve-fitting algorithms to validate the complexity order, e.g., we have observed cubic scaling with the number of devices and antennas. It is straightforward to show that CollabSenseFed converges to local minimum of the training losses and the sensing objec-tive. This follows from the fact that Algorithm 1 guarantees the aggregation error to be bounded 7. Hence, one can use [30, Theorem 2.2] to show that with sufficiently small learning rate choices, the CollabSenseFed converges to a local minimum of the empirical loss. The proof follows the same approach in [31], [32] and the references therein. Due to lack of space, we skip the details and refer interested readers to [31], [32]. V. N UMERICAL RESULTS AND DISCUSSIONS 
+
+A. Experimental Set-up and Benchmarks 
+
+We consider K devices and a PS, where the devices col-laboratively train a global model and localize a target. In all simulations, devices are randomly placed within a ring centered at the PS, with inner radius Rin = 50 m and outer radius Rout = 100 m. Their locations are distributed, such that they all lie within an arch whose angle is smaller than 20 ◦.We assume K = 15 devices, with M = 4 antennas at each device and N = 16 antennas at the PS, unless otherwise stated. A target is located randomly within a ring with inner radius 
+
+Rin = 100 m and outer radius Rout = 110 m around the PS, in the same arch that devices are located, at an altitude that is uniformly chosen from interval [0 , 3] m. The array response is specified by (9) with α0 being set to 1. The aggregation of the parameters of the local models being trained at the devices, as well as the sensing gradients, i.e., the gradients being exchanged to solve the joint ML localization problem, are carried out over-the-air. To mutually orthogonalize the pulses of the devices, we use DFT pulses of length T ≥ K.The uplink channels are considered to experience i.i.d. Rayleigh fading with a coherence time interval that includes four communication rounds, i.e., after four rounds of aggre-
+
+> 7Algorithm 2 assumes full device participation, but in practice, dropouts can bias aggregation based on data distribution, affecting both learning and sensing. This can be mitigated using fault-tolerant FL strategies like weighted aggregation and dropout-aware updates [28], [29].
+
+Algorithm 2 CollabSenseFed Algorithm 
+
+Require: Initiate some random location v, set d to the learn-ing model size and t = 0 . 
+
+> 1:
+
+Compute Ck and M[t] via Algorithm 1 . 
+
+> 2:
+
+for multiple communication rounds do  
+
+> 3:
+
+for t = 1 , . . . , d intervals do  
+
+> 4:
+
+for Device k = 1 : K do  
+
+> 5:
+
+Set sk[t] = PIi=1 cikgik[t]; 
+
+> 6:
+
+Transmit xk[t] = sk[t]pk[t] to the PS.  
+
+> 7:
+
+Compute ˆΞk from reflections with (14).  
+
+> 8:
+
+Set g1
+
+> k
+
+[t + 1] to be an entry of ∇ℓk(v). 
+
+> 9:
+
+for i = 2 , . . . , I do  
+
+> 10:
+
+Compute local gradient gik[t + 1]  
+
+> 11:
+
+end for  
+
+> 12:
+
+end for  
+
+> 13:
+
+PS receives y[t] as in (3).  
+
+> 14:
+
+PS computes r[t] = MH[t]y[t] and send it back.  
+
+> 15:
+
+Update the corresponding entry of v with r1(t) 
+
+> 16:
+
+for i = 2 , . . . , I do  
+
+> 17:
+
+Set entry t of global gradient of model i to ri[t] 
+
+> 18:
+
+end for  
+
+> 19:
+
+Update: t = t + 1 ; 
+
+> 20:
+
+end for  
+
+> 21:
+
+for i = 2 , . . . , I do  
+
+> 22:
+
+Update model i using its global gradient  
+
+> 23:
+
+end for  
+
+> 24:
+
+end for 
+
+gating global model for the learning task. For each realization of this setting, we solve the underlying design problem via 
+
+Algorithm 1 . We use the samples collected by the devices from target reflections in each frame of T transmissions to estimate the location of the target. To this end, the devices use 
+
+Algorithm 2 to solve the joint ML estimation problem in a distributed fashion. The details of the learning and sensing set-tings are represented in the sequel. We also consider the single-shot localization approach from [11], where devices compute local sufficient statistics in the first round and send them to the PS for averaging to estimate the target location. After this initial step, the sensing task ends, and only learning updates are transmitted in subsequent rounds. In contrast, the proposed CollabSenseFed scheme performs sensing iteratively: devices continuously extract sensing-related gradients and transmit them alongside learning updates over multiple rounds. To ensure a fair comparison, both schemes are evaluated under identical resource constraints, with the same number of uplink transmissions (i.e., channel uses) and the same total transmit power. In CollabSenseFed, this power is split between sensing and learning throughout the process, whereas in the single-shot baseline, it is fully devoted to learning after the first round The proposed joint sensing-learning approach significantly improves sensing accuracy, with only a modest degradation in learning performance due to interference from sensing gradient transmissions. In contrast, the single-shot baseline achieves slightly better learning accuracy by allocating all resources to gradient exchange after the first round, but this comes 10   
+
+> Fig. 2: Effect of sensing on MNIST accuracy Fig. 3: Effect of sensing on CIFAR accuracy Fig. 4: Target location MSE vs. iterations
+
+at the cost of substantially reduced sensing performance. These trade-offs are further demonstrated and quantified in the following through numerical results. 
+
+B. Learning Setting 
+
+We evaluate two learning setups on MNIST and CIFAR-10. For MNIST, a two-layer MLP is trained on 60,000 images of size 28 × 28 , with 10,000 used for testing [33]. The training and testing data sets are randomly shuffled and unevenly distributed across devices. To simulate non-uniform data distribution in federated learning, we assign random percentages to each client using the Dirichlet distribution with concentration parameter α = 0 .4 as in [34], which introduces a moderate level of data heterogeneity, ensuring that differ-ent clients receive imbalanced class distributions. Note that non-uniform distribution mainly affects the learning task by increasing aggregation variance, which can slow convergence. However, sensing performance remains largely independent of data heterogeneity, as it is driven by physical signal reflections rather than class distributions. For CIFAR-10 classification [35], we train a deep CNN on 50 , 000 RGB images of size 
+
+32 × 32 , with 10,000 used for testing. The network comprises three convolutional blocks—each with two 3×3 convolutional layers (using 32 , 64 , 128 , and 256 filters), ReLU activation, and 2 × 2 max-pooling—followed by fully connected layers of sizes 1024 and 512, and a final 10-output softmax. In each communication round, the devices iterate five local updates on their local models via stochastic gradient descent (SGD). The model parameters are then transmitted jointly with the gradients of localization loss using the uplink beamforming matrices Ck. We consider I = 2 , where i = 1 and i = 2 refer to the localization and learning tasks, respectively. 
+
+C. Results and Discussions 1) Performance of CollabSenseFed Algorithm : Fig. 2 shows the performance of MNIST classification and compares the results with two ideal cases, namely, perfect FEEL without localiza-tion and OTA-FEEL without localization . These cases consider the learning task being performed individually (no target for sensing) with the former considering perfect orthogonal and noiseless uplink communication, and the latter considers OTA-FEEL. As the figure shows, CollabSenseFed tracks both cases closely, indicating a practically-negligible impact of target sensing on learning quality [31], [36]. The small gap between CollabSenseFed and learning-only cases can be attributed to inter-task interference. In fact, in this case, the interference by the localization gradients on the aggregated parameters leads to higher aggregation error and hence degrades performance of the trained classifier. This degradation is in fact the price paid to integrate a distributed sensing functionality into our system. Fig. 3 shows the results for training of the CNN architecture over the CIFAR-10 dataset. The result shows a similar trend with a larger gap between the baselines, that comes from the fact that the classification task in CIFAR-10 is more complex. Fig. 4 investigates the sensing performance of the CollabSenseFed and its variants against single-shot distributed ISAC approach. The three variants are given as: 
+
+• CollabSenseFed - Setup I : The devices only estimate the target location via CollabSenseFed while communicating their sensing gradients over perfect (noiseless and orthogonal) up-link channels, i.e., no learning task is involved. 
+
+• CollabSenseFed - Setup II : Only sensing is considered (similar to Setup I), however, the aggregation of the gradients is performed directly over-the-air. 
+
+• CollabSenseFed - Setup III : CollabSenseFed is used to perform the joint sensing and learning over-the-air. Fig. 4 shows the MSE of the estimated target, denoted as MSE = E
+
+n
+
+∥v − ˆv∥2o
+
+, plotted against communication rounds. Here, we consider CIFAR-10 classification as the learning task. As the results show, CollabSenseFed gradually reduces the sensing error towards the CRB L in all three cases. Among the three setups, Setup III converges the slowest, which is due to the interference by the learning task. The three setups, however, converge to the joint Cram´ er-Rao bound after enough number of iterations. This is intuitive as CollabSenseFed solves the ML estimation problem in a distributed fashion and hence at its converging point it performs close to the joint Cram´ er-Rao bound. The figure further demonstrates the trade-off between sensing and com-munication: with a larger number of communication rounds, we can achieve more accurate estimation of the location, which is an intuitive observation. The figure shows a drastic enhancement achieved by CollabSenseFed as compared to benchmark single-shot localization. This follows from the fact that in single-shot sensing, the devices estimate the target 11 
+
+> Fig. 5: Target location estimation performance.
+
++: Estimated target location 
+
+# ⋆: Ground-truth target location 
+
+×: Single-Shot Sensing Fig. 6: Lower bound on variance of sensing error. Fig. 7: Sensing error and aggregation error vs. K.
+
+location from an insufficient amount of data. This leads to large localization error which does not vanish by averaging. On the other hand, CollabSenseFed communicates the local gradients together with its uplink transmissions and updates gradually its estimation through time via moving towards the joint ML estimation. The CollabSenseFed shows its best performance with perfect communication links, which is fur-ther consistent with intuition. Additionally, we examine the scenario where users transmit their local gradients over-the-air, focusing solely on the localization task, i.e., I = 1 . In this case, the performance surpasses that of CollabSenseFed. This improvement is attributed to the absence of inter-task interference, which simplifies the learning process. Fig. (5) shows the target location estimates by CollabSenseFed, which closely match the ground truth, demonstrating its superior performance. In contrast, the single-shot localization method shows large deviations from the true location. 
+
+2) Impact of DFT Pulse Duration: Fig. 6 shows the sensing error achieved by Algorithm 2 against the pulse duration T for various choices of K. As the figure shows, the sensing error drops monotonically against pulse duration. This is intuitive as by increasing the pulse duration for a fixed number of devices K, the variance of the sufficient statistics collected by the devices reduces, and therefore the estimation error decreases. Furthermore, the figure indicates that the sensing error also decreases as the number of devices K increases. This is also intuitive, as a greater number of devices results in more samples, and thereby enhanced localization accuracy. 
+
+3) Impact of the Number of Users: We next investigate the variation of the aggregation error and sensing error bound against K for various choices of I. While simulations focus on I=2I=2—one task for over-the-air classification training and the other for distributed localization—this figure treats II as a system parameter to study its impact on Algorithm 1’s solution. As Fig. 7 demonstrates, the sensing error bound reduces against K which is consistent with our observation in Fig. 6. This figure also demonstrates that by increasing the number of learning tasks, the achieved CRB increases. This behavior follows the mutual dependency of the aggregation and sensing error in the multi-objective optimization, where by larger number of tasks the interference increases and hence the sensing error increases. Also, we can see that the aggregation error increases against K. With larger number of devices, the interference increases, and hence the aggregation error grows large. We further observe that the aggregation error increases with the number of tasks which confirms our initial illustrations. In fact this follows from higher inter-task interference, and can implicitly lead to higher sensing error. 
+
+4) Impact of DFT Pulse Duration and Transmit Antennas on Pareto-Front: Figs. 8 and 9 show the Pareto front of the MOOP, illustrating the trade-off between aggregation and sensing errors versus the number of PS antennas and DFT pulse duration, respectively. The shape of the Pareto-front implies from the fact that both the objectives are set to be minimized. In both figures, it can be observed that as the sensing error decreases, the aggregation error tends to increase, highlighting the inherent trade-off between these two metrics. This inverse relationship indicates that improving sensing accuracy comes at the cost of higher aggregation error. Additionally, by increasing the number of transmit antennas or expanding the pulse duration, the aggregation error further reduces and sensing error (marginally) improves. 
+
+5) Convergence Analysis: Fig. 10 shows the convergence behavior of the proposed algorithm as a function of the number of PS antennas. In this figure, the overall error, defined as the average of the sensing error and aggregation error, is plotted against the number of iterations for different antenna configurations. As observed, the proposed algorithm converges very fast, i.e., after less than 10 iterations. Additionally, the overall error shows a rapid drop with increasing N , which can be attributed to the greater degrees of freedom from larger receive arrays that enhance beamforming for model aggregation at the PS. Increasing the number of PS antennas improves interference cancellation, thus reducing overall error. 
+
+6) Centralized vs Distributed Sensing Overhead: The bar plot in Fig. 11 illustrates the SSL for CS and our proposed DS approach with over-the-air computation, considering varying numbers of antennas M = {8, 16 , 32 , 64 } and a sample size 
+
+s = 200 . The left vertical axis, ranging from 0 to 250,000 real scalars, displays the CS overhead, which increases linearly with M (e.g., 32,000 for M = 8 to 244,000 for M = 64 ). The right vertical axis, ranging from 0 to 2000 with ticks every 200, shows the DS overhead, constant at 30 across all M values due to its independence from the number of antennas. The 12     
+
+> Fig. 8: Pareto front: trade-off between sensing and aggregation error for different T.
+> Fig. 9: Pareto front: trade-off between sensing and aggregation error for different N.
+> Fig. 10: Convergence behavior of CollabSenseFed algorithm.
+> Fig. 11: Sensing signaling load vs. number of antenna elements at each device.
+
+figure highlights the significant overhead reduction achieved by distributed sensing in this configuration. VI. C ONCLUSION 
+
+This work demonstrated the potential of integrating localiza-tion into the OTA-FEEL framework by proposing a novel approach for joint target localization and distributed learning. The proposed scheme builds on the FEEL framework to jointly localize a target using samples collected across the network. Numerical results show that, unlike conventional methods limited by individual estimators, CollabSenseFed progres-sively reduces sensing error toward the Cram´ er-Rao bound. These findings suggest several possible directions for future research, including natural extensions to distributed mobility sensing and multi-target scenarios. Investigating the impacts of other classical techniques, such as user dropout, is another interesting direction for future work. Analyzing the robustness of the proposed scheme under practical impairments, such as carrier frequency offset (CFO), phase noise, or hardware imperfections, represents an important direction for future. APPENDIX AWe start with the first limit: since tr { ˜Rk[τ ]} decays against 
+
+τ , as T → ∞ the sequence xk[t]xH 
+
+> k
+
+[t] contains infinitely large number of uncorrelated realizations. Therefore, using the weak law of large numbers, we can write 
+
+Rk,k = 1
+
+P T 
+
+> T
+
+X
+
+> t=1
+
+xk[t]xH 
+
+> k
+
+[t] → E
+
+(
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+
+xk[t]xH 
+
+> k
+
+[t]
+
+)
+
+,
+
+= 1
+
+P E
+
+(
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+
+sk[t]sH 
+
+> k
+
+[t] |pk[t]|2
+
+)
+
+,
+
+= 1
+
+P
+
+1
+
+T
+
+> T
+
+X
+
+> t=1
+
+E sk[t]sH 
+
+> k
+
+[t]
+
+!
+
+= 1
+
+P ˜Rk[0] .
+
+To prove the validity of (10b), let us expand the sample covariance matrix E {Rℓ,k } = 1
+
+> P T
+
+PTt=1 E xℓ[t]xH 
+
+> k
+
+[t] (a) 
+
+=
+
+> 1
+> P T
+
+PTt=1 E {sℓ[t]} E sH 
+
+> k
+
+[t] pℓ[t]p∗
+
+> k
+
+[t] = 0 where (a) follows from the independence of the sequences sk[t] and sℓ[t]. Define 
+
+fℓk [t] = pℓ[t]p∗
+
+> k
+
+[t]. We next compute the sum-variance of the entries of sample covariance matrix as given in (37) at the top of the next page. In (37), the identity (a) follows the independency of sk[t] and sℓ[t], and the inequality (b) is the result of tr { ˜Rk[τ ]} decaying. This indicates that 0 ≤
+
+E
+
+n
+
+∥Rℓ,k ∥2
+
+> F
+
+o
+
+≤ 0 implying E
+
+n
+
+∥Rℓ,k ∥2
+
+> F
+
+o
+
+= 0. By the extended central limit theorem, Rℓ,k converges to a zero-mean, zero-variance Gaussian random variable as T → ∞ .APPENDIX BThe proof follows directly from the definition ˜Rk[τ ] =
+
+E sk[t]sH 
+
+> k
+
+[t − τ ] . Plugging sk[t] into the definition, we have 
+
+˜Rk[τ ] = E Ckgk[t]gH 
+
+> k
+
+[t − τ ]CH 
+
+> k
+
+, (38a) 
+
+= CkE gk[t]gH 
+
+> k
+
+[t − τ ] CH
+
+> k
+> (a)
+
+= Rk[τ ]CkCH 
+
+> k
+
+, (38b) where (a) follows E gk[t]gH 
+
+> k
+
+[t − τ ] = Rk[τ ]I.APPENDIX CLet start from the definition, we have 
+
+CRB ( {Ck}| v) = tr {J−1 (v)} (a) 
+
+≥ 9tr {J (v)} , (39) where (a) follows from the fact that for any inevitable n × n
+
+matrix A, we have tr {A}tr {A−1} ≥ n2. In the following, we use the following lemma. Using Lemma 3, we can write 
+
+tr {J (v)} = X
+
+> i=x,y,z
+
+[J (v)] i,i , (40a) 
+
+≤ E ({Ck})
+
+> K
+
+X
+
+> k=1
+
+Tς2
+
+> k
+
+X
+
+> i=x,y,z
+
+∂∂ℓ i
+
+ak (v) ak (v)T
+
+> 2
+> F
+
+. (40b) The bound in (40b) is tight when optimized over v. We note that ak (v) follows the classical array response model given 13 
+
+E
+
+n
+
+∥Rℓ,k ∥2
+
+> F
+
+o
+
+= E tr {Rℓ,k RH
+
+> ℓ,k
+
+} = 1
+
+P 2T 2 E
+
+(
+
+tr {
+
+> T
+
+X
+
+> t=1
+
+xℓ[t]xH 
+
+> k
+
+[t]
+
+! TX
+
+> t=1
+
+xk[t]xH 
+
+> ℓ
+
+[t]
+
+!
+
+}
+
+)
+
+, (37a) 
+
+= 1
+
+P 2T 2
+
+> T
+
+X
+
+> t1=1
+> T
+
+X
+
+> t2=1
+
+tr {E sℓ[t1]sH 
+
+> k
+
+[t1]sk[t2]sH 
+
+> ℓ
+
+[t2] }fℓk [t1]f ∗
+
+> ℓk
+
+[t2], (37b) 
+
+> (a)
+
+= 1
+
+P 2T 2
+
+> T
+
+X
+
+> t1=1
+> T
+
+X
+
+> t2=1
+
+E sH 
+
+> k
+
+[t1]sk[t2] E sH 
+
+> ℓ
+
+[t1]sℓ[t2] fℓk [t1]f ∗
+
+> ℓk
+
+[t2], (37c) 
+
+= 1
+
+P 2T 2
+
+> T
+
+X
+
+> t1=1
+> T
+
+X
+
+> t2=1
+
+tr { ˜Rk[t1 − t2]}tr { ˜Rℓ[t2 − t1]}fℓk [t1]f ∗
+
+> ℓk
+
+[t2], (37d) 
+
+> (b)
+
+≤ 1
+
+P 2T 2
+
+> T
+
+X
+
+> t1=1
+> T
+
+X
+
+> t2=1
+
+tr { ˜Rk[0] }tr { ˜Rℓ[0] }fℓk [t1]f ∗
+
+> ℓk
+
+[t2] = 1
+
+P 2T 2 tr { ˜Rk[0] }tr { ˜Rℓ[0] }
+
+> T
+
+X
+
+> t=1
+
+fℓk [t]
+
+!2
+
+= 0 . (37e) in (9), with αk = α0  
+
+> ∥v−vk∥2
+
+and θk(v) = arcsin 
+
+ ℓz −ℓkz  
+
+> ∥v−vk∥2
+
+
+
+.Since v lies in a compact region excluding the singularity at v = vk, both θk(v) and αk are smooth functions with bounded derivatives. Consequently, the entries of αk which are composed of trigonometric and rational functions of v, are differentiable with bounded partial derivatives. This ensures that the gradients of ak (v) are bounded over the region of interest [37]. This implies that there exists ϵ > 0 such that 
+
+X
+
+> i=x,y,z
+
+∂∂ℓ i
+
+ak (v) ak (v)T
+
+> 2
+> F
+
+≤ 1
+
+ϵ . (41) Let ϵ = ϱ/ 9. For any v, we have CRB ( {Ck}| v) ≥ ϱ¯ς2 
+
+> T E ({Ck})
+
+with ¯ς2 in Theorem 2. From (21) , CRB worst ({Ck}) ≥
+
+CRB ( {Ck}| v) for all v. Note that this universal bound holds for all target parameters v, with its tightness governed by ϵ.Choosing ϵ to make (41) tight at the worst-case v ensures Theorem 2’s bound is tight. Since ϵ affects the bound only via the constant ϱ, minimizing the bound in Theorem 2 effectively minimizes the worst-case CRB, independent of ϱ.REFERENCES [1] A. Liu, Z. Huang, M. Li et al. , “A survey on fundamental limits of integrated sensing and communication,” IEEE Commun. Surveys & Tut. ,vol. 24, no. 2, pp. 994–1034, 2022. [2] L. Zhao, D. Wu, and et. al., “Radio resource allocation for integrated sensing, communication, and computation networks,” IEEE Trans. Wirel. Commun. , vol. 21, no. 10, pp. 75–87, 2022. [3] F. Liu, C. Masouros, and et. al., “MU-MIMO communications with MIMO radar: From co-existence to joint transmission,” IEEE Trans. Wirel. Commun. , vol. 17, no. 4, pp. 2755–2770, 2018. [4] F. Liu and C. Masouros, “Hybrid beamforming with sub-arrayed MIMO radar: Enabling joint sensing and communication at mmwave band,” in 
+
+Proc IEEE Int Conf Acoust Speech Signal Process , 2019, pp. 7770–7774. [5] B. Eisele, A. Bereyhi, and R. M¨ uller, “Multiple target measurements: Bayesian framework for moving object detection in mimo radar,” in 
+
+ICASSP 2023-2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) . IEEE, 2023, pp. 1–5. [6] Q. Zou, Z. Behdad, and e. a. Demir, “Distributed versus centralized sensing in cell-free massive MIMO,” IEEE Wirel. Commun. Lett. , 2024. [7] S. Xu, K. Doganc ¸ay, and H. Hmam, “Distributed path optimization of multiple uavs for aoa target localization,” in 2016 Proc IEEE Int. Conf. Acoust. Speech Signal Process(ICASSP) . IEEE, 2016, pp. 3141–3145. [8] W. Yuan, N. Wu, B. Etzlinger, Y. Li, C. Yan, and L. Hanzo, “Expectation–maximization-based passive localization relying on asyn-chronous receivers: Centralized versus distributed implementations,” 
+
+IEEE Trans. Commun. , vol. 67, no. 1, pp. 668–681, 2018. [9] X. Li, F. Liu et al. , “Integrated sensing, communication, and computation over-the-air: MIMO beamforming design,” IEEE Trans. Wirel. Commun. ,vol. 22, no. 8, pp. 5383–5398, 2023. [10] M. Du, H. Zheng et al. , “Integrated sensing, communication and com-putation for over-the-air federated learning in 6G wireless networks,” 
+
+IEEE Int. Things J. , 2024. [11] P. Liu, G. Zhu, and other, “Toward ambient intelligence: Federated edge learning with task-oriented sensing, computation, and communication integration,” IEEE J. Sel. Top. Signal Process. , vol. 17, pp. 58–72, 2022. [12] P. Zheng, Y. Zhu, H. Yulin, and A. Schmeink, “Over-the-air federated learning client selection in integrated sensing, computing and commu-nication,” in IEEE Int. Conf. Commun. , 2024, pp. 804–809. [13] S. Asaad, P. Wang, and H. Tabassum, “Over-the-air feel with integrated sensing: Joint scheduling and beamforming design,” IEEE Trans. Wirel. Commun. , pp. 1–1, 2025. [14] S. Wang, H. Guo et al. , “Communication-efficient distributed bayesian FL over arbitrary graphs,” IEEE Trans. Sig. Process. , 2025. [15] T. Li, A. K. Sahu et al. , “Federated learning: Challenges, methods, and future directions,” IEEE signal process. mag. , vol. 37, pp. 50–60, 2020. [16] M. A. Sedaghat, A. Bereyhi, R. R. Mueller, and S. Asaad, “A novel tree-based algorithm for device coordination in over-the-air federated learning,” in WSA & SCC 2023; 26th International ITG Workshop on Smart Antennas and 13th Conference on Systems, Communications, and Coding . VDE, 2023, pp. 1–6. [17] S. M. Hamidi, A. Bereyhi, S. Asaad, and H. V. Poor, “Over-the-air fair federated learning via multi-objective optimization,” IEEE Communica-tions Letters , 2025. [18] J. Seberry, B. JWysocki, and T. AWysocki, “On some applications of Hadamard matrices,” Metrika , vol. 62, no. 2, pp. 221–239, 2005. [19] J. G. Proakis, Digital signal processing: principles, algorithms, and applications, 4/E . Pearson Education India, 2007. [20] B. McMahan, E. Moore, D. Ramage, S. Hampson, and B. A. y Arcas, “Communication-efficient learning of deep networks from decentralized data,” in Proc. PMLR AI and Statistics , 2017, USA, pp. 1273–1282. [21] F. Liu, Y.-F. Liu, A. Li, C. Masouros, and Y. C. Eldar, “Cram´ er-Rao bound optimization for joint radar-communication beamforming,” IEEE Trans. Signal Process. , vol. 70, pp. 240–253, 2021. [22] S. M. Kay, “Statistical signal processing: estimation theory,” Prentice Hall , vol. 1, pp. Chapter–3, 1993. [23] R. T. Marler and J. S. Arora, “Survey of multi-objective optimization methods for engineering,” Structural and multidisciplinary optimization ,vol. 26, pp. 369–395, 2004. [24] K. Miettinen, Nonlinear multiobjective optimization . Springer Science & Business Media, 1999, vol. 12. [25] S. Boyd, Convex optimization . Cambridge university press, 2004. [26] D. P. Bertsekas, “Nonlinear programming,” Journal of the Operational Research Society , vol. 48, no. 3, pp. 334–334, 1997. [27] Z. Behdad, ¨ O. T. Demir et al. , “Power allocation for joint communication and sensing in cell-free massive MIMO,” in IEEE Global Commun. Conf. , 2022, pp. 4081–4086. [28] W. Qian, Q. Shen, H. Xu, X. Huang, and Z. Wu, “DROPFL: Client dropout attacks against federated learning under communication con-straints,” in Proc IEEE Int Conf Acoust Speech Signal Process (ICASSP) .IEEE, 2024, pp. 4870–4874. [29] Y. Sun, Y. Mao, and J. Zhang, “MimiC: combating client dropouts in federated learning by mimicking central updates,” IEEE Trans. Mobile Computing , vol. 23, no. 7, pp. 7572–7584, 2023. [30] M. P. Friedlander and M. Schmidt, “Hybrid deterministic-stochastic methods for data fitting,” SIAM J. Scientific Computing , vol. 34, no. 3, pp. A1380–A1405, 2012. 14 
+
+[31] A. Bereyhi, A. Vagollari, S. Asaad, R. R. M¨ uller, W. Gerstacker, and H. V. Poor, “Device scheduling in over-the-air federated learning via matching pursuit,” IEEE Trans. Signal Process. , 2023. [32] S. Asaad, H. Tabassum, C. Ouyang, and P. Wang, “Joint antenna selection and beamforming for Massive MIMO-enabled over-the-air federated learning,” IEEE Trans. Wireless Commun. , 2024. [33] H. Xiao, K. Rasul, and R. Vollgraf, “Fashion-mnist: a novel image dataset for benchmarking machine learning algorithms,” arXiv preprint arXiv:1708.07747 , 2017. [34] O. Marfoq, G. Neglia, A. Bellet, L. Kameni, and R. Vidal, “Federated multi-task learning under a mixture of distributions,” Advances in Neural Information Processing Systems , vol. 34, pp. 15 434–15 447, 2021. [35] A. Krizhevsky and G. Hinton, “Learning multiple layers of features from tiny images,” Master’s thesis, Comp. Science Dept., Univ. Toronto , 2009. [36] K. Yang, T. Jiang, Y. Shi, and Z. Ding, “Federated learning via over-the-air computation,” IEEE Trans. Wireless Commun. , vol. 19, no. 3, pp. 2022–2035, 2020. [37] S. J. Orfanidis, Introduction to signal processing . Prentice-Hall, Inc., 1995.
