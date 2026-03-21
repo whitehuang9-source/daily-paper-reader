@@ -1,0 +1,37 @@
+{
+  "label": "2026-03-21",
+  "date": "2026-03-21",
+  "generated_at": "2026-03-21T20:12:14",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202603/21/2603.13077v1-rooftop-wind-field-reconstruction-using-sparse-sensors-from-deterministic-to-generative-learning-methods",
+      "section": "quick",
+      "title_en": "Rooftop Wind Field Reconstruction Using Sparse Sensors: From Deterministic to Generative Learning Methods",
+      "authors": "Yihang Zhou, Chao Lin, Hideki Kikumoto, Ryozo Ooka, Sibo Cheng",
+      "date": "2026-03-13",
+      "pdf": "https://arxiv.org/pdf/2603.13077v1",
+      "score": "6.0",
+      "evidence": "利用深度学习从稀疏传感器进行场重建",
+      "tldr": "针对无人机和城市空中交通对屋顶风场实时监测的需求，本研究利用风洞实验PIV数据，对比了Kriging插值与UNet、ViTAE、CWGAN三种深度学习模型在稀疏传感器下的风场重建效果。通过单风向与混合风向训练策略及POD-QR传感器优化，证明了深度学习在处理复杂非线性流场方面的优越性，显著提升了重建精度与鲁棒性，为城市低空安全提供了技术支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "Real-time rooftop wind-speed distribution is important for the safe operation of drones and urban air mobility systems, wind control systems, and rooftop utilization. However, rooftop flows show strong nonlinearity, separation, and cross-direction variability, which make flow field reconstruction from sparse sensors difficult. This study develops a learning-from-observation framework using wind-tunnel experimental data obtained by Particle Image Velocimetry (PIV) and compares Kriging interpolation with three deep learning models: UNet, Vision Transformer Autoencoder (ViTAE), and Conditional Wasserstein GAN (CWGAN). We evaluate two training strategies, single wind-direction training (SDT) and mixed wind-direction training (MDT), across sensor densities from 5 to 30, test robustness under sensor position perturbations of plus or minus 1 grid, and optimize sensor placement via Proper Orthogonal Decomposition with QR decomposition. Results show that deep learning methods can reconstruct rooftop wind fields from sparse sensor data effectively. Compared with Kriging interpolation, the deep learning models improved SSIM by up to 32.7%, FAC2 by 24.2%, and NMSE by 27.8%. Mixed wind-direction training further improved performance, with gains of up to 173.7% in SSIM, 16.7% in FAC2, and 98.3% in MG compared with single-direction training. The results also show that sensor configuration, optimization, and training strategy should be considered jointly for reliable deployment. QR-based optimization improved robustness by up to 27.8% under sensor perturbations, although with metric-dependent trade-offs. Training on experimental rather than simulated data also provides practical guidance for method selection and sensor placement in different scenarios.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/21/2603.18727v1-non-linear-in-band-interference-cancellation-on-base-of-conjugate-gradients-method",
+      "section": "quick",
+      "title_en": "Non-linear in-band interference cancellation on base of conjugate gradients method",
+      "authors": "Alexander Degtyarev, Sergei Bakhurin, Nikita Yudin",
+      "date": "2026-03-19",
+      "pdf": "https://arxiv.org/pdf/2603.18727v1",
+      "score": "6.0",
+      "evidence": "使用基于梯度的优化进行非线性干扰抵消",
+      "tldr": "针对全双工通信系统中的自干扰消除问题，本文提出了一种基于共轭梯度（CG）法的非线性抵消方案。该方法结合了混合牛顿法（MNM）的优势，利用二阶导数信息优化多层非线性模型，有效解决了传统梯度下降法收敛慢以及二阶方法计算复杂度高的问题，在保证抵消性能的同时显著提升了收敛速度。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper investigates one possible solution to the problem of self-interference cancellation (SIC) arising in the design of in-band full-duplex (IBFD) communication systems. Self-interference cancellation is performed in the digital domain using multilayer nonlinear models adapted via gradient-based optimization. The presence of local minima and saddle points during the adaptation of multilayer models limits the direct use of second-order methods due to the indefiniteness of the hessian matrix. The mixed Newton method can address the saddle-point issue; however, it requires significant computational resources. In this work, a conjugate gradient (CG) method constructed on the base of the mixed Newton method (MNM) is proposed. The method exploits information from mixed second-order derivatives of the loss function without explicit computation the full hessian matrix. As a result, the proposed approach achieves a higher convergence rate than first-order methods while requiring significantly lower computational resources than conventional second-order methods when adapting multilayer nonlinear self-interference cancellers in full-duplex communication systems.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
