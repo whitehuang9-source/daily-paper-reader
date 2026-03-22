@@ -1,0 +1,390 @@
+Title: A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond
+
+URL Source: https://arxiv.org/pdf/2603.14728v1
+
+Published Time: Tue, 17 Mar 2026 07:18:16 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+# A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond 
+
+Changyu Yao, 1,∗ Haochen Shen, 1,∗ Zhongyuan Liu, 1 Ruotian Gong, 1 Md Shakil Bin Kashem, 1
+
+Stella Varnum, 2 Liangyu Li, 3 Hangyue Li, 3 Yue Yu, 1 Yizhou Wang, 1 Xiaoshui Lin, 1
+
+Jonathan Brestoff, 2,4 Chenyang Lu, 3,5 Shankar Mukherji, 1,4,6 Chuanwei Zhang, 1,4 Chong Zu 1,4,†
+
+> 1
+
+Department of Physics, Washington University, St. Louis, MO 63130, USA 
+
+> 2
+
+Department of Pathology and Immunology, Washington University School of Medicine, St. Louis, MO 63110, USA 
+
+> 3
+
+Computer Science & Engineering, Washington University McKelvey School of Engineering, St. Louis, MO, USA, 63130 
+
+> 4
+
+Center for Quantum Leaps, Washington University, St. Louis, MO 63130, USA 
+
+> 5
+
+AI for Health Institute, Washington University, St. Louis, MO, USA., 63130 
+
+> 6
+
+Department of Cell Biology and Physiology, Washington University School of Medicine, St. Louis, MO 63110, USA 
+
+> ∗
+
+These authors contribute equally to this work 
+
+> †
+
+To whom correspondence should be addressed; E-mail: zu@wustl.edu 
+
+(Dated: March 17, 2026) Nitrogen-vacancy (NV) centers in diamond are a versatile quantum sensing platform for high sen-sitivity measurements of magnetic fields, temperature and strain with nanoscale spatial resolution. A common bottleneck is the analysis of optically detected magnetic resonance (ODMR) spectra, where target quantities are encoded in resonance features. Conventional nonlinear fitting is often computationally expensive, sensitive to initialization, and prone to failure at low signal-to-noise ratio (SNR). Here we introduce a robust, efficient machine learning (ML) framework for real-time ODMR analysis based on a one-dimensional convolutional neural network (1D-CNN). The model performs direct parameter inference without initial guesses or iterative optimization, and is natu-rally parallelizable on graphics processing units (GPU) for high-throughput processing. We validate the approach on both synthetic and experimental datasets, showing improved throughput, accu-racy and robustness than standard nonlinear fitting, with the largest gains in the low-SNR regime. We further validate our methods in two representative sensing applications: diagnosing intracellular temperature changes using nanodiamond probes and widefield magnetic imaging of superconducting vortices in a high-temperature superconductor. This deep-learning inference framework enables fast and reliable extraction of physical parameters from complex ODMR data and provides a scalable route to real-time quantum sensing and imaging. 
+
+INTRODUCTION 
+
+Quantum sensing based on solid-state defects has emerged as a versatile platform for precision measure-ments, offering a unique combination of high sensitivity and nanoscale spatial resolution under ambient condi-tions [1–4]. Among these systems, the nitrogen-vacancy (NV) center in diamond has become a widely used workhorse because it can be optically initialized and read out and can maintain long-lived spin coherence at room temperature [3, 5–9]. The versatility of NV cen-ters allows for the detection of diverse physical quanti-ties, including magnetic fields, electric fields, tempera-ture, and strain, with applications spanning condensed-matter physics and life sciences, from imaging magnetic textures and superconducting phenomena to monitoring intracellular thermodynamics [10–20]. Many NV sensing experiments rely on continuous-wave optically detected magnetic resonance (ODMR), where shifts and splittings of fluorescence features encode the underlying physical parameters [5, 6, 21, 22]. Extracting these quantities is typically performed by fitting ODMR spectra with phenomenological line shapes, such as sums of Lorentzian or Gaussian functions, using nonlinear least-squares methods [22, 23]. Although robust for single-point, high signal-to-noise ratio (SNR) measure-ments, this workflow can become a practical limitation as data volumes grow, for example in widefield imaging or time-resolved experiments that require repeated anal-ysis across many pixels and time points [19, 20, 24, 25]. In these regimes, iterative fitting increases computational overhead and often demands careful initialization and pa-rameter constraints to avoid failures or biased solutions, especially when spectra are degraded by noise and exper-imental drifts (Fig. 1) [23, 24]. Machine-learning (ML) approaches provide an alter-native route to spectral inference by learning a direct mapping from measured spectra to target parameters af-ter an offline training stage [26–33]. Once trained, neural networks can evaluate spectra with a fixed computational cost per input and can be engineered to be tolerant to common noise sources through appropriate training data and regularization, bypassing the need for iterative opti-mization [26–28, 34]. Motivated by these opportunities, here we develop a one-dimensional convolutional neural network (1D-
+
+> arXiv:2603.14728v1 [quant-ph] 16 Mar 2026
+
+2CNN) for ODMR analysis and benchmark its perfor-mance against standard fitting procedures across regimes relevant to NV sensing. Our main results are in three folds. First, we develop a 1D-CNN architecture for ODMR analysis (Fig 2) and benchmark its performance on synthetic datasets across a range of SNR conditions, comparing prediction accuracy with conventional nonlin-ear least-squares fitting. These tests quantify improve-ments in analysis throughput and highlight enhanced precision and stability, particularly in low-SNR regimes. Second, we validate the approach on experimentally mea-sured ODMR spectra from NV centers in nanodiamonds, demonstrating reliable performance on real data and im-proved resilience to noise relative to least-squares fit-ting (Fig. 3a). Finally, we showcase the breadth of the framework in representative quantum sensing scenarios: nanodiamond-based thermometry, spanning large-scale sensor calibration and intracellular temperature measure-ments in mouse macrophages (Fig. 3) [35], and widefield magnetometry for imaging superconducting vortices in a high-temperature superconductor (Fig. 4) [36]. 
+
+> NITROGEN-VACANCY CENTERS IN DIAMOND
+
+The nitrogen-vacancy (NV) center in diamond is a point defect formed by a substitutional nitrogen atom adjacent to a lattice vacancy (Fig. 1a) [3]. The de-fect hosts a spin-triplet ground state ( S = 1) with a zero-field splitting (ZFS) of D ≈ 2.87 GHz between the 
+
+|ms = 0 ⟩ and |ms = ±1⟩ sublevels (Fig. 1c). Under 532 nm excitation, a spin-dependent intersystem cross-ing enables efficient optical polarization into the |ms = 0 ⟩
+
+state and readout through spin-dependent photolumines-cence, where |ms = 0 ⟩ emits more photons on average than |ms = ±1⟩. The spin transitions can be measured using optically detected magnetic resonance (ODMR): by sweeping the frequency of an applied microwave field while monitoring the fluorescence intensity, a drop in flu-orescence is observed when the microwave is resonant with the |ms = 0 ⟩ ↔ | ms = ±1⟩ transitions. An exter-nal magnetic field lifts the degeneracy of the |ms = ±1⟩
+
+states via Zeeman splitting (proportional to the mag-netic field on the NV axis), while temperature induces a common-mode shift of the ZFS. These responses allow the NV center to simultaneously probe the local magnetic field and temperature environment. Detailed Hamilto-nian is further discussed in the Supplementary Materials. Figure 1d shows a representative ODMR spectrum taken from an ensemble of NV centers in a nanodia-mond in the absence of external magnetic field. In this case, the characteristic feature of the ODMR spectrum displays two largely overlaped resonance peaks with a small splitting originated from the local electric field en-vironment from nearby charged defects inside the dia-mond. The signal quality is inherently limited by photon shot noise, which scales with the square root of the col-lected fluorescence count rate, √N . To quantify the quality of ODMR spectra, we therefore define the SNR as SNR = C√N , where C denotes the optical readout contrast of the ODMR resonance. Here, we intentionally present a low-SNR spectrum (SNR = 5 .33) to emulate re-alistic experimental conditions, such as intracellular nan-odiamond sensing, where only limited averaging can be performed. Conventional analysis to extract resonance frequen-cies typically relies on nonlinear least-squares fitting of ODMR spectra to a phenomenological line shape. In this approach, one minimizes the mean-squared error (MSE) between the measured data and a model function, here taken as a sum of two Lorentzian peaks. However, this iterative procedure is sensitive to the choice of initial pa-rameter guesses and can converge to local minima, es-pecially in low-SNR conditions where photon shot noise obscures the resonance features. To mitigate sensitivity to the initial parameter guesses, a Monte Carlo (MC) strategy is often employed, in which the fitting routine is repeated with many randomized ini-tializations and the solution yielding the lowest MSE is selected. This added robustness comes at the cost of sub-stantial computational overhead, as the runtime scales approximately linearly with the number of MC iterations. As illustrated in Fig. 1e, the relative fitting error at a fixed 200 MC iterations increases sharply in the low-SNR regime. Reducing this error generally requires increasing the number of MC rounds, which in turn increases the computation time (Fig. 1e, inset). As a trade-off between accuracy and efficiency, we adopt 200 MC rounds as the baseline for benchmarking conventional fitting through-out this study. 
+
+> 1D CONVOLUTIONAL NEURAL NETWORK FRAMEWORK
+
+In this work, we employ a one-dimensional convolu-tional neural network (1D-CNN) as the core architecture for ODMR spectrum analysis. This choice is motivated by the structure of ODMR spectra, where key physical parameters (resonance frequencies and linewidths) are encoded in localized, approximately translation-invariant features (ODMR spectral dips) [37, 38]. CNNs are well suited to capture such local geometric patterns regardless of their position within the sampled window [38]. The detailed network architecture is illustrated in Fig. 2(a). It consists of five convolutional layers followed by three fully connected (FC) layers, with a total of ∼ 70 mil-lion trainable parameters. We performed a comparative analysis on the network depth: while a 3-layer architec-ture struggles to resolve the complexity of overlapping peaks, a 4-layer design yields acceptable performance. Increasing to five layers provides a modest but consistent 3532 nm  637 nm 
+
+NV centers 
+
+## 𝑚 𝑠 = +1
+
+## 𝑚 𝑠 = −1
+
+## 𝑚 𝑠 = 0
+
+## 𝐷 𝑔𝑠 (𝑇 )
+
+## ∝ 𝐵 ⋅ ො𝑛 
+
+(a) 
+
+𝐵 ext 
+
+(b)  (c) 
+
+(d)  (e)                       
+
+> FIG. 1. NV-Center Sensing Scheme and Monte-Carlo Fitting Characterization (a) An NV center in a diamond lattice. An NV center is a substitutional nitrogen (N) atom adjacent to a lattice vacancy (V). The lattice structure illustrates the four possible NV crystallographic orientations. (b) Schematic of NV centers in diamond under optical excitation. A532 nm laser initializes and reads out the spin state via spin-dependent photoluminescence (PL), while microwave (MW) fields drive spin transitions. (c) Ground-state energy level structure of the NV center. The spin-triplet ground state ( S= 1) exhibits a zero-field splitting Dgs ≈2.87 GHz at room temperature and the splitting is sensitive to temperature with a typical coefficient d Dgs /dT≈ − 70 kHz/K. Furthermore, the |ms=±1⟩states degeneracy is lifted via the Zeeman effect with splitting
+> δ= 2 γeB∥under external magnetic field. (d) Representative ODMR spectrum of NV ensemble in a nanodiamond displaying the characteristic double-dip feature of |0⟩ ↔ | ± 1⟩transitions. Here we intentionally choose a spectrum with low SNR, SNR = 5 .33 (e) Estimation error as a function of SNR (fixed at 200 Monte Carlo (MC) iterations). Inset: Convergence of MC fitting error versus iteration count at fixed SNR ( ≈12), showing reduced variance, at the expense of increased computational latency.
+
+improvement in prediction accuracy (see Supplementary Information); because the added computational overhead remained manageable, we adopt the 5-layer design to maximize robustness. Kernel sizes (ranging from 7 to 13) are chosen to span the maximum expected linewidth (< 10 % of the entire microwave sweeping range) while avoiding excessive sizes that might degrade local posi-tional information. Consequently, the precise retrieval of the resonance frequency relies heavily on the FC layers to map the extracted features to global coordinates. This architecture implicitly emphasizes spectral features near the center of the microwave frequency sampling window, which matches a typical experimental ODMR protocol where the microwave sweep is centered around the ex-pected resonance frequency. In the Supplementary Ma-terials, we list the detailed parameters used and do a thorough study on model parameters and architectures. Each input spectrum comprises 101 uniformly sampled microwave frequency points, with the frequency axis nor-malized to [0 , 1]. Before being passed to the network, the raw fluorescence signal I is Z-score normalized as 
+
+Inorm = ( I − μ)/σ . This preprocessing suppresses am-plitude variations, expands the effective dynamic range, and encourages the model to focus on spectral line shape rather than absolute intensity. Although Z-score nor-malization removes the absolute contrast C in ODMR, it substantially improves robustness to variations in mi-crowave delivery power and fluorescence collection effi-ciency, which are common in practical measurements. To reduce overfitting and improve generalization to experi-mental data, we train the model using an on-the-fly syn-thetic data pipeline [39, 40]. Rather than relying on a fixed pre-generated dataset, synthetic spectra are gener-ated dynamically during training with randomized pa-rameters within physically relevant ranges: normalized center frequency ∈ [0 .35 , 0.65], splitting δ ∈ [0 .02 , 0.2], linewidth w ∈ [0 .02 , 0.09], and contrast C ∈ [0 .012 , 0.15]. To enforce realistic double-peak ODMR structures, we impose constraints such that the splitting is at least 0.8× the average linewidth, and the width/contrast ra-tios between the two peaks are maintained above 0 .75 (see Supplementary Materials for details). The model is trained for 300 epochs with batch size 128 and 256 batches per epoch, requiring approximately 21 hours on a single NVIDIA GeForce RTX 4070 GPU. 4(a)  (b)    
+
+> (c)
+> MC
+> CNN
+> Hybrid
+> (e)
+> SNR
+> 𝟏𝟒 .𝟕 𝟑𝟓 .𝟖
+> (d)
+> Error
+
+𝑥 1,2, 𝑤 1,2, 𝑐 flatten   
+
+> ……
+> Signal
+> Frequency
+> 𝑥 1,2,𝑤 1,2,𝑐
+
+flatten 
+
+> ……
+> Signal
+> Frequency
+
+FIG. 2. Model Architecture and Performance Validation on Synthetic Data (a) Schematic of the proposed 1D-CNN architecture, comprising 5 convolutional layers for feature extraction followed by 3 fully connected layers ( ∼ 70 M parameters). (b) Prediction success rate for center frequency as a function of SNR ( N = 1 , 024). A prediction is classified as successful if the absolute center frequency error is < 0.003 (normalized frequency range to [0 , 1]). (c) Scatter plot of estimation errors for the center frequency across varying SNR levels. Inset: Expanded view of the error distribution at SNR = 6 .93, highlighting significant outliers attributed to Monte-Carlo fitting failures. (d) RMSE of the estimated center frequency versus SNR. The black dashed line indicates the expected Poisson noise scaling, while colored dashed lines represent the algorithmic error floor determined from noise-free synthetic data, due to model capacity or floating point error. Inset: Wall-clock runtime comparison between Monte Carlo (MC) fitting (683 s), CNN inference (2.94 ms), and the Hybrid approach (10.8 s) for 5000 spectra. (e) Prediction error of the center frequency versus SNR. Red error bars represent the CNN-predicted aleatoric uncertainty (1 σ) for individual spectra, illustrating the expected decrease in uncertainty at higher signal levels. Inset: Distribution of standardized residuals. The close agreement with a standard normal distribution validates the calibration of the model’s aleatoric uncertainty estimates. 
+
+PERFORMANCE VALIDATION ON SYNTHETIC DATA 
+
+In this section, we compare three strategies for extract-ing physical parameters from ODMR spectra: conven-tional MC fitting, direct neural-network inference, and a hybrid approach that combines the two. In the hy-brid scheme, the 1D-CNN prediction serves as the initial guess parameters for the fitting, thereby coupling the CNN model’s global inference capability with the local precision of iterative optimization. We first validate the CNN model using synthetic double-Lorentzian spectra spanning a wide range of SNRs. Figure 2b summarizes the prediction success rate for 1,024 test spectra. A prediction is considered suc-cessful when the absolute error in the center frequency is below 0 .003 (normalized units). For a typical sweep range of 2 .8–2 .92 GHz, this criterion corresponds to a temper-ature resolution of approximately 5 K, which serves as a practically relevant benchmark for biological thermom-etry. Although all three methods degrade at low SNR, the ML-based approaches (both CNN and hybrid) main-tain a clear advantage over MC fitting. We attribute this improvement to the CNN’s ability to extract global spectral features, which reduces susceptibility to the local-minimum traps that often hinder gradient-based fitting algorithm at moderate noise levels. At higher SNR regimes, while the success rates of all methods will eventually converge to unity (100%), the ML-based ap-proaches reach this asymptote more rapidly. This per-formance advantage is further corroborated by the error distributions shown in Fig. 2c, where ML-based methods display a narrower spread across all SNR levels. Notably, the inset of Fig. 2c reveals that MC fitting is prone to catastrophic outliers, particularly at low SNR regimes, consistent with occasional convergence to spurious local minima. We further quantify the performance by comparing the root-mean-square error (RMSE) to the Poisson noise-limit scaling (Fig. 2d). At low SNR, all three approaches are fundamentally noise-limited and exhibit the same scaling behavior ∼ SNR −1. At high SNR, however, the standalone CNN approaches a systematic error floor, con-sistent with residual regression bias, which we attribute to the finite spectral sampling resolution and limited model capacity. The hybrid approach mitigates this lim-itation by utilizing the CNN output as the initialization for nonlinear fitting, thereby recovering fitting-level pre-cision in the high-SNR regime. Beyond ultimate accuracy, a key advantage of the neu-ral network framework is that parameter extraction is decoupled from iterative optimization. In traditional fit-ting method, the nonlinear optimizer must be executed repeatedly, so the computational cost scales unfavorably 5with both the number of spectra and the number of MC initializations. In contrast, direct inference maps each spectrum to its parameters in a single forward pass. This enables fully parallelized execution on GPUs, re-ducing the time complexity by several orders of magni-tude (Fig. 2d, inset). Specifically, processing 5000 spec-tra using MC fitting (200 iterations) with 8 multipro-cessing workers requires 683 s. In comparison, pure 1D-CNN inference processes the same 5,000 spectra in just 2.94 ms, while the hybrid method, which refines the CNN predictions via nonlinear fitting, completes the task in 10.8 s with no multiprocessing. This massive acceleration makes real-time analysis of large-scale widefield quantum imaging data practical. In addition, by incorporating a probabilistic loss func-tion during training, the model provides per-spectrum uncertainty estimates. As expected, the predicted un-certainty decreases systematically with increasing SNR (Fig. 2e), reflecting improved estimation precision with longer data acquisition times. The reliability of these confidence intervals is validated through the distribution of standardized errors, defined as ( εpred − ε)/σ pred . The resulting distribution closely follows a standard normal profile (Fig. 2e, inset), indicating that the predicted un-certainties accurately capture the aleatoric noise in the parameter estimates. Collectively, these results show that our ML-based framework not only dramatically ac-celerates ODMR analysis, but also delivers statistically rigorous uncertainty estimates that are essential for ro-bust physical measurements. 
+
+> EXPERIMENTAL VALIDATION AND QUANTUM SENSING APPLICATIONS
+
+Having established the accuracy, robustness, and com-putational efficiency of our neural-network framework us-ing synthetic data, we next assess its performance on ex-perimental ODMR spectra in practical NV sensing sce-narios. In this section, we apply the pre-trained 1D-CNN directly to experimentally measured ODMR spec-tra without any empirical fine-tuning. We first bench-mark the model’s estimation accuracy over a range of ex-perimental SNR to evaluate its robustness to real-world noise. We then demonstrate the framework’s versatil-ity and throughput in two representative sensing modal-ities: characterizing intracellular temperature changes in mouse macrophages and spatial mapping of magnetic field distributions in superconductors. We start by comparing 1D-CNN’s performance against traditional fitting methods using a well-characterized experimental dataset. Specifically, we acquire a high-quality reference ODMR spectrum with extensive signal averaging using an ensemble of NV centers in a nanodia-mond, yielding an exceptional high SNR ≈ 249. Param-eters extracted from this near-noiseless spectrum serve as our experimental ground truth. By evaluating spectra with progressively shorter integration times thus lower SNR, we quantify how the estimation error scales under realistic measurement conditions. Figure 3a shows the scatter plot of these estimation errors as a function of SNR. Consistent with the synthetic benchmarks, the ML-based approach exhibits improved stability as the signal quality degrades. In the low-SNR regime (SNR = 4 .51), the contrast between the methods becomes particularly pronounced, as highlighted by the expanded error distri-bution in Fig. 3a inset. 
+
+Nanodiamond Thermometry for Biology —We next ap-ply NV centers in nanodiamonds as nanoscale thermome-ters for biological sensing. Nanodiamonds are well suited for bio-quantum sensing owing to their chemical stability, biocompatibility, and ease of cellular internalization. To establish a reliable baseline, we first calibrate the ther-mal response of a small cluster of 70 nm nanodiamonds drop-cast onto a glass substrate. The substrate temper-ature is increased in small discrete steps, allowing suf-ficient time for thermal equilibration at each set point before ODMR acquisition. The 1D-CNN extracts the temperature-dependent ZFS, D(T ) (Fig. 3b), yielding a thermal susceptibility of dD (T )/dT ≈ − 66 .5 kHz/ ◦Cnear room temperature. This value agrees well with the hybrid-fitting result ( −65 .0 kHz/ ◦C) and is consistent with typical literature reports ( ≈ − 70 kHz/ ◦C). Owing to variations in the local stress environment, individual nanodiamonds can exhibit slightly different intrinsic properties, leading to particle-to-particle inho-mogeneity in the ZFS. [41] To quantify the intrinsic ZFS distribution of the nanodiamond ensemble, we performed widefield ODMR imaging at a fixed temperature of 32 ◦C. This dataset comprises ODMR spectra from 19 , 618 pix-els with SNR > 5, making it particularly well suited for validating our CNN approach under large-scale, high-throughput inference. Figure 3c shows a histogram of the extracted ZFS, which is well described by a Gaussian distribution. The full width at half maximum (FWHM) is ∼ 0.5 MHz, corresponding to an apparent tempera-ture variance ±3.8◦C. This broadening is dominated by variations in local lattice strain and defect environment across individual nanodiamonds. We therefore treat this inhomogeneous broadening ( ±3.8◦C) as the systematic uncertainty floor for ensemble thermometry. Despite this substantial intrinsic variance, averag-ing across multiple nanodiamonds internalized within a living cell still enables reliable detection of cellular temperature upon the activation of key biological pro-cesses. To validate our CNN model, we analyze com-parative thermometry ODMR dataset on two groups of wildtype (WT) mouse peritoneal macrophages that en-gulfed nanodiamond sensors: an untreated control group and a treated group exposed to carbonyl cyanide-p-trifluoromethoxyphenylhydrazone (FCCP) [35]. FCCP is a potent mitochondrial protonophore that dissipates 6(b)  (c) 
+
+(e) 
+
+> GHz
+
+(a)   
+
+> SNR
+> 𝟐 𝟕𝟓
+> 100 𝜇 m
+> 2.868 2.869
+> 2.868
+> 2.869
+> 2.870
+
+(d) 
+
+5𝜇 m
+
+FIG. 3. Calibration on Experimental Data and In Vivo Thermometry (a) Scatter plot of estimation errors across varying SNR levels. The high-SNR reference dataset (SNR ≈ 249) serves as the ground truth. Inset: Expanded view of the error distribution at SNR = 4 .51, highlighting significant outliers attributed to Monte-Carlo fitting failures. (b) Temperature dependence of the center frequency (Zero-Field Splitting, D). Linear regression of the Machine Learning inference (orange) and hybrid fitting (green) yields thermal coefficients dD/dT = −66 .5 kHz/ ◦C ( R2 = 0 .9844) and −65 .0 kHz/ ◦C ( R2 = 0 .9859), respectively. (c) Histogram of pixel-wise center frequencies at T = 32 ◦C ( N = 19 , 618 pixels, SNR > 5). The distribution is centered at 2 .8689 GHz with a Full-Width at Half-Maximum (FWHM) around 0 .5 MHz, corresponding to a temperature variance of ±3.8 ◦C. Inset: Wide-field fluorescence image of drop-cast nanodiamond clusters, averaged over 2,000 frames. (d) 
+
+Validation in biological systems. Schematic of ND bio-sensing and FCCP-induced thermogenesis. FCCP dissipates the mitochondrial proton gradient, thereby releasing metabolic energy as heat. Consequently, FCCP-treated cells exhibit elevated intracellular temperatures compared to wild-type controls. Right panel: Image of peritoneal exudate cell under white light. (e) Intracellular temperature measurements comparing 4 untreated control and 5 FCCP-treated cells. Hybrid fitting extracts average temperatures of 28 .4 ± 2.3◦C (untreated control) and 36 .2 ± 4.7◦C (FCCP). In comparison, the CNN prediction yields 31 .8 ± 2.2◦C (untreated control) and 43 .8 ± 4.3◦C (FCCP). Both methods successfully capture the relative warming trend induced by the uncoupler. P-values between untreated control and FCCP-treated groups: CNN: 0.0013, Hybrid: 0.017. P-values between methods: untreated control: 0.21, FCCP: 0.14. 
+
+the proton gradient across the inner mitochondrial mem-brane, thereby uncoupling the electron transport chain from ATP synthesis (Fig. 3d). This uncoupling diverts metabolic energy from ATP production to heat genera-tion, leading to a net increase in intracellular temperature [42–44]. Figure 3e summarizes the in vivo thermometry results. To approximate the global cellular thermal state and reduce the impact of particle-to-particle heterogene-ity, each data point represents the mean apparent tem-perature of a single cell, obtained by probing 4–5 dis-tinct nanodiamond clusters distributed throughout the cell volume. Hybrid methods yields 28 .4 ± 2.3 ◦C for the untreated control group and 36 .2 ± 4.7 ◦C for the FCCP-treated group. We consider these hybrid results to be the most accurate benchmarks among traditional fitting techniques. The 1D-CNN revealed a similar tem-perature elevation, yielding mean extracted temperatures of 31 .8 ± 2.2 ◦C (untreated control) and 43 .8 ± 4.3 ◦C(FCCP). These results indicate that, even under substan-tial systematic variance and complex experimental noise, the proposed ML-based framework can reliably recover underlying thermodynamic trends. 
+
+Widefield Imaging of Superconducting Vortices —We next consider a second quantum sensing scenario: mag-netometry using a thin layer of near surface NV ensem-bles in a diamond plate. Widefield NV magnetometry has emerged as a powerful tool for studying condensed matter systems, from quantum magnetism to supercon-ductivity, by enabling in situ imaging of sample inho-mogeneity and local magnetic textures with sub-micron spatial resolution. Moreover, integrating NV centers into diamond anvil cells provides a new lens to locally char-acterize quantum materials under extreme pressures, ac-cessing regimes beyond thermally driven transitions and into pressure-tuned phenomena. In widefield NV magnetometry, the fluorescence from 7(a)  Stray field (G) (b)  (c)        
+
+> NV layer
+> BSCCO
+> FIG. 4. Magnetic Field Imaging of Superconducting Vortices using NV Centers (a) Illustration of the Meissner effect and vortex formation in a Type-II superconductor. External magnetic field lines are expelled from the bulk material, while discrete magnetic flux quanta penetrate the superconductor in the mixed state. (b) Magnetic stray field map of the BSCCO flake reconstructed by the 1D-CNN at T= 60 K under a 1 .25 G bias field. Superconducting vortices are clearly resolved as distinct dark dots. (c) Reconstruction error (RMSE) of the magnetic field map as a function of SNR. The network inference (orange) is compared with single-shot least-squares fitting using optimized (dark blue, center = 0 .5) and perturbed (light blue, center = 0 .45) initial guesses. While the network maintains low error across the range, the fitting method with poor initialization degrades significantly at low SNR. SNR levels correspond to different signal averaging times, with the dataset from the longest integration time serving as the ground truth reference.
+
+a large field of view of NV centers is imaged onto a cam-era, producing a high-dimensional dataset in which each camera pixel corresponds to an ODMR spectrum. In this setting, conventional nonlinear fitting becomes pro-hibitively slow, often requiring tens of minutes to hours to analyze a single field of view containing ≳ 10 5 pix-els. This modality therefore provides an ideal testbed for our 1D-CNN inference framework, where one expects substantial gains in throughput while maintaining or im-proving robustness and accuracy. Specifically, we apply the 1D-CNN to widefield magnetic imaging of a thin (∼ 200 nm) film of Bi 2Sr 2CaCu 2O8+ δ (BSCCO) mechanically exfoliated di-rectly onto the diamond surface (Fig. 4a) [36]. BSCCO is a layered, unconventional type-II superconductor with a transition temperature Tc ≈ 90 K, and serves as a canonical cuprate platform for studying high-Tc super-conductivity and vortex matter. In the superconduct-ing state, the material expels magnetic flux, leading to a local suppression of the magnetic field (the Meissner effect). During field-cooling, structural disorders or in-homogeneities within the sample lead to magnetic flux trapping, which manifests as the formation of isolated superconducting vortices. Direct imaging of these vor-tices, and tracking their spatial organization and dynam-ics, provides direct access to pinning landscapes, dissipa-tion mechanisms, and vortex-phase behavior in high-Tc
+
+superconductors [45–47]. Accordingly, we map the mag-netic stray field by performing wide-field ODMR mea-surements and extracting the local resonance splitting. Figure 4b shows the magnetic field map reconstructed by the 1D-CNN, which clearly resolves a disordered lat-tice of individual vortices, i.e. a vortex glass state. In particular, the CNN efficiently processes the megapixel array of ODMR spectra within 44 s, ∼ 11x faster than the hybrid method (486 s). To quantify robustness, we eval-uate the reconstruction error (RMSE of peak splitting, normalized by reference splitting) as a function of SNR (Fig. 4c), using again the longest-integration dataset as the ground truth. We benchmark the standalone CNN against single-shot least-squares fitting under two ini-tialization conditions. Although fitting performs well when initialized near the optimum, its accuracy degrades rapidly at low SNR when the initial guess is slightly off-set. This sensitivity makes iterative fitting often unreli-able for widefield imaging dataset, where a single global initialization cannot typically accommodate spatial vari-ations across the field of view and thus leads to local-ized fitting failures (non-converging) and reconstruction artifacts. In contrast, the CNN requires no initializa-tion and maintains consistently low RMSE across the full SNR range. These results confirm that our ML frame-work removes both the computational bottleneck and the initialization vulnerability that limit conventional large-scale quantum sensing image reconstruction. 
+
+> CONCLUSION AND OUTLOOK
+
+In summary, we demonstrate a robust deep-learning framework for the real-time analysis of NV center ODMR spectra. Using a custom 1D-CNN trained on physically constrained synthetic data, our approach addresses key limitations of traditional nonlinear least-squares fitting. In particular, it decouples parameter extraction from it-erative optimization, providing nearly five orders of mag-nitude acceleration while avoiding the local minimum failures that can arise in gradient-based fitting. We val-8idate these advantages across diverse experimental set-tings, ranging from intracellular nanodiamond thermom-etry to robust widefield magnetic imaging of supercon-ducting vortices. Looking forward, our work opens several promising fu-ture directions. First, the low computational footprint of the 1D-CNN makes it well suited for deployment on edge hardware such as field-programmable gate arrays (FPGAs). Integrating inference directly into the acqui-sition pipeline could reduce latency to the microsecond scale, enabling closed-loop control and real-time adaptive sensing [48, 49]. Second, the framework can be naturally extended to handle more complex ODMR spectral features, includ-ing hyperfine structure arising from nearby nuclear spins, as well as the simultaneous extraction of multiple physi-cal parameters. These include vector magnetic field, lo-cal temperature, the full stress tensor, and the relative orientation of the nanodiamond, obtained by combining information from different NV crystallographic groups within the ensemble [50–52]. More broadly, although we focus here on NV centers, the same framework should be applicable to other quantum systems. For example, re-cently emerging spin defects in two-dimensional hexago-nal boron nitride often exhibit substantially broader and more intricate ODMR spectra because of their strong nuclear spin environment [53–55]. In such systems, an ML-based approach could help resolve small splittings or shifts buried within strongly overlapping resonances, thereby improving measurement sensitivity. Finally, the built-in uncertainty quantification pro-vides a route toward “smart” microscopy, in which the integration time is dynamically adjusted based on the predicted confidence of the real-time estimates. We an-ticipate that ML-enabled analysis will become a standard component of the quantum-sensing toolbox, expanding the practical limits of speed and sensitivity in both bio-logical and condensed matter applications. 
+
+Acknowledgements : This work is supported by the Center for Quantum Leaps at Washington University, NSF NRT LinQ 2152221, NSF ExpandQISE 2328837 and NSF QIS 2514391. S.M. acknowledges support from NIH grant R35GM142704. C.Zhang acknowledges sup-port from NSF 2503230. 
+
+Competing Interests : J.R.B. is a member of the Sci-entific Advisory Board of LUCA Science, Inc.; receives research support from LUCA Science and Edgewise Ther-apeutics; is a consultant for Columbus Instruments, Inc.; has received royalties from Springer Nature Group and honoraria from Wiley; is an inventor on technol-ogy licensed to Columbus Instruments, Inc. with roy-alty rights; and is an inventor on pending patent ap-plications related to the treatment of metabolic diseases (63/625,555), allergic diseases (US20210128689A1), and mitochondria transfer (018984/US).                                                                                               
+
+> [1] Degen, C. L., Reinhard, F. & Cappellaro, P. Quantum sensing. Reviews of Modern Physics 89 , 035002 (2017). [2] Wolfowicz, G. et al. Quantum guidelines for solid-state spin defects. Nature Reviews Materials 6, 906–925 (2021). [3] Doherty, M. W. et al. The nitrogen-vacancy colour centre in diamond. Physics Reports 528 , 1–45 (2013). [4] Schirhagl, R., Chang, K., Loretz, M. & Degen, C. L. Nitrogen-vacancy centers in diamond: Nanoscale sen-sors for physics and biology. Annual Review of Physical Chemistry 65 , 83–105 (2014). [5] Rondin, L. et al. Magnetometry with nitrogen-vacancy defects in diamond. Reports on Progress in Physics 77 ,056503 (2014). [6] Barry, J. F. et al. Sensitivity optimization for nv-diamond magnetometry. Reviews of Modern Physics 92 ,015004 (2020). [7] Jelezko, F. & Wrachtrup, J. Single defect centres in dia-mond: A review. physica status solidi (a) 203 , 3207–3225 (2006). [8] Hanson, R., Mendoza, F. M., Epstein, R. J. &Awschalom, D. D. Room-temperature manipulation and decoherence of a single spin in diamond. Physical Review B74 , 161203 (2006). [9] Balasubramanian, G. et al. Ultralong spin coherence time in isotopically engineered diamond. Nature Materials 8,383–387 (2009). [10] Taylor, J. M. et al. High-sensitivity diamond magnetome-ter with nanoscale resolution. Nature Physics 4, 810–816 (2008). [11] Maze, J. R. et al. Nanoscale magnetic sensing with an individual electronic spin in diamond. Nature 455 , 644– 647 (2008). [12] Dolde, F. et al. Electric-field sensing using single dia-mond spins. Nature Physics 7, 459–463 (2011). [13] Kucsko, G. et al. Nanometre-scale thermometry in a living cell. Nature 500 , 54–58 (2013). [14] Ovartchaiyapong, P., Lee, K. Y., Myers, B. A. & Jayich, A. C. B. Dynamic strain-mediated coupling of a single diamond spin to a mechanical resonator. Nature Com-munications 5, 4429 (2014). [15] Hsieh, S. & et al. Imaging stress and magnetism at high pressures using a bulk diamond quantum sensor. Science
+> 366 , 1349–1354 (2019). [16] Dovzhenko, Y. et al. Magnetostatic twists in room-temperature skyrmions explored by nitrogen-vacancy center spin texture reconstruction. Nature Communica-tions 9, 2712 (2018). [17] Jenkins, A. & et al. Single-spin sensing of domain-wall structure and dynamics in a thin-film skyrmion host.
+> Physical Review Materials 3, 083801 (2019). [18] Thiel, L. et al. Quantitative nanoscale vortex imaging using a cryogenic quantum magnetometer. Nature Nan-otechnology 11 , 677–681 (2016). [19] Le Sage, D. et al. Optical magnetic imaging of living cells. Nature 496 , 486–489 (2013). [20] Glenn, D. R. et al. Single-cell magnetic imaging using a quantum diamond microscope. Nature Methods 12 ,736–738 (2015). [21] El-Ella, H. A. R. et al. Optimised frequency modulation for continuous-wave optical magnetic resonance sensing
+
+9
+
+using nitrogen-vacancy ensembles. Optics Express 25 ,14809–14821 (2017). [22] Jensen, K., Acosta, V. M., Jarmola, A. & Budker, D. Light narrowing of magnetic resonances in ensembles of nitrogen-vacancy centers in diamond. Physical Review B 
+
+87 , 014115 (2013). [23] Sengottuvel, S. & et al. Wide-field magnetometry using nitrogen-vacancy color centers with randomly oriented micro-diamonds. Scientific Reports 12 , 18564 (2022). [24] Wojciechowski, A. M. & et al. Camera-limits for wide-field magnetic resonance imaging with a nitrogen-vacancy spin sensor. Review of Scientific Instruments 89 ,031501 (2018). [25] Parashar, P. & et al. Sub-second temporal magnetic field microscopy using quantum defects in diamond. Scientific Reports 12 , 8883 (2022). [26] Homrighausen, D. & et al. Edge-machine-learning-assisted robust magnetometer based on randomly ori-ented nv ensembles in diamond. Sensors 23 , 1119 (2023). [27] Tsukamoto, Y. & et al. Accurate magnetic field imaging using nanodiamond quantum sensors enhanced by ma-chine learning. Scientific Reports 12 , 14112 (2022). [28] Zhang, Y. & et al. Deep-neural-network-based magnetic-field acquisition method for quantum sensing with nitrogen-vacancy centers. Physical Review A 110 , 052417 (2024). [29] Santagati, R. & et al. Magnetic-field learning using a single electronic spin in diamond with one-photon read-out at room temperature. Physical Review X 9, 021019 (2019). [30] Dushenko, S. & et al. Sequential bayesian experiment de-sign for optically detected magnetic resonance. Physical Review Applied 14 , 054036 (2020). [31] Rajpal, S. & et al. Evaluating probabilistic and data-driven inference models for fiber-coupled nv-diamond temperature sensors. Optics Express 33 , unknown (2025). [32] Wang, Z., Yan, W. & Oates, T. Time series classifica-tion from scratch with deep neural networks: A strong baseline. In 2017 International joint conference on neural networks (IJCNN) , 1578–1585 (IEEE, 2017). [33] Yamamoto, K. et al. Nanodiamond quantum thermome-try assisted with machine learning. Applied Physics Ex-press 18 , 025001 (2025). [34] Qian, X. & et al. Machine-learning-assisted electron-spin readout of nitrogen-vacancy center in diamond. Applied Physics Letters 118 , 084001 (2021). [35] Kashem, M. S. B. et al. Multiplexed quantum sensing reveals coordinated thermomagnetic regulation of mito-chondria. bioRxiv 10.1101/2025.07.30.666664 (2025). [36] Liu, Z. et al. Quantum noise spectroscopy of super-conducting dynamics in thin film bscco. arXiv preprint arXiv:2502.04439 (2025). [37] Fukushima, K. Neocognitron: a self organizing neural network model for a mechanism of pattern recognition unaffected by shift in position. Biological Cybernetics 
+
+36 , 193–202 (1980). [38] LeCun, Y., Bottou, L., Bengio, Y. & Haffner, P. Gradient-based learning applied to document recogni-tion. Proceedings of the IEEE 86 , 2278–2324 (1998). [39] Srivastava, N., Hinton, G., Krizhevsky, A., Sutskever, I. & Salakhutdinov, R. Dropout: A simple way to prevent neural networks from overfitting. Journal of Machine Learning Research 15 , 1929–1958 (2014). [40] Tobin, J. et al. Domain randomization for transferring deep neural networks from simulation to the real world (2017). 1703.06907. [41] Foy, C. et al. Wide-field magnetic field and temperature imaging using nanoscale quantum sensors. ACS applied materials & interfaces 12 , 26525–26533 (2020). [42] Luvisetto, S., Pietrobon, D. & Azzone, G. F. Uncoupling of oxidative phosphorylation. 1. protonophoric effects ac-count only partially for uncoupling. Biochemistry 26 ,7332–7338 (1987). [43] Tsuji, T., Ikado, K., Koizumi, H., Kajimoto, K. &Uchiyama, S. Difference in intracellular temperature rise between matured and precursor brown adipocytes in re-sponse to uncoupler and β-adrenergic agonist stimuli. 
+
+Scientific Reports 7, 12889 (2017). [44] Consiglio, J. C. et al. Optically detected magnetic res-onance based intracellular thermometry using nanodia-monds implanted in adherent cancer cells. ACS Applied Nano Materials 9, 3590–3596 (2026). [45] Hoffman, J. E. et al. A four unit cell periodic pat-tern of quasi-particle states surrounding vortex cores in bi 2sr 2cacu 2o8+ δ . Science 295 , 466–469 (2002). [46] Kim, P., Yao, Z. & Lieber, C. M. Vortex lattice structure in bi 2sr 2cacu 2o8+ δ at high temperatures. Physical Review Letters 77 , 5118–5121 (1996). [47] Hoogenboom, B. W. et al. Shape and motion of vortex cores in bi 2sr 2cacu 2o8+ δ . Physical Review B 62 , 9179– 9185 (2000). cond-mat/0002146. [48] Krenn, M., Landgraf, J., Foesel, T. & Marquardt, F. Artificial intelligence and machine learning for quantum technologies. Physical Review A 107 , 010101 (2023). [49] Joas, T. et al. Online adaptive quantum characterization of a nuclear spin. npj Quantum Information 7, 56 (2021). [50] Shim, J. H. et al. Multiplexed sensing of magnetic field and temperature in real time using a nitrogen-vacancy ensemble in diamond. Physical Review Applied 
+
+17 , 014009 (2022). [51] Broadway, D. A. et al. Microscopic imaging of the stress tensor in diamond using in situ quantum sensors. Nano Letters 19 , 4543–4550 (2019). [52] Wang, Y. et al. Simultaneous determination of local magnetic fields and sensor orientation with nitrogen-vacancy centers in nanodiamond. arXiv preprint arXiv:2507.05366 (2025). [53] Gottscholl, A. et al. Spin defects in hbn as promising temperature, pressure and magnetic field quantum sen-sors. Nature communications 12 , 4480 (2021). [54] Stern, H. L. et al. Room-temperature optically detected magnetic resonance of single defects in hexagonal boron nitride. Nature communications 13 , 618 (2022). [55] He, G. et al. Probing stress and magnetism at high pressures with two-dimensional quantum sensors. Nature communications 16 , 8162 (2025). Supplementary Information: A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond 
+
+Changyu Yao, 1,∗ Haochen Shen, 1,∗ Zhongyuan Liu, 1 Ruotian Gong, 1 Md Shakil Bin Kashem, 1
+
+Stella Varnum, 2 Liangyu Li, 3 Hangyue Li, 3 Yue Yu, 1 Yizhou Wang, 1 Xiaoshui Lin, 1
+
+Jonathan Brestoff, 2,4 Chenyang Lu, 3,5 Shankar Mukherji, 1,4,6 Chuanwei Zhang, 1,4 Chong Zu 1,41Department of Physics, Washington University, St. Louis, MO 63130, USA 
+
+> 2
+
+Department of Pathology and Immunology, Washington University School of Medicine, St. Louis, MO 63110, USA 
+
+> 3
+
+Computer Science & Engineering, Washington University McKelvey School of Engineering, St. Louis, MO, USA, 63130 
+
+> 4
+
+Center for Quantum Leaps, Washington University, St. Louis, MO 63130, USA 
+
+> 5
+
+AI for Health Institute, Washington University, St. Louis, MO, USA., 63130 
+
+> 6
+
+Department of Cell Biology and Physiology, Washington University School of Medicine, St. Louis, MO 63110, USA 
+
+> (Dated: March 17, 2026)
+> CONTENTS
+
+Supplementary Note 1. Hamiltonian of the NV Center and ODMR Spectroscopy 1Supplementary Note 1.1. Theory and Methods 1Supplementary Note 1.2. Experimental Dataset and Data Quality 2Supplementary Note 1.3. Extented Data of Superconducting Vortices 2Supplementary Note 2. Model Details and Model Studies 3Supplementary Note 2.1. Model Details 3Supplementary Note 2.2. Data Synthesis 4Supplementary Note 2.3. Hyper-parameter Optimization Studies 5References 8  
+
+> Supplementary Note 1. HAMILTONIAN OF THE NV CENTER AND ODMR SPECTROSCOPY Supplementary Note 1.1. Theory and Methods
+
+The ground-state Hamiltonian of the nitrogen-vacancy (NV) center can be described as the sum of contributions from the zero-field splitting (ZFS), the local electric and strain fields, and the external magnetic field [1, 2]: 
+
+H = HZFS + HE + HB , (1) where the ZFS interaction is given by: 
+
+HZFS = S · D · S ≈ Dgs S2 
+
+> z
+
+, (2) the combined effect of the local electric field and transverse strain is expressed as: 
+
+HE = Π z S2 
+
+> z
+
++ Π x(S2 
+
+> y
+
+− S2
+
+> x
+
+) + Π y (SxSy + Sy Sx), (3) and the Zeeman interaction with the external magnetic field is: 
+
+HB = γeB · S. (4) In the presence of transverse fields and an axial magnetic field, the degenerate | ± 1⟩ spin states mix to form two new energy eigenstates, leading to the ODMR splitting measured experimentally[1, 3]. The resulting energy splitting 2(measured by ODMR) between these hybridized states is given by 
+
+δ = 2 
+
+q
+
+Π2 
+
+> ⊥
+
++ ( γeBz )2, (5) where Π ⊥ =
+
+q
+
+Π2 
+
+> x
+
++ Π 2 
+
+> y
+
+represents the effective transverse coupling, with the effect of Π z and B⊥ negligible at small fields. The ZFS tensor D is highly sensitive to variations in local strain and temperature, providing the fundamental basis for nanoscale sensing of these physical quantities [4, 5]. At zero external magnetic field, the spectrum shows an intrinsic splitting arising from the internal strain (Figure 1). Therefore, we typically measure the center frequency at zero field for temperature sensing. For external magnetic field measurements, we employ Eq. 5. In the low-to-intermediate field regime, however, the intrinsic transverse splitting Π ⊥ becomes comparable to the Zeeman splitting and cannot be neglected. Therefore, standard measurement protocols involve initially acquiring a zero-field splitting map to serve as a baseline benchmark. Then we can calculate the true Bz from the obtained splitting map: 
+
+Bz = p(δ/ 2γe)2 − (Π ⊥/γ e)2 = p(δ/ 2γe)2 − (δ0/2γe)2 (6)   
+
+> Supplementary Fig. 1. Experimental ODMR spectra obtained at zero field with SNR of 4.51, 13.54, and 42.75, respectively.
+> Supplementary Note 1.2. Experimental Dataset and Data Quality
+
+In practice, the measured spectra may deviate from a perfect two-peak Lorentzian profile due to lattice inhomo-geneity and spin noise. Nevertheless, we can still treat them as ideal Lorentzian line shapes while yielding sufficiently accurate parameter estimations [6]. The spectral contrast is primarily governed by polarization and microwave delivery, which typically remain fixed. However, extending the collection time increases the total photon counts, thereby reducing relative noise and enhancing the signal-to-noise ratio (SNR). Figure 1 presents the experimental spectra with SNRs of 4.51, 13.54, and 42.75, respectively.  
+
+> Supplementary Note 1.3. Extented Data of Superconducting Vortices
+
+We follow the standard protocol on measuring the superconducting vortices, in which the applied magnetic field is in the low-field regime and comparable with the intrinsic splitting. To accurately evaluate the local magnetic field, we first measured the intrinsic splitting at zero external magnetic field to map the spatial distribution of Π ⊥
+
+(Fig. 2). Following this baseline characterization, we measured the total energy splitting under the applied field (Fig. 3). Following equation 6, we isolated the Zeeman contribution and calculated the pure out-of-plane magnetic field distribution Bz . This procedure yielded the final magnetic field map of the superconducting vortices presented in Fig. 4. 3CNN Hybrid  Difference %  
+
+> Supplementary Fig. 2. Intrinsic splitting map (Π ⊥/γ e) measured without an external field.
+
+## CNN Hybrid  Difference %  
+
+> Supplementary Fig. 3. Splitting map ( δ/ 2γe) under the applied external field.
+
+## CNN Hybrid  Difference %    
+
+> Supplementary Fig. 4. Magnetic field map ( Bz) calculated from Eq. 6
+> Supplementary Note 2. MODEL DETAILS AND MODEL STUDIES
+
+In this section, we provide a detailed description of our model. This study focuses only on the extraction of two-peak parameters—a task central to temperature sensing, weak magnetic field detection, and single-group NV measurements. We outline the specific configurations used for experimental data analysis and the generation of synthetic training data. Additionally, we present the scaling laws governing our model’s hyperparameters.  
+
+> Supplementary Note 2.1. Model Details
+
+Here we show our model architecture in Figure 5: a 1D-CNN designed to process spectra of length 101, following the general convolutional neural network framework widely used for extracting localized features from structured data [7, 8]. To preserve the precise spatial relationships without introducing edge artifacts, no padding is applied to any of the convolutional layers. Consequently, the sequence length at each layer strictly follows the formula: Output Length = Input Length - Kernel Size + 1. All hidden layers utilize the Rectified Linear Unit (ReLU) activation function, 4512 
+
+CONV1 
+
+5,120 
+
+512 
+
+128 
+
+output 
+
+flatten 
+
+CONV2 
+
+5,768,192 
+
+CONV3 
+
+27,265,024  CONV4 
+
+18,875,392 
+
+CONV5 
+
+3,670,528 
+
+FC1 
+
+14,942,720  FC2 
+
+65,664 
+
+FC3 
+
+645  
+
+> 1024
+> 2048
+> 1024
+> 512
+> Supplementary Fig. 5. The model archtecture and parameter calculation.
+
+and no dropout is applied during the training process. The network consists of five consecutive 1D convolutional layers followed by three fully connected (FC) layers. The total number of trainable parameters in the network is 
+
+70,593,285 . 
+
+> Supplementary Note 2.2. Data Synthesis
+
+We use a perfect two-peak Lorentzian function as the training input: 
+
+S(x, x 1, x 2, w 1, w 2, C 1, C 2) = 1 − C1L(x, x 1, w 1) − C2L(x, x 2, w 2), (7) where L represents the Lorentzian spectrum: 
+
+L(x, x 0, w ) = 11 + (x−x0)2
+
+> w2
+
+(8) and x1, x 2 denote the dip positions, w1, w 2 the dip widths, and C1, C 2 the dip contrasts. To match the model’s input dimensions, the variable x consists of 101 uniformly spaced points between 0 and 1, representing the normalized frequency. To generate a diverse set of spectra, we randomize the parameters. For the widths ( w1 and w2), we first sample a base width w from a uniform distribution between 0 .02 to 0 .09. To account for spectral asymmetry, we introduce an asymmetry parameter aas , sampled from the positive half of a normal distribution ( σ = 0 .083) and clamped at a maximum of 0 .25. With a 50% probability, we set w1 = w and w2 = w(1 − aas ); otherwise, w1 = w(1 − aas ) and 
+
+w2 = w. The contrasts C1 and C2 are generated using a similar approach, but with a base contrast C drawn uniformly from 0 .012 to 0 .15. The dip positions x1 and x2 are determined using a center-splitting model. The center c is sampled uniformly from 0.35 to 0 .65, and the splitting distance s is sampled uniformly from 0 .02 to 0 .2. To prevent the dips from merging, s is clamped to a minimum value of 0 .75( w1 + w2)/2. The positions are then calculated as x1 = c − s/ 2 and x2 = c + s/ 2. This ensures that x1 consistently represents the left dip and that the two dips maintain a minimum separation, which physically accounts for intrinsic splitting. 5Following the generation of the ideal Lorentzian profiles, we introduce photon shot noise. We simulate a total photon count drawn uniformly between 180 , 000 and 3 , 600 , 000 and apply point-wise Poisson noise to mimic realistic experimental conditions. Finally, we apply Z-score normalization by subtracting the mean and dividing by the standard deviation. As a result, the overall amplitude of the data is standardized, regardless of the absolute dip contrast. However, a consequence of this normalization is that a spectrum with contrasts ( C1, C 2) becomes indistinguishable from one with (1 , C 2/C 1), which renders the model incapable of directly extracting absolute contrast values from the processed signal.  
+
+> Supplementary Note 2.3. Hyper-parameter Optimization Studies
+
+In this section, we evaluate how model hyperparameters and training configurations influence final performance. This section is organized following the analysis of three aspects of scaling law: batch size scaling (Figure 6 left), 
+
+data scaling (Figure 6 right) and parameter scaling (Figure 7, 8). We denote specific model configurations as [Ni], where Ni represents the number of features (channels) in the i-th convolutional layer. A common optimizer and learning rate scheduler is shared by all experiments: 
+
+• 5% warmup that starts at learning rate η = 0 .1ηmax 
+
+• Cosine annealing scheduler after the warmup that ends at last step with ηmin = 1 × 10 −5 and ηmax = 1 .5 × 10 −3
+
+• AdamW optimizer with ( β1, β 2) = (0 .9, 0.95) and weight decay λ = 1 × 10 −2 [9]. Other hyperparametes kept in PyTorch default. 
+
+• Batch size B = 2048 except batch scaling experiment. The training data is generated on-the-fly by the double-Lorentzian model, enabling convenient scaling-law studies in a controlled way and also preventing overfitting. The batch size B is a critical training hyperparameter that directly governs optimization dynamics. Increasing B
+
+typically reduces stochastic gradient noise and enables a proportionally larger learning rate according to the linear scaling rule for deep neural network training [10]. This often accelerates training convergence in terms of wall-clock time. However, batch size cannot be increased indefinitely due to hardware memory constraints and, more critically, the point of diminishing returns in data efficiency. As shown in Figure 6 (left), we observe an optimal batch size range between 2048 and 4096 when employing a linear scaling rule for the learning rate, defined as η = 0 .0015 · B/ 2048. Beyond this threshold, the model requires significantly more total samples to achieve the same level of convergence, indicating a drop in sample efficiency that outweighs the benefits of larger optimization steps.         
+
+> Supplementary Fig. 6. Scaling behavior of the model. The left figure is the batch size scaling result, showing an optimum around 2048-4096; The right figure shows the data scaling of the model [128 ,256 ,512 ,512], showing a plateau at around 3 ×10 9.
+
+Data scaling determines the volume of training samples required for a model to adequately generalize. In our context, where the synthetic data generator provides an effectively infinite stream of samples, the primary concern is the total cumulative data needed to fully characterize the underlying double Lorentzian model. Figure 6 (right) 6illustrates the relationship between cumulative training samples and Mean Squared Error (MSE) for a representative architecture, [128 , 256 , 512 , 512]. The performance reaches a plateau after approximately 3 × 10 9 samples. While the saturation point may vary slightly with model capacity, we observe that it remains relatively consistent across architectures within the same family. In practice, we utilize a slightly larger dataset to ensure that models reach a state of full optimization regardless of minor variations in parameter count.         
+
+> Supplementary Fig. 7. Performance of 19 models at 2 .048 ×10 9data seen (left) and performance categorized by different depth (right).
+> Supplementary Fig. 8. Performance categorized by width among each depth. The base width is the smallest number of channels across each block.
+
+To evaluate the impact of model capacity on performance, we conducted an architectural search across 19 distinct configurations, assessing each at a fixed training milestone of 2 .048 ×10 9 samples. While Figure 7 left suggests a general trend of performance gains as model depth increases, a more granular analysis reveals that the 1 σ confidence intervals for different depths frequently overlap (Figure 7 right). This indicates that, within the tested range, increasing the number of layers does not drastically improve the accuracy. Furthermore, deeper architectures introduce a higher number of trainable parameters, which typically necessitates larger datasets to reach peak optimization. In contrast, increasing the base width—defined as the minimum number of channels across all blocks—results in a more consistent performance enhancement across all tested depths, even when accounting for error margins (Figure 8). Despite these trends, the overall sensitivity of the MSE to changes in parameter count and depth remains relatively low. Overall, these results suggest a diminishing return on architectural complexity for the double Lorentzian model, allowing for 7a practical compromise between computational efficiency and predictive accuracy. 8
+
+[1] M. W. Doherty, N. B. Manson, P. Delaney, F. Jelezko, J. Wrachtrup, and L. C. L. Hollenberg, “The nitrogen-vacancy colour centre in diamond,” Physics Reports , vol. 528, no. 1, pp. 1–45, 2013. [2] J. R. Maze, A. Gali, E. Togan, Y. Chu, A. Trifonov, E. Kaxiras, and M. D. Lukin, “Properties of nitrogen-vacancy centers in diamond: the group theoretic approach,” New Journal of Physics , vol. 13, p. 025025, 2011. [3] L. Rondin, J. P. Tetienne, T. Hingant, J. F. Roch, P. Maletinsky, and V. Jacques, “Magnetometry with nitrogen-vacancy defects in diamond,” Reports on Progress in Physics , vol. 77, p. 056503, 2014. [4] V. M. Acosta, E. Bauch, M. P. Ledbetter, C. Santori, K. M. C. Fu, P. E. Barclay, R. G. Beausoleil, H. Linget, J.-F. Roch, F. Treussart, S. Chemerisov, W. Gawlik, and D. Budker, “Temperature dependence of the nitrogen-vacancy magnetic resonance in diamond,” Physical Review Letters , vol. 104, p. 070801, 2010. [5] D. M. Toyli, C. Santori, D. J. Christle, A. Alkauskas, B. B. Buckley, C. G. V. de Walle, and R. G. Beausoleil, “Measurement and control of single nitrogen-vacancy center spins above 600 k,” Proceedings of the National Academy of Sciences , vol. 109, pp. 8417–8421, 2012. [6] C. P. Poole, Electron Spin Resonance: A Comprehensive Treatise on Experimental Techniques . Dover, 1996. [7] Y. LeCun, L. Bottou, Y. Bengio, and P. Haffner, “Gradient-based learning applied to document recognition,” Proceedings of the IEEE , vol. 86, pp. 2278–2324, 1998. [8] A. Krizhevsky, I. Sutskever, and G. Hinton, “Imagenet classification with deep convolutional neural networks,” Advances in Neural Information Processing Systems , vol. 25, 2012. [9] I. Loshchilov and F. Hutter, “Decoupled weight decay regularization,” International Conference on Learning Representa-tions , 2019. [10] P. Goyal, P. Doll´ ar, R. Girshick, P. Noordhuis, L. Wesolowski, A. Kyrola, A. Tulloch, Y. Jia, and K. He, “Accurate, large minibatch sgd: Training imagenet in 1 hour,” arXiv preprint arXiv:1706.02677 , 2017.

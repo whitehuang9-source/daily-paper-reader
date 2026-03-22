@@ -6,29 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-21
-- 运行时间：2026-03-21 20:12:07 UTC
+- 最新运行日期：2026-03-22
+- 运行时间：2026-03-22 20:38:53 UTC
 - 运行状态：成功
-- 本次总论文数：2
+- 本次总论文数：1
 - 精读区：0
-- 速读区：2
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦复杂环境下的风场重构与非线性信号干扰消除技术。
-重点展示了生成式学习在稀疏传感器风场建模中的优势，以及共轭梯度法在提升带内干扰抵消性能上的应用。
-建议关注 AI 驱动的精细化环境感知与高效通信算法的跨界融合。
-- 详情：[/202603/21/README](/202603/21/README)
+今日聚焦深度学习赋能金刚石 NV 色心量子传感的新进展。
+该研究通过深度学习增强框架，显著提升了量子传感的测量效率与数据处理能力。
+建议关注 AI 与量子精密测量的跨界融合，探索其在生物传感及高灵敏磁场探测中的应用潜力。
+- 详情：[/202603/22/README](/202603/22/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Rooftop Wind Field Reconstruction Using Sparse Sensors: From Deterministic to Generative Learning Methods](/202603/21/2603.13077v1-rooftop-wind-field-reconstruction-using-sparse-sensors-from-deterministic-to-generative-learning-methods)  
+1. [A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond](/202603/22/2603.14728v1-a-deep-learning-boosted-framework-for-quantum-sensing-with-nitrogen-vacancy-centers-in-diamond)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用深度学习从稀疏传感器进行场重建
-2. [Non-linear in-band interference cancellation on base of conjugate gradients method](/202603/21/2603.18727v1-non-linear-in-band-interference-cancellation-on-base-of-conjugate-gradients-method)  
-   标签：评分：6.0/10、query:tmr
-   evidence：使用基于梯度的优化进行非线性干扰抵消
+   evidence：用于高灵敏度磁场测量的量子传感
 
 
 <div class="dpr-home-promo-card">

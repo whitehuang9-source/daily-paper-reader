@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-03-22 <!--dpr-date:20260322-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/22/2603.14728v1-a-deep-learning-boosted-framework-for-quantum-sensing-with-nitrogen-vacancy-centers-in-diamond" data-sidebar-item="{&quot;title&quot;: &quot;A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.14728v1-a-deep-learning-boosted-framework-for-quantum-sensing-with-nitrogen-vacancy-centers-in-diamond&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;用于高灵敏度磁场测量的量子传感&quot;}">A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond</a>
   * 2026-03-21 <!--dpr-date:20260321-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/21/2603.13077v1-rooftop-wind-field-reconstruction-using-sparse-sensors-from-deterministic-to-generative-learning-methods" data-sidebar-item="{&quot;title&quot;: &quot;Rooftop Wind Field Reconstruction Using Sparse Sensors: From Deterministic to Generative Learning Methods&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.13077v1-rooftop-wind-field-reconstruction-using-sparse-sensors-from-deterministic-to-generative-learning-methods&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;利用深度学习从稀疏传感器进行场重建&quot;}">Rooftop Wind Field Reconstruction Using Sparse Sensors: From Deterministic to Generative Learning Methods</a>

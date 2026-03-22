@@ -1,0 +1,69 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-22T20:38:32.023876+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.14728v1",
+      "title": "A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond",
+      "abstract": "Nitrogen-vacancy (NV) centers in diamond are a versatile quantum sensing platform for high sensitivity measurements of magnetic fields, temperature and strain with nanoscale spatial resolution. A common bottleneck is the analysis of optically detected magnetic resonance (ODMR) spectra, where target quantities are encoded in resonance features. Conventional nonlinear fitting is often computationally expensive, sensitive to initialization, and prone to failure at low signal-to-noise ratio (SNR). Here we introduce a robust, efficient machine learning (ML) framework for real-time ODMR analysis based on a one-dimensional convolutional neural network (1D-CNN). The model performs direct parameter inference without initial guesses or iterative optimization, and is naturally parallelizable on graphics processing units (GPU) for high-throughput processing. We validate the approach on both synthetic and experimental datasets, showing improved throughput, accuracy and robustness than standard nonlinear fitting, with the largest gains in the low-SNR regime. We further validate our methods in two representative sensing applications: diagnosing intracellular temperature changes using nanodiamond probes and widefield magnetic imaging of superconducting vortices in a high-temperature superconductor. This deep-learning inference framework enables fast and reliable extraction of physical parameters from complex ODMR data and provides a scalable route to real-time quantum sensing and imaging.",
+      "authors": [
+        "Changyu Yao",
+        "Haochen Shen",
+        "Zhongyuan Liu",
+        "Ruotian Gong",
+        "Md Shakil Bin Kashem",
+        "Stella Varnum",
+        "Liangyu Li",
+        "Hangyue Li",
+        "Yue Yu",
+        "Yizhou Wang",
+        "Xiaoshui Lin",
+        "Jonathan Brestoff",
+        "Chenyang Lu",
+        "Shankar Mukherji",
+        "Chuanwei Zhang",
+        "Chong Zu"
+      ],
+      "primary_category": "quant-ph",
+      "categories": [
+        "quant-ph",
+        "physics.app-ph",
+        "physics.comp-ph",
+        "physics.data-an"
+      ],
+      "published": "2026-03-16T02:02:14+00:00",
+      "link": "https://arxiv.org/pdf/2603.14728v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "quantum sensing for high sensitivity magnetic field measurements",
+      "llm_evidence_cn": "用于高灵敏度磁场测量的量子传感",
+      "llm_evidence": "用于高灵敏度磁场测量的量子传感",
+      "canonical_evidence": "用于高灵敏度磁场测量的量子传感",
+      "llm_tldr_en": "Introduces a deep learning framework for real-time analysis of magnetic field resonance in quantum sensors.",
+      "llm_tldr_cn": "引入了一个深度学习框架，用于实时分析量子传感器中的磁场共振。",
+      "llm_tldr": "引入了一个深度学习框架，用于实时分析量子传感器中的磁场共振。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
