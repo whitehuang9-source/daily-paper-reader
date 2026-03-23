@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-03-23 <!--dpr-date:20260323-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/23/2603.19847v1-transformer-causality-regularization-for-dynamic-inverse-problems" data-sidebar-item="{&quot;title&quot;: &quot;Transformer Causality Regularization for Dynamic Inverse Problems&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.19847v1-transformer-causality-regularization-for-dynamic-inverse-problems&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;基于Transformer的动态逆问题正则化&quot;}">Transformer Causality Regularization for Dynamic Inverse Problems</a>
   * 2026-03-22 <!--dpr-date:20260322-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/22/2603.14728v1-a-deep-learning-boosted-framework-for-quantum-sensing-with-nitrogen-vacancy-centers-in-diamond" data-sidebar-item="{&quot;title&quot;: &quot;A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.14728v1-a-deep-learning-boosted-framework-for-quantum-sensing-with-nitrogen-vacancy-centers-in-diamond&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;用于高灵敏度磁场测量的量子传感&quot;}">A Deep-Learning-Boosted Framework for Quantum Sensing with Nitrogen-Vacancy Centers in Diamond</a>

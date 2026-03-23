@@ -1,0 +1,53 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-23T20:27:21.061832+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.19847v1",
+      "title": "Transformer Causality Regularization for Dynamic Inverse Problems",
+      "abstract": "We study the concept of including the causality principle as regularizer into the solution of linear time-dependent inverse problems. This is achieved by combining transformer-based predictions with classical variational regularization, resulting in what we call transformer causality regularization (TCR). The causality principle states that an object at time $t'$ depends only on its previous states at $t < t'$ and is independent of future states at $t > t'$. Since the transformer architecture represents sequence-to-sequence functions and can be equipped with a causal attention mask, transformers are the natural choice for a learned causality function that predicts the state of an object at time $t'$ given the previous states at $t < t'$. We combine this with the inductive bias of convolutional neural networks (CNNs) for imaging tasks to treat the spatial variable. The output of the spatial-temporal transformer is then used as a prior for variational regularization, such that classical results on regularization and convergence for solution methods directly transfer to our case. Using the example of dynamic computerized tomography, we compare TCR to a static and dynamic version of the earlier introduced unrolled adversarial regularizer for simulated and measured data. The results show that using TCR within a variational framework improves reconstruction results and data-consistency.",
+      "authors": [
+        "Gesa Sarnighausen",
+        "Anne Wald",
+        "Andreas Hauptmann"
+      ],
+      "primary_category": "math.NA",
+      "categories": [
+        "math.NA"
+      ],
+      "published": "2026-03-20T10:58:41+00:00",
+      "link": "https://arxiv.org/pdf/2603.19847v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "transformer-based regularization for dynamic inverse problems",
+      "llm_evidence_cn": "基于Transformer的动态逆问题正则化",
+      "llm_evidence": "基于Transformer的动态逆问题正则化",
+      "canonical_evidence": "基于Transformer的动态逆问题正则化",
+      "llm_tldr_en": "Combines transformers with variational regularization to solve time-dependent inverse problems.",
+      "llm_tldr_cn": "将Transformer与变分正则化相结合，以解决随时间变化的逆问题。",
+      "llm_tldr": "将Transformer与变分正则化相结合，以解决随时间变化的逆问题。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using TMR sensor arrays",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
