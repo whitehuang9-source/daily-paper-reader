@@ -1,0 +1,257 @@
+Title: Zero Shot Deformation Reconstruction for Soft Robots Using a Flexible Sensor Array and Cage Based 3D Gaussian Modeling
+
+URL Source: https://arxiv.org/pdf/2603.19543v1
+
+Published Time: Mon, 23 Mar 2026 00:21:00 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Zero-Shot Deformation Reconstruction for Soft Robots Using a Flexible Sensor Array and Cage-Based 3D Gaussian Modeling 
+
+Linrui Shou 1, Zilang Chen 1, Wenjia Xu 1, Yiyue Luo 2, and Tingyu Cheng 11University of Notre Dame 
+
+> 2
+
+University of Washington 
+
+Abstract — We present a zero-shot deformation reconstruction framework for soft robots that operates without any visual supervision at inference time. In this work, zero-shot defor-mation reconstruction is defined as the ability to infer object-wide deformations on previously unseen soft robots without collecting object-specific deformation data or performing any retraining during deployment. Our method assumes access to a static geometric proxy of the undeformed object, which can be obtained from a STL model. During operation, the system relies exclusively on tactile sensing, enabling camera-free deformation inference. The proposed framework integrates a flexible piezoresistive sensor array with a geometry-aware, cage-based 3D Gaussian deformation model. Local tactile measurements are mapped to low-dimensional cage control signals and propagated to dense Gaussian primitives to generate globally consistent shape deformations. A graph attention net-work regresses cage displacements from tactile input, enforcing spatial smoothness and structural continuity via boundary-aware propagation. Given only a nominal geometric proxy and real-time tactile signals, the system performs zero-shot deformation reconstruction of unseen soft robots in bending and twisting motions, while rendering photorealistic RGB in real time. It achieves 0.67 IoU, 0.65 SSIM, and 3.48 mm Chamfer distance, demonstrating strong zero-shot generalization through explicit coupling of tactile sensing and structured geometric deformation. 
+
+I. I NTRODUCTION 
+
+Accurate three-dimensional (3D) reconstruction of soft robots is a fundamental capability for perception, control, and interaction in complex, constrained, and safety-critical envi-ronments. Applications such as minimally invasive surgery, in situ manipulation, and navigation in occluded or confined spaces critically depend on reliable estimation of deformable robot geometries [1-4]. Compared with rigid robots, soft robots exhibit continuous deformation, self-occlusion, and virtually infinite degrees of freedom, which render conven-tional rigid-body modeling and camera-based reconstruction pipelines insufficient or impractical [5-7]. To overcome visual limitations, a growing body of work explores camera-free reconstruction of soft robots using embedded sensing. Electrical impedance tomography (EIT)-based approaches infer volumetric or surface deformation from distributed electrode measurements [2, 8, 9]. In paral-lel, tactile-based and electronic-skin-based systems leverage dense strain or pressure sensing to estimate robot shape or contact states [10-12]. Recent learning-based methods further demonstrate that such sensing modalities can support recon-struction under a three-dimensional semantic representation, such as dense point clouds or surface geometry, rather than only low-dimensional descriptors like curvature or bending angles [4]. Despite these advances, existing EIT-based and tactile-based reconstruction methods fundamentally rely on robot-specific pre-training and pre-defined sensing configurations [3, 10, 13-15]. In practice, the sensor layout is manually designed and fixed for a particular soft robot morphology, and the reconstruction model is trained using paired sensor– geometry data collected on that specific robot [12, 13, 16]. Consequently, these methods exhibit little to no zero-shot capability: a trained model cannot be directly deployed on an unseen soft robot with different geometry, material distribution, or sensor placement. The lack of zero-shot generalization stems from three main limitations. First, there is no efficient mechanism to rapidly obtain an accurate initial 3D model of a soft robot; most sensor-driven pipelines assume a predefined template or rely on external motion-capture and scanning systems during calibration [9, 13, 17], which constrains scalability. Sec-ond, learning-based sensor-to-geometry mappings are tightly coupled to specific robot morphologies and sensor layouts, implicitly encoding robot-dependent assumptions and gen-eralizing poorly to unseen geometries [10, 15, 16]. Third, even with relatively dense sensing, reconstruction methods remain largely geometric—using point clouds or surface meshes without explicit enforcement of global smoothness or structural consistency [13, 16]—often producing visually plausible yet globally inconsistent shapes. In contrast, advances in 3D reconstruction and graphics demonstrate that dense, semantically meaningful represen-tations can be recovered with minimal supervision. Neural radiance fields and related models, as well as 3D and 4D Gaussian Splatting, enable high-fidelity reconstruction and real-time rendering without object-specific retraining at inference [5, 7, 18]. Meanwhile, structure-aware deformation models, including cage-based deformation and mass–spring-inspired formulations, provide compact control over dense geometry while naturally enforcing spatial smoothness and global coherence. These developments suggest that cou-pling local deformation cues with structured deformation propagation offers a principled path toward consistent and generalizable global shape reconstruction. Motivated by these observations, we propose a zero-shot deformation sensing and reconstruction framework for soft  
+
+> arXiv:2603.19543v1 [cs.RO] 20 Mar 2026 Fig. 1. Overview of our camera-free framework for real-time reconstruction and RGB rendering of deformable objects from a flexible sensor array. (a) Real-time resistance map acquired from the flexible tactile array. (b) A Graph Attention Network maps encoded sensor features to cage node displacements. (c) Low-dimensional cage representation controlling dense surface deformation. (d) Gaussian primitives updated via cage-based interpolation. (e) Real-time rendering of the deformed object using Gaussian splatting.
+
+robots based on structured geometric deformation modeling. In our approach, a pre-trained flexible sensor patch can be directly attached to the surface of an unseen soft robot, without requiring robot-specific retraining or sensor layout optimization. Local deformation signals captured by the sensor are interpreted as geometric boundary constraints and propagated to the entire robot body through a structure-aware deformation model that enforces spatial smoothness and con-tinuity. The resulting global deformation is represented using Gaussian-based primitives, enabling real-time, photorealistic RGB rendering without any camera input at inference time. By decoupling local sensing, global deformation propaga-tion, and visual rendering, the proposed framework achieves true zero-shot deployment while maintaining geometric con-sistency and real-time performance. 
+
+Contributions. The main contributions of this work are:  
+
+> •
+
+A zero-shot framework for soft robot deformation re-construction that generalizes to unseen robot geometries without robot-specific pre-training.  
+
+> •
+
+A structure-aware deformation propagation mechanism that expands sparse local sensor measurements into globally coherent 3D shape changes by enforcing spatial smoothness and continuity.  
+
+> •
+
+A real-time Gaussian-based rendering pipeline that pro-duces photorealistic RGB views of soft robot motion in camera-denied environments. II. R ELATED WORK 
+
+A. Sensor and Vision-Based Deformation Reconstruction 
+
+Reconstructing the 3D geometry of deformable soft robots has been explored using both sensor-based and vision-based approaches. Early sensor systems employed sparse resistive or capacitive threads embedded in gloves [10, 19-21] or liquid-metal traces in soft actuators [15, 22], primarily es-timating low-dimensional proxies such as joint angles rather than dense geometry. More recent distributed e-skins based on fiber Bragg grat-ings, carbon nanotube composites, or dense strain arrays [11, 17, 23] improve local resolution, yet typically reconstruct deformation only on sensed regions through kinematic or regression mappings, limiting global consistency and visual fidelity. EIT provides denser conductivity estimation [9, 12, 24], but remains layout-specific, calibration-intensive, and com-putationally demanding. Such systems often require object-specific configurations and struggle with zero-shot general-ization, while real-time rendering remains challenging [13, 25]. Learning-enhanced skins can achieve millimeter-level accuracy [14], though most depend on external ground truth during development. Vision-based methods leverage multi-view stereo or SLAM to recover dynamic meshes or point clouds, while neural representations such as NeRF improve non-rigid mod-eling fidelity. However, these approaches require dense RGB input, precise calibration, and favorable lighting, making them brittle under occlusion or restricted viewpoints. Even recent particle–grid [26] and neural field methods [27] re-main difficult to deploy in high-resolution, real-time robotics scenarios without camera access. 
+
+B. 4D Gaussian Splatting 
+
+4D Gaussian Splatting (4DGS) models dynamic scenes using temporally parameterized anisotropic 3D Gaussians. Compared to NeRF-based approaches, it enables high-fidelity reconstruction with real-time rendering and trackable primi-tives [7, 18, 28]. Recent extensions improve geometric consistency or intro-duce structural constraints. TrimGS enhances surface qual-ity via Gaussian pruning [29], while GeoGaussian [30] and GausSurf [31] enforce geometric priors. Sparse-control variants such as SC-GS [32] and NeuroGauss4D-PCI [27] reduce motion complexity, and additional works incorporate deformation regularization [33, 34]. Nevertheless, existing 4DGS pipelines depend on multi-view RGB supervision and accurate camera poses at in-ference, and stronger constraints often increase computa-tional cost, limiting applicability in real-time, sensor-driven robotics. 
+
+C. Cage-Based Deformation 
+
+Predicting motion for dense meshes or Gaussian primi-tives is computationally expensive. Cage-based deformation introduces sparse control vertices whose motion drives high-resolution geometry, achieving global smoothness with low cost through harmonic or mean-value coordinates. Fig. 2. The architecture of cage-based deformation networks. The cage is represented as a graph, where nodes correspond to cage vertices and edges encode local geometric adjacency. A graph attention (GAT) mechanism is employed to adaptively weight neighboring node contributions during deformation propagation, allowing the network to selectively emphasize structurally relevant neighbors under different deformation patterns. This attention-based message passing enables spatially coherent yet flexible deformation modeling, capturing non-uniform and anisotropic deformation behaviors across the cage. 
+
+Recent work binds Gaussians to sparse cage nodes [32, 35, 36], enabling efficient inference and editing by decoupling low-dimensional control from dense representation. This sep-aration is particularly suitable for sensor-driven reconstruc-tion: instead of regressing dense deformation fields, models infer sparse cage motion from sensor input and propagate it geometrically. Compared to array-based sensing methods that focus only on surface deformation or single deformation modes, cage-driven propagation supports globally consistent 3D reconstruction and naturally facilitates zero-shot transfer and real-time inference. III. M ETHOD 
+
+Our framework consists of four components: (A) tempo-rally consistent Gaussian supervision construction, (B) flex-ible sensor hardware and signal acquisition, (C) cage-based deformation prediction(Fig. 2), and (D) real-time Gaussian rendering. An overview is shown in Fig. 1. 
+
+A. Temporally Consistent Gaussian Supervision Construc-tion 
+
+To obtain dense and temporally aligned supervision for learning the sensor-to-deformation mapping, we construct a dynamic Gaussian dataset in three stages. 
+
+1) Multi-View Keyframe Capture: For each deformation type (bending, twisting), we capture 20 key poses using a structured-light 3D scanner. Each reconstructed mesh is rendered from 100 virtual viewpoints in Blender with fixed intrinsic and extrinsic parameters consistent with the 4DGS coordinate convention. During capture, objects are rigidly fixed, the background is textureless, and the camera coordi-nate frame remains constant to ensure temporal alignment. 
+
+2) Frame Interpolation: To increase temporal density without excessive manual capture, we apply a pretrained interpolation network (RIFE [37]) to synthesize 8–16 inter-mediate frames between adjacent key poses for each view. This results in approximately 100 views × 160 frames per motion sequence, providing smooth temporal coverage for subsequent 4DGS training. 
+
+3) 4D Gaussian Splatting Training: The synthesized multi-view videos and camera poses are used to train a 4DGS model [18], producing temporally corresponded Gaus-sian primitives across frames. Training follows the standard 4DGS configuration with RGB and SSIM losses, together with mild opacity and temporal smoothness regularization. Depending on surface complexity, models converge with 
+
+5×10 5 to 2×10 6 Gaussians. The resulting temporally aligned Gaussian centers serve as geometric supervision for cage-label extraction. 
+
+B. Flexible Array Sensor Design and Data Collection 
+
+We fabricate a 3 × 3 cm tileable tactile patch composed of three layers following prior literature [4, 16]: (i) silver-plated nylon electrodes arranged in a 10 × 10 orthogonal grid, (ii) a Velostat piezoresistive sheet, and (iii) TPU encapsulation (Fig. 3). Two CD74HC4067 multiplexers scan row and column electrodes within a voltage-divider circuit, and an ESP32 microcontroller digitizes the 100 channels (12-bit resolution, 200–500 Hz sampling rate) into a 10 × 10 resistance map per frame. A one-time two-point calibration maps raw voltages to resistances using per-channel baseline R0. During acqui-sition, a low-pass IIR filter (8–12 Hz cutoff) and a 3 × 3
+
+median filter are applied for temporal and spatial denoising. For tiled configurations, patches share a synchronization line and distinct I 2C addresses, enabling timestamp-aligned concatenation into an H × W resistance image. Each patch is aligned to the corresponding cage region via Procrustes fitting of four fiducial markers. 
+
+C. Cage-Based Real-Time Deformation Prediction 
+
+To bridge sparse sensor measurements and dense Gaussian primitives, we adopt a low-dimensional cage representation. 
+
+1) Cage Representation and Gaussian Binding: Each sensor region is enclosed by a regular-grid cage defined in a normalized canonical coordinate frame aligned with the local surface normal. For each Gaussian center pj , we precompute interpolation weights wij with respect to its k nearest cage nodes ci. We use inverse-distance weighting (IDW) with normalization: 
+
+wij = 
+
+> 1
+> ∥pj−ci∥+ε
+
+P    
+
+> i′∈N k(j)1
+> ∥pj−ci′∥+ε
+
+.
+
+At runtime, cage displacements ∆ci propagate to Gaussian centers as: 
+
+∆pj = X 
+
+> i∈N k(j)
+
+wij ∆ci.
+
+2) Graph Attention Cage Deformer: A lightweight CNN encodes the H × W sensor grid into a feature vector. A temporal encoding (six-band sinusoidal embedding of normalized time) is concatenated to this feature. The fused representation conditions a Graph Attention Network (GAT) operating on the cage graph (6-neighborhood connectivity). The network contains two GAT layers (4 heads, 256 hid-den units) followed by one GraphConv layer and an MLP projection to 3D node offsets. 
+
+a) Ground-Truth Cage Extraction: Given Gaussian dis-placements ∆pgt  
+
+> j
+
+from 4DGS and fixed weights wij , cage labels are computed by solving a per-frame least-squares problem: 
+
+min 
+
+> {∆ci}
+
+X
+
+> j
+
+∆pgt  
+
+> j
+
+− X
+
+> i
+
+wij ∆ci
+
+> 22
+
+.
+
+b) Training Objective: The training loss consists of node-wise regression and temporal smoothness: 
+
+L = 1
+
+Nc
+
+X
+
+> i
+
+∥∆cpred  
+
+> i
+
+−∆cgt  
+
+> i
+
+∥22+λ∥∆cpred  
+
+> i
+
+(t)−∆cpred  
+
+> i
+
+(t−1) ∥22.
+
+At inference, exponential moving average (EMA) smooth-ing is optionally applied to improve temporal stability. 
+
+D. Real-Time Gaussian Rendering 
+
+Deformed Gaussians are rendered using a 3DGS-style rasterizer [7]. Only Gaussian centers are updated per frame, while covariance, opacity, and color remain fixed from 4DGS training, enabling interactive rates. Rendering resolutions range from 1280 × 800 to 1600 × 1000 . Near/far clipping, tile-based depth sorting, and frustum culling are enabled to reduce overdraw. A lightweight UI allows adjustment of camera orbit, FOV, exposure, and EMA coefficient for live visualization. IV. E XPERIMENTS 
+
+A. Experimental Setup and Dataset 
+
+Our experimental setup has two stages: (1) controlled de-formation modeling on a compliant substrate for supervised training, and (2) zero-shot deployment on unseen soft robots. 
+
+a) Training platform on compliant substrate: We first attach the 3 × 3 cm tactile patch to the center of a 10 × 10 cm highly compliant fabric sheet. The fabric serves as a con-trolled deformable platform that allows repeatable bending and twisting motions while maintaining stable sensor contact. For each deformation type (bending and twisting), we use a mechanical clamping tool to actuate the fabric. By rotating the clamping position, we vary the bending or twisting central axis, generating multiple deformation configurations. This setup allows systematic coverage of different curvature magnitudes and axis orientations, while ensuring that the sensor remains tightly coupled to the substrate. 
+
+b) High-fidelity 3D data acquisition: For each mo-tion type and each clamping orientation, we capture 20 representative key poses spanning the full actuation range. High-resolution textured meshes are reconstructed using an 
+
+EinScan SE structured-light scanner. From each key pose, 100 virtual camera views are rendered in Blender with fixed intrinsic and extrinsic parameters. To enrich temporal continuity, transitions between adjacent key poses are densified using video frame interpolation. The resulting sequences contain approximately 1.6 × 10 4 images per motion type. These multi-view sequences are processed using a 4DGS pipeline to obtain temporally consistent Gaus-sian representations. These Gaussian sequences serve solely as supervision during training. 
+
+c) Sensor synchronization: During data collection, re-sistance matrices from the tactile array are continuously recorded and synchronized with the corresponding 4DGS frames via timestamp alignment. Raw resistance values are normalized per channel relative to their resting measure-ments. Both cage control nodes and Gaussian centers are transformed into the canonical region coordinate frame, enabling region-wise training and later zero-shot transfer. 
+
+B. Implementation and Training Details a) Cage-based deformation modeling: Each sensor-covered region is modeled by a regular 15 ×15 ×15 cage grid (Nc = 3375 ). The network predicts cage node displacements from sensor inputs, which are then propagated to Gaussian primitives via spatially weighted interpolation. This formula-tion expands local sensor measurements to the full geometry while enforcing spatial smoothness and structural continuity, allowing unsensed regions to deform through structure-aware propagation rather than per-element regression. 
+
+b) Training protocol: The model is implemented in PyTorch and PyTorch Geometric and trained solely on the compliant fabric substrate. We train for 100 epochs using Adam (initial learning rate 1 × 10 −3 with cosine decay) and apply early stopping based on validation loss. Gaussian noise is added to sensor inputs, and a temporal smoothness regularization term is imposed on cage displacements to enhance robustness. All experiments are conducted on a single NVIDIA RTX 3070 Ti GPU. 
+
+C. Zero-Shot Deployment on Unseen Soft Robots 
+
+To evaluate zero-shot generalization, we fabricate two soft robots that are not seen during training. One robot undergoes pneumatic bending, while the other performs pneumatic twisting motions (Fig. 4). These deformation modes are selected as representative motion primitives commonly ob-served in soft robotic systems. For both robots, the unde-formed geometry is initialized directly from the STL files generated during fabrication. No sensor-specific retraining, geometry-specific fine-tuning, or additional adaptation is performed prior to deployment. During inference, the same pre-trained tactile patch is attached to the central region of each robot. The recorded resistance matrices under pneumatic actuation are directly fed into the trained network to predict cage node displace-ments. These displacements deform the Gaussian represen-tation in real time, while neighboring regions are updated through cage-based propagation to preserve global geometric coherence. Figure 5 presents the initialization procedure and qualitative zero-shot results. Fig. 3. Tileable tactile sensor patch. (a) Photograph of the fabricated         
+
+> 3×3cm flexible tactile patch. (b) Exploded view illustrating the three-layer structure, consisting of (i) a 10 ×10 orthogonal grid of silver-plated nylon electrodes (ii) a Velostat piezoresistive layer, and (iii) TPU encapsulation.
+> Fig. 4. Two pneumatically actuated soft robots for zero-shot evaluation: (a) twisting and (b) bending.
+
+Throughout the zero-shot evaluation, no external cameras or rendered supervision are used during inference. These results demonstrate that the proposed framework transfers from a fabric-based training platform to previously unseen soft robotic geometries without retraining, while maintaining coherent object-wide deformation reconstruction. V. R ESULTS 
+
+We evaluate the proposed framework under a zero-shot setting, focusing on reconstruction accuracy, geometric con-sistency, robustness to complex surface geometry, and run-time performance on unseen soft robots. Unless otherwise stated, all quantitative results are computed on held-out test sequences and averaged over time. 
+
+A. Zero-Shot Reconstruction Accuracy a) Evaluation metrics: Quantitative results are sum-marized in Table II using three complementary metrics: Intersection-over-Union (IoU), which measures global vol-umetric overlap between reconstructed and ground-truth 3D geometry; Chamfer Distance (CD), which evaluates local ge-ometric accuracy via bidirectional nearest-neighbor distances between point sets; and Structural Similarity Index (SSIM), which assesses perceptual and structural consistency between rendered RGB images and ground truth. 
+
+b) Quantitative zero-shot results: As reported in Ta-ble II, the proposed method achieves strong zero-shot recon-struction accuracy on both bending and twisting motions. For the sensor-covered central region, reconstruction accuracy reaches 2.18 mm Chamfer Distance and an IoU of 0.76 .               
+
+> TABLE I ABLATION STUDY ON DEFORMATION REPRESENTATION (F ULL ROBOT )
+> Geometric Accuracy Method IoU ↑Chamfer (mm) ↓
+> Full Model (Cage + GAT + IDW) 0.67 3.48
+> w/o Cage (Direct Regression) 0.41 4.62 Cage + MLP (no GAT) 0.62 3.97
+
+When evaluated over the entire soft robot body, the method maintains robust performance with an average Chamfer Dis-tance of 3.48 mm and IoU of 0.67 .Among the two motion types, bending consistently yields higher accuracy than twisting. The increased error in twist-ing is mainly observed in regions not directly covered by the sensor, where torsional motion introduces deformation patterns that are only indirectly constrained by the cage-based representation. Despite this challenge, the framework produces globally coherent reconstructions without retrain-ing, demonstrating effective geometric generalization under a zero-shot setting. 
+
+B. Ablation Study on Deformation Representation 
+
+We conduct an ablation study to evaluate key design choices in the deformation pipeline: (1) cage-based control versus direct dense regression, and (2) graph attention versus multilayer perceptron (MLP) for predicting cage displace-ments. All variants are trained and tested under the same zero-shot setting with identical sensor inputs and data. 
+
+a) Cage-based vs. Direct Regression: Removing the cage representation and directly regressing per-Gaussian displacements leads to significantly higher geometric error and reduced stability, especially in regions not directly constrained by sensors. Without a low-dimensional control structure, local prediction errors accumulate along the elon-gated body, causing global drift and spatial inconsistency. These results highlight the importance of cage-based control in enforcing smoothness and global coherence under zero-shot deployment. 
+
+b) GAT vs. MLP for Cage Regression: Replacing the graph attention network (GAT) with an MLP that indepen-dently predicts cage node displacements results in noticeable performance degradation, particularly in unsensed areas. By modeling adjacency and structural relationships within the cage graph, GAT enables coordinated motion among neighboring control nodes, leading to more consistent global reconstruction under complex deformations. 
+
+C. Bending and Twisting Angle Accuracy 
+
+Beyond geometric metrics such as Chamfer distance and IoU, we additionally report motion-parameter-based evalua-tion to facilitate comparison with prior work. In particular, bending performance is quantified using the bending angle, which is the primary metric reported in existing literature. Across all bending sequences, the average angular error is 
+
+4.7 ◦. For twisting motions, where standardized quantitative metrics are less established, we adopt a centerline-based Fig. 5. 3DGS initialization and qualitative results. (a) Overview of the proposed geometry proxy initialization (b) Qualitative comparison for pneumatic twisting on an unseen soft robot. (c) Qualitative comparison for pneumatic bending on an unseen soft robot. Each comparison shows the predicted deformation cage, the reconstructed 3D Gaussian model (with viewpoints slightly rotated to better reveal surface indentations and protrusions), the rendered RGB view, and the corresponding real-world observation. 
+
+angular measure. Specifically, we compute the angle formed by the distal segments of the object’s centerline after twisting and compare it with real-world observations. The average twisting angular error is 4.9 ◦. Figure 6 visualizes the angle comparisons between real-world measurements and rendered 3DGS results for both bending and twisting motions. 
+
+D. Runtime Performance 
+
+All experiments are conducted on a single NVIDIA RTX 3070 Ti GPU. The system operates at approximately 30 
+
+frames per second (FPS) under the coarse Gaussian setting and 5 FPS under the high-resolution setting. The cage-based representation allows efficient control of dense geometry through a compact set of control nodes, enabling real-time deployment. The visual and temporal differences between the coarse and high-resolution settings are demonstrated in the accompanying supporting video. 
+
+E. Comparison with Prior Work 
+
+Table III summarizes the comparison with representative deformation reconstruction methods. Vision-based approaches achieve high geometric accu-racy under dense multi-view supervision, but fundamentally depend on calibrated cameras, line-of-sight visibility, and scene-specific optimization at inference. As a result, they are unsuitable for camera-denied, occluded, or space-constrained scenarios and generally lack zero-shot transfer to unseen robot geometries. EIT-based and tactile/glove-based systems enable camera-free and real-time operation, yet rely on fixed sensing lay-outs, object-specific calibration, or dedicated training. Their reconstruction is often limited either by ill-posed inversion or by low-dimensional deformation descriptors, restricting scalability and generalization. In contrast, the proposed method uniquely combines camera-free operation, real-time inference, zero-shot deploy-ment, and dense 3D geometric reconstruction with photoreal-istic visualization. Although our Chamfer distance (3.48 mm) and bending angle error (4.7 ◦) are not the lowest reported, they are achieved under a substantially more challenging zero-shot setting on unseen soft robots, without retraining or robot-specific calibration. Overall, our framework offers a balanced trade-off be-tween reconstruction fidelity, global geometric consistency, and deployment flexibility, making it particularly suitable for practical, zero-shot deformation reconstruction in real-world soft robotic systems. VI. D ISCUSSION 
+
+This work presents a camera-free, zero-shot deformation reconstruction framework that couples flexible tactile sensing with a structured cage-driven Gaussian representation. By decoupling sparse control from dense geometry, the system enables real-time inference while preserving global geo-metric coherence and high-fidelity rendering, providing a TABLE II QUANTITATIVE RESULTS OF ZERO -S HOT DEFORMATION                                                 
+
+> RECONSTRUCTION
+> Deformation IoU ↑SSIM ↑Chamfer (mm) ↓
+> Bending (center) 0.76 ±0.05 –2.18 ±0.32
+> Bending (full) 0.69 ±0.18 0.692 ±0.172 3.12 ±0.86
+> Twisting (center) 0.72 ±0.07 –2.47 ±0.44
+> Twisting (full) 0.65 ±0.21 0.603 ±0.186 3.84 ±1.05
+> Average (full) 0.67 ±0.20 0.65 ±0.18 3.48 ±0.96
+> Fig. 6. The top row (A–D) shows the real captured deformation scenes, while the bottom row (E–H) presents the corresponding results rendered in real time from the sensor. The deformation angles are manually measured and annotated using red lines and numerical labels. Specifically, A, B, E, and F correspond to bending cases, whereas C, D, G, and H correspond to twisting cases. Each top–bottom pair (A–E, B–F, C–G, D–H) represents the same deformation condition, enabling a direct comparison between the real captured angles and the sensor-based reconstruction results.
+
+practical pathway toward scalable digital twin deployment in occluded or low-visibility environments. A key observation is the trade-off between real-time per-formance and physically accurate deformation modeling. To maintain low latency, the framework adopts structure-aware geometric propagation rather than explicit material simula-tion. While this design ensures stable and efficient inference, reconstruction accuracy may degrade under extreme defor-mations or complex contact conditions, particularly when nonlinear material behavior dominates the response. This reflects a broader balance between computational efficiency and physics fidelity in sensor-driven reconstruction systems. We also observe that the IDW scheme used for deforma-tion propagation reduces overlap accuracy in regions with abrupt curvature transitions, such as tightly curled endpoints. These high-curvature regions involve localized stress concen-tration that cannot be fully captured through purely geometric interpolation, suggesting the need for material-dependent physical priors in highly nonlinear regimes. Reconstruction quality is additionally sensitive to sen-sor–surface conformity, with imperfect attachment or local-ized interactions (e.g., sharp pressing) introducing measure-ment inconsistencies. Each new object further requires an offline geometric initialization step to construct its canonical Gaussian representation, resulting in a modest setup over-head. Looking ahead, localized physics-assisted reconstruc- 
+
+> Fig. 7. Proof-of-concept tactile deformation reconstruction on an ev-eryday object. (a) A human hand presses a wallet instrumented with a surface-mounted flexible tactile sensor. (b–e) Time-sequential renderings of the reconstructed 3DGS model, showing progressive deformation under increasing pressure. The results demonstrate real-time pressure-to-geometry reconstruction beyond soft robotic platforms.
+
+tion—such as integrating Material Point Method (MPM) simulation in high-curvature regions—could enhance fidelity while preserving global efficiency. The cage-based formula-tion also supports modular scaling: multiple sensor patches can be stitched or hierarchically organized through coor-dinated cage regions, enabling distributed sensing without fundamentally increasing complexity. Incorporating adaptive material parameter estimation may further improve robust-ness across diverse soft substrates. Overall, coupling tactile sensing with structured geometric deformation propagation provides a scalable foundation for real-time, zero-shot soft robot reconstruction, with clear opportunities for physics integration and modular expansion. Beyond soft robotics, the proposed approach can extend to richer contact scenarios and everyday objects. As apreliminary demonstration, Fig. 7 shows a proof-of-concept experiment in which the sensor is attached to a wallet to reconstruct pressure-induced deformation in real time, highlighting the potential of this framework for embodied manipulation and interactive applications. VII. C ONCLUSION 
+
+We presented a zero-shot, camera-free deformation re-construction framework that integrates flexible tactile sens-ing with a cage-based geometric deformation model and Gaussian rendering. Although the method does not achieve the lowest geometric error compared to robot-specific ap-proaches, it demonstrates strong zero-shot generalization by explicitly coupling local sensor measurements with struc-tured deformation propagation, enabling real-time, globally consistent reconstruction without vision at inference. The results suggest that combining tactile sensing with expressive geometric representations and deformation pri-ors provides a scalable foundation for transferable shape reconstruction. Future work will investigate physics-assisted deformation modeling and adaptive material-aware represen-tations to further improve fidelity while preserving real-time performance. Owing to its modular cage-based formulation, the framework also supports scalable multi-sensor integration and broader deployment. REFERENCES [1] Y. Huang, B. Cui, L. Bai, Z. Guo, M. Xu, M. Islam, and H. Ren, “Endo-4DGS: Endoscopic Monocular Scene Reconstruction with 4D Gaussian Splatting,” Apr. 2024. TABLE III COMPARISON WITH EXISTING DEFORMATION RECONSTRUCTION METHODS 
+
+Method Occlusion Robust Low-Latency Zero-Shot High-Fidelity Geometry Angle Error ( ◦) Chamfer (mm) 
+
+Vision-based [29] ✗ ✗ ✗ ✓ – <1.20 EIT-based [3, 14] ✓ ✓ ✗ ✗ 1.90 2.32 Tactile / Glove-based [10] ✓ ✓ ✗ ✗ 4.16 4.02 
+
+Ours ✓ ✓ ✓ ✓ 4.7 3.48 
+
+[2] W. Xin, F. Zhu, P. Wang, Z. Xie, Z. Tang, and C. Laschi, “Electri-cal Impedance Tomographic Shape Sensing for Soft Robots,” IEEE Robotics and Automation Letters , vol. 8, no. 3, pp. 1555–1562, Mar. 2023. [3] H. Chen, B. Li, B. Himmel, X. Wang, and M. Hoffmann, “Robot Skin with Touch and Bend Sensing using Electrical Impedance Tomogra-phy,” Mar. 2025. [4] Y. Luo, M. Wonsick, J. Hodgins, and B. Okorn, “Tactile Embeddings for Multi-Task Learning,” in 2024 IEEE International Conference on Robotics and Automation (ICRA) . Yokohama, Japan: IEEE, May 2024, pp. 3348–3355. [5] Z. Li, T. Müller, A. Evans, R. H. Taylor, M. Unberath, M.-Y. Liu, and C.-H. Lin, “Neuralangelo: High-Fidelity Neural Surface Reconstruc-tion,” Jun. 2023. [6] L. Song, A. Chen, Z. Li, Z. Chen, L. Chen, J. Yuan, Y. Xu, and A. Geiger, “NeRFPlayer: A Streamable Dynamic Scene Representa-tion with Decomposed Neural Radiance Fields,” IEEE Transactions on Visualization and Computer Graphics , vol. 29, no. 5, pp. 2732–2742, May 2023. [7] B. Kerbl, G. Kopanas, T. Leimkühler, and G. Drettakis, “3D Gaussian Splatting for Real-Time Radiance Field Rendering,” Aug. 2023. [8] Z. Jiang, Z. Xu, M. Li, H. Zeng, F. Gong, and Y. Tang, “Electrical Impedance Tomography-Based Electronic Skin for Multi-Touch Tac-tile Sensing Using Hydrogel Material and FISTA Algorithm,” Sensors ,vol. 24, no. 18, p. 5985, Sep. 2024. [9] H. Chen, B. Himmel, B. Li, X. Wang, and M. Hoffmann, “Multi-Touch and Bending Perception Using Electrical Impedance Tomography for Robotics,” Aug. 2025. [10] M. Park, T. Park, S. Park, S. J. Yoon, S. H. Koo, and Y.-L. Park, “Stretchable glove for accurate and robust hand pose reconstruc-tion based on comprehensive motion data,” Nature Communications ,vol. 15, no. 1, p. 5821, Jul. 2024. [11] S. Mei, H. Yi, J. Zhao, Y. Xu, L. Shi, Y. Qin, Y. Jiang, J. Guo, Z. Li, and L. Wu, “High-density, highly sensitive sensor array of spiky carbon nanospheres for strain field mapping,” Nature Communications ,vol. 15, no. 1, p. 3752, May 2024. [12] H. Dong, X. Wu, D. Hu, Z. Liu, F. Giorgio-Serchi, and Y. Yang, “Learning-enhanced electronic skin for tactile sensing on deformable surface based on electrical impedance tomography,” IEEE Transac-tions on Instrumentation and Measurement , vol. 74, pp. 1–9, 2025. [13] E. Koch and A. Dietzel, “Surface reconstruction by means of a flexible sensor array,” Sensors and Actuators A: Physical , vol. 267, pp. 293– 300, Nov. 2017. [14] D. Hu, F. Giorgio-Serchi, S. Zhang, and Y. Yang, “Stretchable e-skin and transformer enable high-resolution morphological reconstruction for soft robots,” Nature Machine Intelligence , vol. 5, no. 3, pp. 261– 272, Feb. 2023. [15] R. L. Truby, C. D. Santina, and D. Rus, “Distributed Proprioception of 3D Configuration in Soft, Sensorized Robots via Deep Learning,” 
+
+IEEE Robotics and Automation Letters , vol. 5, no. 2, pp. 3299–3306, Apr. 2020. [16] B. Huang, Y. Wang, X. Yang, Y. Luo, and Y. Li, “3D-ViTac: Learning Fine-Grained Manipulation with Visuo-Tactile Sensing,” Jan. 2025. [17] T. L. T. Lun, K. Wang, J. D. L. Ho, K.-H. Lee, K. Y. Sze, and K.-W. Kwok, “Real-Time Surface Shape Sensing for Soft and Flexible Structures Using Fiber Bragg Gratings,” IEEE Robotics and Automa-tion Letters , vol. 4, no. 2, pp. 1454–1461, Apr. 2019. [18] G. Wu, T. Yi, J. Fang, L. Xie, X. Zhang, W. Wei, W. Liu, Q. Tian, and X. Wang, “4D Gaussian Splatting for Real-Time Dynamic Scene Rendering,” Jul. 2024. [19] J. DelPreto, J. Hughes, M. D’Aria, M. De Fazio, and D. Rus, “A Wear-able Smart Glove and Its Application of Pose and Gesture Detection to Sign Language Classification,” IEEE Robotics and Automation Letters ,vol. 7, no. 4, pp. 10 589–10 596, Oct. 2022. [20] S. Sundaram, P. Kellnhofer, Y. Li, J.-Y. Zhu, A. Torralba, and W. Ma-tusik, “Learning the signatures of the human grasp using a scalable tactile glove,” Nature , vol. 569, no. 7758, pp. 698–702, May 2019. [21] H. Dong, C. Wang, M. Jiang, F. Giorgio-Serchi, and Y. Yang, “Modular Soft Wearable Glove for Real-Time Gesture Recognition and Dynamic 3D Shape Reconstruction,” Jul. 2025. [22] R. L. Truby, R. K. Katzschmann, J. A. Lewis, and D. Rus, “Soft Robotic Fingers with Embedded Ionogel Sensors and Discrete Actu-ation Modes for Somatosensitive Manipulation,” in 2019 2nd IEEE International Conference on Soft Robotics (RoboSoft) . Seoul, Korea (South): IEEE, Apr. 2019, pp. 322–329. [23] D. Chen, Y. Cai, L. Cheng, S. Guo, T. Liu, S. Huang, H. Yu, Y. Wang, Z. Hu, and D. Gui, “Structure and function design of carbon nanotube-based flexible strain sensors and their application,” Measurement , vol. 225, p. 113992, Feb. 2024. [24] D. Hardman, T. G. Thuruthel, and F. Iida, “Multimodal information structuring with single-layer soft skins and high-density electrical impedance tomography,” Science RoboticS , 2025. [25] Y. Zhao, C. K. Khaw, and Y. Wang, “Measuring a Soft Resistive Strain Sensor Array by Solving the Resistor Network Inverse Problem,” Apr. 2023. [26] K. Zhang, B. Li, K. Hauser, and Y. Li, “Particle-Grid Neural Dynamics for Learning Deformable Object Models from Depth Images.” [27] C. Jiang, D. Du, J. Liu, S. Zhu, Z. Liu, Z. Ma, Z. Liang, and J. Zhou, “NeuroGauss4D-PCI: 4D Neural Fields and Gaussian Deformation Fields for Point Cloud Interpolation.” [28] G. Chen and W. Wang, “A Survey on 3D Gaussian Splatting,” Aug. 2025. [29] L. Fan, Y. Yang, M. Li, H. Li, and Z. Zhang, “Trim 3D Gaussian Splatting for Accurate Geometry Representation,” Jun. 2024. [30] Y. Li, C. Lyu, Y. Di, G. Zhai, G. H. Lee, and F. Tombari, “GeoGaus-sian: Geometry-aware Gaussian Splatting for Scene Rendering,” Jul. 2024. [31] J. Wang, Y. Liu, P. Wang, C. Lin, J. Hou, X. Li, T. Komura, and W. Wang, “GausSurf: Geometry-Guided 3D Gaussian Splatting for Surface Reconstruction,” Dec. 2024. [32] Y.-H. Huang, Y.-T. Sun, Z. Yang, X. Lyu, Y.-P. Cao, and X. Qi, “SC-GS: Sparse-Controlled Gaussian Splatting for Editable Dynamic Scenes,” in 2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) . Seattle, WA, USA: IEEE, Jun. 2024, pp. 4220–4230. [33] T. Xie, Z. Zong, Y. Qiu, X. Li, Y. Feng, Y. Yang, and C. Jiang, “Phys-Gaussian: Physics-Integrated 3D Gaussians for Generative Dynamics,” Apr. 2024. [34] J. Abou-Chakra, K. Rana, and F. Dayoub, “Physically Embodied Gaussian Splatting: A Visually Learnt and Physically Grounded 3D Representation for Robotics.” [35] Y. Tong, R. Tian, X. Han, D. Liu, F. Yu, and Y. Zhang, “CAGE-GS: High-fidelity Cage Based 3D Gaussian Splatting Deformation,” Apr. 2025. [36] J. Huang, S. Xu, H. Yu, and T.-Y. Lee, “GSDeformer: Direct, Real-time and Extensible Cage-based Deformation for 3D Gaussian Splat-ting,” Apr. 2025. [37] Z. Huang, T. Zhang, W. Heng, B. Shi, and S. Zhou, “Real-Time Intermediate Flow Estimation for Video Frame Interpolation,” Jul. 2022.

@@ -1,0 +1,65 @@
+{
+  "label": "2026-03-24",
+  "date": "2026-03-24",
+  "generated_at": "2026-03-24T20:44:16",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202603/24/2603.19543v1-zero-shot-deformation-reconstruction-for-soft-robots-using-a-flexible-sensor-array-and-cage-based-3d-gaussian-modeling",
+      "section": "quick",
+      "title_en": "Zero Shot Deformation Reconstruction for Soft Robots Using a Flexible Sensor Array and Cage Based 3D Gaussian Modeling",
+      "authors": "Linrui Shou, Zilang Chen, Wenjia Xu, Yiyue Luo, Tingyu Cheng",
+      "date": "2026-03-20",
+      "pdf": "https://arxiv.org/pdf/2603.19543v1",
+      "score": "7.0",
+      "evidence": "使用柔性传感器阵列进行形变重建",
+      "tldr": "本研究提出一种针对软体机器人的零样本变形重建框架，无需推理时的视觉监督。该方法结合柔性压阻传感器阵列与基于笼式（Cage）的3D高斯变形模型，通过图注意力网络将局部触觉测量映射为低维笼式控制信号，从而推断全局一致的形状变形。该框架在未见过的软体机器人上实现了弯曲和扭转运动的实时、高质量重建，显著提升了跨物体的泛化能力。",
+      "tags": "query:tmr",
+      "abstract_en": "We present a zero-shot deformation reconstruction framework for soft robots that operates without any visual supervision at inference time. In this work, zero-shot deformation reconstruction is defined as the ability to infer object-wide deformations on previously unseen soft robots without collecting object-specific deformation data or performing any retraining during deployment. Our method assumes access to a static geometric proxy of the undeformed object, which can be obtained from a STL model. During operation, the system relies exclusively on tactile sensing, enabling camera-free deformation inference. The proposed framework integrates a flexible piezoresistive sensor array with a geometry-aware, cage-based 3D Gaussian deformation model. Local tactile measurements are mapped to low-dimensional cage control signals and propagated to dense Gaussian primitives to generate globally consistent shape deformations. A graph attention network regresses cage displacements from tactile input, enforcing spatial smoothness and structural continuity via boundary-aware propagation. Given only a nominal geometric proxy and real-time tactile signals, the system performs zero-shot deformation reconstruction of unseen soft robots in bending and twisting motions, while rendering photorealistic RGB in real time. It achieves 0.67 IoU, 0.65 SSIM, and 3.48 mm Chamfer distance, demonstrating strong zero-shot generalization through explicit coupling of tactile sensing and structured geometric deformation.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/24/2603.17593v1-an-extended-t-a-formulation-based-on-potential-chain-recursion-for-electromagnetic-modeling-of-parallel-wound-no-insulation-hts-coils",
+      "section": "quick",
+      "title_en": "An Extended T-A Formulation Based on Potential-Chain Recursion for Electromagnetic Modeling of Parallel-Wound No-Insulation HTS Coils",
+      "authors": "Zhe Pan, Qi Xu, Ruixiang Wang, Zhenghao Jin, Jianzhao Geng",
+      "date": "2026-03-18",
+      "pdf": "https://arxiv.org/pdf/2603.17593v1",
+      "score": "6.0",
+      "evidence": "高场线圈的电磁建模",
+      "tldr": "针对并绕无绝缘（PW-NI）高温超导线圈在电磁建模中场-路耦合效率低的问题，本文提出了一种基于电势链递归的扩展T-A公式（PCR-TA）。该方法将层间分流和径向旁路行为直接嵌入有限元框架，无需显式电路模型。结合多尺度方法，显著提升了大规模线圈长时瞬态模拟的计算速度，并成功模拟了从充电到闭环运行的连续过程，为PW-NI线圈的设计与分析提供了高效工具。",
+      "tags": "query:tmr",
+      "abstract_en": "Parallel-wound no-insulation (PW-NI) high-temperature superconducting (HTS) coils significantly reduce charging delay while maintaining excellent self-protection capability, demonstrating great potential for high-field applications. Existing models that couple the T-A formulation with equivalent circuits have demonstrated high accuracy in electromagnetic analysis of PW-NI coils. However, eliminating the computational overhead caused by frequent variable mapping and data exchange between electromagnetic and circuit modules is important for improving computational efficiency, particularly in long-duration transient simulations of large-scale magnets. To address this issue, an extended T-A formulation based on potential-chain recursion, termed PCR-TA, is proposed. By directly embedding inter-tape current sharing and radial current bypass behaviors into the finite-element framework, this method computes the transient electromagnetic response of PW-NI coils without requiring an explicit equivalent circuit model. Building upon it, a multi-scale approach is further developed for large-scale PW-NI coils. The validity of the proposed method and its multi-scale extension is verified through comparisons with experimental measurements and field-circuit coupled modeling results. Comparative analyses demonstrate that the PCR-TA method achieves a speedup of approximately 2.4 over the field-circuit coupled method, whereas its multi-scale extension further increases this speedup to roughly 5.8. Furthermore, the PCR-TA method is extended to model the continuous transition of PW-NI coils from power-supply charging to closed-loop operation. This work provides an efficient method and tool for the electromagnetic modeling of PW-NI coils under both driven and closed-loop operating conditions.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/24/2603.20728v1-tackling-heavy-tailed-noise-in-distributed-estimation-asymptotic-performance-and-tradeoffs",
+      "section": "quick",
+      "title_en": "Tackling heavy-tailed noise in distributed estimation: Asymptotic performance and tradeoffs",
+      "authors": "Dragana Bajovic, Dusan Jakovetic, Soummya Kar, Manojlo Vukovic",
+      "date": "2026-03-21",
+      "pdf": "https://arxiv.org/pdf/2603.20728v1",
+      "score": "6.0",
+      "evidence": "传感器网络中针对重尾噪声的分布式估计算法",
+      "tldr": "本文针对物联网和无线传感器网络中常见的重尾噪声问题，提出了一种分布式估计方法。该方法基于“共识+创新”框架，通过在更新过程中引入非线性项来抵御重尾观测和通信噪声的影响。研究证明了估计器的几乎处处收敛性和渐近正态性，并揭示了系统噪声与网络拓扑之间复杂的权衡关系，为复杂环境下的分布式估计提供了理论支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "We present an algorithm for distributed estimation of an unknown vector parameter $\\boldsymbolθ^\\ast \\in {\\mathbb R}^M$ in the presence of heavy-tailed observation and communication noises. Heavy-tailed noises frequently appear, e.g., in densely deployed Internet of Things (IoT) or wireless sensor network systems. The presented algorithm falls within the class of \\emph{consensus+innovation} estimators and combats the effect of the heavy-tailed noises by adding general nonlinearities in the consensus and innovations update parts. We present results on almost sure convergence and asymptotic normality of the estimator. In addition, we provide novel analytical studies that reveal interesting tradeoffs between the system noises and the underlying network topology.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/24/2603.21057v1-robust-quantum-sensing-via-prethermal-spin-orbits",
+      "section": "quick",
+      "title_en": "Robust Quantum Sensing via Prethermal Spin Orbits",
+      "authors": "Enrico Daniel Richter, Ryan J. Smith, Brayden Glockzin, Emanuel Druga, Thomas Schenkel, Ashok Ajoy",
+      "date": "2026-03-22",
+      "pdf": "https://arxiv.org/pdf/2603.21057v1",
+      "score": "6.0",
+      "evidence": "干扰抑制和背景场抑制",
+      "tldr": "本研究针对量子传感器易受环境漂移和控制误差干扰的问题，提出了一种基于预热Floquet轨道的相互作用保护型磁力计方案。通过周期性驱动将集体磁化强度引导至两个长寿命的预热轨道轴，利用快速切换将目标场编码为差分信号，从而实现对背景场的高倍率抑制。实验证明该方案在极端环境（如大幅温度波动、机械振动）和控制误差下仍能保持高灵敏度和宽带探测能力，为非实验室环境下的稳定量子计量开辟了新路径。",
+      "tags": "query:tmr",
+      "abstract_en": "Practical performance of quantum sensors is often curtailed by uncontrolled environmental drift (bias-field instability, temperature fluctuations, mechanical vibration), background fields, and imperfect control pulses. This motivates developing physical mechanisms that intrinsically compensate for such perturbations while retaining high sensitivity to target fields. We introduce an interaction-protected magnetometry scheme where periodic driving steers the collective magnetization onto two long-lived, prethermal Floquet \"orbit\" axes well-separated on the Bloch sphere. Rapid toggling between these axes encodes target fields as a differential signal, whereas background fields appear as common-mode motion that is strongly rejected, achieving >1000-fold suppression while canceling prethermal transients. This enables accurate reconstruction of rapidly varying audio-band magnetic signals without predictive filtering or spectral tuning. We provide an experimental proof-of-principle using a dense ensemble of coupled nuclear spins, operated here as a broadband (0-1 kHz) magnetometer. The protocol is remarkably tolerant to imperfections, operating robustly across millions of pulses under pulse-angle (~10°) and pulse frequency (>1 kHz) errors, large bias-field drifts (>50 $\\mathrmμ$T), temperature variations over 150 K, and harsh mechanical vibrations. These results establish Floquet prethermalization as a resource for robust quantum sensors that combines broadband magnetic-field sensitivity with intrinsic immunity to diverse environmental and control perturbations, opening a path toward stable quantum metrology beyond controlled laboratory conditions.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

@@ -6,26 +6,35 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-23
-- 运行时间：2026-03-23 20:27:38 UTC
+- 最新运行日期：2026-03-24
+- 运行时间：2026-03-24 20:44:06 UTC
 - 运行状态：成功
-- 本次总论文数：1
+- 本次总论文数：4
 - 精读区：0
-- 速读区：1
+- 速读区：4
 
 ### 今日简报（AI）
-今日聚焦 Transformer 因果正则化技术，探索其在解决动态反问题中的新路径。
-研究提出通过引入因果约束来优化注意力机制，从而提升模型在时序重建任务中的物理一致性。
-建议关注物理先验与深度学习架构结合的读者，重点研读如何利用因果律增强时序数据的逻辑严密性。
-- 详情：[/202603/23/README](/202603/23/README)
+今日速读 4 篇前沿论文，重点聚焦软体机器人变形重建、超导线圈建模及分布式估计优化。
+最值得关注利用 3D 高斯建模实现软体机器人的零样本变形重建，以及应对分布式估计中重尾噪声的性能权衡。
+建议深入了解柔性传感与三维建模的跨界融合，探索其在复杂环境感知中的应用潜力。
+- 详情：[/202603/24/README](/202603/24/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Transformer Causality Regularization for Dynamic Inverse Problems](/202603/23/2603.19847v1-transformer-causality-regularization-for-dynamic-inverse-problems)  
+1. [Zero Shot Deformation Reconstruction for Soft Robots Using a Flexible Sensor Array and Cage Based 3D Gaussian Modeling](/202603/24/2603.19543v1-zero-shot-deformation-reconstruction-for-soft-robots-using-a-flexible-sensor-array-and-cage-based-3d-gaussian-modeling)  
+   标签：评分：7.0/10、query:tmr
+   evidence：使用柔性传感器阵列进行形变重建
+2. [An Extended T-A Formulation Based on Potential-Chain Recursion for Electromagnetic Modeling of Parallel-Wound No-Insulation HTS Coils](/202603/24/2603.17593v1-an-extended-t-a-formulation-based-on-potential-chain-recursion-for-electromagnetic-modeling-of-parallel-wound-no-insulation-hts-coils)  
    标签：评分：6.0/10、query:tmr
-   evidence：基于Transformer的动态逆问题正则化
+   evidence：高场线圈的电磁建模
+3. [Tackling heavy-tailed noise in distributed estimation: Asymptotic performance and tradeoffs](/202603/24/2603.20728v1-tackling-heavy-tailed-noise-in-distributed-estimation-asymptotic-performance-and-tradeoffs)  
+   标签：评分：6.0/10、query:tmr
+   evidence：传感器网络中针对重尾噪声的分布式估计算法
+4. [Robust Quantum Sensing via Prethermal Spin Orbits](/202603/24/2603.21057v1-robust-quantum-sensing-via-prethermal-spin-orbits)  
+   标签：评分：6.0/10、query:tmr
+   evidence：干扰抑制和背景场抑制
 
 
 <div class="dpr-home-promo-card">
