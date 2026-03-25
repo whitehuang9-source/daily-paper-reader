@@ -1,0 +1,51 @@
+{
+  "label": "2026-03-25",
+  "date": "2026-03-25",
+  "generated_at": "2026-03-25T20:48:19",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202603/25/2603.18335v1-distributed-unknown-input-observer-design-a-geometric-approach",
+      "section": "quick",
+      "title_en": "Distributed Unknown Input Observer Design: A Geometric Approach",
+      "authors": "Ruixuan Zhao, Guitao Yang, Thomas Parisini, Boli Chen",
+      "date": "2026-03-18",
+      "pdf": "https://arxiv.org/pdf/2603.18335v1",
+      "score": "6.0",
+      "evidence": "用于从局部测量中进行状态重建的分布式观测器",
+      "tldr": "本文针对受未知输入干扰的线性时不变系统，提出了一种基于几何方法的分布式未知输入观测器（DUIO）设计方案。在各节点仅拥有局部观测且无法独立重构状态的情况下，该方案利用(C,A)-不变子空间理论，在连续和离散时间系统中实现了全局状态重构。相比于现有方法，该研究放宽了对输入输出矩阵的秩条件限制，并给出了设计的充要条件，通过电网系统仿真验证了其有效性。",
+      "tags": "query:tmr",
+      "abstract_en": "We present a geometric approach to designing distributed unknown input observers (DUIOs) for linear time-invariant systems, where measurements are distributed across nodes and each node is influenced by \\emph{unknown inputs} through distinct channels. The proposed distributed estimation scheme consists of a network of observers, each tasked with reconstructing the entire system state despite having access only to local input-output signals that are individually insufficient for full state observation. Unlike existing methods that impose stringent rank conditions on the input and output matrices at each node, our approach leverages the $(C,A)$-invariant (conditioned invariant) subspace at each node from a geometric perspective. This enables the design of DUIOs in both continuous- and discrete-time settings under relaxed conditions, for which we establish sufficiency and necessity. The effectiveness of our methodology is demonstrated through extensive simulations, including a practical case study on a power grid system.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/25/2603.19155v1-channel-estimation-via-tensor-decomposition-for-dynamic-metasurface-antennas-with-known-mutual-coupling-algorithms-and-experiments",
+      "section": "quick",
+      "title_en": "Channel Estimation via Tensor Decomposition for Dynamic Metasurface Antennas with Known Mutual Coupling: Algorithms and Experiments",
+      "authors": "Jean Tapie, Bruno Sokal, André L. F. de Almeida, Philipp del Hougne",
+      "date": "2026-03-19",
+      "pdf": "https://arxiv.org/pdf/2603.19155v1",
+      "score": "6.0",
+      "evidence": "具有互耦效应的阵列天线信道估计张量分解算法",
+      "tldr": "本文针对具有已知互耦效应的动态超表面天线（DMA），提出了一种基于张量分解的信道估计框架。研究开发了广义块Tucker交替最小二乘（BTALS）算法及其多种变体，并利用18 GHz DMA原型进行了实验验证。该方法在强互耦环境下实现了接近噪声极限的估计精度，显著优于传统方案，证明了张量方法在波域可编程无线系统中的实用价值。",
+      "tags": "query:tmr",
+      "abstract_en": "Dynamic metasurface antennas (DMAs) are an emerging hybrid-MIMO technology distinguished by an ultrathin form factor, low cost, and low power consumption. In real-world DMA prototypes, mutual coupling (MC) between meta-elements is generally non-negligible; some architectures even deliberately exploit strong MC to enhance wave-domain flexibility. In this paper, we address channel estimation (CE) for DMAs with known MC by formulating it as a tensor-decomposition problem. We develop a generalized block Tucker alternating least squares (BTALS) algorithm, together with specialized variants for cases with known direct and/or feed channel. We also develop a reciprocity-aware bilinear factorization method for the case with known direct channel. We experimentally validate our algorithms using an 18 GHz DMA prototype whose 7 feeds and 96 meta-elements are strongly coupled via a chaotic cavity. Our general BTALS algorithm reaches an accuracy of 43.1 dB, only 0.3 dB below the upper bound imposed by experimental noise. All proposed algorithms generally outperform the prior-art reference scheme thanks to the superior noise rejection enabled by the tensor-based framework. We further study the minimum number of required measurements as a function of the number of feeds and demonstrate the importance of MC awareness by comparison with an MC-unaware benchmark. Finally, we apply BTALS to a second setup enabling the prediction of the DMA's full dual-polarization 3D radiation diagram. We also measure the latter for DMA configurations optimized for channel-gain enhancement based on the estimated channels. Altogether, our work establishes the practical relevance of MC-aware tensor methods; beyond DMAs, it applies to all wireless systems with wave-domain programmability enabled by tunable lumped elements.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/25/2603.20602v1-interpretable-operator-learning-for-inverse-problems-via-adaptive-spectral-filtering-convergence-and-discretization-invariance",
+      "section": "quick",
+      "title_en": "Interpretable Operator Learning for Inverse Problems via Adaptive Spectral Filtering: Convergence and Discretization Invariance",
+      "authors": "Hang-Cheng Dong, Pengcheng Cheng, Shuhuan Li",
+      "date": "2026-03-21",
+      "pdf": "https://arxiv.org/pdf/2603.20602v1",
+      "score": "6.0",
+      "evidence": "用于反问题的算子学习和噪声稳定技术",
+      "tldr": "针对病态反问题中经典正则化需手动调参及深度学习缺乏解释性的挑战，本文提出SC-Net算子学习框架。该方法在谱域内学习自适应滤波器，根据信噪比重权谱系数。理论证明其具有离散不变性并能逼近连续逆算子。实验表明SC-Net达到了理论最优收敛速度，具备零样本超分辨率能力，有效结合了正则化理论与数据驱动方法的优势。",
+      "tags": "query:tmr",
+      "abstract_en": "Solving ill-posed inverse problems necessitates effective regularization strategies to stabilize the inversion process against measurement noise. While classical methods like Tikhonov regularization require heuristic parameter tuning, and standard deep learning approaches often lack interpretability and generalization across resolutions, we propose SC-Net (Spectral Correction Network), a novel operator learning framework. SC-Net operates in the spectral domain of the forward operator, learning a pointwise adaptive filter function that reweights spectral coefficients based on the signal-to-noise ratio. We provide a theoretical analysis showing that SC-Net approximates the continuous inverse operator, guaranteeing discretization invariance. Numerical experiments on 1D integral equations demonstrate that SC-Net: (1) achieves the theoretical minimax optimal convergence rate ($O(δ^{0.5})$ for $s=p=1.5$), matching theoretical lower bounds; (2) learns interpretable sharp-cutoff filters that outperform Oracle Tikhonov regularization; and (3) exhibits zero-shot super-resolution, maintaining stable reconstruction errors ($\\approx 0.23$) when trained on coarse grids ($N=256$) and tested on significantly finer grids (up to $N=2048$). The proposed method bridges the gap between rigorous regularization theory and data-driven operator learning.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

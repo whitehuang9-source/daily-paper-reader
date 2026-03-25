@@ -6,35 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-24
-- 运行时间：2026-03-24 20:44:06 UTC
+- 最新运行日期：2026-03-25
+- 运行时间：2026-03-25 20:48:10 UTC
 - 运行状态：成功
-- 本次总论文数：4
+- 本次总论文数：3
 - 精读区：0
-- 速读区：4
+- 速读区：3
 
 ### 今日简报（AI）
-今日速读 4 篇前沿论文，重点聚焦软体机器人变形重建、超导线圈建模及分布式估计优化。
-最值得关注利用 3D 高斯建模实现软体机器人的零样本变形重建，以及应对分布式估计中重尾噪声的性能权衡。
-建议深入了解柔性传感与三维建模的跨界融合，探索其在复杂环境感知中的应用潜力。
-- 详情：[/202603/24/README](/202603/24/README)
+今日聚焦分布式观测、动态超表面天线及可解释算子学习，深入探讨控制与通信领域的算法优化。
+重点推荐结合张量分解的 DMA 信道估计实验研究，以及具备离散不变性的自适应频谱滤波反问题求解方案。
+建议关注物理启发式算子学习在复杂系统建模中的应用，以平衡模型的可解释性与计算效率。
+- 详情：[/202603/25/README](/202603/25/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Zero Shot Deformation Reconstruction for Soft Robots Using a Flexible Sensor Array and Cage Based 3D Gaussian Modeling](/202603/24/2603.19543v1-zero-shot-deformation-reconstruction-for-soft-robots-using-a-flexible-sensor-array-and-cage-based-3d-gaussian-modeling)  
-   标签：评分：7.0/10、query:tmr
-   evidence：使用柔性传感器阵列进行形变重建
-2. [An Extended T-A Formulation Based on Potential-Chain Recursion for Electromagnetic Modeling of Parallel-Wound No-Insulation HTS Coils](/202603/24/2603.17593v1-an-extended-t-a-formulation-based-on-potential-chain-recursion-for-electromagnetic-modeling-of-parallel-wound-no-insulation-hts-coils)  
+1. [Distributed Unknown Input Observer Design: A Geometric Approach](/202603/25/2603.18335v1-distributed-unknown-input-observer-design-a-geometric-approach)  
    标签：评分：6.0/10、query:tmr
-   evidence：高场线圈的电磁建模
-3. [Tackling heavy-tailed noise in distributed estimation: Asymptotic performance and tradeoffs](/202603/24/2603.20728v1-tackling-heavy-tailed-noise-in-distributed-estimation-asymptotic-performance-and-tradeoffs)  
+   evidence：用于从局部测量中进行状态重建的分布式观测器
+2. [Channel Estimation via Tensor Decomposition for Dynamic Metasurface Antennas with Known Mutual Coupling: Algorithms and Experiments](/202603/25/2603.19155v1-channel-estimation-via-tensor-decomposition-for-dynamic-metasurface-antennas-with-known-mutual-coupling-algorithms-and-experiments)  
    标签：评分：6.0/10、query:tmr
-   evidence：传感器网络中针对重尾噪声的分布式估计算法
-4. [Robust Quantum Sensing via Prethermal Spin Orbits](/202603/24/2603.21057v1-robust-quantum-sensing-via-prethermal-spin-orbits)  
+   evidence：具有互耦效应的阵列天线信道估计张量分解算法
+3. [Interpretable Operator Learning for Inverse Problems via Adaptive Spectral Filtering: Convergence and Discretization Invariance](/202603/25/2603.20602v1-interpretable-operator-learning-for-inverse-problems-via-adaptive-spectral-filtering-convergence-and-discretization-invariance)  
    标签：评分：6.0/10、query:tmr
-   evidence：干扰抑制和背景场抑制
+   evidence：用于反问题的算子学习和噪声稳定技术
 
 
 <div class="dpr-home-promo-card">

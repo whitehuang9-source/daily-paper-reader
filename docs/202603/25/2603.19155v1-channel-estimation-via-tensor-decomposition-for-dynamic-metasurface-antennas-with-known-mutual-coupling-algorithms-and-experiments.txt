@@ -1,0 +1,802 @@
+Title: Channel Estimation via Tensor Decomposition for Dynamic Metasurface Antennas with Known Mutual Coupling: Algorithms and Experiments
+
+URL Source: https://arxiv.org/pdf/2603.19155v1
+
+Published Time: Fri, 20 Mar 2026 01:40:47 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> 1
+
+# Channel Estimation via Tensor Decomposition for Dynamic Metasurface Antennas with Known Mutual Coupling: Algorithms and Experiments 
+
+Jean Tapie, Graduate Student Member, IEEE , Bruno Sokal, Member, IEEE ,André L. F. de Almeida, Senior Member, IEEE , and Philipp del Hougne, Member, IEEE 
+
+Abstract —Dynamic metasurface antennas (DMAs) are an emerging hybrid-MIMO technology distinguished by an ultrathin form factor, low cost, and low power consumption. In real-world DMA prototypes, mutual coupling (MC) between meta-elements is generally non-negligible; some architectures even deliberately exploit strong MC to enhance wave-domain flexibility. In this paper, we address channel estimation (CE) for DMAs with known MC by formulating it as a tensor-decomposition problem. We develop a generalized block Tucker alternating least squares (BTALS) algorithm, together with specialized variants for cases with known direct and/or feed channel. We also develop areciprocity-aware bilinear factorization method for the case with known direct channel. We experimentally validate our algorithms using an 18 GHz DMA prototype whose 7 feeds and 96 meta-elements are strongly coupled via a chaotic cavity. Our general BTALS algorithm reaches an accuracy of 43.1 dB, only 0.3 dB below the upper bound imposed by experimental noise. All proposed algorithms generally outperform the prior-art reference scheme thanks to the superior noise rejection enabled by the tensor-based framework. We further study the minimum number of required measurements as a function of the number of feeds and demonstrate the importance of MC awareness by comparison with an MC-unaware benchmark. Finally, we apply BTALS to a second setup enabling the prediction of the DMA’s full dual-polarization 3D radiation diagram. We also measure the latter for DMA configurations optimized for channel-gain enhancement based on the estimated channels. Altogether, our work establishes the practical relevance of MC-aware tensor methods; beyond DMAs, it applies to all wireless systems with wave-domain programmability enabled by tunable lumped elements. 
+
+Index Terms —Channel estimation, dynamic metasurface antenna, multiport network theory, mutual coupling, reconfigurable intelligent surface, tensor decomposition. 
+
+J. Tapie and P. del Hougne are with Univ Rennes, CNRS, IETR - UMR 6164, F-35000, Rennes, France. P. del Hougne is also with the Department of Electronics and Nanoengineering, Aalto University, 00076 Espoo, Finland. (e-mail: jean.tapie@univ-rennes.fr; philipp.del-hougne@univ-rennes.fr) B. Sokal and A. L. F. de Almeida are with the Wireless Telecom Research Group (GTEL), Department of Teleinformatics Engineering, Federal University of Ceara, 60416-200 Fortaleza-CE, Brazil (e-mail: brunosokal@gtel.ufc.br; andre@gtel.ufc.br). 
+
+(Corresponding Author: Philipp del Hougne.) 
+
+J. Tapie and B. Sokal contributed equally to this work. This work was supported in part by the Nokia Foundation (project 20260028), the ANR France 2030 program (project ANR-22-PEFT-0005), the ANR PRCI program (project ANR-22-CE93-0010), the French Defense Innovation Agency (project 2024600), the European Union’s European Regional Development Fund, the French region of Brittany and Rennes Métropole through the contrats de plan État-Région program (projects “SOPHIE/STIC & Ondes” and “CyMoCoD”), the National Institute of Science and Technology (INCT-Signals) sponsored by Brazil’s National Council for Scientific and Technological Development (CNPq) (projects 406517/2022-3 and 303356/2025-1), and FUNCAP (project ITR-0214-00041.01.00/23). 
+
+I. I NTRODUCTION 
+
+Hybrid antenna architectures with programmability in the wave domain are a technological enabler of massive multiple-input-multiple-output (mMIMO) wireless systems [1]. To avoid the cost and energy consumption associated with requiring one radiofrequency (RF) chain per antenna element, these hybrid architectures operate with a significantly reduced number of RF chains, mapping the low-dimensional signal at the RF chains to a high-dimensional signal at the radiating elements via a programmable wave-domain transformation. Early proposals relied on reconfigurable analog combining boards connecting the reduced number of RF chains to a massive antenna array [2]–[6]. The recent emergence of dynamic metasurface antennas (DMAs) offers an alternative embodiment that is distinguished by its ultrathin form factor. A DMA is an ultrathin device that couples a low-dimensional number of feeds to a high-dimensional number of radiating meta-elements via microstrips or cavities [7]– [16]. Maximizing the programmability of the wave-domain transformation implemented by a DMA is a natural goal in this context. Recent work has shown the benefits of strong inter-element coupling, which increases the sensitivity of the low-to-high-dimensional signal transformation to the configuration of tunable elements [17], [18]. In addition, beyond-diagonal DMAs were proposed to endow the inter-element coupling with programmability [16]. To deploy a DMA in real-world conditions, wireless practitioners require an accurate system model that predicts signal transmission from feeds to users for any DMA configuration. Importantly, the system model must account for electromagnetic interactions among the tunable elements, especially in those DMA architectures that are intentionally designed to operate with strong inter-element interactions to boost wave-domain flexibility. An electromagnetically consistent system model relies on five groups of parameters [19], [20]: (i) scattering characteristics of the possible states of the tunable elements, (ii) mutual coupling (MC) characteristics of the tunable elements, (iii) channels from the feeds to the tunable elements, (iv) channels from the tunable elements to the users, (v) direct channels from the feeds to the users. It is often reasonable to assume that (i) and (ii) are known accurately by the wireless practitioner. If the deployed DMA prototype has been accurately simulated and there are no significant fabrication inaccuracies, (i) and 
+
+> arXiv:2603.19155v1 [eess.SP] 19 Mar 2026 2
+
+(ii) are known [21]. Alternatively, a set of operationally equivalent proxy parameters for (i) and (ii) can be estimated experimentally based on the fabricated prototype as described in [20] (see Sec. II for details on ambiguities in proxy parameters). It is important to recognize that an assumption of knowing (ii), or a proxy thereof, implies assuming that the MC between tunable elements does not depend on the radio environment. In general, any environmental scattering object can contribute paths between pairs of tunable elements, thereby altering the MC between them. Indeed, in the context of wireless channels parametrized by reconfigurable intelligent surfaces (RISs), various experiments in the 2.45 GHz regime demonstrated strong variations in MC strength for the same RIS prototype in radio environments with different levels of environmental scattering [22], [23]. For DMA-based scenarios, however, environmental scattering objects are typically not in the immediate proximity of the DMA, and the path loss between the DMA’s tunable elements and the environmental scattering object is typically high (especially at higher frequencies, such as 18 GHz and above). Consequently, the MC between the tunable elements is dominated by scattering within the DMA architecture, so it is approximately constant and independent of environmental scattering. In this case, the wireless practitioner can assume to know (ii). During runtime, the wireless practitioner is thus left with the problem of MC-aware channel estimation (CE), i.e., estimating (iii), (iv), and (v) given knowledge of (i) and (ii). In addition, a two-time-scale MC-aware CE problem is relevant to DMAs because (iii) only needs to be estimated once in a given deployment scenario, whereas (iv) and (v) should be estimated once per coherence time. Thus, after an initial joint estimate of (iii), (iv), and (v), the problem of estimating (iv) and (v) given knowledge of (i), (ii), and (iii) is relevant. Various theoretical papers have recently considered MC-unaware CE problems for DMAs [24]–[29], all under an assumption of negligible MC. 1 Among these MC-unaware CE works for DMAs, [27]–[29] leverage tensor decompositions, but for structurally different CE problems based on sparse geometric or separable propagation models, array-manifold assumptions, and/or OFDM-induced tensorizations, rather than for a full electromagnetically consistent multiport-network model that would be required for MC awareness. To the best of our knowledge, the only work to date that has considered 
+
+MC-aware CE for DMAs is [20], where an algorithm that jointly estimates a set of operationally equivalent proxy parameters for (i), (ii), (iii), and (iv) is proposed and experimentally validated. Specifically, after a first phase in which the proxy parameters for (i), (ii), and (iii) are estimated, the technique in [20] estimates a set of matching proxy parameters based on measurements of the end-to-end channel for one reference DMA configuration, single-element-flip DMA configurations, and random DMA configurations. The MC-aware CE technique for DMAs in [20] does not fully exploit the tensor structure of the system model, and thus it cannot benefit from noise rejection enabled by tensor-decomposition techniques. Since the mathematical structure of an MC-aware model for a DMA-empowered system is the same as for an 
+
+> 1It is briefly mentioned in [27], [29] that adding a fixed linear multiplication can account for MC; yet, this approach requires simplifications of the complete electromagnetically consistent system model (see details in Sec. II).
+
+RIS-parametrized channel (see Sec. II), MC-aware CE techniques for RISs are directly relevant to the present paper. Consequently, the same five aforementioned groups of parameters also apply to RISs. On the one hand, multiple experimental works tackled the joint estimation of all five groups of parameters [23], [30]–[32], motivated by scenarios in which fabrication inaccuracies or proprietary unknown RIS designs preclude perfect prior knowledge of any parameter. The same approach was also applied to a BD-RIS in [33], noting that the same system model with the same five groups of parameters applies to a BD-RIS when a real-world implementation of the beyond-diagonal load circuit based on tunable lumped elements is considered. Moreover, the works in [23], [30]–[32] were the basis for the aforementioned MC-aware CE technique for DMAs [20]. On the other hand, several works on MC-aware CE for RISs assume prior knowledge of the RIS hardware, i.e., of the parameter sets (i) and (ii), and then exploit additional structural assumptions on the propagation model [34]–[36]. In particular, these works rely on geometry-based or sparse mmWave channel models, together with array-manifold knowledge and/or localization-oriented parameterizations. Their common focus is therefore on estimating a reduced set of physical channel parameters under a prescribed propagation structure, rather than recovering general unstructured channel matrices under the full multiport-network model. The underlying assumptions may be restrictive in practice, since accurate array-manifold knowledge can be compromised by antenna-position uncertainties, calibration errors, RF phase drifts, near-field propagation, and other model-reality mismatches. Among these MC-aware CE works, only [36] leverages tensor methods, but for a purpose that fundamentally differs from our goal in this work: the tensor-ESPRIT stage in [36] exploits rotational-invariance in ageometry-based localization model to estimate physical signal parameters. In contrast, the focus of the present work is on the estimation of general channel matrices under the multiport-network model, i.e., of the parameter sets (iii), (iv), and (v), without relying on array-manifold or localization-specific assumptions. To the best of our knowledge, no prior work has exploited tensor decomposition for MC-aware CE without structural assumptions on the channels, neither for DMAs nor RISs. This gap is important because of its practical relevance and the potential of tensor methods to naturally leverage the multidimensional data structures arising from the measurements collected across multiple DMA configurations, feeds, and users. Tensor decompositions have a long track record in wireless communications [37]–[42] and recent theoretical works have shown strong potential for programmable wave-domain systems such as RISs, BD-RISs, and DMAs [27]–[29], [43]–[46]. While these theoretical results highlight the potential of tensor-based methods for addressing complex CE problems in programmable wireless environments, they all make idealized assumptions by neglecting real-world hardware constraints, especially the MC phenomena that inevitably arise in real-world prototypes. In this paper, we fill the gap on MC-aware CE via tensor decomposition for DMAs based on a multiport-network model without assumptions on the structure of the involved channels. Our work combines electromagnetically consistent system modeling and modern multidimensional signal processing 3
+
+techniques, and connects them with extensive experimental validation. Our contributions are summarized as follows. 1) We introduce a tensor-based formulation of MC-aware CE for DMAs with known MC, based on an electromagnetically consistent multiport-network model and covering four practical levels of prior channel knowledge. 2) We propose a block Tucker alternating least squares (BTALS) algorithm for joint recovery of the unknown channels, as well as specialized BTALS variants that exploit prior knowledge of the direct channel and/or the feed channel. 3) We propose a reciprocity-aware bilinear factorization method for the known-direct-channel case. 4) We experimentally validate, for the first time, tensor-decomposition-based MC-aware CE on a real-world programmable wave-domain system, using an 18 GHz strongly coupled DMA prototype in two distinct setups. 5) We systematically study the dependence of our algorithms’ CE performance on the number of available measurements and the number of DMA feeds. We further benchmark our algorithms against the MC-unaware case. 6) We demonstrate the usefulness of the estimated channel parameters in model-based optimization for channel gain maximization, with experimental measurements confirming the predicted performance. 
+
+Organization: In Sec. II, we describe the DMA-empowered system model, including a discussion of parameter ambiguities. In Sec. III, we describe the four considered problem statements on MC-aware CE for DMAs. In Sec. IV, we introduce our tensor-based system formulation. In Sec. V, we present our algorithms for MC-aware CE via tensor decomposition. In Sec. VI, we experimentally validate our algorithms. Specifically, we describe our DMA prototype, experimental setups, measurement procedure, experimentally verifiable CE accuracy metrics, CE results, and performance evaluation in DMA optimization. We close with a brief discussion in Sec. VII and conclusion in Sec. VIII. 
+
+Notation: 
+
+C and B ≜ {0, 1} denote the sets of complex and binary numbers, respectively. (·)⊤, (·)H , and (·)+ denote transpose, Hermitian transpose, and Moore–Penrose pseudoinverse, respectively. | · | , ∥ · ∥ 2, and ∥·∥ F denote the absolute value, Euclidean norm, and Frobenius norm, respectively. Ia denotes the a × a identity matrix. 0 and 1 denote all-zeros and all-ones vectors/matrices of appropriate sizes. diag( a) denotes the diagonal matrix whose diagonal entries are given by the vector 
+
+a, and blkdiag( ·) denotes block-diagonal concatenation. ⊗
+
+denotes the Kronecker product. vec( ·) and vech( ·) denote vectorization and half-vectorization, respectively. Ai,j denotes the (i, j )th entry in the matrix A. ABC denotes the submatrix (block) of A selected by the row indices B and the column indices C.
+
+Tensor Algebra Preliminaries: Let Tk ∈ CI×J , k =1, . . . , K , and define the third-order tensor T = [ T1 ⊔3 · · · ⊔ 3
+
+TK ] ∈ CI×J×K , where ⊔3 denotes concatenation along the Feeds Reconfigurable Meta-elements Users Lumped port Tunable load ## ######
+
+# . . . . . . . . . . . . . . .           
+
+> Control Vector Load Vector Encoder Encoder Encoder Encoder
+> Fig. 1. MNT system model for a DMA with NFfeeds and NMreconfigurable meta-elements serving NUusers. The encoding of the control vector vin the load vector rthat enters the MNT formalism is highlighted.
+
+third mode. Its mode-1, mode-2, and mode-3 unfoldings are 
+
+[T ](1) = [ T1, . . . , TK ] ∈ CI×JK ,
+
+[T ](2) = [ T⊤ 
+
+> 1
+
+, . . . , T⊤ 
+
+> K
+
+] ∈ CJ×IK ,
+
+[T ](3) = [vec( T1), . . . , vec( TK )] ⊤ ∈ CK×IJ .
+
+Given A ∈ CL×I , B ∈ CM ×J , and C ∈ CN ×K , the multilinear transform 
+
+Y = T ×1 A ×2 B ×3 C ∈ CL×M ×N ,
+
+where ×n denotes the mode-n product, satisfies 
+
+[Y](1) = A [T ](1) (C ⊗ B)⊤,
+
+[Y](2) = B [T ](2) (C ⊗ A)⊤,
+
+[Y](3) = C [T ](3) (B ⊗ A)⊤.
+
+More extensive background on tensor algebra notations, products, and decompositions can be found in [47], [48]. II. S YSTEM MODEL 
+
+In this section, we describe how our system model maps the binary control vector determining the configuration of the DMA’s NM 1-bit-programmable meta-elements to the system’s corresponding NU × NF end-to-end multiple-input-multiple-output (MIMO) transfer function from the NF DMA feeds to the NU ports of the users. We begin by explaining how the binary control vector is mapped to the load vector, which contains the physical scattering properties of the DMA’s meta-elements. Next, we use MNT to map the load vector to the end-to-end channel matrix. Then, we discuss the inevitable ambiguities that arise when all model parameters are estimated experimentally, as well as the operational irrelevance of these ambiguities. 4
+
+Our starting point is a partition of the system into three entities: (i) ports via which waves are injected and/or received; (ii) tunable lumped elements; (iii) static scattering objects. The ports in (i) comprise the ports of the DMA’s feeds and the ports of the users’ antennas. Each tunable lumped element in (ii) can be described as a “virtual” additional port terminated by an individual tunable load. The static scattering objects in (iii) comprise the scattering structures inside the DMA and the structural scattering of the radiating meta-elements, as well as, if applicable, any environmental scattering and structural scattering of the user antennas. 
+
+Encoding Function: The control vector v ∈ BNM defines the configuration of the NM 1-bit-programmable lumped elements. The load vector r ∈ CNM contains the reflection coefficients of the NM individual loads associated with the description of the tunable lumped elements as “virtual” ports terminated by individual loads. In line with our prototype, we assume that all NM tunable lumped elements are identical and independently tunable with two possible states. The two states are characterized by the reflection coefficients α ∈ C
+
+and β ∈ C of the associated loads. In this case, the mapping 
+
+v → r is affine [20]: 
+
+r(v) = α 1 + ( β − α) v. (1) 
+
+MNT Function: The ensemble of the NM tunable loads constitutes an NM-port system which is fully characterized by its scattering matrix Φ(r) = diag( r). Moreover, the ensemble of all static scattering objects constitutes an N -port system, where N = NF + NM + NU, which is fully characterized by its scattering matrix S ∈ CN ×N . We use the same reference impedance of Z0 = 50 Ω at all ports to define all scattering parameters in this paper. Moreover, we assume that signal generators and detectors are matched to Z0. The NM-port system terminates the NM “virtual” ports of the N -port system. The end-to-end channel matrix H ∈ CNU×NF from feeds to user ports resulting from this connection is given by standard MNT [20]: 
+
+H(r) = H0 + A  INM − Φ(r) Γ−1 Φ(r) B, (2) where, for notational ease, H0 ≜ SUF ∈ CNU×NF , A ≜
+
+SUM ∈ CNU×NM , Γ ≜ SMM ∈ CNM×NM , and B ≜
+
+SMF ∈ CNM×NF , and F, U, and M denote the sets containing the port indices associated with the feed ports, the user ports, and “virtual” ports, respectively. Typical DMAs are built exclusively from reciprocal components and are therefore reciprocal. Consequently, reciprocity imposes Γ = Γ⊤.
+
+Benchmark MC-Unaware Model: To examine the importance of MC awareness, we also consider a simple MC-unaware model that can be obtained from (2) by assuming 
+
+Γ = 0:
+
+HnoMC (r) = H0 + A Φ (r) B. (3) 
+
+Parameter Ambiguities: As mentioned in the introduction, our system model involves five groups of parameters: (i) the scattering characteristics of the tunable loads’ possible states (i.e., α and β), (ii) the MC characteristics of the tunable elements (i.e., Γ), (iii) the channels from feeds to “virtual” ports (i.e., B), (iv) the channels from “virtual” ports to user ports (i.e., A), and (v) the direct channels from feeds to user ports (i.e., H0). If all system details are perfectly known (DMA architecture, radio environment, user locations and orientations), then all MNT parameters can be obtained with a single full-wave simulation [21], [49], [50] (unless the simulation is computationally too costly). Due to fabrication inaccuracies, unknown details of the radio environment, and/or unknown user locations, these conditions are not met in real-world settings, so the model parameters need to be estimated experimentally. However, one cannot simply measure the model parameters because the “virtual” ports are not connectorized and too numerous. Indirect estimations of the model parameters can identify the MNT parameters unambiguously only if the encoding function’s parameters are known and the encoding function satisfies specific conditions (at least three distinct terminations per “virtual” port, as well as coupled terminations between neighboring “virtual” ports and at least one “virtual” and one accessible port [51]–[53]). Our system model’s encoding function does not satisfy these criteria, and we do not know 
+
+α or β. Consequently, we can only estimate a set of proxy model parameters that are subject to various ambiguities (diagonal similarity, complex scaling, Möbius transformation – see [Sec. III, [54]] for details). However, since these ambiguities do not impact the mapping v → H, they are operationally irrelevant for model-based optimization of the DMA configuration to impose desired properties on the end-to-end channel matrix (e.g., beamforming). We denote proxy parameters with a tilde in this paper to distinguish them from ground-truth parameters. III. P ROBLEM STATEMENT 
+
+In this paper, we consider four types of MC-aware CE problems for DMAs; an overview is provided in Table I. In all cases, we assume that a matching set of proxy parameters for the encoding function (i.e., ˜α and ˜β) and the inter-element MC matrix (i.e., ˜Γ) is known from a one-off experimental characterization of the DMA prototype with the procedure in [20]. This characterization could have been conducted in the current setup or a different setup, as long as the same DMA prototype was used, because we assume that ˜α, ˜β, and 
+
+˜Γ do not depend on the radio environment. As explained in the introduction, this assumption is reasonable due to significant path loss at our operating frequency of 18 GHz and the absence of environmental scatterers in close proximity to the DMA. Importantly, the ambiguities in ˜α, ˜β, and ˜Γ must harmonize, which they naturally do if the proxy parameters are jointly obtained with the procedure described in [20]. For Type 1 , we assume that ˜α, ˜β, and ˜Γ are known, and we jointly estimate ˜H0, ˜A, and ˜B. This is the general CE setting. The only difference for Type 2 with respect to Type 1 is that we assume to additionally know ˜H0. This situation is relevant because with the choice ˜α = 0 made in [20] we can obtain an estimate of ˜H0 by measuring the end-to-end channel matrix for a single reference DMA configuration: ˜H0 = H(v0), where                          
+
+> TABLE I OVERVIEW OF THE FOUR CONSIDERED MC-AWARE CE PROBLEM TYPES .
+> Type ˜α, ˜β, ˜Γ˜H0˜A˜B
+> Type 1 known TBD TBD TBD Type 2 known known TBD TBD Type 3 known TBD TBD known Type 4 known known TBD known 5
+
+v0 = 0.2 The relevant CE problem is thus to estimate ˜A and 
+
+˜B given ˜α, ˜β, ˜Γ, and ˜H0.With Type 3 and Type 4 , we capture the natural two-time-scale structure of DMA-empowered links. For a fixed deployment of the DMA hardware, the channels from feeds to meta-elements are typically quasi-static over long time scales, whereas the channels from meta-elements to users and from feeds to users vary with the users’ locations and orientations and with the radio environment’s dynamics. Accordingly, after the procedure described in [20], or after running a Type 1 or 
+
+Type 2 procedure once, we can treat ˜B as known. If ˜H0 is not assumed known, the resulting per-coherence CE problem corresponds to Type 3 , in which ˜H0 and ˜A are estimated. If, in addition, ˜H0 is obtained from a single reference-configuration measurement as in Type 2 , the problem of Type 3 reduces to 
+
+Type 4 , in which only ˜A remains to be estimated. 
+
+Remark: Although ˜H0 can be estimated with a single reference-configuration measurement as in Type 2 and in Type 4, we do not assume it known in Type 1 and Type 3 in order to systematically assess the trade-off between estimation accuracy and computational complexity in the comparison between Type 1 and Type 2 as well as in the comparison between Type 3 and Type 4 .IV. T ENSOR -B ASED SYSTEM MODEL FORMULATION 
+
+In this section, we present a tensor formulation based on (2) that we will exploit in Sec. V to derive our proposed algorithms for CE. Our CE techniques are based on K measurements of the end-to-end channel matrix, each using a different DMA configuration. For the kth DMA configuration, we denote the control vector by vk. The corresponding load vector is 
+
+rk ≜ r(vk) and the corresponding scattering matrix of the ensemble of tunable loads is Φk ≜ Φ(rk) = diag( rk). The corresponding end-to-end channel matrix is 
+
+Hk ≜ H(rk) = H0 + A Ω k B, (4) where 
+
+Ωk ≜  INM − Φk Γ−1Φk ∈ CNM×NM . (5) As mentioned, typical DMAs are reciprocal, which implies 
+
+Γ = Γ⊤ and thus Ωk = Ω⊤ 
+
+> k
+
+.When neglecting H0, one can interpret the mathematical structure of (4) as a frontal slice of a Tucker-2 tensor, as shown in [45]. In the general case with non-negligible H0, we can recast (4) as follows: 
+
+Hk = [ H0, A]
+
+INF
+
+Ωk
+
+  INF
+
+B
+
+
+
+(6) 
+
+= C ¯ Ωk D, (7) where C = [H0, A] ∈ CNU×(NF+NM), ¯Ωk =
+
+blkdiag (INF , Ωk) ∈ C(NF+NM)×(NF+NM), and D =[INF , B]⊤ ∈ C(NF+NM)×NF . Therefore, by concatenating the equivalent channel Hk over all K measurements, across the third dimension, the equivalent channel tensor is given as: 
+
+H = ¯T ×1 C ×2 D⊤ ×3 IK ∈ CNU×NF×K , (8)      
+
+> 2If ˜α̸=0, one can apply an ambiguity transformation of the proxy parameters to another set of proxy parameters for which ˜α= 0 . An example of a related ambiguity transformation is available in [(21), [54]].
+
+where the equivalent channel tensor H concatenates Hk
+
+across the third dimension, i.e., H = [ H1 ⊔3 . . . ⊔3 HK ].Likewise, ¯T is formed by concatenating the DMA factor ¯Ωk,across the third dimension, i.e., ¯T = [ ¯Ω1 ⊔3 . . . ⊔3 ¯ΩK ] ∈
+
+C(NF+NM)×(NF+NM)×K . The three unfoldings of H are 
+
+[H](1) = C [ ¯T ](1) 
+
+ IK ⊗ D⊤⊤ ∈ CNU×NFK , (9) 
+
+[H](2) = D⊤ [ ¯T ](2) 
+
+ IK ⊗ C⊤ ∈ CNF×NUK , (10) 
+
+[H](3) = [ ¯T ](3) 
+
+ D⊤ ⊗ C⊤ ∈ CK×NUNF . (11) V. A LGORITHMS FOR MC-A WARE CE VIA 
+
+TENSOR DECOMPOSITION 
+
+In this section, we present two main algorithms and their derivations for estimating the involved channels across the four MC-aware problem types, as described in Table I. To simplify the notation, we write this section in terms of the true physical parameters rather than their proxy counterparts, denoted by tildes. In the experimental setting considered in this paper, however, the known parameters are in general ambiguous proxy parameters, as discussed in Sec. II and Sec. VI. 
+
+A. Type 1 MC-Aware CE Problem BTALS-I: Based on [45], we develop a generalized BTALS algorithm for cases with non-negligible direct channel and non-negligible MC. Our BTALS algorithm iteratively solves two least-squares (LS) problems that exploit the unfoldings (9) and (10): 
+
+ˆC = argmin 
+
+> C
+
+[H](1) − C [ ¯T ](1) (IK ⊗ D⊤)⊤ 2 
+
+> F
+
+, (12) 
+
+ˆD⊤ = argmin 
+
+> D⊤
+
+[H](2) − D⊤ [ ¯T ](2) (IK ⊗ C)⊤ 2 
+
+> F
+
+. (13) The corresponding solutions are 
+
+ˆC = [ H](1) 
+
+ [ ¯T ](1) (IK ⊗ D⊤)⊤+, (14) 
+
+ˆD⊤ = [ H](2) 
+
+ [ ¯T ](2) (IK ⊗ C)⊤+. (15) A necessary dimensional condition for the uniqueness of the LS solution in (14) and (15) is K ≥ max {1 + NM 
+
+> NF
+
+, NF+NM 
+
+> NU
+
+}.Our BTALS algorithm is summarized in Algorithm 1. In the first iteration i = 1 , the feed channel can be randomly initialized as ˆB0 to form ˆD0 = [INF , ˆB0]⊤, which is substituted into (12) to obtain ˆC1. Then, ˆC1 is substituted into (13) to obtain ˆD1. This process is repeated until a maximum number of iterations or a convergence threshold is reached. Since the LS update in (15) is unconstrained, the estimate 
+
+ˆDi may be obtained as a generic full matrix. However, the true factor D has the structured form D = [ INF , B]⊤.
+
+Algorithm 1 Generalized BTALS Algorithm for Type 1  
+
+> 1:
+
+Input: H, ¯T , ˆB0, max. number of iterations I. Set i = 1 . 
+
+> 2:
+
+for i = 1 , . . . , I do  
+
+> 3:
+
+Compute an estimate for ˆCi using (14).  
+
+> 4:
+
+Compute an estimate for 
+
+ ˆDi
+
+⊤
+
+using (15).  
+
+> 5:
+
+Replace upper NF × NF block of ˆDi with INF . 
+
+> 6:
+
+end for  
+
+> 7:
+
+return ˆC = ˆCi, ˆD = ˆDi.6
+
+Therefore, after each iteration, we enforce this structure by replacing the upper NF × NF block of ˆDi with INF , yielding 
+
+ˆDi = [ INF , ˆBi]⊤.The factorization in Algorithm 1 is not unique because only the product A Ω k B is identified. For any nonzero scalar 
+
+γ ∈ C, replacing A by γA and B by γ−1B leaves A Ω k B
+
+unchanged for every k. Since D = [ INF , B]⊤ contains a fixed identity block, this ambiguity does not affect H0. Hence, H0
+
+is identified directly, whereas A and B are identified only up to a reciprocal scalar ambiguity: ˆH0 ≈ H0, A ≈ γ ˆA, and 
+
+B ≈ γ−1 ˆB. This ambiguity is operationally irrelevant because it does not affect the mapping from the control vector to the end-to-end channel matrix. 
+
+B. Type 2 MC-Aware CE Problem 
+
+With known H0, we can define 
+
+˚Hk ≜ H(rk) − H0 = A Ω k B. (16) Analogous to Sec. IV, the channel tensor structure is given as 
+
+˚H = T ×1 A ×2 B⊤ ×3 IK ∈ CNU×NF×K , (17) where ˚H = [ ˚H1 ⊔3 . . . ⊔3 ˚HK ] and T = [ Ω1 ⊔3 . . . ⊔3 ΩK ] ∈
+
+CNM×NM×K . The three unfoldings of ˚H are 
+
+[ ˚H](1) = A [T ](1) (IK ⊗ B⊤)⊤ ∈ CNU×NFK , (18) 
+
+[ ˚H](2) = B⊤ [T ](2) (IK ⊗ A)⊤ ∈ CNF×NUK , (19) 
+
+[ ˚H](3) = [ T ](3) (B⊤ ⊗ A)⊤ ∈ CK×NUNF . (20) We now propose two methods to solve the Type 2 MC-aware CE problem by exploiting this tensor structure. 
+
+BTALS-II: We specialize BTALS-I to the case of a known 
+
+H0. Analogous to Sec. V-A, we solve two LS problems, this time using the [ ˚H](1) and [ ˚H](2) :
+
+ˆA = argmin 
+
+> A
+
+[ ˚H](1) − A [T ](1) (IK ⊗ B⊤)⊤ 2
+
+> F
+
+, (21) 
+
+ˆB⊤ = argmin 
+
+> B⊤
+
+[ ˚H](2) − B⊤ [T ](2) (IK ⊗ A)⊤ 2
+
+> F
+
+. (22) The corresponding solutions are 
+
+ˆA = [ ˚H](1) 
+
+ [T ](1) (IK ⊗ B⊤)⊤+, (23) 
+
+ˆB⊤ = [ ˚H](2) 
+
+ [T ](2) (IK ⊗ A)⊤+. (24) A necessary dimensional condition for the uniqueness of the LS solution in (23) and (24) is K ≥ max { NM 
+
+> NU
+
+, NM 
+
+> NF
+
+}. The iterative procedure for BTALS-II is mostly analogous to that summarized for BTALS-I in Algorithm 1: we first solve for 
+
+A, then we use the solution to solve for B, and we iterate until the maximum number of iterations or a stop criterion threshold is reached. The only difference with respect to Algorithm 1 is that we do not force any block of ˆBi to be an identity matrix. In fact, BTALS-II is analogous to the BTALS algorithm proposed in [45], except that the meaning of ˚H and 
+
+T is different from that of the corresponding variables in [45]. 
+
+RBF: Our second method is an iterative, reciprocity-aware bilinear factorization (RBF) that is summarized in Algorithm 2. Indeed, with known Ωk, the Type 2 MC-aware CE problem can be viewed as factorizing the tensor slices ˚Hk = A Ω k B. To exploit the known matrices Ωk,we work with the mode-3 unfolding in (20), because it separates the dependence on the training configurations from the unknown bilinear factor (B⊤⊗A). However, [T ](3) cannot be directly pseudo-inverted to recover (B⊤ ⊗ A) because rank ([ T ](3) ) ≤ min (NM(NM + 1) /2, K ). Indeed, [T ](3) =[vec( Ω1), . . . , vec( ΩK )] ⊤ contains redundant columns due to 
+
+Ωk = Ω⊤ 
+
+> k
+
+, which is imposed by the DMA’s reciprocity. This redundancy can be removed by introducing a duplication matrix. Specifically, [T ](3) can be factorized as [T ](3) =(W ¯S)⊤, where W contains NM columns with a single nonzero entry equal to one, corresponding to the diagonal elements of Ωk, whereas the remaining NM(NM+1) 2 − NM
+
+columns contain two nonzero entries equal to one, which replicate the symmetric off-diagonal elements. The matrix 
+
+¯S ∈ C NM(NM+1) 2 ×K collects the independent parameters of the symmetric matrices Ωk, i.e., ¯S = vech (Ω1), . . . , vech (ΩK ).Applying a transposition to (20) and substituting [T ]⊤ 
+
+> (3)
+
+=
+
+W ¯S yields 
+
+[ ˚H]⊤ 
+
+> (3)
+
+= ( B⊤ ⊗ A)W ¯S, (25) where ¯S is known and generally has full row rank when K ≥ 
+
+> NM(NM+1) 2
+
+. After filtering out ¯S, we apply a permutation matrix 
+
+P ∈ R NM(NM+1) 2 × NM(NM+1) 2 so that the diagonal components appear in the first NM columns: 
+
+¯H ≜ [ ˚H]⊤ 
+
+> (3)
+
+¯S+P ≈ (B⊤ ⊗ A)WP (26) 
+
+= [ b1 ⊗ a1, . . . , bNM ⊗ aNM , U],
+
+where U contains the combination of the off-diagonal components, i.e., the columns of U are vec  aib⊤ 
+
+> j
+
++ aj b⊤
+
+> i
+
+,for {i, j } = 1 , . . . N M, with i < j . Note that each of the first 
+
+NM columns of ¯H is the vectorization of a rank-one matrix, whereas each of the remaining columns is the vectorization of a matrix of rank at most two. Next, let Mii ∈ CNU×NF denote the matrix obtained by reshaping the ith column of ¯H, for i = 1 , . . . , N M. Likewise, let Mij ∈ CNU×NF denote the matrix obtained by reshaping the column of ¯H associated with the pair (i, j ), for 1 ≤ j < i ≤ NM. Now, we can formulate the following problem: 
+
+min 
+
+> A,B
+
+
+
+> NM
+
+X
+
+> i=1
+
+μii + X
+
+> 1≤j<i ≤NM
+
+νij 
+
+ , (27) where 
+
+μii = Mii − aib⊤ 
+
+> i
+> 2
+> F
+
+, νij = Mij − aj b⊤ 
+
+> i
+
+− aib⊤ 
+
+> j
+> 2
+> F
+
+.
+
+(28) Since the objective in (27) is bilinear in (A, B), RBF adopts an alternating minimization strategy. Note that the problem in (27) combines rank-one and rank-two factorizations. Thus, an initial estimate is obtained by considering the first NM
+
+columns of ¯H. By reshaping each of them into a matrix, we obtain blocks of the form Mii ≈ aib⊤ 
+
+> i
+
+. This initialization step can be performed using any rank-one factorization method, such as the singular-value decomposition or the power method. However, using only the diagonal terms leads to NM
+
+independent scale ambiguities, i.e., one per column. The off-diagonal blocks resolve these ambiguities by coupling different columns, ultimately leaving only a single global scale factor. To avoid repeating identical derivations, we now introduce the generic matrices X = [x1, . . . , xNM ] ∈ CdX×NM7
+
+Algorithm 2 Reciprocity-Aware Bilinear Factorization (RBF) 
+
+Require: {Mii }NM
+
+> i=1
+
+, {Mij }1≤j<i ≤NM , max. number of iterations Lmax . 
+
+> 1:
+
+Initialization:  
+
+> 2:
+
+for i = 1 , . . . , N M do  
+
+> 3:
+
+Compute a rank-one factorization of Mii ≈ aib⊤ 
+
+> i
+
+. 
+
+> 4:
+
+end for  
+
+> 5:
+
+Form ˆA = [ˆ a1, . . . , ˆaNM ], and ˆBT = [ ˆb1, . . . , ˆbNM ]. 
+
+> 6:
+
+Main Loop:  
+
+> 7:
+
+for ℓ = 1 , . . . , L max do  
+
+> 8:
+
+for (X, Y) ∈ { ( ˆA, ˆB⊤), ( ˆB⊤, ˆA)} do  
+
+> 9:
+
+Build GX using (30).  
+
+> 10:
+
+Form R⊤ 
+
+> Y
+
+from {r⊤ 
+
+> i
+
+}NM
+
+> i=1
+
+, with r⊤ 
+
+> i
+
+given by (31).  
+
+> 11:
+
+Update Y using (32).  
+
+> 12:
+
+end for  
+
+> 13:
+
+end for  
+
+> 14:
+
+return ˆA and ˆB⊤
+
+and Y = [y1, . . . , yNM ] ∈ CdY ×NM , where 
+
+(X, Y) ∈ {(A, B⊤), (B⊤, A)} and therefore 
+
+(dX, d Y) ∈ {(NU, N F), (NF, N U)}. Then, given an initialization for X, the update of Y is obtained by solving the normal equation 
+
+GXY⊤ = R⊤ 
+
+> Y
+
+, (29) where the (i, j )th entry of GX ∈ CNM×NM is given by 
+
+(GX)ij =
+
+(PNM 
+
+> ℓ=1
+
+∥xℓ∥22, i = j, 
+
+xHj xi, i̸ = j, i, j = 1 , . . . , N M,
+
+(30) and the ith row of R⊤ 
+
+> Y
+
+= [ r⊤ 
+
+> 1
+
+, . . . , r⊤ 
+
+> NM
+
+]⊤ ∈ CNM×dY is given, for i = 1 , . . . , N M, by 
+
+r⊤ 
+
+> i
+
+= xHi Mii + X
+
+> j<i
+
+xHj Mij + X
+
+> k>i
+
+xHk Mki . (31) Solving (29) for Y yields the update 
+
+Y = RY(G−1X )⊤ ∈ CdY ×NM . (32) By alternating between updating ˆB⊤ with ˆA fixed and updating ˆA with ˆB⊤ fixed, until a maximum number of iterations or a convergence threshold is reached, we ensure that the columns of the estimated matrix are unique up to a single scaling ambiguity, i.e., A = α ˆA and B = α−1 ˆB, where α ∈
+
+C is a nonzero scalar. This single scaling ambiguity is the same reciprocal scalar ambiguity as in the BTALS case discussed above: for any nonzero scalar α ∈ C, replacing A by αA and 
+
+B by α−1B leaves A Ω k B unchanged for every k. Hence, this ambiguity is operationally irrelevant because it does not affect the reconstructed equivalent channel. If MC vanishes, the off-diagonal coupling terms disappear, the columns decouple, and additional per-column scaling ambiguities remain—again without impacting the prediction of the end-to-end channel. 
+
+C. Type 3 MC-Aware CE Problem BTALS-III: 3 With known B, we can estimate H0 and A
+
+using a zero-forcing approach. We leverage the same tensor 
+
+> 3Because this algorithm can be viewed as a specialized variant of BTALS-I, we coin it BTALS-III for notational convenience. Yet, to be clear, the alternating-LS feature of BTALS-I is not present in BTALS-III.
+
+structure as in Sec. V-A, where H0 and A are stacked in C
+
+(see (7)). Specifically, we use the 1-mode unfolding in (9) to compute an estimate of C = [ H0, A]:
+
+ˆC = [ H](1) 
+
+[ ¯T ](1) (IK ⊗ D⊤)⊤+. (33) A necessary dimensional condition for unique zero-forcing recovery is K ≥ 1 + NM 
+
+> NF
+
+. Given ˆC, we identify ˆH0 and ˆA
+
+based on ˆC = [ ˆH0, ˆA].
+
+D. Type 4 MC-Aware CE Problem BTALS-IV: 4 With known H0 and B, we can estimate A
+
+using a zero-forcing approach. This time, we leverage the same tensor structure as in Sec. V-B. Specifically, we use the 1-mode unfolding in (18) to compute an estimate of A:
+
+ˆA = [ ˚H](1) 
+
+[T ](1) (IK ⊗ B⊤)⊤+. (34) A necessary dimensional condition for the uniqueness of the pseudo-inverse in (34) is K ≥ NM 
+
+> NF
+
+.VI. E XPERIMENTAL VALIDATION 
+
+A. DMA Prototype 
+
+Our DMA is an ultrathin device that couples eight feeds (of which we use only seven, as explained below) to 96 radiating meta-elements. The coupling structure is a quasi-2D irregularly shaped cavity, similar to the one described in [10]. The motivation for choosing this coupling structure is that it induces strong MC between the meta-elements, such that the DMA can reap the increased wave-domain flexibility enabled by strong inter-element MC that was unveiled in [17], [18]. In contrast to microstrip-based coupling structures that deliberately mitigate MC with large inter-element spacing [12], accounting for MC is pivotal for our DMA prototype, as we show below. More specifically, our DMA is a four-layer PCB, as seen in Fig. 2c. The approximately 15 cm × 15 cm large cavity is formed in the 1.52 mm thick top layer filled with low-loss dielectric Rogers 4003 substrate ( ϵr = 3 .55 , tan δ = 0 .019 )using a fence comprising 808 vias. The cavity can be excited by eight coaxial feeds from the back of the PCB: each RF connector’s pin is connected to a via that passes through the PCB to a circular patch on the front. The outer conductor of the connector is connected to the RF ground. The circular patch is separated from the ground by an annular gap enabling matching of the feed and the cavity. The 96 meta-elements are pseudo-randomly placed on the top layer, with the condition to be at least 1.5 cm apart from one another. All meta-elements have the same orientation. The meta-elements consist of a rounded complementary electric-LC resonator that can be tuned using a PIN diode as described in [55]. Each meta-element can be individually configured to two possible states by applying a binary bias voltage (0 V or 5 V) to its PIN diode using a via that traverses the PCB and is connected to the control circuit. The control circuit is implemented in the two bottom layers of the PCB, consisting of twelve eight-bit shift-registers and four buffers. An Arduino  
+
+> 4Because this algorithm can be viewed as a specialized variant of BTALS-I, we coin it BTALS-IV for notational convenience. Yet, to be clear, the alternating-LS feature of BTALS-I is not present in BTALS-IV. 820cm 20cm
+> Meta-elements Feeds Via Fence Biasing circuitry Coaxial structure
+
+Back View Front View Exploded View Front View 
+
+> Functionning meta-elements Feeds Mal-functionning meta-elements
+> 3mm 0.5mm 1.2mm 60° 0.129m m
+> PIN-Diode Radial stubs
+> Fig. 2. (a) Photographic images of front view and back view of our DMA with eight feeds (of which we use only seven, as explained in Sec. VI-A) and 96 1-bit-programmable meta-elements. (b) Front-view overview of the location of the feeds, meta-elements, and via fence. (c) Exploded view showing the bias circuitry in the interior of the four-layer PCB.
+
+Mega reconfigures the shift registers when it receives a 96-element binary control vector v from Python. The description of the PIN diodes as tunable lumped elements is justified because of their small size (0.457 mm) relative to the free-space wavelength at 18 GHz (16.67 mm) and the wavelength in the Rogers 4003 dielectric (8.85 mm); see Sec. IV.C in [20] for related experimental sanity checks. Throughout our experiments, we only use seven of the DMA’s eight feeds. The reason is simply that we use an eight-port VNA with one port connected to a probe, as explained below, such that we can connect only seven VNA ports to the DMA feeds. The remaining eighth feed is left open-circuited in all experiments, and thus acts like an additional scatterer in the already chaotic cavity of our DMA. Altogether, we thus have NF = 7 and NM = 96 . Three meta-elements are non-functional due to fabrication issues (missing diodes) and indicated in red rather than green color in Fig. 2b; however, we do not handle them differently from functioning meta-elements, evidencing that our algorithms do not require prior knowledge of faulty meta-elements. 
+
+B. Experimental Setups and Measurement Procedure 
+
+In our experiments, we sample the field radiated by the DMA at ensembles of discrete points with “virtual antenna arrays” (VAAs). A VAA is realized by mechanically displacing one or a few probe(s) relative to the DMA, or vice versa. For single-polarization probes, each VAA grid point represents one user port. For dual-polarization probes, each VAA grid point is represented by two user ports. 
+
+Setup 1: As shown in Fig. 3a, our DMA is placed inside an anechoic chamber, and the VAA is realized based on a 2D translation stage scanning a single-polarization probe through four grid points (a square with side length 10 cm) in a plane parallel to, and 35 cm in front of, the DMA’s surface. Thus, we have NU = 4 . The probe’s polarization is aligned with the dominant polarization of the meta-elements. Seven DMA feed ports and the probe are connected to an eight-port vector network analyzer (VNA). We measure at a single frequency (18 GHz) with VNA settings intended to maximize the measurement accuracy (power: 13 dBm, IFBW: 500 Hz). Similar to [20], we first measure the DMA’s 7 × 7
+
+reflection matrix for 1000 random DMA configurations. Then, we measure the end-to-end channel matrix from the DMA’s feeds to the VAA grid points for the reference DMA configuration v0, 96 single-flip DMA configurations (the ith single-flip configuration differs from the reference configuration only regarding the state of the ith meta-element), and 10000 random configurations. To be clear, our proposed CE methods only directly use a subset of the 10000 measurements of the end-to-end channel matrix with random DMA configurations. We measure that many random DMA configurations to conduct ablation studies. The other types of measurements (all reflection-matrix measurements, and end-to-end channel matrix measurements with reference and single-flip configurations) are only required for the technique described in [20] that we run once to subsequently have prior knowledge of some model parameters, as discussed in Sec. III. Based on the resulting consistent set of proxy parameters ˜α,
+
+˜β, and ˜Γ, we compute ˜Ωk in the corresponding ambiguity basis using (5) for every measured DMA configuration vk.The technique in [20] enforces reciprocity on ˜Γ, such that ˜Ωk
+
+is symmetric: ˜Ωk = ˜Ω⊤ 
+
+> k
+
+.We monitor the stability of our experiment over the course of the measurements by intermittently re-measuring H for the same random DMA configuration. To quantify the stability, we treat the difference between the measurements of H
+
+under nominally identical conditions as noise and evaluate an effective signal-to-noise ratio (SNR). Over the course of our measurements with Setup 1, this stability metric does not drop below 43.3 dB. 
+
+Setup 2: As shown in Fig. 3b, our DMA is placed on a rotatable platform such that the DMA’s center coincides with the center of an arch of dual-polarization probes inside an anechoic environment. In this commercial StarLab setup, only the central feed (indexed #3 in Fig. 2) is connected to the VNA, while the other feeds are left open-circuited (for which we duly account, as explained in the next paragraph). The StarLab setup sequentially connects the probe ports to one VNA port and controls the rotation of the DMA relative to the probe arch. The acquired data are post-processed by the StarLab software to reconstruct the complex dual-polarization field on a spherical surface of diameter 25 cm centered on the DMA (see Fig. 3b for the angle convention). The result is provided on an angular grid of 56 ×98 directions, which we interpret as a spherical VAA: each grid direction corresponds to a virtual user equipped with a non-invasive dual-polarized probe located on that sphere. Considering the two polarizations, we thus have NU = 2 · 56 · 98 = 10976 user ports. In other words, for each DMA configuration, the end-to-end channel vector contains the complex transfer functions that would be observed by dual-polarized receive probes at those spherical sampling directions. 9(a) Setup 1 (b) Setup 2 DMA 
+
+Probe            
+
+> -100mm 0mm 100mm -100mm 0mm 100mm 12345678910 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 571642350mm 3
+
+y                
+
+> 12345678910 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 3571642
+
+xzxyz
+
+θ
+
+> Reconfigurable Meta-elements Users Feeds
+> ####
+
+. . . . . . . . . . . .  
+
+> Control Vector Load Vector Encoder Encoder Encoder Encoder #
+> OC OC OC OC OC OC OC
+> Feeds Reconfigurable Meta-elements Users ########
+
+₄₄
+
+. . . . . . . . . Control Vector Load Vector Encoder Encoder Encoder Encoder # ₅
+
+₇
+
+> ##
+
+₆      
+
+> OC
+> ₍₁₎ ₍₂₎ ₍₁₎ ₍₁₎ ₍₁₎ ₍₁₎ ₍₁₎ ₍₂₎ ₍₂₎ ₍₂₎ ₍₂₎ ₍₂₎
+
+Fig. 3. (a) Experimental Setup 1 with NF = 7 and NU = 4 . The VAA has four grid points in a plane parallel to the DMA surface. The VAA is realized by moving a probe on a translation stage. (b) Experimental Setup 2 with NF = 1 and NU = 10976 . The VAA has 5488 dual-polarization grid points (i.e., 10976 user ports) on a sphere whose center coincides with the DMA’s center. The VAA is realized by rotating the DMA within an arc of dual-polarized probes. In both setups, the eighth DMA port is open-circuited throughout all experiments. 
+
+Our analysis of the data from Setup 2 relies on the estimates of ˜α, ˜β, and ˜Γ obtained with the method from [20] based on Setup 1. To account for the fact that only feed #3 is connected in Setup 2 while the other six feed ports (connected in Setup 1) are left open-circuited in Setup 2, we compute an effective MC matrix by eliminating the open feed ports via a standard MNT port-termination reduction. Specifically, using the proxy scattering-matrix blocks ˜S identified from Setup 1, let Fact =
+
+{3} denote the active feed port and Foc = F \ F act the set of open-circuited feed ports, and partition ˜S accordingly. With open-circuit terminations (reflection coefficient +1 w.r.t. 
+
+Z0), the multiple-scattering contribution through Foc can be absorbed into an effective MC matrix 
+
+˜Γeff = ˜SMM + ˜SMF oc 
+
+ I − ˜SFoc Foc 
+
+−1 ˜SFoc M, (35) which we then use as the known MC matrix in (2) for Setup 2. Over the course of our measurements with Setup 2, our stability metric does not drop below 28.9 dB. The lower stability of the measurements with Setup 2 (in comparison to Setup 1) might originate from vibrations associated with the motion of the arch of probes in the StarLab setup. In addition, we note that the reliance on the values of ˜α, ˜β, and 
+
+˜Γ obtained with Setup 1 implies a potential source of mild model-reality mismatch which can arise due to mechanical stress and deformations arising from manual interventions in moving the DMA from Setup 1 to Setup 2, as well as due to temperature and humidity changes over the course of a one-month gap between the measurements on Setup 1 and Setup 2. 
+
+C. Experimentally Verifiable CE Accuracy Metrics 
+
+Since the ground-truth parameter values are unknown and not directly observable, we evaluate the CE performance of our algorithms exclusively through physically measurable 
+
+quantities. Concretely, we measure the end-to-end channel matrix for a set of Q unseen, randomly chosen DMA configurations and compare the measurements to the corresponding model-based predictions. We evaluate two complementary metrics. We define the normalized mean-squared error (NMSE) as 
+
+NMSE ≜
+
+PQq=1 H(q)meas − H(q)pred 
+
+2
+
+F
+
+PQq=1 H(q)meas 
+
+2
+
+F
+
+, (36) where H(q)meas and H(q)pred denote, respectively, the measured and predicted end-to-end channel matrix for the qth test configuration. While the NMSE is a standard metric, it is sensitive to the magnitude of the constant term in the system model in (2). We expect H0 to be small for our DMA architecture, but the parameter ambiguities nonetheless allow 
+
+˜H0 in principle to be substantial. Therefore, we also evaluate a second accuracy metric that is insensitive to any configuration-10 
+
+independent offset across the test index q. Following [20], [22], we define 
+
+ζ ≜
+
+* SD q
+
+
+
+H(q)meas ,ij 
+
+
+
+SD q
+
+
+
+H(q)meas ,ij − H(q)pred ,ij 
+
++
+
+> i,j
+
+, (37) where H(q)meas ,ij and H(q)pred ,ij denote the (i, j )th entries of H(q)meas and H(q)pred , respectively, SD q (·) is the standard deviation over the test index q, and ⟨·⟩ i,j denotes averaging over all matrix indices. 
+
+D. Experimental CE Results 
+
+We now systematically examine in Fig. 4 the performance and training overhead of the five algorithms presented in Sec. V based on our experimental measurements on Setup 1 (shown in Fig. 3a). To that end, we evaluate NMSE and 
+
+ζ (defined in Sec. VI-C) as a function of K and NF. For reference, we also evaluate these metrics using the proxy parameter set obtained via the procedure described in [20] (denoted by REF). In addition, we benchmark against an MC-unaware scenario for which we impose that ˜Γ vanishes. In addition to the achieved accuracy (quantified in terms of NMSE and ζ), we also assess the minimum required training overhead. For simplicity, we quantify the minimum required training overhead as the minimum number of measurements 
+
+KEXP min for which the value of ζ reaches the corresponding REF value. A summary of the experimentally determined values of KEXP min is provided in Table II. The noise level is the experimentally given one on the order of 43.4 dB, as discussed in Sec. VI-B. The accuracy achieved by the REF proxy parameters is around ζ = 40 dB (39.9 dB for NF = 1 , 40.8 dB for NF = 4 ,40.2 dB for NF = 7 ). If MC is neglected, these values drop to around ζ = 4 dB, highlighting the importance of accounting for MC. With the largest considered value of K = 9000 ,all five considered algorithms achieve accuracies that exceed REF for NF = 7 . RBF marginally exceeds REF by 0.5 dB, BTALS-IV and BTALS-III exceed REF by 1.8 dB and 1.9 dB, respectively, and BTALS-II and BTALS-I both exceed REF by 2.9 dB. BTALS-I/II reach accuracies of ζ = 43 .1 dB, which is extremely close to the upper bound of 43.4 dB imposed by the noise level in our experiment. The ability of the five algorithms to exceed REF originates from their superior noise rejection enabled by the tensor approach. It is interesting to note the hierarchy among the four BTALS algorithms in terms of how much they exceed REF for K = 9000 . The fewer parameters are assumed known, i.e., the more parameters BTALS estimates, the more the REF performance can be exceeded. Similar observations can be made for NF = 4 . For 
+
+NF = 1 , RBF has not yet fully reached the REF accuracy                        
+
+> TABLE II COMPARISON OF MINIMUM REQUIRED TRAINING OVERHEAD KEXP min
+> BASED ON FIG . 4.
+> NFBTALS-I BTALS-II RBF BTALS-III BTALS-IV 1289 314 >9000 229 235 4134 137 7500 72 73 7100 100 7000 50 50
+
+with K = 9000 (its accuracy is 0.6 dB below REF), and the accuracies of the four BTALS algorithms exceed the REF accuracy by 2.2 dB to 2.6 dB (with the same hierarchy discussed before). In terms of the minimum required training overhead, the five algorithms clearly cluster into three groups. BTALS-III and BTALS-IV have the lowest overheads, BTALS-I and BTALS-II have medium overheads, and RBF has a very large overhead. It makes sense that the overhead for BTALS-III and BTALS-IV is much lower since they estimate many fewer parameters. As documented in Table II, the overhead for BTALS-I/II is twice the overhead for BTALS-III/IV, while the overhead for RBF is more than an order of magnitude larger than for BTALS-I/II. For lower values of NF, the minimum required overhead increases. For BTALS-I, KEXP min increases from 100 for NF = 7 , via 134 for NF = 4 , to 289 for NF = 1 .The inferior performance of the RBF algorithm can be explained by the zero-forcing in its first step in (26). A necessary dimensional condition is K ≥ NM(NM+1) 2 , which explains RBF’s high values of KEXP min . Moreover, since ¯S is not orthogonal, the initial zero-forcing step can amplify and color the noise, thereby degrading performance. Nonetheless, RBF has one notable strength: RBF computes rank-one and rank-two factorizations in a bilinear fashion, which significantly reduces computational complexity compared to the BTALS algorithm (Algorithm 1) that computes two major matrix inversions per iteration. We also evaluated the performance of our algorithms under more severe noise conditions by adding synthetic white Gaussian noise to our experimental measurements. These studies yielded qualitatively very similar trends to those seen in Fig. 4 except that the lower [upper] bound on the achievable NMSE [ ζ] was increased [decreased] by the addition of the synthetic noise (which also impacts H(q)meas in (36) and (37)). Finally, we also test the BTALS-I algorithm on experimental data measured on Setup 2 (shown in Fig. 3b). The achieved accuracy as a function of K is plotted in Fig. 5, together with the MC-unaware benchmark. We observe a very sharp increase in accuracy as we increase K from 120 to 125, and thereafter, the accuracy improves only marginally. When K = 220 , we achieve ζ = 23 .1 dB. This is below the noise-imposed limit of 28.9 dB but plausible given the manual interventions and one-month gap between the experiments on Setup 1 and Setup 2, since the estimates of ˜α, ˜β, and ˜Γ are based on measurements on Setup 1. 
+
+E. Experimental SISO Performance Evaluation 
+
+Although the focus of this paper is on CE, we briefly describe two selected examples of experimental performance evaluations based on the estimated model for Setup 2 in this subsection. Thereby, we directly evidence the usability of the estimated model for model-based optimization. Moreover, we thereby demonstrate that our estimated model accurately predicts the end-to-end channels not only for random DMA configurations but also for optimized DMA configurations. For simplicity, we consider the SISO channel gain for a target direction and polarization as the key performance indicator (KPI). In the SISO case, the channel gain maps monotonically to system-level KPIs like bit-error rate and capacity. Optimizing the DMA configuration for SISO 11 -40 -30 -20 -10 010 1 10 2 10 3                                                               
+
+> 010 20 30 40 10 110 210 310 110 210 3
+> REF BTALS-I BTALS-II RBF BTALS-III BTALS-IV MC-aware MC-unaware
+> Fig. 4. Based on measurements on Setup 1 shown in Fig. 3a, two CE accuracy metrics (first row: NMSE defined in (36); second row: ζdefined in (37)) are plotted as a function of NF(different columns) and K(horizontal axis), for the five different algorithms described in Sec. V (BTALS-I, BTALS-II, RBF, BTALS-III, BTALS-IV), with and without MC awareness. The CE accuracy metrics achieved with the algorithm from [20] are plotted as reference (REF). TABLE III SUMMARY OF KEY METRICS FROM FIG . 6. Fig. 6 Target pol. Target dir. θTarget dir. ϕRAND OPT MEAS OPT PRED Channel gain enhancement (a) |Eθ|220 .9◦96 .4◦(4 .21 ±2.93) ×10 −35.26 ×10 −25.23 ×10 −212.5 (b) |Eϕ|227 .3◦−180 .0◦(2 .99 ±1.95) ×10 −33.81 ×10 −23.81 ×10 −212.7 -30 -20 -10 0100 120 140 160 180 200 220 010 20 30 BTALS_ALL MC-aware MC-unaware
+> Fig. 5. Based on measurements on Setup 2 shown in Fig. 3b, two CE accuracy metrics (first row: NMSE defined in (36); second row: ζdefined in (37)) are plotted as a function of K(horizontal axis) for the BTALS-I algorithm, with and without MC awareness.
+
+channel gain maximization is a high-dimensional, non-convex, discrete optimization problem. Various MC-aware discrete optimization algorithms for this problem were studied in the context of RISs in [56]. Here, we leverage a standard genetic algorithm for simplicity to perform the required discrete optimization based on our estimated model, using the negative of the target SISO channel gain as the fitness function. We use default parameters (population size: 200, maximum number of generations: 100 NM) and stop early if there is no improvement for the last 50 generations or if the improvement drops below a threshold of 10 −6.For the two selected targets, we display the comparison between predicted and measured end-to-end channels in Fig. 6 and summarize key metrics in Table III. In both cases, the agreement between our model’s prediction and the measurement is flawless. For benchmarking, we also show the mean and standard deviation of the channel gain across 100 randomly selected DMA configurations. The channel gain enhancement (measured as the channel gain with the optimized configuration relative to the mean channel gain with random configurations) exceeds 12 in both examples. VII. D ISCUSSION 
+
+Although we focused on conventional DMAs for our experimental validation in this paper, the proposed framework applies directly to any wireless system with wave-domain programmability arising from tunable lumped elements with known MC. Therefore, our method can be directly applied not only to RISs but also to real-world implementations of BD-RISs [33] and BD-DMAs [16]. For BD-RISs and BD-DMAs, the number of tunable lumped elements in the “beyond-diagonal” load network differs from the number of meta-elements, and NM represents the former; in addition, since the channel matrices represent the propagation between antenna ports and tunable lumped elements, they also account for static components within the “beyond-diagonal” load network. Furthermore, our method also directly applies to stacked and flexible embodiments of RISs and DMAs. VIII. C ONCLUSION 
+
+To summarize, we developed and experimentally validated tensor-decomposition-based CE techniques for DMAs with known MC based on an electromagnetically consistent multiport-network model. We formulated the MC-aware CE problem as a structured tensor factorization problem and proposed a generalized BTALS framework, specialized variants thereof for different levels of prior parameter knowledge, as well as a reciprocity-aware bilinear factorization method. Based on experimental measurements with an 18 GHz DMA prototype in two distinct setups, we showed that accounting for MC is essential and that the proposed tensor-based methods can outperform the reference technique from [20] thanks to their superior noise rejection. We systematically examined the minimum required training overhead and achieved accuracy. Finally, we demonstrated that the estimated model supports successful model-based 12 
+
+Fig. 6. Two selected examples of experimental validations of optimized DMA configurations for beam-steering in a desired direction. On the left, the predicted (left) and measured (right) radiation patterns with the optimized DMA configuration are shown for the θ (top) and ϕ (bottom) field components; a thin magenta line indicates the target direction. On the right, the predicted and measured radiation patterns of the optimized DMA configuration are compared in terms of two angular slices against the mean and standard deviation of 100 random DMA configurations; a green line indicates the target direction. Key metrics are summarized in Table III. 
+
+DMA optimization, including the prediction and experimental validation of optimized radiation patterns. These results highlight the practical relevance of MC-aware tensor methods for programmable wave-domain systems such as DMAs, RISs, and related architectures based on tunable lumped elements. ACKNOWLEDGMENT 
+
+The authors acknowledge IETR’s QOSC test facility (which is part of the CNRS RF-Net network). REFERENCES [1] P. del Hougne, M. Di Renzo, A. Alù, T. J. Cui, Y. Eldar, N. Engheta, W. Hu, and A. Ozcan, “Programmable wave-domain computing in wireless communications,” HAL:05487878 , 2026. [2] X. Zhang, A. F. Molisch, and S.-Y. Kung, “Variable-phase-shift-based RF-baseband codesign for MIMO antenna selection,” IEEE Trans. Signal Process. , vol. 53, no. 11, pp. 4091–4103, 2005. [3] V. Venkateswaran and A.-J. van der Veen, “Analog beamforming in MIMO communications with phase shift networks and online channel estimation,” IEEE Trans. Signal Process. , vol. 58, no. 8, pp. 4131–4143, 2010. [4] W. Roh, J.-Y. Seol, J. Park, B. Lee, J. Lee, Y. Kim, J. Cho, K. Cheun, and F. Aryanfar, “Millimeter-wave beamforming as an enabling technology for 5G cellular communications: Theoretical feasibility and prototype results,” IEEE Commun. Mag. , vol. 52, no. 2, pp. 106–113, 2014. [5] S. Han, I. Chih-Lin, Z. Xu, and C. Rowell, “Large-scale antenna systems with hybrid analog and digital beamforming for millimeter wave 5G,” 
+
+IEEE Commun. Mag. , vol. 53, no. 1, pp. 186–194, 2015. [6] T. Gong, N. Shlezinger, S. S. Ioushua, M. Namer, Z. Yang, and Y. C. Eldar, “RF chain reduction for MIMO systems: A hardware prototype,” 
+
+IEEE Syst. J. , vol. 14, no. 4, pp. 5296–5307, 2020. [7] T. Sleasman, M. F Imani, J. N. Gollub, and D. R. Smith, “Dynamic metamaterial aperture for microwave imaging,” Appl. Phys. Lett. , vol. 107, no. 20, 2015. [8] O. Yurduseven, D. L. Marks, T. Fromenteze, and D. R. Smith, “Dynamically reconfigurable holographic metasurface aperture for a Mills-Cross monochromatic microwave camera,” Opt. Exp. , vol. 26, no. 5, pp. 5281–5291, 2018. [9] I. Yoo, M. F. Imani, T. Sleasman, H. D. Pfister, and D. R. Smith, “Enhancing capacity of spatial multiplexing systems using reconfigurable cavity-backed metasurface antennas in clustered MIMO channels,” IEEE Trans. Commun. , vol. 67, no. 2, pp. 1070–1084, 2018. [10] T. A. Sleasman, M. F. Imani, A. V. Diebold, M. Boyarsky, K. P. Trofatter, and D. R. Smith, “Implementation and characterization of a two-dimensional printed circuit dynamic metasurface aperture for 13 
+
+computational microwave imaging,” IEEE Trans. Antennas Propag. ,vol. 69, no. 4, pp. 2151–2164, 2020. [11] P. del Hougne, M. F Imani, A. V. Diebold, R. Horstmeyer, and D. R. Smith, “Learned integrated sensing pipeline: Reconfigurable metasurface transceivers as trainable physical layer in an artificial neural network,” 
+
+Adv. Sci. , vol. 7, no. 3, p. 1901913, 2020. [12] M. Boyarsky, T. Sleasman, M. F. Imani, J. N. Gollub, and D. R. Smith, “Electronically steered metasurface antenna,” Sci. Rep. , vol. 11, no. 1, p. 4693, 2021. [13] N. Shlezinger, G. C. Alexandropoulos, M. F. Imani, Y. C. Eldar, and D. R. Smith, “Dynamic metasurface antennas for 6G extreme massive MIMO communications,” IEEE Wirel. Commun. , vol. 28, no. 2, pp. 106–113, 2021. [14] A. Jabbar, M. Alsyed, J. U. R. Kazim, Z. Pang, J. Le Kernec, M. A. Imran, Q. H. Abbasi, and M. Ur-Rehman, “60 GHz programmable dynamic metasurface antenna (DMA) for next-generation communication, sensing, and imaging applications: From concept to prototype,” IEEE Open J. Antennas Propag. , vol. 5, no. 3, pp. 705– 726, 2024. [15] F. Yven, J. Tapie, J. Sol, and P. del Hougne, “End-to-end dynamic metasurface antenna wireless system: Prototype, opportunities, and challenges,” arXiv:2506.09732 , 2025. [16] H. Prod’homme and P. del Hougne, “Beyond-diagonal dynamic metasurface antenna,” IEEE Commun. Lett. , vol. 30, pp. 258–262, 2025. [17] ——, “Mutual coupling in dynamic metasurface antennas: Foe, but also friend,” IEEE Wirel. Commun. , vol. 32, no. 4, pp. 30–36, 2025. [18] H. Prod’homme, J. Tapie, L. Le Magoarou, and P. del Hougne, “Benefits of mutual coupling in dynamic metasurface antennas,” IEEE Trans. Antennas Propag. , 2025. [19] R. J. Williams, P. Ramírez-Espinosa, J. Yuan, and E. De Carvalho, “Electromagnetic based communication model for dynamic metasurface antennas,” IEEE Trans. Wirel. Commun. , vol. 21, no. 10, pp. 8616–8630, 2022. [20] J. Tapie and P. del Hougne, “Experimental multiport-network parameter estimation for a dynamic metasurface antenna,” arXiv:2512.22607 , 2025. [21] M. Almunif, F. Alsolamy, and A. Grbic, “Network-based design of reactive beamforming metasurfaces,” IEEE Trans. Antennas Propag. ,vol. 73, no. 8, pp. 5970–5980, 2025. [22] A. Rabault, L. Le Magoarou, J. Sol, G. C. Alexandropoulos, N. Shlezinger, H. V. Poor, and P. del Hougne, “On the tacit linearity assumption in common cascaded models of RIS-parametrized wireless channels,” IEEE Trans. Wirel. Commun. , vol. 23, no. 8, pp. 10 001– 10 014, 2024. [23] P. del Hougne, “Reduced-rank mutual coupling representation and experimental estimation for large RIS,” IEEE Wirel. Commun. Lett. ,2026. [24] X. Zhang, H. Zhang, L. Yang, and Y. C. Eldar, “Channel estimation with dynamic metasurface antennas via model-based learning,” 
+
+arXiv:2311.08158 , 2023. [25] S. Yang, W. Lyu, B. Ning, Y. Xiu, Y. Xiong, H. Chen, C. Assi, and C. Yuen, “Extremely large-scale dynamic metasurface antennas (XL-DMAs): Near-field modeling and channel estimation,” 
+
+arXiv:2407.04954 , 2024. [26] M. Rezvani and R. Adve, “Channel estimation for dynamic metasurface antennas,” IEEE Trans. Wirel. Commun. , vol. 23, no. 6, pp. 5832–5846, 2024. [27] R. Zhang, G. Chen, L. Cheng, X. Guan, Q. Wu, W. Wu, and R. Zhang, “Tensor-based channel estimation for extremely large-scale MIMO-OFDM with dynamic metasurface antennas,” IEEE Trans. Wirel. Commun. , vol. 24, no. 7, pp. 6052–6068, 2025. [28] A. L. Magalhães, A. L. F. de Almeida, and A. L. Swindlehurst, “Channel estimation for downlink communications based on dynamic metasurface antennas,” arXiv:2506.12639 , 2025. [29] C. Miao, X. Wu, R. Zhang, J. Wang, Y. Ma, W. Wu, and B. Shim, “Channel estimation for dynamic metasurface antennas-based millimeter wave massive MIMO,” IEEE Trans. Veh. Technol. , vol. 75, no. 1, pp. 1591–1596, 2026. [30] J. Sol, H. Prod’homme, L. Le Magoarou, and P. del Hougne, “Experimentally realized physical-model-based frugal wave control in metasurface-programmable complex media,” Nat. Commun. , vol. 15, no. 1, p. 2841, 2024. [31] P. del Hougne, “Experimental multiport-network parameter estimation and optimization for multi-bit RIS,” IEEE Wirel. Commun. Lett. , vol. 15, pp. 790–794, 2025. [32] ——, “Ambiguity-aware segmented estimation of mutual coupling in large RIS: Algorithm and experimental validation,” IEEE Trans. Commun. , vol. 74, pp. 4615–4628, 2026. [33] ——, “A physics-compliant diagonal representation for wireless channels parametrized by beyond-diagonal reconfigurable intelligent surfaces,” IEEE Trans. Wirel. Commun. , vol. 24, no. 7, pp. 5871–5884, 2025. [34] P. Zheng, S. Tarboush, H. Sarieddeen, and T. Y. Al-Naffouri, “Mutual coupling-aware channel estimation and beamforming for RIS-assisted communications,” IEEE Trans. Wirel. Commun. , vol. 25, pp. 4374–4390, 2026. [35] T. Qiu, R. Li, C. Pan, T. Zhang, D. Xia, C. Wang, and H. Ren, “Mutual coupling aware channel estimation for RIS-aided multi-user mmWave systems,” arXiv:2511.08112 , 2025. [36] P. Zheng, H. Chen, T. Ballal, M. Valkama, H. Wymeersch, and T. Y. Al-Naffouri, “JrCUP: Joint RIS calibration and user positioning for 6G wireless systems,” IEEE Trans. Wirel. Commun. , vol. 23, no. 6, pp. 6683–6698, 2024. [37] A. L. F. de Almeida, G. Favier, and J. C. M. Mota, “PARAFAC-based unified tensor modeling for wireless communication systems with application to blind multiuser equalization,” Signal Process. , vol. 87, no. 2, pp. 337–351, 2007. [38] G. Favier and A. L. F. de Almeida, “Overview of constrained PARAFAC models,” EURASIP J. Adv. Signal Process. , vol. 2014, no. 1, pp. 1–25, 2014. [39] A. L. F. de Almeida, G. Favier, and J. C. M. Mota, “A constrained factor decomposition with application to MIMO antenna systems,” IEEE Trans. Signal Process. , vol. 56, no. 6, pp. 2429–2442, 2008. [40] A. L. F. de Almeida and G. Favier, “Double Khatri–Rao space–time– frequency coding using semi-blind PARAFAC-based receiver,” IEEE Signal Process. Lett. , vol. 20, no. 5, pp. 471–474, 2013. [41] G. Favier and A. L. F. de Almeida, “Tensor space–time–frequency coding with semi-blind receivers for MIMO wireless communication systems,” IEEE Trans. Signal Process. , vol. 62, no. 22, pp. 5987–6002, 2014. [42] L. R. Ximenes, G. Favier, and A. L. F. de Almeida, “Semi-blind receivers for non-regenerative cooperative MIMO communications based on nested PARAFAC modeling,” IEEE Trans. Signal Process. , vol. 63, no. 18, pp. 4985–4998, 2015. [43] G. T. de Araújo, A. L. F. de Almeida, and R. Boyer, “Channel estimation for intelligent reflecting surface assisted MIMO systems: A tensor modeling approach,” IEEE J. Sel. Top. Signal Process. , vol. 15, no. 3, pp. 789–802, 2021. [44] G. T. de Araújo and A. L. F. de Almeida, “PARAFAC-based channel estimation for intelligent reflective surface assisted MIMO system,” in 
+
+Proc. IEEE 11th Sensor Array Multichannel Signal Process. Workshop ,2020, pp. 1–5. [45] A. L. F. de Almeida, B. Sokal, H. Li, and B. Clerckx, “Channel estimation for beyond diagonal RIS via tensor decomposition,” IEEE Trans. Signal Process. , vol. 73, pp. 4764–4779, 2025. [46] B. Sokal, Fazal-E-Asim, A. L. F. de Almeida, H. Li, and B. Clerckx, “A decoupled channel estimation method for beyond diagonal RIS,” in 
+
+Proc. 58th Asilomar Conf. Signals, Syst., Comput. , 2024, pp. 1395–1399. [47] T. G. Kolda and B. W. Bader, “Tensor decompositions and applications,” 
+
+SIAM Rev. , vol. 51, no. 3, pp. 455–500, Aug. 2009. [48] N. D. Sidiropoulos, L. De Lathauwer, X. Fu, K. Huang, E. E. Papalexakis, and C. Faloutsos, “Tensor decomposition for signal processing and machine learning,” IEEE Trans. Signal Process. , vol. 65, no. 13, pp. 3551–3582, 2017. [49] J. Tapie, H. Prod’homme, M. F. Imani, and P. del Hougne, “Systematic physics-compliant analysis of over-the-air channel equalization in RIS-parametrized wireless networks-on-chip,” IEEE J. Sel. Areas Commun. ,vol. 42, no. 8, pp. 2026–2038, 2024. [50] P. Zheng, R. Wang, A. Shamim, and T. Y. Al-Naffouri, “Mutual coupling in RIS-aided communication: Model training and experimental validation,” IEEE Trans. Wirel. Commun. , vol. 23, no. 11, pp. 17 174– 17 188, 2024. [51] P. del Hougne, “Virtual VNA 2.0: Ambiguity-free scattering matrix estimation by terminating not-directly-accessible ports with tunable and coupled loads,” IEEE Trans. Antennas Propag. , vol. 73, no. 7, pp. 4903– 4908, 2025. [52] ——, “Virtual VNA 3.0: Unambiguous scattering matrix estimation for non-reciprocal systems by leveraging tunable and coupled loads,” IEEE Trans. Instrum. Meas. , vol. 74, p. 8006515, 2025. [53] ——, “Wireless multi-port sensing: Virtual-VNA-enabled de-embedding of an over-the-air fixture,” IEEE Trans. Antennas Propag. , 2025. [54] A. Salmi, V. Viikari, and P. del Hougne, “Electromagnetically consistent bounds on information transfer in real-world RIS-parametrized wireless channels,” arXiv:2601.20017 , 2026. [55] I. Yoo, M. F. Imani, T. Sleasman, and D. R. Smith, “Efficient complementary metamaterial element for waveguide-fed metasurface antennas,” Opt. Exp. , vol. 24, no. 25, pp. 28 686–28 692, 2016. [56] C. Hammami, L. Le Magoarou, and P. del Hougne, “Statistical multiport-network modeling and efficient discrete optimization of RIS,” IEEE Wirel. Commun. Lett. , 2026.

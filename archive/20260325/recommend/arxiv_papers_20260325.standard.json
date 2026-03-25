@@ -1,0 +1,130 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-25T20:47:32.015110+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.18335v1",
+      "title": "Distributed Unknown Input Observer Design: A Geometric Approach",
+      "abstract": "We present a geometric approach to designing distributed unknown input observers (DUIOs) for linear time-invariant systems, where measurements are distributed across nodes and each node is influenced by \\emph{unknown inputs} through distinct channels. The proposed distributed estimation scheme consists of a network of observers, each tasked with reconstructing the entire system state despite having access only to local input-output signals that are individually insufficient for full state observation. Unlike existing methods that impose stringent rank conditions on the input and output matrices at each node, our approach leverages the $(C,A)$-invariant (conditioned invariant) subspace at each node from a geometric perspective. This enables the design of DUIOs in both continuous- and discrete-time settings under relaxed conditions, for which we establish sufficiency and necessity. The effectiveness of our methodology is demonstrated through extensive simulations, including a practical case study on a power grid system.",
+      "authors": [
+        "Ruixuan Zhao",
+        "Guitao Yang",
+        "Thomas Parisini",
+        "Boli Chen"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-03-18T22:46:23+00:00",
+      "link": "https://arxiv.org/pdf/2603.18335v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "distributed observers for state reconstruction from local measurements",
+      "llm_evidence_cn": "用于从局部测量中进行状态重建的分布式观测器",
+      "llm_evidence": "用于从局部测量中进行状态重建的分布式观测器",
+      "canonical_evidence": "用于从局部测量中进行状态重建的分布式观测器",
+      "llm_tldr_en": "A geometric approach for distributed state reconstruction using networked observers and local sensor data.",
+      "llm_tldr_cn": "一种利用网络化观测器和局部传感器数据进行分布式状态重建的几何方法。",
+      "llm_tldr": "一种利用网络化观测器和局部传感器数据进行分布式状态重建的几何方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.19155v1",
+      "title": "Channel Estimation via Tensor Decomposition for Dynamic Metasurface Antennas with Known Mutual Coupling: Algorithms and Experiments",
+      "abstract": "Dynamic metasurface antennas (DMAs) are an emerging hybrid-MIMO technology distinguished by an ultrathin form factor, low cost, and low power consumption. In real-world DMA prototypes, mutual coupling (MC) between meta-elements is generally non-negligible; some architectures even deliberately exploit strong MC to enhance wave-domain flexibility. In this paper, we address channel estimation (CE) for DMAs with known MC by formulating it as a tensor-decomposition problem. We develop a generalized block Tucker alternating least squares (BTALS) algorithm, together with specialized variants for cases with known direct and/or feed channel. We also develop a reciprocity-aware bilinear factorization method for the case with known direct channel. We experimentally validate our algorithms using an 18 GHz DMA prototype whose 7 feeds and 96 meta-elements are strongly coupled via a chaotic cavity. Our general BTALS algorithm reaches an accuracy of 43.1 dB, only 0.3 dB below the upper bound imposed by experimental noise. All proposed algorithms generally outperform the prior-art reference scheme thanks to the superior noise rejection enabled by the tensor-based framework. We further study the minimum number of required measurements as a function of the number of feeds and demonstrate the importance of MC awareness by comparison with an MC-unaware benchmark. Finally, we apply BTALS to a second setup enabling the prediction of the DMA's full dual-polarization 3D radiation diagram. We also measure the latter for DMA configurations optimized for channel-gain enhancement based on the estimated channels. Altogether, our work establishes the practical relevance of MC-aware tensor methods; beyond DMAs, it applies to all wireless systems with wave-domain programmability enabled by tunable lumped elements.",
+      "authors": [
+        "Jean Tapie",
+        "Bruno Sokal",
+        "André L. F. de Almeida",
+        "Philipp del Hougne"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "physics.app-ph"
+      ],
+      "published": "2026-03-19T17:11:12+00:00",
+      "link": "https://arxiv.org/pdf/2603.19155v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "tensor decomposition for channel estimation in antenna arrays with mutual coupling",
+      "llm_evidence_cn": "具有互耦效应的阵列天线信道估计张量分解算法",
+      "llm_evidence": "具有互耦效应的阵列天线信道估计张量分解算法",
+      "canonical_evidence": "具有互耦效应的阵列天线信道估计张量分解算法",
+      "llm_tldr_en": "Develops tensor-decomposition algorithms for estimation in arrays with known mutual coupling effects.",
+      "llm_tldr_cn": "开发了用于处理具有已知互耦效应的阵列估计问题的张量分解算法。",
+      "llm_tldr": "开发了用于处理具有已知互耦效应的阵列估计问题的张量分解算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.20602v1",
+      "title": "Interpretable Operator Learning for Inverse Problems via Adaptive Spectral Filtering: Convergence and Discretization Invariance",
+      "abstract": "Solving ill-posed inverse problems necessitates effective regularization strategies to stabilize the inversion process against measurement noise. While classical methods like Tikhonov regularization require heuristic parameter tuning, and standard deep learning approaches often lack interpretability and generalization across resolutions, we propose SC-Net (Spectral Correction Network), a novel operator learning framework. SC-Net operates in the spectral domain of the forward operator, learning a pointwise adaptive filter function that reweights spectral coefficients based on the signal-to-noise ratio. We provide a theoretical analysis showing that SC-Net approximates the continuous inverse operator, guaranteeing discretization invariance. Numerical experiments on 1D integral equations demonstrate that SC-Net: (1) achieves the theoretical minimax optimal convergence rate ($O(δ^{0.5})$ for $s=p=1.5$), matching theoretical lower bounds; (2) learns interpretable sharp-cutoff filters that outperform Oracle Tikhonov regularization; and (3) exhibits zero-shot super-resolution, maintaining stable reconstruction errors ($\\approx 0.23$) when trained on coarse grids ($N=256$) and tested on significantly finer grids (up to $N=2048$). The proposed method bridges the gap between rigorous regularization theory and data-driven operator learning.",
+      "authors": [
+        "Hang-Cheng Dong",
+        "Pengcheng Cheng",
+        "Shuhuan Li"
+      ],
+      "primary_category": "stat.ML",
+      "categories": [
+        "stat.ML",
+        "cs.AI",
+        "cs.LG"
+      ],
+      "published": "2026-03-21T02:19:19+00:00",
+      "link": "https://arxiv.org/pdf/2603.20602v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Operator learning for inverse problems and noise stabilization",
+      "llm_evidence_cn": "用于反问题的算子学习和噪声稳定技术",
+      "llm_evidence": "用于反问题的算子学习和噪声稳定技术",
+      "canonical_evidence": "用于反问题的算子学习和噪声稳定技术",
+      "llm_tldr_en": "Proposes a spectral correction network for solving ill-posed inverse problems, applicable to sensor reconstruction.",
+      "llm_tldr_cn": "提出一种用于解决病态反问题的谱修正网络，可应用于传感器信号重建。",
+      "llm_tldr": "提出一种用于解决病态反问题的谱修正网络，可应用于传感器信号重建。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using TMR sensor arrays",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
