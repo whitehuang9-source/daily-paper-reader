@@ -1,0 +1,257 @@
+Title: Ultrawide Bandwidth Optomechanical Magnetometry Using Flux Concentration
+
+URL Source: https://arxiv.org/pdf/2603.23944v1
+
+Published Time: Thu, 26 Mar 2026 00:43:57 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+# Ultrawide Bandwidth Optomechanical Magnetometry Using Flux Concentration 
+
+# Benjamin J. Carey 1, 2, 3 * | Nathaniel Bawden 1,2,3 * |Fernando Gottardo 1,2 | James S. Bennett 4,5 | Douglas Bulla 6 | Scott Foster 6 | Warwick P. Bowen 1,2,3 
+
+> 1
+
+School of Mathematics and Physics, The University of Queensland, St Lucia, Queensland 4067, Australia. 
+
+> 2
+
+ARC Centre of Excellence for Engineered Quantum Systems, St Lucia, Queensland 4067, Australia 
+
+> 3
+
+ARC Centre of Excellence in Quantum Biotechnology, St. Lucia, Queensland 4067, Australia 
+
+> 4
+
+Centre for Quantum Dynamics, Griffith University, Nathan, Queensland 4111, Australia. 
+
+> 5
+
+School of Mathematical Sciences, Queensland University of Technology, Gardens Point, Queensland 4000, Australia. 
+
+> 6
+
+Australian Government Department of Defence Science and Technology, Edinburgh, South Australia 5111, Australia 
+
+Correspondence 
+
+Warwick P. Bowen, School of Mathematics and Physics, The University of Queensland, St Lucia, Queensland 4067, Australia. Email: w.bowen@uq.edu.au 
+
+Funding information 
+
+Defense Science and Technology Group (DSTG), Next Generation Technologies Fund (NGTF) and Advanced Strategic Capabilities Accelerator (ASCA); Australian Research Council Centre of Excellence for Engineered Quantum systems (EQUS, CE170100009): Australian Research Council Centre of Excellence in Quantum Biotechnology (QUBIC, CE230100021); Queensland Defense Science Alliance (QDSA); Orica Australia Pty Ltd ;Queensland Government, department of education, tourism, science, and innovation (Quantum 2032 Challenge) 
+
+Low-frequency magnetic fields carry vital information for neuroscience, navigation, and Earth science. However, they are generally weak, making it challenging to measure them with compact, room-temperature magnetometers. To over-come this challenge, we combine an on-chip optomechani-cal magnetometer with a high-permeability flux concentra-tor. Beyond boosting sensitivity and bandwidth, exploiting the concentrator’s nonlinear response converts low-frequency magnetic fluctuations into higher-frequency signals where the sensor is intrinsically most responsive. This sidesteps the technical noise that has long constrained the applica-tion of optomechanical magnetometry at low frequencies. Our measurements show order-of-magnitude improvements in sensitivity and extend performance into the sub-hertz regime, achieving <20 nT/ √Hz down to 3 Hz and <100 nT/ √Hz at 0.1 Hz. Because this approach requires no redesign of the underlying architecture, it can be readily applied across magnetometer technologies, opening the way to practical low-frequency sensing for applications from brain activity mapping to undersea navigation and biomedical diagnos-tics. 
+
+> *Equally contributing authors.
+
+1 
+
+> arXiv:2603.23944v1 [physics.optics] 25 Mar 2026 2Carey, Bawden et al.
+> K E Y W O R D S
+
+Optomechanical sensing, Magnetometry, Flux-concentration, Nonlinear mixing, On-chip optomechanics, On-chip magnetometer 
+
+## 1 | INTRODUCTION 
+
+Magnetic field sensing (magnetometry) enables technologies ranging from biomedical diagnostics [1] to magnetic anomaly detection [2], GPS-free navigation and geophysical surveying [3]. Superconducting quantum interference devices (SQUIDs) [4] or spin-exchange relaxation-free (SERF) magnetometers [1] are the most sensitive technologies to date. However, the next generation of applications demands the development of chip-scale sensors that operate without cryogenic temperatures or magnetically shielded environments. Optomechanical magnetometers stand out in this regard, combining room-temperature, earth-field operation with the scalability of integrated photonics [5, 6]. Despite these potential advantages, their performance remains constrained by limited sensitivity and bandwidth, most notably at low frequencies where laser noise and other fluctuations become significant [7]. Optomechanical sensors exploit the dual enhancement of mechanical resonances, which provide enhanced sig-nal response to stimuli, coupled to photonic resonances, which provide enhanced readout. This has enabled small-footprint devices for precision measurements of force [8–10], acceleration [11–13], sound [14–16], pressure [17] and temperature [18]. They are particularly attractive for magnetic field sensing because of their compatibility with mag-netostrictive materials, translating the intrinsically small magnetic-field-induced strains into mechanically amplified signals that can be read out optically with high sensitivity [5, 19–21]. Recent demonstrations of on-chip devices have achieved sensitivities approaching 1 pT/ √Hz [22], with larger devices achieving sensitives in the range of hundreds of femtoteslas [21, 23]. However, their performance remains limited by the relatively small strain induced by magne-tostrictive materials and by low-frequency noise. This not only restricts bandwidth and sensitivity but also obscures signals in the Hz–kHz frequency bands most relevant to neuroscience, navigation, and geophysics. Addressing these limitations requires approaches that enhance sensitivity, extend bandwidth, and allow access to low-frequency signals. High-permeability flux concentrators provide one potential solution; by channeling magnetic flux into the sensing region, they can boost effective sensitivity without altering the underlying sensor architecture. Flux concentrators have been successfully employed to improve the performance of diamond [24], atomic vapor [25], Hall effect [26], and SQUID-based [27] magnetometers. However, they have not yet been applied with optomechan-ical magnetometers, nor have the been applied to facilitate low frequency magnetometery, a longstanding challenge for cavity optomechanical magnetometers [7, 14]. In this work, we demonstrate that millimeter-scale, high permeability structures can serve as flux concentra-tors to enhance the performance of silicon-chip-based optomechanical magnetometers, yielding an almost order-of-magnitude passive improvement in sensitivity, consistent with theoretical modeling. Further, we exploit the nonlinear magnetization of the concentrators to up-convert low-frequency magnetic signals into the resonance band of the mechanical sensor with very high conversion efficacy, retaining over 60% of the original signal compared to less than 1% efficacy from previous attempts [19]. This enables operation with flat sensitivity of better than 20 nT/ √Hz at frequencies down to 3 Hz, and <100 nT/ √Hz down to 0.1 Hz, significantly broadening the practical utility of on-chip optomechanical magnetometers for sub-Hz applications. Our approach could be readily applied to other optome-Carey, Bawden et al. 3
+
+chanical magnetometers which possess even better native sensitivity, such as those presented in [22], potentially offering sensitivities beyond 10 fT/ √Hz at hertz or even sub-hertz frequencies. These flux concentrators could also be integrated with on-chip scalable production [28]. Together our results establish optomechanical sensing as a viable route to compact, room-temperature magnetometers capable of detecting low-frequency magnetic signals central to neuroscience, navigation, and Earth-science. 
+
+## 2 | FLUX CONCENTRATION 2.1 | Magnetometer Design 
+
+The optomechanical magnetometer used in this work is built on a freestanding silicon-on-insulator (SOI) platform with integrated optical readout. The fabrication process and operating principle are described in detail by Gottardo et al. 
+
+(2025) [6], and a schematic of the device is shown in Fig. 1(a) inset. The optical resonator comprises a 7-μm-long one-dimensional photonic cavity formed from a 600-nm-wide slot-ted waveguide terminated by a pair of photonic crystal mirrors. At one end of the cavity, a triangular cantilever (136 μmbase × 86 μm height) serves as the mechanical transducer. A magnetostrictive galfenol film (Fe 82 Ga 18 , 600 nm thick [29]) deposited on the cantilever converts applied magnetic fields into strain, driving mechanical motion. This motion perturbs the optical cavity resonance, producing a measurable frequency shift. Optical interrogation is performed by tuning a laser to the slope of the cavity resonance and detecting the re-flected light. Magnetic-field-induced resonance shifts translate directly into intensity modulation of the reflected signal, enabling sensitive optical readout. Light is coupled on and off chip through an inverted taper waveguide, in-terfaced with a tapered optical fiber. To ensure robust operation, the fiber is permanently bonded to the waveguide facet using optical adhesive (NOA 86H) in a manner similar to that presented in [6, 30], eliminating the need for in-situ 
+
+alignment during measurement. 
+
+## 2.2 | Design of flux concentrators 
+
+To effectively concentrate the magnetic field into the field-sensitive region of the optomechanical magnetometer we perform systematic modeling of the flux concentration system, both analytically and numerically. This allowed for the tailoring of concentrator geometry and material choice for maximum performance. 
+
+## 2.2.1 | Mathematical description of flux concentration 
+
+For a high permeability ( μr ) flux concentrator aligned with a uniform external magnetic field ( Bext ), the internal mag-netic flux density at its center is expressed as [31, 32] (see Sec. S.1.A for detailed derivation) 
+
+B0 = μr Bext 
+
+N (μr − 1) + 1 , (1) where N is the demagnetization factor along the field axis, which is set by the geometry of the body [32] (see Sec. S.1, Eq. S3). For a flux-concentrating needle of length l , width w , and thickness h, the average field at the tip is well approximated by B0/m, where m = l /√w · h is the needle aspect ratio and the axial field decays with distance r from 4 Carey, Bawden et al. 
+
+the tip as (see Sec. S.1.A for details): 
+
+B (r ) = B0
+
+m +
+
+
+
+Bext − B0
+
+m
+
+
+
+·
+
+ l 2
+
+m2r 2 + 1
+
+ − 12
+
+. (2) From this expression, the enhancement-factor (in dB) can be expressed as: EF (r ) = 20 log 10 
+
+ B (r )
+
+Bext 
+
+
+
+(3) These relations (Eqs. 1 & 2) emphasize the two key parameters for the design of flux concentrators: magnetic perme-ability ( μr ) and aspect ratio m. Increasing both of these will lead to enhanced concentration. This can be achieved with flux concentrator needles made of the high-μr material Metglas (see Sec. S.1 and Fig. S1). 
+
+## 2.2.2 | Numerical modeling of flux concentration 
+
+To validate the analytical predictions and further inform the experimental flux concentrator design, we performed finite element method (FEM) simulations using COMSOL Multiphysics. A Metglas needle, 15 mm long and 120 μm
+
+× 25 μm in cross-section, was placed in a uniform DC magnetic field oriented parallel to its length. The simulations, shown in Fig. 1(b), clearly illustrate how the field lines are funneled toward the needle and concentrated near the tips, producing a strong local enhancement of the magnetic flux density. Eq. 5 predicts a field enhancement of approximately 20 dB at a sensor—needle spacing of 30 μm (averaged across the area of the magneto-mechanical transducer, as discussed in Sec. 2.1), equivalent to an order-of-magnitude im-provement in sensitivity. Moreover, the calculated decay of enhancement with increasing distance is in excellent agreement with the experimental results presented in Sec. 2.6, providing confidence in both the model and the de-sign choice of high-aspect-ratio Metglas microneedles. To assess the frequency dependence of the magnetic field concentration from the concentrator, we also mod-eled its response to a uniform AC magnetic field of varying frequency and extracted the enhancement factor. The simulations reveal a flat enhancement spectrum up to approximately 100 kHz, followed by a gradual roll-off at higher frequencies, with a reduction of approximately 2 dB at the mechanical resonance frequency of the optomechanical device (590 kHz) (see Sec. S.4), confirming that the flux concentrator provides broadband performance across the frequency range accessible for optomechanical magnetometers. 
+
+## 2.2.3 | Fabrication of flux concentrators 
+
+The modeling presented in Sec. 2.2.1, 2.2.2 & S.1 predicts that flux concentration is maximized by combining high mag-netic permeability with a large aspect ratio. To achieve this we fabricated microneedles from 25-μm-thick Metglas ®
+
+brazing foil (which boasts a relative permeability of μr ≈ 10 5). Needles of 125 μm width and varying lengths were cut using a diamond-blade dicing saw, yielding aspect ratios ( m = l /√w h ) of ∼270. The width was chosen to be commen-surate with the dimensions of the magnetostriction transducer used in the optomechanical device (136 μm × 86 μm), ensuring efficient spatial overlap between the concentrated magnetic field and the magnetostrictive element. Because the resulting needles are mechanically fragile, they were mounted onto ∼1 mm-thick silicon chiplets for support. This provided rigidity for handling and precise alignment while leaving sufficient overhang to precisely posi-tion the tips close to the device during experiments. This mounting does not perturb the local magnetic environment, Carey, Bawden et al. 5
+
+as Si has a negligible magnetic susceptibility. 
+
+## 2.3 | Experimental setup 
+
+Magnetic field sensing experiments were carried out with the magnetometer positioned inside a Helmholtz coil, as shown in Fig. 1(a), providing a uniform and well-calibrated field environment. A sinusoidal drive voltage was applied to the coil to generate magnetic fields with an RMS amplitude of 21 μT, verified using a commercial teslameter (Lake Shore F71) and in agreement with theoretical calculations. The flux concentrator was mounted on a motorized three-axis translation stage for precision alignment above the magnetometer. This allowed reproducible control of the spacing between the needle tip and the magnetostrictive transducer, as informed by the modeling in Sec. 2.2. The optical readout functions by monitoring shifts of the optical cavity resonance with a tunable external cavity diode laser (New Focus TLB-6730-P) which was tuned to the side of the resonance. 
+
+F I G U R E 1 a) Schematic of the experimental setup. A Helmholtz coil produces a magnetic field that is directed onto the sensor by the flux concentrator. Inset: Device architecture. b) 2D cross-section of COMSOL simulation, demonstrating the magnetic field lines and relative flux density. c) Measured power spectra of a 590 kHz 21 μTapplied field with (conc.) and without (no conc.) the flux concentrator, with signal-to-noise ratio (SNR) and enhancement factor (EF) emphasized. Here the resolution bandwidth (RBW) is 1.97 kHz. The noise floor is indicated by the gray shaded region. 
+
+## 2.4 | Sensitivity enhancement 
+
+To quantify the improvement in performance with the flux concentrator, the needle was positioned approximately 10 μm above the center of the cantilever. An AC magnetic field was applied at 590 kHz, corresponding to the fun-damental cantilever resonance where the optomechanical sensor achieves peak magnetic sensitivity [6]. The result was a power spectrum with a sharp peak at the applied drive frequency, as depicted in Fig. 1(c). The sensitivity Bmin 
+
+at resonance was extracted from the known applied field Bapp and the measured signal-to-noise ratio (SNR in linear 6 Carey, Bawden et al. 
+
+scaling) according to [19]: 
+
+Bmin = Bapp 
+
+√SNR · RBW , (4) where RBW is the resolution bandwidth of the spectrum analyzer. With the concentrator in place, the device exhibited a peak sensitivity of 11 nT/ √Hz . This value is comparable to the best reported performance of integrated SOI magnetometers operated in vacuum, but here it is achieved in air, where squeeze-film damping typically degrades the mechanical response [6]. The enhancement of the signal power, in the linear response regime can be quantified through the enhancement factor: EF = 10 log 10 
+
+ Pconc 
+
+P0
+
+
+
+[dB ], (5) where P0 & Pconc are the measured signal power with and without flux concentration respectively. The enhancement factor improves the effective sensitivity (in-line with Eq. 3) of the magnetometer when compared with the sensitiv-ity when the concentrator is retracted as Bconc min = Bmin /10 EF /20 . We found experimentally that the flux concentrator improved the sensitivity of the magnetometer from 89 nT/ √Hz to 11 nT/ √Hz , corresponding to an EF of 18 dB, con-sistent with the order-of-magnitude B-field gain predicted in Sec. 2.2 & S.1. 
+
+## 2.5 | Relative position 
+
+F I G U R E 2 Heat-map of the magnetometer sensitivity as the position of the flux concentrator is varied. The size of the galfenol and flux concentrator are indicated by the dashed lines. To determine how the sensitivity depends on the transverse placement of the flux concentrator, a magnetic field was applied at the mechanical resonance frequency while the flux concentrator was scanned laterally across the sensor area at a fixed height of approximately 25 μm. The resulting sensitivity heat map, shown in Fig. 2, reveals a localized Carey, Bawden et al. 7
+
+enhancement when the concentrator is aligned with the cantilever, consistent with the field funneling predicted by the FEM simulations in Sec. 2.6 and depicted in Fig. 1(b). The triangular shape of the cantilever is not fully resolved in the map because the lateral dimensions of the flux concentrator (136 μm) are comparable to the base of the triangular cantilever (125 μm). This introduces spatial averaging that smears out the cantilever profile. These results highlight the importance of geometric matching between the concentrated flux and the sensing ele-ment, wherein the external field sensitivity is optimized by maximizing the magnetic flux through the magnetostrictive cantilever. This offers a potential pathway to even further improved performance in future devices via the use of ta-pered geometries ( e.g. [24]) to increase total flux in, and hence the force exerted by, the magnetostrictive transducer. 
+
+F I G U R E 3 (a) Sensitivity spectra of the magnetometer for different flux concentrator heights above the device. (b) Measured and modeled enhancement of peak magnetic sensitivity as a function of flux concentrator height. Here, both the mathematical model, and FEM simulations results are determined using the geometry and permeability of the metglas flux concentrator. 
+
+## 2.6 | Height dependence and field decay 
+
+To quantify the effect of vertical position and validate the modeling, the concentrator was positioned at the transverse location of maximum signal enhancement, and the sensitivity spectrum was recorded as the height of the flux con-centrator above the device was varied. At each height, the frequency of the applied field was swept to measure the device sensitivity across a broad bandwidth, as shown in Fig. 3. The sensitivity improvement is apparent across the entire measurement range and broadly frequency independent, with slightly more enhancement at lower frequencies (<200 kHz), which arises from the frequency dependence of the complex permeability ( μ = μ′ + i μ ′′ ) and is consistent with the frequency-dependent enhancement shown from the COMSOL modeling in Section S.4. The extracted peak sensitivities and corresponding enhancement factors (EFs) are summarized in Fig. 3(b) and compared with predictions from both COMSOL simulations and the analytical model. The experimentally observed enhancement is in excellent agreement with both modeling approaches. The agreement between experiment and modeling validates the design approach and underscores the utility of these models for optimizing future flux concen-trator geometries. 8 Carey, Bawden et al. 
+
+## 3 | OPERATIONAL BANDWIDTH 
+
+In principle, the concentrator should provide enhancement across a wide frequency range, from towards DC where many application-relevant magnetic signals arise, up to a higher frequency roll-off in the 100s of kHz–MHz region, determined by the frequency dependence of the material’s permeability (Sec. S.4). This behavior is observed in Fig. 3(a), with enhancement observed at all frequencies from 2 kHz to 800 kHz. A network analyzer was used to measure the sensitivity from 100 Hz to 10 kHz and from 5 kHz to 1 MHz. However, because of the resolution bandwidth of the spectrum analyzer used, the low-frequency sensitivity is not easily determined. To evaluate the low frequency response, the sensitivity of our device was measured down to 1 Hz in three over-lapping frequency bands, as shown in Fig. 4(a). Due to the resolution bandwidth (RBW) limitation of the analyzer, individual frequency response measurements were performed to assess the sensitivity at lower frequencies. The fre-quency ranges used in these measurements overlap, and the mutual agreement in the regions of overlap demonstrates the reliability and compatibility of the methods used. The mechanical resonance peak is clearly observable at 590 kHz, accompanied by a relatively flat sensitivity of 
+
+∼50 nT/ √Hz between 400 kHz and 20 kHz. Below this, the sensitivity degrades toward lower frequencies, propor-tional to 1/f 0.7, caused by an increasing noise floor. This is consistent with previous reports of optomechanical sensors [7, 14]. To rule out laser noise as the source of this low-frequency degradation, the measurements were repeated using a significantly lower-noise, narrow-linewidth laser (NKT Photonics Adjustik E15), which yielded un-changed results. The sensitivity spectra were also measured with the flux concentrator removed, yielding the same low-frequency behavior, thus ruling out contributions of magnetic noise sources arising from within the concentrator, such as Barkhausen noise [33]. Further measurements confirmed that electronic noise was also not responsible for the degradation. Therefore, the low frequency sensitivity degradation likely arises from a combination of environ-mental noise sources ( e.g. thermal, acoustic, vibrational) which manifest as phase or polarization fluctuations, or from fundamental noise sources within the device such as low-frequency stress noise within the cantilever. 
+
+## 3.1 | Nonlinear mixing based sensing 
+
+To evade the low frequency noise, we implemented a nonlinear signal mix-up technique, similar in principle to the method demonstrated by Forstner et al. [19], wherein a strong high-frequency local oscillator magnetic field is ap-plied in order to drive the system into nonlinearity. Lower-frequency signals then manifest as sidebands around the local oscillator frequency. After detection, these sidebands can be demodulated to shift the signal back to its original frequency. Unlike the approach shown in [19], where nonlinearity originated from the elasticity within the magne-tostrictive element, here it arises from the magnetization nonlinearity of the flux concentrator (see Sec. S.1.B). This allows us to exploit the high magnetic susceptibility of Metglas to generate the mixed fields, while the galfenol remains in its optimal linear regime of magnetization and magnetostriction. This method has several distinct advan-tages. Firstly, it allows for operation at the mechanical resonance, and hence the maximum mechanical susceptibility, improving optical-noise-limited sensitivity (see Sec. S.2). Secondly, because the nonlinearity exists outside of the mag-netostrictive material, low-frequency thermomechanical noise is not mixed-up to the operational frequency. This is in direct contrast to Ref. [19], where the ultimate magnetic sensitivity is determined by the low-frequency thermome-chanical strain noise in the magnetostrictive material, independent of the local oscillator field strength. Conversely, in our approach the magnetic field strength is independent of the low-frequency stress noise. Since the local oscil-lator amplifies the sideband generated by the low-frequency field without introducing noise, the sensitivity to low-frequency signals can in principle be enhanced beyond the on-resonance thermomechanical limit. This provides a Carey, Bawden et al. 9
+
+pathway to overcome the fundamental noise source that has limited the sensitivity and bandwidth of optomechanical magnetometers to date. The nonlinear response can be characterized by the second-order susceptibility (see Sec. S.1.B for details), 
+
+χ (2) = μ2
+
+> r
+
+MS
+
+
+
+tanh 3
+
+ μr HDC 
+
+MS
+
+
+
+− tanh 
+
+ μr HDC 
+
+MS
+
+ 
+
+, (6) where μr is the relative permeability of the concentrator, MS its saturation magnetization, and HDC a biasing field used to tune the nonlinear response. A comparatively strong local oscillator (LO) field BLO is applied at the frequency of peak sensitivity (the mechanical resonance). A simultaneous low-frequency signal field Bsig then mixes with BLO 
+
+through the flux concentrator nonlinearity, producing sidebands at ΩLO ± Ωsig :
+
+B (2) 
+
+> out
+
+≈ χ (2) Bsig BLO cos (ΩLO ± Ωsig )t  . (7) This effectively shifts the low-frequency signal into a higher-frequency band where noise is reduced, enabling de-tection well below the sensor’s baseband noise floor. The mix-up efficacy ( η (2) ) and the predicted sensitivity of the mixed-up signal ( B (2)
+
+> min
+
+) are then given by (see Sec. S.2): 
+
+η (2) = 2 χ (2) BLO = B (2)
+
+> out
+
+Bsi g = Bmin (Ω0 − Ω)
+
+B (2) 
+
+> min
+
+(Ω) (8a) 
+
+B (2) 
+
+> min
+
+(Ω) = Bmin (Ω0 − Ω)
+
+η (2) . (8b) It can be seen, that increasing η above unity would allow for the effective sensitivity to exceed that on the native un-mixed signal. This is possible because the thermomechanical and optical noise (including shot-noise, thermo-refractive noise and laser phase noise) sources are constrained to the sensor, whilst the nonlinear mixing occurs within the flux concentrator, effectively isolating the mix-up process from these noise sources. There is potential for the emergence of noise originating with the concentrator itself, e.g. Barkhausen noise, however this was not observed in our experi-ments. Equation 8 reveals that the mix-up efficacy is determined only by χ (2) and BLO , with χ (2) being limited by the material properties shown in Eq. 6; for metglas, it peaks at ∼60,000 (see Fig. S2). In our experiment the DC bias was applied via a permanent NdFeB magnet held near the concentrator at a location that empirically optimized the second-order susceptibility, and hence the mix-up sensitivity. The practical limitation on BLO preventing an arbitrarily high mix-up efficacy arises from dynamic range limitations. This is demonstrated in Fig. 4(b) inset; the nonlinear mixing between a 2-μT (RMS) signal and a 40-μT local oscillator produces a clean pair of sidebands for demodulation, whereas a 21-μTsignal produces multiple higher-order sidebands. This implies that BLO cannot be increased significantly beyond 40 μTwithout signal degradation. For our system ( χ (2) = 60 , 000 & BLO = 40 μT), the expected mix-up efficacy is η = 0 .67 ,predicting a slight trade-off in sensitivity for frequency conversion. The sensitivity spectrum obtained from the mix-up experiment is presented in Fig. 4(b). Here, an additional coil placed above the device generated the high-frequency drive at 590 kHz with an RMS amplitude of BLO = 40 μT and a simultaneous low-frequency signal field of Bsig = 2 μT RMS was applied, varied from 100 mHz to 10 kHz. We observe a sensitivity of ∼18 nT/ √Hz for the nonlinearly mixed signal. This represents a mix-up efficacy of 
+
+η (2) = 0 .62 , in good agreement with the predicted value, and exceeding previous works exploiting nonlinearity in the magnetostrictive material by over two orders of magnitude [19]. The sensitivity is consistent across the whole 10 Carey, Bawden et al. 
+
+F I G U R E 4 a) Wide frequency spectrum of the magnetometer sensitivity from 1 MHz down to 1 Hz. The flux concentrator was approximately 10 μm above the device and centered over the cantilever. The different colors represent different measurements. b) Low-frequency sensitivity using nonlinear mix-up. Inset: Power spectral density around the 590 kHz mix-up frequency for 2 μT RMS and 21 μT RMS signal fields at 300 Hz. frequency band and agrees well with theoretical predictions (Fig. S3), in contrast to Ref. [19] which observed severe degradation in their mix-up efficacy above 1 kHz. Below 3 Hz the noise floor increases rapidly, degrading the sensi-tivity. The mix-up process evades the noise sources discussed earlier in Sec. 3, thus this degradation likely arises due to environmental magnetic field noise which also mixes up to the operational frequency as the measurement was not conducted in a magnetically shielded environment. Overall the mix-up performance spans nearly four decades of fre-quency and represents the first demonstration of optomechanical magnetometry at Hz to sub-Hz range frequencies without significant sensitivity degradation. 
+
+## 4 | DISCUSSION AND CONCLUSIONS 
+
+This work establishes flux concentrators as a means to overcome the long-standing low-frequency performance limi-tations of chip-scale optomechanical magnetometers [7, 14], whilst simultaneously improving sensitivity by an order of magnitude. We demonstrate an operational bandwidth of over seven orders of magnitude of frequency, extending below a hertz for the first time for an optomechanical magnetometer. The low frequency performance is achieved by exploiting the extremely high nonlinear mixing efficacy provided by high magnetic permeability materials, resulting in sensitivity close to the resonant thermomechanical noise floor even down to frequencies as low as 3 Hz. This enables the conversion of low-frequency magnetic signals to high-frequency sidebands with near-unity efficacy, compared to parts-per-thousand in previous works [19]. A further benefit of our approach lies in its versatility. Flux concentra-tors require no modification of the underlying sensor architecture, and thus, could be used to improve the sensitivity and bandwidth of state-of-the-art precision optomechanical magnetometers with minimal alterations. We anticipate that this will allow optomechanical magnetometers to excel in low-frequency applications that have previously been prohibitively challenging. A key result from our work is that the use of a flux concentrator allows the evasion of ther-momechanical noise. Thermomechanical noise has previously presented a fundamental limit to the performance of optomechanical magnetometers [6, 22], and has been the dominant constraint on sensitivity on resonance in all previ-ously reported experiments. Our experiments show a factor of eight improvement in on-resonance sensitivity beyond the thermomechanical noise floor. Moreover, while this is achieved by increasing the effective spatial footprint of the magnetometer – drawing in flux from a larger area – this does not come at the usual cost of increased thermomechan-Carey, Bawden et al. 11 
+
+ical noise. It is well known that the magnetostrictive response of optomechanical magnetometers can be improved by increasing the size of the magnetostrictive material [21, 22]. However, the thermomechanical noise level also increases with the square-root of the effective mass of the mechanical structure [22, 34], reducing the improvement in sensitivity. Employing a flux concentrator evades this constraint, increasing the effective size of the sensor without increasing its thermomechanical noise. Beyond raw sensitivity improvements, and perhaps more significantly, the nonlinear mix-up technique demon-strated here provides a pathway to evade thermomechanical noise altogether. Previous mix-up techniques relied on the strain nonlinearity of the magnetostrictive material and were thus directly sensitive to thermomechanical strain noise [19], even in the limit of a very large local oscillator field amplitude. By contrast, our technique evades this noise by employing a nonlinearity that is external to the optomechanical device. Increasing the magnitude of the os-cillator field then allows the magnetic signal to be amplified above both the thermomechanical noise and the optical noise. For instance, in our experiments, the combination of this amplification and flux concentration allows a factor of 800 improvement in sensitivity for magnetic signals at 3 Hz. The level of amplification will ultimately be limited by magnetic saturation within the flux concentrator leading to higher-order nonlinearities degrading the response. The sensitivity of the system may become ultimately limited by noise sources within the concentrator, such as Barkhausen noise. However, we observe no evidence of these effects in our experiments. The concentrators could, in principle, be implemented with planar geometries directly co-integrated on chip ( e.g. , [35]). This makes them ideally suited for dense sensor arrays or magnetic assays, where localized enhancement and frequency up-conversion can be leveraged for high-resolution imaging and low-frequency detection. The flux concentrator enhancement reported here opens practical pathways to apply optomechanical magne-tometers to biomagnetism, neuroscience, navigation, geological surveying and magnetic anomaly detection which have proved challenging previously due to low-frequency noise. Beyond these immediate applications, combining planar flux concentrator integration with advances in on-chip photonic, and micro-mechanical designs could yield large-scale, low-power, high-sensitivity sensor networks capable of addressing challenges where compact, broad-band, and ultrasensitive magnetic field detection is required, including portable biomagnetic monitoring, magnetic surveying, and GPS-denied navigation. 
+
+## Acknowledgements 
+
+The authors acknowledge the facilities, and the scientific and technical assistance, of the Australian Microscopy & Mi-croanalysis Research Facility at the Centre for Microscopy and Microanalysis, The University of Queensland. This work was performed in part at the Queensland node of the Australian National Fabrication Facility, a company established under the National Collaborative Research Infrastructure Strategy to provide nano- and microfabrication facilities for Australia’s researchers. The Commonwealth of Australia (represented by the Defence Science and Technology Group) supports this research through a Defence Science Partnerships agreement. This work was funded under the Next Gen-eration Technology Fund and is being delivered through the Advanced Strategic Capability Accelerator. This work was also financially supported by the Australian Research Council Centre of Excellence for Engineered Quantum Systems (EQUS, Grant No. CE170100009), and the Australian Research Council Centre of Excellence in Quantum Biotech-nology (QUBIC, Grant No. CE230100021). We thank the Queensland Defence Science Alliance (QDSA) for financial support of the project through the 2023 QDSA Collaborative Research Grant (CRG) funding round. This project was funded by the Queensland Government through the Department of Environment, Tourism, Science and Innovation’s 12 Carey, Bawden et al. 
+
+(DETSI) Quantum 2032 Challenge Program. The program accelerates quantum sportstech, connects Queensland’s research sector with industry, and showcases the state’s quantum capabilities as part of Brisbane 2032’s legacy. The authors acknowledge the highly valuable advice and support provided by Rodney Appleby and financial support by Orica Australia Pty Ltd . The authors thank Professor James Macnae for his support and useful discussions of the research in this publication. 
+
+## Supporting Information references 
+
+[1] Brookes MJ, Leggett J, Rea M, Hill RM, Holmes N, Boto E, et al. Magnetoencephalography with optically pumped magnetometers (OPM-MEG): the next generation of functional neuroimaging. Trends in Neurosciences 2022;45(8):621– 634. [2] Sheinker A, Frumkis L, Ginzburg B, Salomonski N, Kaplan BZ. Magnetic Anomaly Detection Using a Three-Axis Magne-tometer. IEEE Trans Magn 2009;45(1):160–167. [3] Bennett JS, Vyhnalek BE, Greenall H, Bridge EM, Gotardo F, Forstner S, et al. Precision Magnetometers for Aerospace Applications: A Review. Sensors 2021;21(16). [4] Stolz R, Schiffler M, Becken M, Thiede A, Schneider M, Chubak G, et al. SQUIDs for magnetic and electromagnetic methods in mineral exploration. Mineral Economics 2022;35(3):467–494. [5] Gotardo F, Carey BJ, Greenall H, Harris GI, Romero E, Bulla D, et al. Waveguide-integrated chip-scale optomechanical magnetometer. Optics Express 2023;31(23):37663–37672. [6] Gotardo F, Carey BJ, Bawden N, Harris GI, Greenall H, Romero E, et al. Silicon-photonic optomechanical magnetometer. Optica 2026 Apr;13(4):558–565. [7] Yu C, Janousek J, Sheridan E, McAuslan DL, Rubinsztein-Dunlop H, Lam PK, et al. Optomechanical magnetometry with a macroscopic resonator. Phys Rev Appl 2016;5(4):044007. [8] Harris GI, McAuslan DL, Stace TM, Doherty AC, Bowen WP. Minimum requirements for feedback enhanced force sensing. Physical review letters 2013;111(10):103603. [9] Fogliano F, Besga B, Reigue A, Mercier de Lépinay L, Heringlake P, Gouriou C, et al. Ultrasensitive nano-optomechanical force sensor operated at dilution temperatures. Nature Communications 2021;12(1):4124. [10] Melcher J, Stirling J, Cervantes FG, Pratt JR, Shaw GA. A self-calibrating optomechanical force sensor with femtonewton resolution. Applied Physics Letters 2014;105(23). [11] Bawden N, Carey BJ, Yeo PM, Arora N, Sementilli L, Valenzuela VM, et al. Precision optomechanical accelerometer via hybrid test-mass integration. Phys Rev Appl 2025 Dec;24:064008. [12] Krause AG, Winger M, Blasius TD, Qiang L, Oskar P. A high-resolution microchip optomechanical accelerometer. Nat Photon 2012;6(11):768–772. [13] Chowdhury MD, Agrawal AR, Wilson DJ. Membrane-based optomechanical accelerometry. Physical Review Applied 2023;19(2):024011. [14] Basiri-Esfahani S, Armin A, Forstner S, Bowen WP. Precision ultrasound sensing on a chip. Nature Communications 2019;10(1):132. [15] Wang R, Liu W, Pan Z, Fan W, Liu L, Xing E, et al. High resolution acoustic sensing based on microcavity optomechanical oscillator. Optics Express 2024;32(4):4816–4826. Carey, Bawden et al. 13 
+
+[16] McQueen LR, Bawden N, Carey BJ, Marinković I, Bowen WP, Harris GI. Fibre-coupled photonic crystal hydrophone. Optics Express 2025;33(12):25910–25921. [17] Chen Y, Liu S, Hong G, Zou M, Liu B, Luo J, et al. Nano-optomechanical resonators for sensitive pressure sensing. ACS Applied Materials & Interfaces 2022;14(34):39211–39219. [18] Liu Y, Jiang J, Liu K, Wang S, Niu P, Xu T, et al. Ultrahigh-Resolution Optical Fiber Thermometer Based on Microcavity Opto-Mechanical Oscillation. Advanced Photonics Research 2022;3(9):2200052. [19] Forstner S, Sheridan E, Knittel J, Humphreys CL, Brawley GA, Rubinsztein-Dunlop H, et al. Ultrasensitive Optomechan-ical Magnetometry. Adv Mater 2014;26(36):6348–6353. [20] Li BB, Bílek J, Hoff UB, Madsen LS, Forstner S, Prakash V, et al. Quantum enhanced optomechanical magnetometry. Optica 2018 Jul;5(7):850–856. https://opg.optica.org/optica/abstract.cfm?URI=optica-5-7-850 .[21] Xu AN, Li Y, Li X, Liu B, Liu YC. Subpicotesla Optomechanical Magnetometry. Physical Review Letters 2024;133(15):153601. [22] Hu ZG, Gao YM, Liu JF, Yang H, Wang M, Lei Y, et al. Picotesla-sensitivity microcavity optomechanical magnetometry. Light: Science & Applications 2024;13(1):279. [23] Yang S, Zhang Q, Yang L, Liu H, Wang Q, Zhang P, et al. Optomechanical sensor network with fiber Bragg gratings. arXiv preprint arXiv:240906943 2024;. [24] Fescenko I, Jarmola A, Savukov I, Kehayias P, Smits J, Damron J, et al. Diamond magnetometer enhanced by ferrite flux concentrators. Physical review research 2020;2(2):023394. [25] Griffith WC, Jimenez-Martinez R, Shah V, Knappe S, Kitching J. Miniature atomic magnetometer integrated with flux concentrators. Applied Physics Letters 2009;94(2). [26] Leroy P, Coillot C, Mosser V, Roux A, Chanteur G. An ac/dc magnetometer for space missions: Improvement of a Hall sensor by the magnetic flux concentration of the magnetic core of a searchcoil. Sensors and Actuators A: Physical 2008;142(2):503–510. [27] Matlashov A, Koshelets V, Kalashnikov P, Zhuravlev YE, Slobodchikov VY, Kovtonyuk S, et al. High sensitive magnetome-ters and gradiometers based on DC SQUIDs with flux focuser. IEEE transactions on magnetics 2002;27(2):2963–2966. [28] Trindade I, Leitao D, Pogorelov Y, Sousa J, Chaves R, Cardoso S, et al. Control of hysteretic behavior in flux concentrators. Applied Physics Letters 2009;94(7). [29] Greenall H, Carey BJ, Bulla D, Gotardo F, Harris GI, Bennett JS, et al. Quantitative profilometric measurement of mag-netostriction in thin-films. Applied Surface Science 2024;662:160105. [30] Wasserman W, Harrison R, Harris G, Sawadsky A, Sfendla Y, Bowen W, et al. Cryogenic and hermetically sealed packaging of photonic chips for optomechanics. Optics Express 2022;30(17):30822–30831. [31] Sun X, Jiang L, Pong PW. Magnetic flux concentration at micrometer scale. Microelectronic engineering 2013;111:77– 81. [32] Leroy P, Coillot C, Roux AF, Chanteur GM. High magnetic field amplification for improving the sensitivity of Hall sensors. IEEE Sensors Journal 2006;6(3):707–713. [33] Santa-aho S, Laitinen A, Sorsa A, Vippola M. Barkhausen noise probes and modelling: A review. Journal of Nondestruc-tive Evaluation 2019;38(4):94. [34] Forstner S, Prams S, Knittel J, van Ooijen ED, Swaim JD, Harris GI, et al. Cavity Optomechanical Magnetometer. Phys Rev Lett 2012 Mar;108:120801. https://link.aps.org/doi/ 10 .1103 /PhysRevLett. 108 .120801 .[35] Fourneau E, Arregi JA, Barrera A, Nguyen ND, Bending S, Sanchez A, et al. Microscale Metasurfaces for On-Chip Mag-netic Flux Concentration. Advanced Materials Technologies 2023;8(16):2300177.

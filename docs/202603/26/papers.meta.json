@@ -1,0 +1,51 @@
+{
+  "label": "2026-03-26",
+  "date": "2026-03-26",
+  "generated_at": "2026-03-26T21:02:15",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202603/26/2603.19735v1-surrogate-modeling-with-low-rank-function-representation-for-electromagnetic-simulation",
+      "section": "quick",
+      "title_en": "Surrogate Modeling with Low-Rank Function Representation for Electromagnetic Simulation",
+      "authors": "Mingze Sun, Liang Li, Xile Zhao, Zheng Tan, Yulu Hu, Xing Li, Bin Li",
+      "date": "2026-03-20",
+      "pdf": "https://arxiv.org/pdf/2603.19735v1",
+      "score": "6.0",
+      "evidence": "电磁仿真与设计的代理模型",
+      "tldr": "针对高维电磁仿真计算成本高且神经代理模型在有限预算下难以处理复杂参数耦合的问题，本文提出了一种基于低秩张量函数表示的代理建模范式。研究系统对比了Tucker、TT和TR等低秩格式，并提出了一种新型的成对低秩张量网络（PLRNet）。该模型通过紧凑的坐标嵌入和可学习的成对交互因子，在高维电磁代理任务中实现了精度、鲁棒性与参数效率的更优平衡，为高效电磁设计提供了新思路。",
+      "tags": "query:tmr",
+      "abstract_en": "High-fidelity electromagnetic (EM) simulations are indispensable for the design of microwave and wave devices, yet repeated full-wave evaluations over high-dimensional design spaces are often computationally prohibitive. While neural surrogates can amortize this cost, learning high-dimensional EM response mappings remains difficult under limited simulation budgets due to strong and heterogeneous parameter couplings. In this work, we introduce low-rank tensor function representations as a principled surrogate modeling paradigm for EM problems and provide a systematic study of representative low-rank formats, including Tucker-style low-rank tensor function representation (LRTFR) as well as neural functional tensor-train (TT) and tensor-ring (TR) baselines. Building on these insights, we propose a pairwise low-rank tensor network (PLRNet) that uses learnable pairwise interaction factors over compact coordinate-wise embeddings. Experiments on representative EM surrogate tasks demonstrate that the proposed framework achieves a more favorable overall trade-off between accuracy, robustness, and parameter efficiency, with stable optimization in high-dimensional regimes.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/26/2603.23847v1-array-layout-optimization-in-a-24-element-38-ghz-active-incoherent-millimeter-wave-imaging-system",
+      "section": "quick",
+      "title_en": "Array Layout Optimization in a 24-Element 38-GHz Active Incoherent Millimeter-Wave Imaging System",
+      "authors": "Jorge R. Colon-Berrios, Derek Luzano, Daniel Chen, Jeffrey A. Nanzer",
+      "date": "2026-03-25",
+      "pdf": "https://arxiv.org/pdf/2603.23847v1",
+      "score": "6.0",
+      "evidence": "阵列布局优化与图像重建性能",
+      "tldr": "本研究针对38-GHz主动不相干毫米波（AIM）成像系统，探讨了阵列布局对成像性能的影响。通过对比传统的圆形阵列与两种基于优化策略的阵列配置，研究了空间采样多样性与图像重建质量的关系。实验结果表明，优化后的阵列能显著提高空间采样效率，在保持分辨率和视场的同时，提升了结构相似性（SSIM）并降低了峰值旁瓣电平（PSL），为高性能毫米波成像系统设计提供了重要参考。",
+      "tags": "query:tmr",
+      "abstract_en": "Active incoherent millimeter-wave (AIM) imaging is a recently developed technique that has been shown to generate fast millimeter-wave imaging using sparse apertures and Fourier domain sampling. In these systems, spatial frequency sampling is determined by cross-correlation between antenna pairs, making array geometry an important aspect that dictates the field of view (FOV) and image quality. This work investigates the impact of array redundancy and spatial sampling diversity on AIM image reconstruction performance. We present a comparative study of three receive array configurations, including one simple circular design and two arrays obtained through optimization strategies designed to maximize unique spatial samples while preserving system resolution and FOV. Performance is evaluated using the image-domain metrics of structural similarity index (SSIM) and peak sidelobe level (PSL), enabling a quantitative assessment of reconstruction fidelity and artifact suppression. We perform experimental validation using a 38-GHz AIM imaging system, implementing a 24-element receive array within a 48-position reconfigurable aperture. Results demonstrate that optimized array configurations improve spatial sampling efficiency and yield measurable gains in reconstruction quality compared to a conventional circular array, highlighting the importance of array design for AIM imaging systems.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/26/2603.23944v1-ultrawide-bandwidth-optomechanical-magnetometry-using-flux-concentration",
+      "section": "quick",
+      "title_en": "Ultrawide Bandwidth Optomechanical Magnetometry Using Flux Concentration",
+      "authors": "Benjamin J. Carey, Nathaniel Bawden, Fernando Gottardo, James S. Bennett, Douglas Bulla, Scott Foster, Warwick P. Bowen",
+      "date": "2026-03-25",
+      "pdf": "https://arxiv.org/pdf/2603.23944v1",
+      "score": "6.0",
+      "evidence": "利用磁通集中器进行磁场传感",
+      "tldr": "本研究通过将片上光力磁力计与高导磁率磁通集中器结合，解决了低频磁场测量中灵敏度低和技术噪声大的挑战。利用集中器的非线性响应将低频信号上变频至高频响应区，实现了量级上的灵敏度提升和超宽频带测量。该方案无需改变底层架构，可广泛应用于脑活动制图、水下导航及生物医学诊断等领域。",
+      "tags": "query:tmr",
+      "abstract_en": "Low-frequency magnetic fields carry vital information for neuroscience, navigation, and Earth science. However, they are generally weak, making it challenging to measure them with compact, room-temperature magnetometers. To overcome this challenge, we combine an on-chip optomechanical magnetometer with a high-permeability flux concentrator. Beyond boosting sensitivity and bandwidth, exploiting the concentrator's nonlinear response converts low-frequency magnetic fluctuations into higher-frequency signals where the sensor is intrinsically most responsive. This sidesteps the technical noise that has long constrained the application of optomechanical magnetometry at low frequencies. Our measurements show order-of-magnitude improvements in sensitivity and extend performance into the sub-hertz regime, achieving below 20 nT Hz$^{-1/2}$ down to 3 Hz and less than 100 nT Hz$^{-1/2}$ at 0.1 Hz. Because this approach requires no redesign of the underlying architecture, it can be readily applied across magnetometer technologies, opening the way to practical low-frequency sensing for applications from brain activity mapping to undersea navigation and biomedical diagnostics.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

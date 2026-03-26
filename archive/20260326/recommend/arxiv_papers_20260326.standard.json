@@ -1,0 +1,136 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-26T21:01:44.123177+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.19735v1",
+      "title": "Surrogate Modeling with Low-Rank Function Representation for Electromagnetic Simulation",
+      "abstract": "High-fidelity electromagnetic (EM) simulations are indispensable for the design of microwave and wave devices, yet repeated full-wave evaluations over high-dimensional design spaces are often computationally prohibitive. While neural surrogates can amortize this cost, learning high-dimensional EM response mappings remains difficult under limited simulation budgets due to strong and heterogeneous parameter couplings. In this work, we introduce low-rank tensor function representations as a principled surrogate modeling paradigm for EM problems and provide a systematic study of representative low-rank formats, including Tucker-style low-rank tensor function representation (LRTFR) as well as neural functional tensor-train (TT) and tensor-ring (TR) baselines. Building on these insights, we propose a pairwise low-rank tensor network (PLRNet) that uses learnable pairwise interaction factors over compact coordinate-wise embeddings. Experiments on representative EM surrogate tasks demonstrate that the proposed framework achieves a more favorable overall trade-off between accuracy, robustness, and parameter efficiency, with stable optimization in high-dimensional regimes.",
+      "authors": [
+        "Mingze Sun",
+        "Liang Li",
+        "Xile Zhao",
+        "Zheng Tan",
+        "Yulu Hu",
+        "Xing Li",
+        "Bin Li"
+      ],
+      "primary_category": "cs.CE",
+      "categories": [
+        "cs.CE",
+        "math.NA"
+      ],
+      "published": "2026-03-20T08:19:57+00:00",
+      "link": "https://arxiv.org/pdf/2603.19735v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "surrogate modeling for electromagnetic simulation and design",
+      "llm_evidence_cn": "电磁仿真与设计的代理模型",
+      "llm_evidence": "电磁仿真与设计的代理模型",
+      "canonical_evidence": "电磁仿真与设计的代理模型",
+      "llm_tldr_en": "Low-rank tensor function representations for efficient electromagnetic device simulation.",
+      "llm_tldr_cn": "用于高效电磁器件仿真的低秩张量函数表示法。",
+      "llm_tldr": "用于高效电磁器件仿真的低秩张量函数表示法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.23847v1",
+      "title": "Array Layout Optimization in a 24-Element 38-GHz Active Incoherent Millimeter-Wave Imaging System",
+      "abstract": "Active incoherent millimeter-wave (AIM) imaging is a recently developed technique that has been shown to generate fast millimeter-wave imaging using sparse apertures and Fourier domain sampling. In these systems, spatial frequency sampling is determined by cross-correlation between antenna pairs, making array geometry an important aspect that dictates the field of view (FOV) and image quality. This work investigates the impact of array redundancy and spatial sampling diversity on AIM image reconstruction performance. We present a comparative study of three receive array configurations, including one simple circular design and two arrays obtained through optimization strategies designed to maximize unique spatial samples while preserving system resolution and FOV. Performance is evaluated using the image-domain metrics of structural similarity index (SSIM) and peak sidelobe level (PSL), enabling a quantitative assessment of reconstruction fidelity and artifact suppression. We perform experimental validation using a 38-GHz AIM imaging system, implementing a 24-element receive array within a 48-position reconfigurable aperture. Results demonstrate that optimized array configurations improve spatial sampling efficiency and yield measurable gains in reconstruction quality compared to a conventional circular array, highlighting the importance of array design for AIM imaging systems.",
+      "authors": [
+        "Jorge R. Colon-Berrios",
+        "Derek Luzano",
+        "Daniel Chen",
+        "Jeffrey A. Nanzer"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-03-25T02:05:59+00:00",
+      "link": "https://arxiv.org/pdf/2603.23847v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "array layout optimization and image reconstruction performance",
+      "llm_evidence_cn": "阵列布局优化与图像重建性能",
+      "llm_evidence": "阵列布局优化与图像重建性能",
+      "canonical_evidence": "阵列布局优化与图像重建性能",
+      "llm_tldr_en": "Investigates array geometry optimization to improve spatial sampling and image reconstruction quality.",
+      "llm_tldr_cn": "研究阵列几何结构优化，以提高空间采样和图像重建质量。",
+      "llm_tldr": "研究阵列几何结构优化，以提高空间采样和图像重建质量。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.23944v1",
+      "title": "Ultrawide Bandwidth Optomechanical Magnetometry Using Flux Concentration",
+      "abstract": "Low-frequency magnetic fields carry vital information for neuroscience, navigation, and Earth science. However, they are generally weak, making it challenging to measure them with compact, room-temperature magnetometers. To overcome this challenge, we combine an on-chip optomechanical magnetometer with a high-permeability flux concentrator. Beyond boosting sensitivity and bandwidth, exploiting the concentrator's nonlinear response converts low-frequency magnetic fluctuations into higher-frequency signals where the sensor is intrinsically most responsive. This sidesteps the technical noise that has long constrained the application of optomechanical magnetometry at low frequencies. Our measurements show order-of-magnitude improvements in sensitivity and extend performance into the sub-hertz regime, achieving below 20 nT Hz$^{-1/2}$ down to 3 Hz and less than 100 nT Hz$^{-1/2}$ at 0.1 Hz. Because this approach requires no redesign of the underlying architecture, it can be readily applied across magnetometer technologies, opening the way to practical low-frequency sensing for applications from brain activity mapping to undersea navigation and biomedical diagnostics.",
+      "authors": [
+        "Benjamin J. Carey",
+        "Nathaniel Bawden",
+        "Fernando Gottardo",
+        "James S. Bennett",
+        "Douglas Bulla",
+        "Scott Foster",
+        "Warwick P. Bowen"
+      ],
+      "primary_category": "physics.optics",
+      "categories": [
+        "physics.optics",
+        "physics.app-ph"
+      ],
+      "published": "2026-03-25T05:06:04+00:00",
+      "link": "https://arxiv.org/pdf/2603.23944v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magnetic field sensing with flux concentrators",
+      "llm_evidence_cn": "利用磁通集中器进行磁场传感",
+      "llm_evidence": "利用磁通集中器进行磁场传感",
+      "canonical_evidence": "利用磁通集中器进行磁场传感",
+      "llm_tldr_en": "Enhances optomechanical magnetometer sensitivity using flux concentration for low-frequency fields.",
+      "llm_tldr_cn": "利用磁通集中技术提高光力磁力计对低频磁场的探测灵敏度。",
+      "llm_tldr": "利用磁通集中技术提高光力磁力计对低频磁场的探测灵敏度。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
