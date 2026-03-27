@@ -1,0 +1,51 @@
+{
+  "label": "2026-03-27",
+  "date": "2026-03-27",
+  "generated_at": "2026-03-27T20:26:59",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202603/27/2603.25404v1-physics-informed-neural-operator-for-electromagnetic-inverse-scattering-problems",
+      "section": "quick",
+      "title_en": "Physics-Informed Neural Operator for Electromagnetic Inverse Scattering Problems",
+      "authors": "Q. C. Dong, Zi-Xuan Su, Qing Huo Liu, Wen Chen, Zhizhang, Chen",
+      "date": "2026-03-26",
+      "pdf": "https://arxiv.org/pdf/2603.25404v1",
+      "score": "7.0",
+      "evidence": "用于电流分布重建的物理信息神经算子",
+      "tldr": "本研究提出了一种物理信息神经算子（PINO）框架，用于解决电磁逆散射问题。该框架将介电特性表示为可学习张量，利用神经算子预测感应电流，并通过结合状态损失、数据损失和全变分正则化的混合损失函数进行联合优化。PINO在多频率和无相位反演等复杂场景下表现出极高的准确性和鲁棒性，显著优于传统的对比源反演（CSI）方法，为电磁成像提供了一种高效且通用的解决方案。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper proposes a physics-informed neural operator (PINO) framework for solving inverse scattering problems, enabling rapid and accurate reconstructions under diverse measurement conditions. In the proposed approach, the dielectric property is represented as a learnable tensor, while a neural operator is employed to predict the induced current distribution. A hybrid loss function, consisting of the state loss, data loss and total-variation (TV) regularization, is constructed to establish a fully differentiable formulation for a joint optimization of network parameters and dielectric property. To demonstrate the framework's generality and flexibility, PINO is implemented using three representative neural operators, i.e., the Fourier Neural Operator (FNO), the enhanced Fourier Neural Operator (U-FNO) and the Factorized Fourier Neural Operator (F-FNO). Compared with conventional approaches, the proposed framework offers a simpler formulation and universal modeling capability, making it readily applicable to various measurement scenarios, including multi-frequency and phaseless inversion. Numerical simulations demonstrate that the proposed PINO achieves high accuracy and robust reconstruction across samples with and without phase information, under single-frequency and multi-frequency settings in the presence of noise. The results demonstrate that PINO consistently outperforms conventional contrast-source inversion (CSI) methods and provides an efficient, unified solution to complex electromagnetic inverse-scattering problems.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/27/2603.20144v1-distributed-state-estimation-for-discrete-time-lti-systems-the-design-trilemma-and-a-novel-framework",
+      "section": "quick",
+      "title_en": "Distributed State Estimation for Discrete-time LTI Systems: the Design Trilemma and a Novel Framework",
+      "authors": "Ruixuan Zhao, Guitao Yang, James Fleming, Boli Chen",
+      "date": "2026-03-20",
+      "pdf": "https://arxiv.org/pdf/2603.20144v1",
+      "score": "6.0",
+      "evidence": "多传感器分布式状态估计",
+      "tldr": "随着物联网和信息物理系统的发展，离散时间分布式状态估计成为研究热点。本文针对离散系统无法利用高增益机制和瞬时通信的难题，揭示了系统可观测性、通信频率/维度与网络连通性之间的“三难困境”。为此，提出一种基于迭代半正定规划（SDP）的通用设计框架，旨在平衡上述因素并放宽现有文献中的限制性假设，通过仿真验证了其有效性。",
+      "tags": "query:tmr",
+      "abstract_en": "With the advancement of IoT technologies and the rapid expansion of cyber-physical systems, there is increasing interest in distributed state estimation, where multiple sensors collaboratively monitor large-scale dynamic systems. Compared with its continuous-time counterpart, a discrete-time distributed observer faces greater challenges, as it cannot exploit high-gain mechanisms or instantaneous communication. Existing approaches depend on three tightly coupled factors: (i) system observability, (ii) communication frequency and dimension of the exchanged information, and (iii) network connectivity. However, the interdependence among these factors remains underexplored. This paper identifies a fundamental trilemma among these factors and introduces a general design framework that balances them through an iterative semidefinite programming approach. As such, the proposed method mitigates the restrictive assumptions present in existing works. The effectiveness and generality of the proposed approach are demonstrated through a simulation example.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/27/2603.21408v1-cgformer-a-cross-attention-based-grid-free-transformer-for-radio-map-estimation",
+      "section": "quick",
+      "title_en": "CGFormer: A Cross-Attention Based Grid-Free Transformer for Radio Map Estimation",
+      "authors": "Haihan Nan, Emmanuel Obeng Frimpong, Zhi Tian, Yue Wang, Lingjia Liu",
+      "date": "2026-03-22",
+      "pdf": "https://arxiv.org/pdf/2603.21408v1",
+      "score": "6.0",
+      "evidence": "基于稀疏测量的无网格估计",
+      "tldr": "本研究针对无线电地图估计（RME）中网格化方法效率低及现有无网格方法预处理复杂的挑战，提出了一种名为CGFormer的交叉注意力无网格Transformer模型。该模型通过轻量级空间嵌入模块融合环境信息，并利用交叉注意力机制捕捉目标点与测量点间的空间相关性。CGFormer不仅实现了任意位置的灵活预测，还在保持低复杂度的同时，将预测精度提升了约6%，为智能无线网络提供了高效的信号预测方案。",
+      "tags": "query:tmr",
+      "abstract_en": "Radio map estimation (RME), which predicts wireless signal metrics at unmeasured locations from sparse measurements, has attracted growing attention as a key enabler of intelligent wireless networks. The majority of existing RME techniques employ grid-based strategies to process sparse measurements, where the pursuit of accuracy results in significant computational inefficiency and inflexibility for off-grid prediction. In contrast, grid-free approaches directly exploit coordinate features to capture location-specific spatial dependencies, enabling signal prediction at arbitrary locations without relying on predefined grids. However, current grid-free approaches demand substantial preprocessing overhead for constructing the spatial representation, leading to high complexity and constrained adaptability. To address these limitations, this paper proposes a novel cross-attention grid-free based transformer model for RME. We introduce a lightweight spatial embedding module that incorporates environmental knowledge into high-dimensional feature construction. A cross-attention transformer then models the spatial correlation between target and measurement points. The simulation results demonstrate that our proposed method reduces RMSE by up to 6%, outperforming grid-based and gridfree baselines.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

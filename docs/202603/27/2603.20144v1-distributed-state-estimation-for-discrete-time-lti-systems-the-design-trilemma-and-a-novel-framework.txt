@@ -1,0 +1,511 @@
+Title: Distributed State Estimation for Discrete-time LTI Systems: the Design Trilemma and a Novel Framework
+
+URL Source: https://arxiv.org/pdf/2603.20144v1
+
+Published Time: Mon, 23 Mar 2026 01:10:54 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# Distributed State Estimation for Discrete-time LTI Systems: the Design Trilemma and a Novel Framework 
+
+Ruixuan Zhao, Guitao Yang, James Fleming, and Boli Chen 
+
+Abstract— With the advancement of IoT technologies and the rapid expansion of cyber-physical systems, there is increasing interest in distributed state estimation, where multiple sensors collaboratively monitor large-scale dynamic systems. Compared with its continuous-time counterpart, a discrete-time distributed observer faces greater challenges, as it cannot exploit high-gain mechanisms or instantaneous communication. Existing approaches depend on three tightly coupled factors: (i) system observability, (ii) communication frequency and dimension of the exchanged information, and (iii) network connectivity. However, the interdependence among these factors remains underexplored. This paper identifies a fundamental trilemma among these factors and introduces a general design framework that balances them through an iterative semidefinite programming approach. As such, the proposed method mitigates the restrictive assumptions present in existing works. The effectiveness and generality of the proposed approach are demonstrated through a simulation example. 
+
+I. Introduction State estimation plays a crucial role in the field of control systems design, as it serves to monitor system status and facilitate decision-making [1]. However, as modern systems continue to scale up, sensor measure-ments are increasingly distributed across wide geograph-ical areas, making accurate estimation of the overall system state a significant challenge. Fortunately, with the rapid development of IoT devices, it is feasible to leverage communication among sensor nodes to estimate the state in a joint manner. For many, a centralized estimation scheme might be the initial intuition, i.e., first selecting a “central node” that collects all measure-ments via communication, then applying conventional observer design to estimate the state at the central node, and finally disseminating the estimated state to the remaining nodes. Despite the simplicity of this concept, the design suffers from communication delays in the estimated state information, as well as the vulnerability of the scheme (e.g., if the central node becomes faulty) [2]. More recently, distributed observer design has gained attention, as it overcomes the limitations of centralized approaches: it enables all nodes to jointly reconstruct the system state [3]. Furthermore, the increasing ubiquity of digital sensing, computation, and communication has made discrete-time systems more prevalent in industry, which has motivated numerous discrete-time distributed observers [4], [5].  
+
+> R. Zhao and B. Chen are with the Department of Electronic and Electrical Engineering, University College London, London, UK
+
+(ruixuan.zhao.22@ucl.ac.uk; boli.chen@ucl.ac.uk).                    
+
+> G. Yang and J. Fleming are with the Wolfson School of Mechanical, Electrical and Manufacturing Engineering, Lough-borough University, Loughborough, UK
+
+(g.yang@lboro.ac.uk; j.fleming@lboro.ac.uk). 
+
+Building on the above motivations, this paper inves-tigates the problem of distributed state estimation for discrete-time systems. We revisit the key assumptions underlying existing observer designs (observability, com-munication, and connectivity), analyze their respective roles, and formalize the inherent trade-offs among them. This unified perspective reveals the fundamental limita-tions embedded in current design paradigms. Motivated by these insights, we introduce a novel design framework that preserves conceptual simplicity while effectively relaxing the restrictive assumptions of prior approaches. Notation: The sets of real, positive real, and natural numbers are denoted by R, R>0, and N, respectively. The identity matrix of size n is denoted by In. The all-zeros matrix of size n × m is denoted by 0n×m, and simply by 0 when the dimensions are clear from context. 1n is defined as a n-dimensional vector with all 1 elements. The symbol ∥ · ∥ denotes the standard Euclidean norm, and ⊗ denotes the Kronecker product. For a square matrix P , the notation P ≻ 0 (or P ⪰ 0) signifies that P
+
+is positive definite (or positive semi-definite), and Tr( P )
+
+represents the trace of P . Given matrices P1, P 2, . . . , P N ,
+
+diag( P1, P 2, . . . , P N ) constructs a block diagonal matrix. Furthermore, col( P1, P 2, . . . , P N ) denotes the stacked matrix [P ⊤ 
+
+> 1
+
+, P ⊤ 
+
+> 2
+
+, · · · , P ⊤ 
+
+> N
+
+]⊤.II. Problem Statement The distributed state estimation problem for adiscrete-time linear time-invariant (LTI) system is for-mulated as follows. Consider the LTI dynamics 
+
+x(t + 1) = Ax (t) + Bu (t)
+
+yi(t) = Cix(t), i = 1 , 2, . . . , N (1) where t ∈ N denotes the discrete sampling step. The vectors x ∈ Rnx and u ∈ Rnu represent the system state and input, respectively, while yi ∈ Rnyi denotes the local measurement available at Node i. The sensor nodes are interconnected through a directed communication graph 
+
+G = ( N, E, A). Here N = {1, 2, . . . , N } is the set of sensor nodes, E ⊆ N × N is the set of directed communication links and A = [ aij ] ∈ RN ×N is the adjacency matrix. Here, aij = 1 if (i, j ) ∈ E (indicating that node j can receive information from node i), and aij = 0 otherwise. The neighbor set of node i is denoted by Ni = {j|(j, i ) ∈E} . To maintain simplicity and focus within the scope of this paper, we assume that the input u is fully accessible to all nodes. The objective is to design a distributed observer scheme O = {O i}i∈N, ∀i ∈ N, such that the system state x(t) can be asymptotically estimated at each sensor node, 
+
+lim 
+
+> t→+∞
+
+∥x(t) − ˆxi(t)∥= 0 , ∀i ∈ N. (2) 
+
+> arXiv:2603.20144v1 [eess.SY] 20 Mar 2026
+
+A typical structure of a distributed state estimation scheme is depicted in Fig. 1.  
+
+> LTI system
+> O1
+> O2
+> O3
+> O4
+> O5
+> y1
+> y2
+> y3y4
+> y5
+
+Fig. 1: Distributed observer framework with five nodes. Each observer Oi uses its local measurement yi and information from neighbors via the cyan dashed com-munication links. Given system (1), the existence of a distributed es-timator relies on three fundamental assumptions: joint detectability, information exchange, and graph connec-tivity. These assumptions are reviewed below. Assumption 1 (Marginally Joint Detectability): The pair (C, A ) is detectable, where 
+
+C = [C⊤ 
+
+> 1
+
+C⊤ 
+
+> 2
+
+. . . C⊤
+
+> N
+
+]⊤ .
+
+However, the pair ( ˘C, A ) with ˘C = col i∈N\{ j}(Ci), ∀j ∈
+
+N is not detectable. In contrast to the joint detectability condition commonly used in the literature, which only requires the detectabil-ity of (C, A ) and may include trivial cases with nearly detectable local nodes (e.g., ∃i ∈ N such that (Ci, A ) is detectable), we introduce the concept of Marginally Joint Detectability, representing the minimal requirement for achieving joint state estimation. Assumption 2 (Information Exchange): At each sam-pling instant t, every node communicates once and transmits only its latest local state estimate ˆxi(t).This assumption implies that the communication fre-quency is identical to the system’s sampling frequency, and the dimension of the exchanged information re-mains unchanged. This represents the standard setting adopted in many existing distributed observer designs. In contrast, some studies assume that the dimension of transmitted information increases with the number of nodes [6] 1. A two-timescale communication framework, where multiple exchanges occur within a single sam-pling interval, is also common in distributed observer designs [7]. These configurations generally incur higher communication costs than Assumption 2. It is also worth noting that, under a two-timescale setting, exact convergence in (2) can typically be guaranteed as the communication frequency approaches infinity [8]. Assumption 3 (Graph Connectivity): The communi-cation graph G is a minimal strong digraph, that is, 
+
+G is strongly connected and, for every edge e ∈ E , the graph G \ e is no longer strongly connected. 
+
+> 1Although a continuous-time system is considered in this paper, the proposed method’s capability allows its direct application to both continuous- and discrete-time systems.
+
+Assumption 3 is clearly sufficient, as it ensures the propagation of information from every node to all others. However, the necessity of this assumption must be evaluated in conjunction with Assumption 1, since, in a trivial case, a fully detectable node can reconstruct the state independently, even if it is disconnected from the rest of the network. As noted in [9], [10], strong connectivity of the entire sensor network is not always required; instead, it suffices that there exists a strongly connected subgraph that is jointly detectable or observ-able, a clear trade-off with Assumption 1. Within such a subgraph, full state reconstruction can be achieved, while the remaining nodes can estimate the system state successfully, provided that this detectable/observable subgraph serves as their source component. The remainder of this paper is organized as follows: In Section III, we examine the existing literature through the lens of these assumptions to highlight their implica-tions and design trade-offs. Subsequently, in Section IV, we propose our own design, building upon these as-sumptions to address the identified trade-offs. Finally, we validate our design through a numerical example in Section V and provide concluding remarks in Section VI. III. Literature Review Note that Assumptions 1, 2 and 3 are intentionally stated at a “minimal level”. A central observation from the literature is that designs that only request Assump-tions 1, 2 and 3 at their minimal levels simultaneously do not exist. Instead, successful methods typically require strengthening in at least one dimension: 1) they leverage a stronger local observability con-dition (e.g. each individual node is fully de-tectable/observable or each individual node com-bined with its first order in-neighbors is fully detectable/observable); 2) they require richer communication (e.g., multiple information exchanges per time step or higher bandwidth); 3) they assume stronger connectivity (e.g., a fully connected graph). We refer to this tension as a design trilemma (Fig. 2): pushing one corner down generally forces one of the others up. Marginal joint 
+
+> observability
+> Low level of
+> information
+> transmission
+> Minimal
+> connectivity
+> (connected)
+> Assuming fully
+> observable nodes
+
+Fig. 2: Trilemma for discrete-time distributed state estimation on LTI plant with static graph. Below, we summarize the major families of methods and explicitly state whether they invoke the assumptions at the minimal level or more restrictive versions. A seminal distributed Kalman filtering design was proposed by Olfati-Saber [11], [12], [13] and has been extended by many others (e.g., [14]). This type of design fuses local Kalman updates with consensus iterations and jointly ensures a lower variance level of the estimation error. These approaches typically violate Assumption 2 by adopting a two timescale structure: several commu-nication rounds occur within a single sampling period to drive consensus among neighbors (Fig. 3). While the ⋯
+
+> Dynamics timescale
+> Communication timescale
+> Dynamics timescale
+> Communication timescale
+
+Fig. 3: (Left) Two timescale structure; (Right) Single timescale structure. extra exchanges improve fusion accuracy and can lower steady-state error covariance, the price is a higher com-munication frequency relative to Assumption 2. Early variants also impose additional conditions beyond the minimal Assumption 1. For example, the observer in [11] considers identical output matrices across all sensor nodes. Under such a condition, it is required that each individual node is fully observable to ensure the existence of a solution, which is much stronger than Assumption 1. A second stream develops Luenberger-type observers in which each node runs a local Luenberger update, coupled with inter-node correction terms. Within this family, there are two structural variants that sit on different edges of our trilemma. Several designs embed multiple consensus iterations within each sampling period to drive agreement of estimates or innovations before the next plant update, e.g., [7], [15], [16], [17], [18]. This architecture improves fusion quality without augmenting the plant state, but it violates Assumption 2 as it typically requires more than one information exchange per step. Many of these works relax the requirement that every individual sensor node should be fully observable in [11] because the extra exchange rounds can compensate for weaker local sensing requirements. Other Luenberger-type approaches preserve Assump-tion 2 by allowing only one communication per sam-pling instant. Representative examples are the canon-ical decomposition based schemes in [10], [19], which design local observers in coordinates aligned with the observable subspaces and couple node estimates through structured interconnections. Avoiding state augmenta-tion and maintaining a single-round messaging exchange at the cost of stronger graph restrictions (communication flow consistent with the decomposition), which means Assumption 3 is strengthened beyond mere strong con-nectivity. Another line of approaches augments the estimator states while retaining a single timescale, inspired by the decentralized control problem. In schemes such as [6] and [20], extra states are introduced both in the local iteration and in the communication variables at each step to ensure convergence. However, the number of augmented states typically scales up with the number of nodes, resulting in higher-dimensional information exchange, which increases the communication burden in large sensor networks. In contrast, [9] also uses state-augmentation, and the total augmentation depends only on the number of source components, which are defined as strongly connected subgraphs that are jointly detectable/observable. Despite the augmentation, the dimension of information exchanged among agents re-mains equal to the system state, and it does not require multiple consensus iterations per sampling step (con-sistent with Assumption 2). This advantage, however, comes at the expense of additional structural constraints on the communication topology and joint observability (Assumptions A1–A3 in [9]), alongside Assumptions 1 and 3. With increasing computational power, optimization-based designs for distributed observers have attracted significant attention. In particular, distributed moving horizon estimation (MHE) has been widely studied because it naturally handles state constraints, supports robust analysis under diverse channel and measurement disturbances, and extends seamlessly to nonlinear sys-tems. The formulation in [21] introduces a distributed MHE that accounts for both process and measurement noise; however, it requires one-hop observability, which indicates that any nodes together with its in-degree neighboring nodes must already be observable rather than relying on observability across the entire network. In contrast, [22] proposed a distributed MHE applicable to an all-to-all communication architecture among esti-mators, which relaxes the observability requirement but clearly demands a more restrictive communication graph connectivity. Moreover, two timescale structures have been adopted in more recent distributed optimization-based estimation designs [8], [23], [24], [25], where multi-ple communication/optimization iterations occur within each sampling period. In summary, existing designs generally fail to satisfy Assumptions 1, 2, and 3 simultaneously at their min-imal levels. In the successful approaches, at least one corner of the trilemma must be strengthened. Table I summarizes these trade-offs across existing methods. The conceptual trilemma highlights the fundamental limitation in current designs. Motivated by this insight, in the next section, we propose a novel single-timescale, non-augmented estimator that preserves state-dimension messages while trading off graph connectivity against local node observability. That is, we preserve Assump-tion 2, while imposing a new condition that mixes observability and connectivity aspects. IV. Proposed Distributed Observer Design In this section, we introduce a novel framework for distributed observer design in discrete-time on a single timescale structure, as stated in Assumption 2. The distributed observer at Node i, i ∈ N, is designed as 
+
+ˆxi(t + 1) = A
+
+ϖii ˆxi(t) + ∑
+
+> j∈N i
+
+ϖij ˆxj (t)
+
+ + Bu (t)+ Li
+
+(Ci ˆxi(t) − yi(t)) + ∑
+
+> j∈N i
+
+Mij (ˆ xj (t) − ˆxi(t)) (3) Ref. Observability Communication Connectivity [11] 6 3 3                           
+
+> [12][13][14] 363
+> [7][15][16][17][18] 363
+> [10][19] 336
+> [6][20] 363
+> *[9] 737
+> [21] 633
+> [22] 336
+> [8][23][24][25] 363
+> This paper 737
+
+TABLE I: Trilemma trade-offs of the existing litera-ture on distributed state estimation for discrete-time LTI systems. Each entry indicates whether a method strengthens the requirements beyond the Assumptions 1, 2 and 3: 3 = at/near minimal; 6 = stricter than minimal; 7 = trade-off with another assumption. The four horizontal blocks group corresponds to Kalman– consensus filters, Luenberger-type observers, augmented-state observers, and optimization/MHE-based designs, respectively. *[9], similar to our approach, relies solely on Assumption 2 and allows a trade-off between observ-ability and connectivity, though it tends to yield more conservative results, as will be demonstrated later. where Li ∈ Rnx×nyi , Mij ∈ Rnx×nx , and ϖij ∈ R with 
+
+ϖii + ∑ 
+
+> j∈N i
+
+ϖij = 1 . Given an LTI system (1) and the underlying communication network G, the following main theorem states the existence condition of the distributed observer {O i}i∈N.Theorem 1: Consider an LTI system (1), the commu-nication among all sensor nodes is described by the graph 
+
+G and follows Assumption 2. For each node, the local observer (3) can reconstruct the entire system state x(t)
+
+asymptotically as (2) if there exists a positive definite matrix Q ∈ RN n x×N n x and matrices {W, L, M} such that 
+
+[ −Q (W ⊗ A + LC − M)⊤
+
+W ⊗ A + LC − M −Q−1
+
+]
+
+≺ 0 (4) holds, where W = [ϖij ]i,j ∈N ∈ RN ×N
+
+(ϖij = 0 if (j, i ) /∈ E) with W1 N = 1N ,
+
+L = diag( L1, L 2, · · · , L N ) ∈ RN n x×∑Ni=1 nyi ,
+
+C = diag( C1, C 2, · · · , C N ) ∈ R∑Ni=1 nyi ×N n x , and 
+
+M = [ ˘Mij ]i,j ∈N ∈ RN n x×N n x with 
+
+˘Mij =
+
+∑
+
+> q∈N p
+
+Mpq if i = j = p, 
+
+−Mij if (j, i ) ∈ E ,
+
+0n×n if (j, i ) /∈ E .
+
+Proof: Define ei(t) := x(t) − ˆxi(t) as the estimation error at Node i, then its dynamics can be written as follows 
+
+ei(t + 1) = A
+
+ϖii ei(t) + ∑
+
+> j∈N i
+
+ϖij ej (t)
+
+ + LiCiei(t)
+
+−
+
+ ∑
+
+> j∈N i
+
+Mij 
+
+(ei(t) − ej (t)) (5) Stacking all local errors as e := col( e1, e 2, · · · , e N ), one can obtain the full error dynamics as 
+
+e(t + 1) = ( W ⊗ A + LC − M)e(t). (6) Consider a Lyapunov candidate V (t) := e(t)⊤Qe(t). The time difference of V (t) along the error dynamics (6) follows 
+
+V (t + 1) − V (t) = e(t)⊤ (S⊤QS − Q) e(t),
+
+where S = W ⊗ A + LC − M. By applying the Schur Complement Lemma [26], the matrix inequality (4) guarantees that 
+
+S⊤QS − Q ≺ 0,
+
+which implies V (t + 1) − V (t) < 0 for all e(t)̸ =0. Consequently, the estimation error e(t) converges asymptotically to zero. Due to the existence of a nonlinear term Q−1, it is very challenging to address the nonlinear matrix inequality (4) directly. Therefore, we develop an iterative semi-definite programming (SDP) algorithm that transforms (4) into a series of solvable optimization problems, which is inspired by the cone complementary linearization method [27], [28]. Let P := Q−1, the matrix inequality (4) writes 
+
+[−Q S⊤
+
+S −P
+
+]
+
+≺ 0, (7) 
+
+P = Q−1, (8) 
+
+S = W ⊗ A + LC − M.
+
+Define the cone constraint 
+
+K(Q, P ) := 
+
+[ Q IN n x
+
+IN n x P
+
+]
+
+⪰ 0 (9) to be a convex relaxation of the nonconvex constraint (8). Subsequently, we can force the feasible solution to QP =
+
+IN n x , i.e. P = Q−1, by minimizing Tr( QP ) through the following iterative SDP 
+
+Pk : min   
+
+> Q,P,W,L,M
+
+Tr( QkP ) + Tr( PkQ) (10) subject to 
+
+[−Q S⊤
+
+S −P
+
+]
+
+≺ 0, S = W ⊗ A + LC − M,
+
+K(Q, P ) ⪰ 0, Q ≻ 0, W1 N = 1N .
+
+(11) In this optimization problem, Tr( QkP ) + Tr( PkQ) can be regarded as a first order symmetric linearization of 
+
+Tr( QP ) at (Qk, Pk).The overall procedure is described in Algorithm 1, while the convergence of the resulting iterative scheme is formalized in the lemma that follows. Lemma 1: Under Algorithm 1, if the admissible set 
+
+F := 
+
+
+
+(Q, P , W, L, M)
+
+∣∣∣∣∣∣∣∣
+
+S = W ⊗ A + LC − M,
+
+[−Q S⊤
+
+S −P
+
+]
+
+≺ 0, Q ≻ 0,
+
+K(Q, P ) ⪰ 0, W1 N = 1N
+
+
+
+is not empty, we can define the sequence Jk := min (Q,P ,W,L,M)∈F Tr( QkP ) + Tr( PkQ) (k ≥ 0), which has the following properties Algorithm 1: Find matrix Q, and calculate the gain matrices {W, L, M}.Input: System matrix A, output matrices Ci,
+
+i ∈ N, communication topology G, and a small threshold εtol . 
+
+> 1
+
+k ← 0 
+
+> 2
+
+Solve the LMI problem (11) ▷ Guarantee the initial value Q⋄ and P ⋄ are in the feasible region F. 
+
+> 3
+
+Q0 ← Q⋄ and P0 ← P ⋄ ▷ Get initial value.  
+
+> 4
+
+while ∥QkPk − IN n x ∥ > ε tol do  
+
+> 5
+
+Solve optimization problem Pk (10)-(11)  
+
+> 6
+
+k ← k + 1  
+
+> 7
+
+Qk ← Q, Pk ← P ▷ Update for next iteration.  
+
+> 8
+
+if (4) holds then  
+
+> 9
+
+Break ▷ Early stop if find solution of initial matrix inequality. Output: Gain matrices {W, L, M} for distributed observer {O i}i∈N
+
+1) {Jk} is a monotonically non-increasing sequence, which converges to an optimum J⋆ with J⋆ ≥
+
+2N n x,2) If J⋆ = 2N n x, every accumulation point 
+
+(Q⋆, P ⋆, W⋆, L⋆, M⋆) satisfies Q⋆P ⋆ = IN n x ,3) If there exists ( ˜Q, ˜P , ˜W, ˜L, ˜M) ∈ F with ˜P = ˜Q−1
+
+(complementary feasible point), then Jk converges to 2N n x and any accumulation point satisfies 
+
+Q⋆P ⋆ = IN n x .Proof: Each optimization problem of Algorithm 1 is an SDP with a linear objective function over the convex set F satisfying Slater’s condition. Thus, there exists a minimizer in F.(Monotonicity) By definition, (Qk+1 , Pk+1 ) is an op-timal solution of Pk. Hence, we have 
+
+Jk =Tr( QkPk+1 ) + Tr( PkQk+1 )
+
+≤ Tr( Qk−1Pk) + Tr( Pk−1Qk) = Jk−1,
+
+hence {Jk} is monotonically non-increasing. (Lower bound of convergence) For any fixed (Qk, Pk)
+
+and any (Q, P ) ∈ F , we have 
+
+inf  
+
+> K(Q,P)⪰0
+
+Tr( QkP ) + Tr( PkQ)= inf   
+
+> P≻0
+
+Tr( QkP ) + Tr( PkP −1),
+
+where the infimum is obtained at Q = P −1.Define f (P ) = Tr( QkP ) + Tr( PkP −1). Calculating the derivative of this function, one can obtain 
+
+∇f (P ) = Qk − P −1PkP −1.
+
+In accordance with the optimality condition ∇f (P ) = 0,we can get 
+
+Qk = P −1PkP −1 ⇐⇒ P Q kP = Pk,
+
+which has a unique solution 
+
+P ♭ = P 12
+
+> k
+
+(
+
+P 12 
+
+> k
+
+QkP 12
+
+> k
+
+)− 12
+
+P 12 
+
+> k
+
+.
+
+Substituting it into the function f (P ), we can obtain 
+
+inf  
+
+> K(Q,P)⪰0
+
+Tr( QkP ) + Tr( PkQ)= inf   
+
+> P≻0
+
+f (P ) = 2Tr 
+
+((
+
+P 12 
+
+> k
+
+QkP 12
+
+> k
+
+) 12
+
+)
+
+.
+
+Since K(Q, P ) ⪰ 0 holds, Schur Complement implies that P 12 
+
+> k
+
+QkP 12 
+
+> k
+
+⪰ IN n x , which leads to the following result 
+
+Tr( QkP ) + Tr( PkQ) ≥ 2N n x. (12) Minimizing over (Q, P ) results in Jk ≥ 2N n x, which proves lim k→∞ Jk = J⋆ ≥ 2N n x together with the monotonicity. (Equality property) If lim k→∞ Jk = 2N n x, then equality must hold in both (12) and P 12 
+
+> k
+
+QkP 12 
+
+> k
+
+⪰ IN n x .
+
+P 12 
+
+> k
+
+QkP 12 
+
+> k
+
+= IN n x holds if and only if QkPk = IN n x .Passing to any convergent subsequence yields Q⋆P ⋆ =
+
+IN n x .(Complementarity feasibility) If there exists a feasible pair ( ˜Q, ˜P ) ∈ F satisfying ˜P = ˜Q−1, then for any other feasible pair ( ˆQ, ˆP ), Tr( ˆQ ˜P ) + Tr( ˆP ˜Q) ≥ 2N n x, with equality achieved when ˆQ = ˜P −1, ˆP = ˜Q−1. Therefore, all optimal values satisfy Jk ≥ 2N n x, and this lower bound is attainable. Combining this result with the monotonicity of {Jk}, we can obtain lim k→∞ Jk = 2 N n x.According to the “Equality property”, it follows that every accumulation point satisfies Q⋆P ⋆ = IN n x .Remark 1: Theorem 1 establishes that the gain ma-trices W, L, M for the proposed distributed observer (3) exist if the matrix inequality (4) is satisfied (sufficiency). When this condition holds, the matrices can be computed via Algorithm 1. The inequality condition (4) inherently couples the requirements for observability and connec-tivity. Compared with [9], the key innovation lies in the newly introduced Laplacian-type coupling Mij , which introduces an additional degree of freedom to enhance the contraction of non-average network modes beyond 
+
+W ⊗ A + LC . This flexibility is particularly beneficial when the plant dynamics (i.e., A) are “fast,” thereby extending the applicability boundary of [9], as illustrated by the simulation example in Section V. V. Simulation Examples To validate the proposed framework and the trilemma, we consider a discrete-time LTI system of the form (1) with 
+
+A =
+
+
+
+−1.5 0 0 0 00 10 0 0 00 0 −2 0 00 0 0 −3 00 0 0 0 −2
+
+ , B =
+
+
+
+1 00 10 11 01 0
+
+ . (13) Five sensing nodes are deployed along the system, with output matrices given by 
+
+C1 = [1 0 0 0 0] , C 2 = [0 1 0 0 0] ,C3 = [0 0 1 0 0] , C 4 = [0 0 0 1 0] ,C5 = [0 0 0 0 1] .
+
+(14) so that the overall pair (C, A ) is marginally jointly detectable (see Assumption 1). The initial communica-tion graph Ga is a minimal strongly connected digraph (Fig. 4a), corresponding to the lowest connectivity level. O1 O2
+
+> O3
+> O4
+> O5
+
+(a) Ga 
+
+> O1O2
+> O3
+> O4
+> O5
+
+(b) Gb
+
+Fig. 4: Communication topologies for simulation exam-ples Under this setting, Algorithm 1 fails to yield feasible gain matrices {W, L, M} satisfying (4). According to the trilemma, to recover feasibility, we can strengthen the sensing at Node 4 with 
+
+C′ 
+
+> 4
+
+=
+
+[0 0 0 1 00 1 0 0 0
+
+]
+
+.
+
+With this improvement, Algorithm 1 successfully yields feasible gains {W, L, M} (provided in the supplementary document 2 due to space limitations), and all resulting estimation errors asymptotically vanish (Fig. 5a). This confirms that improved observability alone can recover feasibility. 0 100 200 300 400 500 
+
+> 050 100 150 200
+
+(a) Enhance observability 0 100 200 300 400 500  
+
+> 050 100 150 200
+
+(b) Enhance connectivity 
+
+Fig. 5: Norm of estimation errors at each node for (a) enhanced observability, and (b) enhanced network connectivity. Alternatively, we preserve the original sensors but add one directed edge to obtain Gb, as shown in Fig. 4b. The increased connectivity restores feasibility without modifying any Ci, feasible gain matrices {W, L, M}
+
+can be obtained by Algorithm 1, (also provided in the supplementary document 2), and the resulting observer can ensure asymptotic convergence of the estimation error, as illustrated in Fig. 5b. Taken together, the two simulations demonstrate that feasibility can be restored by enhancing either observ-ability or network connectivity (while keeping the infor-mation exchange pattern fixed), confirming the trilemma and the implicit coupling captured in Theorem 1. Moreover, it can be observed that the same system described by (13)–(14) under topology Gb cannot be handled by [9], as the required design conditions in those works are violated. This comparison clearly demonstrates the broader generality and enhanced applicability of the proposed scheme. 
+
+> 2
+
+https://github.com/RuixuanZhaoEEEUCL/ECC2026.git 
+
+VI. Conclusions and Future Works Building upon existing research in discrete-time dis-tributed observers, this paper identifies a fundamental trilemma that captures the intrinsic trade-off among ob-servability, connectivity, and communication frequency. To alleviate the stringent conditions commonly imposed in prior works, we propose a unified single-timescale de-sign framework that inherently couples observability and connectivity requirements, leading to a nonlinear matrix inequality (NMI) formulation. The resulting NMI was effectively addressed through an iterative semidefinite programming (SDP) approach inspired by cone comple-mentarity linearization. Simulation results verified the validity and enhanced the generality of the proposed design compared with existing methods. Future research will focus on establishing explicit analytical relationships within the identified trilemma and examining the neces-sary conditions of the design. References 
+
+[1] J. Zhao, M. Netto, Z. Huang, S. S. Yu, A. Gómez-Expósito, S. Wang, I. Kamwa, S. Akhlaghi, L. Mili, V. Terzija et al., “Roles of dynamic state estimation in power system modeling, monitoring and operation,” IEEE Transactions on Power Systems, vol. 36, no. 3, pp. 2462–2472, 2020. [2] Y. Liu, A. K. Singh, J. Zhao, A. S. Meliopoulos, B. Pal, M. A. bin Mohd Ariff, T. Van Cutsem, M. Glavic, Z. Huang, I. Kamwa et al., “Dynamic state estimation for power system control and protection,” IEEE Transactions on Power Sys-tems, vol. 36, no. 6, pp. 5909–5921, 2021. [3] G. Yang, “Large-scale distributed state estimation: theory, methodology and algorithm,” Ph.D. dissertation, Imperial College London, 2022. [4] R. Zhao, G. Yang, P. Li, and B. Chen, “A multi-hop sensor network-based state estimation for discrete-time linear sys-tems with dynamic communication graphs,” in 2025 European Control Conference (ECC). IEEE, 2025, pp. 1563–1568. [5] R. Zhao, G. Yang, T. Parisini, and B. Chen, “Distributed unknown input observer design: A geometric approach,” 2026. [Online]. Available: https://arxiv.org/abs/2603.18335 [6] L. Wang and A. S. Morse, “A distributed observer for a time-invariant linear system,” IEEE Transactions on Automatic Control, vol. 63, no. 7, pp. 2123–2130, 2018. [7] B. Açıkmeşe, M. Mandić, and J. L. Speyer, “Decentralized observers with consensus filters for distributed discrete-time linear systems,” Automatica, vol. 50, no. 4, pp. 1037–1052, 2014. [8] G. Yang, X. Ren, N. Bastianello, and T. Parisini, “State estimation using a network of observers: A distributed op-timization approach,” in 2025 European Control Conference (ECC). IEEE, 2025, pp. 3151–3157. [9] S. Park and N. C. Martins, “Design of distributed LTI observers for state omniscience,” IEEE Transactions on Au-tomatic Control, vol. 62, no. 2, pp. 561–576, 2017. [10] A. Mitra and S. Sundaram, “Distributed observers for LTI systems,” IEEE Transactions on Automatic Control, vol. 63, no. 11, pp. 3689–3704, 2018. [11] R. Olfati-Saber, “Distributed kalman filter with embedded consensus filters,” in Proceedings of the 44th IEEE Conference on Decision and Control. IEEE, 2005, pp. 8179–8184. [12] ——, “Distributed kalman filtering for sensor networks,” in 2007 46th IEEE conference on decision and control. IEEE, 2007, pp. 5492–5498. [13] ——, “Kalman-consensus filter: Optimality, stability, and performance,” in Proceedings of the 48h IEEE Conference on Decision and Control (CDC) held jointly with 2009 28th Chinese Control Conference. Ieee, 2009, pp. 7036–7042. [14] U. A. Khan and A. Jadbabaie, “On the stability and optimal-ity of distributed kalman filters with finite-time data fusion,” in Proceedings of the 2011 American control conference. IEEE, 2011, pp. 3405–3410. [15] L. Wang, J. Liu, A. S. Morse, and B. D. Anderson, “A distributed observer for a discrete-time linear system,” in 2019 IEEE 58th Conference on Decision and Control (CDC). IEEE, 2019, pp. 367–372. [16] F. C. Rego, Y. Pu, A. Alessandretti, A. P. Aguiar, A. M. Pascoal, and C. N. Jones, “A distributed luenberger observer for linear state feedback systems with quantized and rate-limited communications,” IEEE Transactions on Automatic Control, vol. 66, no. 9, pp. 3922–3937, 2021. [17] T. Liu and J. Huang, “Distributed exponential state estima-tion for discrete-time linear systems over jointly connected switching networks,” IEEE Transactions on Automatic Con-trol, vol. 68, no. 11, pp. 6836–6843, 2023. [18] L. Wang, J. Liu, B. D. Anderson, and A. S. Morse, “Split-spectrum based distributed state estimation for linear sys-tems,” Automatica, vol. 161, p. 111421, 2024. [19] A. Mitra, J. A. Richards, S. Bagchi, and S. Sundaram, “Dis-tributed state estimation over time-varying graphs: Exploiting the age-of-information,” IEEE Transactions on Automatic Control, vol. 67, no. 12, pp. 6349–6365, 2022. [20] S. Park and N. C. Martins, “An augmented observer for the distributed estimation problem for LTI systems,” in 2012 American Control Conference (ACC). IEEE, 2012, pp. 6775– 6780. [21] M. Farina, G. Ferrari-Trecate, and R. Scattolini, “Distributed moving horizon estimation for linear constrained systems,” IEEE Transactions on Automatic Control, vol. 55, no. 11, pp. 2462–2475, 2010. [22] P. Philipp and T. Schmid-Zurek, “Distributed moving horizon estimation via dual decomposition,” in 2012 IEEE 51st IEEE Conference on Decision and Control (CDC). IEEE, 2012, pp. 4792–4798. [23] G. Battistelli, “Distributed moving-horizon estimation with arrival-cost consensus,” IEEE Transactions on Automatic Control, vol. 64, no. 8, pp. 3316–3323, 2018. [24] X. Li, S. Bo, Y. Qin, and X. Yin, “Iterative distributed moving horizon estimation of linear systems with penalties on both system disturbances and noise,” Chemical Engineering Research and Design, vol. 194, pp. 878–893, 2023. [25] L. Pedroso and P. Batista, “Decentralized moving horizon estimation for large-scale networks of interconnected uncon-strained linear systems,” IEEE Transactions on Control of Network Systems, vol. 10, no. 4, pp. 1855–1866, 2023. [26] S. Boyd, L. El Ghaoui, E. Feron, and V. Balakrishnan, Linear matrix inequalities in system and control theory. SIAM, 1994. [27] O. L. Mangasarian and J.-S. Pang, “The extended linear complementarity problem,” SIAM Journal on Matrix Analysis and Applications, vol. 16, no. 2, pp. 359–368, 1995. [28] L. El Ghaoui, F. Oustry, and M. AitRami, “A cone comple-mentarity linearization algorithm for static output-feedback and related problems,” IEEE Transactions on Automatic Control, vol. 42, no. 8, pp. 1171–1176, 1997.

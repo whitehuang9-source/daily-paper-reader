@@ -6,30 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-26
-- 运行时间：2026-03-26 21:02:04 UTC
+- 最新运行日期：2026-03-27
+- 运行时间：2026-03-27 20:26:47 UTC
 - 运行状态：成功
 - 本次总论文数：3
 - 精读区：0
 - 速读区：3
 
 ### 今日简报（AI）
-今日聚焦电磁仿真与精密测量前沿，涵盖低秩建模、毫米波成像阵列优化及超宽带磁力
-- 详情：[/202603/26/README](/202603/26/README)
+今日聚焦物理信息神经网络与分布式系统估算，探索电磁散射与无线电地图构建的前沿算法。
+重点关注利用物理信息算子（PINO）攻克电磁逆散射难题，以及通过 CGFormer 实现无网格的高精度无线电地图估算。
+建议深入了解深度学习架构在复杂物理场建模中的跨界应用，特别是 Transformer 在信号处理领域的落地潜力。
+- 详情：[/202603/27/README](/202603/27/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Surrogate Modeling with Low-Rank Function Representation for Electromagnetic Simulation](/202603/26/2603.19735v1-surrogate-modeling-with-low-rank-function-representation-for-electromagnetic-simulation)  
+1. [Physics-Informed Neural Operator for Electromagnetic Inverse Scattering Problems](/202603/27/2603.25404v1-physics-informed-neural-operator-for-electromagnetic-inverse-scattering-problems)  
+   标签：评分：7.0/10、query:tmr
+   evidence：用于电流分布重建的物理信息神经算子
+2. [Distributed State Estimation for Discrete-time LTI Systems: the Design Trilemma and a Novel Framework](/202603/27/2603.20144v1-distributed-state-estimation-for-discrete-time-lti-systems-the-design-trilemma-and-a-novel-framework)  
    标签：评分：6.0/10、query:tmr
-   evidence：电磁仿真与设计的代理模型
-2. [Array Layout Optimization in a 24-Element 38-GHz Active Incoherent Millimeter-Wave Imaging System](/202603/26/2603.23847v1-array-layout-optimization-in-a-24-element-38-ghz-active-incoherent-millimeter-wave-imaging-system)  
+   evidence：多传感器分布式状态估计
+3. [CGFormer: A Cross-Attention Based Grid-Free Transformer for Radio Map Estimation](/202603/27/2603.21408v1-cgformer-a-cross-attention-based-grid-free-transformer-for-radio-map-estimation)  
    标签：评分：6.0/10、query:tmr
-   evidence：阵列布局优化与图像重建性能
-3. [Ultrawide Bandwidth Optomechanical Magnetometry Using Flux Concentration](/202603/26/2603.23944v1-ultrawide-bandwidth-optomechanical-magnetometry-using-flux-concentration)  
-   标签：评分：6.0/10、query:tmr
-   evidence：利用磁通集中器进行磁场传感
+   evidence：基于稀疏测量的无网格估计
 
 
 <div class="dpr-home-promo-card">
