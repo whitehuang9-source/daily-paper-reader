@@ -1,0 +1,23 @@
+{
+  "label": "2026-03-28",
+  "date": "2026-03-28",
+  "generated_at": "2026-03-28T20:13:46",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202603/28/2603.25166v1-efficient-compressive-sensing-for-machinery-vibration-signals",
+      "section": "quick",
+      "title_en": "Efficient compressive sensing for machinery vibration signals",
+      "authors": "Imen Tounsi, Fadi Karkafi, Mohammed El Badaoui, François Guillet",
+      "date": "2026-03-26",
+      "pdf": "https://arxiv.org/pdf/2603.25166v1",
+      "score": "6.0",
+      "evidence": "稀疏信号的压缩感知与重构算法",
+      "tldr": "针对机械振动监测中高采样率导致的数据存储与传输挑战，本研究深入探讨了压缩感知（CS）框架在振动信号处理中的应用。通过对比分析稀疏基、观测矩阵和重构算法，首次将原用于图像压缩的Wang矩阵引入该领域。实验表明，Wang矩阵在HUMS2023和CETIM数据集上表现优异，尤其在高压缩比下，其重构质量和信噪比显著优于传统的随机矩阵，为工业监测提供了高效的解决方案。",
+      "tags": "query:tmr",
+      "abstract_en": "Mechanical vibration monitoring often requires high sampling rates and generates large data volumes, posing challenges for storage, transmission, and power efficiency. Compressive Sensing (CS) offers a promising approach to overcome these constraints by exploiting signal sparsity to enable sub-Nyquist acquisition and efficient reconstruction. This study presents a comprehensive comparative analysis of the key components of the CS framework: sparse basis, measurement matrix, and reconstruction algorithm for machinery vibration signals. In addition, a hardware-efficient measurement matrix, the Wang matrix, originally developed for image compression, is introduced and evaluated for the first time in this context. Experimental assessment using the HUMS2023 and the CETIM gearbox datasets demonstrates that this matrix achieves superior reconstruction quality, with higher SNR, compared to conventional Gaussian and Bernoulli matrices, especially at high compression ratios.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

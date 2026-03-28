@@ -6,32 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-27
-- 运行时间：2026-03-27 20:26:47 UTC
+- 最新运行日期：2026-03-28
+- 运行时间：2026-03-28 20:13:39 UTC
 - 运行状态：成功
-- 本次总论文数：3
+- 本次总论文数：1
 - 精读区：0
-- 速读区：3
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦物理信息神经网络与分布式系统估算，探索电磁散射与无线电地图构建的前沿算法。
-重点关注利用物理信息算子（PINO）攻克电磁逆散射难题，以及通过 CGFormer 实现无网格的高精度无线电地图估算。
-建议深入了解深度学习架构在复杂物理场建模中的跨界应用，特别是 Transformer 在信号处理领域的落地潜力。
-- 详情：[/202603/27/README](/202603/27/README)
+今日聚焦机械振动信号的高效压缩感知技术，探索工业监测的数据降维新路径。
+该研究重点在于通过优化算法提升机械设备状态监测的传输与处理效率，实现更轻量化的数据采集。
+建议关注工业物联网中低功耗信号处理技术的实际落地，以应对大规模设备监控的挑战。
+- 详情：[/202603/28/README](/202603/28/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Physics-Informed Neural Operator for Electromagnetic Inverse Scattering Problems](/202603/27/2603.25404v1-physics-informed-neural-operator-for-electromagnetic-inverse-scattering-problems)  
-   标签：评分：7.0/10、query:tmr
-   evidence：用于电流分布重建的物理信息神经算子
-2. [Distributed State Estimation for Discrete-time LTI Systems: the Design Trilemma and a Novel Framework](/202603/27/2603.20144v1-distributed-state-estimation-for-discrete-time-lti-systems-the-design-trilemma-and-a-novel-framework)  
+1. [Efficient compressive sensing for machinery vibration signals](/202603/28/2603.25166v1-efficient-compressive-sensing-for-machinery-vibration-signals)  
    标签：评分：6.0/10、query:tmr
-   evidence：多传感器分布式状态估计
-3. [CGFormer: A Cross-Attention Based Grid-Free Transformer for Radio Map Estimation](/202603/27/2603.21408v1-cgformer-a-cross-attention-based-grid-free-transformer-for-radio-map-estimation)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于稀疏测量的无网格估计
+   evidence：稀疏信号的压缩感知与重构算法
 
 
 <div class="dpr-home-promo-card">
