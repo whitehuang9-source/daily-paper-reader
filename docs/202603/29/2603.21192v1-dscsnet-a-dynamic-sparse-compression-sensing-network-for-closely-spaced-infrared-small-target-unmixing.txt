@@ -1,0 +1,540 @@
+Title: DSCSNet: A Dynamic Sparse Compression Sensing Network for Closely-Spaced Infrared Small Target Unmixing
+
+URL Source: https://arxiv.org/pdf/2603.21192v1
+
+Published Time: Tue, 24 Mar 2026 01:32:38 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> 1
+
+# DSCSNet: A Dynamic Sparse Compression Sensing Network for Closely-Spaced Infrared Small Target Unmixing 
+
+Zhiyang Tang †, Yiming Zhu †, Ruimin Huang, Meng Yang, Yong Ma, Jun Huang, Fan Fan* 
+
+Abstract —Due to the limitations of optical lens focal length and detector resolution, distant clustered infrared small targets often appear as mixed spots. The Close Small Object Unmixing (CSOU) task aims to recover the number, sub-pixel positions, and radiant intensities of individual targets from these spots, which is a highly ill-posed inverse problem. Existing methods struggle to balance the rigorous sparsity guarantees of model-driven approaches and the dynamic scene adaptability of data-driven methods. To address this dilemma, this paper proposes a Dynamic Sparse Compressed Sensing Network (DSCSNet), a deep-unfolded network that couples the Alternating Direction Method of Multipliers (ADMM) with learnable parameters. Specifically, we embed a strict ℓ1-norm sparsity constraint into the auxiliary variable update step of ADMM to replace the traditional ℓ2-norm smoothness-promoting terms, which effectively preserves the discrete energy peaks of small targets. We also integrate a self-attention-based dynamic thresholding mechanism into the reconstruction stage, which adaptively adjusts the sparsification intensity using the sparsity-enhanced information from the iterative process. These modules are jointly optimized end-to-end across the three iterative steps of ADMM. Retaining the physical logic of compressed sensing, DSCSNet achieves robust sparsity induction and scene adaptability, thus enhancing the unmixing accuracy and generalization in complex infrared scenarios. Extensive experiments on the synthetic infrared dataset CSIST-100K demonstrate that DSCSNet outperforms state-of-the-art methods in key metrics such as CSO-mAP and sub-pixel localization error. 
+
+Index Terms —Clustered small targets; infrared imaging; target unmixing; compressed sensing; deep-unfolded network; ADMM; dynamic thresholding; sparsity constraint 
+
+I. I NTRODUCTION 
+
+Infrared imaging technology captures the thermal radia-tion from objects, enabling an inherent all-weather imaging capability [ 1, 2 ]. It is widely applied in remote sensing, security monitoring, and surveillance [ 3]. In these scenarios, targets of interest are often imaged as small targets due to long detection distances, making infrared small target detection (IRSTD) a research field with significant practical applications[ 4]. However, with the development of swarm control technologies for low-altitude unmanned aerial vehicles (UAVs)[ 5], the accurate interpretation of clustered infrared small targets has become a critical demand in national defense monitoring and low-altitude security [6]. 
+
+This research was supported by the National Key R &D Program of China under Grant 2024YFE0202500, National Natural Science Foundation of China (No. 62475199, 62473297, and U23B2050) 
+
+The first two authors † contributed equally to this work. (Corresponding author: Fan Fan) 
+
+Fig. 1. The process of imaging mixing and unmixing of Closed-spaced targets. The green box represents the process of mixing distant neighboring targets in the infrared system, menawhile, the blue box represents the process of unmixing. The input for unmixing is the mixed image, and the output is the number of small targets in the mixed light spot, as well as the sub-pixel position and radiation intensity of each small target. 
+
+A particularly challenging scenario arises in clustered target detection: due to the long imaging distance, the angular separation between clustered targets often falls below the optical diffraction limit (Rayleigh criterion) of the infrared system. As shown in Fig. 1, their Point Spread Functions (PSFs) severely overlap on the focal plane, convolving into a single indistinguishable mixed spot [ 7]. Consequently, this phenomenon is well beyond the scope of traditional tasks such as infrared small target detection (IRSTD) [ 8– 12 ] and image super-resolution (SR) [ 13 – 15 ], giving rise to a core task termed " Close Small Object Unmixing (CSOU)". The core of CSOU is to recover the intrinsic attributes of each constituent target from the mixed spot, which necessitates the simultaneous achievement of three objectives: 1) Sub-pixel Target Detection: As illustrated in Fig. 2 ,unlike IRSTD that focuses on pixel-level target detection, CSOU demands accurate estimate of the number of targets within the mixed light spot rather than mere target-level detection. 2) Sub-pixel Localization: Distinct from IRSTD which realizes pixel-level target localization, CSOU needs to determine the sub-pixel coordinates of each individual target. 3) Recovery of intrinsic target information: Distinct from image SR that aims to improve the overall image resolution, CSOU needs to invert both the sub-pixel 
+
+> arXiv:2603.21192v1 [cs.CV] 22 Mar 2026 2
+
+coordinates and radiant intensity of each target. This is different from the traditional IRSTD methods (such as GSTUNet, DNANet, and FDA-IRSTD)[ 3, 9, 11 ], which focus on pixel-level object region segmentation for small object detection, as shown in Fig. 2(a). These methods rely on a one-to-one correspondence between the object to be detected and the annotation mask. As a result, they completely ignore the need for cross-scene Target Unmixing (CSOU) to resolve the intrinsic properties of multiple targets from mixed signals, such as target count, sub-pixel position, and radiance intensity. The inherent differences in core objectives mean that CSOU is a novel and challenging problem distinct from traditional tasks. From a signal processing perspective, CSOU can be naturally formulated within the framework of compressed sensing (CS) and reconstruction [ 16 ]. It aims to reconstruct a high-resolution target distribution from low-resolution observations. The formulation is validated by two physical priors. First, clustered infrared small targets are spatially sparse in the entire imaging plane, i.e., they only occupy an extremely small part of the space (most areas have no targets). [ 17 ]; Second, "long-distance imaging" will cause the "point spread Functions (PSFs)" of multiple infrared small targets to overlap with each other, and the respective infrared energies of the targets will mix together, eventually forming "mixed spots" on the imaging plane. We can only observe the pixel brightness of the mixed spots and cannot directly distinguish the brightness and position of individual targets. [ 18 ]. The goal of CSOU is to utilize mixed spots to restore sparse attributes such as counting, sub-pixel coordinates, and radiation intensity - this is in perfect alignment with the theory of compressed sensing, making this framework mathematically rigorous and grounded in physics. Guided by the theory of compressed sensing, existing CSOU approaches can be broadly categorized into two paradigms: traditional model-driven methods [ 19 ] and deep learning-based data-driven methods [ 20 ]. Specifically, the traditional model-based approaches are to establish inverse problem optimization models related to data fidelity and sparse regularization, and then solve them through hand-crafted priors and fixed regu-larization hyperparameters, such as the Iterative Contraction Threshold Algorithm (ISTA) [19] and ADMM [21] Here, the hand-crafted priors refer to manually designed prior constraints, and regularization hyperparameters are fixed parameters used to adjust the balance between model complexity and data fitting. While these model-driven approaches provide rigorous math-ematical interpretability and are suitable for simple scenarios [ 22 ], they face significant challenges in CSOU tasks: fixed parameters are difficult to adapt to scenarios with different number of targets, locations, and dynamically varying radiation intensities. In particular, pre-defined regularization hyperparam-eters fail to adaptively balance the sparsity constraints with the data fidelity. Consequently, these methods suffer from poor generalization performance and require tedious hyperparameter tuning, which renders them ineffective for complex, dynamic infrared scenarios [20]. Data-driven deep learning approaches can generally be categorized into two groups: super-resolution (SR)-based methods and deep unfolding–based methods. The image super-resolution algorithms improve the overall clarity of targets by  
+
+> Fig. 2. The first column shows that IRSTD methods assume a one-to-one correspondence between detected targets and real-world objects; when only one spot appears in the image, the detection result corresponds to a single target. The super-resolution approach in the second column can split the mixed spot into several sub-targets, yet its sub-pixel localization accuracy is insufficient, leading to missed detections and false alarms. In contrast, the DCSCNet unmixing method in the third column delivers more refined detection, enabling sub-pixel localization within the spot and unmixing of potential sub-targets.
+
+enhancing the perceptual quality of individual mixed spots [13 – 15 ], thereby enabling target detection methods to detect sub-targets. However, these approaches primarily emphasize visual fidelity rather than faithful physical signal recovery and therefore struggle to effectively disentangle the coupled information of closely spaced sub-targets. To overcome the above drawback, the deep unfolding-based methods leverage model-driven optimization frameworks and embed them into learnable networks. Representative approaches, such as ISTA-Net [ 20 ], ADMM-Net [ 22 ] and DISTANet [ 23 ], incorporate physical and hand-crafted priors into data-driven architectures to enable more reliable recovery of sub-targets. Nevertheless, two key limitations remain: 1) Insufficient robustness in complex infrared scenes: 
+
+As the complexity of mixed spot signal patterns in-creases—such as when the number of densely distributed targets grows—accurate reconstruction of a small target to a single pixel becomes challenging, often manifesting as varying degrees of artifacts around a given pixel. This leads to a decline in network prediction accuracy and a corresponding degradation in reconstructed image quality. 2) Insufficient adaptation of network sparsity: The CS mechanisms embedded in these frameworks often promote excessive image smoothing and fail to impose sparsity constraints tailored to small infrared targets, thereby limiting further improvements in unmixing accuracy. To address the aforementioned limitations, we revisit the CSOU problem from a prior-driven perspective. As a highly ill-posed inverse problem[ 23 ], the successful resolution of CSOU fundamentally depends on the accurate exploitation of prior knowledge regarding target radiation signals. In this context, we argue that an ideal CSOU framework should possess two key capabilities: 3
+
+1) Dynamic Scene-Adaptive Perception: In real-world sce-narios, target states and interference conditions evolve dy-namically. When small targets are densely distributed, their local spatial proportion becomes significant, necessitating stronger sparsity constraints (e.g., through larger penalty coefficients or stricter thresholds). These constraints help the model focus on selecting only the most salient target features, thereby preventing it from being distracted by excessive background details or noise. Conversely, in low-density target scenarios, weaker sparsity constraints are required, allowing the model to flexibly activate a broader set of features to capture potential target signals without overly suppressing the background. Therefore, an effective model must possess the ability to intelligently perceive the contextual dynamics and adjust sparsity constraints accordingly. 2) Strong Sparsity Induction : The observed mixed signals typically originate from a limited number of high-energy point sources, implying that the underlying target distri-bution is inherently sparse. Accordingly, the unmixing process should avoid indiscriminate spatial smoothing and instead emphasize the preservation of both the radiation intensity and spatial location of each individual sub-target during signal recovery, thereby enabling the clear separation of overlapping or closely spaced targets. The core motivation of this work arises from the failure of existing unmixing frameworks to reconcile the rigorous sparsity guaranties of model-based methods with the dynamic adaptability of data-driven approaches[ 24 ]. We propose that the key lies in creating a novel architecture where sparsity constraints evolve from static, manually defined rules into intelligent, context-aware processes tailored to specific input signals[ 25 ]. This architecture is realized by advancing the deep unfolding paradigm [ 26 ], specifically through a dynamically parameterized ADMM framework that decouples sparsity regularization from data fidelity, thereby establishing the theoretical groundwork for our proposed DCSCNet. Based on the above analysis, we propose a novel Dynamic Sparse Compressed Sensing Network (DSCSNet). Built upon the deep unfolding theory, DSCSNet deeply couples the physically interpretable ADMM optimization framework with dynamic, data-driven learning. We propose three key innovations. First , end-to-end opti-mization across ADMM steps (Initialize, Update, Reconstruc-tion, Fig. 3 ) ensures adaptive sparse iteration of parameters x,
+
+z, u: dynamic convolution and self-attention enable threshold sparsity in z-update; ℓ1-norm and sparse z separate targets in 
+
+x-update; step sizes are learned in u-update. This preserves compressed sensing physics while enabling sparsity and scene adaptation. Second , a Dynamic Threshold Generator (DTG) distills global context to predict spatially-varying thresholds per iteration, enabling content-aware feature selection. Third ,we replace smoothness with a strict ℓ1-norm constraint in 
+
+z-update and design a Dynamic Information Reorganization (DIR) module to reintroduce sparse auxiliary information in reconstruction, aligning optimization with target sparsity and avoiding smoothing bias.  
+
+> Fig. 3. Schematic of DCSCNet unmixing, organized into three main stages—initialize_layer, update_layer, and reconstruction_layer. Within each stage, three embedded sub-layers perform the ADMM variable updates for input image X, auxiliary variable Z, and multiplier u.
+
+The main contributions of this paper are summarized as follows: 1) Theoretical Innovation: A Paradigm Fusing Physical Priors with Data-Driven Learning: We establish a novel hybrid paradigm that integrates the sparse priors of model-based compressed sensing with the adaptive learning capabilities of deep learning. This approach overcomes the limitations of traditional methods that rely on manually preset sparse constraints and purely data-driven methods. 2) Architectural Innovation: A Task-Specific Deep Unfold-ing Framework: We design a deep unfolding architecture based on the ADMM optimization algorithm that is specif-ically tailored for the CSOU. This framework resolves the task mismatch bottleneck by ensuring a principled alignment between the unmixing problem’s structure and the network’s design. 3) Methodological Innovation: Effective combination of dynamic threshold processing and sparse iterative information: We deeply embed the strict ℓ1-norm sparsity constraint into the network’s iterative z update stage, and in the final reconstruction stage, we integrate the iterative information and apply a joint dynamic threshold mechanism to perform adaptive filtering on the input based on the input-generated threshold. These mechanisms are jointly optimized in an end-to-end manner, enabling the precise separation of closely spaced targets in dynamic high-density scenarios. 4
+
+II. R ELATED WORK 
+
+A. Infrared Small Target Detection 
+
+Infrared Small Target Detection (IRSTD) aims to identify pixel-level targets against complex backgrounds, and research in this field has evolved from handcrafted feature-based methods to deep learning paradigms. Early methods relied on local contrast mechanisms [ 27 ] and low-rank decomposition [ 28 ], but these methods struggled with poor generalization ability. The emergence of datasets like SIRST [ 8] and IRSTD-1k [ 29 ]has catalyzed the development of data-driven approaches. Data-driven methods, especially deep learning ones, have triggered a paradigm shift in IRSTD via end-to-end feature learning, achieving remarkable performance gains on multiple public datasets. They follow several key technical evolution paths: 1) Multi-scale Feature Fusion has become the mainstream strategy to address intrinsic feature sparsity [ 30 ]. DNANet [9] employs dense nested connections with gradient rout-ing to preserve target details across scales. UIU-Net [ 10 ]introduces a U-Net within U-Net architecture with dual attention gates for precise localization. MTMLNet [ 31 ]designs multi-stage feature aggregation and hierarchical feature fusion to capture features with different receptive fields. WMRNet [ 32 ] employs discrete wavelet transform to decompose images into subbands, minimizing frequency interference in state space models. ACMNet [ 33 ] proposes asymmetric contextual modulation that bridges semantic gaps via point-wise channel attention, achieving a 0.95 F1-measure on IRSTD-1k. 2) Attention Mechanisms have further enhanced robustness against background clutter. RLGA-Net [ 7] integrates rein-forcement learning with global context boundary attention, reducing false alarms caused by bright noise. OSFormer [34 ] introduces Varied-Size Patch Attention and Doppler Adaptive Filter for background suppression in video sequences. Lin et al. [ 35 ] propose contrast-enhanced shape-biased representations via cascaded contrast-shape encoder with attention guidance. LoGoNet [ 36 ] adopts local-to-global fusion with deformable convolutions, improving the detection rate in cluttered scenes. 3) Transformers for Global Dependency Modeling : Re-cently, Transformers have been introduced to IRSTD for global dependency modeling (addressing CNNS’ receptive field limitations) [ 37 , 38 ]: DATransNet [ 38 ] employs a Spatial-Channel Cross Transformer to model long-range spatial-channel dependencies for accurate target context extraction; DSTransNet [ 39 ] and its variants balance efficiency and global modeling via hierarchical structures and shifted window attention, enabling the processing of high-resolution infrared images. 4) Joint Learning Frameworks : Joint optimization of multi-ple tasks provides complementary supervision for infrared small target detection. SRS [ 40 ] presents a Siamese Reconstruction-Segmentation Network with dynamic-parameter convolution, using reconstruction as an auxiliary task. MTMLNet [ 31 ] further explores multi-task mutual learning to leverage both detection and segmentation annotations. We emphasize that IRSTD primarily identifies whether a pixel region contains a target. However, CSOU aims to inversely resolve the exact number, sub-pixel coordinates, and radiation intensities from a single blended spot—a fundamental difference in task objectives. Consequently, existing detection methods fail to meet the core demands of CSOU, such as the requirements of sparse signal reconstruction and scene adaptivity, as shown in Fig. 2. IRSTD typically outputs binary masks indicating target presence, while CSOU requires resolving overlapping signatures into discrete targets with sub-pixel-level precision. This limitation stems from their inherent architectural focus on classification rather than inverse problem solving. 
+
+B. Deep Unfolding Network Learning 
+
+With the development of deep learning, deep unfolding bridges model-based optimization and data-driven learning by translating iterative algorithms into network layers [ 41 ]. This constructs an end-to-end model that enjoys both physical interpretability and data-adaptive learning capabilities, achiev-ing breakthroughs in sparse signal processing tasks such as compressive sensing and image reconstruction. For instance, 
+
+ISTA-based unfolding initiated this paradigm: LISTA[ 42 ] first unfolded ISTA into feedforward networks, while ISTA-Net[ 20 ]incorporated convolutional transforms, improving PSNR over traditional CS. ISTA-Net++[ 43 ] introduced adaptive thresh-olding across layers. Meanwhile, ADMM-based frameworks 
+
+offered enhanced stability through variable splitting. ADMM-Net[ 22 ] unfolded the ADMM algorithm with learned param-eters, reducing MRI reconstruction time while maintaining image quality. HQS-Net[ 44 ] employed half-quadratic splitting with deep denoiser priors, demonstrating superior performance in Poisson noise conditions. Deep unfolding provides a naturally suited framework for solving the CSOU sparse reconstruction problem. In CSOU applications, initial attempts adapted these frameworks with limited success. For instance, most existing unfolding methods, such as ISTA-Net [ 20 ] and ADMM-Net [ 22 ]), employ static parameters. Their network weights and thresholds remain fixed, unable to adapt to input-specific characteristics. The dynamic unfolding paradigm emerged to address this. For instance, DISTA-Net [ 23 ] generates convolutional weights adaptively, improving unmixing accuracy. Furthermore, SeqCSIST [ 45 ]further advanced this line by proposing a Temporal Deformable Feature Alignment module for enhanced unmixing performance in sequential data. Our proposed DSCSNet shares the dynamic unfolding foundation with DISTA-Net [ 23 ]. However, to directly address the core challenges of "powerful sparsity induction" and "fine-grained scene adaptivity" outlined in the introduction, DSCSNet introduces three key distinctions, constituting a significant extension and innovation within this dynamic framework: 1) Algorithmic Foundation: DSCSNet is unfolded from the ADMM algorithm, not ISTA. ADMM’s use of variable splitting decomposes complex optimization into simpler sub-problems, yielding a more stable process that better ac-commodates the "embedding of strong sparse constraints" required for CSOU. 5
+
+2) Sparsification Core: DSCSNet explicitly incorporates an L1-norm constraint, replacing the inherent proximal mapping sparsification of ISTA. This enhances sparsity induction, enabling more precise separation of blended spots into discrete targets. 3) Dynamic Mechanism: DSCSNet employs an attention-based dynamic thresholding module. By perceiving local energy characteristics of the input spot, it generates pixel-wise dynamic thresholds. Compared to DISTA-Net’s dynamic convolution weights, our approach allows for finer-grained, scene-adaptive adjustment—imposing strong sparsity on target regions and weak sparsity on the background. In summary, DSCSNet is the first CSOU method that integrates the ADMM framework with attention-based dynamic thresholding and a strong L1-norm sparsity constraint, effec-tively addressing the limitations of existing dynamic unfolding methods in sparsity induction and adaptive precision. III. M ETHOD 
+
+A. Problem Formulation 1) Imaging model : Traditional imaging systems are con-strained by the pixel size of the detector, which is directly related to the spatial sampling frequency. This limitation re-stricts their ability to achieve sub-pixel-level target localization. In contrast, CS takes advantage of the sparsity of the signal as a prior, effectively overcoming the constraints imposed by the Nyquist-Shannon Sampling Theorem (NSST) on spatial sampling frequency. CS enables accurate scene reconstruction at sampling rates significantly lower than the Nyquist rate. This unique capability allows sub-pixel localization to be reformu-lated as a sparse signal reconstruction problem. Specifically, by discretizing the scene onto a high-resolution grid—finer than the resolution of the original image—the target is represented with greater sparsity in the grid space. Leveraging this sparsity prior, we can model the long-range infrared small target imaging (CSIST) process as an underdetermined linear system based on the high-resolution grid. By solving this system, we can achieve sparse signal reconstruction, enabling sub-pixel-level target localization. This system consists of several components, which are described in detail as follows: 
+
+Sparse Target Vector : To achieve sub-pixel precision, the target scene is discretized into a high-resolution grid of size 
+
+N1 × N2 , where N1 and N2 represent the number of rows and columns of the grid, respectively. The target distribution flattened from this grid can be represented by a sparse vector 
+
+x = ( x1, x 2, . . . , x N ), which satisfies x ∈ RN and ∥x∥0 =
+
+K ≪ N , where ∥ · ∥ 0 denotes the ℓ0-norm of a vector, N =
+
+N1N2 represents the total number of grid points, K represents the number of actual targets in the scene, and K is much smaller than the total number of grid points N.
+
+Point Spread Function (PSF) : Due to the diffraction effects of the optical system and the inherent physical limitations of the sensor, each point target on the high-resolution grid will not be represented as an ideal point on the actual low-resolution imaging plane. Instead, it will be blurred into a light spot with a specific distribution. This blurring process is typically modeled using the Gaussian point spread function (PSF): 
+
+P SF (q; pk) = 12πσ 2
+
+> psf
+
+exp − || q − pk|| 22
+
+2σ2
+
+> psf
+
+!
+
+, (1) where q = ( q1, q 2) denotes coordinates on the low-resolution imaging plane, and ∥ · ∥ 2 denotes the ℓ2-norm. σpsf is the PSF width parameter, which is calibrated via optical system parameters or experimental data. 
+
+Forward Imaging Model : In the actual remote infrared small target imaging scene, there is not only a single point target. After blurring the point spread function (PSF) of multiple point targets, their spots will be superimposed to form a blended spot. The blended spot is generated by the superposition of blurred infrared small targets, with the imaging process governed by physical constraints such as the optical diffraction limit, sensor resolution, and noise interference. The observed blended spot 
+
+y = ( y1, y 2, . . . , y M ) ∈ RM , where M = M1M2, generally denotes the number of pixels or the measurement dimension in the original observational data, and M1 and M2 represent the number of rows and columns of the grid of the original observational data, respectively. The resolution of this grid is much higher than the original observation resolution, typically satisfying N ≫ M . The observed y is the linear superposition of blurred target spots and additive noise, modeled as: 
+
+y = Φ · H (x) + n, (2) where H denotes the convolution operation that models the blurring effect of the imaging system’s point spread function (PSF), Φ is the measurement matrix that performs a linear dimensionality reduction, projecting the high-dimensional blurred signal H(x) from the high-resolution grid into the low-dimensional observation space RM , and n is the addition of Gaussian noise. 
+
+2) Inverse Problem : CSOU aims to reconstruct the sparse, high-resolution signal x from the observed blended spot y,which is formulated as a constrained optimization problem: 
+
+ˆH(x) = arg min  
+
+> H(x)
+
+∥ΦH(x) − y∥22 + λ∥x∥1, (3) where ∥ · ∥ 1 denotes the ℓ1-norm. Typical basis matrices H(·)
+
+include the discrete cosine transform, discrete wavelet trans-form, and others. In this paper, we generalize this constrained standard CS model to a generalized form: let H(x) = Cx
+
+where C is an invertible matrix satisfying CC −1 = I. We then substitute H(x) with Cx into the following model: 
+
+ˆx = arg min 
+
+> x
+
+(
+
+12 ∥Φx − y∥22 + X
+
+> l
+
+λl|Clx|
+
+)
+
+, (4) where Cl is the lth row of C. Since x is an image with arbitrary resolution, we further generalize the image representation Clx
+
+from image convolution using fixed local filters and ℓ1 sparse regularization to a more general regularizer g(·). In Eq. (4) ,we relax the requirements for orthogonality and invertibility of the basis matrix C, and thus we formulate the Generalized-CS 6 
+
+> Fig. 4. Architecture of the proposed Dynamic Convolutional Sparse Coding Network (DCSCNet).
+
+model: 
+
+ˆx = arg min 
+
+> x
+
+(
+
+12 ∥Φx − y∥22 +
+
+> L
+
+X
+
+> l=1
+
+λlg(Dlx)
+
+)
+
+, (5) where D = {Dl} denotes a transform matrix for a convolution operation, L denotes the number of filters, and λ = {λl, λ ≥
+
+0} is the regularization parameter balancing data fidelity and sparsity. To enforce point-wise sparsity and facilitate adaptive learning, we introduce an auxiliary variable z = Dx , where z ∈
+
+RC and D ∈ RC×N represent learnable sparse transformation matrices. The corresponding optimization problem is expressed through an augmented Lagrangian function: 
+
+Lρ(x, z, μ ) = 12 ∥Φx − y∥22 +
+
+> L
+
+X
+
+> l=1
+
+
+
+λlg(zl)+ ⟨μl, D lx − zl⟩ + ρl
+
+2 ∥Dlx − zl∥22
+
+
+
+,s.t.z l = Dlx
+
+(6) 
+
+where μ = {μl , μ ∈ RC } , μ ∈ RC is the Lagrange multiplier , and ρl > 0 is the penalty parameter controlling convergence stability. In Eq. (6) , the first term denotes the data fidelity term, which enforces consistency between the reconstructed image and the actual observed data †, λlg(zl)
+
+represents sparsity-promoting regularization, the rest of this function consists of the constraint enforcement terms. This problem exhibits a separable structure in the objective and a linear equality constraint, making it well - suited for the ADMM algorithm. The ADMM algorithm solves this problem via alternating minimization steps, enhanced with dynamic threshold generation for adaptive sparse reconstruction. The specific iterative steps are as follows: 
+
+Step 1: x-update for Observation Consistency: When z
+
+and β are fixed , the iteration for x proceeds as follows: 
+
+x(k+1) = arg min 
+
+> x(k)
+
+12 ∥Φx (k) − y∥22
+
++ ρ
+
+2 Dx (k) − z(k) + μ(k)
+
+ρ
+
+> 22
+
+,
+
+(7) where k denotes the number of iterations. When k = 0 , x
+
+represents the learnable network’s input, and z and β are set to 0. This quadratic optimization admits a closed-form as follows: 
+
+x(k+1) = ( ΦT Φ + ρI )(−1) (Φ x(k) − ρ(β(k) − z(k))) , (8) where β(k) = μ(k) 
+
+> ρ
+
+and I indicates the identity matrix. 
+
+Step 2: z-update for Sparsity Enforcement: With x and 
+
+μ fixed, the iteration for z proceeds as follows: 
+
+z(k) = arg min 
+
+> z(k−1)
+
+L(x(k), z(k−1) , μ(k−1) ). (9) We address Eq. (9) using the gradient descent method: 
+
+z(k) = z(k−1) − lr
+
+"
+
+ρz(k−1) − ρ
+
+
+
+x(k) + β(k−1) 
+
++
+
+> L
+
+X
+
+> l=1
+
+λlDTl H
+
+
+
+Dlz(k−1) #
+
+= μ1z(k−1) + μ2(x(k) + β(k−1) )−
+
+> L
+
+X
+
+> l=1
+
+˜λlDTl H(Dlz(k−1)),
+
+(10) where λl denotes the weight of the regularization term for the l-th transform operator Dl ,Dl is the l-th sparse transform operator — typically implemented as a learnable convolutional filter bank , mapping the intermediate variable z into a feature 7
+
+space where the representation is encouraged to be sparse , 
+
+μ1 = 1 − lr ρ , μ2 = lr ρ and ˜λl = lr λ. The subtraction part’s operation can be split into two convolutions C1(·), C2(·) and one activation H(·).
+
+Step3: β-update for Constraint Enforcement: Update the Lagrange multiplier to enforce the constraint z = Dx :
+
+β(k+1) = β(k) + ρ
+
+
+
+x(k+1) − z(k+1) 
+
+. (11) The integration of learnable components—sparse transform 
+
+D, and adaptive coefficients (λ, ρ )—enables the framework to adapt to dynamic target characteristics, learn target-specific sparse representations beyond fixed priors, and achieve precise separation of overlapping targets via ℓ1-norm-induced sparsity with enhanced adaptability. This dynamic ADMM optimization framework forms the mathematical foundation of DSCSNet, where each iteration is unfolded into a network layer for end-to-end training. 
+
+B. Dynamic Sparse Compressing Sensing Net 
+
+DSCS-Net integrates the dynamic parameter generation with the ADMM unrolling framework of ADMM-CSNet. The network comprises N cascaded stages, each corresponding to one ADMM iteration. As illustrated in Fig. 3 , each stage 
+
+k ∈ { 1, 2, ..., N } contains three core components: Dynamic Transform & Threshold Module F(k): Learns input-adaptive feature representations, Θ(k) 
+
+> d
+
+: Generates data-dependent shrink-age parameters; Reconstruction Module : Recovers sparse target signals through linear projection. 
+
+1) Dynamic Transform with L1 Regularization : To meet the requirements for extreme sparsity during the iterative process, as well as to ensure the robustness of the network’s iterative enhancement during the iterative stage. We embed ℓ1
+
+regularization into dynamic convolution to achieve adaptive iteration based on input content, as shown in Eq. (12): 
+
+z(k) = arg min 
+
+> z(k)
+
+ρl
+
+2 ∥Dlx(k) + β(k−1)  
+
+> l
+
+− z∥22 + λl∥z∥1. (12) In Eq.8, our solution employs a dynamic convolution for adaptive feature extraction, The module F(k) replaces tradi-tional fixed transforms with learnable sparse representations: 
+
+F(k)(z(k)) = C2(SiLu (C1(W, z(k)))) , (13) where W = f (·) generates dynamic convolutional weights from inputs, C1(·) represents using the dynamic convolutional weights for convolutional operation and C2(·) represents using the static convolutional weights for convolutional operation. 
+
+2) Sparsity and robustness enhancement in the final recon-struction stage : The original algorithm uses Eq. (8) as the final reconstruction output. However, due to differences between this task and traditional compressed sensing, this approach yields low image quality and poor restoration accuracy. In order to overcome the problem that the original ADMM depth expansion algorithm cannot adapt to the sparsity of the CSOU task and the robustness is reduced in the face of scenes with a large number of small targets, we add Dynamic Threshold Generator (DTG) and Dynamic Information Reorganization (DIR) in the reconstruction stage. The final reconstruction stage is formulated as Eq. (14): 
+
+x(k+1) =  ΦT Φ + ρI (−1) 
+
+·
+
+
+
+fDIR (Φ x) − ρ · Soft (fDTG (( δ(k))) 
+
+
+
+, (14) where δ(k) = β(k) − z(k), fDTG (·) employs spatial attention to capture target density variations, fDIR (·) integrates the original input with iterative information while simultaneously enhancing sparsity, and Soft (·) = sign (·) · max(0 , | · | − θ) denotes soft-thresholding operation. 
+
+(a) Dynamic Threshold Generator Module: In the output of the original reconstruction stage, for δ(k), it made full use of the iterative information and we believe that it can meet the requirements in terms of sparsity. However, in scenarios where the number of small targets increases, the network has difficulty predicting a specific small target precisely to a particular pixel, resulting in varying degrees of ghosting in adjacent pixels. Therefore, we believe that in the final reconstruction stage, we need a threshold that can be generated based on the input content to finely process δ(k), reducing the ghosting caused by the increase in the number of small targets, thereby enhancing the overall robustness of the network. This module employs spatial attention to perceive local energy distributions and generates pixel-wise adaptive thresholds, lowering values in target regions to preserve weak signals and raising them in background areas to suppress noise, thereby enabling content-aware filtering. The DTG processes multi-scale features through parallel convolutions and spatial attention: 
+
+˜U = [ Conv (1) 3×3(F(k) 
+
+> d
+
+), Conv (2) 3×3(F(k) 
+
+> d
+
+)] , (15) 
+
+θ(k) 
+
+> d
+
+= Conv 
+
+h 
+
+AvgPool ( ˜U ); MaxPool ( ˜U )
+
+i 
+
+. (16) The adaptive soft-thresholding operation becomes: 
+
+ˆδ(k) = Soft (δ(k)) = sign (δ(k)) · max(0 , |δ| − θ(k) 
+
+> d
+
+), (17) where ˆδ(k) means the δ(k) after being processed by the soft threshold operation. The threshold parameter θ(k) 
+
+> d
+
+is adaptively generated through a dedicated Dynamic Threshold Generator (DTG) module: 
+
+θ(k) 
+
+> d
+
+= fDTG 
+
+
+
+Fd(δ(k))
+
+
+
+, (18) where Fd(·) uses static convolution and dynamic convolution to extract multi-scale features. 
+
+(b)Dynamic Information Reorganization Module: In the ADMM algorithm, the auxiliary variable z from early iterations is typically discarded. As shown in Eq. (8) , this discarding leads to insufficient sparse representation ability in the final recon-struction layer, particularly for the initialized image input part, due to the lack of iterative sparsity refinement and the difficulty of enhancing sparsity via content-based adaptive filtering. This inherent mismatch between the network structure and the task requirements limits performance in scenarios like CSOU. To address this, we design a Dynamic Information Reorganization module (DIR) that aggregates auxiliary variables from the past m iterations. These historical features are integrated 8
+
+and reintroduced into the current reconstruction via residual connections, enhancing the consistency of sparse estimation across layers and suppressing artifacts while maintaining high interpretability. The auxiliary variable z involved in the fusion is: 
+
+Z(i) = z(i) ni=n−m, (19) Let m be the number of auxiliary variables z fused from n
+
+iterations (e.g., last m if m = 3 , n = 6 ). After sparsifying each z(i) to Z(i)
+
+> enhanced
+
+, they are averaged. Z(i) 
+
+> enhanced
+
+= tanh( Conv (Z(i))) , (20) 
+
+zfused = Weight (Z(i)
+
+> enhanced
+
+). (21) Finally, the sparsity-enhanced initialized input features are fused with the enhanced auxiliary variable z:
+
+inp enhanced = Conv (SiLU (Conv (Cat [zfused , F(inp )])) , (22) where F means the sparsity-enhanced initialization, inp de-notes oringinal input, inp enhanced represents sparsity-enhanced input . In summary, as illustrated in Fig. 4 , the network comprises three stages: Origin-layer, Update-layer, and Final-reconstruction-layer. The Origin-layer encodes the input into initial features 
+
+X(1) , sparse codes Z(1) , and multipliers μ(1) . The Update-layer iteratively refines X(n), Z(n), and μ(n) via convolutional proximal operators (Conv1, Conv2) with nonlinear transforms and dynamic residual learning, fusing historical Z(n, 0) and current Z(n, 1) to update sparse codes. Within this stage, the Dy-namic Information Reorganization module aggregates historical sparse code sequences Z(n−1,k ) through convolutional fusion and adaptive weighting, producing updated X(n); the Dynamic Threshold Generator adaptively predicts soft thresholds θ from current sparse states via channel attention, while the coefficient 
+
+ρ enables iterative threshold optimization. Finally, the Final-reconstruction-layer outputs X(Ns+1) .
+
+C. Loss Function for Sparse Recovery 
+
+The training objective combines reconstruction fidelity: 
+
+Ldiscrepancy = 1
+
+M N sMX
+
+> i=1
+
+∥˜s(N ) 
+
+> i
+
+− si∥22. (23) where Ldiscrepancy is the mean squared error between the reconstructed signal s(N ) 
+
+> i
+
+and the ground truth si.IV. E XPERIMENTS 
+
+A. Experimental Settings 1) Evaluation Metrics : To evaluate DCSCNet, we adopted the CSO mean Average Precision (CSO-mAP) as the metric to assess network performance, a metric specifically designed for the CSOU task. The evaluation process is as follows: First, each prediction is classified as True-Positive (TP) or False-Positive (FP); then, a binary list is created. In this binary list, TP predictions are encoded as 1 and FP predictions are denoted by 0. This  
+
+> Fig. 5. Each pixel is subdivided into an 3 × 3 sub-pixel grid that represents the set of potential target locations.
+
+binary encoding underpins the precision–recall (PR) curve. The confidence threshold δ for positive predictions is then systematically varied to obtain multiple pairs of Precision and Recall values. These values collectively trace the preci-sion–recall curve. Average Precision (AP) is defined as the area under the PR curve, which offers a fine-grained assessment of model performance across all confidence levels and jointly accounts for the precision–recall trade-off. In this task, we set the confidence threshold δ to the values 5, 10, 15, 20, 25, which indicates the indicators AP 05 , AP 10 , AP 15 , AP 20 , AP 25 , and on this basis, we computed the network-performance metric CSO-mAP. We implemented DCSCNet on the open-source MMCV framework, integrating and adapting existing compressed-sensing techniques for the hyperspectral unmixing of infrared small-target imagery. 
+
+Train Settings: As a downstream stage of infrared small-target detection, DSCSNet receives target patches cropped from the detection results rather than the original full image.We used images from the CSIST-100K dataset as input, where the target patches are 11 × 11 pixels. The network outputs the predicted target position, sub-pixel offset, and radiometric intensity. Throughout the experiment, the initialized super-resolution ratio cis set to 3, and both the ground-truth and the unmixed output images have a spatial dimension of 33 × 33 pixels. The initialization parameter c is introduced to subdivide each pixel into a grid of n × n, producing units of sub-pixel 
+
+L = U V n 2. Provided the grid is sufficiently dense, each sub-pixel cell contains at most one target object, and the upper bound resulting in the localization error is √22n D.Specifically, for the i-th target, its position and radiance are denoted by 
+
+(xi, y i, s i). After initialization, the radiance value si is assigned 9                             
+
+> TABLE I SYSTEMATIC BENCHMARKING ANALYSIS OF DCSCN ET PERFORMANCE : C OMPARATIVE EVALUATION AGAINST MULTIPLE METHOD CATEGORIES
+> INCLUDING CLASSICAL OPTIMIZATION , S UPER -R ESOLUTION NETWORKS ,AND DEEP UNFOLDING ARCHITECTURES ON CSIST100K DATASET .
+> Method Params ↓FLOPs ↓CSO-mAP ↑
+> CSO-mAP AP 05 AP 10 AP 15 AP 20 AP 25
+
+Traditional Optimization       
+
+> ISTA [19] 7.46 0.01 0.31 2.39 9.46 25.14
+
+Image Super-Resolution                                                                                 
+
+> SRCNN [13] 0.019 M 1.345 G 29.06 0.23 4.10 21.65 49.95 69.39 ACTNet [46] 46.323 M 62.80 G 45.61 0.38 7.46 41.13 83.12 95.95 CTNet [47] 0.400 M 2.756 G 45.11 0.38 7.53 40.39 82.11 95.14 DCTLISA [48] 0.865 M 13.69 G 44.51 0.39 7.35 39.35 81.15 94.34 SRFBN [49] 0.373 M 3.217 G 46.05 0.43 8.31 42.83 83.72 94.95 RDN [50] 22.31 M 173 G 45.81 0.35 7.11 41.07 84.07 96.43 EDSR [47] 1.552 M 12.04 G 45.32 0.33 7.07 40.58 83.24 95.41 HIT-SIR [51] 0.769 M 7.357G 44.51 0.40 7.16 39.55 80.94 94.50 HiT-SNG [51] 0.952M 13.324G 45.01 0.39 7.34 40.19 81.98 95.17 HiT-SRF [51] 0.844M 7.945G 44.71 0.40 7.71 40.03 80.94 94.49
+
+Deep Unfolding                                                                                  
+
+> LIHT [52] 21.10 M 1.358 G 10.35 0.06 0.92 4.99 14.74 30.50 LAMP [53] 2.13 M 0.278 G 14.22 0.05 1.11 7.31 21.56 41.06 ISTA-Net [20] 0.171 M 12.77 G 45.16 0.41 7.71 40.57 82.58 94.53 ISTA-Net+ [20] 0.38 M 7.70 G 51.02 1.00 13.70 52.70 90.40 93.70 ISTA-Net++ [43] 0.337 M 24.33 G 46.06 0.42 7.66 41.58 84.46 96.17 LISTA [42] 21.10 M 1.358 G 30.13 0.25 4.13 22.29 51.18 72.80 FISTA-Net [54] 0.074 M 18.96 G 44.66 0.41 7.58 39.74 81.24 94.19 TiLISTA [44] 2.126 M 0.278G 14.95 0.06 1.23 7.72 22.50 46.23 DISTANet [23] 2.179 M 35.10 G 45.94 0.38 7.54 41.26 84.03 96.35
+> ⋆DCSCNet (Ours) 6.23M 40.70 G 46.36 0.44 7.93 41.50 85.40 96.54
+
+to the pixel whose coordinates are (c · xi + c−12 , c · yi + c−12 ).Remaining pixels are set to zero.By adjusting c, we guaranty that each sub-pixel grid contains at most one target. This allows iterative updates to refine the sub-pixel position and accurately recover the target’s radiance. We trained the network with the Adam optimizer under the MMEngine framework. The learning rate was fixed at 110 −4.
+
+Test Settings: To quantify the sub-pixel localization accuracy of DCSCNet on the infrared small-target unmixing task, we measured each model’s performance via CSO-mAP. We extracted bright pixels whose intensity exceeded a threshold of 50 from the unmixed image and treated them as pre-dicted targets. Their intensity values were recorded as peak strengths. Their positions were re-projected into the original 11 × 11 coordinate system. The re-projection formulas are 
+
+x′ =
+
+$ x −  c−12
+
+
+
+c
+
+%
+
+, y′ =
+
+$ y −  c−12
+
+
+
+c
+
+%
+
+.
+
+B. Comparison with State-of-the-Arts 1) Quantitative Analysis: Table I compares DCSCNet with three method families on CSIST-100K: classical optimization (ISTA), super-resolution networks (SR), and deep-unfolding networks (ACTNet, ISTANet). Evaluation covers parameters, FLOPs, and CSO-mAP. 1) Compared with traditional model-driven methods (e.g., ISTA): DCSCNet achieves 46.36% mAP versus 7.46%, revealing the limitations of purely model-driven approaches. By integrating model- and data-driven strate-gies, it effectively handles overlapping targets and scene variations, yielding substantially higher unmixing and localization accuracy. 2) Compared with super-resolution methods: SR methods perform poorly in CSOU. DCSCNet incorporates physics-matched dynamic thresholds and sparse iterations to capture finer details under extreme sparsity, conducting reconstruction early in the network rather than at the final stage, enabling more effective handling of complex target scenarios. 3) Compared with deep unfolding methods: DCSCNet dynamically integrates iterative information, excelling in both lenient ( AP 25 : 96.54%) and ultra-strict ( AP 05 , AP 10 )metrics. While ADMMCSNet achieves reasonable AP 25 
+
+with deeper iterations, it lags in stringent localization. DC-SCNet ranks first overall among deep-unfolding methods, maintaining robust performance across thresholds. The CSO-mAP metric is adopted with AP 05 –AP 25 reported over a 0.05–0.5 pixel range (step 0.05). Given the systematic error of 0.236 pixels from the c = 3 grid, AP 20 and AP 25 
+
+serve as primary metrics, where DCSCNet achieves 85.40% and 10  
+
+> Fig. 6. Visual comparison of 3× sub-pixel partition reconstruction in scenes with varying numbers of adjacent targets
+
+96.54%, respectively—on par with DISTANet—while leading in sub-pixel localization ( AP 05 , AP 10 ). In dense multi-target scenarios, DCSCNet attains 46.36% CSO-mAP, confirming robustness across precision levels. These results are achieved with only 6.23M parameters and 40.7G FLOPs, yielding over 
+
+7× parameter compression and at least 1.5× FLOPs reduction versus ACTNet and HAN, significantly easing deployment on embedded platforms. 
+
+2) Visualization Analysis: To more clearly demonstrate the advantages of the proposed model, partial experimental visual-ization results are provided, as shown in Fig. 6 . Specifically, 
+
+Fig. 6 presents comparative reconstruction experiments under the 3× sub-pixel partitioning framework, focusing on typical scenes containing 3–5 spatially adjacent infrared small targets. This evaluation is designed to assess the analytical performance of each algorithm under high target overlap conditions. 1) Compared with traditional model-driven methods :Traditional methods and existing deep unfolding networks exhibit varying degrees of boundary blurring and target merging. Moreover, as the number of targets increases to five, both localization errors and miss detection rates rise significantly. 2) Compared with super-resolution methods : Super-resolution methods are inconsistent with the physical principles of the CSOU task. They rely heavily on the contribution of the initialization method to the task. Unlike optimization-based networks, if the initialization is insufficiently accurate, such methods cannot iteratively refine the image to improve metrics. Additionally, the localization accuracy and radiation intensity restoration of super-resolution methods are highly unstable. 3) Compared to deep unfolding methods : As the number of targets increases, existing deep unfolding methods exhibit varying degrees of ghosting artifacts and intro-duce noticeable errors in radiation intensity restoration. In contrast, DCSCNet, by leveraging the synergistic enhancement mechanism of iterative information-based dynamic reconstruction and adaptive thresholding, can simultaneously maintain target count consistency, edge clarity, and spatial distribution accuracy at the sub-pixel level. This validates its robustness in dense multi-target unmixing tasks. 
+
+C. Ablation Study 1) Impact of different components: We conduct ablation studies to evaluate each component’s contribution, with results in TABLE II. 11         
+
+> TABLE II QUANTITATIVE ABLATION RESULTS ON THE CSIST 100K DATASET . W E REPORT THE AVERAGE PRECISION (AP) AVERAGED OVER DIFFERENT THRESHOLDS ,ALONG WITH THE PRIMARY EVALUATION METRIC CSO-MAP.
+
+## Strategy Module CSIST 100K 
+
+## DCN DIR DTG mAP AP 25 AP 20 AP 15 AP 10 AP 05 
+
+## DCSCNet ✓ ✓ ✓ 46.36 0.44 7.93 41.50 85.40 96.54 ADMMCSNet ✗ ✗ ✗ 43.64 0.40 7.93 38.80 79.27 91.80 DCSCNet w/o DCN ✓ ✗ ✗ 44.90 0.41 7.42 39.98 83.32 93.44 DCSCNet w/o DIR ✓ ✓ ✗ 44.35 0.40 7.51 40.37 83.85 94.61 DCSCNet w/o DTG ✓ ✗ ✓ 45.94 0.39 7.62 41.31 84.60 95.80  
+
+> Fig. 7. The degree of unmixing varies with the number of iteration rounds and training epochs
+
+"DCSCNet w/o DCN" removes dynamic information reorga-nization and soft thresholding from ADMMCSNet, retaining only static convolution. Adding DCN enables sparse extraction across iterations, improving all metrics with minimal cost (e.g., 
+
+AP 25 from 91.80% to 93.44%), confirming its suitability. "DCSCNet w/o DIR" removes dynamic information reor-ganization. Compared to "w/o DCN", AP 25 rises to 94.61%, showing that integrating iterative information reduces loss and enhances final sparse representation. "DCSCNet w/o Thres" removes dynamic soft thresholding. 
+
+AP 25 increases to 95.80% versus "w/o DCN", indicating that input-adaptive thresholding suppresses noise, aligns with physical priors, and improves interpretability and performance. Full DCSCNet outperforms baseline ADMMCSNet: CSO-mAP from 45.16% to 46.36%, AP 25 from 91.80% to 96.54%, validating synergistic gains. Removing DIR drops CSO-mAP to 44.35% and AP 25 to 94.61%, confirming its role in adaptive feature correction. Removing Thres reduces CSO-mAP to 45.94% and AP 25 to 95.80%, highlighting its necessity for artifact suppression and localization accuracy.  
+
+> Fig. 8. Hyperparameter analysis
+
+2) Hyperparameter analysis: We trained networks with layer counts 2, 4, 6, 8, 10. Performance peaked at 6 layers (46.36% CSO-mAP, as shown in Fig. 7 ), with best reconstruction at 6/250 epochs and 8/200 epochs. Six layers provide the optimal accuracy–efficiency trade-off. 
+
+(a) Dynamic weight: varied from 0 to 1; best at 0.7, stable 0.5-0.9, drop at 1 (45.3%), confirming coefficient importance. 
+
+(b) Dynamic reorganization layer: with 6 layers, tested positions 1–6; best at 3; beyond this, model complexity increases and convergence speed decreases, yielding marginal gains; optimal at 3. V. C ONCLUSION 
+
+This paper addresses the ill-posed CSOU problem, where existing methods struggle to balance sparsity and adaptability. To resolve this, we propose DSCSNet, coupling ADMM with deep unfolding. Key innovations: strict ℓ1-norm sparsity in ADMM updates to avoid smoothing bias, plus self-attention-based dynamic threshold and reorganized sparse iteration mechanisms for adaptive sparsification. The model preserves compressed sensing physics while ensuring robust adaptability. Experimental results show DSCSNet outperforms SOTA in accuracy and generalization. Future work includes multi-modal extension and real-time optimization. REFERENCES 
+
+[1] H. Deng, X. Sun, M. Liu, C. Ye, and X. Zhou, “Small infrared target detection based on weighted local differ-ence measure,” IEEE Transactions on Geoscience and Remote Sensing , vol. 54, no. 7, pp. 4204–4214, 2016. 1 [2] Y. Zhu, Y. Ma, F. Fan, J. Huang, and G. Wang, “Shifting neighbors within temporal contexts for slow-moving 12 
+
+infrared small target detection,” IEEE Signal Processing Letters , 2025. 1 [3] Y. Zhu, Y. Ma, F. Fan, J. Huang, Y. Yao, X. Zhou, and R. Huang, “Toward robust infrared small target detection via frequency and spatial feature fusion,” IEEE Transactions on Geoscience and Remote Sensing , 2025. 1, 2 [4] P. Wu, H. Huang, H. Qian, S. Su, B. Sun, and Z. Zuo, “Srcanet: Stacked residual coordinate attention network for infrared ship detection,” IEEE Transactions on Geoscience and Remote Sensing , vol. 60, pp. 1–14, 2022. 1 [5] M. Xiao, Q. Dai, Y. Zhu, K. Guo, H. Wang, X. Shu, J. Yang, and Y. Dai, “Background semantics matter: Cross-task feature exchange network for clustered infrared small target detection with sky-annotated dataset,” arXiv preprint arXiv:2407.20078 , vol. 1, 2024. 1 [6] M. Zhao, W. Li, L. Li, J. Hu, P. Ma, and R. Tao, “Single-frame infrared small-target detection: A survey,” IEEE Geoscience and Remote Sensing Magazine , vol. 10, no. 2, pp. 87–119, 2022. 1 [7] D. Wang, J. Liu, L. Ma, R. Liu, and X. Fan, “Improving misaligned multi-modality image fusion with one-stage progressive dense registration,” IEEE Transactions on Circuits and Systems for Video Technology , 2024. 1, 4 [8] Y. Dai, Y. Wu, F. Zhou, and K. Barnard, “Attentional local contrast networks for infrared small target detection,” 
+
+IEEE Transactions on Geoscience and Remote Sensing ,vol. 59, no. 11, pp. 9813–9824, 2021. 1, 4 [9] B. Li, C. Xiao, L. Wang, Y. Wang, Z. Lin, M. Li, W. An, and Y. Guo, “Dense nested attention network for infrared small target detection,” IEEE Transactions on Image Processing , vol. 32, pp. 1745–1758, 2022. 2, 4 [10] X. Wu, D. Hong, and J. Chanussot, “UIU-Net: U-Net in U-Net for infrared small object detection,” IEEE Transactions on Image Processing , vol. 32, pp. 364–376, 2022. 4 [11] Y. Zhu, Y. Ma, F. Fan, J. Huang, K. Wu, and G. Wang, “Toward accurate infrared small target detection via edge-aware gated transformer,” IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing ,vol. 17, pp. 8779–8793, 2024. 2 [12] Y. Jing, J. Zhao, T. Zhang, and Y. Zhu, “Swan: Syner-gistic wavelet-attention network for infrared small target detection,” arXiv preprint arXiv:2508.01322 , 2025. 1 [13] C. Dong, C. C. Loy, K. He, and X. Tang, “Image super-resolution using deep convolutional networks,” IEEE Transactions on Pattern Analysis and Machine Intelli-gence , vol. 38, no. 2, pp. 295–307, 2015. 1, 2, 9 [14] X. Wang, K. Yu, S. Wu, J. Gu, Y. Liu, C. Dong, Y. Qiao, and C. Change Loy, “ESRGAN: Enhanced super-resolution generative adversarial networks,” in Proceed-ings of the European Conference on Computer Vision (ECCV) Workshops , 2018, pp. 0–0. [15] K. Zhang, J. Liang, L. Van Gool, and R. Timofte, “Designing a practical degradation model for deep blind image super-resolution,” in Proceedings of the IEEE International Conference on Computer Vision , 2021, pp. 4791–4800. 1, 2 [16] D. L. Donoho, “Compressed sensing,” IEEE Transactions on information theory , vol. 52, no. 4, pp. 1289–1306, 2006. 2 [17] L. Lin, H. Xu, D. Xu, and W. An, “Resolution of closely spaced objects via infrared focal plane using reversible jump Markov chain Monte-Carlo method,” Acta Optica Sinica , vol. 31, no. 5, p. 0510004, 2011. 2 [18] X. Hui and L. Liangkui, “Super-resolution method of closely spaced objects based on sparse reconstruction using single frame infrared data,” Acta Optica Sinica ,vol. 33, no. 4, p. 0411001, 2013. 2 [19] I. Daubechies, M. Defrise, and C. De Mol, “An iterative thresholding algorithm for linear inverse problems with a sparsity constraint,” Communications on Pure and Applied Mathematics , vol. 57, no. 11, pp. 1413–1457, 2004. 2, 9 [20] J. Zhang and B. Ghanem, “ISTA-Net: Interpretable optimization-inspired deep network for image compres-sive sensing,” in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 2018, pp. 1828–1837. 2, 4, 9 [21] S. Boyd, N. Parikh, E. Chu, B. Peleato, J. Eckstein et al. ,“Distributed optimization and statistical learning via the alternating direction method of multipliers,” Foundations and Trends® in Machine learning , vol. 3, no. 1, pp. 1–122, 2011. 2 [22] Y. Yang, J. Sun, H. Li, and Z. Xu, “ADMM-CSNet: A deep learning approach for image compressive sensing,” 
+
+IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 42, no. 3, pp. 521–538, 2018. 2, 4 [23] S. Han, S. Yang, Y. Li, X. Zhang, X. Li, J. Yang, M.-M. Cheng, and Y. Dai, “Dista-net: Dynamic closely-spaced infrared small target unmixing,” in Proceedings of the IEEE/CVF International Conference on Computer Vision ,2025, pp. 14 655–14 664. 2, 4, 9 [24] V. Monga, Y. Li, and Y. C. Eldar, “Algorithm unrolling: Interpretable, efficient deep learning for signal and image processing,” IEEE Signal Processing Magazine , vol. 38, no. 2, pp. 18–44, 2021. 3 [25] M. Shen, H. Gan, C. Ning, Y. Hua, and T. Zhang, “Transcs: A transformer-based hybrid architecture for image compressed sensing,” IEEE Transactions on Image Processing , vol. 31, pp. 6991–7005, 2022. 3 [26] S. A. Mansouri, E. Nematbakhsh, A. Ramos, M. Tostado-Véliz, J. A. Aguado, and J. Aghaei, “A robust admm-enabled optimization framework for decentralized coordi-nation of microgrids,” IEEE Transactions on Industrial Informatics , 2024. 3 [27] C. P. Chen, H. Li, Y. Wei, T. Xia, and Y. Y. Tang, “A local contrast method for small infrared target detection,” 
+
+IEEE Transactions on Geoscience and Remote Sensing ,vol. 52, no. 1, pp. 574–581, 2013. 4 [28] S. Feng, R. Feng, D. Wu, C. Zhao, W. Li, and R. Tao, “A coarse-to-fine hyperspectral target detection method based on low-rank tensor decomposition,” IEEE Transactions on Geoscience and Remote Sensing , 2023. 4 [29] M. Zhang, R. Zhang, Y. Yang, H. Bai, J. Zhang, and J. Guo, “ISNet: Shape matters for infrared small target detection,” in Proceedings of the IEEE Conference on 13 
+
+Computer Vision and Pattern Recognition , 2022, pp. 877– 886. 4 [30] X. Zhou, Y. Ma, J. Huang, Z. Cai, Y. Zhu, and F. Fan, “Hmfenet: Hierarchical matching guided feature enhancement network for few-shot rgb-thermal urban scene segmentation,” IEEE Transactions on Intelligent Transportation Systems , 2025. 4 [31] B. Yang, F. Li, S. Zhao, W. Wang, J. Luo, H. Pu, M. Zhou, and Y. Pi, “Mtmlnet: Multi-task mutual learning network for infrared small target detection and segmentation,” 
+
+IEEE Transactions on Image Processing , vol. 34, pp. 4414–4425, 2025. 4 [32] M. Zhang, X. Li, J. Guo, Y. Li, and X. Gao, “Wmrnet: Wavelet mamba with reversible structure for infrared small target detection,” IEEE Transactions on Image Processing ,vol. 34, pp. 8229–8242, 2025. 4 [33] Y. Dai, P. Pan, Y. Qian, Y. Li, X. Li, J. Yang, and H. Wang, “Pick of the bunch: Detecting infrared small targets beyond hit-miss trade-offs via selective rank-aware attention,” IEEE Transactions on Geoscience and Remote Sensing , 2024. 4 [34] H. Qin, T. Xu, Y. Tang, F. Xu, and J. Li, “Osformer: One-step transformer for infrared video small object detection,” 
+
+IEEE Transactions on Image Processing , vol. 34, pp. 5725–5736, 2025. 4 [35] F. Lin, K. Bao, Y. Li, D. Zeng, and S. Ge, “Learn-ing contrast-enhanced shape-biased representations for infrared small target detection,” IEEE Transactions on Image Processing , vol. 33, pp. 3047–3058, 2024. 4 [36] X. Li, T. Ma, Y. Hou, B. Shi, Y. Yang, Y. Liu, X. Wu, Q. Chen, Y. Li, Y. Qiao et al. , “LoGoNet: Towards accurate 3d object detection with local-to-global cross-modal fusion,” in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 2023, pp. 17 524–17 534. 4 [37] T. Zhang, J. Zhao, Y. Zhu, G. Cui, and Y. Lyu, “Fsatfu-sion: Frequency-spatial attention transformer for infrared and visible image fusion,” Computer Vision and Image Understanding , 2026. 4 [38] C. Hu, Y. Huang, K. Li, L. Zhang, C. Long, Y. Zhu, T. Pu, and Z. Peng, “Datransnet: dynamic attention transformer network for infrared small target detection,” 
+
+IEEE Geoscience and Remote Sensing Letters , 2025. 4 [39] R. Huang, J. Huang, Y. Ma, F. Fan, and Y. Zhu, “Dstransnet: Dynamic feature selection network with feature enhancement and multi-attention for infrared small target detection,” IEEE Transactions on Geoscience and Remote Sensing , pp. 1–1, 2025. 4 [40] B. Nian, F. Tang, J. Ding, J. Yang, Z. Zheng, S. Kevin Zhou, and W. Liu, “Srs: Siamese reconstruction-segmentation network based on dynamic-parameter convo-lution,” IEEE Transactions on Image Processing , vol. 34, pp. 6318–6330, 2025. 4 [41] T. Zhang, Y. Zhu, J. Zhao, G. Cui, and Y. Zheng, “Ex-ploring state space model in wavelet domain: An infrared and visible image fusion network via wavelet transform and state space model,” in 2025 IEEE International Conference on Multimedia and Expo (ICME) , 2025, pp. 1–6. 4 [42] K. Gregor and Y. LeCun, “Learning fast approximations of sparse coding,” in 27th International Conference on Machine Learning , 2010, pp. 399–406. 4, 9 [43] D. You, J. Xie, and J. Zhang, “ISTA-Net++: Flexible deep unfolding network for compressive sensing,” in 2021 IEEE International Conference on Multimedia and Expo (ICME) . IEEE, 2021, pp. 1–6. 4, 9 [44] J. Liu and X. Chen, “ALISTA: Analytic weights are as good as learned weights in lista,” in International Conference on Learning Representations , 2019. 4, 9 [45] X. Zhai, B. Xu, Y. Chen, H. Wang, K. Guo, and Y. Dai, “Seqcsist: Sequential closely-spaced infrared small target unmixing,” IEEE Transactions on Geoscience and Remote Sensing , 2025. 4 [46] Z. Zhang, F. Liu, C. Liu, Q. Tian, and H. Qu, “Actnet: A dual-attention adapter with a cnn-transformer network for the semantic segmentation of remote sensing imagery,” 
+
+Remote Sensing , vol. 15, no. 9, 2023. [Online]. Available: https://www.mdpi.com/2072-4292/15/9/2363 9 [47] B. Lim, S. Son, H. Kim, S. Nah, and K. Mu Lee, “Enhanced deep residual networks for single image super-resolution,” in Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops ,2017, pp. 136–144. 9 [48] K. Zeng, H. Lin, Z. Yan, and J. Fang, “Densely connected transformer with linear self-attention for lightweight image super-resolution,” IEEE Transactions on Instru-mentation and Measurement , vol. 72, pp. 1–12, 2023. 9[49] Q. Li, Z. Li, L. Lu, G. Jeon, K. Liu, and X. Yang, “Gated multiple feedback network for image super-resolution,” in The British Machine Vision Conference (BMVC) , 2019. 9[50] Y. Zhang, Y. Tian, Y. Kong, B. Zhong, and Y. Fu, “Residual dense network for image super-resolution,” in 
+
+Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition , 2018, pp. 2472–2481. 9 [51] M. Zhang, C. Zhang, Q. Zhang, Y. Li, X. Gao, and J. Zhang, “Unleashing the power of generic segmentation model: A simple baseline for infrared small target detection,” in Proceedings of the 32nd ACM International Conference on Multimedia , 2024, pp. 10 392–10 401. 9 [52] Z. Wang, Q. Ling, and T. Huang, “Learning deep ℓ0
+
+encoders,” in Proceedings of the AAAI Conference on Artificial Intelligence , vol. 30, no. 1, 2016. 9 [53] C. Metzler, A. Mousavi, and R. Baraniuk, “Learned d-amp: Principled neural network based compressive image recovery,” Advances in Neural Information Processing Systems , vol. 30, 2017. 9 [54] J. Xiang, Y. Dong, and Y. Yang, “FISTA-Net: Learning a fast iterative shrinkage thresholding network for inverse problems in imaging,” IEEE Transactions on Medical Imaging , vol. 40, no. 5, pp. 1329–1339, 2021. 9

@@ -1,0 +1,1214 @@
+Title: Digital Self-Interference Cancellation in Full-Duplex Radios: A Fundamental Limit Perspective
+
+URL Source: https://arxiv.org/pdf/2603.21561v1
+
+Published Time: Tue, 24 Mar 2026 01:47:07 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+> IEEE TRANSACTION ON COMMUNICATIONS 1
+
+# Digital Self-Interference Cancellation in Full-Duplex Radios: A Fundamental Limit Perspective 
+
+Limin Liao, Jun Sun, Junzhi Wang, Chao Deng, Jizhao Wang, Fangsen Li and Yingzhuang Liu 
+
+Abstract —Digital self-interference cancellation (D-SIC) plays a crucial role in in-band full-duplex radios. Unfortunately, its fundamental limit remains unclear. In this paper, we aim to address this problem by exploring the performance limit of the parallel Hammerstein (PH) canceller for D-SIC, which is most commonly used in practice. First, a comprehensive analysis of the power of the residual self-interference (RSI) after the PH canceller with the least squares (LS) estimator is provided, which takes into account the truncation error, reconstruction error and transmitter noise. Specifically, the analysis is greatly simplified by equivalently expanding the PH canceller via generalized Laguerre polynomials (GLP), which enjoys the desirable property of mutual orthogonality among the basis functions. As a by-product of this orthogonal expansion, we establish that the LS estimator for the weights of the GLP canceller is asymptotically 
+
+unbiased , if the pilot sequence is Gaussian distributed. Second, in order to minimize the reconstruction error of the PH canceller, we propose a succinct criterion for optimizing the pilot sequence, which essentially seeks for small eigenvalue spread and large minimum eigenvalue of the Gram matrix corresponding to the pilot sequence. Specifically, the criterion is to minimize the product of the Shannon rank, an effective rank of a positive semidefinite matrix and the minimum eigenvalue of the Gram matrix. Simulation results demonstrate that with the optimized pilot sequence of a single OFDM symbol, over 10 dB gain can be achieved compared to the conventional pilot sequence (HE-LTF) for the PH canceller, and the corresponding RSI can be as low as -87.6 dBm. 
+
+Index Terms —In-band full-duplex, PH canceller, generalized Laguerre polynomial, sequence optimization. 
+
+I. I NTRODUCTION 
+
+# IN-band full-duplex (IBFD) radios have great potential to double the spectrum efficiency of wireless systems by allowing simultaneous transmission and reception over the same frequency band [1]. The core prerequisite for implementing IBFD radios is to effectively eliminate the strong self-interference (SI) received at the local Rx chain. For example, when the Tx power is 20 dBm, the strength of the SI can be more than 110 dB higher than that of the Rx noise. To suppress the SI to the noise level, implying the self-interference cancellation (SIC) ability should be more than 110 dB, is obviously a huge challenge. To accomplish this goal, we have to address the SI in both the analog and digital domain, which corresponds to analog SIC (A-SIC) and digital SIC (D-SIC), respectively [2]–[4]. As the first stage of SIC, A-SIC is required to reduce the strength of SI to a sufficiently low level—within the dynamic range of the analog-to-digital converter (ADC)—through RF analog cancellation circuits as well as antenna isolation. However, due to hardware limitations, the performance of A-SIC remains limited. Actually, it is quite difficult to achieve more than 60 dB of cancellation ability both theoretically [5] and practically [2]. Therefore, D-SIC, as the final stage of SIC, plays an indispensable role in suppressing the residual self-interference (RSI) below the noise floor. Early works employed a linear filter to reconstruct and subtract the SI, but these approaches were inadequate under nonlinear front-end distortions [6]. Therefore, the key goal of D-SIC is to eliminate nonlinear distortions in SI, such as power amplifier (PA) nonlinearity and in-phase/quadrature (I/Q) imbalance, and there have been many remarkable works [2], [7]–[13]. [2] models the nonlinear distortions of the transmitter through memory polynomials, and was the first to implement an end-to-end full duplex Wi-Fi prototype, verifying the feasibility of 110 dB cancellation performance. The parallel Hammerstein (PH) canceller was proposed to capture the nonlinear distortions of Tx chains and the memory effect of the SI channel [8]. [9] incorporates I/Q imbalance into the PH canceller and extends it to MIMO scenarios. Considering the all nonlinearities of the Tx and Rx chains, [10] provides a digital canceller based on Volterra series model. A nonlinear D-SIC based on deep neural networks has been proposed in [11], which achieves performance comparable to polynomial models while reducing complexity. However, the ability of neural networks to track channels in real-time remains to be verified. Orthogonalization-based least mean squares (LMS) algorithms were proposed in [3], [12], [14] for tracking time-varying channels. To further reduce complexity, [13], [15] proposed iterative parameter estimation methods to decouple the estimation of the SI channel response and nonlinear distortions. Despite these advances, the fundamental limit of D-SIC is still unclear. As a companion to [5], which addresses the fundamental limit of A-SIC, in this paper we aim to close this gap by exploring the performance limit of D-SIC from the fundamental perspective. Specifically, we will focus on the PH canceller with the least squares (LS) estimator. This is justified for the following reasons: 1) Convergence speed and compu-tational complexity; 2) Optimization of the pilot sequence; 3) Simplification of the digital SI canceller. First, compared to the LMS estimator, the LS estimator has advantages in convergence speed and computational complexity, especially in fast-varying channels. Additionally, weight estimation needs to be completed before the reception of the desired signal, since it is not realistic to distinguish SI from the mixed signal 
+
+0000–0000/00$00.00 © 2021 IEEE  
+
+> arXiv:2603.21561v1 [eess.SP] 23 Mar 2026 IEEE TRANSACTION ON COMMUNICATIONS 2
+
+of SI and the desired signal, which means that the optimization of the pilot sequence is crucial for both LMS and other estimation methods. Furthermore, compared to incorporating the I/Q imbalance and low noise amplifier (LNA) nonlinearity into the D-SIC canceller, it is reasonable to adopt the PH canceller with a simpler architecture, which is beneficial for performance analysis and system implementation, for two reasons: 1) Significant distinction in the variation period of the I/Q imbalance and SI channels; 2) Negligible nonlinear effects of LNA after reasonable A-SIC. Practically, the calibration of I/Q imbalance and the cancellation of SI can be completed separately since the variation timescale of I/Q imbalance is usually much longer than the coherence time of the channel. As long as the accuracy of I/Q imbalance calibration is high enough to reduce the mirror components below the Rx noise floor, its impact on the D-SIC of the PH canceller can be reasonably ignored. Besides, the performance of A-SIC should be sufficient to reduce the Tx noise below the Rx noise floor and make the RSI fall within the dynamic range of ADCs, which makes the RSI fall within the linear region of the LNA in a typical IBFD. Therefore, from the perspective of a comprehensive IBFD system, compared to the complex nonlinear cancellers that take into account various nonlinear distortions, the employment of the PH canceller is feasible. Unfortunately, to the best of our knowledge, pilot sequence design/optimization for D-SIC has not been systematically studied in the literature. [2] mentioned the LS estimation of the weights of a nonlinear filter through the Wi-Fi preamble, and achieved linear cancellation of 48 dB and nonlinear cancellation of 16 dB. [16] adopts a high-power sequence to estimate the nonlinear effects of PA. [8] utilized 10 orthogonal frequency division multiplex (OFDM) symbols to estimate the parameters of the PH canceller. However, in simulations, we found that the estimation accuracy of HE-LTF is not satis-factory, and the estimation error caused by different OFDM symbols also fluctuates significantly. This motivates us to investigate the optimal pilot sequence. Specifically, our contributions are summarized as follows:  
+
+> •
+
+We transform the conventional PH canceller into gener-alized Laguerre polynomial (GLP) canceller which is in essence an orthogonal expansion model. This transfor-mation is proved to preserve the equivalence and enjoy the advantage of greatly simplifying the analysis of the power of RSI.  
+
+> •
+
+We establish that LS estimation is asymptotically un-biased with Gaussian pilot sequences, and clarify its role in reducing bias-related reconstruction error in IBFD systems.  
+
+> •
+
+We develop a novel criterion for the optimal design of the pilot sequence, which aims for as uniform as possible 
+
+spectrum (i.e., small spread of eigenvalues) and high strength of the Gram matrix corresponding to the pilot sequence. Moreover, we propose a novel effective rank of a positive semidefinite (PSD) matrix, i.e., Shannon rank, which might be of value on its own.  
+
+> •
+
+We identify the key factors that influence the performance of the PH canceller, which include A-SIC ability, trunca-tion order, etc. The rest of this paper is organized as follows: In Section II, we provide the relevant theoretical background and present the mathematical models for D-SIC. In Section III, we detail the analysis on the RSI of the PH canceller under LS estimation, and propose the optimization criterion for pilot sequences. Additionally, we summarize various factors that affect the performance of the PH canceller. In IV, we validate the optimization criterion by comparing the performance under different pilot sequences through experimental simulations, and evaluate the influence of several factors. Finally, the conclusion is provided in V. 
+
+Notations: In this paper, the circularly symmetric complex Gaussian variable with variance σ2 is denoted as CN (0 , σ 2)
+
+and an exponential distribution is denoted as exp( λ). The operator ∗ represents the convolution and ⊗ represents the Kronecker product. z∗ is the conjugate of the complex z,and |z| is the modulus of z. For a matrix X, XT is the transpose of X, XH is the conjugate transpose of X, X−1 is the inverse of X, tr( X) represents the trace of X, ∥X∥F
+
+represents the Frobenius norm of X, and ∥X∥ represents the 2-norm of X. Particularly, we denote the diagonal matrix 
+
+A = [ aij ] ∈ CN ×N by diag( a11 . . . a N N ).II. B ACKGROUND AND MODELING 
+
+In this section, we first provide the mathematical models of D-SIC based on the PH canceller. Then, the GLP canceller is introduced. 
+
+A. Modeling of PH Cancellers 
+
+As illustrated in Fig. 1, taking into account the nonlinear distortions at the Tx chain, the actual Tx symbols s(n) can be expressed as 
+
+s(n) = 
+
+> +∞
+
+X
+
+> p=1
+> p=odd
+
+cp|x(n)|p−1x(n) , (1) where cp is the coefficient of p-order nonlinear components and x(n) is the modulated symbol. For the sake of simplicity, we denote that 
+
+ϕp
+
+ x(n) = |x(n)|p−1x(n) . (2) Assuming that A-SIC can effectively suppress SI so that the RSI is within the dynamic range of the ADC and the LNA behaves as a linear amplifier. Therefore, by taking the Tx noise 
+
+zt(n) into account, the SI at the Rx chain after A-SIC can be expressed as 
+
+r(n) = ˜h(n) ∗
+
+
+
+s(n) + zt(n)
+
+
+
++ zr(n) , (3) where zr(n) is the Rx noise that includes the thermal noise and the quantization noise, and the equivalent channel ˜h(n)
+
+can be expressed as 
+
+˜h(n) = hSI (n) − hASIC (n)=
+
+> Lh
+
+X
+
+> ℓ=0
+
+αℓδ(n − ℓ) . (4) IEEE TRANSACTION ON COMMUNICATIONS 3DAC 
+
+> PA
+> LNA
+> ADC
+> A-SIC
+
+## ~ 
+
+> Fig. 1. Digital self-interference cancellation based on the PH canceller.
+
+Here, hSI (n) is the SI channel response that includes spatial channels and the memory of nonlinear components, hASIC (n)
+
+is the channel response of A-SIC, and Lh +1 is the number of channel taps. Therefore, the Rx SI in Eq. (3) can be expressed as 
+
+r(n) = 
+
+> ∞
+
+X
+
+> p=1
+> p=odd Lh
+
+X
+
+> ℓ=0
+
+wp,ℓ ϕp
+
+ x(n − ℓ) + ˜ zr(n) , (5) where wp,ℓ = cpαℓ, and ˜zr(n) is the equivalent Rx noise, which can be expressed as 
+
+˜zr(n) = ˜h(n) ∗ zt(n) + zr(n) . (6) Similarly, for a P -order PH canceller with Lh + 1 memory length, the reconstructed signal can be expressed as 
+
+ˆr(n) = 
+
+> P
+
+X
+
+> p=1
+> p=odd Lh
+
+X
+
+> ℓ=0
+
+ˆwp,ℓ ϕp
+
+ x(n − ℓ) . (7) To simplify the notation, we rewrite it in the matrix-vector form as follows: 
+
+ˆr(n) = ϕT 
+
+> x,n
+
+ˆw. (8) Here ϕT 
+
+> x,n
+
+is defined as 
+
+ϕT 
+
+> x,n
+
+=
+
+h
+
+ϕT x(n) ϕT x(n − 1)  · · · ϕT x(n − Lh)i
+
+,
+
+(9) where 
+
+ϕT x(n) =
+
+h
+
+ϕ1
+
+ x(n) ϕ3
+
+ x(n) · · · ϕP
+
+ x(n)i
+
+, (10) and 
+
+ˆwT = [ ˆ w1,0 · · · ˆwP, 0 · · · ˆw1,L h · · · ˆwP,L h ] . (11) Then, the RSI can be expressed as 
+
+e(n) = r(n) − ˆr(n)= εx(n)
+
+| {z } 
+
+> T runcation error
+
++ ϕT
+
+> x,n
+
+(w − ˆw)
+
+| {z }
+
+> Reconstruction error
+
++ ˜ zr(n)
+
+| {z } 
+
+> N oise
+
+,
+
+(12) where the truncation error can be expressed as 
+
+εx(n) = 
+
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+wp,ℓ ϕp
+
+ x(n − ℓ) . (13) Thus, the RSI can be decomposed as:  
+
+> •
+
+Truncation error: the truncation error caused by insuffi-cient parameters, mainly the number of orders P , of the PH canceller, determines the theoretical upper bound of the cancellation performance of the PH canceller.  
+
+> •
+
+Reconstruction error: the reconstruction error is caused by the estimation error of the weights due to the noise and the truncation error, determining the actual performance of the PH canceller.  
+
+> •
+
+Noise: the noise, including the Tx noise, the thermal noise, and the quantization noise, determines the equiva-lent Rx noise floor. We denote the power of r(n) and e(n) by ρr and ρe respec-tively. Therefore, considering the peak-to-average power ratio (PAPR) of the signal, the upper bound of D-SIC based on the PH canceller can be expressed as 
+
+min {10 log 10 
+
+ρr
+
+ρe
+
+, DR − PAPR[dB] } , (14) where DR is the dynamic range of a b-bit ADC, which can be expressed as 
+
+DR[dB] = 6 .02 × b + 1 .76 . (15) Although the PH canceller can effectively reconstruct and sup-press SI, the non-orthogonality of its basis function ϕp
+
+ x(n)
+
+in Eq. (2) poses fundamental challenges for subsequent in-depth analysis. As shown in Eq. (12), the terms in the RSI are mutually coupled, making it difficult to independently evaluate the impacts of the truncation error and reconstruction error, thereby rendering the optimization problem of pilot sequences extremely complex and intractable. To solve the above problems, an ideal approach is to find a set of orthogonal basis functions to describe the nonlinear system represented by the PH canceller equivalently. Fortu-nately, for wireless communication systems based on OFDM, the normalized baseband signal x(n) approximately follows a complex Gaussian distribution CN (0 , 1) . Accordingly, we can utilize the orthogonal completeness of the GLP to re-expand 
+
+s(n) into the orthogonal form indicated in Eq. (16). Thus, we can obtain a new D-SIC canceller — the GLP canceller. IEEE TRANSACTION ON COMMUNICATIONS 4
+
+B. Orthogonal Expansion of PH Canceller via Generalized Laguerre Polynomials (GLP) 
+
+Above all, when x(n) ∼ CN (0 , 1) , the actual Tx symbols in Eq. (1) can be expanded orthogonally as 
+
+s(n) = 
+
+> +∞
+
+X
+
+> p=1
+> p=odd
+
+˜cpψp
+
+ x(n) , (16) where 
+
+ψp
+
+ x(n) =
+
+r 2
+
+p + 1 L1
+
+> p−12
+
+
+
+|x(n)|2
+
+x(n) . (17) Here, L1 
+
+> i
+
+(x) is the GLP [17], which can be expressed as 
+
+L1 
+
+> i
+
+(x) = 
+
+> i
+
+X
+
+> k=0
+
+(−1) k
+
+k!
+
+ i + 1 
+
+k + 1 
+
+
+
+xk , (18) and satisfies 
+
+Z ∞
+
+> 0
+
+L1 
+
+> i
+
+(x)L1 
+
+> j
+
+(x)xe −xdx = (i + 1)! 
+
+i! δij , (19) where δij is the Kronecker delta. When x(n) i.i.d. 
+
+∼ CN (0 , 1) ,the square of its modulus satisfies |x(n)|2 ∼ Exp(1) , where the probability density function (PDF) can be expressed as 
+
+f
+
+
+
+|x(n)|2
+
+=
+
+(
+
+e−| x(n)|2
+
+|x(n)|2 ≥ 0 ,
+
+0 |x(n)|2 < 0 . (20) Furthermore, according to Eq. (19), it can be proven that 
+
+E
+
+
+
+ψp
+
+ x(n) · ψ∗
+
+> q
+
+ x(m)
+
+= δpq · δnm . (21) We denote that 
+
+lp,q =
+
+r 2
+
+p + 1 (−1) q−12
+
+( q−12 )! 
+
+ p+1 2
+
+> q+1 2
+
+
+
+, (22) where p = odd, q = odd (p ≥ q). Then Eq. (17) can be rewritten as 
+
+ψp
+
+ x(n) =
+
+> (p−1) /2
+
+X
+
+> k=0
+
+lp, 2k+1 |x(n)|2kx(n) . (23) Therefore, the PH canceller can be transformed into a canceller based on the GLP, which can be expressed as 
+
+ˆr(n) = ψT 
+
+> x,n
+
+ˆ˜w . (24) Here, the expression of ψx,n is the same as ϕx,n , except that the basis function has been changed from ϕp
+
+ x(n) to 
+
+ψp
+
+ x(n). Notably, the PH canceller and the GLP canceller have the following relationship: 
+
+ψx,n = ϕx,n T . (25) Here, the transformation matrix T is defined as 
+
+T = ILh+1 ⊗ L , (26) where 
+
+L =
+
+
+
+l1,1 l3,1 · · · lP, 1
+
+0 l3,3 · · · lP, 3
+
+... ... . . . ...
+
+0 0 · · · lP,P 
+
+ . (27) Compared with the PH canceller, the basis functions of the GLP canceller, which satisfy the orthogonality property in Eq. (21), will greatly simplify the subsequent theoretical analysis. As will be demonstrated later, based on the GLP canceller, we can derive the conditions for achieving asymptotic unbiased estimation under the LS criterion, and propose a systematic optimization criterion for pilot sequences. Notably, the PH canceller and the GLP canceller can be transformed into each other through a certain linear transformation T , which is the foundation for the equivalence of the GLP canceller and the PH canceller under LS estimation. III. T HEORETICAL ANALYSIS AND OPTIMIZATION 
+
+In this section, we first analyze the RSI of D-SIC based on the PH canceller with the LS estimator, which is proven to be equivalent to that of D-SIC based on the GLP canceller. Next, we prove that the LS estimation of the weights of the GLP canceller is asymptotically unbiased based on Gaussian pilot sequences. Furthermore, we propose a novel criterion for optimizing the pilot sequence. Finally, we summarize the key factors that determine the performance of the PH canceller. 
+
+A. Analysis on the RSI 1) PH cancellers: 
+
+According to the Rx SI in Eq. (5), for a Tx data sequence vector xd = [ xd(0) · · · xd(Ld)] , (Ld ≥ Lh), the Rx SI vector rd = [ rd(Lh) · · · rd(Ld)] T can be expressed as 
+
+rd =Φdw + εd + ˜ zd , (28) where the measurement matrix Φd has 
+
+ΦTd = [ ϕxd,L h . . . ϕxd,L d ] , (29) and the truncation error vector εd = [ εxd (Lh) · · · εxd (Ld)] T.Similarly, for a Lp +1 -length Tx pilot sequence vector xp =[xp(0) · · · xp(Lp)] , where Lp − Lh + 1 ≥ (P +1)( Lh+1) 2 , the Rx pilot sequence vector can be expressed as 
+
+rp =Φpw + εp + ˜ zp . (30) Here, we use the subscript (·)p to distinguish all symbols related to the pilot sequence from symbols related to the data sequence. Then, the LS estimation of the weights can be expressed as 
+
+ˆw =( ΦHp Φp)−1ΦHp rp
+
+=Φ†
+
+> p
+
+(Φpw + εp + ˜ zp)=w + Φ†
+
+> p
+
+(εp + ˜ zp) . (31) Therefore, according to the RSI in Eq. (12), the RSI vector of the data sequence can be expressed as 
+
+ed = εd − ΦdΦ†
+
+> p
+
+(εp + ˜ zp) + ˜ zd . (32) Obviously, for PH cancellers with non-orthogonal basis func-tions, it is difficult to find the structural characteristics of the optimal pilot sequence. In light of this, we will resort to the GLP cancellers instead. IEEE TRANSACTION ON COMMUNICATIONS 5
+
+2) GLP cancellers: 
+
+Similarly, for GLP cancellers, the Rx pilot sequence vector in Eq. (30) can be rewritten as 
+
+rp =Ψp ˜w + ˜ εp + ˜ zp . (33) Here, Ψp has the same form as Φp, except that the basis function is ψp(xp(n)) instead of ϕp(xp(n)) . Moreover, the 
+
+n-th element ˜εxp (n) of the truncation error can be expressed as 
+
+˜εxp (n) = 
+
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+˜wp,ℓ ψp(xp(n − ℓ)) , (34) where ˜wp,ℓ = ˜ cpαℓ satisfies 
+
+wq,ℓ =
+
+> ∞
+
+X
+
+> p=qp=odd
+
+˜wp,ℓ · lp,q . (35) Actually, it can be proved that the GLP canceller is equivalent to the PH canceller in the case of LS estimation. Specifically, we have: 
+
+Theorem 1. The GLP canceller is equivalent to the PH canceller if LS estimation for the weights are employed for both cancellers, in the sense that 
+
+Φd ˆw =Ψd ˆ˜w , (36) 
+
+where 
+
+ˆw =Φ†
+
+> p
+
+rp
+
+ˆ˜w =Ψ†
+
+> p
+
+rp . (37) 
+
+Proof. See Appendix A. Notably, except for the LS estimator, Theorem 1 also applies to the minimum mean square error (MMSE) estimator as indicated in Eq. (67). By leveraging this equivalence, the RSI of PH cancellers in Eq. (32) can be rewritten as 
+
+ed = ˜ εd + ˜ zd − ΨdΨ†
+
+> p
+
+( ˜ εp + ˜ zp) . (38) For the sake of simplicity, we denote that 
+
+˜Ld = Ld − Lh + 1 , Gp = ΨHp Ψp,
+
+˜Lp = Lp − Lh + 1 , Gd = ΨHd Ψd, (39) 
+
+Lw = (P + 1)( Lh + 1) 2 .
+
+Assuming that ˜zp ∼ CN (0 , ρ ˜z I˜Lp ) is uncorrelated with ˜zd ∼CN (0 , ρ ˜z I˜Ld ), the expectation of ∥ed∥2 can be expressed as 
+
+E(∥ed∥2) = ∥ ˜εd − ΨdΨ† 
+
+> p
+
+˜εp∥2 + ρ˜z tr( G−1p Gd) + ˜Ldρ˜z .
+
+(40) 
+
+B. Optimization criterion of the pilot sequence 
+
+According to the Cauchy-Schwarz inequality, the power of the RSI in Eq. (40) satisfies that 
+
+ρe ≤ 2∥ ˜εd∥2
+
+˜Ld
+
++ 2∥ΨdΨ† 
+
+> p
+
+˜εp∥2
+
+˜Ld
+
++ tr( G−1p Gd)˜Ld
+
+ρ˜z + ρ˜z ,
+
+(41) where the terms in the right-hand side correspond to: trunca-tion error , bias-induced reconstruction error , noise-induced reconstruction error , and Rx noise , respectively. In the fol-lowing, we will focus on the analysis of the bias-induced and noise-induced reconstruction error. 
+
+1) Bias-induced reconstruction error (BIRE): 
+
+According to Eq. (31), the sufficient and necessary condition for an unbiased LS estimation can be expressed as 
+
+E( ˜ w − ˆ˜w) = 0 ⇐⇒ ΨHp ˜εp = 0 . (42) Obviously, if the estimator is unbiased , i.e., ΨHp ˜εp = 0 , the bias-induced reconstruction error would be zero. However, it is difficult to obtain the solution of Eq. (42) since we don’t have any knowledge about ˜wp,ℓ . Fortunately, if the pilot sequence is Gaussian distributed, we can prove that the LS estimation is guaranteed to be asymptotically unbiased, which is stated as follows: 
+
+Theorem 2. If the pilot sequence is an independently Gaus-sian sequence, i.e., xp(n) i.i.d. 
+
+∼ CN (0 , 1) , the LS estimator ˆ˜w
+
+would be asymptotically unbiased: 
+
+E( ˜ w − ˆ˜w| xp) a.s. 
+
+−−−−→ 
+
+> Lp→∞
+
+0 , (43) 
+
+s.t. xp(n) i.i.d. 
+
+∼ CN (0 , 1) .
+
+Proof. See Appendix B. 
+
+Theorem 2 offers a valuable insight, namely we can take advantage of the orthogonality of the GLP basis for Gaussian sequences to reduce the channel estimation bias. It is worth noting that Theorem 2 holds in the asymptotic sense, i.e., when the pilot sequence is of infinite length. For the finite-length case, we can upper-bound the BIRE by using the Rayleigh quotient inequality as follows: 
+
+∥ΨdG−1p ΨHp ˜εp∥2 ≤λmax (Gd)∥G−1p ΨHp ˜εp∥2
+
+≤λmax (Gd) λmax (Gp)
+
+λ2min (Gp) ∥ ˜εp∥2
+
+=λmax (Gd) cond 2(Gp)
+
+λmin (Gp) ∥ ˜εp∥2 . (44) Here, cond 2(·) is the spectral condition number, λmin and 
+
+λmax are the minimum and maximum eigenvalues, respec-tively. It is clear that a large λmin (Gp) and a small value of 
+
+cond 2(Gp) are desirable for minimizing the BIRE. 
+
+2) Noise-induced reconstruction error (NIRE) : 
+
+Regarding the NIRE, to maintain generality, we use the inequality λmin (A)tr( B) ≤ tr( AB ) ≤ λmax (A)tr( B) to decouple Gp and Gd as follows: 
+
+λmin (Gd)tr( G−1p ) ≤tr( G−1p Gd) ≤ λmax (Gd)tr( G−1p ) ,
+
+tr( Gd)
+
+λmax (Gp) ≤tr( G−1p Gd) ≤ tr( Gd)
+
+λmin (Gp) , (45) IEEE TRANSACTION ON COMMUNICATIONS 6
+
+It can be seen that to minimize the NIRE, we hope the pilot sequence could produce a small tr( G−1p ) as well as a small condition number of Gp. For tr( G−1p ), we have 
+
+tr( G−1p ) = 
+
+> Lw
+
+X
+
+> i=1
+
+1
+
+λi(Gp) ≤ Lw
+
+λmin (Gp) , (46) which implies that a large value of λmin is beneficial for resulting in a small-valued tr( G−1p ).
+
+3) Optimization for the pilot sequence: 
+
+Since the Gaussian pilot sequence enjoys the advantage of asymptotically unbiased LS estimation and thus has low BIRE, we assume the pilot sequence is selected from an ensemble of Gaussian sequences. The remaining core problem is: by what criterion should we select the sequence? As discussed above, to minimize the NIRE, it is beneficial that Gp has a large-valued λmin as well as a small-valued condition number of Gp.To put these heuristics into a unified and succinct framework, we propose a criterion which is the product of the Shannon rank (an effective rank of a PSD, which will be defined soon), and the minimum eigenvalue of Gp. The reason for employing the Shannon rank, rather than the condition number, to characterize the spread of the spectrum (eigenvalues) lies in the fact that the Shannon rank is a functional of all the eigenvalues; thus, it can capture the spread in a finer way, as compared with the condition number, which only depends on the extreme eigenvalues. a) Shannon rank 
+
+Shannon rank is a novel effective rank of a PSD matrix, which is motivated by the celebrated Shannon entropy and defined as follows: 
+
+rank S(Gp) = 2 H(¯λ(Gp)) , (47) where H(·) denotes the Shannon entropy and ¯λ(Gp) is a normalized version of the spectrum of Gp , i.e., ¯λ(Gp) = 
+
+λ(Gp)/tr( Gp). Shannon rank can effectively capture the spread of the eigenvalues of a PSD matrix, due to the con-cavity property of the Shannon entropy, i.e., a more uniform probability (spectrum) will lead to a higher Shannon entropy (rank). When all eigenvalues are identical, the Shannon rank will attain its maximal value, i.e., ˜Lp, which is exactly the size of Gp .b) Pilot design criterion 
+
+Building on the afore-mentioned insight that a more uniform spectrum (i.e., with a small spread of the eigenvalues) and a larger trace of the Gram matrix Gp are of critical importance for minimizing the BIRE and NIRE, we propose the following criterion for designing the pilot sequences xp:
+
+max 
+
+> xp∈χp
+
+rank S(Gp)) · λmin (Gp) , (48) where χp denotes a set of randomly generated Gaussian sequences, i.e. 
+
+χp =
+
+
+
+xp : xp = x
+
+∥x∥2
+
+, x ∼ CN (0 , ILp )
+
+
+
+. (49) 
+
+4) The Superiority of Gaussianity: 
+
+Due to the complex construction of the measurement matrix 
+
+Ψp, where the element of Ψp is the nonlinear basis function 
+
+ψp(·), it is hard to directly construct a pilot sequence satis-fying that cond 2(Gd) = 1 . Instead, we obtain the optimized pilot sequence by selecting from an ensemble of Gaussian sequences. A natural question is whether Gaussian sequences are optimal or near-optimal indeed. Firstly, we’ll argue that when the data sequence is indepen-dently Gaussian distributed (which is the case for OFDM sys-tems), the Gaussian pilot sequence is asymptotically optimal in terms of mean square error (MSE). Specifically, assuming that 
+
+xd(n) i.i.d. 
+
+∼ CN (0 , 1) is uncorrelated with the noise, according to the orthogonality in Eq. (21), the MMSE estimation of ˜w
+
+can be expressed as 
+
+ˆ˜wmmse =R−1 
+
+> ψ
+
+Rψr 
+
+= E(ψ∗
+
+> x,n
+
+ψT
+
+> x,n
+
+)−1 · E ψ∗
+
+> x,n
+
+r(n)
+
+=ILw E
+
+
+
+ψ∗
+
+> x,n
+
+ ψT 
+
+> x,n
+
+˜w + ˜ ε(n) + ˜ z(n)
+
+= ˜ w . (50) Thus, the MMSE of the RSI can be expressed as 
+
+¯ρe, min =
+
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+| ˜wp,ℓ |2 + ρ˜z . (51) Similarly, the MSE of RSI based on the LS estimator can be written as 
+
+¯ρe =
+
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+| ˜wp,ℓ |2 + ∥Ψ† 
+
+> p
+
+˜εp∥2 + ρ˜z tr( G−1p ) + ρ˜z .
+
+(52) According to Theorem 1 , when xp(n) i.i.d. 
+
+∼ CN (0 , 1) , the BIRE ∥Ψ† 
+
+> p
+
+˜εp∥2 will asymptotically equal zero as the pilot length Lp → ∞ , and this also holds for the NIRE tr( G−1p )
+
+since E(Gp) = ˜LpILw , resulting in ¯ρe → ¯ρe, min .Next, we’ll examine how the Gaussian pilot sequence be-have in the finite-length case, including the behavior of both NIRE and BIRE. a) Noise-Induced Reconstruction Error (NIRE) 
+
+When xd(n) i.i.d. 
+
+∼ CN (0 , 1) , the NIRE can be simplified as 
+
+tr( G−1p ), which can further be bounded as: 
+
+L2
+
+> w
+
+tr( Gp) ≤ tr( G−1p ) ≤ L2
+
+> w
+
+cond 2(Gp)tr( Gp) , (53) where the lower bound is due to the Cauchy-Schwarz in-equality, while the upper bound is a consequence of the facts 
+
+tr( Gp) ≤ Lwλmax and tr( G−1p ) ≤ Lw/λ min . It can be seen from (53) that it is possible to obtain a lower value of tr( G−1p )
+
+if the denominator tr( Gp) grows faster than the numerator 
+
+cond 2(Gp).With respect to tr( Gp), it can be written as 
+
+tr( Gp) = 
+
+> Lp
+
+X
+
+> n=Lh
+> P
+
+X
+
+> p=1
+> p=odd Lh
+
+X
+
+> ℓ=0
+
+ψp
+
+ xp(n − ℓ) 2
+
+, (54) IEEE TRANSACTION ON COMMUNICATIONS 7-80 -60 -40 -20 0 20 -100 -50 050 100 150 p=1 p=3 p=5 p=7 p=9   
+
+> Fig. 2. Power of ψp(x).
+
+where ψp(x) 2 can be expressed as 
+
+ψp
+
+ x(n) 2 =
+
+> (p−1) /2
+
+X
+
+> k=0
+
+lp, 2k+1 |x(n)|2kx(n)
+
+> 2
+
+= Ω 
+
+
+
+|x(n)|2p
+
+. (55) Since ψp(x) 2 grows asymptotically as |x|2p as demonstrated in Fig. 2, tr( Gp) will be highly sensitive to the PAPR of the pilot sequence. According to the extreme value theory, the expectation and variance of the peak power u = ∥x∥2 
+
+> ∞
+
+of a Gaussian sequence x ∼ CN (0 , ILp ) can be expressed as 
+
+E(u) = 
+
+> Lp
+
+X
+
+> n=1
+
+1
+
+n
+
+> Lp→+∞
+
+−−−−−−→ ln( Lp) + γ , (56) 
+
+D( u) = 
+
+> Lp
+
+X
+
+> n=1
+
+1
+
+n2
+
+> Lp→+∞
+
+−−−−−−→ π2
+
+6 , (57) where the Euler’s constant γ ≈ 0.5772 . Specifically, when 
+
+Lp = 1280 , which is equivalent to the length of an OFDM symbol in 802.11ax at 80 MHz, the PAPR of the Gaussian pilot sequence is approximately 8.9 dB. Theoretically, continuing to increase PAPR will lead to an increase in tr( Gp), which may be beneficial for reducing NIRE. b) Bias-Induced Reconstruction Error (BIRE) 
+
+Regarding the BIRE, it is the projection of the truncation error ˜εp on the estimation subspace Ψ†. The power of BIRE depends on both the power of the truncation error and the correlation between the truncation error and the estimation subspace. The power of the truncation error, which can be expressed as 
+
+|˜εxp (n)|2 =
+
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+˜wp,ℓ ψp
+
+ xp(n − ℓ)
+
+≤
+
+ X
+
+> ℓ,p>P
+
+| ˜wp,ℓ |2
+
+ X
+
+> ℓ,p>P
+
+ψp
+
+ xp(n − ℓ) 2
+
+
+
+,
+
+(58) will grow faster than |x|2P . While the correlation asymptot-ically vanishes in the case of Gaussian pilot sequences. For instance, the pilot sequence in 802.11ax, i.e., HE-LTF, with low PAPR (about 5 dB) can reduce the nonlinear distortion (truncation error), thereby reducing the BIRE. However, if a sequence with a larger PAPR than the Gaussian sequence is selected to further reduce NIRE, BIRE will increase due to the increase of ∥ ˜εp∥2 and the destruction of the correlation. These analyses indicate a trade-off between BIRE and NIRE, resulting in the overall lowest RSI. Although the finite-length Gaussian pilot sequence may not be globally optimal, its good properties—orthogonality under ψp(·) and appropriate PAPR—can achieve a low NIRE while suppressing the BIRE. Actually, Designing an absolute global optimal pilot sequence is not realistic since it is not constant, which is closely related to the data sequence, nonlinear effects, the SI channel, parameters of the PH canceller, etc. Nevertheless, Gaussian sequences provide guidance for the design of the optimal pilot sequence—balancing among truncation error, BIRE, NIRE, and noise. Similarly, since we do not make any assumptions about the data sequence as indicated in Eq. (41) and (45), the PH canceller based on the Gaussian pilot sequence can effectively suppress the NIRE and BIRE in non-OFDM IBFD systems, while the truncation error ∥ ˜εd∥2 of data sequences will sharply decrease with the decrease of the PAPR. This means that although the unbiased estimation of weights ˜w is not asymp-totically optimal, it can still provide a robust lower bound for the performance of D-SIC in non-OFDM systems. 
+
+C. Key Factors for PH Canceller 
+
+According to Eq. (40), the performance of PH cancellers is constrained by multiple factors:  
+
+> •
+
+A-SIC : The impact of A-SIC is multifaceted and crucial. To minimize the distortion of the SI in the Rx chain, A-SIC needs to reduce SI to the dynamic range of ADC and the linear region of LNA; Meanwhile, the cancellation performance of A-SIC affects the Rx noise level, which determines the upper bound of the SIC performance in the digital domain. Specifically, the performance of A-SIC and Tx signal-to-noise ratio (SNR) determines the power of Tx noise in the RSI. Furthermore, the RSI after A-SIC and the SNR of the expected signal jointly determine the gain of the Rx chain and thus determine the level of the equivalent quantization noise.  
+
+> •
+
+Order of the PH canceller : The impact of the order P
+
+of PH canceller is contradictory. On the one hand, the truncation error will decrease as P increases. On the other hand, the estimation error of the weights w under a cer-tain pilot will increase as the number Lw = Lh(P + 1) /2
+
+of the weights increases, leading to an increase in the reconstruction error. Therefore, for a certain pilot, there should be an optimal order P ⋆ to minimize the RSI by the trade-off between the reconstruction error and truncation error.  
+
+> •
+
+Nonlinear effects in Tx : The nonlinear effects in the Tx chain affect the truncation error since they determine the IEEE TRANSACTION ON COMMUNICATIONS 8
+
+power of the nonlinear components at each order. For example, if the input power of PA or the efficiency of PA decreases, the nonlinear distortion of PA will also weaken, which means that the optimal order of the PH canceller may also decrease.  
+
+> •
+
+The power delay profiles of SI channels and the band-width of SI : The power delay profiles of SI channels determine the power and delay of each multipath compo-nent in SI. Intuitively, SIC needs to reduce all multipath components with power higher than the Rx noise floor to below the Rx noise floor. However, A-SIC mainly con-tributes to the suppression of those multipath components with short delays in SI due to hardware limitations. This means that the PH canceller needs to configure sufficient memory length Lh to cope with the SI channel with a large delay spread. Additionally, the digital sampling rate will increase as the bandwidth increases, leading to an increase of Lh. A larger Lh means a larger pilot length 
+
+Lp to suppress the reconstruction error.  
+
+> •
+
+Multiple antennas : On the one hand, multiple antennas increase the number Lw of the weights from an additional dimension; On the other hand, when the total Tx power remains constant, multiple antennas mean that the Tx power of each RF chain will decrease, thereby reducing the nonlinear effects of PA, leading to a smaller opti-mal order of the PH canceller. These two contradictory impacts suggest that the design of the MIMO IBFD needs to comprehensively consider the SIC performance, estimation overhead, and PA efficiency. IV. S IMULATIONS AND DISCUSSIONS 
+
+In this section, we provide a comprehensive evaluation of the LS-based PH canceller based on simulations. Firstly, we provide the simulation results of the RSI under different pilots. Next, we present in-depth simulations and discussions on the factors that affect the PH canceller from different perspectives. Finally, some discussions are provided. 
+
+A. Simulation Settings 
+
+First, the simulation setup is listed in TABLE I. Particularly, we adopt the TGax channel model [18] to model the SI channels, where Model-F in the delay profile models exhibits the largest delay spread in contrast to Model-A with the smallest delay spread. Considering the nonlinear distortion, we adopt the RAPP model to model AM-AM characteristics, which can be expressed as 
+
+R( x) = Ax 
+
+
+
+1 + Ax Asat 
+
+> 2s
+
+ 12s
+
+, (59) where A is the linear gain of the PA, Asat is the amplitude saturation level, and s is the amplitude smoothing factor. Besides, the AM-PM characteristics is modelled as 
+
+Θ( x) = exp B|x|q
+
+1 + xBsat 
+
+> q
+
+!
+
+, (60)                                  
+
+> TABLE I CONFIGURATIONS
+> Parameter Value Protocol stack 802.11 ax (HE SU) Bandwidth 80 MHz Modulation and coding scheme (MCS) 64 QAM 3/4 Tx power 23 dBm Antenna number 1SI delay profile model Model-A/Model-F A-SIC performance 60 dB Memory length of the PH canceller L100 Rx noise power -90 dBm Trials 1000 TABLE II PARAMETERS OF THE NONLINEAR MODEL
+> Parameter Value Linear gain A30 dB Amplitude saturation power Asat 30 dBm Amplitude smoothing factor s2Phase gain B-0.15 Phase saturation level Bsat 0.88 Phase smoothing factor q21357911 13 -90 -80 -70 -60 -50 -40 -30 -20 -10 0
+> Fig. 3. Comparison of the RSI of the PH canceller with different orders under different pilot sequences. ( Lp=Ns)
+
+where B is the phase gain, Bsat is the phase saturation level, and q is the phase smoothing factor. The parameters of the nonlinear model are list in TABLE II. 
+
+B. Performance Validation 
+
+Firstly, according to the optimization criterion in Eq. (48), we select the optimized pilot sequence from 1000 candidate pilot sequences, where each pilot sequence is an Lp-point in-dependent sampling of the Gaussian distribution. Furthermore, to demonstrate the optimal performance, we also provide a criterion based on global LS, where the pilot sequence xp
+
+exactly equal to the data sequence xd, i.e. xp = xd.
+
+1) Optimization of the pilot sequence: As demonstrated in Fig. 3, considering the RSI of the PH canceller with different orders, we respectively adopt HE-LTF, the random Gaussian pilot sequence, and the optimized Gaussian pilot sequence to estimate the weights of the PH canceller, where the pilot length Lp is one OFDM symbol with Ns sampling points, which is the same as the length of HE-LTF. Obviously, the IEEE TRANSACTION ON COMMUNICATIONS 91 3 5 7 9 11 13 The order of PH canceller -120 -100 -80 -60 -40 -20 0Power [dBm]  
+
+> Fig. 4. The power of the different components in RSI of the PH canceller with different orders. (Model-F)
+
+RSI under the optimized pilot sequence is quite close to the lower bound under the global LS, which exhibits a significant drop compared with the RSI under HE-LTF and the random Gaussian pilot sequence when P > 5. Particularly, when 
+
+P = 9 , the RSI under the optimized pilot sequence is about -87.6 dBm, which approximates the Rx noise floor level, while the lower bound of the RSI under the global LS criterion is about -89.6 dBm. 
+
+2) Reconstruction Error vs. Truncation Error: To further reveal the impact of pilot sequences on RSI, Fig. 4 demon-strates the power of the NIRE and the power of the RSI without the Rx noise, where the channel model is Model-F. On the one hand, the truncation error decreases with the increase of P , which is stronger than the Rx noise in RSI when P < 9.On the other hand, the NIRE increases with the increase of P due to the rise in the number of weights of the PH canceller when the pilot length remains constant. Particularly, the NIRE under HE-LTF dominates in RSI when P > 3, which means that the performance of the high-order PH canceller will be limited under the LS estimation of weights based on HE-LTF, as illustrated in Fig. 3. This reveals that for a certain pilot sequence, there should be an optimal order P ⋆
+
+to achieve the optimal trade-off between reconstruction error and truncation error. For example, as illustrated in the Fig. 4, when Lt = 10 Ns, the optimal order of the PH canceller under optimized Gaussian pilot sequence is P ⋆ = 11 , and the RSI is about -89.8 dBm, where RSI without Rx noise is about -104 dBm. 
+
+3) BIRE vs. NIRE: As analyzed in Section III, to demon-strate the impact of PAPR on RSI, we considered another random sequence, where its phase follows the uniform dis-tribution and the amplitude follows the chi-square distribution with 4 degrees of freedom, which can be expressed as 
+
+f (|xp(n)|) = 14 |xp(n)|e− |xp( n)| 
+
+> 2
+
+, |xp(n)| ≥ 0 . (61) Compared to the Gaussian distribution, where the PDF of its amplitude can be expressed as 
+
+f (|xp(n)|) = |xp(n)|e− |xp( n)|22 , |xp(n)| ≥ 0 , (62) 1 2 3 4 5 6 7 8 9 10 -110 -105 -100 -95 -90 -85 Power [dBm]  RSI(Gaussian) RSI(chi-square) Global LS(opt) NIRE(Gaussian) NIRE(chi-square) Rx noise   
+
+> Fig. 5. The power of the RSI and the NIRE under various pilot sequences with different lengths. ( P= 9 , Model-F)
+
+the PDF of the chi-square distribution decays by e−| x|, result-ing in a higher PAPR for the pilot sequences. Similarly, the pilot sequence is selected from 1000 candidate pilot sequences according to the optimization criterion in Eq. (48). The power of the RSI and the NIRE under various pilot sequences with different lengths is demonstrated in Fig. 5. As the pilot length increases, on the one hand, the NIRE based on the opti-mized Gaussian pilot sequence and chi-square pilot sequence decreases; On the other hand, the RSI under the chi-square pilot sequence exhibits a decrease followed by an increase, while the RSI under the Gaussian pilot sequence continues to decrease. It is clear that both the BIRE and NIRE under the Gaussian pilot sequence will decrease as the pilot length increases since the Gaussian pilot sequence is asymptotically optimal. However, the BIRE and NIRE under the chi-square pilot sequence exhibit a mutually restrictive relationship as the pilot length increases. For the chi-square pilot sequence, an increase in the pilot length will lead to an increase in the PAPR. When the NIRE is higher than the BIRE, an increase in the PAPR reduces the NIRE at the cost of increasing the BIRE, thereby achieving a better trade-off between the NIRE and BIRE; When the NIRE is lower than the BIRE, further increasing PAPR to reduce NIRE is not beneficial, but instead increases the dominant term–BIRE, leading to an increase in RSI instead of a decrease. Particularly, it is worth noting that the RSI only decreases from -87.3 dBm to -89 dBm as the pilot length increases from 
+
+Ns to 10 Ns. This depends on the fact that when the RSI without Rx noise (truncation error and reconstruction error) is reduced to the Rx noise level (-90 dBm), the RSI is about -87 dBm, while the RSI is about -89 dBm when the RSI without Rx noise is reduced to -95.9 dBm. This marginal diminishing effect suggests that a trade-off between performance and overhead should be considered in the implementation of IBFD radios. 
+
+4) SISO vs. MIMO: Considering the PH canceller in MIMO with M antennas, Eq. (8) can be extended as 
+
+[ˆ r1 · · · ˆrM ] = [ Φ1 · · · ΦM ] ˆW . (63) Here, ˆrm (1 ≤ m ≤ M ) is the output vector of the PH canceller on the mth antenna, Φm is the measurement matrix based on the Tx sequence of the mth antenna with the same IEEE TRANSACTION ON COMMUNICATIONS 10 1 3 5 7 9 11 -110 -100 -90 -80 -70 -60 -50 -40 -30 Power [dBm]        
+
+> Fig. 6. The power of the different components in RSI of the PH canceller with different orders under various Tx antennas. (Model-F) 20 30 40 50 60 IRR [dB] -90 -80 -70 -60 -50 -40 Power [dBm]
+> Fig. 7. The power of the RSI of digital SI cancellers under different IRR. (P= 9 , Model-F)
+
+form as Eq. (29), and the weight matrix ˆW can be expressed as 
+
+ˆW =
+
+
+
+ˆw1,1 · · · ˆw1,n · · · ˆw1,M 
+
+... . . . ... . . . ...
+
+ˆwm, 1 · · · ˆwm,n · · · ˆwm,M 
+
+... . . . ... . . . ...
+
+ˆwM, 1 · · · ˆwM,n · · · ˆwM,M 
+
+
+
+, (64) where ˆwm,n represents the weight vector of the PH canceller from mth antenna to nth antenna with the same form as Eq. (11). As discussed in Section III, when the Tx power remains constant, as the antennas increase, the power at the input of the PA will decrease, leading to a significant reduction in the nonlinear effects of the PA at the cost of the decrease in PA efficiency. As indicated in Fig. 6, the optimal order of the PH canceller is 7 when M = 2 , while the optimal order of the PH canceller is 5 when M = 4, which is because the truncation error decreases significantly as the nonlinear effect of PA is mitigated. Therefore, it is necessary to comprehensively consider the trade-off between PA efficiency and model complexity in the design of the MIMO IBFD. 
+
+5) I/Q imbalance: Taking into account the I/Q imbalance, the PH canceller can be extended as 
+
+˜y(n) = 
+
+> P
+
+X
+
+> p=1
+> p=odd p
+
+X
+
+> q=0
+> Lh
+
+X
+
+> ℓ=0
+
+ˆwp,q,ℓ xq (n − ℓ) x∗(n − ℓ)p−q , (65) which is denoted as the PH+IQ canceller. The RSI of the PH canceller and the PH+IQ canceller under different IRR is demonstrated in Fig. 7. It can be seen that the performance of the PH canceller is limited by the IRR, where the mirror component contributes significantly to the RSI. Although the PH+IQ canceller can handle I/Q imbalance, the RSI is about -84 dBm, which is 6 dB higher than the Rx noise floor since the number of weights increases from Lh(P +1) 2 to Lh(P +1)( P +3) 4 .This means that the pilot sequence needs to be approximately 
+
+70 Ns in length to reduce the I/Q imbalance to the Rx noise floor. However, once we improve the IRR to a sufficiently high level through I/Q calibration, the PH canceller can also reduce the RSI to the Rx noise floor. As illustrated in Fig. 7, when the IRR is larger than 50 dB, the PH canceller performs better than the PH+IQ canceller. As we discussed at the beginning, the variation period of I/Q imbalance is often much larger than the coherence time of the channels. Additionally, the RF circuit in A-SIC can provide an available loop for I/Q calibration. Therefore, we suggest that the I/Q calibration and the nonlinear D-SIC should be implemented independently to achieve better performance while reducing complexity. 
+
+C. Discussions 
+
+Due to the characteristics of the nonlinear distortion of band-limited signals caused by the RF components, such as PA, the Gaussian pilot sequence have significant advantages in reconstructing nonlinear components due to the orthogonality under GLP and appropriate PAPR, especially for OFDM IBFD systems. Specifically, under the simulation settings in this paper, compared to the conventional pilot–HE-LTF, the Gaussian pilot sequence can provide a performance gain of over 10 dB for the PH canceller, where the RSI under the optimized Gaussian pilot sequence is about 2.4 dB higher than the Rx noise floor. As the final stage in a comprehensive system, the perfor-mance of D-SIC is affected by multiple factors, among which one of the most critical is the I/Q imbalance. Although we can couple the I/Q imbalance into the PH canceller, this also brings higher complexity and performance loss. Obviously, it can be inferred that the convergence time of D-SIC will further increase as the number of antennas and bandwidth increase. Therefore, it is significant to separate I/Q calibration from D-SIC, which can not only reduce computational complexity but also optimize the error vector magnitude of the transceiver. In summary, a good D-SIC design should comprehensively consider multiple aspects and balance performance indicators, complexity, efficiency (PA), and other aspects. V. C ONCLUSION 
+
+In this paper, we investigate the performance limit of D-SIC, specifically the PH canceller with the LS estimator. We IEEE TRANSACTION ON COMMUNICATIONS 11 
+
+first transform the conventional PH canceller into the GLP canceller, which enjoys the advantage of mutual orthogonality of basis functions, thus greatly simplifying the analysis of the power of RSI. By taking advantage of the orthogonality prop-erty, we establish the asymptotic unbiasedness of LS estimator if a Gaussian pilot sequence is employed, which motivates the choice of a Gaussian pilot sequence. Furthermore, we propose a novel criterion for the optimal pilot design, which is a product of the Shannon rank, an effective rank of a PSD matrix we define in this paper and the minimal eigenvalue of the Gram matrix corresponding to the pilot sequence. Simulation results demonstrate that the power of the RSI of the PH canceller based on our proposed optimized pilot sequence is 10 dB lower than that based on the HE-LTF sequence, only 2 dB higher than the lower bound. APPENDIX APROOF OF THEOREM 1
+
+According to Eq. (25), The measurement matrices of an certain pilot sequence for the PH canceller and the GLP canceller satisfy the following relationship: 
+
+Ψp = ΦpT . (66) Similarly, the measurement matrices of the data sequence, i.e., 
+
+Ψd and Ψd, have the same relationship. Furthermore, the LS estimation of the weights of the GLP canceller can be expressed as 
+
+ˆ˜w =( ΨHp Ψp)−1ΨHp rp
+
+=( T HΦHp ΦpT )−1T HΦHp rp
+
+=T −1(ΦHp Φp)−1ΦHp rp
+
+=T −1 ˆw . (67) Therefore, the reconstructed SI satisfies that 
+
+Φd ˆw = Ψd ˆ˜w . (68) Similarly, for the MMSE estimator, the estimation of the weights can be expressed as 
+
+ˆ˜wmmse =R−1 
+
+> ψ
+
+Rψr 
+
+= E(ψ∗
+
+> x,n
+
+ψT
+
+> x,n
+
+)−1 · E ψ∗
+
+> x,n
+
+r(n)
+
+= T HE(ϕ∗
+
+> x,n
+
+ϕT
+
+> x,n
+
+)T −1 · T HE(ϕ∗
+
+> x,n
+
+r(n)) =T −1R−1 
+
+> ϕ
+
+Rϕr 
+
+=T −1 ˆwmmse . (69) APPENDIX BPROOF OF THEOREM 2
+
+The estimation error of ˜w caused by the truncation error can be rewritten as 
+
+G−1p ΨHp ˜εp =( 1˜Lp
+
+Gp)−1 1˜Lp
+
+ΨHp ˜εp . (70) When xp(n) i.i.d. 
+
+∼ CN (0 , 1) , according to the law of large numbers, there has 
+
+1˜Lp
+
+Gp = 1˜Lp
+
+> Lp
+
+X
+
+> n=Lh
+
+ψ∗
+
+> xp,n
+
+ψT
+
+> xp,n a.s.
+
+−−−−→ 
+
+> Lp→∞
+
+E(ψ∗
+
+> xp,n
+
+ψT
+
+> xp,n
+
+) = ILw , (71) and 
+
+1˜Lp
+
+ΨHp ˜εp = 1˜Lp
+
+> Lp
+
+X
+
+> n=Lh
+
+ψ∗ 
+
+> xp,n
+
+˜εp(n)= 1˜Lp
+
+> Lp
+
+X
+
+> n=Lh
+
+
+
+ψ∗
+
+> xp,n
+> ∞
+
+X
+
+> p>P p=odd Lh
+
+X
+
+> ℓ=0
+
+˜wp,ℓ ψp
+
+ xp(n − ℓ)
+
+> a.s.
+
+−−−−→ 
+
+> Lp→∞
+
+E ψ∗ 
+
+> xp,n
+
+˜εp(n) = 0 . (72) REFERENCES [1] M. Mohammadi, Z. Mobini, D. Galappaththige, and C. Tellambura, “A comprehensive survey on full-duplex communication: Current solutions, future trends, and open issues,” IEEE Communications Surveys &Tutorials , vol. 25, no. 4, pp. 2190–2244, 2023. [2] D. Bharadia, E. McMilin, and S. Katti, “Full duplex radios,” in Proceed-ings of the ACM SIGCOMM 2013 conference on SIGCOMM , 2013, pp. 375–386. [3] D. Korpi, J. Tamminen, M. Turunen, T. Huusari, Y.-S. Choi, L. Anttila, S. Talwar, and M. Valkama, “Full-duplex mobile device: Pushing the limits,” IEEE Communications Magazine , vol. 54, no. 9, pp. 80–87, 2016. [4] B. Smida, A. Sabharwal, G. Fodor, G. C. Alexandropoulos, H. A. Suraweera, and C.-B. Chae, “Full-duplex wireless for 6G: Progress brings new opportunities and challenges,” IEEE Journal on Selected Areas in Communications , vol. 41, no. 9, pp. 2729–2750, 2023. [5] L. Liao, J. Sun, J. Wang, and Y. Liu, “Analog self-interference can-cellation in full-duplex radios: A fundamental limit perspective,” IEEE Transactions on Communications , 2025. [6] D. Korpi, T. Riihonen, V. Syrj¨ al¨ a, L. Anttila, M. Valkama, and R. Wich-man, “Full-duplex transceiver system calculations: Analysis of ADC and linearity challenges,” IEEE Transactions on Wireless Communications ,vol. 13, no. 7, pp. 3821–3836, 2014. [7] E. Ahmed and A. M. Eltawil, “All-digital self-interference cancellation technique for full-duplex systems,” IEEE Transactions on Wireless Communications , vol. 14, no. 7, pp. 3519–3532, 2015. [8] L. Anttila, D. Korpi, V. Syrj¨ al¨ a, and M. Valkama, “Cancellation of power amplifier induced nonlinear self-interference in full-duplex transceivers,” in 2013 Asilomar conference on signals, systems and computers . IEEE, 2013, pp. 1193–1198. [9] L. Anttila, D. Korpi, E. Antonio-Rodr´ ıguez, R. Wichman, and M. Valkama, “Modeling and efficient cancellation of nonlinear self-interference in MIMO full-duplex transceivers,” in 2014 IEEE Globecom Workshops (GC Wkshps) . IEEE, 2014, pp. 777–783. [10] M. A. Islam and B. Smida, “A comprehensive self-interference model for single-antenna full-duplex communication systems,” in ICC 2019-2019 IEEE International Conference on Communications (ICC) . IEEE, 2019, pp. 1–7. [11] M. Elsayed, A. A. A. El-Banna, O. A. Dobre, W. Shiu, and P. Wang, “Low complexity neural network structures for self-interference can-cellation in full-duplex radio,” IEEE Communications Letters , vol. 25, no. 1, pp. 181–185, 2020. [12] D. Korpi, Y.-S. Choi, T. Huusari, L. Anttila, S. Talwar, and M. Valkama, “Adaptive nonlinear digital self-interference cancellation for mobile inband full-duplex radio: Algorithms and RF measurements,” in 2015 IEEE global communications conference (GLOBECOM) . IEEE, 2015, pp. 1–7. [13] K. Komatsu, Y. Miyaji, and H. Uehara, “Iterative nonlinear self-interference cancellation for in-band full-duplex wireless communica-tions under mixer imbalance and amplifier nonlinearity,” IEEE Trans-actions on Wireless Communications , vol. 19, no. 7, pp. 4424–4438, 2020. IEEE TRANSACTION ON COMMUNICATIONS 12 
+
+[14] Z. Li, Y. Xia, W. Pei, K. Wang, and D. P. Mandic, “An augmented nonlinear LMS for digital self-interference cancellation in full-duplex direct-conversion transceivers,” IEEE Transactions on Signal Processing ,vol. 66, no. 15, pp. 4065–4078, 2018. [15] E. Ahmed, A. M. Eltawil, and A. Sabharwal, “Self-interference cancel-lation with nonlinear distortion suppression for full-duplex systems,” in 
+
+2013 Asilomar Conference on Signals, Systems and Computers . IEEE, 2013, pp. 1199–1203. [16] M. S. Sim, M. Chung, D. Kim, J. Chung, D. K. Kim, and C.-B. Chae, “Nonlinear self-interference cancellation for full-duplex radios: From link-level and system-level performance perspectives,” IEEE Communi-cations Magazine , vol. 55, no. 9, pp. 158–167, 2017. [17] K. Komatsu, Y. Miyaji, and H. Uehara, “Theoretical analysis of in-band full-duplex radios with parallel Hammerstein self-interference cancellers,” IEEE Transactions on Wireless Communications , vol. 20, no. 10, pp. 6772–6786, 2021. [18] L. Jianhan, P. Ron et al. , “TGAX channel model,” IEEE , vol. 802, pp. 11–14, 2014.
