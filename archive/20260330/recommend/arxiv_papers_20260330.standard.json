@@ -1,0 +1,95 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-30T21:11:49.209241+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.23267v1",
+      "title": "Geometric Direction Finding on Dynamic Manifolds: Unambiguous DOA Estimation for Spatially Undersampled UWB Arrays",
+      "abstract": "Traditional Direction of Arrival (DOA) estimation methods struggle to simultaneously address three physical constraints in Ultra-Wideband (UWB) electromagnetic sensing: spatial undersampling, asynchronous array phase, and beam squint. Existing solutions treat these issues in isolation, leading to limited performance in complex scenarios. This paper proposes a novel dynamic manifold perspective, which models UWB signal observations as a continuous manifold curve in a high-dimensional space driven by temporal evolution and array topology. We theoretically demonstrate that the DOA can be uniquely determined solely by the geometric shape of the manifold, rather than the absolute arrival phase. Based on this perspective, we construct a geometric parameter system comprising extrinsic and intrinsic parameters, along with a corresponding DOA estimation framework. Extrinsic vector parameters serve as a dynamic extension of traditional array processing, effectively expanding the degrees of freedom to suppress grating lobes. Intrinsic scalar invariants provide a new geometric perspective independent of traditional phase models, offering intrinsic robustness against array channel phase errors. Simulation results show that the derived analytical expressions for geometric parameters are highly consistent with numerical truths. The proposed framework not only completely eliminates spatial ambiguity in sparse arrays but also achieves high-precision direction finding under conditions with calibration-free phase errors.",
+      "authors": [
+        "Kailun Tian",
+        "Kaili Jiang",
+        "Dechang Wang",
+        "Hancong Feng",
+        "Yuxin Zhao",
+        "Ying Xiong",
+        "Bin Tang"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-03-24T14:30:37+00:00",
+      "link": "https://arxiv.org/pdf/2603.23267v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "DOA estimation for spatially undersampled sensor arrays",
+      "llm_evidence_cn": "空间欠采样传感器阵列的波达方向估计",
+      "llm_evidence": "空间欠采样传感器阵列的波达方向估计",
+      "canonical_evidence": "空间欠采样传感器阵列的波达方向估计",
+      "llm_tldr_en": "Proposes a dynamic manifold perspective for DOA estimation in spatially undersampled sensor arrays.",
+      "llm_tldr_cn": "提出了一种动态流形视角，用于解决空间欠采样传感器阵列的波达方向估计问题。",
+      "llm_tldr": "提出了一种动态流形视角，用于解决空间欠采样传感器阵列的波达方向估计问题。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.26023v1",
+      "title": "GLU: Global-Local-Uncertainty Fusion for Scalable Spatiotemporal Reconstruction and Forecasting",
+      "abstract": "Digital twins of complex physical systems are expected to infer unobserved states from sparse measurements and predict their evolution in time, yet these two functions are typically treated as separate tasks. Here we present GLU, a Global-Local-Uncertainty framework that formulates sparse reconstruction and dynamic forecasting as a unified state-representation problem and introduces a structured latent assembly to both tasks. The central idea is to build a structured latent state that combines a global summary of system-level organization, local tokens anchored to available measurements, and an uncertainty-driven importance field that weights observations according to the physical informativeness. For reconstruction, GLU uses importance-aware adaptive neighborhood selection to retrieve locally relevant information while preserving global consistency and allowing flexible query resolution on arbitrary geometries. Across a suite of challenging benchmarks, GLU consistently improves reconstruction fidelity over reduced-order, convolutional, neural operator, and attention-based baselines, better preserving multi-scale structures. For forecasting, a hierarchical Leader-Follower Dynamics module evolves the latent state with substantially reduced memory growth, maintains stable rollout behavior and delays error accumulation in nonlinear dynamics. On a realistic turbulent combustion dataset, it further preserves not only sharp fronts and broadband structures in multiple physical fields, but also their cross-channel thermo-chemical couplings. Scalability tests show that these gains are achieved with substantially lower memory growth than comparable attention-based baselines. Together, these results establish GLU as a flexible and computationally practical paradigm for sparse digital twins.",
+      "authors": [
+        "Linzheng Wang",
+        "Jason Chen",
+        "Nicolas Tricard",
+        "Zituo Chen",
+        "Sili Deng"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-03-27T02:40:58+00:00",
+      "link": "https://arxiv.org/pdf/2603.26023v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "spatiotemporal reconstruction from sparse measurements",
+      "llm_evidence_cn": "基于稀疏测量的时空重构",
+      "llm_evidence": "基于稀疏测量的时空重构",
+      "canonical_evidence": "基于稀疏测量的时空重构",
+      "llm_tldr_en": "A framework for state reconstruction from sparse sensors, potentially applicable to sensor array algorithms.",
+      "llm_tldr_cn": "一种从稀疏传感器进行状态重构的框架，可能适用于传感器阵列算法。",
+      "llm_tldr": "一种从稀疏传感器进行状态重构的框架，可能适用于传感器阵列算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

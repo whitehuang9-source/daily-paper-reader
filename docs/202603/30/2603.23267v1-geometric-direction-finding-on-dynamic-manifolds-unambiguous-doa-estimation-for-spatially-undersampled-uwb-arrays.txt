@@ -1,0 +1,3281 @@
+Title: 2603.23267v1.pdf
+
+URL Source: https://arxiv.org/pdf/2603.23267v1
+
+Published Time: Wed, 25 Mar 2026 01:18:11 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+1
+
+# Geometric Direction Finding on Dynamic Manifolds: 
+
+# Unambiguous DOA Estimation for Spatially 
+
+# Undersampled UWB Arrays 
+
+Kailun Tian, Kaili Jiang,  Dechang Wang,  Hancong Feng, Yuxin Zhao,  Ying Xiong , and Bin Tang 
+
+Abstract —Traditional Direction of Arrival (DOA) estimation 
+
+methods struggle to simultaneously address three physical 
+
+constraints in Ultra -Wideband (UWB) electromagnetic sensing: 
+
+spatial undersampling, asynchronous array phase, and beam 
+
+squint. Existing solutions tr eat these issues in isolation, leading to 
+
+limited performance in complex scenarios. This paper proposes a 
+
+novel  dynamic manifold  perspective , which models  UWB  signal 
+
+observations as a continuous manifold curve in a high -dimensional 
+
+space driven by temporal evolution and array topology. We 
+
+theoretically demonstrate that the DOA can be uniquely 
+
+determined solely by the geometric shape of the manifold, rather 
+
+than  the absolute arrival phase . Based on this  perspective , we 
+
+construct a geometric parameter system comprising extrinsic and 
+
+intrinsic parameters, along with a corresponding DOA estimation 
+
+framework. Extrinsic vector parameters serve as a dynamic 
+
+extension of traditional array processing, effectively expanding  the 
+
+degrees of freedom to suppress grating lobes. Intrinsic scalar 
+
+invariants provide a new geometric perspective independent of 
+
+traditional phase models, offering intrinsic robustness against 
+
+array channel phase errors. Simulation results show that the 
+
+de rived analytical expressions for geometric parameters are 
+
+highly consistent with numerical truths. The proposed framework 
+
+not only completely eliminates spatial ambiguity in sparse arrays 
+
+but also achieves high -precision direction finding under conditions 
+
+with calibration -free phase errors. 
+
+Index Terms —Dynamic Manifold, Ultra -Wideband, Direction of 
+
+Arrival , Spatially Undersampled .
+
+I.  INTRODUCTION 
+
+RIVEN  by the evolution of  sixth -generation  (6G) 
+
+mobile communications  [1]  and  Integrated Sensing 
+
+and Communication (ISAC) technologies  [2] , Ultra -
+
+Wideband  (UWB)  [3]  signal ’s Direction of Arrival 
+
+(DOA)  estimation increasingly relies on sparse arrays to 
+
+overcome physical constraints  [4] . However, coupling 
+
+wideband signals with sparse topologies introduces a
+
+fundamental Space -Time -Phase ambiguity that  disables 
+
+traditional static processing. Specifically, the violation of the 
+
+spatial sampling theorem generates dense grating lobes  [5] ,
+
+This work was supported in part by the National Natural Science Foundation 
+
+of China under Grant 62301119 . Corresponding author:  Kailun Tian .
+
+Kailun Tian  is with the  University of Electronic Science and Technology of 
+
+China, Chengdu, Sichuan, 611731, China (e -mail: kailun_tian@163.com ).
+
+Kaili Jiang  is  with  the  University of Electronic Science and Technology of 
+
+China, Chengdu, Sichuan, 611731, China ( jiangkelly@uestc.edu.cn ). 
+
+Dechang Wang  is  with the  University of Electronic Science and Technology 
+
+of China, Chengdu, Sichuan, 611731, China (c13844033835@163.com ). 
+
+while large bandwidths  demanded  by  6G  induce severe beam 
+
+squint  [6] . Compounded by synchronization errors  such as 
+
+distributed nodes  [7] . These multi -dimensional challenges 
+
+render conventional narrowband algorithms based on static 
+
+manifold assumptions ineffective for practical engineering. 
+
+Existing solutions typically treat the aforementioned 
+
+difficulties as independent problems, addressing them 
+
+separately  [8] .
+
+Addressing the spatial ambiguity problem,  sparse 
+
+geometry  designs (such as coprime  [9]  and nested arrays  [10] )
+
+utilize the concept of difference co -arrays  [11]  to construct 
+
+virtual uniform arrays. Although these methods successfully 
+
+increase the degrees of freedom  [12] , they are typically based 
+
+on narrowband signal models and  cannot  address wideband 
+
+issues  direct ly. 
+
+Regarding wideband DOA estimation, dominant 
+
+frameworks include the Incoherent Signal -Subspace Method 
+
+(ISM)  [13]  and the Coherent Signal -Subspace Method (CSM) 
+
+[14] . ISM processes individual frequency bins independently 
+
+[15]  and often fails to resolve ambiguities when grating lobes 
+
+overlap in the frequency domain. CSM employs focusing 
+
+matrices to align signal subspaces from different frequencies to 
+
+a reference frequency  [16] . However, it relies on preliminary 
+
+DOA estimates and is prone to focusing errors, especially when 
+
+the sparse array itself exhibits inherent ambiguity.  These 
+
+methods tend to treat frequency variation as an error to be 
+
+compensated for, rather than a feature to be utilized. 
+
+For phase errors,  self -calibration  algorithms (e.g., iterative 
+
+optimization  [17]  or eigen  structure -based methods  [18] ) have 
+
+been developed to jointly estimate DOA and sensor  phases  [19] .
+
+However, these methods typically pose non -convex 
+
+optimization problems  [20] , requiring initial guesses to avoid 
+
+local minima. Furthermore, calibration performance degrades 
+
+when the array manifold itself is ambiguous  [21]  due to sparsity. 
+
+In summary, current approaches  operate within the 
+
+framework of  the  static  array m anifold  [22] , lack a unified 
+
+theoretical framework to exploit the  dynamic  information 
+
+embedded in the continuous temporal evolution of non -
+
+stationary signals. 
+
+In this paper, we propose a novel  dynamic manifold 
+
+Hancong Feng  is  with the  University of Electronic Science and Technology 
+
+of China, Chengdu, Sichuan, 611731, China (2927282941@qq.com ). 
+
+Yuxin Zhao  is  with the  University of Electronic Science and Technology of 
+
+China, Chengdu, Sichuan, 611731, China (1051172535@qq.com ). 
+
+Ying Xiong  is  with the  University of Electronic Science and Technology of 
+
+China, Chengdu, Sichuan, 611731, China (yxiong@uestc.edu.cn ). 
+
+Bin Tang is  with the  University of Electronic Science and Technology of 
+
+China, Chengdu, Sichuan, 611731, China (bint@uestc.edu.cn ). 
+
+# D2
+
+perspective , shifting the paradigm of DOA estimation from 
+
+static phase matching to dynamic geometric evolution analysis. 
+
+We model the array observation  as a continuous trajectory 
+
+evolving in a high -dimensional space. By introducing the 
+
+dynamic  generator  algebra, we reveal a deep coupling between 
+
+the signal's time -domain non -stationarity and the array 
+
+geometry; this coupling drives the manifold to bend and twist. 
+
+Based on  the  differential  geometry  theory , we construct 
+
+the Frenet -Serret moving frame  [23]  of the manifold and derive 
+
+analytical expressions for the manifold's tangent vector, 
+
+principal normal vector, binormal vector,  curvature, and  torsion. 
+
+We prove that all these geometric features encode the DOA 
+
+information. This perspective allows us to distinguish the true 
+
+DOA based on the trajectory's geometric shape and evolution 
+
+direction, rather than relying solely on ambiguous static phases. 
+
+The main contributions of this paper are summarized as 
+
+follows . We provide the theoretical foundation for ambiguity -
+
+free DOA estimation using signal dynamics. We prove that the 
+
+temporal dynamics of non -stationary signals can expand the 
+
+observable signal subspace, thereby algebraically breaking the 
+
+rank -1 ambiguity cons traint of traditional narrowband models. 
+
+Based on the dynamic manifold, ambiguity -free DOA 
+
+estimation for wideband signals  can be achieved under  arbitrary 
+
+array  configurations . We classify the  geometric parameters of 
+
+the manifold into  extrinsic  parameter s and  intrinsic  invariant s.
+
+We prove that  intrinsic  parameter s are invariant to rigid body 
+
+transformations, thus providing the system with inherent 
+
+robustness against uncalibrated phase errors.  Based on the 
+
+characteristics of geometric parameters, we  offer  two 
+
+estimation frameworks . The framework I is  based on e xtrinsic 
+
+parameter s, which  utilizes complete trajectory information to 
+
+achieve ambiguity resolution in arbitrary array systems. This 
+
+serv es as a dynamic extension of conventional array signal 
+
+processing techniques.  Framework II  is  based on i ntrinsic 
+
+invariant s, which is  a geometric feature matching method that 
+
+utilizes  invariant s to achieve robust, calibration -free estimatio n.
+
+The remainder of this paper is organized as follows.  Chapter 
+
+II  outlines the problem . Chapter  III develops the differential 
+
+geometric framework  of  the dynamic  manifold . Chapter  IV 
+
+presents the theoretical analysis of observability and proposes 
+
+the two general estimation frameworks.  Chapter  V provides 
+
+comprehensive simulation results to validate the theory. 
+
+Finally,  Chapter  VI concludes the paper .
+
+II.  PROBLEM  FORMULATION 
+
+A.  Signal Model 
+
+Consider a sparse array consisting of M omnidirectional 
+
+elements. Let the m -th  element position vectors be 3
+
+{ }m p  .
+
+Assume  the  far -field signal ( ) 
+
+( ) ( ) j t
+
+s t A t e 
+
+= impinges on the 
+
+array from a direction 3
+
+( ) 
+
+d  , where  denotes the  DOA. 
+
+Dynamic  means the  instantaneous  angular frequency ( ) t
+
+ of 
+
+this signal model is  not  constant .Φ( ) ( ) d tt dt 
+
+ =
+
+(1)
+
+where Φ( ) t is the phase of ( ) s t  . Assume the  envelope  of ( ) s t 
+
+slowly varying ( ) ( ) A t A t 
+
+−  . T he received signal at the m -
+
+th element  can be expressed as a delayed version of ( ) s t ( ) ( ( )) ( ) m m mx tt s t n
+
+ = − +
+
+(2)
+
+where ( ) ( ) / Tm m c
+
+ = p d  represents the propagation delay ,)(mn t
+
+is white complex Gaussian noise , and c is the speed of 
+
+light . Substituting the above equation into the signal model ( ) ( ) ( , ) ( ) m m mx t s t a t n t
+
+= +
+
+. (3)
+
+The vector 1( , ) [ ( , ),..., ( , )] TMt a t a t
+
+=a , where (Φ(t- )) Φ(t)) (
+
+( , ) mjma et 
+
+> 
+
+
+
+> −
+
+=
+
+, is referred to as the steering vector. 
+
+Thus, t he  observation vector ( ) M
+
+t x  is 1
+
+(( ) ( , ) )( ) ( ) ()M
+
+sx ttx tt t t
+
+  = = +  
+
+nx a
+
+. (4)
+
+For the sake of simplicity, we will introduce noise only where 
+
+necessary in the subsequent discussion. 
+
+B. Three Fundamental Challenge s
+
+There are  three fundamental challenges that cause 
+
+conventional DOA estimation methods to become ineffective. 
+
+First, i n typical  array signal processing, the signal frequency 
+
+is typically assumed to be constant ( ) 2 ct f
+
+ = . In this case, ( , ) ma t
+
+
+
+degenerates into the standard form ( ) ma
+
+ .- (0)0t       
+
+> (()()))2(
+
+( )    
+
+> tmcm
+> jdfjdm
+
+a ee      
+
+> 
+
+ 
+
+> −−
+
+ = =
+
+(5)
+
+Ideally , this phase has a one -to -one correspondence with 
+
+DOA. However,  spatial undersampling leads to phase 
+
+ambiguity.  For high carrier frequency signals, the inter -element 
+
+spacing of sparse arrays is usually much larger than half the 
+
+minimum wavelength (min / 2 d
+
+
+
+ ). Consequently, the 
+
+measured phase difference meas 
+
+ between any two sensors m
+
+and n contains an integer cycle ambiguity  
+
+> 2
+
+( ) 2 ( ( ) ( )) meas c m nt f
+
+> 
+
+     = − −
+
+. (6)
+
+Which  can be rewritten as 2 ( ( ) ( )) ( ) 2 ,c m n meas f t k k
+
+     − − =  +  
+
+. (7)
+
+Since the integer k is unknown, multiple solutions for 
+
+exist. This phenomenon creates grating lobes and results in 
+
+direction -finding ambiguity. 
+
+Second, frequency non -stationarity leads to  beam squint .
+
+Using the mean value theorem, the phase difference term can 
+
+be expressed as ( ( )) ( ) ( ) ( ) ( )  
+
+> m
+> tmmt
+
+t t d t
+
+> 
+
+      
+
+> −
+
+ − −  = −  − 
+
+. (8)
+
+Considering ( ) t
+
+ is  not  constant ,( ) ( )
+
+( , ) mj tma t e  
+
+> 
+
+
+
+> −
+
+ , t ime t
+
+is explicitly incorporated. This implies that for broadband 
+
+signals, the steering vector is no longer a static geometric 
+
+vector . T ime -varying steering vector cause s mismatches in 
+
+conventional signal processing theory. 
+
+Finally, practical array systems often suffer from 
+
+uncalibrated inter -element phase errors. 1
+
+diag( , , )Mj j
+
+e e
+
+> 
+
+= Γ
+
+(9)31u2u2u3u3u,1 arc l,2 arc l1ux
+
+Fig.  1. Schematic  diagram of  the  Frenet -Serret frame 
+
+These phase errors induce a coordinate rotation of the 
+
+steering vector. This rotation causes a severe mismatch between 
+
+the received data and the theoretical model, thereby rendering 
+
+conventional DOA estimation algorithms ineffective. 
+
+In summary, the  steering vector is a key parameter for current 
+
+array processing techniques. However, spatial undersampling, 
+
+signals with dynamic models or phase errors  cause  DOA 
+
+algorithms based on the  steering vector ineffective. 
+
+III.  DYNAMIC  MANIFOLD AND  DIFFERENTIAL  GEOMETRY 
+
+A. Dynamic Manifold of Array Observations 
+
+The analysis in  Section  2 indicates that traditional array 
+
+signal processing is no longer applicable. It is necessary to 
+
+introduce time dependency to address the  modeling mismatch. 
+
+For a fixed  , the set of time delays { ( )} m
+
+  consists of 
+
+fixed constants. Therefore, ( ) tx is equivalent to observing the 
+
+same scalar system ( ) s t  with multiple time delays . The 
+
+evolution of ( ) tx over time t traces a continuous trajectory in 
+
+the high -dimensional complex space.  This trajectory constitutes 
+
+the dynamic  manifold obs  , which is  different from  the  array 
+
+manifold { ( ) | ( , ]} array A span a 
+
+    =  −  . 
+
+( ) |( ) Mobs obs t t t T=  x 
+
+. (10 )
+
+Parameterized by the physical time t ,obs  is  a one -
+
+dimensional smooth  trajectory  embedded in the complex 
+
+Euclidean space M
+
+ . It can be seen that , time t determining 
+
+the position of the  manifold , while  degenerates into the 
+
+structural parameter of the manifold.  Clearly, the trajectory is a 
+
+curve. For consistency, all subsequent references to the 
+
+manifold refer to the observation dynamic manifold obs  .
+
+The geometric analysis in this paper focuses on the 
+
+continuous evolution intervals where the trajectory is 
+
+differentiable ( C ), such as  Linear Frequency Modulation 
+
+(LFM) and  Sinusoidal Frequency Modulation  (SFM)  signals .
+
+The complex envelope ( ) s t  and its phase function ( ) t are 
+
+continuous and differentiable with respect to time t . The 
+
+symbol transitions (singularities) are treated as boundaries of 
+
+these smooth segments , such as f requency -shift  or phase -shift 
+
+keying  signals,  we model them as piecewise smooth curves. 
+
+Fig.  2. Schematic Diagram of Curvature 
+
+Since the array manifold response is also a smooth function, the 
+
+smoothness of  observation dynamic manifold obs  is ensured .
+
+Furthermore, we examine the topological constraints of the 
+
+manifold. Assuming the source signal is amplitude -normalized 
+
+and the modulus of the array manifold vector components is 
+
+unity, the Euclidean norm of the observation vector satisfies 212
+
+( ) ( ) 
+
+> Mmm
+
+t x t M
+
+> =
+
+= =x
+
+. (11 )
+
+This implies that, regardless of how the signal's dynamic 
+
+characteristics change, the manifold  is always strictly 
+
+confined to a Hypersphere of radius M in the complex 
+
+Euclidean space M
+
+ .
+
+To quantitatively describe the local geometric properties of 
+
+the manifold curve, we need to establish a local coordinate 
+
+system that moves along the curve.  Given the isomorphism 
+
+between the observation space M
+
+ and the real Riemannian 
+
+manifold 2M
+
+ , we adopt the concept of Wide -Sense 
+
+Orthogonality  [22] . Two complex vectors , M
+
+u w  are 
+
+defined as generalized orthogonal if and only if the real part of 
+
+their Hermitian inner product is zero .Re , Re( ) 0H
+
+  = =u w u w
+
+(12 )
+
+Based on this, we can construct a set of generalized 
+
+orthogonal unit basis vectors 1 2 2{ , , , }Mu u u for the manifold .
+
+These vectors constitute the Frenet -Serret frame describing the 
+
+dynamic evolution of the manifold , as shown in  Fig.  1. To 
+
+obtain features that depend only on the geometric shape of the 
+
+manifold, we introduce the Arc Length s (denoted as arc l to 
+
+distinguish from the signal ( ) s t  ) as the natural parametrization 
+
+of the curve. 
+
+For an example, a ccording to the fundamental theorem of 
+
+differential geometry, the rate of change of the tangent vector's 
+
+direction 1u with respect to the arc length arc l defines the 
+
+curvature 1
+
+ . The curvature of a one -dimensional curve can be 
+
+represented by the  osculating  circle, as  shown  in  Fig.  2.
+
+The subsequent sections will derive the specific mapping 
+
+relationship between this geometric and the physical 
+
+parameters. 4
+
+B. Physical Differential Vector and the Dynamic Generator 
+
+This section introduces physical time t as the dynamic 
+
+parameter of the manifold, derives the differential form of the 
+
+observation equation .
+
+Define the  physical  velocity  vector ( ) ( ) / t d t dt =v x as the 
+
+first derivative of the observation manifold ( ) tx . For the m -th 
+
+sensor, ( ) ( ( )) / m mv t ds t dt 
+
+ = − . Under the slowly varying 
+
+envelope assumption, we have Φ( ) Φ( ) 
+
+( ) Φ( ) ( ) ( ) j t j tds t e j t e j t s t dt 
+
+= = =
+
+(13 )
+
+Applying the chain rule shows that the  physical  velocity 
+
+vector contains not only the time evolution information of the 
+
+signal but also couples the array's geometry. ( , ) ( ( )) ( ) m m mv t j t x t
+
+   = −
+
+(14 )
+
+The complete  physical  velocity  vector is 1( , ) diag( ( ( )), , ( ( ))) ( ) ( , ) ( ) 
+
+> M
+
+t j t j t tt t
+
+     = −  − = 
+
+v x
+
+Ω x
+
+. (15 )
+
+Here, ( ),t
+
+
+
+Ω is referred to as the dynamic generator, as it 
+
+governs the  evolution of the  manifold  induced by source 
+
+dynamics and array geometry.  This equation shows that ( ) tv
+
+satisfies a closed first -order linear differential system. The 
+
+linear transformation relationship between v and x encodes 
+
+the spatial parameter  .
+
+We can perform a Taylor expansion on the instantaneous 
+
+frequency ( )mt
+
+ − based on the  smooth assumption .( )0
+
+( 1) ( ) ( ) !  
+
+> nnnmmn
+
+t tn
+
+  
+
+> =
+
+−− = 
+
+(16 )
+
+Consequently, the dynamic generator can be  expanded ( )0 1
+
+( 1) ( ) ( ) ( ) ( ) !,  
+
+> nnnnnn
+
+tt j tn
+
+  
+
+> ==
+
+ −= = +  
+
+#  Ω Ω I T
+
+(17 )
+
+where 1 2( ) diag( ( ), ( ),..., ( )) M
+
+     =T is the time -delay 
+
+matrix. In  (17 ), the zeroth -order term ( ) j t
+
+
+
+I represents the 
+
+common -mode dynamic evolution, dominated by the 
+
+instantaneous frequency. In contrast, the higher -order terms 
+
+represent the differential geometric perturbations induced by 
+
+the coupling between the signal's  dynamic  and the array  delay .
+
+The second -order  derivative  is acceleration  vector ( ) ( ) cc t t=a x 
+
+, which can be driven by 2
+
+( ) ( ) ( )cc 
+
+dt dt 
+
+= = +a Ωx Ω Ω x
+
+. (18 )
+
+Similarly , the t hird -order  derivative  is j erk  vector ( ) ( ) t t=j x 3
+
+( ) ( 2 )t = + + +j Ω ΩΩ ΩΩ Ω x 
+
+. (19 )
+
+By analogy,  all high -order physical derivatives ( )k
+
+x of the 
+
+manifold can be recursively generated by Ω . The geometric 
+
+properties of the manifold (such as bending and twisting) 
+
+depend on the angles between these derivative vectors. To 
+
+analyze these angles, we introduce the following core lemma. 
+
+Lemma 1 . In an ideal lossless array, the dynamic operator ( , ) t
+
+
+
+Ω
+
+is an Anti -Hermitian Operator, satisfying H = − Ω Ω .
+
+Since the modulus of each element in the manifold is 
+
+constant, its phase ( ) m t is a real function. Therefore, the 
+
+diagonal elements of Ω , are purely imaginary, i.e., H = − Ω Ω .
+
+The essence of this property is that Ω represents a rotation 
+
+on the high -dimensional complex hypersphere. Just as skew -
+
+symmetric matrices generate rotations in real space, anti -
+
+Hermitian operators generate unitary evolution in complex 
+
+space, ensuring the manifold remains constrained on the 
+
+hyp ersphere.  Based on Lemma 1, within the framework of real 
+
+embedded manifold geometry, we can derive a series of 
+
+orthogonality relationships between physical derivatives. 
+
+Corollary  1. If the operator Ω is anti -Hermitian, then for 
+
+odd  term 2 1k +
+
+Ω x and even  term 2m
+
+Ω x , the results of its 
+
+operator powers satisfy 2 1 2
+
+, 0k m+
+
+  =Ω x Ω x  .
+
+For an example, the  physical  velocity  vector v is always 
+
+perpendicular to the  observation  vector , Re( ) 0H
+
+  = =x v x Ωx
+
+. (20 )
+
+Through this algebraic framework, we transform complex 
+
+differential geometric operations into clear operator algebraic 
+
+operations. 
+
+C. Geometric Parameter Conversion and Frenet -Serret Frame 
+
+This section builds the bridge between the geometric  Frenet -
+
+Serret frame  and the physical  time domain .
+
+First , we need to establish the metric conversion between the 
+
+natural parameter arc l and time t . According to the definition 
+
+of the arc length arc dl d= x , we can derive ( ) arc ddl d tdt dt dt 
+
+= = =
+
+x x v
+
+. (21 )
+
+This factor  reveals an extremely important physical meaning: 
+
+the  rate of change of arc length  of the manifold curve is directly 
+
+determined by the magnitude of the physical velocity vector. 
+
+Based on the precise analysis of the tangent vector, we can also 
+
+derive the exact arc length formula for the dynamic manifold. 
+
+The exact magnitude of the tangent vector is given by 22 21 1
+
+(( ) ( ) ) ( )  
+
+> MMmmmmm
+
+j t xt t t
+
+   
+
+> ==
+
+= =− − v
+
+(22 )
+
+This formulation provides the exact arc l for arbitrary signals .20 1
+
+( , ) ( ( ))  
+
+> Mtarc mm
+
+l t d
+
+    
+
+> =
+
+= −
+
+(23 )
+
+Different  result in different ( ) m
+
+  , which fine -tunes the 
+
+stretching speed of the  curve . According to the definition in 
+
+differential geometry, the unit tangent vector 1 ( )arc lu is the 
+
+derivative of the position vector with respect to the arc length .1 ( )arc arc 
+
+l ddl 
+
+= xu
+
+(24 )
+
+Using the chain rule , we have 1
+
+/ ( ) ( ) / ( ) arc 
+
+d dt tt d dl t t
+
+= = =
+
+x v Ωxu v Ωx
+
+. (25 )
+
+This equation reveals  that  the direction of 1u is entirely 5
+
+determined by the direction of v . This implies that the evolution 
+
+direction of the dynamic generator directly indicates the 
+
+geometric extension direction of the manifold. 
+
+The principal normal vector 2u is defined as the normalized 
+
+direction of the derivative of the tangent vector 121
+
+( )( ) ( )
+
+> arc arc arc
+
+ll l
+
+= 
+
+uu u
+
+(26 )
+
+Using the chain rule 1 12
+
+//1 1 
+
+> arc arc
+
+dd d d dt d d tdt l l d dt
+
+− = = =   
+
+vv v vu u vv v v v
+
+
+
+. (27 )
+
+Note that ( ) ( ) ( ) cc t t t= =v x a  is the physical acceleration 
+
+vector , and t he physical velocity vector v can be decomposed 
+
+into  magnitude ( v ) multiplied by  unit  direction ( 1u ). tan norm  
+
+> 111
+
+( )cc 
+
+d dddt dt dt 
+
+= = + 
+
+> aa
+
+v ua v u u v
+
+ 
+
+(28 )
+
+The second term  of  numerator in the 1
+
+> arc
+
+ddl 
+
+u is actually the 
+
+component of acceleration in the tangential direction (tangential 
+
+acceleration tan a ). 1 tan 
+
+d ddt dt 
+
+= =
+
+v vv v u v a 
+
+(29 )
+
+Therefore, the numerator  in 1
+
+> arc
+
+ddl 
+
+u as a whole represents the 
+
+normal  acceleration after subtracting the tangential component. tan norm tan norm 12 2
+
+1 )(
+
+> arc
+
+ddl 
+
+−= =+a a v v a auv v v
+
+(30 )
+
+Clearly, the direction of 2u is perpendicular to 1u . We can 
+
+extract this direction by projecting onto the orthogonal 
+
+complement of the tangent space . Introducing the normal 
+
+projection operator 1 1 
+
+> H⊥
+
+= −vP I u u  . Using 1c as the coefficient .21 1
+
+( ) ( ), Re 
+
+> Hcc
+
+c  +=   =    
+
+Ωx Ω Ω xu a Ωx
+
+> 
+
+
+
+(31 )
+
+According  to  corollary  1( )
+
+> 2
+
+Re ( ) ( ) 0H =Ωx Ω x
+
+(32 )1 Re 
+
+> H
+
+c  −=    
+
+x ΩΩ x
+
+Ωx
+
+
+
+(33 )
+
+We can derive the analytical expression for 2 ( ) tu .21 1 1( )cc cc c c⊥ = − = + −v
+
+ΩxP a a u Ω Ω x Ωx
+
+
+
+(34 )2
+
+( ) ( ) ( ) 
+
+> cc cc
+
+tt t
+
+> ⊥⊥
+
+= vv
+
+P a u P a 
+
+(35 )
+
+The subspace spanned by 1u and 2u is called the  osculating 
+
+plane. It represents the plane that best fits the manifold curve at 
+
+the current moment.  The osculating plane effectively reveals 
+
+the geometric structure information of the array manifold. 1 2Span{ , } Span{ ( ), ( )} cc t tu u v a
+
+(36 )
+
+When the manifold is not confined to a two -dimensional 
+
+plane, a third coordinate axis —the  binormal  vector 3u —needs 
+
+to be introduced. In the arc l -domain, 3u is defined as the unit 
+
+vector perpendicular to the osculating plane. 23 1 1( )arc arc 
+
+dl dl 
+
+ +  
+
+uu u
+
+(37 )
+
+Since linear combinations of , , cc x v a  all lie within the 
+
+osculating plane, only the high -order dynamic terms contained 
+
+in j can possibly point out of the plane  in the t -domain. 
+
+Define the orthogonal projection operator onto the osculating 
+
+plane as osc 1 1 2 2  
+
+> HH⊥
+
+= − −P I u u u u  . Using projection coefficient 41 1 1
+
+( ), Re( )
+
+> HH
+
+d +=   = = − x ΩΩ Ω xu j u j Ωx
+
+> 
+
+ 
+
+(38 )31 12 2 221
+
+(2 ), Re( )( ) 
+
+> HH
+
+c d dc
+
+− −=   = =+ −
+
+x Ω Ω ΩΩ xu j u j Ωx
+
+Ω Ω x Ωx
+
+> 
+
+ 
+
+
+
+(39 )
+
+The binormal vector can be expressed as 3osc 1 1 2 2( ) ( 3 )t d d⊥ = + + − −P j Ω ΩΩ Ω x u u 
+
+(40 )osc 3osc 
+
+( ) ( ) ( ) 
+
+tt t
+
+> ⊥⊥
+
+= P ju P j
+
+(41 )
+
+Through the above derivations, we have established a
+
+mapping between physical derivatives and the geometric frame ,
+
+which  indicates that the high -order time derivatives of the 
+
+manfoid are  physical probes for detecting the high -dimensional 
+
+geometric shape  of the manifold. 
+
+D. The Curvature and The Torsion 
+
+This section derives the analytical expressions for the 
+
+curvature 1
+
+ and torsion 2
+
+ of the manifold. We will 
+
+demonstrate how to calculate these geometric invariants using 
+
+orthogonal projections of physical derivatives in the real 
+
+embedding space, and reveal their mapping relationships with 
+
+signal dynamic parameters and the array geometri c structure. 
+
+According to the Frenet -Serret frame, curvature is 1 1( ) /arc arc dl dl 
+
+= u
+
+(42 )
+
+Using the metric conversion relationship ( ) /arc l dd tt = v ,
+
+we transform this into a time -domain projection formula based 
+
+on the physical acceleration ( ) cc ta1 2
+
+( ) ( ) ( )  
+
+> cc
+
+tt t
+
+
+
+> ⊥
+
+= vP a v
+
+(43 )
+
+Within the framework of real Riemannian geometry, 
+
+utilizing the anti -Hermitian property of Ω , we obtain the 
+
+closed -form solution for the first -order curvature 211 2
+
+( )( ) 
+
+ct
+
++ −=
+
+Ωx
+
+Ω Ω x Ωx
+
+Ωx
+
+
+
+(44 )6
+
+Furthermore, we can obtain an approximate analytical 
+
+expression (see Appendix A for details) .g22 2eo 1
+
+1 2 ( ) ( , ) std( ( )) ( ) dyn 
+
+tt M tM
+
+    + = +  
+
+τ
+
+
+
+(45 )
+
+This formula reveals the  orthogonal  synthesis  law of 
+
+curvature: geo 1/ M
+
+= is the curvature of the geodesic ,
+
+originates from the hypersphere of radius M . Dynamic 
+
+curvature dyn 
+
+ originates from the stretching of the manifold by 
+
+the  signal  dynamics 
+
+ , varies monotonically with the variance 
+
+of the DOA distribution std( ) τ , constituting the geometric 
+
+basis for DOA estimation. 
+
+The second -order torsion describes the degree to which the 
+
+manifold trajectory deviates from the  osculating  plane. 22 1 1( )arc arc 
+
+ddl l
+
+= +
+
+u u‖ ‖
+
+(46 )
+
+As shown in  (36 ), s ince v and cc a span the osculating plane, 
+
+torsion is entirely determined by the component of ( ) tj that lies 
+
+outside this plane.  The torsion calculation formula is osc 2 31
+
+( ) ( ) ( ) ( ) 
+
+tt t t
+
+ 
+
+> ⊥
+
+= P jv
+
+(47 )
+
+Substituting the operator expansion into the formula .31 1 2 22 2
+
+( 3 )( ) d dt
+
++ + − −= 
+
+Ω ΩΩ Ω x u u
+
+Ω x Ωx
+
+ 
+
+(48 )
+
+We obtain the approximate analytical law for torsion 
+
+(derivation provided in Appendix B) .2
+
+2 ( ) ( , ) std( ( )) ( ) dyn 
+
+tt tM
+
+   =τ
+
+
+
+(49 )
+
+In summary,  this  work  is not merely an extension of 
+
+traditional  array  processing , but a complete geometric system. 
+
+However, the analytical expressions for higher -order curvatures 
+
+are complex. The analytical expressions for 1 ( ) t
+
+ and 2 ( ) t
+
+
+
+derived in this paper also neglect the higher -order differential 
+
+dynamics of the signal.  Structural errors exist under certain 
+
+parameters. 
+
+E. High -Order Extension 
+
+This section extends the  dynamic manifold framework  to 
+
+high -order geometric features, constructing a complete 
+
+theoretical description framework. 
+
+From the perspective of theoretical completeness, a smooth 
+
+curve embedded in an M -dimensional complex space is 
+
+uniquely described by the  Frenet -Serret Frame , which  consists 
+
+of 2M generalized orthogonal unit basis vectors 1 2{ , , }Mu u
+
+and 2 1M − generalized curvatures 1 2 1{ , , }M
+
+ 
+
+> −
+
+ .
+
+The rotational motion of the manifold frame with respect to 
+
+the parameter arc l follows a system of differential equations, 
+
+whose structure is described by the Cartan Matrix ( )arc lC [22] .
+
+TABLE I 
+
+DYNAMICS -GEOMETRY DUALITY HIERARCHY 
+
+Geometric 
+
+Object 
+
+Geometric 
+
+parameters 
+
+Related physical 
+
+parameter 
+
+Manifold ( )arc lx( ) arc dl tdt = v
+
+Tangent 
+
+vector 1 ( )arc arc 
+
+dl dl 
+
+= xu1
+
+( ) ( ) ( ) 
+
+tt t
+
+= vu v
+
+Principal 
+
+Normal 
+
+Vector 121
+
+( )arc l = 
+
+uu u2
+
+( ) ( ) ( ) 
+
+tt t
+
+> ⊥⊥
+
+= au a
+
+Binormal 
+
+Vector 2 1 132 1 1
+
+( )arc l
+
+ + =  + 
+
+u uu u u3
+
+( ) ( ) ( ) 
+
+tt t
+
+> ⊥⊥
+
+= ju j
+
+Unit Basis 
+
+Vector 1 2 21  
+
+> iiiii
+
+  
+
+> −−−−
+
+=  +u uu( ) ( ) 
+
+( ) ( ) 
+
+> iii
+
+tt
+
+> ⊥⊥
+
+= xu x
+
+Curvature 11
+
+( )arc arc 
+
+d ldl 
+
+= u1 2
+
+( ) ( ) 
+
+tt
+
+
+
+> ⊥
+
+= av
+
+Torsion 22 1 1
+
+> arc
+
+ddl 
+
+= +
+
+u u2 31
+
+( ) ( ) ( ) 
+
+tt t
+
+ 
+
+> ⊥
+
+= jv
+
+High -
+
+order 
+
+Curvature 1 1i i i i
+
+ 
+
+> −−
+
++= u u( 1) 11 1 
+
+> iiii
+
+  
+
+> +⊥+−
+
+= xv1 112 21 22 2( )
+
+0 00 
+
+> arc
+> arc MMl
+
+ddl 
+
+            = −            C
+
+u uu uu u
+
+
+
+
+
+  
+
+ 
+
+(50 )
+
+This matrix form indicates that the high -order geometric 
+
+shape of the manifold is successively defined by a series of 
+
+high -order curvatures. 
+
+In summary, we can induce the Dynamics -Geometry duality 
+
+hierarchy in wideband array signal processing. The time -
+
+domain differential properties of the signal map directly to the 
+
+geometric properties. This correspondence is summarized in 
+
+Table  I, where ( ) ⊥ denote  the  projection  operator . This 
+
+hierarchy table not only summarizes the theoretical findings of 
+
+this paper but also points out the theoretical potential of using 
+
+high -order dynamic information for finer signal analysis. 
+
+IV.  GEOMETRIC  INVARIANCE AND  ESTIMATION  FRAMEWORKS 
+
+A. Dynamic Subspace Expansion 
+
+This section aims to establish a new framework for 
+
+unambiguous direction finding based on dynamic manifolds. 
+
+To understand the physical basis of this framework, we need to 
+
+examine the complete signal space. 
+
+Consider the high -order differential structure of the 
+
+observation vector ( ) tx . According to the analysis in Chapter 
+
+3, the derivative ( )k
+
+x of any order k is recursively generated 
+
+by the dynamic generator Ω and its time derivatives. 7
+
+Consequently, the local evolution trajectory of the manifold at 
+
+time t is confined within a linear subspace generated by ( ) tΩ 
+
+#  
+
+> 2
+
+( ) span ( ), ( ), ( ), span , , ( ) ,  
+
+> dyn cc
+
+t t t t=  + 
+
+x v ax Ωx Ω Ω x
+
+
+
+(51 )
+
+In numerical linear algebra, this space can be viewed as the 
+
+Generalized Krylov Subspace generated by the dynamic 
+
+generator ( ) tΩ . From the perspective of differential geometry, 
+
+the generalized orthogonal basis of this subspace at time t is 
+
+precisely the Frenet -Serret Frame 1 2{ , , }u u .
+
+The dimension of this subspace determines the observable 
+
+degrees of freedom of the system. In traditional array signal 
+
+processing, the signal space is spanned solely by x (Rank -1). 
+
+In dynamic manifold, we are observing this high -dimensional 
+
+expanded subspace dyn  . The  DOA  acts on the array topology, 
+
+introducing the dynamic evolution directions of the manifold 
+
+represented by the high -order terms. Therefore, the essence of 
+
+dynamic direction finding is utilizing the expanded degrees of 
+
+freedom provided by the generalized Kryl ov subspace to extract 
+
+geometric attributes of the manifold. 
+
+Based on the subspace definition above, we can 
+
+fundamentally explain how the dynamic manifold breaks the 
+
+limitations of the spatial sampling theorem to achieve 
+
+unambiguity direction finding. 
+
+Assume that in a sparse array, there exist two different 
+
+directions 1 2,
+
+  whose steering vectors ( ) 
+
+
+
+a are linearly 
+
+dependent (with coefficient  ), i.e., 1 2( , ) ( , ) t t
+
+  = x x
+
+(52 )
+
+In the subspace span{ } x , these two directions are 
+
+indistinguishable. We need to consider whether this same linear 
+
+relationship is maintained in the defined dyn  by  test whether 
+
+the dynamic evolution directions of any order or the derived 
+
+geometric parameters maintain the same linear relationship .
+
+Examine the first -order term and define the residual vector as 1 2( , ) ( , ) t t
+
+   = −v v v
+
+. (53 )
+
+Substituting the ambiguity condition 1 2( , ) ( , ) t t
+
+  = x x( )1 2 11
+
+( 1) ( )( ( ) ( )) ( , ) !  
+
+> nnnnn
+
+j t tn
+
+  
+
+> =
+
+ − = −  
+
+# v T T x
+
+(54 )
+
+Since 1 2( ) ( )n n
+
+ T T , as long as the first -order dynamic ( ) t
+
+
+
+
+
+is not constantly zero, the tangent vector no longer 
+
+satisfies the linear dependence relationship. Consequently, the 
+
+augmented vectors in the high -dimensional expanded subspace dyn 
+
+are linearly independent. The dynamic generator Ω
+
+destroys the linear correlation in the static space by leveraging 
+
+its structural differences. 
+
+Based on above analysis, we propose the general  theorem .
+
+Theorem 1 . The  dynamic  manifold of a signal is a curve  in
+
+the  high -dimensional  observation  space. The DOA  is an 
+
+intrinsic structural parameter encoded in the curve's differential 
+
+geometric features independent of spatial aliasing. 
+
+The validity of this  theorem  strictly depends on whether the 
+
+subspace is successfully expanded, i.e., whether the 
+
+aforementioned linear independence holds. This is defined by 
+
+the following two conditions: 
+
+1.  If 
+
+ is identically zero (e.g.,  Monopulse  (MP) 
+
+signal), the operator degenerates to scalar multiplication j
+
+=Ω I
+
+. In this case, the T term vanishes, causing frames 
+
+of any order to remain linearly dependent. The system 
+
+degenerates to traditional array signal processing. 
+
+2.  The array geometric structure must be non -degenerate, 
+
+meaning the delay matrix corresponding to different angles 
+
+must be separable 1 2T T .
+
+In summary,  the theorem 1 extends the direction -finding 
+
+capabilities of sparse arrays and provides a theoretical 
+
+foundation for designing new wideband array processing 
+
+algorithms. 
+
+B. Geometric Invariance Theory and Robust Estimator 
+
+We have established the feasibility of unambiguous direction 
+
+finding using dynamic manifolds  in  theorem 1.  Additionally ,
+
+the manifold possesses numerous geometric attributes that 
+
+exhibit unique properties. Among these, the most prominent is 
+
+rigid  body  transformation  invariance. 
+
+In practical systems,  unknown phase  error  is  mathematically 
+
+equivalent to applying a  rigid  body  transformation to the 
+
+observation manifold. ( ) ( ) t t=x Γx
+
+(55 )
+
+Let ( ) geo  denote a differential mapping of manifold 
+
+parameters. If a geometric parameter remains unchanged under 
+
+rigid body transformation, i.e., ( ) ( ) geo geo =x x  , we classify it 
+
+as an  intrinsic  invariant of the dynamic manifold.  Parameters 
+
+that do not satisfy this condition are termed  extrinsic  parameter .
+
+According to the analysis in Chapter 3, the derivative ( )k
+
+x is 
+
+recursively generated by the dynamic generator Ω( )
+
+( ) ( )kgeo k= =x x Ω x 
+
+. (56 )
+
+Therefore, vector features of all orders (such as , , iv a u  ) will 
+
+rotate with the rigid body transformation and thus belong to the 
+
+extrinsic  parameter s( ) ( ) ( ) geo k geo = = x Ω x Γ x  
+
+(57 )
+
+On the contrary , the shape of a curve (scalars such as 
+
+curvature and torsion) is an invariant of motion in Euclidean 
+
+space. Examining the curvature 1 12 2
+
+( ) ( )( ) ( ) ( ) ( ) geo geo t t
+
+ 
+
+> ⊥⊥
+
+= = = = = 
+
+> Γvv
+
+P Γa Γ P a x x
+
+Γv v
+
+ 
+
+(58 )
+
+This implies that the shape of the curve, i.e., curvatures of all 
+
+orders, belongs to  intrinsic  invariant. Based on the behavior of 
+
+geometric features under rigid body transformation, we 
+
+introduce a new theorem .
+
+Theorem 2. The  extrinsic  parameter s of the dynamic 
+
+manifold contain the attitude information of the  manifold ; they 
+
+are not limited by the spatial sampling theorem but are 
+
+constrained by rigid body transformations caused by array 
+
+phase errors. The  intrinsic  invariant s describe only the inherent 8
+
+shape information of the manifold, and thus naturally possess 
+
+robustness against both the spatial sampling theorem limits and 
+
+channel errors. 
+
+Based on Theorem 2, we propose two feasible generalized 
+
+estimator frameworks utilizing geometric parameters for DOA 
+
+estimation. 
+
+Framework I  is b ased on  extrinsic  vector  features ( , , iv a u  ). 
+
+Its geometric essence  is  searching for a theoretical manifold ( ) 
+
+
+
+
+
+in the phase space that maximizes the overlap (via inner 
+
+product or projection) with the observed trajectory.  For an 
+
+example, w e define a general coherent cost functional .( )
+
+ˆ arg max ( ), ( , )    
+
+> obs
+> coh obs model T
+
+t t dt 
+
+> 
+
+=  v v
+
+(59 )
+
+where ( ) coh  is a coherent metric operator. This estimator is 
+
+essentially a direct generalization of traditional array signal 
+
+processing within the dynamic manifold framework. However, 
+
+if an unknown phase error Γ exists, the  extrinsic  vector 
+
+parameter s rotate, causing ambiguity  with the model. 
+
+Framework II  is  based on  the i ntrinsic  invariants  ( ). This 
+
+is the core contribution of this paper distinguishing it from 
+
+traditional array processing. Its geometric essence is to abandon 
+
+the matching of manifold position and direction, turning instead 
+
+to matching the topological shape of the manifold.  For an 
+
+example, w e define a general feature matching cost function .2
+
+ˆ arg min ( ) ( , )   
+
+> obs
+> obs model T
+
+t t dt 
+
+> 
+
+= − κ κ
+
+(60 )
+
+where 1 2[ , , ]T
+
+ = κ is the vector of geometric invariants. 
+
+According to Theorem 2, even in the presence of unknown 
+
+channel phase errors Γ , the observed curvature obs 
+
+ remains 
+
+equal to the theoretical curvature model 
+
+ . Therefore, this 
+
+framework enables calibration -free direction finding. 
+
+However, it must be noted that  feature extraction involves 
+
+high -order differential operations, which amplifies  noise. 
+
+Therefore, this framework is more suitable for high  signal -to -
+
+noise ratio ( SNR ) environments or  large  aperture  array .
+
+V.  SIMULATION  EXPERIMENTS AND  ANALYSIS 
+
+This chapter conducts a validation of the  dynamic manifold 
+
+framework  through numerical simulations. Unless otherwise 
+
+specified, the simulation sampling rate is set to satisfy the 
+
+requirements for high -precision differentiation. Three typical 
+
+signal types are simulated: a  MP  signal, a LFM signal with a 
+
+bandwidth of 800 MHz, and a SFM signal with a modulation 
+
+slope of 10 MHz and a modulation index of 15. All signal s share 
+
+a pulse width of 200 ns and a carrier frequency of  2 GHz. 
+
+First  experiment aims to verify the core hypothesis that the 
+
+time -domain dynamic characteristics of a signal directly 
+
+determine the geometric topology of the  dynamic  manifold , as 
+
+shown  in  Fig.  3. We consider a three -element sparse linear array 
+
+with an element spacing [0,5,10] d , where d representing a 
+
+half wavelength. Under a SNR of 30 dB, the three types of 
+
+signals are generated, and the trajectories of the  observation 
+
+vectors are extracted via Principal Component Analysis (PCA) 
+
+for three -dimensional visualization .
+
+(a)  MP signal  (b)  LFM signal 
+
+(c) SFM signal  (d)  The observation norm 
+
+Fig.  3. The geometric topology of the observation manifold 
+
+The trajectory of the MP signal closes into a  closed  circle,  as
+
+shown in  Fig.  3(a),  where the manifold is constrained solely by 
+
+the constant baseline geodesic curvature. In contrast, the LFM 
+
+signal breaks this closed loop; as depicted in  Fig.  3(b), its 
+
+trajectory extends along the binormal direction. The SFM signal 
+
+exhibits an even more complex spatially twisted curve, as 
+
+shown in  Fig.  3(c).  Furthermore, the numerical values of the 
+
+observation vector norm x for different numbers of array 
+
+elements are presented in  Fig.  3(d). These results verify the 
+
+constraint that the signal manifold is strictly confined to a high -
+
+dimensional hypersphere with a radius of M .
+
+The simulation results intuitively confirm that as the order of 
+
+signal dynamics increases, the manifold evolves from a two -
+
+dimensional closed curve into a three -dimensional spatial 
+
+curve. This expansion of geometric dimensionality represents 
+
+the pivotal mec hanism by which the  dynamic manifold 
+
+framework  resolves traditional array ambiguities. 
+
+To verify whether the dynamic generator derived in Chapter 
+
+3 can accurately describe the high -order evolution of the 
+
+manifold,  the second  experiment designs a comparative test 
+
+between theoretical values and measured values.  To exclude the 
+
+masking of waveform details by strong noise and focus on 
+
+verifying the correctness of the geometric structure, the SNR is 
+
+set to 40dB. The array configuration remains consistent with 
+
+Experiment 1, and we examine two representative dynamic 
+
+si gnals: LFM and SFM. The  physical  measurement  curves are 
+
+obtained by directly applying a high -order Savitzky -Golay filter 
+
+to the noisy observation data for numerical differentiation, 
+
+successively extracting velocity v , acceleration a , and jerk j .
+
+The  theoretical  truth  curves are analytically generated based on 
+
+the dynamic operator Ω using the chain rule. The experimental 
+
+results are shown in  Fig.  4.
+
+Whether for LFM or SFM signals, the theoretical curves and 
+
+the physical measurement curves coincide highly in both trend 
+
+and numerical value. This confirms the mathematical 
+
+correctness and its high -order generalizations. 9
+
+(a) LFM  signal  (b)  SFM signal 
+
+Fig.  4. Comparison of  numerical  differentiation and  theoretical 
+
+formulas 
+
+Fig.  5. Comparison of average curvature s
+
+(a) LFM  signal  (b)  SFM signal 
+
+Fig.  6. Instantaneous curvature under symmetric angles  for a 
+
+non -centered array 
+
+Next, a rray parameters changed  into [ 5, 0,5] d− , which  is a 
+
+centralized array . Fig.  5 illustrates the trend of the average 
+
+curvature of three signal types with respect to the array 
+
+geometric factor std( ) τ . The results indicate that the curvature 
+
+of the MP signal exhibits noise -like characteristics, suggesting 
+
+that its geometric features do not vary with DOA. Both LFM 
+
+and SFM signals show a high degree of linear correlation with std( ) τ
+
+. This confirms that the dynamic perturbation term dyn 
+
+
+
+linearly encodes the DOA into the bending degree of the 
+
+manifold, providing a physical basis for geometric direction 
+
+finding.  For non -centralized arrays, positive and negative 
+
+DOA ’s curvature possess distinctiveness. 
+
+Fig.  6 compares the curvature under symmetric angles 
+
+(30 
+
+ ) for a non -centered array [0,5,10] d . For the LFM signal ,
+
+as shown in  Fig.  6(a), the overall curvature amplitude at 30 
+
++
+
+is higher than at 30 
+
+− . Similarly, the SFM signal , as shown in 
+
+Fig.  6(b ), shows a phase dislocation between peaks and troughs 
+
+under positive and negative angles. This manifold chirality 
+
+(asymmetry) induced by the Geometric Doppler Effect equips 
+
+the dynamic manifold method with the capability to resolve the 
+
+sign of the DOA. 
+
+(a) C urvature  of  small  aperture  (b)  Torsion  of  small  aperture 
+
+(c) C urvature  of  large  aperture  (d) Torsion  of  large  aperture 
+
+Fig.  7. Curvature  and t orsion  of LFM signal 
+
+(a) C urvature  of  small  aperture  (b)  Torsion  of  small  aperture 
+
+(c) C urvature  of  large  aperture  (d) Torsion  of  large  aperture 
+
+Fig.  8. Curvature  and t orsion  of SFM signal 
+
+What ’s more, we examine the time -varying curves of 
+
+geometric features for LF M ( Fig.  7) and SFM ( Fig.  8) under 
+
+small aperture [0,5,10] d and ultra -large aperture [0,500,1000] d
+
+conditions, respectively.  The experiment 
+
+employs three  method s: the geometric truth obtained by 
+
+numerical differentiation of sampled data (Measurement); the 
+
+precise projection result based on the dynamic operator Ω
+
+(Projection); and the closed -form approximation obtained via 
+
+perturbation expansion (Analytical). 
+
+Under small aperture conditions , as shown in  Fig.  7(a) and 
+
+Fig.  8(a), the curvature 1
+
+ for all signals clusters around the 
+
+theoretical baseline value 1/ M (approximately 0.577). LFM 
+
+appears as a monotonic curve, while SFM exhibits periodic 
+
+oscillations. Simulation results show that the three curves 
+
+overlap highly, validating the  orthogonal  synthesis  law. 
+
+When the array spacing is expanded to [0,500,1000] d , as 
+
+shown in  Fig.  7(c -d) and  Fig.  8(c -d), the amplitudes of 1
+
+ and 10 
+
+(a) LFM  curvature  (b)  SFM t orsion 
+
+(a) SFM  curvature  (b)  SFM t orsion 
+
+Fig.  9. RMSE  under  different  apertures and  DOA 2
+
+
+
+increase. The term dyn 
+
+ is no longer a minute quantity but 
+
+becomes a strong feature. This indicates that a large aperture 
+
+amplifies geometric identifiability. However, under large 
+
+aperture conditions, the  algebraic approximation begins to 
+
+show errors, whereas the  projection remains precisely locked to 
+
+the measurement. This demonstrates that under high delay 
+
+conditions, the complete structure of Ω must be considered. 
+
+Fig.  9 quantifies the error laws of the two theoretical models 
+
+relative to the physical truth as aperture and azimuth vary. The 
+
+error is calculated as the 2 -norm between the theoretical 
+
+model and the geometric truth. Here,  1d represents  a uniform 
+
+linear array  with spacing [0,1, 2] d , 5d represents [0,5,10] d ,
+
+and  50 d represents [0,50,100] d . The results show that the 
+
+Projection Formula error remains consistently at an extremely 
+
+low level, proving that the differential geometric description 
+
+based on the dynamic operator Ω is  physically  exact. The 
+
+algebraic  formula error rises with increasing aperture. This 
+
+indicates that the closed -form approximation is valid only under 
+
+small aperture conditions. 
+
+The next  simulation verifies the correctness of the 
+
+Framework I and the Framework II through multi -level 
+
+simulation scenarios.  The target signal DOA is set to 20  .
+
+First, we examine a MP signal incident on a uniform array 
+
+with spacing 5d. The experimental results, as shown in  Fig.  10 ,
+
+reveal that MUSIC exhibits 5 peaks of nearly equal amplitude. 
+
+Since the dynamic  features  of MP is not  available , the spectral 
+
+peak morphology of Framework I is completely consistent with 
+
+MUSIC, also showing 5 ambiguous peaks. This validates our 
+
+theoretical inference  that,  when dynamics are absent, the 
+
+dynamic subspace and Framework I degenerates into a
+
+conventional array processing method. The spectrum of 
+
+Framework II approaches 0 or invalid values across the entire 
+
+domain. This is because the MP signal manifold degenerate s
+
+into a  closed  circle, where its geometric feature ( ) t
+
+ is constant 
+
+and isotropic, losing the ability to encode the DOA. 
+
+Fig.  10 . DOA estimation results for  a MP signal 
+
+(a)  No phase error  (b)  Have  phase error 
+
+Fig.  11 . Direction -finding results under small aperture 
+
+(a)  No phase error  (b)  Have  phase error 
+
+Fig.  12 . Direction -finding results under  large  aperture 
+
+Next, an LFM signal is introduced under a  50 d uniform array 
+
+condition, utilizing a high SNR of 100 dB to highlight weak 
+
+geometric perturbation features. The results are shown in  Fig. 
+
+11 (a) . The MUSIC spectrum presents dense  co mb-like grating 
+
+lobes. Framework I successfully suppresses all grating lobes, 
+
+forming a single main peak pointing to 20  . Framework II 
+
+exhibits two symmetric main peaks of approximately equal 
+
+amplitude, which can be distinguished by expanding the 
+
+aperture or incorporating vector direction identification. This 
+
+proves that whether using  intrinsic or  extrinsic  parameters, 
+
+dynamic information can break spatial ambiguity. 
+
+After introducing uncalibrated random element phase errors Γ
+
+, as shown in  Fig.  11 (b) , Framework I fails. Since phase 
+
+errors cause a rigid body rotation misalignment between the 
+
+theoretical model and the observation in the complex space, 
+
+preventing coherent integration from forming an effective 
+
+spectral peak. The result of Framework II rem ains unchanged. 
+
+To verify the impact of aperture on the frameworks, we 
+
+expand the array aperture to  5000 d (Ultra -Large Aperture) and 
+
+reduce the SNR to 30 dB. The experimental results are shown 
+
+in  Fig.  12 (a) . Without  phase  error, both Framework I and II 
+
+precisely lock onto the true value. 11 
+
+Fig.  13 . RMSE of DOA estimation under different  SNR  for the 
+
+proposed framework s
+
+With  phase  error,  as shown in  Fig.  12 (b),  Framework I shows 
+
+a fixed bias of approximately 2 , while Framework II precisely 
+
+points to the true DOA. This indicates that for Framework I,  the 
+
+rotation manifests as a systematic offset in beam pointing 
+
+during large -aperture coherent integration. Conversely, the 
+
+geometric invariance of Framework II holds strictly under large 
+
+apertures, and due to the significant enhancement of geometric 
+
+features,  its noise immunity is also greatly improved. 
+
+Finally, to verify the statistical characteristics and applicable 
+
+boundaries of the proposed theoretical frameworks, we 
+
+conducted Monte Carlo simulations (100 independent trials) 
+
+under a 5000d array to examine the variation of RMSE with 
+
+SNR ( -10 dB to 30 d B). The results are shown in  Fig.  13 .
+
+Framework I, in the absence of error, shows RMSE linearly 
+
+decreasing with SNR, converging to 0; in the presence of error, 
+
+RMSE exhibits a significant Error Floor, converging to 2.7  .
+
+Framework II, regardless of the presence of phase errors, shows 
+
+RMSE continuously decreasing with improved SNR, finally 
+
+converging to 0. This establishes the superiority of the intrinsic 
+
+geometric framework in non -cooperative scenarios in a
+
+statistical s ense. 
+
+VI. CONCLUSION 
+
+This paper establishes a  novel  dynamic  manifold  perspective ,
+
+offering  a paradigm shift in  UWB  array signal processing from 
+
+traditional phase consistency matching to geometric shape 
+
+matching. By constructing a dual -parameter system comprising 
+
+Extrinsic and Intrinsic parameters, we theoretically revealed 
+
+how signal temporal dynamics translate into generalized 
+
+identifiability capable of suppressing grating lobes, and how the 
+
+geometric invariants of the manifold trajectory endow the 
+
+system with intrinsic robustness against channel phase errors. 
+
+While this work lays a mathematical foundation and provides 
+
+general estimator frameworks, specific algorithms remain to be 
+
+developed . Future research should focus on designing robust 
+
+and efficient direction -finding algorithms to fully exploit the 
+
+expanded degrees of freedom offered by the dynamic manifold. 
+
+APPENDIX 
+
+Appendix A: First -Order Curvature 
+
+In Section 3.3, we presented the analytical formula for the 
+
+first -order curvature. Here, we explicitly demonstrate the vector 
+
+projection process. 
+
+In real Riemannian geometry, the projection coefficient is 
+
+defined as 2
+
+, cc Pk  = v a v 
+
+> 
+
+. To obtain an analytical solution with 
+
+clear physical meaning, we need to evaluate the squared 
+
+velocity magnitude in the denominator 2 21
+
+( ) ( )
+
+> Mmm
+
+t t
+
+ 
+
+> =
+
+= −v .
+
+Without loss of generality, we set the delay reference point 
+
+at the Geometric Centroid of the array, satisfying 1
+
+( ) 0
+
+> Mmm
+
+ 
+
+> =
+
+= .
+
+Performing a second -order Taylor expansion on the squared 
+
+instantaneous frequency yields 2 2 2 21 1
+
+( ) ( ) 2 ( ) ( ) ( ) ( )      
+
+> MMnmmmmmm
+
+t t t t t O
+
+        
+
+> ==
+
+ −  − + +    
+
+(61 )
+
+Utilizing the centroid property 0m
+
+= , the linear error 
+
+term vanishes 2 2 2 21
+
+( ) ( ) ( )std ( ) ( ) 
+
+> Mnmm
+
+t M t M t O
+
+
+
+> =
+
+ + + v τ
+
+(62 )
+
+For conventional radar and communication signals, the 
+
+carrier frequency  is much larger than the frequency 
+
+variation caused by aperture transit time (i.e., max 
+
+  
+
+ ). 
+
+Consequently, the contribution of higher -order terms to the 
+
+magnitude is negligible, allowing for the high -precision 
+
+approximation. Additionally, we can obtain that M=x , and 22
+
+std( ) m m mx M
+
+= = =  Tx τ
+
+. (63 )
+
+Recall the first -order dynamic expansions for the tangent 
+
+vector and acceleration vector 2
+
+( ) ( ) ( )cc 
+
+dt tdt 
+
+= = + = +a v Ωx Ωx Ω Ω x 
+
+(64 )
+
+Substituting the operator dominant term approximation j j
+
+  −Ω I T2 2 2 2 2
+
+( ) 2
+
+j jj j
+
+      − −  − + −
+
+Ω I T
+
+Ω I T I T T
+
+  
+
+ 
+
+(65 )
+
+We  can  obtain that the acceleration vector has five -term 
+
+decomposition   
+
+> 222
+
+2
+
+> acccedb
+
+j j
+
+     − + − + −a x x Tx Tx T x   
+
+(66 )
+
+It is needed to perform the real inner product operation 
+
+between v and each of the five terms of cc a .( )( )( )( )( ) 
+
+> 2222
+
+a.Re ( )( ) 0b.Re ( )( )c.Re ( )( ) std ( ) d.Re ( )(2 ) 0e.Re ( )( ) 0     
+
+> HHHHHHHHHH
+
+j jj j j Mj j j Mj jj j
+
+             − + − =− + =− + − =− + =− + − =
+
+x x T xx x T xx x T Tx τ
+
+x x T Tx x x T T x 
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+
+(67 )12 
+
+The tangential projection coefficient Pk is contributed by 
+
+Term b  and Term  c2 22 2
+
+std ( ) std ( ) M Mk M
+
+    += = +
+
+τ τ 
+
+(68 )
+
+Calculate the tangential component vector 222 2 2 22
+
+std ( ) ( )( )std ( ) std ( ) 
+
+k j jj j j j
+
+        = = + −= − + −
+
+τ
+
+a v x Tx 
+
+τ τ
+
+x Tx x Tx 
+
+> 
+
+ 
+
+ 
+
+
+
+(69 )
+
+Calculate the normal acceleration cc ⊥ = −a a a .         
+
+> 312
+> 2222222222222222
+
+2 ... std ( ) std ( ) std ( ) ( ) ( ... std ( ) ( ))2
+
+> CCC
+
+j jj j j jjj j j
+
+              
+
+> ⊥
+
+− + − + − +− − += − − + − +− + +=a x x Tx Tx T x 
+
+τ τ
+
+Tx x x Tx 
+
+τ x T x 
+
+τ Tx 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+ 
+
+(70 )
+
+To obtain the magnitude of the normal acceleration, we need 
+
+to analyze the orthogonality of the vectors x ,Tx  , and 2
+
+T x  .
+
+We have 22 2 44 42 332 2 2
+
+,, std ( ) 1, ,, 0, 0, 1 0
+
+MMM MMM
+
+   =  =  = =  =  = =   =  = 
+
+# 
+
+x x Tx Tx τ
+
+T x T x τ
+
+x Tx Tx T x τ
+
+x T x τ
+
+> 
+> 
+> 
+> 
+> 
+> 
+
+(71 )
+
+Therefore, apart from the strong correlation between the 
+
+reference term x and the second -order geometric term 2
+
+T x  ,
+
+the magnitude of the other terms can be calculated using the 
+
+vector sum formula. ( )         
+
+> 22222*212313
+
+2Re ,C C C C C ⊥ = + + +  a x Tx T x x T x 
+
+(72 )
+
+The term s can be calculated as ( )                
+
+> 224212222222222222434*4222213
+
+std ( ) ( )std ( ) 4 ( ) std ( ) 2Re , 2 std ( ) 
+
+C MC MC MC C M
+
+           = + + − +   ===
+
+τ
+
+x
+
+τ
+
+Tx τ
+
+T x x T x τ
+
+ 
+
+ 
+
+ 
+
+
+
+
+
+(73 )
+
+Under typical radar and communication parameters, terms 4
+
+M
+
+
+
+and 2 2 2
+
+std ( ) M
+
+  
+
+τ contribute the vast majority of the 
+
+energy. The contributions from the remaining terms differ from 
+
+the main terms by at least an order of magnitude of 6
+
+10 − , thus 42 2 2 2
+
+6 std ( ) ( )M M O
+
+    
+
+> ⊥
+
+ + +a τ 
+
+(74 )
+
+Assuming std( ) 
+
+=  , we can simplify the numerator to 4 2
+
+(1 6 )M
+
+  
+
+> ⊥
+
+ +a
+
+(75 )
+
+And the denominator  to 2 2 2 2 4 2
+
+( (1 )) (1 2 )M M
+
+   +  +v
+
+(76 )
+
+Substituting the above results into the curvature formula 4 2 21 22 4 22
+
+(1 6 ) 1 4( ) 1 (1 2 )(1 2 )
+
+Mt MM
+
+   
+
+> ⊥
+
++=  = + ++
+
+av
+
+(77 )
+
+The complete expression is 2 21 2 2
+
+1 std ( ( )) ( , ) 1 2std ( ( )) 4
+
+t M
+
+       + +
+
+
+
+(78 )
+
+Clearly, there is 2 2
+
+2std ( ( )) 
+
+  
+
+ . L et geo 
+
+1
+
+M
+
+= and 2 ( ) std( ( )) ( ) 
+
+> dyn
+
+ttM
+
+= τ
+
+
+
+, t he first -order curvature can be 
+
+expressed in a more concise form. g212 2eo 
+
+1 2 ( ) ( , ) std( ( )) ( ) 
+
+> dyn
+
+tt M tM
+
+    +   = +
+
+τ
+
+
+
+(79 )
+
+Appendix B: Derivation of the Torsion Projection 
+
+Formula 
+
+This appendix derives the computational formula for the 
+
+second -order torsion 2
+
+ starting strictly from its differential 
+
+geometric definition. 
+
+To find the torsion, we must calculate the jerk vector ( ) ( ) cc t t=j a
+
+. We focus on the terms that generate components 
+
+orthogonal to the osculating plane.  A crucial point is that 
+
+performing higher -order expansions of velocity and 
+
+acceleration poses computational pitfalls for analytical 
+
+solutions. As a compromise, we utilize the narrowband 
+
+assumption to reduce velocity and acceleration to terms 
+
+involving only  the instantaneous frequency itself.  Recall the 
+
+multi -term expansion of the acceleration vector 2 2cc 
+
+   − +a x Tx 
+
+(80 )
+
+Using the derivative rule j
+
+= x Ωx x , we differentiate the 
+
+key terms that contribute to the  binormal direction .3 2 2
+
+2 (2 2 ) 2cc 
+
+d j T jdt 
+
+       − − + + +a x x x Tx  
+
+(81 )
+
+The osculating plane is spanned by x (Normal baseline), jx
+
+(Tangent baseline), and Tx  (Normal perturbation).  The 
+
+dominant component of the jerk vector orthogonal to the 
+
+osculating plane is jTx  .2
+
+2 j
+
+   
+
+> ⊥
+
+j Tx 
+
+(82 )
+
+We verify that ⊥j is orthogonal to the osculating plane basis 13 
+
+in the real embedded manifold 2M
+
+ .
+
+The osculating plane is spanned by base j
+
+v x and  Normal 
+
+baseline 2 2base 
+
+   − +a x Tx  (Real part) . Then we can check 
+
+the inner product , Re( ) 0, Re( ) Re( ) 0, Re( ) 0 
+
+> HHHH
+
+j jj j j jT j j
+
+  = =  = − = =  = =
+
+x Tx x Tx x Tx x Tx x Tx x Tx x T Tx 
+
+> 
+> 
+> 
+
+(83 )
+
+Thus, the vector direction jTx  constitutes the  Binormal 
+
+Direction 3u .
+
+Substituting ⊥j into the torsion formula 2 31
+
+ 
+
+> ⊥
+
+= jv2 2
+
+2 2 std( ) M
+
+     
+
+> ⊥
+
+  = j Tx  
+
+(84 )2 3/ 2 31Denom ( )M MM
+
+ =22 3
+
+| 2 ( ) | std( ) ( , ) ( ) 
+
+t Mt M t
+
+    
+
+(85 )
+
+Simplifying yields the general torsion law 2
+
+2 ( ) ( , ) std( ( )) ( ) 
+
+tt tM
+
+   τ
+
+
+
+(86 )
+
+REFERENCES 
+
+[1]  Z. Wei  et al. , “Integrated Sensing and Communication Signals 
+
+Toward 5G -A and 6G: A Survey,”  IEEE Internet Things J. , vol. 10, 
+
+no. 13, pp. 11068 –11092, Jul. 2023, doi: 10.1109/JIOT.2023.3235618. 
+
+[2]  Y. Niu, Z. Wei, L. Wang, H. Wu, and Z. Feng, “Interference 
+
+Management for Integrated Sensing and Communication Systems: A 
+
+Survey,”  IEEE Internet Things J. , vol. 12, no. 7, pp. 8110 –8134, Apr. 
+
+2025, doi: 10.1109/JIOT.2024.3506162. 
+
+[3]  R. Kshetrimayum, “An introduction to UWB communication 
+
+systems,”  IEEE Potentials , vol. 28, no. 2, pp. 9 –13, Mar. 2009, doi: 
+
+10.1109/MPOT.2009.931847. 
+
+[4]  M. Guo, Y. D. Zhang, and T. Chen, “DOA Estimation Using 
+
+Compressed Sparse Array,”  IEEE Trans. Signal Process. , vol. 66, no. 
+
+15, pp. 4133 –4146, Aug. 2018, doi: 10.1109/TSP.2018.2847645. 
+
+[5]  P. Wu, Y. -H. Liu, Z. -Q. Zhao, and Q. -H. Liu, “Sparse antenna array 
+
+design methodologies: A review,”  Journal of Electronic Science and 
+
+Technology , vol. 22, no. 3, p. 100276, Sep. 2024, doi: 
+
+10.1016/j.jnlest.2024.100276. 
+
+[6]  H. Luo, F. Gao, W. Yuan, and S. Zhang, “Beam Squint Assisted User 
+
+Localization in Near -Field Integrated Sensing and Communications 
+
+Systems,”  IEEE TRANSACTIONS ON WIRELESS 
+
+COMMUNICATIONS , vol. 23, no. 5, 2024. 
+
+[7]  K. Jiang  et al. , “Distributed UAV Swarm Augmented Wideband 
+
+Spectrum Sensing Using Nyquist Folding Receiver,”  IEEE Trans. 
+
+Wireless Commun. , vol. 23, no. 10, pp. 14171 –14184, Oct. 2024, doi: 
+
+10.1109/TWC.2024.3410186. 
+
+[8]  F. Wang, Z. Tian, G. Leus, and J. Fang, “Direction of Arrival 
+
+Estimation of Wideband Sources Using Sparse Linear Arrays,”  IEEE 
+
+Trans. Signal Process. , vol. 69, pp. 4444 –4457, 2021, doi: 
+
+10.1109/TSP.2021.3094718. 
+
+[9]  P. P. Vaidyanathan and P. Pal, “Sparse sensing with coprime arrays,” 
+
+in  2010 Conference Record of the Forty Fourth Asilomar Conference 
+
+on Signals, Systems and Computers , Pacific Grove, CA, USA: IEEE, 
+
+Nov. 2010, pp. 1405 –1409. doi: 10.1109/ACSSC.2010.5757766. 
+
+[10]  P. Pal and P. P. Vaidyanathan, “Nested Arrays: A Novel Approach to 
+
+Array Processing With Enhanced Degrees of Freedom,”  IEEE Trans. 
+
+Signal Process. , vol. 58, no. 8, pp. 4167 –4181, Aug. 2010, doi: 
+
+10.1109/TSP.2010.2049264. 
+
+[11]  J. Shi, G. Hu, X. Zhang, F. Sun, and H. Zhou, “Sparsity -Based Two -
+
+Dimensional DOA Estimation for Coprime Array: From Sum –
+
+Difference Coarray Viewpoint,”  IEEE Trans. Signal Process. , vol. 65, 
+
+no. 21, pp. 5591 –5604, Nov. 2017, doi: 10.1109/TSP.2017.2739105. 
+
+[12]  S. Li and X. -P. Zhang, “A New Approach to Construct Virtual Array 
+
+With Increased Degrees of Freedom for Moving Sparse Arrays,”  IEEE 
+
+Signal Process. Lett. , vol. 27, pp. 805 –809, 2020, doi: 
+
+10.1109/LSP.2020.2993956. 
+
+[13]  M. Wax, Tie -Jun Shan, and T. Kailath, “Spatio -temporal spectral 
+
+analysis by eigenstructure methods,”  IEEE Trans. Acoust., Speech, 
+
+Signal Process. , vol. 32, no. 4, pp. 817 –827, Aug. 1984, doi: 
+
+10.1109/TASSP.1984.1164400. 
+
+[14]  H. Hung and M. Kaveh, “Focussing matrices for coherent signal -
+
+subspace processing,”  IEEE Trans. Acoust., Speech, Signal 
+
+Processing , vol. 36, no. 8, pp. 1272 –1281, Aug. 1988, doi: 
+
+10.1109/29.1655. 
+
+[15]  Ahmad Z, Song Y, Du Q., “Wideband DOA estimation based on 
+
+incoherent signal subspace method,”  The international journal for 
+
+computation and mathematics in electrical and electronic 
+
+engineering , vol. 37, no. (3), pp. 1271 –1289, 2018. 
+
+[16]  F. Ma and X. Zhang, “Wideband DOA estimation based on focusing 
+
+signal subspace,”  SIViP , vol. 13, no. 4, pp. 675 –682, Jun. 2019, doi: 
+
+10.1007/s11760 -018 -1396 -4. 
+
+[17]  Z. Yan, T. Jia, H. Liu, C. Gao, J. Yan, and S. Yan, “A Two -Step 
+
+Weighted Least Squares Self -Calibration Method for Gain -Phase 
+
+Errors in Uniform Linear Arrays,” in  2025 IEEE 15th International 
+
+Conference on Signal Processing, Communications and Computing 
+
+(ICSPCC) , Hong Kong, Hong Kong: IEEE, Jul. 2025, pp. 1 –6. doi: 
+
+10.1109/ICSPCC66825.2025.11194451. 
+
+[18]  W. Wang and S. Yan, “Self -Calibration Direction -of -Arrival 
+
+Estimation with Gain -Phase Errors Using Wideband Sources,” in 
+
+2025 IEEE 15th International Conference on Signal Processing, 
+
+Communications and Computing (ICSPCC) , Hong Kong, Hong Kong: 
+
+IEEE, Jul. 2025, pp. 1 –5. doi: 
+
+10.1109/ICSPCC66825.2025.11194676. 
+
+[19]  E. G. Larsson and J. Vieira, “Phase Calibration of Distributed Antenna 
+
+Arrays,”  IEEE Commun. Lett. , vol. 27, no. 6, pp. 1619 –1623, Jun. 
+
+2023, doi: 10.1109/LCOMM.2023.3266836. 
+
+[20]  M. Rashid and J. A. Nanzer, “Frequency and Phase Synchronization 
+
+in Distributed Antenna Arrays Based on Consensus Averaging and 
+
+Kalman Filtering,”  IEEE Trans. Wireless Commun. , vol. 22, no. 4, pp. 
+
+2789 –2803, Apr. 2023, doi: 10.1109/TWC.2022.3213788. 
+
+[21]  Y. I. Abramovich, N. K. Spencer, and A. Y. Gorokhov, “Resolving 
+
+manifold ambiguities in direction -of -arrival estimation for nonuniform 
+
+linear antenna arrays,”  IEEE Trans. Signal Process. , vol. 47, no. 10, 
+
+pp. 2629 –2643, Oct. 1999, doi: 10.1109/78.790646. 
+
+[22]  I. Dacos and A. Manikas, “Estimating the manifold parameters of one -
+
+dimensional arrays of sensors,”  Journal of the Franklin Institute , vol. 
+
+332, no. 3, pp. 307 –332, May 1995, doi: 10.1016/0016 -
+
+0032(95)00046 -1. 
+
+[23]  S. M. Hirsh, S. M. Ichinaga, S. L. Brunton, J. Nathan Kutz, and B. W. 
+
+Brunton, “Structured time -delay models for dynamical systems with 
+
+connections to Frenet –Serret frame,”  Proc. R. Soc. A. , vol. 477, no. 
+
+2254, p. 20210097, Oct. 2021, doi: 10.1098/rspa.2021.0097.

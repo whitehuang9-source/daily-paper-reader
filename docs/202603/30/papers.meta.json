@@ -1,0 +1,37 @@
+{
+  "label": "2026-03-30",
+  "date": "2026-03-30",
+  "generated_at": "2026-03-30T21:12:16",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202603/30/2603.23267v1-geometric-direction-finding-on-dynamic-manifolds-unambiguous-doa-estimation-for-spatially-undersampled-uwb-arrays",
+      "section": "quick",
+      "title_en": "Geometric Direction Finding on Dynamic Manifolds: Unambiguous DOA Estimation for Spatially Undersampled UWB Arrays",
+      "authors": "Kailun Tian, Kaili Jiang, Dechang Wang, Hancong Feng, Yuxin Zhao, Ying Xiong, Bin Tang",
+      "date": "2026-03-24",
+      "pdf": "https://arxiv.org/pdf/2603.23267v1",
+      "score": "6.0",
+      "evidence": "空间欠采样传感器阵列的波达方向估计",
+      "tldr": "针对超宽带（UWB）电磁感知中空间欠采样、异步阵列相位和波束倾斜等挑战，本文提出了一种动态流形视角。通过将UWB信号建模为高维空间中的连续流形曲线，利用流形的几何形状而非绝对相位来唯一确定到达角（DOA）。该方法结合外在向量参数和内在标量不变量，有效抑制了栅瓣并增强了对相位误差的鲁棒性，实现了稀疏阵列下的无歧义、高精度测向。",
+      "tags": "query:tmr",
+      "abstract_en": "Traditional Direction of Arrival (DOA) estimation methods struggle to simultaneously address three physical constraints in Ultra-Wideband (UWB) electromagnetic sensing: spatial undersampling, asynchronous array phase, and beam squint. Existing solutions treat these issues in isolation, leading to limited performance in complex scenarios. This paper proposes a novel dynamic manifold perspective, which models UWB signal observations as a continuous manifold curve in a high-dimensional space driven by temporal evolution and array topology. We theoretically demonstrate that the DOA can be uniquely determined solely by the geometric shape of the manifold, rather than the absolute arrival phase. Based on this perspective, we construct a geometric parameter system comprising extrinsic and intrinsic parameters, along with a corresponding DOA estimation framework. Extrinsic vector parameters serve as a dynamic extension of traditional array processing, effectively expanding the degrees of freedom to suppress grating lobes. Intrinsic scalar invariants provide a new geometric perspective independent of traditional phase models, offering intrinsic robustness against array channel phase errors. Simulation results show that the derived analytical expressions for geometric parameters are highly consistent with numerical truths. The proposed framework not only completely eliminates spatial ambiguity in sparse arrays but also achieves high-precision direction finding under conditions with calibration-free phase errors.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202603/30/2603.26023v1-glu-global-local-uncertainty-fusion-for-scalable-spatiotemporal-reconstruction-and-forecasting",
+      "section": "quick",
+      "title_en": "GLU: Global-Local-Uncertainty Fusion for Scalable Spatiotemporal Reconstruction and Forecasting",
+      "authors": "Linzheng Wang, Jason Chen, Nicolas Tricard, Zituo Chen, Sili Deng",
+      "date": "2026-03-27",
+      "pdf": "https://arxiv.org/pdf/2603.26023v1",
+      "score": "6.0",
+      "evidence": "基于稀疏测量的时空重构",
+      "tldr": "GLU是一个统一的时空重建与预测框架，旨在解决复杂物理系统数字孪生中稀疏观测下的状态推断与演化预测问题。它通过结合全局系统概括、局部测量标记和不确定性驱动的重要性场，构建了结构化潜空间表示。该方法在保持全局一致性的同时，实现了灵活的局部信息检索，显著提升了重建精度和预测稳定性，且具有较低的内存增长，为大规模数字孪生提供了高效的计算范式。",
+      "tags": "query:tmr",
+      "abstract_en": "Digital twins of complex physical systems are expected to infer unobserved states from sparse measurements and predict their evolution in time, yet these two functions are typically treated as separate tasks. Here we present GLU, a Global-Local-Uncertainty framework that formulates sparse reconstruction and dynamic forecasting as a unified state-representation problem and introduces a structured latent assembly to both tasks. The central idea is to build a structured latent state that combines a global summary of system-level organization, local tokens anchored to available measurements, and an uncertainty-driven importance field that weights observations according to the physical informativeness. For reconstruction, GLU uses importance-aware adaptive neighborhood selection to retrieve locally relevant information while preserving global consistency and allowing flexible query resolution on arbitrary geometries. Across a suite of challenging benchmarks, GLU consistently improves reconstruction fidelity over reduced-order, convolutional, neural operator, and attention-based baselines, better preserving multi-scale structures. For forecasting, a hierarchical Leader-Follower Dynamics module evolves the latent state with substantially reduced memory growth, maintains stable rollout behavior and delays error accumulation in nonlinear dynamics. On a realistic turbulent combustion dataset, it further preserves not only sharp fronts and broadband structures in multiple physical fields, but also their cross-channel thermo-chemical couplings. Scalability tests show that these gains are achieved with substantially lower memory growth than comparable attention-based baselines. Together, these results establish GLU as a flexible and computationally practical paradigm for sparse digital twins.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
