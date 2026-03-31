@@ -1,0 +1,23 @@
+{
+  "label": "2026-03-31",
+  "date": "2026-03-31",
+  "generated_at": "2026-03-31T21:04:02",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202603/31/2603.27929v1-physics-guided-transformer-pgt-physics-aware-attention-mechanism-for-pinns",
+      "section": "quick",
+      "title_en": "Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs",
+      "authors": "Ehsan Zeraatkar, Rodion Podorozhny, Jelena Tešić",
+      "date": "2026-03-30",
+      "pdf": "https://arxiv.org/pdf/2603.27929v1",
+      "score": "6.0",
+      "evidence": "从稀疏观测中重建连续物理场",
+      "tldr": "针对从稀疏观测中重建物理场时 PINN 存在的梯度不平衡和物理一致性差等问题，本文提出物理引导 Transformer (PGT)。该架构将物理结构（如热核偏置）直接嵌入自注意力机制，并结合 FiLM 调制的正弦隐式网络。在热传导和流体动力学任务中，PGT 在数据稀疏情况下表现出更强的稳定性、泛化能力和物理保真度。",
+      "tags": "query:tmr",
+      "abstract_en": "Reconstructing continuous physical fields from sparse, irregular observations is a central challenge in scientific machine learning, particularly for systems governed by partial differential equations (PDEs). Existing physics-informed methods typically enforce governing equations as soft penalty terms during optimization, often leading to gradient imbalance, instability, and degraded physical consistency under limited data. We introduce the Physics-Guided Transformer (PGT), a neural architecture that embeds physical structure directly into the self-attention mechanism. Specifically, PGT incorporates a heat-kernel-derived additive bias into attention logits, encoding diffusion dynamics and temporal causality within the representation. Query coordinates attend to these physics-conditioned context tokens, and the resulting features are decoded using a FiLM-modulated sinusoidal implicit network that adaptively controls spectral response. We evaluate PGT on the one-dimensional heat equation and two-dimensional incompressible Navier-Stokes systems. In sparse 1D reconstruction with 100 observations, PGT achieves a relative L2 error of 5.9e-3, significantly outperforming both PINNs and sinusoidal representations. In the 2D cylinder wake problem, PGT uniquely achieves both low PDE residual (8.3e-4) and competitive relative error (0.034), outperforming methods that optimize only one objective. These results demonstrate that embedding physics within attention improves stability, generalization, and physical fidelity under data-scarce conditions.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

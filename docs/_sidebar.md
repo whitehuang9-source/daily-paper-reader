@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-03-31 <!--dpr-date:20260331-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/31/2603.27929v1-physics-guided-transformer-pgt-physics-aware-attention-mechanism-for-pinns" data-sidebar-item="{&quot;title&quot;: &quot;Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.27929v1-physics-guided-transformer-pgt-physics-aware-attention-mechanism-for-pinns&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;从稀疏观测中重建连续物理场&quot;}">Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs</a>
   * 2026-03-30 <!--dpr-date:20260330-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202603/30/2603.23267v1-geometric-direction-finding-on-dynamic-manifolds-unambiguous-doa-estimation-for-spatially-undersampled-uwb-arrays" data-sidebar-item="{&quot;title&quot;: &quot;Geometric Direction Finding on Dynamic Manifolds: Unambiguous DOA Estimation for Spatially Undersampled UWB Arrays&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.23267v1-geometric-direction-finding-on-dynamic-manifolds-unambiguous-doa-estimation-for-spatially-undersampled-uwb-arrays&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;空间欠采样传感器阵列的波达方向估计&quot;}">Geometric Direction Finding on Dynamic Manifolds: Unambiguous DOA Estimation for Spatially Undersampled UWB Arrays</a>

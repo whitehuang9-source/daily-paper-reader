@@ -6,29 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-30
-- 运行时间：2026-03-30 21:12:07 UTC
+- 最新运行日期：2026-03-31
+- 运行时间：2026-03-31 21:03:54 UTC
 - 运行状态：成功
-- 本次总论文数：2
+- 本次总论文数：1
 - 精读区：0
-- 速读区：2
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦动态流形与时空融合，攻克欠采样阵列测向与大规模时空预测难题。
-研究展示了 UWB 阵列在空间欠采样下的无歧义 DOA 估计，以及通过全局-局部-不确定性融合实现的高效时空重建。
-推荐关注信号处理与时空建模的读者，深入探索几何测向与多尺度融合架构的最新进展。
-- 详情：[/202603/30/README](/202603/30/README)
+今日聚焦物理引导的 Transformer (PGT)，探索物理信息神经网络（PINNs）的架构创新。
+核心在于引入物理感知的注意力机制，通过融合物理先验提升模型对复杂动力系统的表征精度。
+推荐关注物理规律与注意力机制的深度耦合，这是优化科学计算模型性能的关键方向。
+- 详情：[/202603/31/README](/202603/31/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Geometric Direction Finding on Dynamic Manifolds: Unambiguous DOA Estimation for Spatially Undersampled UWB Arrays](/202603/30/2603.23267v1-geometric-direction-finding-on-dynamic-manifolds-unambiguous-doa-estimation-for-spatially-undersampled-uwb-arrays)  
+1. [Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs](/202603/31/2603.27929v1-physics-guided-transformer-pgt-physics-aware-attention-mechanism-for-pinns)  
    标签：评分：6.0/10、query:tmr
-   evidence：空间欠采样传感器阵列的波达方向估计
-2. [GLU: Global-Local-Uncertainty Fusion for Scalable Spatiotemporal Reconstruction and Forecasting](/202603/30/2603.26023v1-glu-global-local-uncertainty-fusion-for-scalable-spatiotemporal-reconstruction-and-forecasting)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于稀疏测量的时空重构
+   evidence：从稀疏观测中重建连续物理场
 
 
 <div class="dpr-home-promo-card">

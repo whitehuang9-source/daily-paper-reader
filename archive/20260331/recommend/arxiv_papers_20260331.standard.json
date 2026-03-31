@@ -1,0 +1,54 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-03-31T21:03:36.097025+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.27929v1",
+      "title": "Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs",
+      "abstract": "Reconstructing continuous physical fields from sparse, irregular observations is a central challenge in scientific machine learning, particularly for systems governed by partial differential equations (PDEs). Existing physics-informed methods typically enforce governing equations as soft penalty terms during optimization, often leading to gradient imbalance, instability, and degraded physical consistency under limited data. We introduce the Physics-Guided Transformer (PGT), a neural architecture that embeds physical structure directly into the self-attention mechanism. Specifically, PGT incorporates a heat-kernel-derived additive bias into attention logits, encoding diffusion dynamics and temporal causality within the representation. Query coordinates attend to these physics-conditioned context tokens, and the resulting features are decoded using a FiLM-modulated sinusoidal implicit network that adaptively controls spectral response. We evaluate PGT on the one-dimensional heat equation and two-dimensional incompressible Navier-Stokes systems. In sparse 1D reconstruction with 100 observations, PGT achieves a relative L2 error of 5.9e-3, significantly outperforming both PINNs and sinusoidal representations. In the 2D cylinder wake problem, PGT uniquely achieves both low PDE residual (8.3e-4) and competitive relative error (0.034), outperforming methods that optimize only one objective. These results demonstrate that embedding physics within attention improves stability, generalization, and physical fidelity under data-scarce conditions.",
+      "authors": [
+        "Ehsan Zeraatkar",
+        "Rodion Podorozhny",
+        "Jelena Tešić"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI"
+      ],
+      "published": "2026-03-30T00:55:32+00:00",
+      "link": "https://arxiv.org/pdf/2603.27929v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstructing continuous physical fields from sparse observations",
+      "llm_evidence_cn": "从稀疏观测中重建连续物理场",
+      "llm_evidence": "从稀疏观测中重建连续物理场",
+      "canonical_evidence": "从稀疏观测中重建连续物理场",
+      "llm_tldr_en": "Introduces a Physics-Guided Transformer for reconstructing physical fields from sparse data.",
+      "llm_tldr_cn": "引入物理引导的Transformer，用于从稀疏数据中重建物理场。",
+      "llm_tldr": "引入物理引导的Transformer，用于从稀疏数据中重建物理场。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
