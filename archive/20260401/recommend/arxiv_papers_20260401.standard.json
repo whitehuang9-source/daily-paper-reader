@@ -1,0 +1,108 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-01T21:50:57.154188+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.29613v1",
+      "title": "Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype",
+      "abstract": "The readout system with a high multiplexing ratio has become a bottleneck limiting the application of large-scale Transition Edge Sensor (TES) detector arrays. In recent years, the microwave superconducting quantum interference device (SQUID) multiplexer has emerged as a key technology for effectively reading large-scale cryogenic detector arrays. Currently, the microwave SQUID multiplexer is being adopted by an increasing number of experiments due to its capability of achieving a multiplexing ratio of 2000:1 within the readout bandwidth. In this study, we developed and fabricated a 32-channel microwave SQUID multiplexer prototype. And we measured 8 channels of the prototype. The measured equivalent noise current of the prototype reached 154 pA/$\\sqrt{Hz}$.",
+      "authors": [
+        "Mengjie Song",
+        "Yixian Deng",
+        "Zhengwei Li",
+        "He Gao",
+        "Zhouhui Liu",
+        "Yudong Gu",
+        "XiangXiang Ren",
+        "Nan Li",
+        "Guofu Liao",
+        "Qinglei Xiu",
+        "Yu Xu",
+        "Mengqi Jiang",
+        "Xufang Li",
+        "Yaqiong Li",
+        "Shibo Shu",
+        "Yongjie Zhang",
+        "Congzhan Liu"
+      ],
+      "primary_category": "physics.ins-det",
+      "categories": [
+        "physics.ins-det"
+      ],
+      "published": "2026-03-31T11:34:05+00:00",
+      "link": "https://arxiv.org/pdf/2603.29613v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multiplexing readout for sensor arrays and noise current measurement",
+      "llm_evidence_cn": "传感器阵列的多路复用读取和噪声电流测量",
+      "llm_evidence": "传感器阵列的多路复用读取和噪声电流测量",
+      "canonical_evidence": "传感器阵列的多路复用读取和噪声电流测量",
+      "llm_tldr_en": "Develops a 32-channel microwave SQUID multiplexer for reading large-scale detector arrays with low noise.",
+      "llm_tldr_cn": "开发了一种32通道微波SQUID多路复用器原型，用于读取具有低噪声的大规模探测器阵列。",
+      "llm_tldr": "开发了一种32通道微波SQUID多路复用器原型，用于读取具有低噪声的大规模探测器阵列。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "multi-sensor array for current measurement",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2603.29745v1",
+      "title": "RHINO-MAG: Recursive H-Field Inference based on Observed Magnetic Flux under Dynamic Excitation",
+      "abstract": "Driven by the MagNet Challenge 2025 (MC2), increased research interest is directed towards modeling transient magnetic fields within ferrite material. An accurate time-resolved and temperature-aware H-field prediction is essential for optimizing magnetic components in applications with quasi-stationary / non-stationary excitation waveforms. Within the scope of this investigation, a selection of model structures with varying degrees of physically motivated structure are compared. Based on a Pareto investigation, a rather black-box gated recurrent unit (GRU) model structure with a graceful initialization setup is found to offer the most attractive model size vs. model accuracy trade-off, while the physics-inspired models performed worse. For a GRU-based model with only 325 parameters, a sequence relative error of 8.02 % and a normalized energy relative error of 1.07 % averaged across five different materials are achieved on unseen test data. With this excellent parameter efficiency, the proposed model won the first place in the performance category of the MC2.",
+      "authors": [
+        "Hendrik Vater",
+        "Oliver Schweins",
+        "Lukas Hölsch",
+        "Wilhelm Kirchgässner",
+        "Till Piepenbrock",
+        "Oliver Wallscheid"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY",
+        "cond-mat.mtrl-sci",
+        "eess.SP"
+      ],
+      "published": "2026-03-31T13:43:52+00:00",
+      "link": "https://arxiv.org/pdf/2603.29745v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "H-field inference based on observed magnetic flux",
+      "llm_evidence_cn": "基于观测磁通量的磁场推断",
+      "llm_evidence": "基于观测磁通量的磁场推断",
+      "canonical_evidence": "基于观测磁通量的磁场推断",
+      "llm_tldr_en": "Investigates recursive models for predicting transient magnetic fields in ferrite materials.",
+      "llm_tldr_cn": "研究了用于预测铁氧体材料中瞬态磁场的递归模型。",
+      "llm_tldr": "研究了用于预测铁氧体材料中瞬态磁场的递归模型。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

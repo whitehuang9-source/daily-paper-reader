@@ -1,0 +1,37 @@
+{
+  "label": "2026-04-01",
+  "date": "2026-04-01",
+  "generated_at": "2026-04-01T21:51:30",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202604/01/2603.29613v1-design-fabrication-and-characterization-of-microwave-multiplexing-squid-prototype",
+      "section": "quick",
+      "title_en": "Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype",
+      "authors": "Mengjie Song, Yixian Deng, Zhengwei Li, He Gao, Zhouhui Liu, Yudong Gu, XiangXiang Ren, Nan Li, Guofu Liao, Qinglei Xiu, Yu Xu, Mengqi Jiang, Xufang Li, Yaqiong Li, Shibo Shu, Yongjie Zhang, Congzhan Liu",
+      "date": "2026-03-31",
+      "pdf": "https://arxiv.org/pdf/2603.29613v1",
+      "score": "6.0",
+      "evidence": "传感器阵列的多路复用读取和噪声电流测量",
+      "tldr": "针对大规模超导转变边缘传感器（TES）探测器阵列读出受限的问题，本研究设计并研制了一款32通道微波超导量子干涉器件（SQUID）复用器原型。该技术利用微波复用实现高复用率，通过对其中8个通道的测试，实现了154 pA/√Hz的等效噪声电流，为大规模低温探测器阵列的高效读出提供了关键技术支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "The readout system with a high multiplexing ratio has become a bottleneck limiting the application of large-scale Transition Edge Sensor (TES) detector arrays. In recent years, the microwave superconducting quantum interference device (SQUID) multiplexer has emerged as a key technology for effectively reading large-scale cryogenic detector arrays. Currently, the microwave SQUID multiplexer is being adopted by an increasing number of experiments due to its capability of achieving a multiplexing ratio of 2000:1 within the readout bandwidth. In this study, we developed and fabricated a 32-channel microwave SQUID multiplexer prototype. And we measured 8 channels of the prototype. The measured equivalent noise current of the prototype reached 154 pA/$\\sqrt{Hz}$.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/01/2603.29745v1-rhino-mag-recursive-h-field-inference-based-on-observed-magnetic-flux-under-dynamic-excitation",
+      "section": "quick",
+      "title_en": "RHINO-MAG: Recursive H-Field Inference based on Observed Magnetic Flux under Dynamic Excitation",
+      "authors": "Hendrik Vater, Oliver Schweins, Lukas Hölsch, Wilhelm Kirchgässner, Till Piepenbrock, Oliver Wallscheid",
+      "date": "2026-03-31",
+      "pdf": "https://arxiv.org/pdf/2603.29745v1",
+      "score": "6.0",
+      "evidence": "基于观测磁通量的磁场推断",
+      "tldr": "本研究针对MagNet挑战赛2025，旨在对铁氧体材料中的瞬态磁场进行建模。通过对比物理启发式模型与黑盒模型，提出了一种基于门控循环单元（GRU）且具有优雅初始化设置的RHINO-MAG模型。该模型仅含325个参数，在五种不同材料的测试中实现了8.02%的序列相对误差和1.07%的归一化能量相对误差。凭借极高的参数效率和预测精度，该方法在MC2性能竞赛中荣获第一名。",
+      "tags": "query:tmr",
+      "abstract_en": "Driven by the MagNet Challenge 2025 (MC2), increased research interest is directed towards modeling transient magnetic fields within ferrite material. An accurate time-resolved and temperature-aware H-field prediction is essential for optimizing magnetic components in applications with quasi-stationary / non-stationary excitation waveforms. Within the scope of this investigation, a selection of model structures with varying degrees of physically motivated structure are compared. Based on a Pareto investigation, a rather black-box gated recurrent unit (GRU) model structure with a graceful initialization setup is found to offer the most attractive model size vs. model accuracy trade-off, while the physics-inspired models performed worse. For a GRU-based model with only 325 parameters, a sequence relative error of 8.02 % and a normalized energy relative error of 1.07 % averaged across five different materials are achieved on unseen test data. With this excellent parameter efficiency, the proposed model won the first place in the performance category of the MC2.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

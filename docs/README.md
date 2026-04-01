@@ -6,26 +6,29 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-03-31
-- 运行时间：2026-03-31 21:03:54 UTC
+- 最新运行日期：2026-04-01
+- 运行时间：2026-04-01 21:51:18 UTC
 - 运行状态：成功
-- 本次总论文数：1
+- 本次总论文数：2
 - 精读区：0
-- 速读区：1
+- 速读区：2
 
 ### 今日简报（AI）
-今日聚焦物理引导的 Transformer (PGT)，探索物理信息神经网络（PINNs）的架构创新。
-核心在于引入物理感知的注意力机制，通过融合物理先验提升模型对复杂动力系统的表征精度。
-推荐关注物理规律与注意力机制的深度耦合，这是优化科学计算模型性能的关键方向。
-- 详情：[/202603/31/README](/202603/31/README)
+今日聚焦超导磁感应前沿，涵盖微波复用 SQUID 硬件原型设计与动态磁场递归推断算法。
+重点展示了微波复用 SQUID 的制备表征，以及 RHINO-MAG 算法在动态激励下精准推算磁场强度的能力。
+建议关注高灵敏度磁传感器与智能推断模型的结合，以提升复杂环境下的精密探测精度。
+- 详情：[/202604/01/README](/202604/01/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Physics-Guided Transformer (PGT): Physics-Aware Attention Mechanism for PINNs](/202603/31/2603.27929v1-physics-guided-transformer-pgt-physics-aware-attention-mechanism-for-pinns)  
+1. [Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype](/202604/01/2603.29613v1-design-fabrication-and-characterization-of-microwave-multiplexing-squid-prototype)  
    标签：评分：6.0/10、query:tmr
-   evidence：从稀疏观测中重建连续物理场
+   evidence：传感器阵列的多路复用读取和噪声电流测量
+2. [RHINO-MAG: Recursive H-Field Inference based on Observed Magnetic Flux under Dynamic Excitation](/202604/01/2603.29745v1-rhino-mag-recursive-h-field-inference-based-on-observed-magnetic-flux-under-dynamic-excitation)  
+   标签：评分：6.0/10、query:tmr
+   evidence：基于观测磁通量的磁场推断
 
 
 <div class="dpr-home-promo-card">

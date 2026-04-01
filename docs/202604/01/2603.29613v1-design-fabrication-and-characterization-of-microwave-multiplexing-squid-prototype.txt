@@ -1,0 +1,265 @@
+Title: Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype
+
+URL Source: https://arxiv.org/pdf/2603.29613v1
+
+Published Time: Wed, 01 Apr 2026 00:55:16 GMT
+
+Number of Pages: 17
+
+Markdown Content:
+# Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype 
+
+## Mengjie Song 1,2 , Yixian Deng 1,2 , Zhengwei Li 1* , He Gao 1* ,Zhouhui Liu 1, Yudong Gu 1, XiangXiang Ren 3, Nan Li 1,Guofu Liao 1, Qinglei Xiu 1, Yu Xu 1, Mengqi Jiang 1, Xufang Li 1,Yaqiong Li 1, Shibo Shu 1, Yongjie Zhang 1, Congzhan Liu 1* 1* Key Laboratory of Particle Astrophysics, Institute of High Energy Physics, Chinese Academy of Sciences, Beijing, 100049, China. 
+
+2School of Physical Science, University of Chinese Academy of Sciences, Beijing, 100049, China. 
+
+3Key Laboratory of Particle Physics and Particle Irradiation(MOE), Institute of Frontier and Interdisciplinary Science, Shandong University, Qingdao, Shandong, 266237, China. *Corresponding author(s). E-mail(s): lizw@ihep.ac.cn; hegao@ihep.ac.cn; liucz@ihep.ac.cn; 
+
+Abstract 
+
+The readout system with a high multiplexing ratio has become a bottleneck limiting the application of large-scale Transition Edge Sensor (TES) detector arrays. In recent years, the microwave superconducting quantum interference device (SQUID) multiplexer has emerged as a key technology for effectively reading large-scale cryogenic detector arrays. Currently, the microwave SQUID multiplexer is being adopted by an increasing number of experiments due to its capability of achieving a multiplexing ratio of 2000:1 within the readout bandwidth. In this study, we developed and fabricated a 32-channel microwave SQUID multiplexer prototype. And we measured 8 channels of the prototype. The measured equivalent noise current of the prototype reached 154 pA/ √Hz .
+
+Keywords: microwave SQUID multiplexer, transition-edge sensor, RF-SQUID, cryogenic detector array readout 
+
+1
+
+> arXiv:2603.29613v1 [physics.ins-det] 31 Mar 2026
+
+# 1 Introduction 
+
+The Transition-Edge Sensor (TES) is widely used in astronomical and cosmological observation experiments due to its extremely low noise. Absorption of photon energy or power causes a temperature change in the TES, which results in a significant change of its resistance. Usually, the normal resistance of a TES detector is designed rang-ing from several mΩ to tens of mΩ. It is hard to achieve noise impedance match with conventional semiconductor amplifiers, such as Junction Field-Effect Transis-tor(JFET). Superconducting Quantum Interference Device(SQUID) is nearly the only readout electronics option for TES [1]. By reducing the noise level while increas-ing the number of detectors, the observation sensitivity of millimeter wave/Cosmic Microwave Background(CMB) telescopes can be rapidly enhanced. The development of TES accelerates the upgrading and replacement of millimeter wave/CMB tele-scopes [2]. The increase in the number of detectors poses a significant challenge to the low-temperature readout technology of the TES array. Therefore, a multiplexing low-temperature readout technology needs to be employed to reduce the number of readout channels. There are four main types of multiplexing low-temperature readout technology, which are Time Division Multiplexing (TDM) [3–6], Frequency Division Multiplexing (FDM) [7–9], Code Division Multiplexing (CDM) [10, 11], and microwave SQUID multiplexing( μMux) [12–15]. Among these techniques, TDM is the most widely employed, with a multiplexing ratio of typically around 64:1 in CMB observations[4]. TDM utilizes DC-SQUID and incorporates at least two stages in series. However, it has stringent requirements for yield. Conversely, FDM is constrained by its limited bandwidth, with TES operating in an AC bias state. The maximum multiplexing ratio of FDM for TES X-ray microcalorimeters reaches around 70:1 [8], and it may reach 170:1 in CMB observations. CDM can achieve a significantly high multiplexing ratio theoretically. However, a primary challenge associated with CDM is its complex-ity. As the array size increases, the complexity of the SQUID chip design and coding also escalates [10]. μMux employs the principle of frequency division multiplexing and utilizes radio-frequency SQUIDs (RF-SQUIDs) instead of DC-SQUIDs, thereby elim-inating the need for series connections between DC-SQUIDs. This approach results in a considerable multiplexing ratio, currently reaching 1820:1 [15]. 
+
+μMux has been selected as the readout electronics for various applications, includ-ing primordial gravitational wave detection and space X-ray astronomical telescopes, such as BICEP/Keck Array in South Pole [16], Simons observatory in Chile [17], Ali CMB Polarization Telescope(AliCPT) in China [18], the conceptual X-ray space mis-sion Lynx [19], etc. AliCPT is the first primordial gravitational wave experiment in China, located in Ali, Tibet. It has successfully achieved first light but currently oper-ates with only one detector module. In the future, it is expected to be upgraded to 19 modules. For the upgrade of AliCPT, we designed a 32-channel μMux chip proto-type for readout development. When the fabrication technology matures, the number of readout channel for each μMux is expected to increase to 80. 22 Design of the microwave SQUID multiplexer 
+
+The working principle of the μMux is illustrated in Fig.1. Each input channel consists of an RF-SQUID and a coplanar waveguide (CPW) quarter-wavelength resonator, with the resonator and RF-SQUID coupled through inductance. The resonators connect to a common readout CPW feedline through weak capacitive coupling. The RF-SQUID circuit functions as a quarter-wavelength transmission line load, effectively acting as a variable inductance. The equivalent inductance of the RF-SQUID is influenced by the magnetic flux within the SQUID loop, which is modulated by the current sig-nal flowing through the TES. Variations in the RF-SQUID’s equivalent inductance result in changes in the resonant frequency and transmission parameters of the series-connected quarter-wavelength resonator. Consequently, measuring the changes in the resonator’s frequency or transmission parameters can be utilized to measured the TES signal. The resonant frequencies of the quarter-wavelength resonators in each channel differ, enabling multiple channels at distinct frequencies to be read out simultaneously through the common CPW feedline. Additionally, all RF-SQUIDs are linked to a com-mon modulation line that linearizes their responses through flux ramp modulation. 
+
+Fig. 1 : The equivalent electronics schematic diagram of μMux. Fig. 2 presents a microphotograph of the 32-channel microwave SQUID multiplexer designed and fabricated at the Institute of High Energy Physics (IHEP), Chinese Academy of Sciences. The layout of the prototype is shown as Fig. 2(a). The frequency spacing for the 32 channels is set to 10 MHz. These channels are categorized into four groups, with each group comprising eight channels (e.g., 1-1, 1-2, ..., 1-8), each spaced 10 MHz apart from neighboring frequencies. The frequency interval between adjacent channels in the geometric distribution (e.g., 1-1 and 2-1, 2-1 and 3-1) is 80 MHz, which helps prevent cross-talk among different channels. The 32-channel μMux 3incorporates four flux ramp lines, each capable of modulating eight RF-SQUIDs. Each flux ramp includes two corresponding bonding pads for testing. Fig. 2(b) illustrates the microscope image of the chip. The resonator (shown in Fig. 2(b)) is constructed from 200 nm thick niobium (Nb) and features a central conductor width of 9 μm. The slot width between this central conductor and the ground is 6 μm. All resonators are capacitively coupled to a common CPW feedline, which has a center conductor width of 15 μm and a gap of 10 μm from the ground. To achieve this coupling, the resonator operates parallel to the feedline CPW over a specific length (as depicted in Fig. 2(c)), allowing for capacitive coupling. The quality factor can be adjusted by modifying the coupling length or spacing. 
+
+Fig. 2 : (a) Design of μMux; (b) Partial microphotograph of the chip; (c) Quarter-wavelength resonator with capacitively coupled to the feedline; (d) RF-SQUID and slotting washer; (e) Flux ramp LR filter (left) and input coil LR filter (right). 
+
+Table 1 : The simulated inductances and mutual inductances of μMux.               
+
+> Inductance (pH) SQUID Input coil Flux ramp coil Resonator SQUID 42.3 228.9 50.9 2.0 Input coil 4144.7 292.3 18.6 Flux ramp coil 882.6 5.42 Resonator 161.5
+
+Each resonator is inductively coupled to the RF-SQUID. The RF-SQUID is designed as a second-order gradiometric with 4 loops to reduce magnetic interference. Each loop is an octagonal slotted washer. The linewidth of slotted-washer and coils is designed to be as narrow as 3 μm to reduce the the probability of flux-trapping. μMux employs flux ramp modulation to linearize the input coil response. A flux ramp coil is 4added to the slotted washer and the direction of the flux-ramp coil is made consistent with that of the input coil. The inductances and mutual inductances of each part are calculated based on InductEx [20] as shown in Table 1. The microwave excitation sig-nal in the CPW feedline may couple inductively and enter the bias circuit of TES via the input coil. This would cause a change in the bias state of TES and thereby affect the readout system noise. Therefore, an LR low-pass filter is added between the input coil and TES (shown as in Fig. 2(e)). 
+
+# 3 Fabrication of the microwave SQUID multiplexer 
+
+The μMux prototype was fabricated at the superconducting micro-nano processing platform at IHEP. To manufacture the μMux, we combined a high-quality Josephson tunnel junction fabrication process with the production of superconducting microwave resonators that possess high internal quality factors. Fig. 3 presents the test results of a 4 μm×4μm Josephson junction created in our laboratory. The junction was measured at 3.8 K inside a pulse-tube cryostat. The critical current (I c) value is not discernible in the IV curve due to its high susceptibility to external interference. Additionally, inadequate shielding and filtering within the test system may have contributed to the difficulty in measuring I c.
+
+Fig. 3 : The measured IV curve of a 4 μm × 4μm Josephson junction. Fig. 4 illustrates the manufacturing process of the μMux, which involves ten photo-lithographies, seven dry etchings, one lift-off, two wet etchings, and several deposition steps. Firstly, a trilayer film of Nb/Al-AlO x/Nb (200 nm/8 nm/150 nm) was sputtered onto a 4-inch high-resistance silicon substrate using magnetron sputtering. The upper Nb layer was defined as the junction region using Inductively Coupled Plasma Reac-tive Ion Etching (ICP-RIE). This junction region was then protected by anodization, 5followed by Ion Beam Etching (IBE) of the oxide layer. The bottom superconducting Nb layer was etched in two steps. Firstly, Reactive Ion Etching (RIE) was employed to form the conductor wire. Subsequently, the Nb layer was etched again using ICP-RIE to create the CPW feedline and the quarter-wavelength CPW resonator. A 350 nm thick SiO 2 isolation layer was deposited using low-temperature Inductively Cou-pled Plasma Chemical Vapor Deposition (ICP-CVD) and subsequently etched to form vias. An additional Nb layer was sputtered to act as the conductor layer, connecting the Josephson junction, input coil, flux ramp modulation coil, and LR filter, as well as leading to the pads. Finally, the SiO 2 in the gaps of the CPW and SQUID was removed through wet etching. 
+
+Fig. 4 : The fabrication procedure of μMux. 64 Experimental setup for the microwave SQUID multiplexer prototype 
+
+The overall test block diagram of the μMux is illustrated in Fig. 5. This system allows us to obtain the S 21 transmission parameters and noise information of the μMux chip. The μMux sample is installed in an adiabatic demagnetization refrigerator (ADR). Depending on the operating temperature, the readout electronics are divided into cryogenic readout electronics located inside the refrigerator and room-temperature readout electronics situated outside. Fig. 5(a) depicts the cryogenic section, which includes a signal generator used to produce the flux-ramp signal. Fig. 5(b) illustrates the room-temperature readout electronics. The cryogenic readout electronics consist of a Low-Noise Amplifier (LNA), attenuator, circulator, and flux-ramp cables. This configuration reduces the excitation power of the comb-like spectrum generated by the room-temperature readout electronics to an appropriate level, aligning with the requirements of the μMux resonators. Additionally, it lowers the noise temperature at the input end of the μMux chip. The modulated comb spectrum output from the μMux chip is then amplified by the LNA to an appropriate power level, ensur-ing compatibility with the readout requirements of the room-temperature electronics. The room-temperature readout section mainly comprises a fast Analog Digital Con-verter(ADC)/Digital Analog Converter(DAC) board, an intermediate frequency (IF) board, and an IF board control board, among other components. 
+
+Fig. 5 : Block diagram of μMux readout electronics. (a) The cryogenic readout electronics; (b) The room-temperature readout electronics. The main characterization measurement of μMux include magnetic flux dependent measurements of the resonator’s resonant frequency f r , the internal quality factor Q i
+
+7and the coupling quality factor Q c. Therefore, we measured the transmission parame-ters S 21 of various magnetic fluxes passing through the SQUID loop. By changing the current of the flux ramp coil, the magnetic flux of eight channels in the same flux ramp line was simultaneously altered. We used the algorithm described in [21] to extract f r ,Qi and Q c from the measured data. 
+
+# 5 Results 
+
+## 5.1 Resonance frequency measurement 
+
+For the initial characterization of the microwave SQUID multiplexer, we measured the S21 parameter of the device using a vector network analyzer for resonance frequency searching. The S 21 measurements were conducted with excitation powers of -10 dBm and -30 dBm, respectively, at a temperature of 60 mK. Fig. 6 displays the measured transmission parameters of the microwave SQUID multiplexer prototype. The eight channels highlighted within the red box in the μMux layout of Fig. 6 were measured in detail. These channels are labeled as ch01 to ch07, as shown in Fig. 6, with the exception of one missing highest resonant frequency. When measuring the resonant frequencies of the seven channels, we performed a detailed S 21 measurement for these channels under different magnetic fluxes applied by the flux ramp coil. 4.30 4.35 4.40 4.45 4.50 4.55 4.60  
+
+> Frequency(Hz) 1e9
+> 34
+> 32
+> 30
+> 28
+> 26
+> S21(dB)
+> ch01
+> ch02
+> ch03
+> ch04
+> ch05
+> ch06
+> ch07
+> -30dBm
+> -10dBm
+
+Fig. 6 : Measured S 21 of the μMux prototype. The measurement was conducted at 60 mK using a vector network analyzer, with the excitation powers being -10 dBm and -30 dBm respectively. Fig. 7 shows the S 21 parameters of a single channel under different magnetic fluxes passing through the corresponding SQUID loop, it can be seen that when the magnetic flux passing through the SQUID loop changes, the resonant frequency shifts. 84.5864 4.5866 4.5868 4.5870 4.5872 4.5874    
+
+> Frequency(Hz) 1e9
+> 31
+> 30
+> 29
+> 28
+> 27
+> 26
+> S21(dB)
+> n0
+> (n+1/2) 0
+
+Fig. 7 : Measured S 21 parameters of a single channel with different magnetic fluxes in SQUID loop. 0 1 2 3 4 5 6 7 8  
+
+> flux ramp (A) 1e 5
+> 4.5864
+> 4.5866
+> 4.5868
+> 4.5870
+> 4.5872
+> 4.5874
+> Frequency(Hz)
+> 1e9
+
+flux ramp-S21 
+
+X: flux ramp, Y: Frequency, color bar: S21 
+
+> 32
+> 31
+> 30
+> 29
+> 28
+> 27
+> 26
+> S21(dB)
+
+Fig. 8 : Measured S 21 of ch01 under different flux ramp currents. The determined resonance frequency as well as a fit(the yellow curve) according to [21] are shown in the plot. To characterize the magnetic flux dependence of the resonant frequency f r (Φ), different currents are applied to the flux ramp coil, generating varying magnetic fluxes in the SQUID loop. The measured S 21 parameters of ch01 under different flux ramp currents are shown in Fig. 8. The test was conducted at 45 mK with an excitation power of -35 dBm. Fig. 9 illustrates the dependence of the resonant frequency on the 9flux ramp current (f r (I mod )) along with the fitting of this curve based on Equation (2). Equation (1) provides the expression for the resonant frequency under the assumption that the RF-SQUID behaves as a flux-dependent inductance; the relationship between the resonant frequency and flux ramp current is described by Equation (2) and derived from Equation (1), where ϕ = 2 πMmod,ef f Imod /Φ 0 + ϕof f set .0 1 2 3 4 5 6 7 8   
+
+> flux ramp(A) 1e 5
+> 600000
+> 650000
+> 700000
+> 750000
+> 800000
+> 850000
+> 900000
+> 950000
+> Frequency(Hz)
+> +4.586e9
+
+Resonator frequency vs flux ramp current 
+
+> uMux-35dBm@45mK
+> fit
+
+Fig. 9 : Dependence of resonant frequency on flux ramp current and curve fitting (ch01). The characterization was conducted at 45 mK with an excitation power of -35 dBm. 
+
+fr ≈ f0 − 4f 20 CC Z0 − 4f 20
+
+Z0
+
+(LT − M 2
+
+> T
+
+LS
+
+λ cos ϕ
+
+1 + λ cos ϕ ) (1) 
+
+fr (Φ) = fr,of f + ∆ fr,mod 
+
+λ cos ϕ
+
+1 + λ cos ϕ (2) Here, ϕoffset represents the normalized magnetic flux offset passing through the SQUID loop. Due to parasitic coupling between the flux ramp coil and the input coil, we utilize the effective mutual inductance Mmod ,eff . The fitting results accurately describe our measurement outcomes. We can determine the flux-independent term in the resonant frequency expression fr, off ≡ f0 − 4f 20 CC Z0 − 4f 20 LT 
+
+> Z0
+
+, the modulation coefficient ∆ fr, mod ≡ 4f 20 M 2 
+
+> T
+> Z0LS
+
+, the hysteresis parameter λ, and the effective mutual inductance Mmod ,eff . We conducted this analysis for all seven measured channels. Table 2 summarizes the relevant parameters obtained from the fitting of these channels. The results indicate that the measured values of the effective mutual inductance coeffi-cients for different channels are generally consistent, with a deviation from simulation values within 12%. The hysteresis parameter λ ranges approximately from 0.6 to 0.9, 10 appearing somewhat random. Using the calculated value of the shielded SQUID induc-tance LS , we find the critical current to range from 4.6 to 6.9 μA. This is close to our expected critical current, though it shows variability. This variability may arise from processing the chips using 4-inch wafers, which could lead to differences in the Josephson junction currents at various positions on the chips. 
+
+Table 2 : Summary of fitting parameters for the measured 7 channels.                           
+
+> Channel fr/GHz λMmod ,eff /pH 14.5869 0.901 56.42 24.5120 0.618 56.79 34.4973 0.913 56.35 44.4283 0.909 56.39 54.4162 0.913 56.21 64.3465 0.707 56.26 74.3352 0.714 56.36
+
+## 5.2 Quality factor measurement 
+
+The internal quality factor of the microwave resonator is related to the magnetic flux Φ passing through the SQUID loop. To investigate this effect, Fig. 10 presents the relationship between the measured internal quality factor Qi, extracted from ch01 during the resonance curve fitting process, and the flux ramp current. The tests were conducted at 45 mK with an excitation power of -35 dBm. It is evident that Qi and the flux ramp current exhibit a periodic dependence, with the period matching that of the resonant frequency’s dependence on the flux ramp current. According to the multiplexer model, periodic modulation of the flux ramp current is expected when the sub-gap resistance of the Josephson junction is small. Therefore, we use the following formula for fitting: 1
+
+Qi
+
+= 1
+
+Qoffset 
+
++
+
+ πZ 0Rsg (1 + λ cos ϕ)2
+
+4( ωM T )2
+
+−1
+
+(3) Here, Qoffset represents the offset of the internal quality factor, incorporating all contributions that are independent of the magnetic flux. Rsg is the sub-gap resistance of the Josephson junction. During the fitting process, Qoffset and Rsg are the only fitting parameters, as we fixed λ to the value obtained from fitting the dependence of the resonant frequency on the flux ramp current. It can be observed that there is a strong consistency between the measured internal quality factor and the fitted model. Based on the test results of our seven channels, the value of the sub-gap resistance 
+
+Rsg ranges from 60 Ω to 1160 Ω. This is significantly lower compared to the sub-gap resistance value of high-quality Nb/Al-AlO x/Nb junctions. This discrepancy is likely due to deviations in the optimal sputtering parameters necessary for achieving low intrinsic stress in the Josephson junction or damage caused by the etching process. We remain optimistic about resolving this issue in the future. 11 0 1 2 3 4 5 6 7 8  
+
+> flux ramp(A) 1e 5
+> 60000
+> 80000
+> 100000
+> 120000
+> 140000
+> Internal factor
+
+Internal factor vs flux ramp current 
+
+> uMux-35dBm@45mK
+> fit
+
+Fig. 10 : The dependence of the internal quality factor Q i of ch01 on the flux ramp current. The measurement was carried out at a temperature of 45 mK, using an excitation power of -35 dBm. The solid orange line is the fitting based on formula (3), assuming that the internal quality factor is affected by the sub-gap resistance of the Josephson junction. 0 1 2 3 4 5 6 7 8  
+
+> flux ramp(A) 1e 5
+> 45000
+> 50000
+> 55000
+> 60000
+> 65000
+> 70000
+> 75000
+> Quality factor
+
+Quality factor vs flux ramp 
+
+Fig. 11 : The dependence of the measured quality factor Q of ch01 on the flux ramp current. 12 The internal quality factor of each channel has a periodic dependence on the flux ramp current. While the coupling quality factor is fixed, it is related to the coupling length and coupling spacing between the resonator and the feedline, and is not affected by the flux ramp current. Therefore, the quality factor of each channel also has a certain dependence on the flux ramp current. Fig. 11 shows the dependence of the quality factor Q measured in ch01 on the flux ramp current. It can be seen that the dependence of Q on the flux ramp current is similar to that of Q i on the flux ramp current. Table 3 presents a summary of the quality factors for the measured seven channels. 
+
+Table 3 : Summary of measured quality factors for the measured seven channels.                         
+
+> Channel QiQcQ1137261 161098 73000 2123651 129359 64921 346483 95269 30091 4100269 88366 40838 533293 88358 22569 6118264 94487 45457 733267 131713 26559
+
+## 5.3 Flux modulation and readout noise measurement 0.000 0.001 0.002 0.003 0.004 
+
+Time (s) 
+
+2
+
+1
+
+0
+
+1
+
+2
+
+> Phase (rad)
+
+Fig. 12 : Modulation curve. 13 10 0 10 1 10 2
+
+> Frequency (Hz)
+> 10 2
+> 10 3
+> Noise ASD (pA/  Hz )
+
+Fig. 13 : Measured equivalent noise current (NEI) of ch01. By supplying a sawtooth wave signal to the flux ramp coil through a signal gener-ator, the noise performance of the μMux can be assessed. The excitation tone signals for reading out the seven channels of the μMux prototype are generated and combined by the room-temperature electronics. The frequencies of the generated tone signals are derived from the fitted results of the measured S 21 . The demodulated phase sig-nal of the flux ramp modulation is illustrated in Figure 12. From this demodulated phase signal, we can extract the signal from the input coil of the μMux. When no sig-nal is input from the input coil, the demodulated signal can be utilized to derive the equivalent noise current using Fast Fourier Transform (FFT) analysis. The measured equivalent noise current power for ch01 is presented in Figure 13. It can be observed that the measured equivalent noise current (NEI) is 154 pA/ √Hz in the frequency range of 2–20 Hz. 
+
+# 6 Conclusion 
+
+We fabricated a 32-channel microwave SQUID multiplexer prototype and tested eight channels. Among these, seven channels exhibited magnetic flux-modulated responses. The measured equivalent noise current reached 154 pA/ √Hz and the quality factor was 73,000. While challenges remain, such as the lack of resonance points and incon-sistencies in the critical current of the Josephson junctions, we plan to investigate and resolve these issues. By optimizing the etching conditions and the stress during film deposition, we anticipate that these problems will be addressed. Furthermore, we aim to fabricate and characterize a μMux prototype with a higher multiplexing ratio, which will be utilized for the upgrade of AliCPT. 
+
+Funding This work is supported by the National Key Research and Development Program of China (Grant No.2021YFC2203401), Scientiffc Instrument Developing 14 Project of the Chinese Academy of Sciences (Grant No.YJKYYQ20190065), Youth Innovation Promotion Association CAS 2021011, Open Research Fund of the State Key Laboratory of Particle Astrophysics (Grant No. 2025000276). 
+
+# References 
+
+[1] J. Clarke and A. I. Braginski. The SQUID handbook: volume 1 . 2004. [2] Kevork N. Abazajian, Peter Adshead, Zeeshan Ahmed, Steven W. Allen, David Alonso, Kam S. Arnoldand, et al. CMB-S4 Science Book, First Edition . 2016. [3] W. B. Doriese, K. M. Morgan, D. A. Bennett, et al. Developments in Time-Division Multiplexing of X-ray Transition-Edge Sensors. Journal of Low Temperature Physics , 184:389–395, 2016. [4] Shawn W. Henderson, Jason R. Stevens, Mandana Amiri, Jason Austermann, James A. Beall, Saptarshi Chaudhuri, Hsiao-Mei Cho, Steve K. Choi, Nicholas F. Cothard, Kevin T. Crowley, Shannon M. Duff, Colin P. Fitzgerald, Patricio A. Gallardo, Mark Halpern, Matthew Hasselfield, Gene Hilton, Shuay-Pwu Patty Ho, Johannes Hubmayr, Kent D. Irwin, Brian J. Koopman, Dale Li, Yaqiong Li, Jeff McMahon, Federico Nati, Michael Niemack, Carl D. Reintsema, Maria Salatino, Alessandro Schillaci, Benjamin L. Schmitt, Sara M. Simon, Suzanne T. Staggs, Eve M. Vavagiakis, and Jonathan T. Ward. Readout of two-kilopixel transition-edge sensor arrays for Advanced ACTPol. In Wayne S. Holland and Jonas Zmuidzinas, editors, Millimeter, Submillimeter, and Far-Infrared Detectors and Instrumentation for Astronomy VIII , volume 9914, page 99141G. International Society for Optics and Photonics, SPIE, 2016. [5] Malcolm Durkin, Joseph S. Adams, Simon R. Bandler, James A. Chervenak, Edward V. Denison, William B. Doriese, Shannon M. Duff, Fred M. Finkbeiner, Joseph W. Fowler, Johnathon D. Gard, Gene C. Hilton, Ruslan Hummatov, Kent D. Irwin, Young Il Joe, Richard L. Kelley, Caroline A. Kilbourne, Antoine R. Miniussi, Kelsey M. Morgan, Galen C. O’Neil, Christine G. Pappas, Frederick S. Porter, Carl D. Reintsema, David A. Rudman, Kazuhiro Sakai, Stephen J. Smith, Robert W. Stevens, Daniel S. Swetz, Paul Szypryt, Joel N. Ullom, Leila R. Vale, and Nicholas Wakeham. Mitigation of Finite Bandwidth Effects in Time-Division-Multiplexed SQUID Readout of TES arrays. IEEE Transactions on Applied Superconductivity , 31(5):1–5, 2021. [6] D. C. Goldfinger, Z. Ahmed, D. R. Barron, W. B. Doriese, M. Durkin, J. P. Filippini, G. Haller, S. W. Henderson, R. Herbst, J. Hubmayr, K. Irwin, B. Reese, L. Sapozhnikov, K. L. Thompson, J. Ullom, and M. R. Vissers. End-to-End Modeling of the TDM Readout System for CMB-S4. Journal of Low Temperature Physics , 215(3):143–152, 2024. [7] K. Hattori, Y. Akiba, K. Arnold, D. Barron, A. N. Bender, A. Cukierman, T. de Haan, M. Dobbs, T. Elleflot, M. Hasegawa, M. Hazumi, W. Holzapfel, 15 Y. Hori, B. Keating, A. Kusaka, A. Lee, J. Montgomery, K. Rotermund, I. Shirley, A. Suzuki, and N. Whitehorn. Development of Readout Electronics for POLARBEAR-2 Cosmic Microwave Background Experiment. Journal of Low Temperature Physics , 184:512–518, 2016. [8] D. Vaccaro, H. Akamatsu, L. Gottardi, M. de Wit, M. P. Bruijn, J. van der Kuur, K. Nagayoshi, E. Taralli, K. Ravensberg, J.-R. Gao, and J. W. A. den Herder. Developments on frequency domain multiplexing readout for large arrays of transition-edge sensor x-ray micro-calorimeters. Journal of Low Temperature Physics , 216:21–28, 2024. [9] R. den Hartog, B.-J. van Leeuwen, P. Peille, J. van der Kuur, L. Ravera, D. van Loon, B. Jackson, and J.-W. den Herder. Performance of a state-of-the-art DAC system for FDM readout. Proc. SPIE 10699, Space Telescopes and Instrumentation 2018: Ultraviolet to Gamma Ray, 106994Q , 2018. [10] K. D. Irwin, M. D. Niemack, J. Beyer, H. M. Cho, W. B. Doriese, G. C. Hilton, et al. Code-division multiplexing of superconducting transition-edge sensor arrays. Superconductor Science and Technology , 23(3):034004, 2010. [11] K. M. Morgan, B. K. Alpert, D. A. Bennett, E. V. Denison, W. B. Doriese, J. W. Fowler, J. D. Gard, G. C. Hilton, K. D. Irwin, Y. I. Joe, et al. Code-division multiplexed read-out of large arrays of tes microcalorimeters. Applied Physics Letters , 109:112604, 2016. [12] K. D. Irwin and K. W. Lehnert. Microwave SQUID multiplexer. Applied Physics Letters , 85(11):2107–2109, 2004. [13] Cyndia Yu, Z. Ahmed, J. C. Frisch, S. W. Henderson, M. Silva-Feaver, K. Arnold, D. Brown, J. Connors, A. J. Cukierman, J. M. DEwart, B. J. Dober, J. E. Dusatko, G. Haller, R. Herbst, G. C. Hilton, J. Hubmayr, K. D. Irwin, et al. SLAC microresonator RF(SMuRF) electronics: A tone-tracking readout system for superconducting microwave resonator arrays. Review of Scientific Instruments ,94:014712, 2023. [14] B. Dober, Z. Ahmed, K. Arnold, D. T. Becker, D. A. Bennett, J. A. Connors, A. Cukierman, J. M. D’Ewart, S. M. Duff, J. E. Dusatko, J. C. Frisch, J. D. Gard, S. W. Henderson, R. Herbst, G. C. Hilton, et al. A microwave SQUID multiplexer optimized for bolometric applications. Applied Physics Letters , 118:062601, 2021. [15] J. C. Groh, Z. Ahmed, J. Austermann, J. Beall, D. Daniel, S. M. Duff, S. W. Henderson, J. Hubmayr, R. Lew, M. Link, T. J. Lucas, J. A. B. Mates, M. Silva-Feaver, R. Singh, J. Ullom, L. Vale, J. Van Lanen, M. Vissers, and C. Yu. Demonstration of a 1820 channel multiplexer for transition- edge sensor bolometers. Applied Physics Letters , 127:152602, 2025. 16 [16] A. Cukierman, Z. Ahmed, S. Henderson, E. Young, C. Yu, D. Barkats, D. Brown, S. Chaudhuri, J. Cornelison, J. M. DEwart, M. Dierickx, B. J. Dober, J. Dusatko, S. Fatigoni, J. P. Filippini, J. C. Frisch, G. Haller, M. Halpern, G. C. Hilton, J. Hubmayr, K. D. Irwin, et al. Microwave multiplexing on the Keck Array. 
+
+Journal of Low Temperature Physics , 199:858–866, 2019. [17] Y. Li, K. Arnold, Z. Atkins, S. M. Bruno, N. F. Cothard, B. Dober, C. J. Duell, S. M. Duff, P. A. Gallardo, E. Healy, S. P. Ho, J. Hubmayr, B. Keating, A. T. Lee, A. Mangu, H. McCarrick, M. D. Niemack, L. Newburgh, C. Raum, M. Salatino, T. Sasse, M. Silva-Feaver, S. M. Simon, S. Staggs, et al. Assembly and Integration Process of the High-Density Detector Array Readout Modules for the Simons Observatory. Journal of Low Temperature Physics , 199:985–993, 2020. [18] M. Salatino, J. Austermann, K. L. Thompson, P. A. R. Ade, X. Bai, J. A. Beall, D. T. Becker, Y. Cai, Z. Chang, D. Chen, J. Connors, P. Chen, B. Dober, J. Delabrouille, S. M. Duff, G. Gao, R. C. Givhan, S. Ghosh, G. Hilton, B. Hu, J. Hubmayr, E. Karpel, C.-L. Kuo, H. Li, M. Li, S.-Y. Li, X. Li, M. Link, Y. Li, H. Liu, L. Liu, Y. Liu, F. Lu, T. Lucas, X. Lu, J. A. B. Mates, et al. The Design of the Ali CMB Polarization Telescope receiver. Millimeter, Submillimeter, and Far-Infrared Detectors and Instrumentation for Astronomy X , page 114532A, 2020. [19] D. Bennett, J. B. Mates, S. Bandler, D. Becker, J. Fowler, J. Gard, G. Hilton, K. Irwin, K. Morgan, C. Reintsema, Kazuhiro Sakai, D. Schmidt, S. Smith, D. Swetz, J. Ullom, L. Vale, and A. Wessels. Microwave SQUID multiplex-ing for the Lynx x-ray microcalorimeter. Journal of Astronomical Telescopes, Instruments, and Systems , 5(2):021007, 2019. [20] Coenrad J. Fourie. Inductex software. https://www.inductex.info, 2015. [21] J. S. Gao. The Physics of Superconducting Microwave Resonators . Thesis, California Institute of Technology, 2008. 17
