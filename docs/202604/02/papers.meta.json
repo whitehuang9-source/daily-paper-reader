@@ -1,0 +1,23 @@
+{
+  "label": "2026-04-02",
+  "date": "2026-04-02",
+  "generated_at": "2026-04-02T20:45:05",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202604/02/2603.27018v1-on-device-super-resolution-imaging-using-low-cost-spad-array-and-embedded-lightweight-deep-learning",
+      "section": "quick",
+      "title_en": "On-Device Super Resolution Imaging Using Low-Cost SPAD Array and Embedded Lightweight Deep Learning",
+      "authors": "Zhenya Zang, Xingda Li, David Day Uei Li",
+      "date": "2026-03-27",
+      "pdf": "https://arxiv.org/pdf/2603.27018v1",
+      "score": "6.0",
+      "evidence": "利用轻量级深度学习从低分辨率传感器阵列重建高分辨率数据",
+      "tldr": "本研究针对消费级单光子雪崩二极管（SPAD）阵列空间分辨率不足的问题，提出了一种轻量级超分辨率神经网络（LiteSR）。该模型能将48x32的低分辨率深度与强度图像重建为256x256的高分辨率图像。通过在Arduino UNO Q微控制器上部署压缩后的预训练模型，实现了实时超分辨率视频流传输。实验证明，该方案在合成和真实场景下均具有高保真度，最高可实现512x512的分辨率提升，为低成本SPAD成像提供了高效的硬件协同设计方案。",
+      "tags": "query:tmr",
+      "abstract_en": "This work presents a lightweight super-resolution (LiteSR) neural network for depth and intensity images acquired from a consumer-grade single-photon avalanche diode (SPAD) array with a 48x32 spatial resolution. The proposed framework reconstructs high-resolution (HR) images of size 256x256. Both synthetic and real datasets are used for performance evaluation. Extensive quantitative metrics demonstrate high reconstruction fidelity on synthetic datasets, while experiments on real indoor and outdoor measurements further confirm the robustness of the proposed approach. Moreover, the SPAD sensor is interfaced with an Arduino UNO Q microcontroller, which receives low-resolution (LR) depth and intensity images and feeds them into a compressed, pre-trained deep learning (DL) model, enabling real-time SR video streaming. In addition to the 256x256 setting, a range of target HR resolutions is evaluated to determine the maximum achievable upscaling resolution (512x512) with LiteSR, including scenarios with noise-corrupted LR inputs. The proposed LiteSR-embedded system co-design provides a scalable, cost-effective solution to enhance the spatial resolution of current consumer-grade SPAD arrays to meet HR imaging requirements.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

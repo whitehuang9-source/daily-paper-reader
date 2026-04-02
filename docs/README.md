@@ -6,29 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-01
-- 运行时间：2026-04-01 21:51:18 UTC
+- 最新运行日期：2026-04-02
+- 运行时间：2026-04-02 20:44:58 UTC
 - 运行状态：成功
-- 本次总论文数：2
+- 本次总论文数：1
 - 精读区：0
-- 速读区：2
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦超导磁感应前沿，涵盖微波复用 SQUID 硬件原型设计与动态磁场递归推断算法。
-重点展示了微波复用 SQUID 的制备表征，以及 RHINO-MAG 算法在动态激励下精准推算磁场强度的能力。
-建议关注高灵敏度磁传感器与智能推断模型的结合，以提升复杂环境下的精密探测精度。
-- 详情：[/202604/01/README](/202604/01/README)
+今日聚焦低成本 SPAD 阵列的端侧超分辨率成像，探索硬件受限下的高质量视觉重建。
+核心结论展示了轻量化深度学习模型在嵌入式设备上实现实时超分成像的可行性。
+建议关注边缘计算与低功耗传感器协同优化的技术路径，以提升端侧设备的感知上限。
+- 详情：[/202604/02/README](/202604/02/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype](/202604/01/2603.29613v1-design-fabrication-and-characterization-of-microwave-multiplexing-squid-prototype)  
+1. [On-Device Super Resolution Imaging Using Low-Cost SPAD Array and Embedded Lightweight Deep Learning](/202604/02/2603.27018v1-on-device-super-resolution-imaging-using-low-cost-spad-array-and-embedded-lightweight-deep-learning)  
    标签：评分：6.0/10、query:tmr
-   evidence：传感器阵列的多路复用读取和噪声电流测量
-2. [RHINO-MAG: Recursive H-Field Inference based on Observed Magnetic Flux under Dynamic Excitation](/202604/01/2603.29745v1-rhino-mag-recursive-h-field-inference-based-on-observed-magnetic-flux-under-dynamic-excitation)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于观测磁通量的磁场推断
+   evidence：利用轻量级深度学习从低分辨率传感器阵列重建高分辨率数据
 
 
 <div class="dpr-home-promo-card">

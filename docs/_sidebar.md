@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-04-02 <!--dpr-date:20260402-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/02/2603.27018v1-on-device-super-resolution-imaging-using-low-cost-spad-array-and-embedded-lightweight-deep-learning" data-sidebar-item="{&quot;title&quot;: &quot;On-Device Super Resolution Imaging Using Low-Cost SPAD Array and Embedded Lightweight Deep Learning&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.27018v1-on-device-super-resolution-imaging-using-low-cost-spad-array-and-embedded-lightweight-deep-learning&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;利用轻量级深度学习从低分辨率传感器阵列重建高分辨率数据&quot;}">On-Device Super Resolution Imaging Using Low-Cost SPAD Array and Embedded Lightweight Deep Learning</a>
   * 2026-04-01 <!--dpr-date:20260401-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/01/2603.29613v1-design-fabrication-and-characterization-of-microwave-multiplexing-squid-prototype" data-sidebar-item="{&quot;title&quot;: &quot;Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.29613v1-design-fabrication-and-characterization-of-microwave-multiplexing-squid-prototype&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;传感器阵列的多路复用读取和噪声电流测量&quot;}">Design, Fabrication and Characterization of Microwave Multiplexing SQUID Prototype</a>
