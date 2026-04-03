@@ -1,0 +1,1510 @@
+Title: Wideband Near-Field Sensing in ISAC: Unified Algorithm Design and Decoupled Effect Analysis
+
+URL Source: https://arxiv.org/pdf/2603.27726v1
+
+Published Time: Tue, 31 Mar 2026 01:30:47 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> 1
+
+# Wideband Near-Field Sensing in ISAC: Unified Algorithm Design and Decoupled Effect Analysis 
+
+Ruiyun Zhang, Zhaolin Wang, Zhiqing Wei, Yuanwei Liu, Zehui Xiong, Zhiyong Feng 
+
+Abstract —To advance integrated sensing and communications (ISAC) in sixth-generation (6G) extremely large-scale multiple-input multiple-output (XL-MIMO) networks, a low-complexity compressed sensing (CS)-based dictionary design is proposed for wideband near-field (WB-NF) target localization. Currently, the massive signal dimensions in the WB-NF regime impose severe computational burdens and high spatial-frequency coherence on conventional grid-based algorithms. Furthermore, a unified framework exploiting both wideband (WB) and near-field (NF) effects is lacking, and the analytical conditions for simplifying this model into decoupled approximations remain uncharac-terized. To address these challenges, the proposed algorithm mathematically decouples the mutual coherence function and introduces a novel angle-distance sampling grid with customized distance adjustments, drastically reducing dictionary dimensions while ensuring low coherence. To isolate the individual WB and NF impacts, two coherence-based metrics are formulated to establish the effective boundaries of the narrowband near-field (NB-NF) and wideband far-field (WB-FF) regions, where respective multiple signal classification (MUSIC) algorithms are utilized. Simulations demonstrate that the CS-based method achieves robust performance across the entire regime, and the established boundaries provide crucial theoretical guidelines for WB and NF effect decoupling. 
+
+Index Terms —Compressed sensing, integrated sensing and communications, wideband near-field sensing. 
+
+I. I NTRODUCTION 
+
+# INTEGRATED sensing and communications (ISAC) is en-visioned as a defining technology for sixth-generation (6G) wireless networks [1]–[3]. Driven by the requirements for high-resolution sensing and massive data transmission, there is a paradigm shift from fifth-generation (5G) massive multiple-input multiple-output (MIMO) [4]–[6] to extremely large-scale MIMO (XL-MIMO) [7], [8] for 6G. Coupled with the use of high-frequency bands such as millimeter-wave (mmWave) and terahertz (THz), the drastic expansion of the large aperture fundamentally extends the Rayleigh distance, rendering the conventional far-field (FF) planar wavefront model inapplicable and necessitating the rigorous treatment of non-negligible near-field (NF) effects. Simultaneously, ultra-wideband (WB) transmissions become indispensable to pro-vide abundant frequency-domain resources for delay-based ranging accuracy. Consequently, sensing in 6G will inevitably operate in a wideband near-field (WB-NF) regime [9]. 
+
+Ruiyun Zhang, Zhiqing Wei, and Zhiyong Feng are with the Key Laboratory of Universal Wireless Communications, Ministry of Education, School of Information and Communication Engineering, Beijing Univer-sity of Posts and Telecommunications, Beijing 100876, China. (e-mail: zhangruiyun@bupt.edu.cn; weizhiqing@bupt.edu.cn; fengzy@bupt.edu.cn). Zhaolin Wang and Yuanwei Liu are with the Department of Electrical and Computer Engineering, The University of Hong Kong, Hong Kong. (e-mail: zhaolin.wang@hku.hk; yuanwei@hku.hk). Zehui Xiong is the School of Electronics, Electrical Engineering and Computer Science, Queen’s University Belfast, United Kingdom. (e-mail: z.xiong@qub.ac.uk). Zhiqing Wei is the corresponding author of this article. 
+
+In the WB-NF regime, the target distance information is em-bedded in both the spatial and frequency domains through dis-tinct physical mechanisms. Historically, target sensing in ISAC systems was extensively investigated within the wideband far-field (WB-FF) framework [10]–[14]. These approaches effec-tively decoupled spatial and temporal processing, resolving angles via the array response, while deriving distances from the WB frequencies. For large-aperture arrays envisioned in 6G systems, this planar wavefront assumption leads to model mismatch and spatial defocusing in the extended NF region. Furthermore, the spherical wavefront introduces a non-linear quadratic phase variation, which enables distance estimation via the spatial array response, alleviating the necessity for extensive system bandwidth [9]. Driven by these two factors, most recent research efforts initially focused on narrowband near-field (NB-NF) sensing [7], [15]–[21]. For instance, pio-neering tutorials and overview works [7], [15], [16] system-atically articulated the paradigm shift, fundamental principles, and inherent opportunities of NF ISAC introduced by XL-MIMO architectures. From a theoretical performance per-spective, fundamental analytical bounds, such as the Cram´ er-Rao bound (CRB), were rigorously derived to quantify and analyze the performance enabled by the spherical wavefront curvature [17], [18], [22]. Building upon these theoretical foundations, a variety of parameter estimation algorithms were developed. Notably, subspace fitting-based [20] and modified multiple signal classification (MUSIC) approaches [16], [21] were proposed to realize high-resolution target localization by exploiting the distance-dependent non-linear phase structures. While these NB-NF approaches achieve distance estimation via wavefront curvature, this focusing gain diminishes rapidly with distance, necessitating WB signals for robust delay-based sensing. However, directly applying the NB-NF assumption to WB-NF systems inherently ignores the substantial beam squint effect, which causes severe energy defocusing, ultimately nullifying the NF curvature advantages. Therefore, a unified WB-NF algorithm is necessary to seamlessly bridge these regimes. Recognizing this necessity, emerging studies have recently ventured into WB-NF sensing, which can be broadly categorized into two streams. The first stream focuses on fundamental formulation and theoretical limits, establishing analytical channel models and performance bounds [9], [15], [23]–[26]. The second stream centers on target localization and channel estimation [27], [28]. For in-stance, the authors in [27] pioneered compressed sensing (CS)-based NF channel estimation by exploiting the polar-domain sparsity. Furthermore, the work in [28] introduced true-time-delay (TTD) to control the beam squint trajectory, inversely exploiting beam squint for efficient target localization. Despite these pioneering efforts, a unified estimation algo-
+
+> arXiv:2603.27726v1 [eess.SP] 29 Mar 2026 2
+
+rithm capable of jointly exploiting the NF spherical curvature effect and the frequency-dependent WB effect without relying on customized hardware modifications (e.g., TTDs) is still lacking. Specifically, WB-NF sensing introduces a massive volume of signal data across extensive subcarriers and large-scale antennas, which poses a formidable computational bur-den. Fortunately, since the number of targets is typically very small relative to the spatial-frequency dimensions, the target parameters exhibit inherent sparsity. This physical character-istic makes CS an ideal foundational framework to achieve high-resolution estimation with drastically reduced computa-tional overhead. However, directly applying CS to the unified WB-NF regime is non-trivial, since conventional grid-based algorithms suffer from severe spatial-frequency coherence among dictionary atoms, which degrades the sparse recovery performance. More fundamentally, the physical mechanisms dictating when the unified WB-NF model degrades into de-coupled approximations (i.e., the NB-NF and WB-FF) remain uncharacterized. Driven by the above considerations and the inevitable trend towards the ISAC paradigm, this paper in-vestigates the performance of target sensing within a WB-NF communication system, focusing on the unified algorithm design and decoupled NF and WB effect analysis. The main contributions are summarized as follows:  
+
+> •
+
+A low-complexity CS-based dictionary design algorithm is proposed for target localization in WB-NF systems. By decoupling the mutual coherence function, the proposed algorithm utilizes a novel angle-distance sampling grid with a customized distance adjustment strategy, which significantly reduces dictionary dimensions while rigor-ously guaranteeing low mutual coherence.  
+
+> •
+
+To isolate the individual impacts of the WB and NF effects, two coherence functions are formulated to estab-lish the boundaries of the NB-NF and WB-FF regions. Within these regions, decoupled MUSIC algorithms are developed to achieve high-resolution target localization.  
+
+> •
+
+Extensive simulations are conducted to validate the robust performance of the proposed CS-based WB-NF localiza-tion method across the entire sensing region. Further-more, the results demonstrate that the established NB-NF and WB-FF boundaries provide crucial guidelines for decoupling the WB and NF effects in ISAC systems. The remainder of this paper is organized as follows. Section II introduces the system and signal model for WB-NF sensing. Section III presents the sparse matrix formulation and the proposed low-coherence dictionary design. Section IV investi-gates the analytical characterization of the WB and NF effects and proposes two MUSIC benchmarks. Simulation results are provided in Section V. Finally, Section VI concludes the paper. 
+
+Notations: Scalars, vectors, and matrices are denoted by non-boldface, boldface lowercase, and boldface uppercase letters, respectively. The space of Nc × Ns complex matrices is denoted by CNc×Ns . The superscripts (·)T and (·)H denote the transpose and conjugate transpose operations, respectively. The operator diag( x) represents a diagonal matrix with the elements of vector x on its main diagonal. The operators 
+
+⌊·⌋ and ⌈·⌉ denote the floor and ceiling of their arguments, .
+
+> .
+> .
+> ISAC BS
+> Antenna array xy
+> -th antenna
+> .
+> .
+> .,p n rprp
+
+nO
+
+> target p
+
+Fig. 1: Illustration of the considered NF system model. respectively. Calligraphic uppercase letters (e.g., S) are used to denote sets, and |S| denotes the cardinality of the set S.The hat operator ˆ(·) denotes the estimated value of a variable. Finally, CN (μ, Σ) denotes the circularly symmetric complex Gaussian distribution with mean vector μ and covariance matrix Σ, and IN is the N × N identity matrix. II. S YSTEM MODEL 
+
+We consider an orthogonal frequency-division multiplexing (OFDM) ISAC system in the NF region. As illustrated in Fig. 1, the base station (BS) is equipped with an N -element uniform linear array (ULA) deployed along the x-axis, and 
+
+P single-antenna active targets located in the NF region. The center of the ULA is aligned with the origin of the Cartesian coordinate system, and the antenna elements are spaced by 
+
+d = λc/2, where λc represents the central carrier wavelength. Specifically, the Cartesian coordinates of the n-th antenna element are expressed as (δnd, 0) , where δn = n − (N − 1) /2
+
+represents the symmetric element index for n = 0 , . . . , N − 1.The targets are located within the Fresnel region, strictly upper-bounded by the Rayleigh distance Rr = 2 D2/λ c, where 
+
+D = ( N − 1) d denotes the array aperture. We assume a quasi-static scenario where the position of the p-th target, denoted by the coordinate (rp, θ p) in polar form, remains constant within a coherent processing interval (CPI). Here, rp represents the distance from the origin, and θp ∈ [0 , π ] denotes the angle relative to the x-axis. Consequently, the distance between the 
+
+p-th target and the n-th antenna element is derived as 
+
+rp,n =
+
+q
+
+r2 
+
+> p
+
++ δ2
+
+> n
+
+d2 − 2rpδnd cos θp. (1) Focusing on the dominant Line-of-Sight (LoS) propagation path in the NF environment, the propagation delay is given by 
+
+τp,n = rp,n /c , with c being the speed of light. 
+
+A. Transmit Signal Model 
+
+The uplink transmission utilizes OFDM frames consisting of K symbols with M subcarriers. The total bandwidth is B =
+
+M ∆f , where ∆f is the subcarrier spacing. Correspondingly, 3
+
+the effective symbol duration is given by Td = 1 /∆f . The complex baseband signal transmitted by the p-th target is [29] 
+
+˜xp(t) = 1
+
+√M
+
+> K−1
+
+X 
+
+> k=0
+> M−1
+
+X
+
+> m=0
+
+sk,m,p ej2 πm ∆f (t−kT t)rect 
+
+ t − kT t
+
+Tt
+
+
+
+,
+
+(2) where Tt = Td + Tg is the total OFDM symbol duration including the effective duration Td and cyclic prefix (CP) Tg .The term sk,m,p denotes the pilot symbol transmitted on the 
+
+m-th subcarrier of the k-th OFDM symbol by the p-th target, and rect( ·) is the rectangular function, defined as 
+
+rect( u) = 
+
+(
+
+1, 0 ≤ u < 1,
+
+0, otherwise . (3) 
+
+B. Received Signal Model 
+
+The received signal at the n-th antenna is a superposition of signals from P targets, distorted by delay and additive noise 
+
+yn(t) = 
+
+> P
+
+X
+
+> p=1
+
+βp,n ˜xp(t − τp,n ) e−j2 πf cτp,n + wn(t), (4) where wn(t) ∼ CN (0 , σ 2) represents the additive white Gaus-sian noise (AWGN). As mentioned above, the propagation delay between the p-th target and the n-th BS antenna is defined strictly by the geometric distance as τp,n = rp,n /c .The path loss coefficient is given by βp,n ≈ c 
+
+> 4πf crp,n
+
+[28]. Following CP removal, the continuous-time received signal 
+
+yn(t) is sampled at discrete instants t = kT t +Tg +iT s, where 
+
+i = 0 , . . . , M − 1 denotes the fast-time sample index. The sampling interval is set to Ts = 1 /B = 1 /(M ∆f ), adhering to the Nyquist criterion Td = M T s. For canonical derivation purposes, we initially focus on the noiseless signal component. Assuming perfect time synchronization, the resulting discrete-time signal at the n-th antenna is derived as 
+
+yn(kT t + Tg + iT s) ≜ yk,n [i]
+
+≈ 1
+
+√M
+
+> P
+
+X 
+
+> p=1
+> M−1
+
+X
+
+> m=0
+
+βpsk,m,p ej2 π mi M e−j2 πf mτp,n . (5) When expanding the received signal over subcarriers, we rigorously account for the path loss by initially defining the amplitude as βp,n,m ≜ c 
+
+> 4πf mrp,n
+
+, where fm = fc + m∆f . In the last step of Eq. (5), this varying amplitude is approximated as follows. First, given that the transmission distance exceeds the array aperture ( rp > D ), the amplitude variation across array elements is negligible compared to the phase sensitivity, yielding βp,n,m ≈ βp,m = c 
+
+> 4πf mrp
+
+[19]. Second, under the narrowband (NB) amplitude assumption ( fc ≫ B), the slow 1/f m decay permits the approximation βp,m ≈ βp = 
+
+> c
+> 4πf crp
+
+[30], [31]. Note that while the amplitude is treated as constant, the exact phase progression e−j2 πf mτp,n is strictly retained to capture the WB effect and NF characteristics. By stacking the received signals across the N antenna elements, we define the spatial snapshot vector at time index i
+
+as yk[i] ≜ [yk, 0[i], . . . , y k,N −1[i]] T ∈ CN ×1. Substituting the approximation Eq. (5), the received signal vector is given by 
+
+yk[i] ≈
+
+r 1
+
+M
+
+> P
+
+X
+
+> p=1
+
+βpM −1X
+
+> m=0
+
+am(rp, θ p)sk,m,p ej2 π mi M , (6) where the term am(rp, θ p) ∈ CN ×1 denotes the NF steering vector for the m-th subcarrier, defined as am(rp, θ p) =
+
+e−j2 πf mτp, 0 , . . . , e −j2 πf mτp,N −1
+
+T. To facilitate parameter es-timation during the sensing interval, we utilize reference pilot symbols that are constant across subcarriers for the k-th OFDM symbol, i.e., sk, 0,p = · · · = sk,M −1,p = sk,p .Applying the unitary Discrete Fourier Transform (DFT) to the time-domain snapshots yk[i], and explicitly reintroducing the additive noise component to complete the statistical model, we obtain the frequency-domain signal at the m-th subcarrier 
+
+yk,m =DFT {yk[i]}m=
+
+> P
+
+X
+
+> p=1
+
+βpsk,p am(rp, θ p) + wk,m , (7) where wk,m ∼ CN (0, σ 2IN ) represents the noise vector, preserving the white statistics under unitary transformation. Following that, by stacking the observations from all M
+
+subcarriers, we formulate the sensing model for the k-th symbol as yk = [ yT
+
+> k, 0
+
+, . . . , yT 
+
+> k,M −1
+
+]T, which is expressed as 
+
+yk =
+
+> P
+
+X
+
+> p=1
+
+βpsk,p a(rp, θ p) + wk, (8) where wk = [wT
+
+> k, 0
+
+, . . . , wT 
+
+> k,M −1
+
+]T is the WB noise vec-tor. The term a(rp, θ p) ∈ CN M ×1 denotes the joint spatial-frequency steering vector, defined as a(rp, θ p) =[aT0 (rp, θ p), . . . , aT 
+
+> M−1
+
+(rp, θ p)] T.Subsequently, the received signal matrix over K symbols, denoted as Y = [ y0, . . . , yK−1] ∈ CN M ×K , is formulated as 
+
+Y =
+
+> P
+
+X
+
+> p=1
+
+βpa(rp, θ p)sT 
+
+> p
+
++ W, (9) where sp = [s0,p , . . . , s K−1,p ]T ∈ CK×1 represents the pilot sequence vector for the p-th target, and W =[w0, . . . , wK−1] ∈ CN M ×K is the aggregated noise matrix. 
+
+C. Problem Statement 
+
+The objective of this work is to accurately estimate the distance and angle parameters (rp, θ p) for all P sensing targets from the multi-carrier observation matrix Y. Based on the unified model in (9), the core of the sensing task lies in the characterization of the joint spatial-frequency steering vector 
+
+a(r, θ ), which presents twofold technical challenges. First, the target information is embedded in a dual-domain coupled phase structure. Specifically, the NF effect intro-duces a non-linear phase curvature across the large-scale array (the n-dimension), while the WB effect manifests as a frequency-dependent phase progression across subcarriers (the m-dimension). Unlike conventional models, the distance r
+
+here serves as a common factor influencing both the spherical wavefront shape and the time-of-arrival delay, leading to a high-dimensional parameter coupling that invalidates simpli-fied decoupled estimation. Second, extracting the distance and angle parameters from a(r, θ ) encounters a formidable computational bottleneck. The aggregated dimension N M in modern XL-MIMO systems leads to a prohibitive cost for classical grid-based methods. Furthermore, when formulating this as a sparse recovery problem, the joint WB-NF manifold 4
+
+exhibits high mutual coherence between neighboring atoms in the distance-angle grid, which necessitates a sophisticated dic-tionary design method to ensure robust recovery performance with reduced complexity. III. S PARSE MATRIX FORMULATION AND LOCALIZATION 
+
+ALGORITHM DESIGN 
+
+In this section, we detail the proposed low-complexity WB-NF localization framework. We first formulate a sparse matrix representation and analytically decouple the mutual coherence function to facilitate efficient dictionary design. Subsequently, we develop a novel angle-distance sampling grid that incorporates Fresnel-based spatial analysis and a bandwidth-constrained alignment strategy, effectively reduc-ing the dictionary dimensionality without compromising the mutual coherence properties. The section concludes with the presentation of a unified CS-based algorithm for robust target parameter estimation across the entire WB-NF regime. 
+
+A. Sparse Matrix Representation for WB-NF Sensing 
+
+Based on the signal model derived in Eq. (9), the WB-NF channel vector h ∈ CN M ×1 is theoretically defined as the superposition of the steering vectors from all P targets 
+
+h =
+
+> P
+
+X
+
+> p=1
+
+βpa(rp, θ p), (10) which characterizes the joint space-frequency response, incor-porating both the path gains and the geometric information of the targets. Our objective is to estimate the target parameters embedded in h from the noisy observation Y.To facilitate employing CS techniques, we adopt a grid-based sparse representation. Extending the angle-distance framework [27], and assuming the targets fall on the sampling grid, the linear sparse model is formulated as 
+
+h = Bh s, (11) where the matrix B ∈ CN M ×Qθ Qr is the overcomplete dic-tionary whose columns are sampled steering vectors a(ri, θ j ),and hs ∈ CQθ Qr ×1 is a sparse coefficient vector indicating the locations and strengths of the targets, with at most P sig-nificant nonzero entries (typically P ≪ Qθ Qr ) corresponding to the dominant LoS components. Here, Qθ Qr gives the total number of sampled NF steering vectors in the angle-distance domain, with Qr and Qθ representing the numbers of distance and angular sampling points, respectively. Consequently, a key challenge is designing the angle-distance sampling strategy for the dictionary matrix B to strictly satisfy the restricted isom-etry property (RIP) or simplify the coherence structure [32]. To enable precise target identification and parameter estima-tion within the CS framework [27], the angular and distance sampling must be meticulously designed to ensure that the dic-tionary matrix B achieves minimal mutual coherence among its columns. The mutual coherence, defined as 
+
+g(ri, θ i, r j , θ j ) = aH (ri, θ i)a(rj , θ j )
+
+= 1
+
+N M  
+
+> M−1
+
+X 
+
+> m=0
+> N−1
+
+X
+
+> n=0
+
+ejkm(ri,n −rj,n ) , (12) where the indices i, j ∈ {1, . . . , Q θ Qr } denote two arbi-trary columns in the dictionary, associated with the spa-tial grid points (ri, θ i) and (rj , θ j ), respectively. The wave number is defined as km = 2πf m 
+
+> c
+
+= 2πλm , corresponding to the m-th carrier frequency. Consequently, the global mu-tual coherence of the dictionary is determined by μ(B) = max i̸=j g(ri, θ i, r j , θ j ). Since all dictionary columns are ℓ2-normalized to unit norm (implying each entry has a modulus of 1/√N M ), both the pairwise coherence g(·) and the global coherence μ(B) are strictly bounded within the interval [0 , 1] .Considering a ULA configuration with N = 2 N ′ + 1 an-tennas, the relative element index δn, as defined in Section II, is given by δn = n − N ′. To simplify the distance model in Eq. (1), we apply the Fresnel approximation using a second-order Taylor expansion [19], which yields 
+
+rn ≈ r0
+
+
+
+1 + δ2
+
+> n
+
+d2
+
+2r20
+
+− δndr0
+
+cos θ − δ2
+
+> n
+
+d2cos 2θ
+
+2r20
+
+
+
+= r0 − δndα + δ2
+
+> n
+
+d2
+
+2r0
+
+(1 − α2),
+
+(13) where r0 denotes the reference distance and α = cos θ. This approximation retains quadratic phase terms to capture the spherical wavefront curvature. It is valid for targets located in the radiative NF region, defined by D < r < 2D2/λ c (where 
+
+D ≈ N d is the aperture size), which ensures the higher-order terms in the Taylor expansion are negligible. To facilitate the analytical derivation of the sampling grid, we temporarily adopt the NB assumption fc ≫ B. Al-though the considered system is a broadband system, this assumption implies that the spatial phase variations across the bandwidth are negligible specifically for the purpose of coherence structure analysis. This simplification allows the mutual coherence to be approximately factorized into the product of a distance-dependent frequency term and an angle-distance coupled spatial term as expressed in Eq. (14): 
+
+Sfreq = 1
+
+M 
+
+> M−1
+
+X
+
+> m=0
+
+ejkm(ri−rj ) ,Sspace = 1
+
+N 
+
+> N′
+
+X 
+
+> n′=−N′
+
+ejkc n′d(αj −αi) ejkc (n′)2d2   
+
+> 1−α2
+> i
+> 2ri−1−α2
+> j
+> 2rj
+> 
+
+,
+
+(15) where Sfreq characterizes the frequency-domain correlation depending on the bandwidth and distance difference, while 
+
+Sspace represents the spatial aperture correlation determined by both angular and distance parameters. Minimizing the total coherence g(·) ≈ Sfreq · Sspace requires at least one of these factors to be negligible. Recognizing their distinct dependencies, we adopt a decoupled design strategy: 1) Inter-Distance Orthogonalization via Sfreq : Since Sfreq 
+
+depends essentially on the distance difference ∆r, it pro-vides robust orthogonality for targets in different distance bins, regardless of their angular separation. 2) Intra-Distance discrimination via Sspace : When targets share the same distance bin (collapsing Sfreq to unity), orthogonality must be recovered solely through Sspace .5
+
+g (ri, θ i, r j , θ j ) ≜ g (ri, α i, r j , α j ) = 1
+
+N M  
+
+> M−1
+
+X 
+
+> m=0
+> N−1
+
+X
+
+> n=0
+
+ejkm(ri−rj )ejkmδnd(αj −αi)ejkmδ2   
+
+> nd22
+> 1−α2
+> iri−1−α2
+> jrj
+> 
+
+≈ 1
+
+N M  
+
+> M−1
+
+X
+
+> m=0
+
+ejkm(ri−rj )
+
+| {z }
+
+> Distance Correlation
+
+· 
+
+> N′
+
+X 
+
+> n′=−N′
+
+ejkcn′d(αj −αi)ejkc(n′)2d2 1 2   
+
+> 1−α2
+> iri−1−α2
+> jrj
+> 
+
+| {z }
+
+> Angular Correlation
+
+. (14) First, evaluating the summation in Sfreq yields 
+
+Sfreq = 1
+
+M
+
+sin 
+
+ M ∆k(ri−rj )2
+
+
+
+sin 
+
+ ∆k(ri−rj )2
+
+ , (16) where ∆k = 2 π∆f /c denotes the wave number increment. The nulls of Eq. (16) establish the fundamental frequency-domain orthogonality condition as follows: 
+
+∆r = ri − rj = 2πp M ∆k = p · cB , p ∈ Z \ { 0}. (17) Specifically, the distance resolution determined by the first null is ∆r = 2πM ∆k = cM ∆f = cB , which links the distance sampling step directly to the system bandwidth. This confirms that as long as the dictionary grid points are separated by integer multiples of the distance resolution c/B , inter-distance coherence is suppressed. The remaining challenge is to design the grid to handle the intra-distance (same r) and intra-angle (same α, proximate r) ambiguities. 
+
+B. Angular Sampling Design 
+
+When two dictionary atoms share the same distance index (ri = rj = r), the frequency term Sfreq becomes unity, and distance discrimination fails. Under this condition, the orthogonality must be ensured by the spatial term Sspace .
+
+1) Design of Spatial Sampling Grid: The angular sampling design focuses on resolving targets when distance discrimina-tion fails. In Eq. (15), the spatial coherence Sspace contains both a linear phase term depending on angular difference and a quadratic phase term. Ideally, the quadratic phase is eliminated when the atom pair satisfies the wavefront-curvature matching condition 1−α2 
+
+> i
+> 2ri
+
+= 1−α2 
+
+> j
+> 2rj
+
+. In the intra-distance scenario ( ri = rj ), the quadratic phase difference is proportional to (α2 
+
+> i
+
+− α2 
+
+> j
+
+)/r . Moreover, considering the typical operational scenario where the target distance r is larger than the array aperture D (i.e., D < r ), the contribution of this quadratic residual scales by a factor proportional to the aperture-to-distance ratio D/r relative to the linear phase term. Consequently, perfectly matching the curvature is secondary to the dominant linear phase mismatch, allowing Sspace to be well-approximated by the standard linear array factor 
+
+Sspace ≈ 1
+
+N
+
+sin   N π  
+
+> 2
+
+(αj − αi)
+
+sin   π 
+
+> 2
+
+(αj − αi) , (18) where the last equality assumes half-wavelength spacing d =
+
+λc/2, implying kcd = π. Under these conditions, the column coherence function depends purely on the angular difference. Considering the field of view 60 ◦ < θ < 120 ◦ as shown in Fig. 1, the corresponding directional cosine α = cos θ is constrained to the interval − 12 < α < 12 . The nulls of this function provide the angular orthogonality condition 
+
+αj − αi = 2pN , p ∈ Z \ { 0}, |p| ≤ N − 12 . (19) 
+
+2) Angular Sampling Criterion: Combining this with the bounded field of view − 12 < α < 12 , we propose a uniform grid in the directional cosine domain 
+
+αn′ = − 12 + 2n′ + 1 
+
+N , n′ = 0 , . . . , 
+
+ N
+
+2
+
+
+
+− 1. (20) This grid guarantees that for any same distance targets, their angular difference aligns with the zeros of the spatial coher-ence function. 
+
+C. Distance Sampling Design 
+
+While angular sampling relies on linear phase variations, distance sampling in the NF regime necessitates a hybrid approach that exploits both the bandwidth-dependent delay and the wavefront curvature. 
+
+1) Fresnel-Based Spatial Coherence Analysis: To isolate the distance-dependent spatial information, we examine the column coherence for two atoms sharing the same angle ( αi =
+
+αj = α) but reside at different distances. Under this condition, the linear phase term in Sspace vanishes. The remaining phase term is purely quadratic, simplifying Sspace to a function of the inverse-distance difference. This quadratic summation lacks a simple closed-form expression. However, for a sufficiently large number of array elements N , the summation can be accurately approximated by a definite integral 
+
+Sspace ≈ | F (x)| = 1
+
+N 
+
+> N′
+
+X 
+
+> n′=−N′
+
+ej π(n′)2d2(1 −α2)   
+
+> λc
+> 1
+> ri−1
+> rj
+> 
+
+≈ 1
+
+N
+
+Z N ′ 
+
+> −N′
+
+ejπ(n′)2x dn ′ ,
+
+(21) where x ≜ d2(1 −α2) 
+
+> λc
+
+( 1 
+
+> ri
+
+− 1 
+
+> rj
+
+) is the dimensionless variable characterizing the distance disparity. By leveraging the symmetry of the integrand and applying the variable substitution κ = n′p2|x|, the integral is formu-lated in terms of Fresnel integrals. For the case x > 0,
+
+F (x)≈√2
+
+N √x
+
+Z √2xN ′
+
+> 0
+
+ej π 
+
+> 2κ2
+
+dκ =
+
+√2
+
+N √x [U (ζ)+j V (ζ)] , (22) where the integration upper limit is ζ = √2xN ′. The terms 
+
+U (ζ) and V (ζ) denote the Fresnel integrals, defined as 
+
+U (ζ) = 
+
+Z ζ
+
+> 0
+
+cos 
+
+ π
+
+2 κ2
+
+dκ, V (ζ) = 
+
+Z ζ
+
+> 0
+
+sin 
+
+ π
+
+2 κ2
+
+dκ. 
+
+(23) 6
+
+These functions characterize the oscillatory nature of F (x)
+
+and facilitate a computationally efficient approximation of its evaluation [27]. Consider another scenario where ri > r j , and let x′ = −x > 0. Through a symmetric derivation, we obtain 
+
+F (x) = 2
+
+N √2x′
+
+Z √2x′N ′
+
+> 0
+
+exp 
+
+
+
+−j π
+
+2 κ2
+
+dκ 
+
+= 2
+
+N √2x′ [U (ζ) − jV (ζ)] ,
+
+(24) where ζ = √2x′N ′. This result mirrors x > 0, with the sign inversion in the exponential leading to a conjugate relationship. Consequently, combining both cases (Eq. (22) and Eq. (24)), the magnitude function |F (x)| relies solely on quadratic sums of U and V , independent of the sign of x
+
+|F (x)| ≈ 2
+
+N p2|x|
+
+pU 2(ζ) + V 2(ζ), ζ = N ′p2|x|. (25) Asymptotically, as ζ → ∞ , both U (ζ) and V (ζ) converge to 0.5. This implies that the coherence decays according to 
+
+|F (x)| ∼ ζ−1, confirming that orthogonality improves as the inverse-distance difference |1/r i − 1/r j | increases. 
+
+2) Bandwidth Constraint and Grid Alignment: While the Fresnel-based analysis (Eq. (21)–(25)) reveals how spatial curvature contributes to distance discrimination, the ultimate distance resolution is hard-limited by the system bandwidth. To ensure global orthogonality across the dictionary, we en-force the frequency-domain condition derived in Eq. (17). This imposes a discrete grid constraint on the distance sampling, i.e., any two distinct distance geometric centers ri and rj
+
+must be separated by an integer multiple of the fundamental resolution c/B . Consequently, the continuous search space for distance sampling is discretized into a uniform candidate set Ggrid = {rmin + k · c/B | k ∈ Z≥0}. Potential distance atoms will be selected from this grid to maximize the spatial orthogonality derived in the previous subsection. Our proposed distance sampling strategy harmonizes the Fresnel-based orthogonality derived from Eq. (25) with the bandwidth-based grid constraint in Eq. (17). We proceed in two steps: First, we impose a coherence threshold ∆ ∈ (0 , 1) 
+
+such that |F (x)| ≤ ∆. Let ζ∆ be the value satisfying 
+
+|F (ζ∆)| = ∆ . The inequality implies a lower bound on the inverse-distance difference 
+
+1
+
+ri
+
+− 1
+
+rj
+
+≥ 1
+
+G∆ (1 − α2) , where G∆ ≈ D2
+
+2ζ2∆λc
+
+. (26) Enforcing equality in Eq. (26) for successive distance samples yields a set of non-uniform distance rings distributed along each angular ray [27], given by 
+
+˜rl(α) = G∆
+
+ 1 − α2/l, l = lmin , . . . , L, (27) where the index l scales linearly with the inverse distance. The starting index lmin accounts for the FF boundary, while 
+
+L corresponds to the NF lower boundary rmin .Second, to satisfy the bandwidth constraint, we align these ideal rings {˜rl} onto the resolution grid. Adopting a recursive “outside-in” approach, let r′ 
+
+> l−1
+
+be the aligned position of the previous (outer) ring. The current ring is adjusted to 
+
+r′ 
+
+> l
+
+= r′ 
+
+> l−1
+
+− kl∆r, where kl =
+
+ r′ 
+
+> l−1
+
+− ˜rl
+
+∆r
+
+
+
+∈ Z≥1, (28) TABLE I: Complexity Comparison of Different Dictionary                               
+
+> Scheme Distance Grid Size ( Qr)Dictionary Complexity
+> Traditional Uniform Grid O rmax
+> ϵ
+> O N M ·Qθ·rmax
+> ϵ
+> 
+> Pure Fresnel Grid [27] Qr, dense =O
+> 1
+> rmin
+> 
+> O(N M ·QθQr, dense )
+> Proposed Hybrid Grid O min  L, rmax
+> ∆r
+>  O(N M ·QθQr)
+
+with ∆r = c/B . Here, the ceiling operation guarantees that the inter-ring interval is expanded to the nearest integer multiple of the grid resolution. This expansion ensures that the actual physical distance r′
+
+> l−1
+
+−r′ 
+
+> l
+
+is strictly no less than the theoretical requirement r′ 
+
+> l−1
+
+− ˜rl, thereby preserving the orthogonality conditions provided by the Fresnel bounds. It remains to be shown that this grid alignment does not vio-late the Fresnel-based inverse-distance lower bound specified in Eq. (26). Let us adopt an ”expansion” strategy. Consider the adjacent pair of aligned rings (r′
+
+> l
+
+, r ′
+
+> l−1
+
+), where r′ 
+
+> l
+
+< r ′
+
+> l−1
+
+.The alignment process effectively widens the physical gap by moving the inner ring rl closer to the origin (decreased by 
+
+b ≥ 0) and/or the outer ring rl−1 further away (increased by 
+
+a ≥ 0), i.e., r′ 
+
+> l
+
+= rl − b and r′ 
+
+> l−1
+
+= rl−1 + a. The change in the inverse-distance difference is given by 
+
+∆inv =
+
+ 1
+
+rl − b − 1
+
+rl−1 + a
+
+
+
+−
+
+ 1˜rl
+
+− 1˜rl−1
+
+
+
+= brl(rl − b) + arl−1(rl−1 + a) .
+
+(29) Given that rl > b and all distance parameters are positive, the term in Eq. (29) remains strictly positive. Therefore, 
+
+1
+
+r′
+
+> l
+
+− 1
+
+r′
+
+> l−1
+
+> 1˜rl
+
+− 1˜rl−1
+
+≥ 1
+
+G∆(1 − α2) . (30) This confirms that increasing the distance gap |r′ 
+
+> l−1
+
+− r′
+
+> l
+
+|
+
+guarantees a larger inverse-distance gap. Thus, the alignment satisfies the Fresnel-imposed orthogonality lower bound. 
+
+3) Dimensionality Reduction and Complexity Analysis: The complexity comparison in Table I illustrates the efficiency of our hybrid design compared to traditional schemes. For the traditional uniform grid, the distance atom count is determined by a fixed fine step ϵ. For the pure Fresnel grid [27], the number of distance atoms is denoted as Qr, dense ≈ L, where 
+
+L is the maximum index defined in Eq. (27). As derived, 
+
+L ∝ 1/r min , which implies that the atom density inflates as the target approaches the array, leading to grid intervals that are physically indistinguishable. In contrast, our hybrid grid truncates the sampling cardinality using the system bandwidth resolution. As shown in Table I, the distance grid size Qr
+
+is bounded by min( L, r max /∆r), where rmax represents the FF distance boundary as mentioned above. Since rmax /∆r
+
+remains constant regardless of how small rmin is, this strategy ensures that the dictionary size Qθ Qr remains scalable even in extreme XL-MIMO configurations. This reduction translates directly to the decrease in the computational complexity of the subsequent CS-based sparse recovery, rendering the unified WB-NF sensing algorithm highly viable for practical 6G ISAC implementations. 7
+
+Algorithm 1 WB-NF Parameter Estimation Algorithm 
+
+1. Angle grid construction (Eq. (20) ):  
+
+> 1:
+
+αn ← − 12 + 2n+1  
+
+> N
+
+, n = 0 , . . . , ⌊N/ 2⌋ − 1
+
+2. Non-uniform distance rings alignment (Eq. (28) ):  
+
+> 2:
+
+λc ← c/f c; G∆ ← (N d )2 
+
+> 2ζ2∆λc
+
+; ∆r ← cM ∆f ; Initialize G ← ∅  
+
+> 3:
+
+for all αn do  
+
+> 4:
+
+r′ 
+
+> prev
+
+← rmax ▷ Initialize at FF boundary  
+
+> 5:
+
+l ← ⌈ G∆(1 − α2
+
+> n
+
+)/r max ⌉ ▷ Determine initial index  
+
+> 6:
+
+while true do  
+
+> 7:
+
+˜rl ← G∆(1 −α2 
+
+> n)
+> l
+
+▷ Ideal candidate ring  
+
+> 8:
+
+kl ← ⌈ (r′ 
+
+> prev
+
+− ˜rl)/∆r⌉ 
+
+> 9:
+
+r′ 
+
+> l
+
+← r′ 
+
+> prev
+
+− kl∆r ▷ Quantize to resolution grid  
+
+> 10:
+
+if r′ 
+
+> l
+
+< r min then break  
+
+> 11:
+
+end if  
+
+> 12:
+
+Add pair (αn, r ′
+
+> l
+
+) to set G; r′ 
+
+> prev
+
+← r′
+
+> l
+
+; l ← l + 1  
+
+> 13:
+
+end while  
+
+> 14:
+
+end for 3. Dictionary construction:  
+
+> 15:
+
+Qθ Qr ← |G| ; Initialize B ∈ CN M ×Qθ Qr 
+
+> 16:
+
+for q = 1 to Qθ Qr do  
+
+> 17:
+
+Extract (αq , r q ) from G 
+
+> 18:
+
+for m = 0 to M − 1 do  
+
+> 19:
+
+km ← 2π(fc+m∆f ) 
+
+> c
+> 20:
+
+Calculate exact distance rn(αq , r q ) via Eq. (1)  
+
+> 21:
+
+Define [˜am]n = 1√N M e−jkmrn(αq ,r q ) 
+
+> 22:
+
+BmN +1:( m+1) N,q ← ˜am 
+
+> 23:
+
+end for  
+
+> 24:
+
+end for 4. Sparse recovery and parameter extraction:  
+
+> 25:
+
+(∼, S) ← SOMP (Y, B, P ) ▷ Estimate support set  
+
+> 26:
+
+for each index s ∈ S do  
+
+> 27:
+
+Retrieve estimated ( ˆ αs, ˆrs) from G using index s 
+
+> 28:
+
+ˆθp ← arccos( ˆ αs); ˆrp ← ˆrs 
+
+> 29:
+
+Add estimated (ˆ rp, ˆθp) to output set  
+
+> 30:
+
+end for 
+
+D. The Proposed Algorithm for WB-NF Parameter Estimation 
+
+The proposed estimation procedure is outlined in Algorithm 1, which comprises four distinct phases: 1) Angle Grid Initialization: First, a uniform angular grid is initialized in the spatial frequency domain according to Eq. (20). This establishes the directional baselines ensuring that the linear phase component of the spatial coherence is minimized for targets at similar distances. 2) Recursive Hybrid Distance Sampling: Second, for each angular ray αn, a set of non-uniform distance rings is generated using a recursive “outside-in” strat-egy. The search initiates from the FF boundary rmax 
+
+(setting r′ 
+
+> prev
+
+← rmax ). In each iteration, the algorithm computes two candidates: 1) The ideal Fresnel distance 
+
+˜rl, calculated via Eq. (27), which satisfies the inverse-distance orthogonality condition derived from the Fresnel approximation. 2) The aligned distance r′
+
+> l
+
+, obtained by quantizing the interval relative to the previous ring r′
+
+> prev
+
+onto the system’s distance resolution ∆r, as defined in Eq. (28). This hybrid alignment suppresses both spatial correlation (via ˜rl) and frequency-domain sidelobes (via grid alignment). The recursion proceeds by incrementing the ring index l until the lower boundary rmin is reached. 3) Exact Dictionary Construction: Third, the WB over-complete dictionary B is assembled. Here, Qθ Qr ← |G| 
+
+represents the total cardinality of the generated non-uniform grid points, which determines the column di-mension of the dictionary matrix B. A key distinction in this step is the model fidelity: while the sampling grid 
+
+G is designed using Fresnel approximations to ensure low coherence, the dictionary atoms are constructed using the exact spherical wavefront model. Specifically, for each grid point (αq , r q ) in G, the precise array delays are calculated via Eq. (1), and the corresponding joint spatial-frequency steering vectors are normalized to unit norm (1/√N M ) to form the columns of B.4) Sparse Recovery and Extraction: Finally, the Simulta-neous Orthogonal Matching Pursuit (SOMP) algorithm is employed to identify the support set S from the received signal Y and dictionary B. The estimated indices are then mapped back to the physical grid parameters to retrieve the target locations {(ˆ rp, ˆθp)}Pp=1 .IV. D ECOUPLED ANALYSIS OF THE WB AND NF E FFECTS 
+
+To isolate and quantitatively assess the individual contribu-tions of the NF and WB effects, we introduce two auxiliary benchmark schemes. These schemes are constructed by delib-erately disabling one of the two physical phenomena in the signal model, thereby enabling a clean decomposition of their impact on parameter estimation performance. Specifically: 1) NB-NF MUSIC: This scheme considers only the spherical wavefront curvature effect while neglecting the frequency-dependent effect. 2) WB-FF MUSIC: This scheme considers only the WB effect while assuming planar wavefronts. 
+
+A. The NB-NF Boundary and MUSIC Method 1) Correlation Function and Dirichlet-Kernel Bound: To examine the impact of WB effects, we define the spatial correlation function as the magnitude of the normalized inner product between the WB-NF steering vector and its NB refer-ence counterpart constructed at the central carrier wavenumber 
+
+kc. This correlation metric, which takes values in the interval 
+
+[0 , 1] , quantifies the frequency-dependent mismatch between the actual WB snapshots and the reference model, thereby capturing the decorrelation induced by the WB effect even when the spatial direction remains fixed. Incorporating the NF distance approximation derived in Eq. (13), the normalized correlation between the WB-NF steering vector and the NB reference steering vector is derived as Eq. (31). Assuming a fixed spatial direction described by the direc-tional cosine α = cos θ, we consider M discrete wavenumbers 
+
+km = kc + m∆k for m = 0 , . . . , M − 1, where the total wavenumber span is defined as Kbw = M ∆k. For each antenna index n′, let us define the effective Fresnel distance term ψn′ (r) = r−n′d α + (n′)2d2 
+
+> 2r
+
+(1 −α2). Substituting this into Eq. (31), the summation over the frequency domain (index m)typically takes the form of a geometric series. For a generic distance variable ψ, this summation is expressed as  
+
+> M−1
+
+X
+
+> m=0
+
+ej m∆k ψ = ej (M −1)∆ k ψ 
+
+> 2
+
+sin 
+
+ M ∆k ψ 
+
+> 2
+
+
+
+sin 
+
+ ∆k ψ 
+
+> 2
+
+
+
+≜ ej (M −1)∆ k ψ  
+
+> 2
+
+DM (∆ k ψ ),
+
+(32) 8
+
+˜g1(ri, θ i) ≜ ˜g1 (ri, α i) = aH (ri, θ i)˜a1(ri, θ i) = 1
+
+N M  
+
+> M−1
+
+X 
+
+> m=0
+> N−1
+
+X
+
+> n=0
+
+ejkmri,n e−jkcri,n 
+
+= 1
+
+N M  
+
+> M−1
+
+X
+
+> m=0
+
+ejm∆kr i 
+
+> N′
+
+X 
+
+> n′=−N′
+
+e−jm∆kn ′dα i
+
+| {z }
+
+> Linear Phase
+
+ejm∆k (n′)2d2(1 −α2 
+
+> i)2ri
+
+| {z }
+
+> Quadratic Phase
+
+.
+
+(31) where γ = ∆k ψ , and DM (γ) ≜ sin( M γ/ 2) sin( γ/ 2) denotes the Dirichlet kernel (also known as the periodic sinc function). This derivation reveals that aggregating M subcarriers results in an amplitude envelope shaped by the Dirichlet kernel, exhibiting a characteristic mainlobe-sidelobe structure that dictates the distance resolution. By substituting the antenna-specific term ψn′ (r) back into the array correlation expression in Eq. (31), we obtain the closed-form expression for the normalized WB-NF correlation 
+
+˜g1(ri, α i) = 1
+
+N M  
+
+> N′
+
+X  
+
+> n′=−N′
+> M−1
+
+X
+
+> m=0
+
+ejm∆kψ n′ (r)
+
+!
+
+= 1
+
+N M  
+
+> N′
+
+X 
+
+> n′=−N′
+
+DM
+
+ ∆k ψ n′ (r) ej (M −1)∆ k   
+
+> 2ψn′(r)
+
+.
+
+(33) From Eq. (33), the magnitude contribution from each antenna element is 1 
+
+> M
+
+|D M (∆ kψ n′ (r)) |, whose mainlobe is confined by the first nonzero roots of sin( M γ/ 2) at γ = ±2π/M .In contrast, the periodic peaks (grating lobes, where the denominator also vanishes) occur at integer multiples of 2π.Since 2π/M ≪ 2π for any typical number of subcarriers 
+
+M ≥ 2, focusing on the mainlobe region is sufficient for local analysis. Consequently, to ensure that the correlation energy remains concentrated within the mainlobe of the Dirichlet kernel, the following sufficient condition must be satisfied, given by 
+
+max    
+
+> n′∈[−N′, N ′]
+
+∆k ψ n′ (r) ≤ 2πM . (34) It should be noted that Eq. (34) is a sufficient but not necessary condition. More specifically, it guarantees that each element remains within the mainlobe, but does not ensure that the overall correlation is close to unity, since the amplitude near the mainlobe edge is already significantly reduced. For a given target angle θ0, we formally define the maximum threshold distance of the NB-NF region, denoted as rNB −NF ,as the solution to the following constrained optimization problem [33] 
+
+rNB −NF = arg max  
+
+> r
+
+r, (35a) s.t. ˜g1(r, θ 0) ≥ ρ0, (35b) where ρ0 represents a predefined reliability threshold (e.g., 
+
+ρ0 = 0.9) that ensures the multi-carrier spatial snapshots do not severely decorrelate from the reference NB manifold. By formulating it as Eq. (35), rNB −NF establishes a critical upper boundary. While its exact analytical solution depends on the complex interplay of bandwidth, aperture, and target angle, its quantitative behavior will be rigorously evaluated via simulation in Section V-B. 
+
+2) The NB-NF MUSIC Algorithm: Motivated by the defi-nition of rNB −NF above, we propose an approximation algo-rithm that leverages the NB-NF model to estimate the location parameters (rp, θ p) from the WB observation. This approach is theoretically grounded in the analysis in Section IV-A1, which suggests that within the distance r ≤ rNB −NF , the frequency-dependent phase variations are negligible. Based on the signal model in Section II, the aggregated received signal matrix Y ∈ CN M ×K collects the observations over K OFDM symbols collects the observations from all M
+
+subcarriers and N antennas. It can be expressed as 
+
+Y = A (r, θ ) ΓS + W, (36) where Γ = diag( β) ∈ CP ×P contains the complex path gains, S ∈ CP ×K contains the transmitted symbols, and 
+
+W is the additive noise. The matrix A (r, θ ) ∈ CN M ×P
+
+represents the exact WB-NF steering matrix. Its p-th column, corresponding to the p-th target, stacks the steering vectors across M subcarriers. To implement the NB approximation, we reorganize the data structure to exploit frequency diversity as multiple snapshots. Let Ym ∈ CN ×K denote the sub-matrix extracted from Y
+
+corresponding to the m-th subcarrier index. The reduced-dimension spatial covariance matrix is then computed by 
+
+Rnb = 1
+
+M K  
+
+> M−1
+
+X
+
+> m=0
+
+YmYHm ∈ CN ×N . (37) Performing the eigendecomposition on R yields 
+
+Rnb = UsΣsUHs + UnΣnUHn , (38) where Un ∈ CN ×(N −P ) represents the noise subspace eigen-vectors corresponding to the N − P smallest eigenvalues. The key to this algorithm is the construction of the ap-proximate scanning vector. Under the NB assumption justified by the correlation analysis above, we assume the frequency-dependent spatial variation is negligible. Consequently, the search vector anb (r, θ ) ∈ CN ×1 is simply the standard NF steering vector at the center frequency fc
+
+anb (r, θ ) = a0(r, θ ), (39) where a0(r, θ ) ∈ CN ×1 is defined in Eq. (6). Finally, the 2D angle-distance spectrum is given by 
+
+Snb (r, θ ) = 1
+
+aH
+
+> nb
+
+(r, θ )UnUHn anb (r, θ ) . (40) This strategy effectively reduces the computational complex-ity of manifold generation while maintaining high distance sensing accuracy, provided that the target is located within the valid region r ≤ rNB −NF where the WB effect is minimal. 9
+
+˜g2 (ri, θ i) ≜ ˜g2 (ri, α i) = aH (ri, θ i)˜awb (ri, θ i) = 1
+
+N M  
+
+> M−1
+
+X 
+
+> m=0
+> N−1
+
+X
+
+> n=0
+
+ejkmri,n e−jkm ˜ri,n 
+
+= 1
+
+N M  
+
+> N′
+
+X 
+
+> n′=−N′
+
+ejkc  
+
+> (n′d)2(1 −α2
+> i)2ri
+> M−1
+
+X
+
+> m=0
+
+ejm∆k (n′d)2(1 −α2 
+
+> i)2ri
+
+!
+
+.
+
+(41) 
+
+B. The WB-FF Boundary and MUSIC Method 1) Correlation Function and Fresnel-Phase Bound: To quantify the mismatch purely caused by the wavefront cur-vature in the NF, we define a normalized inner product—i.e., a correlation function—between a multi-carrier, NF steering vector and a multi-carrier, FF (plane wave) reference vector constructed over the same set of wavenumbers {km}M −1 
+
+> m=0
+
+. Un-like the NF effect-only case in Section IV-A, where the refer-ence vector is NB (i.e., constructed at the carrier wavenumber 
+
+kc), both vectors here are WB. The only difference lies in the retention of the quadratic phase term in the NF model, while the FF model neglects it. This correlation function takes values in [0 , 1] and isolates the decorrelation solely due to spherical wavefront curvature, with the spatial direction fixed. Applying the NF distance approximation from Eq. (13), the resulting normalized correlation is shown in Eq. (41). For a fixed direction α = cos θ, denote the physical array position by χ = n′d, and define the curvature factor η ≜ 1−α2 
+
+> 2ri
+
+. Then the residual distance offset between the NF and FF models reduces to a purely quadratic term 
+
+ri,n − ˜ri,n = χ2η, (42) so that the inner summation over subcarriers in Eq. (41) decouples into a product of a frequency-independent curvature phase and a frequency-dependent summation, and we obtain  
+
+> M−1
+
+X
+
+> m=0
+
+ej m∆k (χ2η) = ej (M −1)∆ k χ 2η
+
+> 2
+
+sin   M ∆k χ 2η
+
+> 2
+
+
+
+sin   ∆k χ 2η
+
+> 2
+
+
+
+≜ ej (M −1)∆ k χ 2η 
+
+> 2
+
+DM
+
+ ∆k χ 2η,
+
+(43) where γ′ = ∆ k χ 2η, and DM (γ′) ≜ sin( M γ ′/2) sin( γ′/2) denotes the Dirichlet kernel. Substituting (43) into Eq. (41) yields the array-level normalized correlation 
+
+˜g2 (ri, α i) = 1
+
+N M  
+
+> N′
+
+X 
+
+> n′=−N′
+
+DM
+
+ ∆kχ 2ηej (M −1)∆ k χ 2η 
+
+> 2
+
+ejkc χ2η .
+
+(44) The factor exp {j (M −1)∆ k χ 2η 
+
+> 2
+
+} is a pure phase and does not affect the magnitude. Hence each array element frequency-domain magnitude contribution is 1 
+
+> M
+
+DM
+
+ ∆k χ 2η . Similar to Eq. (33), the mainlobe of DM (x) is confined by the first nonzero roots of sin( M γ ′/2) at γ′ = ±2π/M . In contrast, the periodic peaks (grating lobes, where the denominator also vanishes) occur at integer multiples of 2π. Since 2π/M ≪ 2π
+
+for any typical number of subcarriers M ≥ 2, focusing on the mainlobe region is sufficient for analyzing the decorrelation effect. Consequently, to ensure that the WB response for every array element remains concentrated within the high-correlation mainlobe of the Dirichlet kernel, the following sufficient condition must be satisfied 
+
+max   
+
+> |n′|≤ N′
+
+|∆k χ 2η| = ∆ k η (N ′d)2 ≤ 2πM . (45) Equivalently, in terms of the distance r, we have 
+
+r ≥ M ∆k (1 − α2) ( N ′d)2
+
+4π . (46) In contrast to the NF effect-only case, Eq. (44) also contains the carrier-wavenumber Fresnel phase exp {jkcχ2η} across the aperture, which can induce additional spatial cancellation. To avoid strong spatial defocusing, one may further impose the Fresnel-type sufficient bound 
+
+max   
+
+> |n′|≤ N′
+
+|kc χ2η| = kc η (N ′d)2 ≤ π , (47) which translates, using kc = 2 π/λ c and D = 2 N ′d, we have 
+
+r ≥ (1 − α2) D2
+
+4 λc
+
+. (48) The bounds in Eq. (46) and Eq. (48) are sufficient (not necessary) and jointly ensure that curvature-induced decorre-lation remains limited both in frequency (via DM ) and across the aperture (via the Fresnel phase at kc). Similarly, we define the minimum threshold distance, denoted as rWB −FF . For a given target angle θ0, rWB −FF is formulated as the solution to the following constrained optimization problem [33] 
+
+rWB −FF = arg min  
+
+> r
+
+r, (49a) s.t. ˜g2(r, θ 0) ≥ ρ1, (49b) where ρ1 is a predefined reliability threshold (e.g., ρ1 = 0 .9). Physically, Eq. (49) determines the critical distance boundary below which the uncompensated wavefront curvature induces severe decorrelation ( ˜g2 < ρ 1). Similar to the NB-NF bound-ary, its quantitative behavior and specific numerical limits will be rigorously evaluated via simulation in Section V-C. 
+
+2) The WB-FF MUSIC Algorithm: Alternatively, to address the frequency-dependent phase variations while neglecting the NF curvature, we consider the WB-FF approximation. This approach corresponds to the planar reference model analyzed in Eq. (41). Based on this approximation, the received signal model is matched against a WB planar steering matrix, denoted as ˜A. The signal subspace equation is formulated as 
+
+˜Y = ˜A (r, θ ) ΓS + W, (50) where Γ = diag( β) denotes the path gains, and ˜A (r, θ ) = [˜ awb (r1, θ 1), . . . , ˜awb (rP , θ P )] denotes the WB steering ma-trix. Distinct from the NF model in Eq. (6), the planar steering vector ˜awb is constructed using the linear phase approximation 
+
+˜awb (rp, θ p) =  ˜aT 
+
+> 0
+
+(rp, θ p), . . . , ˜aTM −1(rp, θ p) T ,
+
+(51) 10 
+
+TABLE II: Summary of Sensing Regimes, Physical Assumptions, and Valid Boundaries 
+
+Sensing Regime Valid Range Wavefront Bandwidth Dominant Mechanism Algorithm NB-NF Model r ≤ rNB −NF Spherical NB Spherical curvature NB-NF MUSIC 
+
+WB-FF Model r ≥ rWB −FF Planar WB Time-delay WB-FF MUSIC 
+
+WB-NF (Unified) rNB −NF < r < r WB −FF Spherical WB Joint spherical & delay Proposed CS Method where ˜am(rp, θ p) ∈ CN ×1 represents the FF response vector at subcarrier m, defined as 
+
+˜am(rp, θ p) =  e−jkm ˜rp, 0 , . . . , e−jkm ˜rp,N −1
+
+T . (52) Here, the effective planar distance is ˜rp,n = rp − δnd cos θp.Note that unlike the true NF model, the quadratic curvature term is absent in ˜rp,n . To fully preserve the frequency-dependent effect, the covariance matrix cannot be spa-tially averaged as in the previous NB-NF case. Instead, the full-dimension spatio-temporal covariance matrix Rwb = 
+
+> 1
+> K
+
+˜Y ˜ YH ∈ CN M ×N M must be constructed. Performing eigendecomposition on Rwb yields the noise subspace ˜Un ∈
+
+CN M ×(N M −P ). By utilizing the orthogonality between the full-dimension signal and noise subspaces, the 2D pseudo-spectrum is formulated as 
+
+Swb (r, θ ) = 1˜aHwb (r, θ ) ˜Un ˜UHn ˜awb (r, θ ) . (53) By searching for the peaks of Swb (r, θ ), the joint distance and angle estimation is performed. However, distinct from the proposed NF method, this approach assumes a linear spatial phase distribution, effectively discarding the aperture-domain focusing gain associated with the wavefront curvature. Thus, this approach functionally realizes ranging via the WB delay signature and angle estimation via the planar array response, albeit suffering from defocusing errors if the target strictly resides in the NF curvature region r < r WB −FF .Table II summarizes the key characteristics of the three sensing regimes. As shown, the simplified NB-NF and WB-FF models are only valid within their specific distance boundaries (r ≤ rNB −NF and r ≥ rWB −FF ). However, in the transition zone ( rNB −NF < r < r WB −FF ), neither approximation is reliable. In this region, relying on only NF or WB delay leads to large estimation errors. Therefore, the unified WB-NF model and the proposed CS method are necessary to bridge this gap, ensuring accurate sensing across the entire range. V. N UMERICAL RESULTS 
+
+In this section, we present numerical results to evaluate the performance of the proposed WB-NF parameter esti-mation algorithm. To demonstrate the performance of the unified model, we compare the proposed method against two benchmark schemes: NB-NF MUSIC and WB-FF MUSIC. Unless otherwise specified, the simulation setup employs a ULA with N = 127 elements and an array aperture of 
+
+D = 0 .68 m. The system operates at a carrier frequency of fc = 28 GHz with a bandwidth of B = 122 .88 MHz (M = 256 subcarriers). Consequently, the Rayleigh distance is derived as Rr = 2 D2/λ c ≈ 86 .4 m. The signal-to-noise ratio (SNR) is set to 0 dB by default. 
+
+Fig. 2: Coherence function magnitude |F (ζ)| as a function of the normalized distance ζ.
+
+A. Performance Analysis of Sparse Matrix Representation 1) Analysis of Spatial Coherence and Parameter Selection: 
+
+To validate the theoretical basis of the proposed dictionary construction, Fig. 2 illustrates the magnitude of the Fresnel-based column coherence |F (ζ)| as derived in Eq. (25). The numerical results demonstrate an asymptotic decay behavior proportional to 1/ζ . Crucially, the figure reveals the trade-off between dictionary conditioning and grid density involved in selecting the threshold ∆: 1) A strict threshold (e.g., ∆ = 0.01 ) requires a large normalized distance ζ ≈ 70 .22 . This would result in sparse distance rings and increase the risk of off-grid errors. 2)A relaxed threshold (e.g., ∆ = 0 .5, ζ ≈ 1.55 )yields dense sampling but results in high mutual coherence, degrading the sparse recovery performance. Therefore, we adopt ∆ = 0 .1 (ζ∆ ≈ 6.62 ) for the subsequent simulations. This choice offers a favorable balance, ensuring sufficient low-coherence to satisfy the RIP while maintaining adequate sampling resolution for precise localization. 
+
+2) Validation of the Proposed WB-NF Dictionary Design: 
+
+We validate the effectiveness of the proposed dictionary design in terms of sparse recovery and demonstrate the overall localization performance. The simulation setup involves P = 3 
+
+targets randomly scattered within the radiative NF region. As shown in Fig. 3(a), the recovered sparse coefficients are presented, where the horizontal axis represents the atom indices in the angle-distance dictionary and the vertical axis denotes the average coefficient magnitude. We observe three distinct and prominent peaks, corresponding to three targets. Furthermore, Fig. 3(b) showcases the effectiveness of the proposed algorithm in localizing targets. It plots the true target positions against their estimated counterparts in Cartesian coordinates. The results clearly demonstrate that the estimated positions (marked by red triangles) closely align with the true 11 0123456789Average Coefficient Magnitude           
+
+> 10 -4 Recovered Sparse Coefficients
+> 0500 1000 1500 2000 2500 3000 3500 4000 4500 Atom Index
+> Coefficient Magnitude
+> Estimated Support
+
+(a) Sparse recovery performance. -50 0 50 100 150  
+
+> -40 -30 -20 -10 010 20 30 40
+> Target Localization Results
+> Ground-truth
+> Estimated Position
+> Rayleigh Distance
+
+(b) NF localization results. 
+
+Fig. 3: Visualization of the proposed parameter algorithm. 
+
+Fig. 4: The maximum threshold distance rNB −NF versus system bandwidth B for various correlation thresholds ρ0.positions (marked by blue circles), indicating high localization accuracy. Moreover, all targets are accurately identified within the radiative NF region, consistent with the Rayleigh distance. 
+
+B. Performance Analysis of NB-NF MUSIC Method 1) Quantification of the Correlation Function: To quan-tify the limitations of the NB assumption within the WB-NF regime, we evaluate the maximum threshold distance, denoted as rNB −NF . This metric implies the effective upper distance limit beyond which the correlation coefficient ˜g1 (r, θ )
+
+deteriorates below a predefined reliability threshold ρ0. The simulation considered a fixed target angle of 60 degrees. Fig. 4 depicts the variation of rNB −NF against the system bandwidth 
+
+B (ranging from 5 MHz to 100 MHz), parameterized by varying correlation stringency levels ρ0 ∈ [0 .50 , 0.95] . Two primary observations can be drawn from the results: 1) A pro-nounced inverse dependence between the maximum threshold distance and bandwidth ( rNB −NF ∝ 1/B ) is evident across all correlation levels. For instance, under a high-fidelity require-ment of ρ0 = 0 .90 , the reliable operating range drastically shrinks from approximately 15 m at B = 5 MHz to less than 1 m at B = 100 MHz. This indicates that in WB systems, the spatial region where the simple NB model remains valid is negligibly small. 2) This behavior aligns perfectly with Eq. (33), where the array gain is governed by the Dirichlet ker-nel argument ∆kψ n′ (r) ∝ B · r. Consequently, maintaining a fixed correlation ρ0 effectively imposes a constant bandwidth-distance product. As a result, any increase in bandwidth B
+
+necessitates a proportional reduction in distance to strictly confine the operating point within the mainlobe. 
+
+Fig. 5: Spatial spectrum estimation results of the NB-NF MUSIC algorithm. Physically, rNB −NF serves as a critical boundary delineating two operating regimes. Beyond this distance ( r > r NB −NF ), the coherence gain provided by NF effect is approximately nullified by the significant energy defocusing induced by the frequency-dependent phase mismatch. As bandwidth B
+
+increases, this WB effect overshadows the focusing gain at progressively shorter distances. Therefore, within the effective distance r ≤ rNB −NF , the computationally simpler NB-NF model can be adopted to legitimately approximate the complex WB-NF response with high fidelity. 
+
+2) Validation of the Proposed NB-NF MUSIC Method: 
+
+Fig. 5 presents the comprehensive spatial spectrum estimation results of the proposed NB-NF MUSIC algorithm in a dual-target scenario. The simulation setup includes two NF targets randomly located at coordinates (r1, θ 1) = (1 .1 m, 112 .2◦)
+
+and (r2, θ 2) = (2 .5 m, 102 .0◦). As depicted in the 2D spec-trum (Fig. 5(a)) and the 3D spectral surface (Fig. 5(b)), the algorithm successfully resolves both targets in the spatial domain. However, a significant resolution disparity is observed between the angular and distance dimensions. Specifically, the angular spectrum cut in Fig. 5(c) demonstrates extremely sharp spectral peaks with narrow beamwidths, indicating high-resolution angular estimation capabilities. In contrast, the distance spectrum cut in Fig. 5(d) reveals substantial spectral broadening and slower decay in the distance domain. This phenomenon, visualized as vertical ridges ((i.e., distance-spreading) in Fig. 5(a), suggests that the distance measurement capability of the NB spherical wave model is limited due to the absence of WB time-delay information. 
+
+C. Performance Analysis of WB-FF MUSIC Method 1) Quantification of the Correlation Function: To quan-tify the limitations of the FF assumption within the WB-NF regime, we evaluate the minimum threshold distance, denoted as rWB −FF . This metric implies the effective lower distance limit within which the correlation coefficient ˜g2 (r, θ )
+
+deteriorates below a predefined reliability threshold ρ1. The simulation assumes a fixed bandwidth of B = 122 .88 MHz based on the derivation in Eq. (41). Fig. 6 illustrates the 12 
+
+Fig. 6: The minimum threshold distance rWB −FF versus system aperture D for various correlation thresholds ρ1.
+
+Fig. 7: Spatial spectrum estimation results of the WB-FF MUSIC algorithm. relationship between the minimum threshold distance rWB −FF 
+
+and the array aperture D, parameterized by varying correlation stringency levels ρ1 ∈ [0 .50 , 0.95] . Two primary observations can be drawn from the results: 1) The minimum threshold dis-tance exhibits a quadratic growth with respect to the aperture size ( rWB −FF ∝ D2). This implies that as the array scale expands, the region where the FF assumption fails expands significantly. 2) The threshold boundary is sensitive to the required correlation ρ1. For a large aperture of D = 1 .8 m, maintaining a high-fidelity correlation of ρ1 = 0 .95 mandates a minimum distance of 168 .3 m. Even relaxing the requirement to ρ1 = 0 .85 only reduces the threshold to approximately 95 .1
+
+m. Conversely, for small apertures (e.g., D < 0.2 m), the valid distance starts very close to the array ( rWB −FF ≈ 0). 
+
+2) Validation of the Proposed WB-FF MUSIC Method: 
+
+Fig. 7 evaluates the proposed WB-FF MUSIC algorithm using two targets at (r1, θ 1) = (14 .0 m, 84 .7◦) and (r2, θ 2) =(4 .6 m, 107 .2◦). As shown in Figs. 7(a) and (b), the algorithm successfully resolves both targets by extracting WB time-delay signatures for ranging and utilizing the planar array response for angle estimation. Similar to the NB-NF method, the inherent distance resolution remains lower than the angular resolution, visualized as vertical ridges. More importantly, a severe spatial-dependent performance discrepancy is observed. 
+
+Fig. 8: NMSE versus distance performance for different algo-rithms. While the farther target 1 ( 14 .0 m) exhibits an accurate, sharp spectrum peak near 0 dB, the closer target 2 ( 4.6 m) suffers from substantial defocusing. As explicitly shown in Figs. 7(c) and (d), the spectral peak of target 2 degrades to approximately 
+
+−5 dB with noticeable broadening. This severe mismatch occurs because the WB-FF model inherently discards the NF wavefront curvature, which rigorously corroborates the theoretical curvature-induced decorrelation and the critical distance bound rWB −FF analyzed in Fig. 6. 
+
+D. NMSE vs Distance 
+
+In this subsection, we investigate the effective operating regimes of the decoupled approximation models (NB-NF and WB-FF) by evaluating their NMSE against target distance. This analysis aims to identify the specific distance intervals where these low-complexity substitutions remain viable. As illustrated in Fig. 8, although the geometric Rayleigh dis-tance is Rr ≈ 86 .4 m, both decoupled methods exhibit highly restricted “sweet spots”. For the NB-NF method (blue curve), distance sensing precision relies on spherical wavefront cur-vature. As established analytically, its spatial phase coherence (ρ ≥ 0.9) holds only within r ≤ rNB −NF = 0 .53 m. Instead of failing abruptly at this conservative theoretical boundary, the spatial correlation degrades progressively, allowing the NB-NF MUSIC method to exploit residual wavefront curvature for viable estimation slightly beyond this limit. However, the NMSE escalates at a rapid rate (proportional to (r/D )4)as curvature sensitivity diminishes. At the first empirical intersection (r ≈ 1.8 m), the noise floor dominates the weakened curvature features, causing the NB-NF performance to plummet below the proposed CS-based method. Conversely, the WB-FF MUSIC approach (red curve) lever-ages the WB envelope delay ( B = 122 .88 MHz) for long-range targets. While severely degraded by uncompensated quadratic phase errors at close-in distances, its performance progressively stabilizes once the distance exceeds the theoret-ical boundary of rWB −FF = 17 .302 m ( ρ = 0 .9), where the planar wavefront assumption becomes tolerable. Nevertheless, since the residual spherical curvature still incurs a marginal phase penalty at this exact threshold, the empirical WB-FF curve requires a slightly extended distance to fully surpass the CS baseline. Consequently, the actual intersection occurs 13 
+
+at r ≈ 18 .5 m, beyond which the approach recovers its bandwidth-dependent distance sensing capability. Crucially, the extensive region between 1.8 m and 18 .5 mmanifests as a severe “gray zone” where neither decoupled model yields acceptable accuracy. In this transitionary phase, the target is neither sufficiently close for reliable curvature ex-traction nor sufficiently far to ignore the NF phase mismatch. This observation justifies the necessity of our proposed unified sensing framework, which is capable of bridging this gap and ensuring reliability across the entire sensing range. VI. C ONCLUSION 
+
+This paper investigated target sensing within WB-NF ISAC systems for 6G networks. To address the limitations of con-ventional WB-FF and NB-NF assumptions, we proposed a unified CS-based parameter estimation algorithm. Specifically, we formulated an exact WB-NF sparse matrix and designed a novel low-coherence angle-distance dictionary, which sig-nificantly reduced computational complexity without sacri-ficing resolution. Furthermore, to perform a decoupled NF and WB effect analysis, we developed two MUSIC-based benchmark schemes. By evaluating the estimation performance against these baselines, we systematically analyzed the isolated physical effects and identified the distinct effective operating regimes. REFERENCES [1] F. Liu, Y. Cui, C. Masouros, J. Xu, T. X. Han, Y. C. Eldar, and S. Buzzi, “Integrated sensing and communications: Toward dual-functional wire-less networks for 6G and beyond,” IEEE J. Sel. Areas Commun. , vol. 40, no. 6, pp. 1728–1767, Jun. 2022. [2] Z. Zhang, Y. Xiao, Z. Ma, M. Xiao, Z. Ding, X. Lei, G. K. Karagiannidis, and P. Fan, “6G wireless networks: Vision, requirements, architecture, and key technologies,” IEEE Veh. Technol. Mag. , vol. 14, no. 3, pp. 28–41, Sep. 2019. [3] Z. Wei, H. Liu, Z. Feng, H. Wu, F. Liu, Q. Zhang, and Y. Du, “Deep cooperation in ISAC system: Resource, node and infrastructure perspectives,” IEEE Internet Things Mag. , vol. 7, no. 6, pp. 118–125, Jul. 2024. [4] E. Bj¨ ornson, Y. C. Eldar, E. G. Larsson, A. Lozano, and H. V. Poor, “Twenty-five years of signal processing advances for multiantenna communications: From theory to mainstream technology,” IEEE Signal Process. Mag. , vol. 40, no. 4, pp. 107–117, Jun. 2023. [5] E. Bj¨ ornson, J. Hoydis, M. Kountouris, and M. Debbah, “Massive MIMO systems with non-ideal hardware: Energy efficiency, estimation, and capacity limits,” IEEE Trans. Inf. Theory , vol. 60, no. 11, pp. 7112– 7139, Sep. 2014. [6] Z. Wei, J. Piao, X. Yuan, H. Wu, J. A. Zhang, Z. Feng, L. Wang, and P. Zhang, “Waveform design for MIMO-OFDM integrated sensing and communication system: An information theoretical approach,” IEEE Trans. Commun. , vol. 72, no. 1, pp. 496–509, Jan. 2024. [7] Z. Wang, J. Zhang, H. Du, D. Niyato, S. Cui, B. Ai, M. Debbah, K. B. Letaief, and H. V. Poor, “A tutorial on extremely large-scale MIMO for 6G: Fundamentals, Signal Processing, and Applications,” 
+
+IEEE Commun. Surv. Tut. , vol. 26, no. 3, pp. 1560–1605, Jan. 2024. [8] Z. Wang, J. Zhang, W. Yi, H. Xiao, H. Du, D. Niyato, B. Ai, and D. W. K. Ng, “Analytical framework for effective degrees of freedom in near-field XL-MIMO,” IEEE Trans. Wireless Commun. , vol. 24, no. 4, pp. 3465–3482, Jan. 2025. [9] Z. Wang, X. Mu, and Y. Liu, “Rethinking integrated sensing and communication: When near field meets wideband,” IEEE Commun. Mag. , vol. 62, no. 9, pp. 44–50, Sep. 2024. [10] Z. Zhang, H. Ren, C. Pan, S. Hong, D. Wang, J. Wang, and X. You, “Target localization in cooperative ISAC systems: A scheme based on 5G NR OFDM signals,” IEEE Trans. Commun. , vol. 73, no. 5, pp. 3562– 3578, Oct. 2025. [11] R. Zhang, Z. Wang, Z. Wei, Y. Liu, Z. Xiong, and Z. Feng, “ISAR sensing based on MUSIC algorithm in integrated sensing and commu-nications,” Trans. Cogn. Commun. Netw. , vol. 11, no. 5, pp. 3292–3305, Jan. 2025. [12] X. Xu, Z. Zhou, and Y. Zeng, “How does CP length affect the sensing range for OFDM-ISAC?” IEEE Trans. Signal Process. , vol. 73, pp. 5106–5120, Dec. 2025. [13] Z. Xiao, R. Liu, M. Li, Q. Liu, and A. L. Swindlehurst, “A novel joint angle-range-velocity estimation method for MIMO-OFDM ISAC systems,” IEEE Trans. Signal Process. , vol. 72, pp. 3805–3818, Aug. 2024. [14] Z. Wei, H. Liu, X. Yang, W. Jiang, H. Wu, X. Li, and Z. Feng, “Carrier aggregation enabled integrated sensing and communication signal design and processing,” IEEE Trans. Veh. Technol. , vol. 73, no. 3, pp. 3580– 3596, Oct. 2024. [15] J. Cong, C. You, J. Li, L. Chen, B. Zheng, Y. Liu, W. Wu, Y. Gong, S. Jin, and R. Zhang, “Near-field integrated sensing and communication: Opportunities and challenges,” IEEE Wirel. Commun. , vol. 31, no. 6, pp. 162–169, Sep. 2024. [16] B. Friedlander, “Localization of signals in the near-field of an antenna array,” IEEE Trans. Signal Process. , vol. 67, no. 15, pp. 3885–3893, Jun. 2019. [17] H. Hua, J. Xu, and R. Zhang, “Near-field integrated sensing and communication with extremely large-scale antenna array,” IEEE Trans. Wireless Commun. , vol. 24, no. 12, pp. 9962–9977, Jun. 2025. [18] H. Wang, Z. Xiao, and Y. Zeng, “Cram´ er-Rao bounds for near-field sensing with extremely large-scale MIMO,” IEEE Trans. Signal Pro-cess. , vol. 72, pp. 701–717, Jan. 2024. [19] Z. Wang, X. Mu, and Y. Liu, “Near-field integrated sensing and communications,” IEEE Commun. Lett. , vol. 27, no. 8, pp. 2048–2052, Sep. 2023. [20] W. Zuo, J. Xin, N. Zheng, and A. Sano, “Subspace-based localization of far-field and near-field signals without eigendecomposition,” IEEE Trans. Signal Process. , vol. 66, no. 17, pp. 4461–4476, Jul. 2018. [21] H. Huang, W. Yuan, and A. Nallanathan, “Sensing mobile targets in near-field ISAC systems: A low complexity modified MUSIC approach,” 
+
+IEEE Trans. Veh. Technol. , vol. 74, no. 12, pp. 19 887–19 891, Jul. 2025. [22] Z. Wang, X. Mu, and Y. Liu, “Near-field velocity sensing and predictive beamforming,” arXiv preprint arXiv:2311.09888 , 2023, to be published. [23] B. Zhao, C. Ouyang, Y. Liu, X. Zhang, and H. V. Poor, “Modeling and analysis of near-field ISAC,” IEEE J. Sel. Topics Signal Process. ,vol. 18, no. 4, pp. 678–693, Apr. 2024. [24] Z. Wang, X. Mu, and Y. Liu, “Performance analysis of near-field sensing in wideband MIMO systems,” IEEE Trans. Wireless Commun. , Oct. 2025, early access. [25] X. Wang, W. Zhai, X. Wang, M. Amin, and A. Zoubir, “Wideband near-field integrated sensing and communications: A hybrid precoding perspective,” IEEE Signal Process. Mag. , vol. 42, no. 1, pp. 88–105, Mar. 2025. [26] X. Wang, W. Zhai, X. Wang, M. G. Amin, and K. Cai, “Wideband near-field integrated sensing and communication with sparse transceiver design,” IEEE J. Sel. Topics Signal Process. , vol. 18, no. 4, pp. 662–677, May. 2024. [27] M. Cui and L. Dai, “Channel estimation for extremely large-scale MIMO: Far-field or near-field?” IEEE Trans. Commun. , vol. 70, no. 4, pp. 2663–2677, 2022. [28] H. Luo, F. Gao, W. Yuan, and S. Zhang, “Beam squint assisted user localization in near-field integrated sensing and communications systems,” IEEE Trans. Wireless Commun. , vol. 23, no. 5, pp. 4504– 4517, 2024. [29] L. Wang, Z. Wei, X. Chen, and Z. Feng, “Coherent compensation-based sensing for long-range targets in integrated sensing and communication system,” IEEE Trans. Veh. Technol. , vol. 74, no. 6, pp. 9134–9148, Feb. 2025. [30] Y. Li, Z. Wei, H. Liu, and Z. Feng, “Uplink multi-RSU cooperative sensing strategy for integrated sensing and communication system,” 
+
+Trans. Cogn. Commun. Netw. , vol. 11, no. 5, pp. 3112–3127, May 2025. [31] H. Liu, Z. Wei, L. Sun, R. Xu, Y. Zhang, and Z. Feng, “Coopera-tive sensing in cell-free massive MIMO ISAC systems: Performance optimization and signal processing,” IEEE Trans. Wireless Commun. ,vol. 25, pp. 12 531–12 547, 2026. [32] E. J. Candes and Y. Plan, “A probabilistic and RIPless theory of compressed sensing,” IEEE Trans. Inf. Theory , vol. 57, no. 11, pp. 7235– 7254, Aug. 2011. [33] Y. Liu, Z. Wang, J. Xu, C. Ouyang, X. Mu, and R. Schober, “Near-field communications: A tutorial review,” IEEE Open J. Commun. Soc. ,vol. 4, pp. 1999–2049, Aug. 2023.

@@ -1,0 +1,249 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-03T21:04:51.168899+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 6,
+    "quick_skim_target": 11,
+    "quick_selected": 6
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.01305v1",
+      "title": "UQ-SHRED: uncertainty quantification of shallow recurrent decoder networks for sparse sensing via engression",
+      "abstract": "Reconstructing high-dimensional spatiotemporal fields from sparse sensor measurements is critical in a wide range of scientific applications. The SHallow REcurrent Decoder (SHRED) architecture is a recent state-of-the-art architecture that reconstructs high-quality spatial domain from hyper-sparse sensor measurement streams. An important limitation of SHRED is that in complex, data-scarce, high-frequency, or stochastic systems, portions of the spatiotemporal field must be modeled with valid uncertainty estimation. We introduce UQ-SHRED, a distributional learning framework for sparse sensing problems that provides uncertainty quantification through a neural network-based distributional regression called engression. UQ-SHRED models the uncertainty by learning the predictive distribution of the spatial state conditioned on the sensor history. By injecting stochastic noise into sensor inputs and training with an energy score loss, UQ-SHRED produces predictive distributions with minimal computational overhead, requiring only noise injection at the input and resampling through a single architecture without retraining or additional network structures. On complicated synthetic and real-life datasets including turbulent flow, atmospheric dynamics, neuroscience and astrophysics, UQ-SHRED provides a distributional approximation with well-calibrated confidence intervals. We further conduct ablation studies to understand how each model setting affects the quality of the UQ-SHRED performance, and its validity on uncertainty quantification over a set of different experimental setups.",
+      "authors": [
+        "Mars Liyao Gao",
+        "Yuxuan Bao",
+        "Amy S. Rude",
+        "Xinwei Shen",
+        "J. Nathan Kutz"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.CE"
+      ],
+      "published": "2026-04-01T18:18:09+00:00",
+      "link": "https://arxiv.org/pdf/2604.01305v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "reconstructing high-dimensional fields from sparse sensor measurements",
+      "llm_evidence_cn": "从稀疏传感器测量中重建高维场",
+      "llm_evidence": "从稀疏传感器测量中重建高维场",
+      "canonical_evidence": "从稀疏传感器测量中重建高维场",
+      "llm_tldr_en": "Introduces UQ-SHRED for field reconstruction from sparse sensors with uncertainty quantification.",
+      "llm_tldr_cn": "引入 UQ-SHRED 用于稀疏传感器的场重建并提供不确定性量化。",
+      "llm_tldr": "引入 UQ-SHRED 用于稀疏传感器的场重建并提供不确定性量化。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.25471v1",
+      "title": "Advancing weak lensing mass mapping with a mask-aware HEALPix transformer",
+      "abstract": "We present HEALFormer, a transformer-based neural network architecture for weak gravitational lensing mass mapping that reconstructs convergence maps from incomplete and noisy shear observations on the celestial sphere. The model operates directly on the Hierarchical Equal Area isoLatitude Pixelization and employs learnable mask tokens to handle arbitrary survey geometries without requiring preprocessing. Through a progressive training strategy, HEALFormer efficiently processes high-resolution maps up to Nside = 1024 and demonstrates excellent performance across diverse survey footprints including KiDS, DES, DECaLS, and Planck. The model generalizes robustly to cosmological parameters beyond its training set, producing nearly unbiased reconstructions with superior noise suppression compared to traditional Kaiser-Squires and Wiener filter methods. Remarkably, HEALFormer exceeds the theoretical phase recovery limits of linear reconstruction methods at small scales, achieving a fundamental breakthrough in weak lensing analysis. The combination of computational efficiency, reconstruction accuracy, and adaptability to varying survey configurations makes HEALFormer well-suited for current and next-generation cosmological surveys. Code is available at GitHub.",
+      "authors": [
+        "Yihe Wang",
+        "Yu Yu"
+      ],
+      "primary_category": "astro-ph.IM",
+      "categories": [
+        "astro-ph.IM",
+        "astro-ph.CO"
+      ],
+      "published": "2026-03-26T14:15:49+00:00",
+      "link": "https://arxiv.org/pdf/2603.25471v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstruction from incomplete and noisy observations",
+      "llm_evidence_cn": "从不完整且有噪声的观测中进行重建",
+      "llm_evidence": "从不完整且有噪声的观测中进行重建",
+      "canonical_evidence": "从不完整且有噪声的观测中进行重建",
+      "llm_tldr_en": "Uses a transformer architecture to reconstruct convergence maps from noisy and incomplete spatial observations.",
+      "llm_tldr_cn": "使用Transformer架构从噪声和不完整的空间观测中重建收敛图。",
+      "llm_tldr": "使用Transformer架构从噪声和不完整的空间观测中重建收敛图。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.01802v1",
+      "title": "Graph Neural Operator Towards Edge Deployability and Portability for Sparse-to-Dense, Real-Time Virtual Sensing on Irregular Grids",
+      "abstract": "Accurate sensing of spatially distributed physical fields typically requires dense instrumentation, which is often infeasible in real-world systems due to cost, accessibility, and environmental constraints. Physics-based solvers address this through direct numerical integration of governing equations, but their computational latency and power requirements preclude real-time use in resource-constrained monitoring and control systems. Here we introduce VIRSO (Virtual Irregular Real-Time Sparse Operator), a graph-based neural operator for sparse-to-dense reconstruction on irregular geometries, and a variable-connectivity algorithm, Variable KNN (V-KNN), for mesh-informed graph construction. Unlike prior neural operators that treat hardware deployability as secondary, VIRSO reframes inference as measurement: the combination of both spectral and spatial analysis provides accurate reconstruction without the high latency and power consumption of previous graph-based methodologies with poor scalability, presenting VIRSO as a potential candidate for edge-constrained, real-time virtual sensing. We evaluate VIRSO on three nuclear thermal-hydraulic benchmarks of increasing geometric and multiphysics complexity, across reconstruction ratios from 47:1 to 156:1. VIRSO achieves mean relative $L_2$ errors below 1%, outperforming other benchmark operators while using fewer parameters. The full 10-layer configuration reduces the energy-delay product (EDP) from ${\\approx}206$ J$\\cdot$ms for the graph operator baseline to $10.1$ J$\\cdot$ms on an NVIDIA H200. Implemented on an NVIDIA Jetson Orin Nano, all configurations of VIRSO provide sub-10 W power consumption and sub-second latency. These results establish the edge-feasibility and hardware-portability of VIRSO and present compute-aware operator learning as a new paradigm for real-time sensing in inaccessible and resource-constrained environments.",
+      "authors": [
+        "William Howes",
+        "Jason Yoo",
+        "Kazuma Kobayashi",
+        "Subhankar Sarkar",
+        "Farid Ahmed",
+        "Souvik Chakraborty",
+        "Syed Bahauddin Alam"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-04-02T09:14:59+00:00",
+      "link": "https://arxiv.org/pdf/2604.01802v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "sparse-to-dense reconstruction of physical fields",
+      "llm_evidence_cn": "物理场的稀疏到稠密重建",
+      "llm_evidence": "物理场的稀疏到稠密重建",
+      "canonical_evidence": "物理场的稀疏到稠密重建",
+      "llm_tldr_en": "A graph-based neural operator for real-time reconstruction of physical fields from sparse sensor data.",
+      "llm_tldr_cn": "一种基于图的神经算子，用于从稀疏传感器数据中实时重建物理场。",
+      "llm_tldr": "一种基于图的神经算子，用于从稀疏传感器数据中实时重建物理场。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2603.27726v1",
+      "title": "Wideband Near-Field Sensing in ISAC: Unified Algorithm Design and Decoupled Effect Analysis",
+      "abstract": "To advance integrated sensing and communications (ISAC) in sixth-generation (6G) extremely large-scale multiple-input multiple-output (XL-MIMO) networks, a low-complexity compressed sensing (CS)-based dictionary design is proposed for wideband near-field (WB-NF) target localization. Currently, the massive signal dimensions in the WB-NF regime impose severe computational burdens and high spatial-frequency coherence on conventional grid-based algorithms. Furthermore, a unified framework exploiting both wideband (WB) and near-field (NF) effects is lacking, and the analytical conditions for simplifying this model into decoupled approximations remain uncharacterized. To address these challenges, the proposed algorithm mathematically decouples the mutual coherence function and introduces a novel angle-distance sampling grid with customized distance adjustments, drastically reducing dictionary dimensions while ensuring low coherence. To isolate the individual WB and NF impacts, two coherence-based metrics are formulated to establish the effective boundaries of the narrowband near-field (NB-NF) and wideband far-field (WB-FF) regions, where respective multiple signal classification (MUSIC) algorithms are utilized. Simulations demonstrate that the CS-based method achieves robust performance across the entire regime, and the established boundaries provide crucial theoretical guidelines for WB and NF effect decoupling.",
+      "authors": [
+        "Ruiyun Zhang",
+        "Zhaolin Wang",
+        "Zhiqing Wei",
+        "Yuanwei Liu",
+        "Zehui Xiong",
+        "Zhiyong Feng"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-03-29T15:00:15+00:00",
+      "link": "https://arxiv.org/pdf/2603.27726v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "compressed sensing based dictionary design for near-field sensing",
+      "llm_evidence_cn": "基于压缩感知的近场传感字典设计",
+      "llm_evidence": "基于压缩感知的近场传感字典设计",
+      "canonical_evidence": "基于压缩感知的近场传感字典设计",
+      "llm_tldr_en": "Develops a low-complexity compressed sensing algorithm for near-field target localization and sensing.",
+      "llm_tldr_cn": "开发了一种用于近场目标定位和传感的低复杂度压缩感知算法。",
+      "llm_tldr": "开发了一种用于近场目标定位和传感的低复杂度压缩感知算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.00806v1",
+      "title": "Unsupervised End-to-End Array Calibration for Multi-Target Integrated Sensing and Communication",
+      "abstract": "In this work, we consider end-to-end calibration of an integrated sensing and communication (ISAC) base station (BS) under gain-phase and antenna displacement impairments without collecting signals from predefined positions (labeled data). We consider a BS with two impaired uniform linear arrays used for simultaneous multi-target sensing and communication with a user equipment (UE) leveraging orthogonal frequency-division multiplexing signals. The main contribution is the design of a framework that can compensate for the impairments without labeled data and considering coherent receive signals. We harness a differentiable precoder based on the maximum array response in an angular direction at the transmitter and the orthogonal matching pursuit (OMP) algorithm at the sensing receiver. We propose an ISAC loss as a combination of sensing and communication losses that provides a trade-off between the two functionalities. We compare two sensing objective alternatives: (i) maximize the maximum response of the angle-delay map of the targets or (ii) minimize the norm of the residual signal at the output of the OMP algorithm after all estimated targets have been removed. The communication objective maximizes the energy of the received signal at the UE. Additionally, our framework leverages an approximation of the channel gradient that avoids the impractical knowledge of the gradient of the channel. Our results show that the proposed method performs closely to using labeled data and knowledge of the channel gradient in terms of sensing position estimation and communication symbol error rate. When comparing the two sensing losses, minimizing the norm of the OMP residual yields significantly better sensing position estimation with slightly increased complexity.",
+      "authors": [
+        "José Miguel Mateos-Ramos",
+        "Baptiste Chatelier",
+        "Luc Le Magoarou",
+        "Nir Shlezinger",
+        "Henk Wymeersch",
+        "Christian Häger"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-01T12:13:45+00:00",
+      "link": "https://arxiv.org/pdf/2604.00806v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "unsupervised array calibration for sensing impairments",
+      "llm_evidence_cn": "针对传感损伤的无监督阵列校准",
+      "llm_evidence": "针对传感损伤的无监督阵列校准",
+      "canonical_evidence": "针对传感损伤的无监督阵列校准",
+      "llm_tldr_en": "Proposes an unsupervised framework for calibrating sensor arrays against gain-phase and displacement errors.",
+      "llm_tldr_cn": "提出了一种无监督框架，用于校准传感器阵列的增益相位和位移误差。",
+      "llm_tldr": "提出了一种无监督框架，用于校准传感器阵列的增益相位和位移误差。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.02139v1",
+      "title": "Application of parametric Shallow Recurrent Decoder Network to magnetohydrodynamic flows in liquid metal blankets of fusion reactors",
+      "abstract": "Magnetohydrodynamic (MHD) phenomena play a pivotal role in the design and operation of nuclear fusion systems, where electrically conducting fluids (such as liquid metals or molten salts employed in reactor blankets) interact with magnetic fields of varying intensity and orientation, influencing the resulting flow dynamics. The numerical solution of MHD models entails the resolution of highly nonlinear, multiphysics systems of equations, which can become computationally demanding, particularly in multi-query, parametric, or real-time contexts. This study investigates a fully data-driven framework for MHD state reconstruction that integrates dimensionality reduction through Singular Value Decomposition (SVD) with the SHallow REcurrent Decoder (SHRED), a neural network architecture designed to reconstruct the full spatio-temporal state from sparse time-series measurements of selected observables, including previously unseen parametric configurations. The SHRED methodology is applied to a three-dimensional geometry representative of a portion of a WCLL blanket cell, in which lead-lithium flows around a water-cooled tube. Multiple magnetic field configurations are examined, including constant toroidal fields, combined toroidal-poloidal fields, and time-dependent magnetic fields. Across all considered scenarios, SHRED achieves high reconstruction accuracy, robustness, and generalization to magnetic field intensities, orientations, and temporal evolutions not seen during training. Notably, in the presence of time-varying magnetic fields, the model accurately infers the temporal evolution of the magnetic field itself using temperature measurements alone. Overall, the findings identify SHRED as a computationally efficient, data-driven, and flexible approach for MHD state reconstruction, with significant potential for real-time monitoring, diagnostics and control in fusion reactor systems.",
+      "authors": [
+        "M. Lo Verso",
+        "C. Introini",
+        "E. Cervi",
+        "L. Savoldi",
+        "J. N. Kutz",
+        "A. Cammi"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG"
+      ],
+      "published": "2026-04-02T15:12:24+00:00",
+      "link": "https://arxiv.org/pdf/2604.02139v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "MHD state reconstruction using magnetic field interactions",
+      "llm_evidence_cn": "利用磁场相互作用进行磁流体动力学状态重构",
+      "llm_evidence": "利用磁场相互作用进行磁流体动力学状态重构",
+      "canonical_evidence": "利用磁场相互作用进行磁流体动力学状态重构",
+      "llm_tldr_en": "Explores data-driven reconstruction of physical states interacting with magnetic fields, useful for current sensing.",
+      "llm_tldr_cn": "探索与磁场相互作用的物理状态的数据驱动重构，可用于电流传感。",
+      "llm_tldr": "探索与磁场相互作用的物理状态的数据驱动重构，可用于电流传感。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
