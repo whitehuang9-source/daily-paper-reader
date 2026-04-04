@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-04",
+  "date": "2026-04-04",
+  "generated_at": "2026-04-04T20:19:45",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/04/2603.28812v1-data-driven-estimation-of-the-interfacial-dzyaloshinskii-moriya-interaction-with-machine-learning",
+      "section": "quick",
+      "title_en": "Data-Driven Estimation of the interfacial Dzyaloshinskii-Moriya Interaction with Machine Learning",
+      "authors": "Davi Rodrigues, Andrea Meo, Ali Hasan, Edoardo Piccolo, Adriano Di Pietro, Alessandro Magni, Marco Madami, Giovanni Finocchio, Mario Carpentieri, Michaela Kuepferling, Vito Puliafito",
+      "date": "2026-03-28",
+      "pdf": "https://arxiv.org/pdf/2603.28812v1",
+      "score": "6.0",
+      "evidence": "利用机器学习提取磁性特征",
+      "tldr": "针对界面Dzyaloshinskii-Moriya相互作用（DMI）测量不一致的难题，本研究提出一种基于卷积神经网络（CNN）的数据驱动方法。通过在包含实验伪影的微磁模拟磁泡畴图像上进行训练，该模型实现了对DMI强度的快速、鲁棒预测，且具备良好的泛化能力，为磁性材料表征提供了高效的定量工具。",
+      "tags": "query:tmr",
+      "abstract_en": "Machine learning offers powerful tools to support experimental techniques, particularly for extracting latent features from large datasets. In magnetic materials, accurately estimating the interfacial Dzyaloshinskii-Moriya interaction strength remains challenging, as existing experimental methods often rely on indirect measurements and can yield inconsistent results across techniques. Because this interaction is often extracted experimentally from bubble domain expansion, we investigate whether bubble textures alone contain sufficient and reliable information for data driven DMI inference. We therefore develop a compact convolutional neural network trained on a comprehensive micromagnetic dataset of magnetic bubble domains designed to emulate magneto optical Kerr effect imaging, including structural non uniformity, additive noise, and image pixelation. The proposed network demonstrates strong robustness against sample inhomogeneities, noise, and reduced spatial resolution. Furthermore, it exhibits reliable generalization by accurately predicting DMI values outside the trained interval. These results support the use of machine learning as a fast and quantitative tool to characterize magnetic textures with interfacial DMI.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/04/2603.29940v1-sensor-array-and-camera-fusion-via-unbalanced-optimal-transport-for-3d-source-localization",
+      "section": "quick",
+      "title_en": "Sensor array and camera fusion via unbalanced optimal transport for 3D source localization",
+      "authors": "Ilyes Jaouedi, Gilles Chardon, José Picheral",
+      "date": "2026-03-31",
+      "pdf": "https://arxiv.org/pdf/2603.29940v1",
+      "score": "6.0",
+      "evidence": "用于3D声源定位的传感器阵列测量",
+      "tldr": "本文研究多声源3D定位问题，提出一种融合传感器阵列与相机观测的新框架。该方法在协方差矩阵拟合中引入非平衡最优传输（UOT）正则项，使传感器响应与视觉先验实现软对齐。通过贪婪坐标下降算法实现高效计算，且无需标注数据训练。实验证明，该方法在声学阵列等场景下显著提升了定位精度，具有较强的通用性和实用性。",
+      "tags": "query:tmr",
+      "abstract_en": "We address the problem of localizing multiple sources in 3D by combining sensor array measurements with camera observations. We propose a fusion framework extending the covariance matrix fitting method with an unbalanced optimal transport regularization term that softly aligns sensor array responses with visual priors while allowing flexibility in mass allocation. To solve the resulting largescale problem, we adopt a greedy coordinate descent algorithm that efficiently updates the transport plan. Its computational efficiency makes full 3D localization feasible in practice. The proposed framework is modular and does not rely on labeled data or training, in contrast with deep learning-based fusion approaches. Although validated here on acoustic arrays, the method is general to arbitrary sensor arrays. Experiments on real data show that the proposed approach improves localization accuracy compared to sensor-only baselines.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/04/2604.02056v1-compass-complete-multimodal-fusion-via-proxy-tokens-and-shared-spaces-for-ubiquitous-sensing",
+      "section": "quick",
+      "title_en": "COMPASS: Complete Multimodal Fusion via Proxy Tokens and Shared Spaces for Ubiquitous Sensing",
+      "authors": "Hao Wang, Yanyu Qian, Pengcheng Weng, Zixuan Xia, William Dan, Yangxin Xu, Fei Wang",
+      "date": "2026-04-02",
+      "pdf": "https://arxiv.org/pdf/2604.02056v1",
+      "score": "6.0",
+      "evidence": "针对泛在传感中缺失模态的多模态融合框架",
+      "tldr": "针对多模态感知中模态缺失导致融合结构不一致的问题，本文提出COMPASS框架。该框架基于“融合完整性”原则，通过在共享潜空间中利用观测模态生成缺失模态的代理Token，确保融合头始终接收固定数量的输入。通过代理对齐、共享空间正则化和判别性监督，COMPASS在多个数据集上显著提升了缺失模态场景下的感知性能，为鲁棒的多模态融合提供了新思路。",
+      "tags": "query:tmr",
+      "abstract_en": "Missing modalities remain a major challenge for multimodal sensing, because most existing methods adapt the fusion process to the observed subset by dropping absent branches, using subset-specific fusion, or reconstructing missing features. As a result, the fusion head often receives an input structure different from the one seen during training, leading to incomplete fusion and degraded cross-modal interaction. We propose COMPASS, a missing-modality fusion framework built on the principle of fusion completeness: the fusion head always receives a fixed N-slot multimodal input, with one token per modality slot. For each missing modality, COMPASS synthesizes a target-specific proxy token from the observed modalities using pairwise source-to-target generators in a shared latent space, and aggregates them into a single replacement token. To make these proxies both representation-compatible and task-informative, we combine proxy alignment, shared-space regularization, and per-proxy discriminative supervision. Experiments on XRF55, MM-Fi, and OctoNet under diverse single- and multiple-missing settings show that COMPASS outperforms prior methods on the large majority of scenarios. Our results suggest that preserving a modality-complete fusion interface is a simple and effective design principle for robust multimodal sensing.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
