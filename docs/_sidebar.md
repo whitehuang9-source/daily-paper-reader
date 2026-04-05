@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-04-05 <!--dpr-date:20260405-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/05/2604.01216v1-latent-phase-inference-from-short-time-sequences-using-shallow-recurrent-decoders-lapis-shred" data-sidebar-item="{&quot;title&quot;: &quot;LAtent Phase Inference from Short time sequences using SHallow REcurrent Decoders (LAPIS-SHRED)&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.01216v1-latent-phase-inference-from-short-time-sequences-using-shallow-recurrent-decoders-lapis-shred&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;从稀疏传感器观测中重建时空动力学&quot;}">LAtent Phase Inference from Short time sequences using SHallow REcurrent Decoders (LAPIS-SHRED)</a>
   * 2026-04-04 <!--dpr-date:20260404-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/04/2603.28812v1-data-driven-estimation-of-the-interfacial-dzyaloshinskii-moriya-interaction-with-machine-learning" data-sidebar-item="{&quot;title&quot;: &quot;Data-Driven Estimation of the interfacial Dzyaloshinskii-Moriya Interaction with Machine Learning&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2603.28812v1-data-driven-estimation-of-the-interfacial-dzyaloshinskii-moriya-interaction-with-machine-learning&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;利用机器学习提取磁性特征&quot;}">Data-Driven Estimation of the interfacial Dzyaloshinskii-Moriya Interaction with Machine Learning</a>

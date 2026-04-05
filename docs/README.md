@@ -6,32 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-04
-- 运行时间：2026-04-04 20:19:36 UTC
+- 最新运行日期：2026-04-05
+- 运行时间：2026-04-05 20:30:30 UTC
 - 运行状态：成功
-- 本次总论文数：3
+- 本次总论文数：1
 - 精读区：0
-- 速读区：3
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦多模态感知与物理参数估计，探索机器学习在材料科学与 3D 定位中的前沿应用。
-重点关注利用非平衡最优传输实现的传感器与相机融合技术，以及通过代理令牌构建的通用多模态感知框架 COMPASS。
-建议关注跨模态融合算法在复杂环境定位及新材料特性预测中的落地潜力。
-- 详情：[/202604/04/README](/202604/04/README)
+今日探索如何利用 LAPIS-SHRED 模型，从极短的时间序列中精准推断系统的潜在相位。
+该方法通过浅层循环解码器实现了高效的动力学重构，显著降低了对长程观测数据的依赖。
+建议关注非线性动力学或时序预测的读者，尝试这种轻量化的相位推断新方案。
+- 详情：[/202604/05/README](/202604/05/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Data-Driven Estimation of the interfacial Dzyaloshinskii-Moriya Interaction with Machine Learning](/202604/04/2603.28812v1-data-driven-estimation-of-the-interfacial-dzyaloshinskii-moriya-interaction-with-machine-learning)  
+1. [LAtent Phase Inference from Short time sequences using SHallow REcurrent Decoders (LAPIS-SHRED)](/202604/05/2604.01216v1-latent-phase-inference-from-short-time-sequences-using-shallow-recurrent-decoders-lapis-shred)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用机器学习提取磁性特征
-2. [Sensor array and camera fusion via unbalanced optimal transport for 3D source localization](/202604/04/2603.29940v1-sensor-array-and-camera-fusion-via-unbalanced-optimal-transport-for-3d-source-localization)  
-   标签：评分：6.0/10、query:tmr
-   evidence：用于3D声源定位的传感器阵列测量
-3. [COMPASS: Complete Multimodal Fusion via Proxy Tokens and Shared Spaces for Ubiquitous Sensing](/202604/04/2604.02056v1-compass-complete-multimodal-fusion-via-proxy-tokens-and-shared-spaces-for-ubiquitous-sensing)  
-   标签：评分：6.0/10、query:tmr
-   evidence：针对泛在传感中缺失模态的多模态融合框架
+   evidence：从稀疏传感器观测中重建时空动力学
 
 
 <div class="dpr-home-promo-card">

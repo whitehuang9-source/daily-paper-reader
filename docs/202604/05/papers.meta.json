@@ -1,0 +1,23 @@
+{
+  "label": "2026-04-05",
+  "date": "2026-04-05",
+  "generated_at": "2026-04-05T20:30:38",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202604/05/2604.01216v1-latent-phase-inference-from-short-time-sequences-using-shallow-recurrent-decoders-lapis-shred",
+      "section": "quick",
+      "title_en": "LAtent Phase Inference from Short time sequences using SHallow REcurrent Decoders (LAPIS-SHRED)",
+      "authors": "Yuxuan Bao, Xingyue Zhang, J. Nathan Kutz",
+      "date": "2026-04-01",
+      "pdf": "https://arxiv.org/pdf/2604.01216v1",
+      "score": "6.0",
+      "evidence": "从稀疏传感器观测中重建时空动力学",
+      "tldr": "针对复杂系统时空动态重建中观测数据在空间和时间上双重稀疏的难题，本文提出 LAPIS-SHRED 框架。该方法结合预训练的浅层循环解码器（SHRED）和时间序列模型，通过极短时间窗口内的超稀疏传感器数据，实现全时空轨迹的重建与预测。该架构支持双向推理和多尺度重建，在湍流、燃烧及环境监测等六个复杂物理场景中表现优异，为物理受限环境下的实时决策提供了轻量化解决方案。",
+      "tags": "query:tmr",
+      "abstract_en": "Reconstructing full spatio-temporal dynamics from sparse observations in both space and time remains a central challenge in complex systems, as measurements can be spatially incomplete and can be also limited to narrow temporal windows. Yet approximating the complete spatio-temporal trajectory is essential for mechanistic insight and understanding, model calibration, and operational decision-making. We introduce LAPIS-SHRED (LAtent Phase Inference from Short time sequence using SHallow REcurrent Decoders), a modular architecture that reconstructs and/or forecasts complete spatiotemporal dynamics from sparse sensor observations confined to short temporal windows. LAPIS-SHRED operates through a three-stage pipeline: (i) a SHRED model is pre-trained entirely on simulation data to map sensor time-histories into a structured latent space, (ii) a temporal sequence model, trained on simulation-derived latent trajectories, learns to propagate latent states forward or backward in time to span unobserved temporal regions from short observational time windows, and (iii) at deployment, only a short observation window of hyper-sparse sensor measurements from the true system is provided, from which the frozen SHRED model and the temporal model jointly reconstruct or forecast the complete spatiotemporal trajectory. The framework supports bidirectional inference, inherits data assimilation and multiscale reconstruction capabilities from its modular structure, and accommodates extreme observational constraints including single-frame terminal inputs. We evaluate LAPIS-SHRED on six experiments spanning complex spatio-temporal physics: turbulent flows, multiscale propulsion physics, volatile combustion transients, and satellite-derived environmental fields, highlighting a lightweight, modular architecture suited for operational settings where observation is constrained by physical or logistical limitations.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
