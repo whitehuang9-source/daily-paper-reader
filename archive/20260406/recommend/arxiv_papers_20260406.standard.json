@@ -1,0 +1,182 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-06T20:23:16.249418+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2603.28183v1",
+      "title": "PReD: An LLM-based Foundation Multimodal Model for Electromagnetic Perception, Recognition, and Decision",
+      "abstract": "Multimodal Large Language Models have demonstrated powerful cross-modal understanding and reasoning capabilities in general domains. However, in the electromagnetic (EM) domain, they still face challenges such as data scarcity and insufficient integration of domain knowledge. This paper proposes PReD, the first foundation model for the EM domain that covers the intelligent closed-loop of \"perception, recognition, decision-making.\" We constructed a high-quality multitask EM dataset, PReD-1.3M, and an evaluation benchmark, PReD-Bench. The dataset encompasses multi-perspective representations such as raw time-domain waveform, frequency-domain spectrograms, and constellation diagrams, covering typical features of communication and radar signals. It supports a range of core tasks, including signal detection, modulation recognition, parameter estimation, protocol recognition, radio frequency fingerprint recognition, and anti-jamming decision-making. PReD adopts a multi-stage training strategy that unifies multiple tasks for EM signals. It achieves closed-loop optimization from end-to-end signal understanding to language-driven reasoning and decision-making, significantly enhancing EM domain expertise while maintaining general multimodal capabilities. Experimental results show that PReD achieves state-of-the-art performance on PReD-Bench constructed from both open-source and self-collected signal datasets. These results collectively validate the feasibility and potential of vision-aligned foundation models in advancing the understanding and reasoning of EM signals.",
+      "authors": [
+        "Zehua Han",
+        "Jing Xiao",
+        "Yiqi Duan",
+        "Mengyu Xiang",
+        "Yuheng Ji",
+        "Xiaolong Zheng",
+        "Chenghanyu Zhang",
+        "Zhendong She",
+        "Junyu Shen",
+        "Dingwei Tan",
+        "Shichu Sun",
+        "Zhou Cong",
+        "Mingxuan Liu",
+        "Fengxiang Wang",
+        "Jinping Sun",
+        "Yangang Sun"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-03-30T08:47:02+00:00",
+      "link": "https://arxiv.org/pdf/2603.28183v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "electromagnetic perception foundation model",
+      "llm_evidence_cn": "电磁感知大模型",
+      "llm_evidence": "电磁感知大模型",
+      "canonical_evidence": "电磁感知大模型",
+      "llm_tldr_en": "A foundation model for electromagnetic perception and recognition using multimodal data representations.",
+      "llm_tldr_cn": "一种利用多模态数据表示进行电磁感知和识别的基础模型。",
+      "llm_tldr": "一种利用多模态数据表示进行电磁感知和识别的基础模型。",
+      "llm_tags": [
+        "query:tmr:composite"
+      ],
+      "matched_query_tag": "query:tmr:composite",
+      "matched_query_text": "Papers central to 请帮我查找与TMR电流传感器阵列有关的论文, especially work that connects or combines: multi-sensor array for current measurement; magnetic field sensor array for current sensing; algorithms for current reconstruction using sensor arrays; non contact current measurement using TMR magnetic sensor arrays; interference suppression techniques for TMR current sensor arrays; TMR current sensor array design and optimization; algorithms for current reconstruction using TMR sensor arrays.",
+      "matched_requirement_id": "req-composite-tmr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.01211v1",
+      "title": "Making Every Bit Count for $A$-Optimal State Estimation",
+      "abstract": "We study the problem of controlling how a limited communication bandwidth budget is allocated across heterogeneously quantized sensor measurements. The performance criterion is the trace of the error covariance matrix of the linear minimum mean square error (LMMSE) state estimator, i.e., an $A$-optimal design criterion. Minimizing this criterion with a bit budget constraint yields a nonconvex optimization problem. We derive a formula that reduces each evaluation of the gradient to a single Cholesky factorization. This enables efficient optimization by both a projection-free Frank-Wolfe method (with a computable convergence certificate) and an interior point method with L-BFGS Hessian approximation over the problem's continuous relaxation. A largest remainder rounding procedure recovers integer bit allocations with a bound on the quality of the rounded solution. Numerical experiments in IEEE power grid test cases with up to 300 buses compare both solvers and demonstrate that the analytic gradient is the key computational enabler for both methods. Additionally, the heterogeneous bit allocation is compared to standard uniform bit allocation on the 500 bus IEEE power grid test case.",
+      "authors": [
+        "Cameron Khanpour",
+        "Daniel Turizo",
+        "Samuel Talkington"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-01T17:51:34+00:00",
+      "link": "https://arxiv.org/pdf/2604.01211v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "optimal state estimation for quantized sensor measurements",
+      "llm_evidence_cn": "量化传感器测量的最优状态估计",
+      "llm_evidence": "量化传感器测量的最优状态估计",
+      "canonical_evidence": "量化传感器测量的最优状态估计",
+      "llm_tldr_en": "Optimizes bandwidth allocation for sensor arrays to improve state estimation accuracy, relevant to reconstruction.",
+      "llm_tldr_cn": "优化传感器阵列的带宽分配以提高状态估计精度，与电流重建算法相关。",
+      "llm_tldr": "优化传感器阵列的带宽分配以提高状态估计精度，与电流重建算法相关。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.02738v1",
+      "title": "State estimations and noise identifications with intermittent corrupted observations via Bayesian variational inference",
+      "abstract": "This paper focuses on the state estimation problem in distributed sensor networks, where intermittent packet dropouts, corrupted observations, and unknown noise covariances coexist. To tackle this challenge, we formulate the joint estimation of system states, noise parameters, and network reliability as a Bayesian variational inference problem, and propose a novel variational Bayesian adaptive Kalman filter (VB-AKF) to approximate the joint posterior probability densities of the latent parameters. Unlike existing AKF that separately handle missing data and measurement outliers, the proposed VB-AKF adopts a dual-mask generative model with two independent Bernoulli random variables, explicitly characterizing both observable communication losses and latent data authenticity. Additionally, the VB-AKF integrates multiple concurrent multiple observations into the adaptive filtering framework, which significantly enhances statistical identifiability. Comprehensive numerical experiments verify the effectiveness and asymptotic optimality of the proposed method, showing that both parameter identification and state estimation asymptotically converge to the theoretical optimal lower bound with the increase in the number of sensors.",
+      "authors": [
+        "Peng Sun",
+        "Ruoyu Wang",
+        "Xue Luo"
+      ],
+      "primary_category": "stat.ML",
+      "categories": [
+        "stat.ML",
+        "cs.LG",
+        "math.OC",
+        "stat.CO"
+      ],
+      "published": "2026-04-03T05:20:49+00:00",
+      "link": "https://arxiv.org/pdf/2604.02738v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "State estimation and noise identification in sensor networks",
+      "llm_evidence_cn": "传感器网络中的状态估计与噪声识别",
+      "llm_evidence": "传感器网络中的状态估计与噪声识别",
+      "canonical_evidence": "传感器网络中的状态估计与噪声识别",
+      "llm_tldr_en": "Develops a variational Bayesian adaptive Kalman filter for state estimation and noise identification in networks.",
+      "llm_tldr_cn": "开发了一种变分贝叶斯自适应卡尔曼滤波器，用于网络中的状态估计和噪声识别。",
+      "llm_tldr": "开发了一种变分贝叶斯自适应卡尔曼滤波器，用于网络中的状态估计和噪声识别。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.03187v1",
+      "title": "Biologically Realistic Dynamics for Nonlinear Classification in CMOS+X Neurons",
+      "abstract": "Spiking neural networks encode information in spike timing and offer a pathway toward energy efficient artificial intelligence. However, a key challenge in spiking neural networks is realizing nonlinear and expressive computation in compact, energy-efficient hardware without relying on additional circuit complexity. In this work, we examine nonlinear computation in a CMOS+X spiking neuron implemented with a magnetic tunnel junction connected in series with an NMOS transistor. Circuit simulations of a multilayer network solving the XOR classification problem show that three intrinsic neuronal properties enable nonlinear behavior: threshold activation, response latency, and absolute refraction. Threshold activation determines which neurons participate in computation, response latency shifts spike timing, and absolute refraction suppresses subsequent spikes. These results show that magnetization dynamics of MTJ devices can support nonlinear computation in compact neuromorphic hardware.",
+      "authors": [
+        "Steven Louis",
+        "Hannah Bradley",
+        "Artem Litvinenko",
+        "Cody Trevillian",
+        "Darrin Hanna",
+        "Vasyl Tyberkevych"
+      ],
+      "primary_category": "cs.NE",
+      "categories": [
+        "cs.NE",
+        "cond-mat.other",
+        "physics.app-ph"
+      ],
+      "published": "2026-04-03T17:03:29+00:00",
+      "link": "https://arxiv.org/pdf/2604.03187v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magnetic tunnel junction (MTJ) in CMOS spiking neurons",
+      "llm_evidence_cn": "CMOS脉冲神经元中的磁隧道结 (MTJ)",
+      "llm_evidence": "CMOS脉冲神经元中的磁隧道结 (MTJ)",
+      "canonical_evidence": "CMOS脉冲神经元中的磁隧道结 (MTJ)",
+      "llm_tldr_en": "Explores nonlinear computation in neurons using magnetic tunnel junctions, the core technology of TMR sensors.",
+      "llm_tldr_cn": "探索了利用磁隧道结（TMR传感器的核心技术）进行神经元非线性计算。",
+      "llm_tldr": "探索了利用磁隧道结（TMR传感器的核心技术）进行神经元非线性计算。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "non contact current measurement using TMR magnetic sensor arrays",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

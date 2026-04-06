@@ -1,0 +1,65 @@
+{
+  "label": "2026-04-06",
+  "date": "2026-04-06",
+  "generated_at": "2026-04-06T20:23:54",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202604/06/2603.28183v1-pred-an-llm-based-foundation-multimodal-model-for-electromagnetic-perception-recognition-and-decision",
+      "section": "quick",
+      "title_en": "PReD: An LLM-based Foundation Multimodal Model for Electromagnetic Perception, Recognition, and Decision",
+      "authors": "Zehua Han, Jing Xiao, Yiqi Duan, Mengyu Xiang, Yuheng Ji, Xiaolong Zheng, Chenghanyu Zhang, Zhendong She, Junyu Shen, Dingwei Tan, Shichu Sun, Zhou Cong, Mingxuan Liu, Fengxiang Wang, Jinping Sun, Yangang Sun",
+      "date": "2026-03-30",
+      "pdf": "https://arxiv.org/pdf/2603.28183v1",
+      "score": "6.0",
+      "evidence": "电磁感知大模型",
+      "tldr": "针对电磁领域多模态大模型数据稀缺及知识融合不足的问题，本文提出了首个涵盖“感知、识别、决策”全流程的电磁基础模型PReD。通过构建包含130万条数据的PReD-1.3M数据集和PReD-Bench基准，该模型整合了时域、频域及星座图等多维特征，支持信号检测、调制识别及抗干扰决策等核心任务。实验证明，PReD在多项任务上达到SOTA水平，展示了视觉对齐基础模型在电磁信号理解与推理方面的巨大潜力。",
+      "tags": "query:tmr",
+      "abstract_en": "Multimodal Large Language Models have demonstrated powerful cross-modal understanding and reasoning capabilities in general domains. However, in the electromagnetic (EM) domain, they still face challenges such as data scarcity and insufficient integration of domain knowledge. This paper proposes PReD, the first foundation model for the EM domain that covers the intelligent closed-loop of \"perception, recognition, decision-making.\" We constructed a high-quality multitask EM dataset, PReD-1.3M, and an evaluation benchmark, PReD-Bench. The dataset encompasses multi-perspective representations such as raw time-domain waveform, frequency-domain spectrograms, and constellation diagrams, covering typical features of communication and radar signals. It supports a range of core tasks, including signal detection, modulation recognition, parameter estimation, protocol recognition, radio frequency fingerprint recognition, and anti-jamming decision-making. PReD adopts a multi-stage training strategy that unifies multiple tasks for EM signals. It achieves closed-loop optimization from end-to-end signal understanding to language-driven reasoning and decision-making, significantly enhancing EM domain expertise while maintaining general multimodal capabilities. Experimental results show that PReD achieves state-of-the-art performance on PReD-Bench constructed from both open-source and self-collected signal datasets. These results collectively validate the feasibility and potential of vision-aligned foundation models in advancing the understanding and reasoning of EM signals.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/06/2604.01211v1-making-every-bit-count-for-a-optimal-state-estimation",
+      "section": "quick",
+      "title_en": "Making Every Bit Count for $A$-Optimal State Estimation",
+      "authors": "Cameron Khanpour, Daniel Turizo, Samuel Talkington",
+      "date": "2026-04-01",
+      "pdf": "https://arxiv.org/pdf/2604.01211v1",
+      "score": "6.0",
+      "evidence": "量化传感器测量的最优状态估计",
+      "tldr": "本研究针对有限带宽下的传感器量化位分配问题，旨在优化线性最小均方误差（LMMSE）状态估计的性能（A-最优准则）。通过推导梯度计算公式，将计算复杂度降低至单次Cholesky分解，并利用Frank-Wolfe和内点法高效求解非凸优化问题。实验表明，该方法在IEEE电网测试中显著优于均匀位分配，为大规模系统状态估计提供了高效的资源分配方案。",
+      "tags": "query:tmr",
+      "abstract_en": "We study the problem of controlling how a limited communication bandwidth budget is allocated across heterogeneously quantized sensor measurements. The performance criterion is the trace of the error covariance matrix of the linear minimum mean square error (LMMSE) state estimator, i.e., an $A$-optimal design criterion. Minimizing this criterion with a bit budget constraint yields a nonconvex optimization problem. We derive a formula that reduces each evaluation of the gradient to a single Cholesky factorization. This enables efficient optimization by both a projection-free Frank-Wolfe method (with a computable convergence certificate) and an interior point method with L-BFGS Hessian approximation over the problem's continuous relaxation. A largest remainder rounding procedure recovers integer bit allocations with a bound on the quality of the rounded solution. Numerical experiments in IEEE power grid test cases with up to 300 buses compare both solvers and demonstrate that the analytic gradient is the key computational enabler for both methods. Additionally, the heterogeneous bit allocation is compared to standard uniform bit allocation on the 500 bus IEEE power grid test case.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/06/2604.02738v1-state-estimations-and-noise-identifications-with-intermittent-corrupted-observations-via-bayesian-variational-inference",
+      "section": "quick",
+      "title_en": "State estimations and noise identifications with intermittent corrupted observations via Bayesian variational inference",
+      "authors": "Peng Sun, Ruoyu Wang, Xue Luo",
+      "date": "2026-04-03",
+      "pdf": "https://arxiv.org/pdf/2604.02738v1",
+      "score": "6.0",
+      "evidence": "传感器网络中的状态估计与噪声识别",
+      "tldr": "针对分布式传感器网络中存在的数据包丢失、观测污染及噪声协方差未知等复杂问题，本文提出了一种基于贝叶斯变分推理的自适应卡尔曼滤波器（VB-AKF）。该方法通过引入双伯努利随机变量的双掩码生成模型，显式刻画通信丢失与数据真实性，并整合多传感器观测以增强统计可辨识性。实验证明，该方法在状态估计和参数识别方面均能随传感器数量增加而渐近收敛至理论最优下界。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper focuses on the state estimation problem in distributed sensor networks, where intermittent packet dropouts, corrupted observations, and unknown noise covariances coexist. To tackle this challenge, we formulate the joint estimation of system states, noise parameters, and network reliability as a Bayesian variational inference problem, and propose a novel variational Bayesian adaptive Kalman filter (VB-AKF) to approximate the joint posterior probability densities of the latent parameters. Unlike existing AKF that separately handle missing data and measurement outliers, the proposed VB-AKF adopts a dual-mask generative model with two independent Bernoulli random variables, explicitly characterizing both observable communication losses and latent data authenticity. Additionally, the VB-AKF integrates multiple concurrent multiple observations into the adaptive filtering framework, which significantly enhances statistical identifiability. Comprehensive numerical experiments verify the effectiveness and asymptotic optimality of the proposed method, showing that both parameter identification and state estimation asymptotically converge to the theoretical optimal lower bound with the increase in the number of sensors.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/06/2604.03187v1-biologically-realistic-dynamics-for-nonlinear-classification-in-cmosx-neurons",
+      "section": "quick",
+      "title_en": "Biologically Realistic Dynamics for Nonlinear Classification in CMOS+X Neurons",
+      "authors": "Steven Louis, Hannah Bradley, Artem Litvinenko, Cody Trevillian, Darrin Hanna, Vasyl Tyberkevych",
+      "date": "2026-04-03",
+      "pdf": "https://arxiv.org/pdf/2604.03187v1",
+      "score": "6.0",
+      "evidence": "CMOS脉冲神经元中的磁隧道结 (MTJ)",
+      "tldr": "脉冲神经网络（SNN）具有高能效潜力，但在紧凑硬件中实现非线性计算仍具挑战。本研究提出一种基于磁隧道结（MTJ）与NMOS晶体管串联的CMOS+X神经元模型，通过解决XOR分类问题的电路仿真，揭示了阈值激活、响应延迟和绝对折返期这三种生物学特性如何驱动非线性行为，证明了MTJ动力学在神经形态硬件中支持复杂计算的潜力。",
+      "tags": "query:tmr",
+      "abstract_en": "Spiking neural networks encode information in spike timing and offer a pathway toward energy efficient artificial intelligence. However, a key challenge in spiking neural networks is realizing nonlinear and expressive computation in compact, energy-efficient hardware without relying on additional circuit complexity. In this work, we examine nonlinear computation in a CMOS+X spiking neuron implemented with a magnetic tunnel junction connected in series with an NMOS transistor. Circuit simulations of a multilayer network solving the XOR classification problem show that three intrinsic neuronal properties enable nonlinear behavior: threshold activation, response latency, and absolute refraction. Threshold activation determines which neurons participate in computation, response latency shifts spike timing, and absolute refraction suppresses subsequent spikes. These results show that magnetization dynamics of MTJ devices can support nonlinear computation in compact neuromorphic hardware.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

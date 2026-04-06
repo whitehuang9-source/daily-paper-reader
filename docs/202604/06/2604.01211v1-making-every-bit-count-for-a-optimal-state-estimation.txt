@@ -1,0 +1,1246 @@
+Title: Making Every Bit Count for $A$-Optimal State Estimation
+
+URL Source: https://arxiv.org/pdf/2604.01211v1
+
+Published Time: Thu, 02 Apr 2026 01:29:58 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Making Every Bit Count for A-Optimal State Estimation 
+
+Cameron Khanpour, Daniel Turizo, Samuel Talkington 
+
+Abstract — We study the problem of controlling how a limited communication bandwidth budget is allocated across hetero-geneously quantized sensor measurements. The performance criterion is the trace of the error covariance matrix of the linear minimum mean square error (LMMSE) state estimator, i.e., an A-optimal design criterion. Minimizing this criterion with a bit budget constraint yields a nonconvex optimization problem. We derive a formula that reduces each evaluation of the gradient to a single Cholesky factorization. This enables efficient optimization by both a projection-free Frank–Wolfe method (with a computable convergence certificate) and an interior point method with L-BFGS Hessian approximation over the problem’s continuous relaxation. A largest remainder rounding procedure recovers integer bit allocations with a bound on the quality of the rounded solution. Numerical experiments in IEEE power grid test cases with up to 300 buses compare both solvers and demonstrate that the analytic gradient is the key computational enabler for both methods. Additionally, the heterogeneous bit allocation is compared to standard uniform bit allocation on the 500 bus IEEE power grid test case. 
+
+I. I NTRODUCTION 
+
+Analog-to-digital quantization methods improve computa-tional and communication efficiency by mapping continuous measurements to discrete intervals [ 1 ]. While coarse quanti-zation accelerates computations [ 2], it introduces nonlinear ,typically non-Gaussian , measurement noise [ 3], [ 4 ], which contrasts with the additive Gaussian noise assumptions that are frequently used for analyzing state estimation algorithms. At the same time, sensing technologies are increasingly widespread in modern engineering practice. For example, ad-vanced metering infrastructure (AMI) has become widespread in electric power distribution infrastructure, where variable precision sensing has emerged as a promising operational paradigm for communication-constrained sensing. To address these challenges, we cast heterogeneous quantizer bit alloca-tion under a global bandwidth budget as an A-optimal design problem for linear minimum mean square error (LMMSE) estimation—i.e., minimizing the trace of the covariance matrix of the error of the LMMSE estimator. The resource allocation acts on measurement precisions and induces a nonconvex optimization problem that falls outside the scope of existing sensor selection methods. 
+
+a) Related Work: There are a number of related works. In [ 5], the discrete sensor placement problem was studied under a D-optimal criterion; the relaxed problem is solved 
+
+> This material is based upon work supported by the National Science Foundation Graduate Research Fellowship Program under Grant No. DGE-2039655. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. C. Khanpour and S. Talkington are with the School of Electrical and Com-puter Engineering, Georgia Institute of Technology, Atlanta, GA 30332, USA.
+
+ckhanpour3@gatech.edu, talkington@gatech.edu           
+
+> D. Turizo is with SimpleRose, Inc., St. Louis, MO 63101, USA.
+
+daniel.turizo@simplerose.com 
+
+without guarantees of optimality. Budget-constrained D-optimal design was recently studied in [ 6]. Similarly, [ 7]applied sensor placement for water networks; they focus on a class of objective functions that possess other structured properties, such as submodularity (this property is useful to prove theoretical guarantees of greedy based algorithms). While A-optimal design does not have (super)modularity in general, recent research in [ 8] showed that A-optimal design enjoys approximate supermodularity. Combinatorial approximation algorithms for A-optimal design have also been developed [ 9], [ 10 ]. Frank–Wolfe algorithms [ 11 ] for the classical A-optimal design problem were analyzed in [ 12 ], where the information matrix is linear in the design weights and the problem is convex. The exponential mapping between sensor bitrate and precision in our formulation breaks this linearity and introduces nonconvexity, requiring a different convergence analysis. The work of [ 13 ] is also related and shows that the dual of a very similar problem to our own is convex; an earlier paper from the same group [ 14 ] proposes a greedy bit assignment heuristic. This line of inquiry enables valuable insights on the energy savings obtained by a chosen bit allocation policy. Another component of this work is the incorporation of the effects of quantization and communication bandwidth in state estimation. Quantization has a significant effect on the accuracy of state estimation in scenarios limited by bandwidth. In communication-constrained settings—such as remote monitoring over low-bandwidth links or large-scale sensor networks with shared communication channels—the number of bits allocated to each measurement directly determines the quantization noise variance and, consequently, the estimation quality. This connects to the classical theory of optimal experimental design [ 15 ], where measurement resources are allocated to minimize estimation error. Quantized estimation has been addressed in the Kalman filtering [ 16 ], [ 17 ], sensor network placement [ 18 ], and topol-ogy learning [ 19 ] settings. In power systems, the literature on state estimation has also focused on the importance of heterogeneous data sources, communication constraints, and measurement quality for large scale networks [20]. 
+
+b) Contributions: In this paper, we study optimal bit allocation for LMMSE state estimation under a global communication budget. We formulate the problem as a nonconvex A-optimal design problem with the following contributions: 1) We present two algorithms: i.) A first-order Frank– Wolfe algorithm with a closed-form linear minimization oracle (Proposition 3), and show that the minimum Frank–Wolfe gap over iterates converges to zero at rate O(1 /√T ) (Theorem 1), providing a computable convergence certificate. ii.) A second-order interior 
+
+> arXiv:2604.01211v1 [eess.SY] 1 Apr 2026
+
+point algorithm. We derive a closed-form gradient for both FW and the interior point method to reduce each evaluation to a single Cholesky factorization of the information matrix. Further, the interior point method is accelerated with a L-BFGS Hessian approximation and converges in very few iterations. 2) We introduce a solver-agnostic largest remainder round-ing procedure (Algorithm 2) that maps continuous relaxations to integer allocations that are guaranteed to be feasible and have bounded solution quality gap. 3) We evaluate the speed and solution quality of the algo-rithms in the practical setting of experimental design for power network state estimation within different regimes (“sensor rich” and limited bandwidth). We also validate the problem formulation of heterogeneous bit allocation to a standard uniform bit allocation, achieving up to 
+
+53% improvement in the limited bandwidth regime. The remainder of the paper is organized as follows. Section II introduces the measurement model, the LMMSE estimator, and the resulting bit-allocation problem under a global communication budget. Section III presents the proposed solution methods for the relaxed problem, includ-ing the analytic gradient, the Frank–Wolfe algorithm and its convergence guarantee, and an interior point approach. Section IV describes the rounding procedure used to recover integer bit allocations from relaxed solutions along with guarantees. Section V reports numerical experiments on IEEE power system test cases, comparing solver performance and evaluating the benefits of heterogeneous allocation relative to uniform allocation. Finally, Section VI concludes the paper and outlines directions for future work. II. P ROBLEM FORMULATION 
+
+A. Measurement Model and Estimation 
+
+Given a fixed sensing matrix H ∈ Rm×d whose rows are {h⊤ 
+
+> i
+
+}mi=1 , where each hi ∈ Rd, corresponding to m linear projections of an unknown state vector x ∈ Rd, we consider heterogeneously quantized measurements with quantization bin widths {∆i}mi=1 . We assume throughout that hi̸ = 0 for all i, i.e., every sensor observes a nontrivial linear combination of the state. Each quantized measurement i is generated from a uni-formly dithered quantization function Qi : R → R (see [ 1], [4]) with bin width ∆i > 0 such that 
+
+Qi(⟨hi, x⟩) = ∆ i ·
+
+ ⟨hi, x⟩ + τi
+
+∆i
+
+
+
++ 12
+
+
+
+, (1) where τi ∼ Uniform( − ∆i 
+
+> 2
+
+, ∆i 
+
+> 2
+
+), and Eτi [Qi(⟨hi, x⟩) | hi] = 
+
+⟨hi, x⟩, i.e., Qi(⟨hi, x⟩) is conditionally unbiased. The independent dither τi is noise purposely applied prior to quantization; see [ 1 ], [ 21 ]. The quantization error is well approximated by the additive model 
+
+y := Hx + z, (2) where E zz ⊤ = 112 diag (∆ 21, . . . , ∆2
+
+> m
+
+). Set di := ∆ 2 
+
+> i
+
+/12 
+
+and D := diag (d1, . . . , d m). Suppose x is zero-mean with prior covariance Cx ≻ 0. The LMMSE state estimator is 
+
+ˆx = CxH⊤ 
+
+HC xH⊤ + D
+
+−1
+
+y, (3)        
+
+> 1
+> 2
+> 3
+> 45
+> 6
+> 4
+> 7
+> 2
+> 1
+> 63
+> b3= 2 bits
+> 2b3= 2 2= 4 levels
+
+y = Hx + z, Pmi=1 bi ≤ B              
+
+> Fig. 1. Bit allocation on a sensor network. Each node ireceives bibits (■= 1 bit) subject to budget P
+> ibi≤B. Inset: 2-bit quantization maps an analog measurement to 2bi= 4 discrete levels.
+
+with error covariance 
+
+Cε =
+
+
+
+H⊤D−1H + C−1
+
+> x
+
+−1
+
+. (4) Quantization error is generally signal-dependent, so an additive noise model can be inaccurate, especially at coarse resolutions [ 1 ]. Our use of uniformly dithered quantizers in (1) is intended to mitigate this dependence and justify the covariance model [ 21 ]. Accordingly, the optimization problem below should be interpreted as the A-optimal design problem induced by this dithered additive noise LMMSE model. 
+
+B. Bandwidth Allocation Problem 
+
+We allocate a limited number of quantization bits across m
+
+channels to minimize the MSE. For a bi-bit uniform quantizer with dynamic range Ri,
+
+∆i = Ri
+
+2bi , di = R2
+
+> i
+
+12 · 4bi , ρi := d−1 
+
+> i
+
+= κi 4bi , (5) where κi := 12 /R 2 
+
+> i
+
+. Allocating more bits to channel i
+
+increases its precision exponentially. The integer program is 
+
+min 
+
+> b∈Zm
+> +
+
+tr  Cε(b) s. t. 1⊤b ≤ B. (6) The standard continuous relaxation replaces Zm 
+
+> +
+
+by Rm 
+
+> +
+
+.Define B := {b ∈ Rm 
+
+> +
+
+: 1⊤b ≤ B} and write 
+
+M (b) := C−1 
+
+> x
+
++ H⊤ diag (ρ(b)) H, Cε(b) := M (b)−1.
+
+(7) The relaxed problem is 
+
+min  
+
+> b∈B
+
+F (b) := tr  Cε(b). (8) The feasible set B is compact and convex, but F is generally nonconvex in the bit variables due to the exponential reparameterization ρi = κi4bi . Introducing the auxiliary function f (ρ) := tr (( C−1 
+
+> x
+
++ H⊤ diag (ρ)H)−1) in precision variables, we have F (b) = f (ρ(b)) . While f is convex in ρ,the chain rule yields 
+
+∇2F (b) = ( ln 4) 2h
+
+diag (ρ)∇2f (ρ) diag (ρ)+ diag  ρ ⊙ ∇ f (ρ)i
+
+,
+
+(9) where the second term is negative semidefinite (since ∇f ≤ 0
+
+componentwise), so convexity does not transfer from ρ to b.Remark (Convexity in precision space) . Although F (b)
+
+is nonconvex in the bit variables, the function f (ρ) =
+
+tr  (C−1 
+
+> x
+
++ H⊤ diag (ρ)H)−1 is convex in the precision variables ρ. However, the budget constraint 1⊤b ≤ B
+
+becomes Pmi=1 log 4(ρi/κ i) ≤ B in ρ-space, which is not 
+
+convex (it is the sublevel set of a concave function). Thus, the b-space formulation trades a nonconvex objective for a convex (polyhedral) feasible set, which is precisely what enables the Frank–Wolfe method with a closed-form linear minimization oracle. This tradeoff is complementary to the dual formulation of [ 13 ], which achieves a convex objective at the cost of a more complex constraint geometry. 
+
+Lemma 1 (Gradient with respect to bits) . For each measure-ment i = 1 , . . . , m ,
+
+∂F ∂b i
+
+(b) = −(ln 4) ρi(b) h⊤ 
+
+> i
+
+Cε(b)2hi. (10) 
+
+Equivalently, 
+
+∇F (b) = −(ln 4) ρ(b) ⊙
+
+h
+
+h⊤ 
+
+> i
+
+Cε(b)2hi
+
+imi=1 
+
+. (11) 
+
+In particular, ∂F/∂b i < 0 whenever hi̸ = 0. Each gradient evaluation reduces to a single Cholesky factorization of M (b): the diagonal entries h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi are extracted column-by-column from CεH⊤ without forming the full 
+
+m × m product, at cost O(d2m) dominated by the O(d3)
+
+factorization when m = O(d).Proof: Define 
+
+A(ρ) := C−1 
+
+> x
+
++ H⊤ diag (ρ)H, Cε(ρ) = A(ρ)−1.
+
+Since ∂A/∂ρ i = H⊤eie⊤ 
+
+> i
+
+H = hih⊤ 
+
+> i
+
+, the derivative identity for matrix inverses gives 
+
+∂Cε
+
+∂ρ i
+
+= −Cε
+
+∂A
+
+∂ρ i
+
+Cε = −Cεhih⊤ 
+
+> i
+
+Cε.
+
+Taking traces, 
+
+∂f ∂ρ i
+
+= tr 
+
+ ∂Cε
+
+∂ρ i
+
+
+
+= − tr  Cεhih⊤ 
+
+> i
+
+Cε
+
+ = −h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi.
+
+Since Cε ≻ 0, the quadratic form h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi is nonnegative. Now F (b) = f (ρ(b)) with ρi(b) = κi4bi , so by chain rule 
+
+∂F ∂b i
+
+= ∂f ∂ρ i
+
+· ∂ρ i
+
+∂b i
+
+=
+
+
+
+−h⊤ 
+
+> i
+
+Cε(b)2hi
+
+
+
+· (ln 4) ρi(b),
+
+which yields (10) . The vector form (11) follows by stacking. If hi̸ = 0, then h⊤ 
+
+> i
+
+Cε(b)2hi > 0 because Cε(b) ≻ 0, so the derivative is strictly negative. 
+
+Proposition 1 (Budget saturation) . If hi̸ = 0 for all i and 
+
+b⋆ minimizes (8) , then 1⊤b⋆ = B.Proof: Consider any feasible b such that 1⊤b < B . Then 
+
+b + tei ∈ B for some index i and all sufficiently small t > 0.By Lemma 1, ∂F/∂b i(b) < 0, so increasing bi decreases the objective, which means that b is not a minimum. Conversely, if b⋆ minimizes (8), we must have that 1⊤b⋆ = B.
+
+Proposition 2 (Lipschitz continuity of the gradient) . The function F is C∞ on Rm, and ∇F is L-Lipschitz on B with 
+
+L = ( ln 4) 2 ∥Cx∥2 (2 m + 1) . (12) 
+
+Proof: Recall that F (b) = f (ρ(b)) and ρi(b) = κi4bi ,
+
+where 
+
+f (ρ) = tr 
+
+ C−1 
+
+> x
+
++ H⊤ diag (ρ)H−1
+
+.
+
+Since each coordinate map b 7 → ρi(b) = κi4bi is smooth and strictly positive on Rm, and matrix inversion is smooth on the positive definite cone, F is C∞ on Rm. Since Cε(b) ≻ 0
+
+for all b, and Cε(b) ⪯ Cx implies ∥Cε(b)∥2 ≤ ∥ Cx∥2.
+
+From Lemma 1, ∂f ∂ρ i (ρ) = −h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi. Differentiating once more with respect to ρj gives 
+
+∂2f∂ρ j ∂ρ i
+
+(ρ) = 2 tr  Cεhih⊤ 
+
+> i
+
+Cεhj h⊤ 
+
+> j
+
+Cε
+
+. (13) Fix i, and write Ai := C−1 
+
+> x
+
++ P  
+
+> k̸=i
+
+ρkhkh⊤ 
+
+> k
+
+≻ 0. By the Sherman–Morrison–Woodbury identity, 
+
+Cε = A−1 
+
+> i
+
+− ρi A−1 
+
+> i
+
+hih⊤ 
+
+> i
+
+A−1
+
+> i
+
+1 + ρih⊤ 
+
+> i
+
+A−1 
+
+> i
+
+hi
+
+.
+
+Hence, with h⊤ 
+
+> i
+
+A−1 
+
+> i
+
+hi ≥ 0, we obtain 
+
+h⊤ 
+
+> i
+
+Cεhi = h⊤ 
+
+> i
+
+A−1 
+
+> i
+
+hi
+
+1 + ρih⊤ 
+
+> i
+
+A−1 
+
+> i
+
+hi
+
+≤ 1
+
+ρi
+
+.
+
+Therefore 
+
+ρi h⊤ 
+
+> i
+
+Cεhi ≤ 1. (14) Since Cε ⪰ 0 and ∥Cε∥2 ≤ ∥ Cx∥2, we have 
+
+C2 
+
+> ε
+
+⪯ ∥ Cε∥2 Cε ⪯ ∥ Cx∥2Cε.
+
+Thus h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi ≤ ∥ Cx∥2 h⊤ 
+
+> i
+
+Cεhi. Using (14), 
+
+ρi
+
+∂f ∂ρ i
+
+= ρi h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi ≤ ∥ Cx∥2 ρi h⊤ 
+
+> i
+
+Cεhi ≤ ∥ Cx∥2.
+
+Therefore 
+
+ρi
+
+∂f ∂ρ i
+
+≤ ∥ Cx∥2. (15) From (13), 
+
+∂2f∂ρ j ∂ρ i
+
+= 2 ( h⊤ 
+
+> i
+
+Cεhj )( h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hj ).
+
+Since Cε ⪰ 0, the Cauchy–Schwarz inequality in the Cε-inner product yields 
+
+|h⊤ 
+
+> i
+
+Cεhj | ≤  h⊤ 
+
+> i
+
+Cεhi
+
+1/2 h⊤ 
+
+> j
+
+Cεhj
+
+1/2 ≤ 1
+
+√ρiρj
+
+,
+
+where the last step uses (14). Since C2 
+
+> ε
+
+⪯ ∥ Cx∥2Cε,
+
+|h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hj | ≤  h⊤ 
+
+> i
+
+C2
+
+> ε
+
+hi
+
+1/2 h⊤ 
+
+> j
+
+C2
+
+> ε
+
+hj
+
+1/2
+
+≤ ∥ Cx∥2
+
+ h⊤ 
+
+> i
+
+Cεhi
+
+1/2 h⊤ 
+
+> j
+
+Cεhj
+
+1/2
+
+≤ ∥Cx∥2
+
+√ρiρj
+
+.
+
+Combining the two bounds, 
+
+∂2f∂ρ j ∂ρ i
+
+≤ 2∥Cx∥2
+
+ρiρj
+
+,and therefore 
+
+ρiρj
+
+∂2f∂ρ j ∂ρ i
+
+≤ 2∥Cx∥2. (16) From the chain rule with δij denoting the Kronecker delta, 
+
+∂2F∂b j ∂b i
+
+= ( ln 4) 2
+
+
+
+δij ρi
+
+∂f ∂ρ i
+
++ ρiρj
+
+∂2f∂ρ j ∂ρ i
+
+
+
+. (17) Using (15) and (16), 
+
+∂2F∂b j ∂b i
+
+≤ (ln 4) 2δij ∥Cx∥2 + 2 ∥Cx∥2
+
+.
+
+Hence, for each fixed i,
+
+> m
+
+X
+
+> j=1
+
+∂2F∂b j ∂b i
+
+≤ (ln 4) 2
+
+> m
+
+X
+
+> j=1
+
+δij ∥Cx∥2 + 2 ∥Cx∥2
+
+
+
+= ( ln 4) 2 ∥Cx∥2 (2 m + 1) =: L. 
+
+Thus ∥∇ 2F (b)∥2 ≤ ∥∇ 2F (b)∥∞ ≤ (ln 4) 2 ∥Cx∥2 (2 m + 1) 
+
+for all b ∈ B . Since the Hessian is uniformly bounded on the convex set B, the mean value theorem implies that ∇F
+
+is L-Lipschitz continuous on B.III. B IT ALLOCATION PROCEDURE 
+
+We solve the relaxed problem (8) using the Frank–Wolfe (FW) method [ 11 ]; see [ 22 ], [ 23 ] for introductions. Unlike the convex setting of [ 12 ], our objective is nonconvex in b, so we apply the nonconvex FW analysis of [ 24 ]. FW is well suited because the feasible set is compact and convex, the objective is smooth, and the linear minimization oracle (LMO) admits a closed-form solution. 
+
+A. Gradient and Linear Minimization Oracle 
+
+Given a feasible iterate b ∈ B , the FW linear minimization oracle solves 
+
+s(b) ∈ arg min 
+
+> s∈B
+
+⟨∇ F (b), s⟩ . (18) The FW direction is d(b) := s(b) − b, and the FW gap is 
+
+gFW (b) := max  
+
+> s∈B
+
+⟨b − s, ∇F (b)⟩ = − ⟨ d(b), ∇F (b)⟩ . (19) As usual, gFW (b) ≥ 0, with equality if and only if b is a first-order stationary point. 
+
+Proposition 3 (Closed-form LMO) . Let g := ∇F (b) ∈ Rm.Then an optimal solution of (18) is 
+
+s⋆ =
+
+(
+
+B ei⋆ , if min i gi < 0 and i⋆ ∈ arg min i gi,
+
+0, if gi ≥ 0 for all i. (20) 
+
+Under the standing assumption hi̸ = 0 for all i (so g < 0
+
+by Lemma 1), this simplifies to 
+
+s⋆ = B ei⋆ , i⋆ ∈ arg min 
+
+> 1≤i≤m
+
+[∇F (b)] i. (21) 
+
+Proof: The feasible set B is a polytope with extreme points 0, B e1, . . . , B em. Since s 7 → ⟨ g, s⟩ is linear, an optimum is attained at a vertex. Evaluating gives ⟨g, 0⟩ = 0 
+
+and ⟨g, B ei⟩ = Bg i, so the minimum is min {0, B min i gi},yielding (20) . Simplification (21) follows from Lemma 1. 
+
+Be1 Be2
+
+Be3 
+
+> F(b)
+
+b(t)
+
+−∇ F
+
+s(t) = Bei⋆
+
+b(t+1) 
+
+> γt
+
+gFW (b(t)) = 
+
+D
+
+b(t) − s(t), ∇F (b(t))
+
+E          
+
+> Fig. 2. Frank–Wolfe iteration on the budget simplex Bfor m= 3 . The LMO selects vertex s(t); the next iterate lies on [b(t),s(t)]with step γt.
+
+Corollary 3.1 (Explicit Frank–Wolfe gap) . Under the as-sumption hi̸ = 0 for all i,
+
+gFW (b) = ⟨b, ∇F (b)⟩ − B min 
+
+> 1≤i≤m
+
+[∇F (b)] i.
+
+Proof: By definition of FW gap in (19) , gFW (b) = 
+
+⟨b − s(b), ∇F (b)⟩ where s(b) ∈ arg min s∈B ⟨∇ F (b), s⟩.Since ∇F (b) < 0 componentwise by Lemma 1, Proposition 3 gives s(b) = Bei⋆ with i⋆ ∈ arg min i[∇F (b)] i. Hence 
+
+gFW (b) = ⟨b, ∇F (b)⟩ − B min i[∇F (b)] i.
+
+B. Convergence Guarantee 
+
+Starting from b(0) ∈ B , the FW method generates 
+
+s(t) ∈ arg min 
+
+> s∈B
+
+D
+
+∇F (b(t)), s
+
+E
+
+, d(t) := s(t) − b(t),
+
+and updates b(t+1) = (1 − γt)b(t) + γts(t) with step size 
+
+γt = min 
+
+(
+
+gFW (b(t))2LB 2 , 1
+
+)
+
+. (22) Since B is convex, every iterate remains feasible. The step size (22) uses diam( B) = √2B by property of simplices. 
+
+Theorem 1 (FW convergence for relaxed bit allocation [ 24 ]) .
+
+Assume hi̸ = 0 for all i, and let {b(t)}t≥0 be generated by (22) starting from any b(0) ∈ B . Define h0 := F (b(0) ) −
+
+min b∈B F (b). Then 
+
+min  
+
+> 0≤t≤T
+
+gFW (b(t)) ≤ max {2h0, 2LB 2}√T + 1 . (23) 
+
+To achieve gFW (b(t)) ≤ ε, it suffices to perform T + 1 ≥
+
+max {2h0, 2LB 2}2/ε 2 iterations. Proof: By Proposition 2, F is continuously differentiable on Rm with L-Lipschitz gradient on the compact convex set 
+
+B. The FW curvature constant CF over B satisfies 
+
+CF ≤ L diam( B)2 = 2 LB 2,
+
+where diam( B) = √2B follows from the vertex structure. Applying [24, Theorem 1] with C := 2 LB 2 gives 
+
+min  
+
+> 0≤t≤T
+
+gFW (b(t)) ≤ max {2h0, C }√T + 1 = max {2h0, 2LB 2}√T + 1 ,
+
+which is (23) . Rearranging yields the iteration complexity. Input: H, Cx, κ, B, L, ε, Tmax 
+
+Output: feasible b(t) ∈ B 
+
+b(0) ← 0
+
+for t = 0 , 1, . . . , T max do 
+
+ρ(t) ← κ ⊙ 4b(t)
+
+M (t) ← C−1 
+
+> x
+
++ H⊤ diag (ρ(t))HC(t) 
+
+> ε
+
+←  M (t)−1
+
+g(t) ← − (ln 4) ρ(t) ⊙ diag  H(C(t) 
+
+> ε
+
+)2H⊤
+
+it ← arg min 1≤i≤m[g(t)]i
+
+s(t) ← B eit
+
+gt ←
+
+D
+
+b(t) − s(t), g(t)
+
+E
+
+if gt ≤ ε then return b(t)
+
+γt ← min 
+
+n gt
+
+2LB 2 , 1
+
+o
+
+b(t+1) ← (1 − γt)b(t) + γts(t)
+
+end return b(Tmax +1) 
+
+Algorithm 1: Frank–Wolfe for relaxed bit allocation 
+
+Remark. Theorem 1 guarantees convergence to a first-order stationary point at rate O(ε−2). The stationarity measure is the computable FW gap, obtained at no extra cost once the LMO is solved. 
+
+Remark (Adaptive step size) . In practice, the global bound L
+
+can be conservative. One may replace the step size in Algorithm 1 with an adaptive Lipschitz search: initialize 
+
+ˆL0 = 1; at each iteration, halve ˆL, then double until 
+
+F (b + γtd(t)) ≤ F (b(t)) − γtgFW (b(t))/2, capping at L.Since ˆLt ≤ L, Theorem 1 still applies. 
+
+C. Interior Point Method with Analytic Gradient 
+
+The gradient formula from Lemma 1 can also be supplied to general purpose nonlinear programming solvers. We use the interior point solver Ipopt [ 25 ] via JuMP [ 26 ] with the option hessian_approximation = “limited-memory” , which activates an L-BFGS Hessian approximation. Ipopt replaces the constrained problem (8) with a sequence of log-barrier subproblems 
+
+min  
+
+> b
+
+F (b) − μ
+
+> m
+
+X
+
+> i=1
+
+ln bi − μ ln  B − 1⊤b,
+
+where μ > 0 is driven to zero. Each subproblem is solved by a damped Newton method on the primal-dual KKT system. Since the constraint structure is simple ( m bound constraints plus one linear budget constraint), the KKT system is inexpensive to solve once the gradient is available. The Hessian ∇2F (b) is costly to compute exactly. Instead, we use the limited-memory BFGS (L-BFGS) approximation, which maintains a low-rank estimate from recent gradient differences. With L-BFGS, each iteration requires only the gradient ∇F (b) from Lemma 1—the same O(d3) Cholesky factorization used by Frank–Wolfe—plus O(m) work for the L-BFGS update and KKT solve. 
+
+Remark (Comparison of per-iteration costs) . Both Frank– Wolfe and the interior point method are bottlenecked by the same O(d3) Cholesky factorization for the gradient. FW adds an O(m) LMO step, whereas Ipopt adds an O(m) KKT solve. The key difference is iteration count; while FW and 
+
+Input: continuous solution ¯b ∈ B with 1⊤¯b = B
+
+Output: integral ˆb ∈ Zm 
+
+> +
+
+with 1⊤ˆb = B
+
+b(0) ← ⌊ ¯b⌋
+
+r ← ¯b − ⌊ ¯b⌋
+
+Rrem ← B − 1⊤b(0) 
+
+ˆb ← b(0) 
+
+find a set S ⊆ { 1, . . . , m } with |S| = Rrem such that 
+
+S ∈ arg max   
+
+> T⊆{ 1,...,m }|T|=Rrem
+
+X
+
+> i∈T
+
+ri
+
+(i.e., S indexes the Rrem largest components of r)
+
+foreach i ∈ S do 
+
+ˆbi ← ˆbi + 1 
+
+end return ˆb
+
+Algorithm 2: Largest remainder rounding procedure interior point methods both globally converge sublinearly at rate O(1 /√T ), IPMs also exhibit local superlinear conver-gence, typically requiring 20–50 iterations. FW provides a computable convergence certificate (the FW gap), while Ipopt reports KKT residuals. IV. R OUNDING PROCEDURE 
+
+The relaxed problem (8) returns a continuous solution 
+
+¯b ∈ B , whereas the original problem (6) requires b ∈ Zm 
+
+> +
+
+.We compute 
+
+r := ¯b − ⌊ ¯b⌋ ∈ [0 , 1) m, Rrem := 1⊤r,
+
+where ⌊·⌋ is computed componentwise. Since 1⊤¯b = B by Proposition 1 and 1⊤⌊¯b⌋ ∈ Z+, the residual budget is an integer satisfying 0 ≤ Rrem ≤ m − 1.Similarly to the Quota Method for apportionment [ 27 ]and the rounding procedures for approximate experimental designs [ 28 ], we use largest remainder rounding to round up the Rrem largest components of r and round the rest down. Equivalently, 
+
+ξ ∈ arg max 
+
+> ξ∈{ 0,1}m
+> 1⊤ξ=Rrem
+
+⟨r, ξ⟩ , ˆb := ⌊¯b⌋ + ξ. (24) 
+
+Proposition 4 (Feasibility and nearest point property of largest remainder rounding [ 27 ]) . Let ¯b ∈ B satisfy 1⊤¯b = B, and define r = ¯b − ⌊ ¯b⌋ and Rrem = 1⊤r. Then ˆb defined by (24) 
+
+belongs to Zm 
+
+> +
+
+, satisfies 1⊤ˆb = B, and solves 
+
+ˆb ∈ arg min  
+
+> ˆb∈Zm
+> +,
+> ˆb=⌊¯b⌋+ξ
+
+∥ˆb − ¯b∥22 s.t. ξ ∈ { 0, 1}m, 1⊤ξ = Rrem . (25) 
+
+Moreover, 
+
+∥ˆb − ¯b∥22 ≤
+
+> m
+
+X
+
+> i=1
+
+ri(1 − ri). (26) 
+
+Proof: By construction, ξ ∈ { 0, 1}m and 1⊤ξ = Rrem ,so ˆb = ⌊¯b⌋ + ξ ∈ Zm 
+
+> +
+
+and 
+
+1⊤ˆb = 1⊤⌊¯b⌋ + 1⊤ξ = ( B − Rrem ) + Rrem = B. Now let ˆb = ⌊¯b⌋ + ξ with ξ ∈ { 0, 1}m and 1⊤ξ = Rrem .Since ¯b = ⌊¯b⌋ + r, we obtain 
+
+∥ˆb − ¯b∥22 = ∥ξ − r∥22 = ∥r∥22 + ∥ξ∥22 − 2 ⟨r, ξ⟩ .
+
+Because ξ ∈ { 0, 1}m with 1⊤ξ = Rrem , we have ∥ξ∥22 =
+
+Rrem . Hence 
+
+∥ˆb − ¯b∥22 = ∥r∥22 + Rrem − 2 ⟨r, ξ⟩ .
+
+Therefore minimizing ∥ˆb−¯b∥22 over all feasible ξ is equivalent to maximizing ⟨r, ξ⟩, which proves (25). For (26) , note that r ∈ [0 , 1] m and 1⊤r = Rrem , so r is feasible for the continuous relaxation of the maximization problem in (24) . Hence ⟨r, ξ⟩ ≥ ⟨ r, r⟩ = ∥r∥22. Substituting into the norm identity above gives 
+
+∥ˆb − ¯b∥22 = ∥r∥22 + Rrem − 2 ⟨r, ξ⟩≤ Rrem − ∥ r∥22 =
+
+> m
+
+X
+
+> i=1
+
+ri(1 − ri),
+
+as claimed. 
+
+Theorem 2 (Rounding gap for largest remainder rounding) .
+
+Assume hi̸ = 0 for all i, and let ¯b ∈ B satisfy 1⊤¯b = B.Suppose ¯b is a KKT point of the relaxed problem (8) . Then the largest remainder rounding ˆb defined by (24) satisfies 
+
+F (ˆb) ≤ F (¯b) + L
+
+2
+
+> m
+
+X
+
+> i=1
+
+ri(1 − ri). (27) 
+
+In particular, 
+
+F (ˆb) ≤ F (¯b) + L
+
+2 min {Rrem , m/ 4} . (28) 
+
+Proof: Since ¯b, ˆb ∈ B and B is convex, L-smoothness of F on B gives the following quadratic upper bound 
+
+F (ˆb) ≤ F (¯b) + 
+
+D
+
+∇F (¯b), ˆb − ¯b
+
+E
+
++ L
+
+2 ∥ˆb − ¯b∥22. (29) Let δ := ˆb − ¯b = ξ − r. Since 1⊤ξ = 1⊤r = Rrem , we have 
+
+1⊤δ = 0 . Let (λ, μ) be KKT multipliers for the constraints 
+
+1⊤b ≤ B and b ≥ 0, so 
+
+∇F (¯b) + λ1 − μ = 0, λ ≥ 0, μ ≥ 0, μi¯bi = 0 ∀i. 
+
+If ri > 0, then ¯bi > 0, so complementary slackness gives 
+
+μi = 0 . If ri = 0 , then δi = ξi − ri = 0 because largest remainder rounding only rounds up coordinates with positive fractional part. Therefore 
+
+∇F (¯b), δ =
+
+> m
+
+X
+
+> i=1
+
+(−λ + μi) δi
+
+= −λ
+
+> m
+
+X
+
+> i=1
+
+δi = −λ 1⊤δ = 0 .
+
+Substituting into (29) and applying Proposition 4 yields 
+
+F (ˆb) ≤ F (¯b) + L
+
+2 ∥ˆb − ¯b∥22 ≤ F (¯b) + L
+
+2
+
+> m
+
+X
+
+> i=1
+
+ri(1 − ri),
+
+which proves (27) . The simplified bound follows from ri(1 −
+
+ri) ≤ ri and ri(1 − ri) ≤ 1/4 for each i.
+
+Remark. The bound in Theorem 2 requires KKT stationarity of the relaxed solution, which is satisfied by interior point solutions. Frank–Wolfe only guarantees a small FW gap, so the bound applies approximately. In practice, the bound depending on the global Lipschitz constant can be loose; some future work would be to tighten this bound using local Lipschitz constant or specific structural properties of a given problem’s sensing matrix such as sparsity. V. N UMERICAL EXPERIMENTS 
+
+We evaluate the proposed Frank–Wolfe algorithm (Algo-rithm 1) and compare it against an interior point method (Ipopt) with analytic gradient and L-BFGS Hessian approx-imation. Both methods use the gradient computation from Lemma 1. All experiments were conducted on an AMD Ryzen 5 7600X3D (6 cores, 4.1 GHz) with 48 GB RAM using Julia 1.12. 
+
+A. Comparison of Solver Computation Time a) Solver Configuration: The proposed method uses the FW algorithm with the short step rule (22) , which computes the step size as γt = min gt/(2 LB 2), 1 using the analytic Lipschitz constant L = ( ln 4) 2∥Cx∥2(2 m + 1) . The solver runs for at most 500 iterations with a duality gap tolerance of 10 −6 and a 600 s wall-clock time limit. Each iteration requires one Cholesky factorization of the d × d information matrix M (b) via LAPACK, and the information matrix is assembled using a BLAS symmetric rank-k update. The interior point baseline uses Ipopt [ 25 ] via JuMP [ 26 ]with the analytic gradient from Lemma 1 and L-BFGS Hessian approximation, initialized at b = ( B/m )1 with a 600 s time limit. Each Ipopt iteration requires the same O(d3) Cholesky factorization as FW. After the continuous solve, both methods apply the same largest remainder rounding procedure from Algorithm 2 to obtain integer bit allocations. 
+
+b) Test Cases: We use 11 power grid test cases from the PGLib-OPF benchmark library [ 29 ]. The sensing matrix H
+
+is the grounded bus susceptance matrix from DC power flow with the slack bus removed to ensure positive definiteness. State dimensions range from d = 13 (case14) to d = 299 
+
+(case300), with m = d measurements corresponding to power injections at all non slack buses. For each test case, we generate 30 independent problem instances by randomizing the channel precision constants κi ∼ Uniform(0 .8, 1.2) , i =1, . . . , m . The bit budget is set to B = 2 m (2 bits per sensor). The prior covariance is Cx = I.Table I summarizes solve times across the 30 randomized instances for each test case. Both methods are bottlenecked by one LAPACK Cholesky factorization of the information matrix M (b) per iteration, with the gradient extracted via 
+
+[HC 2
+
+> ε
+
+H⊤]ii without forming the full m × m product. The FW LMO adds only O(m) work per iteration via (20) ; the interior point KKT solve is similarly O(m) with L-BFGS. The speed difference is determined by iteration count; the interior point method converges in 20–50 iterations, while FW often used most of the max 500 iterations. Across all instances where both solvers converged, FW and Ipopt+ ∇
+
+returned similar objective values up to the solver tolerances. Bits per sensor c = B/m
+
+> 2.0 2.25 2.5 2.75 3.0 3.25 3.5 3.75 4.0 4.25 4.5 4.75 5.0 5.25 5.5 5.75 6.0 6.25 6.5 6.75 7.0 Improvement over uniform (%) 010 20 30 40 50
+> Heterogeneous Allocation Improvement over Uniform (case500, m=499)
+
+Fig. 3. Percentage improvement of the optimized heterogeneous bit allocation (8) over uniform allocation b = 1 · ⌊ B/m ⌋ on the case500 test system (m = 499 sensors). Each boxplot shows 30 randomized instances at the given budget level c = B/m . Shaded columns denote integer values of c.TABLE I SOLVE TIME COMPARISON : S TOCK IPOPT , FW, AND IPOPT + ANALYTIC GRADIENT . M EAN ± STD . DEV . OVER 30 TRIALS , 10 MIN . LIMIT .
+
+Case m Ipopt (s) FW (s) Ipopt+ ∇ (s) 
+
+case14 13 5.03 ± 1.02 0.098 ± 0.0023 0.033 ± 0.14 
+
+case30 29 2.73 ± 0.16 0.24 ± 0.0093 0.014 ± 0.0010 
+
+case57 56 7.52 ± 0.31 0.89 ± 0.030 0.022 ± 0.0020 
+
+case73 72 12 .1 ± 0.97 1.76 ± 0.090 0.026 ± 0.0040 
+
+case118 117 121 .2 ± 12 .6 7.64 ± 0.22 0.052 ± 0.0040 
+
+case162 161 252 .9 ± 26 .1 27 .44 ± 1.1 0.070 ± 0.0060 
+
+case179 178 442 .7 ± 80 .3 41 .05 ± 1.6 0.16 ± 0.032 
+
+case197 196 > 600 (timeout) 50 .67 ± 1.5 0.16 ± 0.020 
+
+case200 199 > 600 (timeout) 52 .59 ± 2.7 0.12 ± 0.028 
+
+case240 239 > 600 (timeout) 77 .82 ± 2.4 0.11 ± 0.056 
+
+case300 299 > 600 (timeout) 207 .46 ± 8.6 0.43 ± 0.062 
+
+TABLE II MEDIAN EXPERIMENTAL ROUNDING QUALITY VS THEORETICAL BOUND OVER 30 RANDOM INSTANCES AND B = 2 m TOTAL BIT BUDGET .
+
+Case m F (ˆb) − F (¯b) Rounding bound (27) Median ratio 
+
+case14 13 1.92 × 10 −2 7.26 × 10 1 2.62 × 10 −4
+
+case30 29 2.48 × 10 −2 2.52 × 10 2 9.98 × 10 −5
+
+case57 56 4.13 × 10 −2 1.00 × 10 3 4.06 × 10 −5
+
+case200 199 5.76 × 10 −2 1.34 × 10 4 4.28 × 10 −6
+
+case240 239 1.80 × 10 −2 1.57 × 10 4 1.15 × 10 −6
+
+case300 299 8.38 × 10 −2 2.73 × 10 4 3.05 × 10 −6
+
+Table I therefore isolates runtime differences rather than solution quality differences. Table II reports the median rounding gap F (ˆb) − F (¯b)
+
+and the theoretical bound from Theorem 2 across six IEEE test cases, each evaluated over 30 random instances with 
+
+κi ∼ Uniform(0 .8, 1.2) . In particular, the ratio of the actual gap to the bound ranges from 10 −4 (case14) to 10 −6 (case240, case300), indicating that the bound is highly conservative in practice. This conservatism may stem from L being a global worst-case Lipschitz constant, whereas a local Lipschitz constant could give a tighter bound. In Figure 4, we analyzed a “sensor rich” ( m ≫ d) regime Sensor-to-state ratio m/d
+
+10 1.0 10 1.5 10 2.0 10 2.5 10 3.0 Median solve time (s) 10 −110 010 1
+
+d = 10 Sensor-to-state ratio m/d
+
+10 1.0 10 1.5 10 2.0 10 2.5 10 −110 010 110 2
+
+d = 20 Alg. 1 (FW) Ipopt + ∇F 
+
+> Ipopt failed Alg. 1 (FW) Ipopt + ∇F
+> Ipopt failed
+
+Fig. 4. Median solve time vs. sensor-to-state ratio m/d for d ∈ { 10 , 20 }
+
+with B = 2 d. Error bars show the IQR over 30 instances. Frank–Wolfe scales linearly in m (for m ≫ d) with O(d3 +d2m) per-iteration cost. Ipopt fails to converge entirely beyond m/d ≈ 200 (d=10 ) and 100 (d=20 ). 
+
+in which FW outperforms Ipopt with gradient acceleration in computation time. We generate random Gaussian instances with H ∈ Rm×d, κi ∼ U (0 .8, 1.2) , and bit budget B = 2 d.For each state dimension d ∈ { 10 , 20 }, we sweep the sensor-to-state ratio m/d from 5 to 1000 and solve 30 independent instances per configuration using both Algorithm 1 and Ipopt with analytic gradients and L-BFGS. Median solve times and ranges are reported; red × markers indicate configurations where Ipopt failed to converge on all 30 instances. 
+
+B. Comparison of Problem Formulations 
+
+We evaluate the benefit of solving (8) relative to the uniform baseline b = 1 · ⌊ B/m ⌋ on the case500 power system test case ( m = d = 499 ) across per-sensor budgets c =
+
+B/m ∈ [2 , 7] . For each budget level, 30 instances are generated with quantization gains κi ∼ Uniform(0 .8, 1.2) ,and the continuous relaxation is solved with Ipopt+ ∇ method followed by largest remainder rounding. As shown in Figure 3, heterogeneous allocation yields median improvements of approximately 47% at c = 2,rising to 53% at c = 2 .5 before settling near 50% and 45% at c = 2 .75 and c = 3 , respectively, then declining to 31% 
+
+at c = 4 and 14% at c = 5 , and falling to 3.4% at c = 7 
+
+as abundant access to bandwidth levels the playing field. The gains at integer c remain large (e.g., 45% at c = 3 ,
+
+31% at c = 4 ), confirming that the dominant source of improvement is the optimizer’s ability to concentrate precision on high information sensors rather than an artifact of baseline rounding. These results demonstrate that heterogeneous allocation is most valuable in the bandwidth-constrained regime that motivates this work. VI. C ONCLUSIONS 
+
+We proposed an optimal bit allocation method for state estimation with variable precision measurements. The method reduces the MSE of a state estimator by controlling how a limited number of bits are allocated to sensors. 
+
+a) Discussion: Two algorithms were proposed: a first-order and second-order method to solve the corresponding nonconvex optimization problem. The algorithms demon-strated the ability to heterogeneously allocate a limited bit budget across quantized measurements, significantly reducing the A-optimal design criterion for the state estimator. We derived a closed-form gradient formula that reduces computing the gradient to a single Cholesky factorization. We presented two methods that exploit this gradient: a Frank– Wolfe method with a closed-form LMO and guaranteed 
+
+O(1 /√T ) convergence rate guarantee in terms of the FW gap, and an interior point method with L-BFGS Hessian approximation. Numerical experiments on IEEE power grid test cases show that the interior point method converges in fewer iterations, as expected for a second-order method. Additionally, the Frank–Wolfe method, being a first order method compared to a second order interior point method, is more memory efficient, allowing it to scale to large problems where storing the L-BFGS Hessian itself becomes infeasible. 
+
+b) Future work: This work opens a wide array of future directions. This includes adding stochastic trace estimation for scaling to larger problem sizes, such as the classical Hutchinson estimator or more modern approaches [ 30 ]. This paper has thus far considered only an offline state estimation problem. Future work should extend these methods to dynamic bit allocation in time-varying systems. Another promising direction is the consideration of a broader class of objectives that measure communication cost and performance criteria complementary to the A-optimal design criterion. Future work will consider general classes of convex com-munication cost functionals, and applying decision-focused learning (DFL) principles to optimize over the dynamic ranges of the channels. REFERENCES [1] R. Gray and D. Neuhoff, “Quantization,” IEEE Trans. Inf. Theory ,vol. 44, no. 6, pp. 2325–2383, 1998. [2] A. Gholami, S. Kim, Z. Dong, Z. Yao, M. W. Mahoney, and K. Keutzer, “A Survey of Quantization Methods for Efficient Neural Network Inference,” in Low-Power Computer Vision . Chapman and Hall/CRC, 2022, pp. 291–326. [3] Y. Plan and R. Vershynin, “The Generalized LASSO with Non-Linear Observations,” IEEE Trans. Inf. Theory , vol. 62, no. 3, pp. 1528–1537, 2016. [4] C. Thrampoulidis and A. S. Rawat, “The Generalized LASSO for Sub-Gaussian Measurements with Dithered Quantization,” IEEE Trans. Inf. Theory , vol. 66, no. 4, pp. 2487–2500, 2020. [5] S. Joshi and S. Boyd, “Sensor Selection via Convex Optimization,” 
+
+IEEE Trans. Signal Process. , vol. 57, no. 2, pp. 451–462, 2009. [6] J. Wang, W. Xie, and I. O. Ryzhov, “Algorithms for Budget-Constrained D-Optimal Design,” Math. Oper. Res. , 2025, early access. [7] A. Krause, J. Leskovec, C. Guestrin, J. VanBriesen, and C. Faloutsos, “Efficient Sensor Placement Optimization for Securing Large Water Distribution Networks,” J. Water Resour. Plan. Manag. , vol. 134, no. 6, pp. 516–526, 2008. [8] L. F. O. Chamon and A. Ribeiro, “Approximate Supermodularity Bounds for Experimental Design,” in Proceedings of the 31st Inter-national Conference on Neural Information Processing Systems , ser. NIPS’17. Red Hook, NY, USA: Curran Associates Inc., 2017, p. 5409–5418. [9] V. Madan, M. Singh, U. Tantipongpipat, and W. Xie, “Combinatorial Algorithms for Optimal Design,” in Proc. 32nd COLT , vol. 99, 2019, pp. 2210–2258. [10] A. Nikolov, M. Singh, and U. T. Tantipongpipat, “Proportional Volume Sampling and Approximation Algorithms for A-Optimal Design,” in 
+
+Proc. 30th ACM-SIAM SODA , 2019, pp. 1369–1386. [11] M. Frank and P. Wolfe, “An Algorithm for Quadratic Programming,” 
+
+Nav. Res. Logist. Q. , vol. 3, no. 1–2, pp. 95–110, 1956. [12] S. D. Ahipasaoglu, “A First-Order Algorithm for the A-Optimal Ex-perimental Design Problem: A Mathematical Programming Approach,” 
+
+Stat. Comput. , vol. 25, no. 6, pp. 1113–1127, Nov. 2015. [13] F. de la Hucha Arce, P. Patrinos, M. Verhelst, and A. Bertrand, “On the Convexity of Bit Depth Allocation for Linear MMSE Estimation in Wireless Sensor Networks,” IEEE Signal Process. Lett. , vol. 27, pp. 291–295, 2020. [14] F. de la Hucha Arce, F. Rosas, M. Moonen, M. Verhelst, and A. Bertrand, “Generalized Signal Utility for LMMSE Signal Estimation With Application to Greedy Quantization in Wireless Sensor Networks,” 
+
+IEEE Signal Process. Lett. , vol. 23, no. 9, pp. 1202–1206, 2016. [15] V. V. Fedorov, Theory of Optimal Experiments . Academic Press, Inc., 1972. [16] S. Sun, J. Lin, L. Xie, and W. Xiao, “Quantized Kalman Filtering,” in 
+
+Proc. 22nd IEEE ISIC , 2007, pp. 7–12. [17] E. J. Msechu, S. I. Roumeliotis, A. Ribeiro, and G. B. Giannakis, “De-centralized Quantized Kalman Filtering with Scalable Communication Cost,” IEEE Trans. Signal Process. , vol. 56, no. 8, pp. 3727–3741, 2008. [18] V. Kekatos, G. B. Giannakis, and B. Wollenberg, “Optimal Placement of Phasor Measurement Units via Convex Relaxation,” IEEE Trans. Power Syst. , vol. 27, no. 3, pp. 1521–1530, 2012. [19] S. Talkington, A. Rangarajan, P. A. Alcântara, L. Roald, D. K. Molzahn, and D. R. Fuhrmann, “Error Bounds for Radial Network Topology Learning from Quantized Measurements,” IEEE Trans. Power Syst. ,pp. 1–4, 2026. [20] G. Cheng, Y. Lin, A. Abur, A. Gómez-Expósito, and W. Wu, “A Survey of Power System State Estimation using Multiple Data Sources: PMUs, SCADA, AMI, and Beyond,” IEEE Trans. Smart Grid , vol. 15, no. 1, pp. 1129–1151, 2024. [21] R. Gray and T. Stockham, “Dithered Quantizers,” IEEE Trans. Inf. Theory , vol. 39, no. 3, pp. 805–812, 1993. [22] M. Jaggi, “Revisiting Frank-Wolfe: Projection-Free Sparse Convex Optimization,” in Proc. 30th ICML , vol. 28, no. 1, 2013, pp. 427–435. [23] S. Pokutta, “The Frank-Wolfe Algorithm: A Short Introduction,” 
+
+Jahresber. Dtsch. Math.-Ver. , vol. 126, no. 1, pp. 3–35, Mar. 2024. [24] S. Lacoste-Julien, “Convergence Rate of Frank-Wolfe for Non-Convex Objectives,” arXiv:1607.00345 [math.OC] , 2016. [25] A. Wächter and L. T. Biegler, “On the Implementation of an Interior-Point Filter Line-Search Algorithm for Large-Scale Nonlinear Programming,” Math. Program. , vol. 106, no. 1, pp. 25–57, Mar. 2006. [26] I. Dunning, J. Huchette, and M. Lubin, “JuMP: A Modeling Language for Mathematical Optimization,” SIAM Rev. , vol. 59, no. 2, pp. 295–320, 2017. [27] M. L. Balinski and H. P. Young, “The Quota Method of Apportionment,” 
+
+Amer. Math. Monthly , vol. 82, no. 7, pp. 701–730, 1975. [28] F. Pukelsheim and S. Rieder, “Efficient Rounding of Approximate Designs,” Biometrika , vol. 79, no. 4, pp. 763–770, 1992. [29] S. Babaeinejadsarookolaee et al. , “The Power Grid Library for Benchmarking AC Optimal Power Flow Algorithms,” arXiv:1908.02788 [math.OC] , 2021. [30] R. A. Meyer, C. Musco, C. Musco, and D. P. Woodruff, “Hutch++: Optimal Stochastic Trace Estimation,” in Proc. SIAM SOSA , 2021, pp. 142–155.
