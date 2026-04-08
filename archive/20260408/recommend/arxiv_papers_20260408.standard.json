@@ -1,0 +1,168 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-08T20:58:20.902847+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.00309v1",
+      "title": "Nonlinear Moving-Horizon Estimation Using State- and Control-Dependent Models",
+      "abstract": "This paper presents a state- and control-dependent moving-horizon estimation (SCD-MHE) algorithm for nonlinear discrete-time systems. Within this framework, a pseudo-linear representation of nonlinear dynamics is leveraged utilizing state- and control-dependent coefficients, where the solution to a moving-horizon estimation problem is iteratively refined. At each discrete time step, a quadratic program is executed over a sliding window of historical measurements. Moreover, system matrices are consecutively updated based upon prior iterates to capture nonlinear regimes. In contrast to the extended Kalman filter (EKF) and the unscented Kalman filter (UKF), nonlinearities and bounds are accommodated within a structured optimization framework, thereby circumventing the reliance on local Jacobian matrices. Furthermore, theoretical analysis is presented to establish the convergence of the iterative sequence, and bounded estimation errors are mathematically guaranteed under uniform observability conditions. Finally, comparative numerical experiments utilizing a quadrotor vertical kinematics system demonstrate that the SCD-MHE achieves superior estimation accuracy relative to the EKF, the UKF, and a fully nonlinear moving-horizon estimator, while reducing per-step computational latency by over an order of magnitude.",
+      "authors": [
+        "Mohammadreza Kamaldar"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY",
+        "math.DS"
+      ],
+      "published": "2026-03-31T23:13:35+00:00",
+      "link": "https://arxiv.org/pdf/2604.00309v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Nonlinear estimation algorithm for state reconstruction from measurements",
+      "llm_evidence_cn": "用于从测量值进行状态重建的非线性估计算法",
+      "llm_evidence": "用于从测量值进行状态重建的非线性估计算法",
+      "canonical_evidence": "用于从测量值进行状态重建的非线性估计算法",
+      "llm_tldr_en": "Proposes a moving-horizon estimation algorithm for nonlinear systems that could aid in current reconstruction tasks.",
+      "llm_tldr_cn": "提出了一种用于非线性系统的移动时域估计算法，可辅助电流重建任务。",
+      "llm_tldr": "提出了一种用于非线性系统的移动时域估计算法，可辅助电流重建任务。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.01921v1",
+      "title": "Learning Spatial Structure from Pre-Beamforming Per-Antenna Range-Doppler Radar Data via Visibility-Aware Cross-Modal Supervision",
+      "abstract": "Automotive radar perception pipelines commonly construct angle-domain representations via beamforming before applying learning-based models. This work instead investigates a representational question: can meaningful spatial structure be learned directly from pre-beamforming per-antenna range-Doppler (RD) measurements? Experiments are conducted on a 6-TX x 8-RX (48 virtual antennas) commodity automotive radar employing an A/B chirp-sequence frequency-modulated continuous-wave (CS-FMCW) transmit scheme, in which the effective transmit aperture varies between chirps (single-TX vs. multi-TX), enabling controlled analysis of chirp-dependent transmit configurations. We operate on pre-beamforming per-antenna RD tensors using a dual-chirp shared-weight encoder trained in an end-to-end, fully data-driven manner, and evaluate spatial recoverability using bird's-eye-view (BEV) occupancy as a geometric probe rather than a performance-driven objective. Supervision is visibility-aware and cross-modal, derived from LiDAR with explicit modeling of the radar field-of-view and occlusion-aware LiDAR observability via ray-based visibility. Through chirp ablations (A-only, B-only, A+B), range-band analysis, and physics-aligned baselines, we assess how transmit configurations affect geometric recoverability. The results indicate that spatial structure can be learned directly from pre-beamforming per-antenna RD tensors without explicit angle-domain construction or hand-crafted signal-processing stages.",
+      "authors": [
+        "George Sebastian",
+        "Philipp Berthold",
+        "Bianca Forkel",
+        "Leon Pohl",
+        "Mirko Maehlisch"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV",
+        "cs.LG",
+        "cs.RO"
+      ],
+      "published": "2026-04-02T11:39:00+00:00",
+      "link": "https://arxiv.org/pdf/2604.01921v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "learning spatial structure from pre-beamforming sensor data",
+      "llm_evidence_cn": "从预波束成形传感器数据中学习空间结构",
+      "llm_evidence": "从预波束成形传感器数据中学习空间结构",
+      "canonical_evidence": "从预波束成形传感器数据中学习空间结构",
+      "llm_tldr_en": "Investigates learning spatial structures directly from raw multi-antenna sensor data.",
+      "llm_tldr_cn": "研究直接从原始多天线传感器数据中学习空间结构的方法。",
+      "llm_tldr": "研究直接从原始多天线传感器数据中学习空间结构的方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.05334v1",
+      "title": "CT Saturation Detection and Compensation: A Hybrid Physical Model- and Data-Driven Method",
+      "abstract": "Current transformer (CT) saturation is one of the dominant causes of relay protection devices' malfunctions, which pose a threat to the safe operation of the power system. To address this problem, we propose a hybrid physical model- and data-driven method. The method firstly detects the CT saturation and then compensates it to reproduce the real waveform. Considering the multi-factor and strong nonlinearity of CT saturation, a data-driven model, namely the Fully Convolutional Network (FCN), is built to detect the operation status of CT. As for the compensation, a physical model of short-circuit current is used for its conciseness and universality. Through tactfully integrating the data model and the physical model, the proposed method is endowed with two major merits: the arduous adjustment of universal thresholds and parameters in existing methods is avoided, and the deficiency in generalization and interpretability of the data-driven method is assuaged. Simulation and experimental results verify the effectiveness of the proposed method. Furthermore, its application potential to future protection is explored.",
+      "authors": [
+        "Songhao Yang",
+        "Yubo Zhang",
+        "Zhiguo Hao",
+        "Zexuan Lin",
+        "Baohui Zhang"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-07T02:12:09+00:00",
+      "link": "https://arxiv.org/pdf/2604.05334v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "current transformer saturation detection and compensation",
+      "llm_evidence_cn": "电流互感器饱和检测与补偿",
+      "llm_evidence": "电流互感器饱和检测与补偿",
+      "canonical_evidence": "电流互感器饱和检测与补偿",
+      "llm_tldr_en": "Proposes a hybrid method to detect and compensate for current transformer saturation to reproduce real waveforms.",
+      "llm_tldr_cn": "提出了一种混合方法来检测和补偿电流互感器饱和，以还原真实波形。",
+      "llm_tldr": "提出了一种混合方法来检测和补偿电流互感器饱和，以还原真实波形。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.05890v1",
+      "title": "A Tensor-Train Framework for Bayesian Inference in High-Dimensional Systems: Applications to MIMO Detection and Channel Decoding",
+      "abstract": "Bayesian inference in high-dimensional discrete-input additive noise models is a fundamental challenge in communication systems, as the support of the required joint a posteriori probability (APP) mass function grows exponentially with the number of unknown variables. In this work, we propose a tensor-train (TT) framework for tractable, near-optimal Bayesian inference in discrete-input additive noise models. The central insight is that the joint log-APP mass function admits an exact low-rank representation in the TT format, enabling compact storage and efficient computations. To recover symbol-wise APP marginals, we develop a practical inference procedure that approximates the exponential of the log-posterior using a TT-cross algorithm initialized with a truncated Taylor-series. To demonstrate the generality of the approach, we derive explicit low-rank TT constructions for two canonical communication problems: the linear observation model under additive white Gaussian noise (AWGN), applied to multiple-input multiple-output (MIMO) detection, and soft-decision decoding of binary linear block error correcting codes over the binary-input AWGN channel. Numerical results show near-optimal error-rate performance across a wide range of signal-to-noise ratios while requiring only modest TT ranks. These results highlight the potential of tensor-network methods for efficient Bayesian inference in communication systems.",
+      "authors": [
+        "Luca Schmid",
+        "Dominik Sulz",
+        "Shrinivas Chimmalgi",
+        "Laurent Schmalen"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "cs.LG"
+      ],
+      "published": "2026-04-07T13:53:21+00:00",
+      "link": "https://arxiv.org/pdf/2604.05890v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Bayesian inference for high-dimensional signal reconstruction",
+      "llm_evidence_cn": "高维信号重建的贝叶斯推理",
+      "llm_evidence": "高维信号重建的贝叶斯推理",
+      "canonical_evidence": "高维信号重建的贝叶斯推理",
+      "llm_tldr_en": "A tensor-train framework for efficient Bayesian inference in high-dimensional additive noise models.",
+      "llm_tldr_cn": "一种用于高维加性噪声模型中高效贝叶斯推理的张量训练框架。",
+      "llm_tldr": "一种用于高维加性噪声模型中高效贝叶斯推理的张量训练框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

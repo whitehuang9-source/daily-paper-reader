@@ -1,0 +1,214 @@
+Title: Learning Spatial Structure from Pre-Beamforming Per-Antenna Range-Doppler Radar Data via Visibility-Aware Cross-Modal Supervision
+
+URL Source: https://arxiv.org/pdf/2604.01921v1
+
+Published Time: Fri, 03 Apr 2026 00:49:47 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Learning Spatial Structure from Pre-Beamforming Per-Antenna Range-Doppler Radar Data via Visibility-Aware Cross-Modal Supervision 
+
+George Sebastian, Philipp Berthold, Bianca Forkel, Leon Pohl and Mirko Maehlisch 
+
+Abstract — Automotive radar perception pipelines commonly construct angle-domain representations via beamforming before applying learning-based models. This work instead investigates a representational question: can meaningful spatial structure be learned directly from pre-beamforming per-antenna range-Doppler (RD) measurements? Experiments are conducted on a 6-TX × 8-RX (48 virtual antennas) commodity automotive radar employing an A/B chirp-sequence frequency-modulated continuous-wave (CS-FMCW) transmit scheme, in which the effective transmit aperture varies between chirps (single-TX vs. multi-TX), enabling controlled analysis of chirp-dependent transmit configurations. We operate on pre-beamforming per-antenna RD tensors using a dual-chirp shared-weight encoder trained in an end-to-end, fully data-driven manner, and evaluate spatial recoverability using bird’s-eye-view (BEV) occupancy as a geometric probe rather than a performance-driven objective. Supervision is visibility-aware and cross-modal, derived from LiDAR with explicit modeling of the radar field-of-view and occlusion-aware LiDAR observability via ray-based visibility. Through chirp ablations (A-only, B-only, A+B), range-band analysis, and physics-aligned baselines, we assess how trans-mit configurations affect geometric recoverability. The results indicate that spatial structure can be learned directly from pre-beamforming per-antenna RD tensors without explicit angle-domain construction or hand-crafted signal-processing stages. 
+
+I. INTRODUCTION Automotive radar perception pipelines commonly recover spatial structure through beamforming or angle FFT, often followed by hand-crafted signal-processing stages such as constant false alarm rate (CFAR) detection, before applying learning-based models [1]. In practice, learning-based meth-ods typically operate on angle-resolved representations such as range-azimuth (RA) maps, range-azimuth-Doppler (RAD) tensors, 4D radar cubes, or radar point clouds [2]–[6]. This separation reflects the conventional design choice that spatial mixing is performed prior to learning-based perception. However, spatial information is carried by the inter-antenna phase relationships before angle-domain construc-tion [7], [8]. This raises a representational question: is explicit angle-domain processing necessary, or can spa-tial structure relevant for geometric reasoning be learned directly from pre-beamforming per-antenna range-Doppler     
+
+> This work was supported in part by the Federal Office of Bundeswehr Equipment, Information Technology and In-Service Support (BAAINBw) and in part by dtec.bw – Digitalization and Technology Research Center of the Bundeswehr (project MORE), funded by the European Union – NextGenerationEU. The authors are with the Institute for Autonomous Driving, Department of Aerospace Engineering, University of the Bundeswehr Munich, Neubiberg, Germany. Corresponding author: george.sebastian@unibw.de No angle FFT
+> Pre-beamforming RD Radar BEV (Ours) Supervision Mask
+> Fig. 1. Despite ambiguous RD observations (near-zero Doppler), spatial structure is recoverable in BEV without explicit angle-domain processing.
+
+(RD) measurements? As illustrated in Fig. 1, even ambiguous RD observations can support recovery of meaningful spatial structure in BEV through learning. Although prior work has demonstrated learning from RD representations [9]–[12] or raw radar signals [13], [14], these approaches are typically evaluated through downstream perception tasks such as detection, tracking, or free-space segmentation, which are optimized for task performance rather than explicitly probing geometric recoverability. In contrast, we study whether spatial geometry can be recovered directly from per-antenna RD measurements, using bird’s-eye-view (BEV) occupancy as a geometric probe task over the observable scene. We study this question using a 6-TX × 8-RX auto-motive radar employing an A/B chirp-sequence frequency-modulated continuous-wave (CS-FMCW) waveform [15], in which different chirps activate different transmit config-urations (single-TX vs. multi-TX). This results in chirp-dependent effective transmit apertures, enabling controlled analysis of how transmit configuration affects the spatial structure learned by the model without explicit angle-domain construction. To probe spatial structure, we use BEV occupancy as a diagnostic task. Supervision is visibility-aware and cross-modal, derived from LiDAR with explicit modeling of radar horizontal field-of-view (HFOV) and occlusion-aware Li-DAR observability through ray-based visibility. This restricts training and evaluation to regions observable by both sensors, enabling controlled assessment through chirp ablations. The overall approach is illustrated in Fig. 2. Our contributions are as follows:  
+
+> •
+
+Learning spatial structure from pre-beamforming RD. We investigate whether meaningful spatial struc-    
+
+> arXiv:2604.01921v1 [cs.CV] 2 Apr 2026 Learning Spatial Structure from Pre-Beamforming RD via Visibility-Aware Cross-Modal Supervision
+> Learned RX Spatial Mixing
+> (RX K)
+> Learned RX Spatial Mixing
+> (RX K)
+> Per-Chirp Feature Extractor
+> Per-Chirp Feature Extractor
+> Chirp Feature Fusion
+> RD Feature Encoder
+> Learned BEV Projection
+> Chirp B, RX0 - RX7
+> Multi-TX
+> Chirp A, RX0 – RX7
+> Single-TX
+> Concat + 1x1 Conv
+> 1x1 Conv
+> Shared Weights Across Chirps
+> Predicted BEV Occupancy
+> Pre-Beamforming RD
+> No Angle-Domain Processing
+> LiDAR Observability Mask Radar HFOV Supervision Mask
+
+∩ =
+
+> Geometric Probe
+> Prediction from Pre-Beamforming RD
+> Visibility-Aware Cross-Modal Supervision
+> Masked Focal Loss
+> Shared Weights Across Chirps
+> 1x1 Conv
+
+Fig. 2. Overview of the proposed approach. Top: Prediction from pre-beamforming per-antenna range-Doppler (RD) tensors using learned spatial mixing and a convolutional RD-to-BEV mapping, without explicit angle-domain processing. Bottom: Visibility-aware cross-modal supervision constructed by intersecting the radar horizontal field-of-view (HFOV) with the LiDAR observability mask. In the supervision mask, LiDAR-observable occupied (yellow) and free (teal) cells within the radar HFOV are retained, while LiDAR-unobservable regions (purple) within the HFOV are treated as unknown and excluded from supervision; the radar HFOV is shown in white (with black denoting outside-HFOV regions in the intermediate mask), and regions outside the HFOV are not considered during training or evaluation. Training uses masked focal loss restricted to the valid region, enabling evaluation of geometric recoverability from RD as a probe task. 
+
+ture can be learned directly from pre-beamforming per-antenna RD tensors without explicit angle-domain construction using a dual-chirp shared-weight encoder that processes chirp-wise RD measurements in an end-to-end manner. 
+
+• Chirp-dependent transmit configuration analysis. 
+
+Leveraging the structured A/B waveform (single-TX vs. multi-TX chirps), we perform chirp ablations (A-only, B-only, A+B) to analyze how changes in effective transmit aperture influence geometric recoverability. 
+
+• BEV occupancy as a geometric probe. We use BEV occupancy not as a performance benchmark but as a structured diagnostic task to evaluate whether spatial geometry can be learned from pre-beamforming RD measurements. 
+
+• Visibility-aware cross-modal supervision and physics-aligned evaluation. We introduce a LiDAR-based supervision protocol with explicit modeling of radar HFOV and LiDAR observability, enabling sensor-consistent evaluation with explicit unknown-region handling and physics-grounded analyses of geometric recoverability. II. RELATED WORK 
+
+A. Radar Signal Representations and RD-Based Learning 
+
+Learning-based radar perception spans multiple signal rep-resentations depending on the stage of processing [1]. Many pipelines operate after angle-domain processing using RA maps, RAD tensors, or 4D radar cubes (e.g., RODNet [4], RADDet [3], and transformer-based radar models [2]). Other approaches operate on post-processed radar outputs such as CFAR-based radar point clouds [5], [6]. Accordingly, we focus on learned radar representations and review prior work that uses learned perception models rather than classical signal-processing pipelines for detection or angle estimation. RD representations arise at different stages of the radar processing pipeline, either before beamforming as per-antenna RD measurements with implicit angular structure, or after angle-domain processing as angle-resolved RD slices from RAD representations [1]. FFT-RadNet learns a latent RA representation from per-receiver RD inputs for vehi-cle detection and free-space estimation in high-definition radar systems with 192 virtual antennas [9]. In contrast, our formulation predicts dense BEV occupancy rather than separating detection and free-space estimation, providing a unified spatial representation of the scene. DAROD performs object detection directly on RD representations (referred to as RD maps in [10]), while DopplerFormer leverages velocity supervision on RD inputs to improve radar-based object detection [11]. RadarMOTR applies transformer-based architectures on RD representations (also referred to as RD maps in [12]) for multi-object tracking. In parallel, several works explore learning directly from raw ADC signals to reduce reliance on handcrafted processing, including CNN-Swin ADC [14] and ADCNet [13]. While these works demonstrate that learning from RD or raw radar signals can support radar perception tasks such as detection, tracking, and free-space estimation, their primary objective is improving downstream perception performance, typically in high-resolution or fixed-MIMO radar regimes. In contrast, our work investigates a representational question: whether spatial structure sufficient for geometric reasoning can be learned directly from pre-beamforming per-antenna RD tensors, without explicitly reconstructing angle-domain representations, using a commodity automotive radar with 48 virtual antennas under an A/B CS-FMCW waveform with chirp-dependent transmit antenna activation. 
+
+B. Radar-Based Occupancy and Scene Completion 
+
+Recent work has explored the use of radar for dense spatial reasoning tasks such as occupancy prediction and semantic scene completion [2], [16]–[18]. Methods such as RadarOcc operate on angle-resolved 4D radar tensors [16], while Li-CROcc uses radar point clouds with cross-modal distillation to improve semantic occupancy performance [17]. Large-scale transformer models trained on 4D radar cubes further show that radar can produce dense BEV and occupancy predictions under fixed MIMO configurations [2]. LiDAR-supervised radar occupancy detectors operating on range-azimuth-elevation-Doppler (RAED) cubes have also been proposed (e.g., RaDelft [18]). These approaches rely on angle-resolved or post-processed radar representations and aim to improve occupancy ac-curacy. In contrast, we study a different representational stage by operating directly on pre-beamforming per-antenna RD tensors, before explicit angle-domain construction. BEV occupancy is therefore used not as a performance objective but as a geometric probe to test whether spatial structure can emerge from learned cross-antenna mixing of pre-beamforming RD measurements. 
+
+C. Public Radar Datasets 
+
+Public radar datasets span multiple representations, includ-ing angle-resolved tensors (RADDet [3], CARRADA [19], K-Radar [20]), post-processed radar point clouds (7V-Scanario [21], RadarScenes [22]), and mechanical radar imagery (Oxford Radar RobotCar [23], RADIATE [24], Boreas [25]). Datasets with lower-level signal access have also emerged. RADIal provides raw ADC recordings and supports gener-ation of RD, RA, and RAD representations from a high-definition MIMO radar (12-TX × 16-RX) [9]. The I/Q-1M dataset provides large-scale raw I/Q measurements (3-TX 
+
+× 4-RX) enabling learning on 4D radar cubes [2]. These datasets employ fixed transmit activation patterns within each radar cycle. In contrast, our work studies pre-beamforming per-antenna RD measurements under the A/B CS-FMCW waveform, in which the transmit antenna activation pattern varies across chirps within a radar cycle (single-TX A-ramp vs. multi-TX B-ramp). This produces different effective transmit aper-tures across chirps, enabling controlled chirp-wise analyses  
+
+> Fig. 3. Sensor setup with radar (red), LiDAR (blue), and camera (green).
+
+(single-TX vs. multi-TX) to study the recoverability of spatial structure from per-antenna RD measurements. To our knowledge, publicly available automotive radar datasets employ fixed MIMO activation patterns and do not expose chirp-level transmit antenna activation required for controlled aperture analyses within a radar cycle. III. R ADAR REPRESENTATION AND DATASET SETUP 
+
+A. Pre-Beamforming Per-Antenna RD Measurements 
+
+The radar sensor provides complex pre-beamforming RD measurements for each receive antenna. For each frame we obtain a tensor: 
+
+X ∈ RC×Nrx ×R×D×2, (1) where C denotes the two chirp types in the A/B waveform, 
+
+R the number of range bins, Nrx the number of receive antennas, and D the number of Doppler bins. The final dimension represents the real and imaginary components of the complex signal. In our setup the RD tensor uses R = 200 range bins and D = 128 Doppler bins, corresponding to a radar range resolution of approximately 0 .33 m per bin. The radar employs an A/B CS-FMCW waveform in which different chirps activate different transmit antenna configurations (single-TX vs. multi-TX). The RD tensors are extracted prior to angle-domain processing, preserving the per-antenna phase relationships that encode spatial cues. Since the sensor primarily captures spatial structure in the horizontal (azimuth) plane, with limited elevation resolution, we adopt BEV as the geometric probe task. 
+
+B. Sensor Setup and Data Collection 
+
+Data collection was performed using a research vehicle equipped with a Smartmicro DRVEGRD 152 radar (76-77 GHz, 6-TX × 8-RX, 64 ◦ HFOV, mid-range mode 65 m, 18 Hz) operating in radar cube streaming mode, providing pre-beamforming per-antenna RD tensors without additional on-device detection processing [15], a Velodyne Alpha Prime LiDAR (128 channels, 10 Hz), and a Basler acA2440-20gc RGB camera (10 Hz). The LiDAR is roof-mounted, while the radar is mounted below the LiDAR, as shown in Fig. 3. Data were recorded on campus roads and automotive test-track environments containing both stationary and dynamic scenes with ego-motion and moving vehicles, pedestrians, roadside vegetation, and terrain slopes. Radar and LiDAR frames are aligned via nearest-neighbor temporal matching (within a small temporal offset) to account for differing sensor frame rates, and the resulting radar-LiDAR pairs are used for cross-modal supervision. The dataset contains 16,600 synchronized radar-LiDAR frames, split into 11,680 training and 4,920 validation frames (≈ 70 /30), with evaluation performed on the validation set. Splits are created at the sequence level to avoid temporal overlap between training and validation data. IV. M ETHODOLOGY 
+
+A. Visibility-Aware Supervision 
+
+LiDAR supervision is generated in BEV using ground-removed point clouds (via a simple height-based filter in the LiDAR frame). The BEV plane is discretized into a grid, and cells containing at least one non-ground LiDAR return are labeled as occupied. To account for LiDAR occlusions, we compute a BEV observability mask using 2D ray casting from the LiDAR origin over discretized azimuth bins (0.05 ◦ resolution), sim-ilar to ray-based visibility modeling used in occupancy label generation pipelines [26]. The nearest non-ground return acts as an occluder; if no obstacle exists, the farthest LiDAR return defines the free-space extent. Cells along each ray up to the endpoint are marked observable, while cells beyond the endpoint are treated as unobserved. Supervision is applied only in regions jointly observable by radar and LiDAR. The supervision mask is defined as 
+
+Msup = MHFOV ∩ MLiDAR-Obs , (2) where MHFOV denotes the radar HFOV mask and 
+
+MLiDAR-Obs denotes the LiDAR observability mask (cells observed by LiDAR, either free or occupied). Intersecting with the radar MHFOV removes LiDAR-observed regions outside the radar sensing sector. Cells within the radar HFOV that are not observable by LiDAR are treated as unknown and excluded from supervision, but are retained for evaluation of unknown-region hallucination. Regions outside the radar HFOV are not considered during training or evaluation. The supervision mask construction is illustrated in Fig. 2 (bottom). Because LiDAR observability varies with scene geometry and occlusions, the supervision mask is scene-dependent, resulting in a partially supervised learning setting. Addi-tionally, BEV occupancy exhibits strong class imbalance, with free-space cells significantly outnumbering occupied cells. Training therefore employs a masked focal loss [27] computed only over i ∈ Msup . As such, LiDAR provides a high-resolution geometric reference for supervising spatial consistency, but is used as a geometric proxy rather than as radar-equivalent ground truth, due to differing sensing physics, occlusion behavior, and the mounting offset between sensors. 
+
+B. Pre-Beamforming RD-to-BEV Learning Network 
+
+The proposed network maps the pre-beamforming per-antenna RD tensor X defined in (1) directly to BEV oc-cupancy predictions, as illustrated in Fig. 2 (top). The input consists of two RD tensors corresponding to the two chirp types of the A/B waveform. For each chirp, the real and imaginary components across receive antennas are arranged into a channel-first tensor of size 2 Nrx × R × D, and normalized at each RD cell by the square root of the mean power across receive antennas. Each chirp branch then ap-plies a receive-antenna mixing layer (Rx →K), implemented as a 1 × 1 convolution that mixes information across antenna channels while preserving the range-Doppler resolution. The mixing weights are shared across chirp branches, as both chirps produce RD tensors with the same signal structure, differing only in effective transmit aperture. The resulting features are processed by a shared per-chirp feature extractor. The two chirp feature streams are fused by concatenation followed by a 1 × 1 convolution, producing a joint RD representation. This fused representation is processed by an RD encoder, which reduces resolution while extracting higher-level features. Finally, the encoded features are mapped to the BEV plane using a lightweight convolutional encoder-decoder projection network, followed by BEV refinement layers and a prediction head that outputs occupancy logits. The architecture uses convolutional operators throughout and learns the RD-to-BEV mapping end-to-end in a fully data-driven manner, without explicit angle-domain recon-struction or hand-crafted geometric projection. 
+
+Ablation variants. For chirp ablations, the same architecture is trained separately using either Chirp A, Chirp B, or both chirps jointly as input, and evaluated in the corresponding setting. No changes are made to the network design. In the single-chirp setting, the absent chirp input is set to zero while keeping the chirp fusion module unchanged. For RD structure ablations, we remove Doppler or range variation by averaging along the corresponding dimension and broadcasting the averaged values back to the original tensor shape, while keeping the rest of the architecture unchanged. V. E XPERIMENTS 
+
+A. Training Setup 
+
+The BEV grid is defined in the LiDAR coordinate frame with a base resolution of 0.5 m per cell, covering x ∈
+
+[0 m , 60 m ] (forward) and y ∈ [−38 m , 38 m ] (lateral), corre-sponding to a grid of H × W = 120 × 152 cells. Additional experiments evaluate finer resolutions of 0.4 m and 0.35 m while keeping the same spatial extent. Pre-beamforming RD tensors are provided in the radar coordinate frame without any explicit geometric transformation. The network learns to predict occupancy in the LiDAR BEV frame through cross-modal supervision, with the BEV frames approximately aligned due to the fixed rigid sensor mounting; however, residual mismatch remains due to differing viewpoints, sens-ing physics, and mounting offset between sensors, and is handled implicitly by the learned mapping. The network is trained end-to-end on the training split of paired radar-LiDAR data described in Sec. III-B. Training uses the AdamW optimizer [28] with an initial learning rate of 1 × 10 −4 and cosine learning-rate decay for 50 epochs with a batch size of 4. The model contains approximately 3.2M trainable parameters and is trained from scratch. Supervision is applied only within the visibility-aware mask Msup defined in (2) and described in Sec. IV-A, resulting in a partially supervised learning setting where su-pervision is available only for cells observable by LiDAR and within the radar HFOV. Because BEV occupancy is strongly imbalanced (free space ≫ occupied), training employs a masked focal loss [27] computed only over pixels i ∈ Msup .
+
+B. Evaluation Protocol 
+
+Evaluation is performed on the validation set within Msup 
+
+defined in (2). Performance is reported using average pre-cision (AP), defined as the area under the precision-recall curve (AUPRC), computed over pixel-wise BEV occupancy predictions. We additionally report Intersection over Union (IoU) for the occupied class, as free-space dominates the BEV grid, using a global threshold selected by maximizing the F1 score on the validation set for each model, and applied uniformly across all bands. All metrics are reported in the range [0,1]. To analyze spatial behavior, performance is reported across range bands (0-20 m, 20-40 m, 40-60 m) and angular sectors within the radar HFOV. Predictions outside the LiDAR ob-servability mask are excluded from both AP and IoU and an-alyzed separately using an unknown-region hallucination rate (UHR), defined as the fraction of predicted occupied cells within LiDAR-unobservable regions ( MHFOV ∩ ¬ MLiDAR-Obs )at the model’s global validation threshold. We include two simple radar baselines for reference:  
+
+> •
+
+Random prior , predicting a constant occupancy prob-ability equal to the empirical fraction of occupied cells within the supervised BEV region Msup , estimated from the dataset distribution.  
+
+> •
+
+Range-energy projection , a physics-inspired baseline obtained by averaging RD magnitude across chirps, antennas, and Doppler bins to produce a normalized 1D range energy profile, which is then mapped to BEV cells based on their radial distance, effectively assuming az-imuthal symmetry to form a coarse occupancy estimate. Additional analyses include chirp configuration analysis (A-only, B-only, A+B), RD structure ablations (Doppler and range collapse), BEV resolution studies, and band-wise evaluation across range and angular sectors. 
+
+C. Main Results 
+
+Table I reports performance at the base BEV resolution of 0.5 m. The proposed method substantially outperforms both baselines, achieving a large improvement over the random prior and the range-energy projection baseline. The range-energy baseline provides only marginal improvement over the random prior, indicating that range-only aggregation pro-vides limited geometric structure in the absence of angular discrimination. This behavior is illustrated qualitatively in Fig. 4.                                
+
+> TABLE I MAIN RESULTS AT 0.5 MBEV RESOLUTION . AP IS COMPUTED ON Msup ,
+> WHILE IOUIS COMPUTED ON THRESHOLDED PREDICTIONS WITHIN
+> Msup . UHR IS COMPUTED ON THE UNKNOWN REGION AT EACH MODEL ’SGLOBAL VALIDATION THRESHOLD . L OWER UHR IS BETTER .Method AP ↑IoU ↑UHR ↓
+> Random prior 0.05 --Range-energy projection 0.06 0.06 0.17 Ours 0.36 0.24 0.11 LiDAR BEV GT Range-Energy Baseline Radar BEV (Ours)
+> Fig. 4. Comparison between LiDAR BEV GT, the range-energy (radial) baseline, and the proposed method. The baseline produces radially symmet-ric responses due to the absence of angular information, while the proposed model recovers spatially localized structure from pre-beamforming RD.
+
+In contrast, the learned model achieves significantly higher AP and IoU, demonstrating that meaningful spatial structure can be recovered directly from pre-beamforming per-antenna RD measurements without explicit angle-domain processing. Additionally, the proposed method reduces hallucination in unknown regions compared to the range-energy baseline, indicating more reliable spatial reasoning beyond observed areas. The absolute performance reflects the inherent difficulty of BEV occupancy prediction under cross-modal supervision between radar and LiDAR, which rely on different sensing physics, as well as partial observability in the supervi-sion mask. In particular, radar measurements produce more diffuse, blob-like spatial responses due to lower angular resolution and multipath effects, whereas LiDAR provides sharper geometric boundaries. As a result, IoU penalizes these differences, leading to lower scores even when the predicted spatial structure is qualitatively consistent. 
+
+D. Qualitative Results 
+
+Fig. 5 shows representative qualitative results, including both successful predictions and failure cases. The model recovers meaningful spatial structure from pre-beamforming RD, with consistent occupancy responses for large objects such as vehicles and extended terrain structures (e.g., slopes). Predictions are spatially more diffuse than LiDAR ground truth, reflecting the limited angular resolution and speckle characteristics of automotive radar. This leads to blob-like responses and slight spatial offsets relative to LiDAR an-notations, which can reduce pixel-wise agreement despite consistent object-level structure. Failure cases are primarily observed for small or closely spaced objects, where limited angular resolution and multi-Camera  Range-Doppler  LiDAR BEV GT  Radar BEV Prediction Fig. 5. Qualitative radar BEV occupancy predictions from pre-beamforming RD tensors. Each row shows (from left to right) the camera image (for visualization only), RD magnitude (single RX, chirp A; range on the vertical axis, Doppler on the horizontal axis, zero Doppler centered), LiDAR BEV ground truth within the visible region, and the radar BEV prediction. For visualization, RD is shown for a single receive channel and chirp with Doppler centered via FFT shift and magnitude log-compressed and normalized, while the model operates on all receive channels and both chirps (A+B) using the native RD representation without these visualization transformations. In the LiDAR BEV ground-truth (GT) panel, occupied cells are shown in yellow, free space in teal, and LiDAR-unobservable regions within the radar HFOV in purple (unknown and excluded from supervision), while regions outside the radar HFOV are not considered during training or evaluation; in the radar BEV prediction, non-occupied cells are shown in purple. Radar predictions recover coherent spatial responses for large structures while exhibiting more diffuse, blob-like responses compared to LiDAR. Notably, radar frequently produces responses in regions occluded or unobserved in LiDAR, which may arise from multipath propagation and differences in sensing physics, indicating that the model captures radar-specific phenomena beyond LiDAR supervision. 
+
+path effects lead to merged or ambiguous responses. Dif-ferences relative to LiDAR also arise from cross-modal misalignment and sensing physics; notably, radar can respond in partially occluded regions not observed by LiDAR, re-flecting complementary sensing rather than purely erroneous predictions. The qualitative results are consistent with the quantitative evaluation: predictions are less precise than LiDAR supervi-sion, but still capture coherent spatial structure, supporting the use of BEV occupancy as a probe rather than as a reconstruction of LiDAR measurements. 
+
+E. Chirp Configuration Analysis 
+
+Table II compares performance under different chirp con-figurations. Using only Chirp A (single-TX, limited effective 
+
+TABLE II CHIRP CONFIGURATION ANALYSIS AT 0.5 M BEV RESOLUTION . A LL CONFIGURATIONS USE THE SAME MODEL ARCHITECTURE TRAINED UNDER DIFFERENT CHIRP SETTINGS .Chirp configuration AP ↑ IoU ↑
+
+A-only 0.28 0.19 B-only 0.34 0.23 A+B 0.36 0.24 Camera  RD (RX0, Chirp A)  RD (RX0, Chirp B)   
+
+> Chirp A only Chirp B only Chirp A + B
+
+Fig. 6. Qualitative comparison of chirp configurations for a representative scene. Top row shows the camera view and RD magnitude (single RX) for Chirp A and Chirp B (shown for visualization; the model uses all receive channels for each chirp configuration). Bottom row shows BEV predictions using Chirp A, Chirp B, and both chirps (A+B). The visual progression is consistent with the quantitative results in Table II. 
+
+transmit aperture) yields the lowest performance, indicating weaker recoverability of spatial structure from the RD rep-resentation. Using only Chirp B (multi-TX, full effective transmit aperture) leads to a clear improvement in both AP and IoU, highlighting the benefit of a larger effective transmit aperture, which enables more informative inter-antenna phase relationships for spatial reasoning. The combined A+B configuration achieves the best perfor-mance, suggesting that the two chirp types provide comple-mentary cues that help reduce ambiguities in the RD repre-sentation. While Chirp B offers stronger spatial information, incorporating Chirp A further improves performance, indi-cating that combining multiple chirp measurements enhances geometric recoverability. This analysis shows that recoverability of spatial structure from pre-beamforming RD depends on the effective trans-mit aperture encoded in the waveform, and benefits from combining multiple chirp configurations. Fig. 6 provides a qualitative illustration of this trend. 
+
+F. RD Structure Ablations 
+
+Performance under RD structure variations is summarized in Table III. The full RD model achieves the best perfor-mance across all metrics, indicating that jointly modeling TABLE III EFFECT OF RD STRUCTURE AT 0.5 M BEV RESOLUTION . AP IS COMPUTED ON Msup , WHILE IOU IS COMPUTED ON THRESHOLDED PREDICTIONS WITHIN Msup . UHR IS COMPUTED ON THE UNKNOWN REGION AT EACH MODEL ’S GLOBAL VALIDATION THRESHOLD . L OWER 
+
+UHR IS BETTER .Variant AP ↑ IoU ↑ UHR ↓
+
+Full RD 0.36 0.24 0.11 Doppler-collapsed 0.29 0.20 0.12 Range-collapsed 0.08 0.07 0.25 TABLE IV EFFECT OF BEV RESOLUTION ON PERFORMANCE . AP IS COMPUTED ON 
+
+Msup , WHILE IOU IS COMPUTED ON THRESHOLDED PREDICTIONS WITHIN Msup .Resolution AP ↑ IoU ↑
+
+0.5 m 0.36 0.24 0.4 m 0.30 0.21 0.35 m 0.27 0.19 
+
+range and Doppler is critical for recovering spatial structure. Collapsing the Doppler dimension leads to a noticeable drop in both AP and IoU, showing that Doppler carries useful information for geometric recoverability beyond range alone. While some structure remains recoverable without Doppler, performance degradation suggests that Doppler contributes complementary cues that support spatial reasoning. In contrast, collapsing the range dimension results in a severe performance drop, with AP approaching the random prior and a large increase in hallucination in unknown re-gions. This indicates that range is fundamental for spatial lo-calization, and that removing range structure largely destroys the geometric information available in the representation. Preserving the full RD structure is therefore important for geometric recoverability, with range providing the pri-mary localization signal and Doppler contributing additional complementary information that improves performance and reduces hallucination. 
+
+G. BEV Resolution Study 
+
+As shown in Table IV, performance decreases as the grid resolution becomes finer, with both AP and IoU dropping from 0.5 m to 0.35 m. This trend reflects the increased difficulty of the task at higher resolutions, where each cell covers a smaller spatial extent and requires more precise localization. Given the limited angular resolution and diffuse reflections of automo-tive radar, finer grids lead to sparser and more challenging supervision at the cell level, making accurate occupancy prediction more challenging. This effect is also influenced by the decreasing fraction of occupied cells at finer resolutions, which increases class imbalance. Despite this degradation, the model retains non-trivial performance across resolutions under stricter localization requirements. 
+
+TABLE V BAND -WISE PERFORMANCE AT 0.5 M BEV RESOLUTION . AP IS COMPUTED ON Msup , WHILE IOU IS COMPUTED ON THRESHOLDED PREDICTIONS WITHIN Msup . pos frac DENOTES THE FRACTION OF OCCUPIED CELLS WITHIN EACH BAND OF Msup .Band AP ↑ IoU ↑ pos frac Overall 0.36 0.24 0.05 0-20 m 0.44 0.29 0.06 20-40 m 0.38 0.25 0.06 40-60 m 0.25 0.19 0.04 Center (0-15 ◦) 0.33 0.23 0.05 Edges (15-32 ◦) 0.38 0.25 0.06 0.0 0.2 0.4 0.6 0.8 1.0 
+
+> Recall
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Precision
+> Overall (AP=0.36)
+> 0–20 m (AP=0.44)
+> 20–40 m (AP=0.38)
+> 40–60 m (AP=0.25)
+> Center (0–15°) (AP=0.33)
+> Edges (15–32°) (AP=0.38)
+
+Fig. 7. Precision–recall curves across range and angular bands within 
+
+Msup (angles shown as absolute azimuth, ±θ ). Performance degrades with increasing range, while angular differences are modest. Legend reports AP (AUPRC) per band. 
+
+The results highlight a trade-off between spatial resolution and recoverability, with 0.5 m providing a favorable balance for this setting. 
+
+H. Band-wise Analysis 
+
+Performance varies across range and angular bands, as shown in Table V. It decreases with increasing range, with AP dropping from 0-20 m to 40-60 m. This trend is consistent with reduced signal strength and increased sparsity of radar returns at longer distances, making spatial structure more difficult to recover. The lower pos frac in the far range is also associated with increased class imbalance, which may contribute to the observed degradation. Across angular bands, performance is slightly higher in the edge regions compared to the center, although the difference is modest. This variation may reflect differences in scene structure and radar coverage across the field of view. Geometric recoverability from pre-beamforming RD varies with both range and angle, with performance degrad-ing at longer ranges and modestly varying across the field of view (Fig. 7). VI. C ONCLUSION 
+
+This work investigates whether meaningful spatial struc-ture can be recovered from pre-beamforming per-antenna RD measurements. Using BEV occupancy as a geometric probe task with visibility-aware cross-modal supervision, the proposed approach demonstrates that spatial structure can be learned directly from RD without explicit angle-domain reconstruction or hand-crafted signal-processing stages. Experimental results show that the learned model sub-stantially outperforms simple radar baselines and captures consistent spatial responses across ranges, resolutions, and chirp configurations. Ablation studies further indicate that geometric recoverability depends on both the effective trans-mit aperture and the preservation of RD structure, while degrading with increased spatial resolution and distance. These findings show that spatial structure carried by inter-antenna phase relationships in pre-beamforming RD can be recovered through learned spatial mixing. This highlights the potential of pre-beamforming representations for learning-based radar perception without relying on explicit signal processing pipelines that may discard or irreversibly reduce information. REFERENCES [1] S. Yao, R. Guan, Z. Peng, C. Xu, Y. Shi, W. Ding, E. Gee Lim, Y. Yue, H. Seo, K. Lok Man, J. Ma, X. Zhu, and Y. Yue, “Exploring Radar Data Representations in Autonomous Driving: A Comprehensive Review,” IEEE Transactions on Intelligent Transportation Systems ,vol. 26, no. 6, pp. 7401–7425, 2025. [2] T. Huang, A. Prabhakara, C. Chen, J. Karhade, D. Ramanan, M. O’toole, and A. Rowe, “Towards Foundational Models for Single-Chip Radar,” in Proceedings of the IEEE/CVF International Confer-ence on Computer Vision (ICCV) , 2025, pp. 24 655–24 665. [3] A. Zhang, F. E. Nowruzi, and R. Laganiere, “RADDet: Range-Azimuth-Doppler based Radar Object Detection for Dynamic Road Users,” in 2021 18th Conference on Robots and Vision (CRV) , 2021. [4] Y. Wang, Z. Jiang, Y. Li, J.-N. Hwang, G. Xing, and H. Liu, “ROD-Net: A Real-Time Radar Object Detection Network Cross-Supervised by Camera-Radar Fused Object 3D Localization,” IEEE Journal of Selected Topics in Signal Processing , vol. 15, no. 4, 2021. [5] N. Scheiner, F. Kraus, N. Appenrodt, J. Dickmann, and B. Sick, “Object detection for automotive radar point clouds – a comparison,” 
+
+AI Perspectives , vol. 3, no. 1, Nov. 2021. [6] F. Fent, P. Bauerschmidt, and M. Lienkamp, “RadarGNN: Transfor-mation Invariant Graph Neural Network for Radar-Based Perception,” in Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) Workshops , 2023, pp. 182–191. [7] S. M. Patole, M. Torlak, D. Wang, and M. Ali, “Automotive radars: A review of signal processing techniques,” IEEE Signal Processing Magazine , vol. 34, no. 2, pp. 22–35, 2017. [8] S. Saponara, M. S. Greco, and F. Gini, “Radar-on-Chip/in-Package in Autonomous Driving Vehicles and Intelligent Transport Systems: Opportunities and Challenges,” IEEE Signal Processing Magazine ,vol. 36, no. 5, pp. 71–84, 2019. [9] J. Rebut, A. Ouaknine, W. Malik, and P. P´ erez, “Raw High-Definition Radar for Multi-Task Learning,” in 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 2022. [10] C. Decourt, R. VanRullen, D. Salle, and T. Oberlin, “DAROD: A Deep Automotive Radar Object Detector on Range-Doppler maps,” in 2022 IEEE Intelligent Vehicles Symposium (IV) , 2022, pp. 112–118. [11] S. Zhao, W. Sun, H. Li, and Z. Jiang, “Doppler Former: Velocity Su-pervision of Raw Radar Data,” in 2025 IEEE International Conference on Robotics and Automation (ICRA) , 2025, pp. 13 036–13 042. [12] M. Dell, W. Bradfisch, S. Schober, and C. Kl¨ ock, “RadarMOTR: Multi-Object Tracking with Transformers on Range-Doppler Maps,” in 2024 International Radar Conference (RADAR) , 2024. [13] B. Yang, I. Khatri, M. Happold, and C. Chen, “ADCNet: End-to-end perception with raw radar ADC data,” 2023. [14] I. Banwait, N. Zeller, and J. Alirezaie, “CNN-Swin Backbones in Radar Object Detection for Autonomous Vehicles using Raw ADC Signals,” in 2025 21st International Conference on Intelligent Envi-ronments (IE) , 2025. [15] smartmicro GmbH, “DRVEGRD 152 Automotive Radar Sensor Datasheet,” 2024. [Online]. Avail-able: https://www.smartmicro.com/fileadmin/media/Partner Zone/ Automotive Radar/DRVEGRD 152 Automotive Datasheet.pdf [16] F. Ding, X. Wen, Y. Zhu, Y. Li, and C. X. Lu, “RadarOcc: Robust 3D Occupancy Prediction with 4D Imaging Radar,” in Advances in Neural Information Processing Systems , A. Globerson, L. Mackey, D. Belgrave, A. Fan, U. Paquet, J. Tomczak, and C. Zhang, Eds., vol. 37. Curran Associates, Inc., 2024, pp. 101 589–101 617. [17] Y. Ma, J. Mei, X. Yang, L. Wen, W. Xu, J. Zhang, X. Zuo, B. Shi, and Y. Liu, “LiCROcc: Teach Radar for Accurate Semantic Occupancy Prediction Using LiDAR and Camera,” IEEE Robotics and Automation Letters , vol. 10, no. 1, pp. 852–859, 2025. [18] I. Roldan, A. Palffy, J. F. P. Kooij, D. M. Gavrila, F. Fioranelli, and A. Yarovoy, “A Deep Automotive Radar Detector Using the RaDelft Dataset,” IEEE Transactions on Radar Systems , vol. 2, 2024. [19] A. Ouaknine, A. Newson, J. Rebut, F. Tupin, and P. P´ erez, “CAR-RADA Dataset: Camera and Automotive Radar with Range- Angle-Doppler Annotations,” in Proceedings of the 25th International Con-ference on Pattern Recognition (ICPR) , 2021, pp. 5068–5075. [20] D.-H. Paek, S.-H. KONG, and K. T. Wijaya, “K-Radar: 4D Radar Object Detection for Autonomous Driving in Various Weather Con-ditions,” in Advances in Neural Information Processing Systems ,S. Koyejo, S. Mohamed, A. Agarwal, D. Belgrave, K. Cho, and A. Oh, Eds., vol. 35. Curran Associates, Inc., 2022, pp. 3819–3829. [21] P. Berthold, B. Forkel, and M. Maehlisch, “A Multi-Vehicle Dataset with Camera, LiDAR, and Radar Sensors and Scanned 3D Models for Custom Auto-Annotation using RTK-GNSS,” in Symposium Sensor Data Fusion (SDF) , 2025. [22] O. Schumann, M. Hahn, N. Scheiner, F. Weishaupt, J. F. Tilly, J. Dickmann, and C. W¨ ohler, “RadarScenes: A Real-World Radar Point Cloud Data Set for Automotive Applications,” in 2021 IEEE 24th International Conference on Information Fusion (FUSION) , 2021. [23] D. Barnes, M. Gadd, P. Murcutt, P. Newman, and I. Posner, “The Oxford Radar RobotCar Dataset: A Radar Extension to the Ox-ford RobotCar Dataset,” in 2020 IEEE International Conference on Robotics and Automation (ICRA) , 2020, pp. 6433–6438. [24] M. Sheeny, E. De Pellegrin, S. Mukherjee, A. Ahrabian, S. Wang, and A. Wallace, “RADIATE: A Radar Dataset for Automotive Perception in Bad Weather,” in 2021 IEEE International Conference on Robotics and Automation (ICRA) , 2021. [25] K. Burnett, D. J. Yoon, Y. Wu, A. Z. Li, H. Zhang, S. Lu, J. Qian, W.-K. Tseng, A. Lambert, K. Y. Leung, A. P. Schoellig, and T. D. Barfoot, “Boreas: A Multi-Season Autonomous Driving Dataset,” The International Journal of Robotics Research , 2023. [26] X. Tian, T. Jiang, L. Yun, Y. Mao, H. Yang, Y. Wang, Y. Wang, and H. Zhao, “Occ3D: A Large-Scale 3D Occupancy Prediction Bench-mark for Autonomous Driving,” in Advances in Neural Information Processing Systems , A. Oh, T. Naumann, A. Globerson, K. Saenko, M. Hardt, and S. Levine, Eds., vol. 36. Curran Associates, Inc., 2023. [27] T.-Y. Lin, P. Goyal, R. Girshick, K. He, and P. Doll´ ar, “Focal Loss for Dense Object Detection,” IEEE Transactions on Pattern Analysis and Machine Intelligence , vol. 42, no. 2, pp. 318–327, 2020. [28] I. Loshchilov and F. Hutter, “Decoupled Weight Decay Regulariza-tion,” in International Conference on Learning Representations , 2019.

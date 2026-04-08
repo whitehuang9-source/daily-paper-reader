@@ -1,0 +1,2031 @@
+Title: 
+
+URL Source: https://arxiv.org/pdf/2604.05334v1
+
+Published Time: Wed, 08 Apr 2026 00:22:32 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+IEEE Transactions on Power Delivery 1
+
+Abstract —Current transformer ( CT) saturation is one of the 
+
+dominant causes of relay protection devices’ malfunctions, whi ch 
+
+pose a threat to the safe operation of the power system. To address 
+
+th is problem, we propose a hybrid physical model - and 
+
+data -driven method . The me th od firstly detect s the CT saturation 
+
+and then compensa te s it to reproduce the real waveform .
+
+Considerin g the multi -factor and strong nonlinear ity of CT 
+
+saturation , a data -driven model, namely the Full y Convolutional 
+
+Network (FCN) , is built to detect the operation status of CT . As 
+
+for the compensation , a physical model of short -circuit current is 
+
+used for it s conciseness and universality. Through tactfully 
+
+integrating the data model and the physical model, the proposed 
+
+method is endowed with two major merits: the arduous 
+
+adjustment of universal thresholds and parameters in existing 
+
+method s is avoided, and the deficiency in generalization and 
+
+interpretability of the data -driven method is assuaged. Simulat ion 
+
+and experimental results verify the effectiveness of the proposed 
+
+method. Furthermore , its application potential to future 
+
+protection is explored .
+
+Index Terms —Current transformer (CT) , CT saturation ,
+
+physical model -driven , data -driven, Full y Convolutional Network 
+
+(FCN). 
+
+NOMENCLATURE 
+
+Acronyms 
+
+CT Current transformer .
+
+EKF Extended Kalman filtering .
+
+FC N Full convolutional network .
+
+NLS Nonlinear leas t squares. 
+
+LM-NLS Levenberg -Marquardt nonlinear least squares .
+
+Variables and Parameters 1i
+
+Short -circuit current /Primary current of CT .2i
+
+Secondary current of CT .mi
+
+Magne tizing current of CT. 2i
+
+Normalized output current of CT. mI
+
+Amplitude of the steady -state short -circuit current 
+
+Initial phase angle of fault. 1T
+
+System time constant. 
+
+System angular speed. f
+
+System frequency. 
+
+This work was partially supp orted by the Joint Funds of the National 
+
+Natural Science Foundation of China and State Grid Corporation of 
+
+China(U1866603) , National Natural Science Foundation of China ( 52007143), 
+
+China Postdoctoral Science Foundation (2021M692526) and Open Fund of 
+
+State Key Laboratory of Operation and Control of Renewable Energy & 
+
+Storage Systems (China Electric Power Research Institute). 
+
+All authors are with Shaanxi Key Laboratory of Smart Grid, Xi'an Jiaotong 
+
+University, Xi'an, China (e -mail:{songhaoyang, zhghao, bhz hang} @xjtu.edu.cn, 
+
+{zyb970305,405331375}@stu.xjtu.edu.cn). 2T
+
+Time constant of the secondary closed -loop 
+
+circuit of CT. r
+
+
+
+Remanence of CT .S
+
+Serial saturation information. 
+
+I. INTRODUCTION 
+
+URRENT transformer (CT) is a kind of essential 
+
+measuring device for protection and state monitoring in the 
+
+power system , of which function is to accurately measure the 
+
+current of the primary device s. However, the accuracy of CT 
+
+may be affected by CT saturation which usually occur s when 
+
+the short -circuit current especially its DC componen t is 
+
+enormous . Serious CT saturation will cause the malfunctions of 
+
+the relay protection device s, pos ing a threat to the safe 
+
+operation of the power system. Therefore, how to deal with the 
+
+issue of CT saturation has attracted widespread attention. 
+
+As magnetic saturation is an inherent property of 
+
+ferromagnetic materials, a straightforward solution to CT 
+
+saturation is to design and manufacture the non -ferromagnetic 
+
+CT s, e.g., optical current sensor  [1]  and Rogowski coil  [2] .
+
+However, such transducers suffer the problems of noise 
+
+sensitivity and accuracy , thus they are not widely used in 
+
+practice . For ferromagnetic CT s, introducing an air gap in the 
+
+core magnetic path can significantly decrease the remanence 
+
+and keep CT unsaturated  [3] . TPY -type CT s [4]  and TPZ -type 
+
+CT s [5]  are designed according to such technical ide as. The 
+
+TPY -CT has a small air gap in the core and its remanence is less 
+
+than 10% of the saturation flux. Due to its excellent transient 
+
+performance, T PY -type CT is widely used in relay prote ction 
+
+especially in high -voltage transmission power system s.
+
+Moreover , TPZ -type CT eliminates remanence by increasing 
+
+the air gap . However, the poor accuracy of TPZ -CT impedes its 
+
+application. In addition , the air ga p of TPY -CT and TPZ -CT 
+
+also lead to a larger size and higher cost. Benefited from the 
+
+stable performance and acceptable cost, the traditional CTs, i.e. 
+
+the closed -core P class CT s, are still widely used in current 
+
+power systems especially in distribution s ystems and non -high 
+
+voltage transmission systems .
+
+Retaining the ferromagnetic core closed, scholars attempt to 
+
+keep the CT unsaturated by changing the circuit structure. 
+
+Power electronic -based method  [6] , [7] , and voltage 
+
+feedback -based method  [8]  were proved to be robust and 
+
+efficient . However, these methods need to reconstruct the 
+
+hardware structure of CT, which lead s to high cost s. By 
+
+contrast, t he software -based methods are cost -effective , which 
+
+can be divided into three type s: 1) CT model -based methods; 2) 
+
+# CT Saturation Detection and Compensation : A 
+
+# Hybrid Physical Model - and Data -Driven  Method 
+
+Songhao Yang, Member, IEEE, Yubo Zhang, student member, IEEE, Zhiguo Hao, Member, IEEE, 
+
+Ze xuan Lin, Baohui Zhang, Fellow, IEEE 
+
+# CIEEE Transactions on Power Delivery 2
+
+signal processing methods; 3) data -driven methods. 
+
+The first type attempt s to reproduce the saturated CT 
+
+secondary current by modeling magnetization characteristic s of
+
+the ferromagnetic core . Based on the measured magnetization 
+
+curve  [9] -[11] , simplified magnetization curve  [12] , [13] , and 
+
+Frö hlich hysteresis technique  [14] , the magnetizing current 
+
+could be accurately and efficiently estimated to correct the 
+
+distorted CT se condary current . However, their effectiveness 
+
+essentially depends on the precise estimation of the initial 
+
+oper ating status of CT , which is difficult in practice .
+
+The key of the signal processing methods is to distinguish the 
+
+unsaturated waveforms from the saturated waveforms. To 
+
+achieve this goal, the mutation information of the CT operating 
+
+status transition is g enerally used . In  [15] , the section of the 
+
+unsaturated CT current waveform was empirically determined ,
+
+which may result in insufficient utilization of information and 
+
+low accuracy. To automatically identify the unsaturated curre nt 
+
+waveform , multiple -order derivative information of the current 
+
+waveform was used in  [16] -[18] . Similarly, in  [19] , [20] , the 
+
+wavelet transfor m was used to extract the high -frequency 
+
+component for the detection of the onset and endpoints of the 
+
+CT saturation. However, the above methods are sensitive to 
+
+measurement noises and dependent on the preset threshold ,
+
+which limit s their application poten tial . The extended Kalman 
+
+filtering (EKF)  [21]  and morphological filtering technique s
+
+were used in  [22] , [23]  to integrate the CT saturation detection 
+
+and correction for it s outstanding merits of accuracy and 
+
+robustness against the noises. However, it is challenging to 
+
+design proper filter parameters that suit different scenarios .
+
+Data -driven methods, such as artificial neural networks 
+
+(ANNs) , have been introduced to cope wi th the problem of CT 
+
+saturation  [24] , [25] . Although data -driven methods have 
+
+powerful capabilities in data processing and feature mining, 
+
+the ir interpretability and generalization are seriously 
+
+co ncerned .
+
+Each of the above mentioned methods has its pros and cons. 
+
+Through the proper integration , it is greatly promising to realize 
+
+the complementa ry advantages among the methods, and 
+
+ultimately better performance. This hybrid -driven idea has been 
+
+extens ively explored in power systems  [26] -[28]  and other 
+
+research fields  [29] , [30] . Inspired by these wo rks, this paper 
+
+proposes a hybrid physical m odel - and data -driven method to 
+
+cope with the problem of CT saturation. The major 
+
+contribution s of this paper are list ed as follows: 
+
+1) Tactful integration of physical model and data model is 
+
+realized. The proposed hybrid -driven method is divided into 
+
+two serial parts, namely the data -driven detection and physical 
+
+model -driven compensation of CT saturation. The Full y
+
+Convolutional Network (FCN)  [31]  is built to detect the 
+
+operat ion status of CT which is multifacto rial and strongly 
+
+nonlinear . The n a cl assic short -circuit current model is applied 
+
+to reproduce the real current , and the model parameters are 
+
+estimated by the efficient Levenberg -Marquardt nonlinear least 
+
+squares (LM -NLS) algorithm  [32] . The data -driven and 
+
+physical model -driven methods deal with different parts of the 
+
+CT saturation according to their respective advantages and 
+
+finally solve this problem together. 
+
+2) The detection of CT saturation is more accurate and easier 
+
+due to the powerful nonlinear modeling and feature extraction 
+
+capabilities of FCN . Thus, the arduous selection of universal 
+
+thresholds and model parameters in existing CT saturation 
+
+detection methods is avoided . Moreover, FCN is 
+
+com putationally efficient and can process variable -length 
+
+samples, which significantly enhanc es its applicability to 
+
+various scenarios .
+
+3) The generalization and interpretability of the proposed 
+
+method are enhanced by introduc ing the short -circuit current 
+
+model in the CT compensation pa rt . These features provide a 
+
+guarantee for the effectiveness of the method and greatly 
+
+improve its application potential in future relay protection. 
+
+The rest of the paper is organized as follows: Section II 
+
+pr esents the mechanism of CT saturation and the f ramework of 
+
+the proposed method. In Section III, the implementation of the 
+
+method is explained in detail. The effectiveness of the proposed 
+
+method is validated by simulation results in Section IV. The 
+
+experimental verification and its application potential are 
+
+explored in Section V. Finally, Section VI draws the 
+
+conclusion. 
+
+II. MECHANISM OF CT SATURATION AND FRAMEWORK OF 
+
+PROPOSED METHOD 
+
+In this section, the expression of the transient magnetic flux 
+
+of CT under short -circuit current is derived under certain 
+
+post ulates, which reveals the mechanism and the major 
+
+influence factors of CT saturation. Besides, the framework of 
+
+the proposed hybrid -driven method is elaborated. 
+
+A. Mechanism of CT saturation 
+
+As above mentioned, CT saturation is an intricate nonlinear 
+
+and mult ifactorial problem. Although data -driven methods are 
+
+independent of the physical models, a deep analysis of the 
+
+mechanism of CT saturation is undoubtedly necessary to figure 
+
+out the major influence factors, which conduces to construct a 
+
+relatively complete sample database to improve the accuracy 
+
+and generalization of the CT saturation detection model. 
+
+The equivalent circuit of CT converted to the secondary side 
+
+is shown in Fig. 1  [9] -[11] . Concretely, R and L denote the 
+
+resistance and inductance respectively, and subscript s 1, 2, m,
+
+and l represent the primary side, secondary side, magnetizing 
+
+branch , and load of CT. 
+
+> Fig. 1 The equivalent circuit of CT.
+
+Normally, the CT secondary current reflect s the system 
+
+current accurately as the magnetizing current is negligible , as 
+
+shown by the blue curve in Fig. 2. When a short -circuit fault 
+
+occurs, f or simplicity, it is assumed that the system operates in 
+
+the no -load condition and the impedance angle of the IEEE Transactions on Power Delivery 3
+
+shor t-circuit loop is 2
+
+ . Then , the short -circuit current can be 
+
+expressed as (1) [6] .1/1( ) [cos cos( )] t T mi t I e t
+
+ −
+
+= − +
+
+, (1)
+
+where mI is the ampl itude of the steady -state short -circuit 
+
+current;  is the initi al phase angle of fault; 1T is the system 
+
+time constant ; and 2 f
+
+ = ,f is the system frequency. 
+
+To analyze the transient characteristics of CT, the following 
+
+simplifications and assumptio ns are essential. 
+
+1) Assuming the magnetizing inductance to be a constant. 
+
+2) Assuming the remanence to be zero. 
+
+3) Ignoring the magnetizing resistance. 
+
+4) Ignoring the leakage inductance and resistance of the 
+
+primary side. 
+
+Based on the above assumptions, the follow ing equation can 
+
+be derived from the equivalent circuit shown in Fig. 1. 221 2
+
+( ) ( ) ( ) ( ) ( ) ( )   
+
+> mmssm
+
+di t di tL L i t R dt dt i t i t i t
+
+= + = + 
+
+, (2)
+
+where 2s lL L L= + ,2s lR R R= + .
+
+Combining (1) and (2), the magneti zing current can be 
+
+expressed as follows. 21 2   
+
+> /2//1212
+
+( ) [ sin( ) sin cos ( )]  
+
+> t T mmt T t T
+
+Ii t t eTT T e eT T
+
+    
+
+> −−−
+
+= − + ++ −−
+
+, (3)
+
+where 2 ( ) / m s sT L L R= + represents the time constant of th e
+
+secondary closed -loop circuit of CT .
+
+Then the transient magnetic flux can be calculated by (4).2 1 2    
+
+> 2///1212
+
+( ) ( ) [ sin( )sin cos ( )]     
+
+> m m mmrt T t T t T r
+
+L i t L I t tN NT T T e e eT T
+
+ − − −
+
+= + = − + ++ − +−
+
+, (4)
+
+where N is the number of turns of CT , and r
+
+ is remanence. 
+
+Based on (4), the transient magnetic flux under short -circuit 
+
+current is as shown by the red line in Fig. 2. The comparison 
+
+between the blue curve and red curve indicates that the 
+
+magnetic flux under short -circuit curre nt is much larger than 
+
+that of the normal condition, which may cause CT to work in 
+
+the nonlinear region, namely CT saturation .
+
+More importantly , the Eq. (4) reflect s the major influence 
+
+factors that associate with the transient magnetic flux of CT ,
+
+whi ch provides a theoretical basis for building a complete 
+
+sample database by parameter traversal in the simulation model .
+
+Specifically, the major influence factors include the time 
+
+constant of the system 1T , the initial phase angle of fault  , the 
+
+amplitude of short -circuit current mI , the time constant of the 
+
+CT sec ondary closed -loop circuit 2T , the remanence r
+
+ , and 
+
+the nonlinearity of the magnetizing .
+
+B. Framework of the proposed method 
+
+Th e framework of the proposed method is shown in Fig. 3. 
+
+Overall, the essential idea is to use the data -driven model to 
+
+handle the complex and nonlinear characteristics of the CT in 
+
+CT saturation detection and adopt a physical model , i.e. the 
+
+short -circuit current model, to reproduce the real short -circuit 
+
+current waveform. Hence , the tact ful combination of the data 
+
+model and the physical model is implemented in sequence .
+
+Concretely, saturation detection refers to monitoring the CT 
+
+operation status and distinguish ing the onset and endpoints of 
+
+the saturated and unsaturated portion s, while saturation 
+
+compensation refers to restoring the saturated secondary 
+
+current of CT. A complete sample database , the key to the 
+
+accuracy and generalization of the data model , is established by 
+
+traversing the major influence factors in the simulation model .
+
+Be sides, the technology of data augmentation is applied to 
+
+further improve the completeness of the database . The 
+
+correlation between CT saturation and the influence factors is  
+
+> Fig. 2 Ma gnetic flux character of CT under fault condition and normal
+> condition. (a) Tra nsien t magnetic flux curve. (b) Magnetization curve.
+> Fig. 3 Framework of the proposed method.
+
+IEEE Transactions on Power Delivery 4
+
+implicit in the sample database and then captured by the data 
+
+model. The above pro cess, including the database construction 
+
+and the model training, is implemented offline. Then, the 
+
+well -trained data model is deployed online to detect CT 
+
+saturation. 
+
+As for the saturation compensation, the physical model of 
+
+short -circuit current is retai ned for its conciseness and 
+
+universality . Considering that the premises required by the (1)
+
+cannot be satisfied in engineering practice, a more accurate 
+
+short -circuit current model is shown as follows. 1/1 cos( ) t T 
+
+i A t Be 
+
+  −
+
+= + +
+
+(5)
+
+Given the short -circuit current model in (5), saturation 
+
+compensation is simplified as a problem of parameter 
+
+estimation . After the saturated and unsaturated segments are 
+
+distinguished by the data model, the saturated output waveform 
+
+of CT can be efficiently compensated based on unsaturated data 
+
+and the LM -NLS algorithm, as shown in Fig. 3. The fra mework 
+
+of the proposed method is briefly introduced above, and the 
+
+specific implementation will be elaborated in section III. 
+
+III. IMPL EMENTATION OF PROPOSED METHOD 
+
+The details of the proposed method are explained here. 
+
+A. The data -driven model for CT saturation detection 
+
+As shown in Fig. 3, the data -driven model consists of two 
+
+parts, namely the construction of the sample database , the 
+
+cons truction and training of the network . T he sample database 
+
+is constructed firstly based on the simulation model . Then, the 
+
+technique of data augmentation is applied to improv e the 
+
+completeness of the sample database. To facility the application 
+
+of the data model in postmortem analysis and online detection, 
+
+a one -dimensional FCN is built which can efficiently process 
+
+the variable -length samples .
+
+1) The construction of sample database 
+
+As indicated in subsection II -A, CT saturation is mainly 
+
+affected by the syste m parameters 1T , ,mI , and CT 
+
+parameters 2T ,r
+
+ . With the aid of power system sim ulation 
+
+software, e.g., PSCAD/EMTDC, enormous simulati on data can 
+
+be generated through parameter traversal .
+
+To train the FCN, the saturation information for samples is 
+
+essential. Since the real short -circuit current and the CT 
+
+secondary current can be expediently obtained from the 
+
+simulation , the saturation i nformation for each sample can be 
+
+acquired by comparing the waveforms of primary current and 
+
+secondary current which are denoted as i1 and i2, respectively. 
+
+Thus, a straightforward criterion is given as follows. 1 21
+
+| [ ] [ ] | 1, max(| |) [ ] , 1, 2, 0, 
+
+i k i kiS k k nelse 
+
+− = =
+
+, (6)
+
+where S denotes the serial saturation information and n denotes 
+
+the dimension of the sample. The threshold,  , determines the 
+
+se nsitivity of the saturation detection. Specifically, the smaller 
+
+means higher sensitivity, but the robustness will decrease 
+
+accordingly . Numerous simulations reveal that a reasonable 
+
+value range is 0.01 -0.1 and 0.05 
+
+ =  is adopted in this paper . If 
+
+CT is saturate d at the k-th sample point, S[k] is equal to 1; 
+
+otherwise, it is equal to 0. 
+
+Moreover, to avert the problem of numerical instability, it is 
+
+necessary to normalize the input of FCN, i.e., the secondary 
+
+cur rent of CT. The normalization is shown in (7).222
+
+[ ] [ ] , 1, 2, ,max(abs( )) 
+
+i ki k k ni 
+
+> 
+
+= =
+
+, (7)
+
+where 2i denotes the normalized secondary current of CT with 
+
+the value range of -1 to 1. 
+
+The normalized secondary current of CT and corresponding 
+
+saturation information constitute a training sampl e, i.e. 2( , )i S ,
+
+as shown in Fig. 4.          
+
+> Fig. 4Normalized secondary current and its corresponding saturation
+> information .
+> Fig. 5 Saturation detection model based on FCN .
+
+2) Data augmentation 
+
+Data augmentation has been widely applied to im proving the 
+
+generalization capabilities of deep neural networks in recent 
+
+years  [33] . For the same purpose, the data augmentation is 
+
+implemented in this paper, and details are given as follows.  
+
+> ⚫
+
+Polarity reversal 
+
+For each sample 2( , )i S , the polarity reversal is performed on 
+
+the network input to form a new sample 2( , )i S
+
+− . 
+
+> ⚫
+
+Noise addition 
+
+For each sample 2( , )i S , a certain intensity Gaussian white 
+
+noise is added in the network input to form a new sample 2( ( , ), )noise i SNR S
+
+, while SNR represents the intensity of the 
+
+noise. Considering that there are various low pass filters in the 
+
+signal acquisition system, the noise intensity is generally small, 
+
+so the value of the noise intensity is set as 40dB or 35 dB . 
+
+> ⚫
+
+Variable -length window 
+
+For each sample 2( , )i S , intercepting a certain length can 
+
+produce a new sample 2( [1: ], [1: ]), i k S k k n  . In this paper, the IEEE Transactions on Power Delivery 5
+
+variable -length window can be 10ms, 20ms, 40ms, and 60ms, 
+
+for coping with different application scenarios. 
+
+3) The FCN for CT saturation detection 
+
+Considering the limitations of the Convolutional Neural 
+
+Network (CNN) and the Deep Belief Network on the input and 
+
+output sizes, this paper uses the FCN to detect th e CT saturation 
+
+for its adaptability to the variation of input size . Moreover, 
+
+although the Recurrent Neural Network (RNN) can also handle 
+
+input signals of variable size, the sequential operation 
+
+characteristic limits its computational efficiency. As a var iant 
+
+of the CNN, the FCN not only retains the computational 
+
+efficiency of the CNN but has the ability of the RNN to process 
+
+data with variable size. The specific structure of FCN for CT 
+
+saturation detection is shown in Fig. 5. To maintain the 
+
+consistency o f input and output sizes, the network contains only 
+
+convolution operations, and the convolution kernel is 
+
+one -dimensional. Besides, for multiple receptive fields and 
+
+fewer network parameters, the branch structure and unit 
+
+convolution (i.e. 1*1 kernel) of G oogLeNet in  [34]  are used for 
+
+reference when building the FCN as shown in Fig. 5.
+
+B. The physical model for CT saturation compensation 
+
+The essence of CT saturation compensation is to re produce 
+
+the real short -circuit current from t he distorted secondary 
+
+current of CT. Based on the physical model of short -circuit 
+
+current in (5), the CT saturation compensation is essentially 
+
+converted int o a parameter estimation problem . In this paper, 
+
+the LM -NLS algorithm is used to solve the above issue due to 
+
+its advantage of stability and efficiency .
+
+First, the short -circuit current 1i is discretized according to 
+
+the sampling in terval. 1 1[ ] cos( ) k tt k t
+
+i i k A k t Be 
+
+> 
+
+  =  = =  + +
+
+, (8)
+
+where 11 / T
+
+ = −  and t denotes the sampling interval. A ,
+
+,B and  are the parameters to be estimated. 
+
+The index sequence of the unsaturated sampling points 
+
+identified by FCN is denoted as Ι .1 2[ ]Nk k k=I
+
+(9)
+
+As CT is unsaturated, the sampling values of secondary 
+
+current in the set I are effective observed values of the 
+
+short -circuit current. Therefore, saturation compensation is a
+
+parameter estimation problem based on a definite physical 
+
+model and its effective observation data. The nonlinear least 
+
+squares (NLS) algorithm is an efficient method for estimating 
+
+the pa rameters of the nonlinear model as shown in (8). The 
+
+specific implementation is given as follows. 
+
+The unsaturated data can form a n error vector , F. Each 
+
+vecto r element denotes the error between the observed value 
+
+and the real value of the physical model at the sampling time .1  
+
+> 2112
+
+[ ] cos( )( )[ ] cos[ ] N   
+
+> ktktNN
+
+i k A k t Be i k A k t Be 
+
+> 
+
+  
+
+> 
+
+ −  + + =   −  + + 
+
+F x 
+
+, (10 )
+
+where [ ]A B
+
+ =x .
+
+Hence , the parameter estimation problem in (5) is equivalent 
+
+to the following least square problem. 21arg min || ( ) || 2
+
+= x
+
+x F x 
+
+(11 )
+
+The Jacobian matrix is essential to solve the least square 
+
+problem in (11 ), as expressed in (12 ).1 1  
+
+> 111
+
+cos( ) sin( )cos( ) sin( ) N N        
+
+> ktktktktNNN
+
+k t A k t e Bk te k t A k t e Bk te 
+
+> 
+
+      
+
+> 
+
+  + −  +  =    + −  +  
+
+J
+
+(12 )
+
+To balance the stability and convergence speed, the 
+
+Gauss -Newton method modified by the LM algorithm is 
+
+applied in this paper, and the pseudo -code is give n in TABLE I .
+
+In the LM -NLS algorithm, the damping parameter  is 
+
+introduced to deal with the numerical stability problem caused 
+
+by the irreversibility of the Hessian matrix, H. The parameter 
+
+is the gain ratio, which indicates the quality of  .       
+
+> TABLE I
+> PSEUDO -CODE OF SATURATION COMPENSATION BASED ON LM -NLS
+> *Recommended value 3
+> 10
+> −
+> =,-15
+> 10
+>  =
+
+IV. SIMULATION VALIDATION 
+
+A. Simulation model and network model 
+
+1) Database construction by simulati on 
+
+A simulation model of a double -ended power system is built 
+
+in PSCAD/EMTDC, as shown in Fig. 6. The system voltage is 
+
+220kV and the frequency is 50Hz. The turn ratio of CT is 
+
+2000 :5. Note that the CT in Fig.6 adopts the JA model built -in 
+
+PSCAD . The model can accurately simulate the magnetization 
+
+process using domain wall motion with pinning effects to 
+
+describe hysteresis loops of soft magnetic materials  [35] . JA 
+
+model is widely used due to the ease in numerical 
+
+implementation a nd its fewer parameters. CT CT  
+
+> Fig.6 Schematic diagram of the simulation system .
+
+IEEE Transactions on Power Delivery 6
+
+As discuss ed in section III -A, the dat abase is constructed by 
+
+the traversal of key parameters . Despite mI cannot be set 
+
+directly, it can be indirect ly controlled by the fault resistance, fR
+
+. TABLE II presents t he specific values of all major 
+
+influence parameter s. A total of 146 ,510 original samples have 
+
+been obtained. For the balance of sample number, a part of 
+
+unsaturated sam ples is removed and 102 ,571 valid samples 
+
+have remained. Further more , the data augmentation technique 
+
+in section III -A is used by three times, as a result of which the 
+
+number of samples increases to 410,284. 
+
+2) Network construction and training 
+
+TensorFlow is one of the mainstream deep learning 
+
+platform s developed by Google, which provides various 
+
+high -level APIs to streamline the construction and training 
+
+process of the network model. In this paper, TensorFlow is used 
+
+for the construction and training of the s aturation detection 
+
+model. 
+
+The branched FCN network shown in Fig. 5 is constructed 
+
+based on the Functional API while the one -dimensional 
+
+convolutional layer is the built -in layer module of TensorFlow. 
+
+Moreover, the activation function of the middle layer s is tanh ,
+
+and that of the output layer is sigmoid , so the network output is 
+
+restrained in the range of 0-1. 
+
+In the supervised learning mode, the mean square error 
+
+between the network output and the reference output is defined 
+
+as the loss function , which fo rces the network output to 
+
+gradually approach the reference output. Specifically, the 
+
+Adam optimizer is adopted for gradient backpropagation and 
+
+network parameter update. Except for the learning rate, the 
+
+default parameter values of the Adam optimizer in TensorFlow 
+
+are used (beta1=0.9, beta2=0.999, epsilon=1e -7). A descending 
+
+learning rate is applied for better convergence performance, i.e., 
+
+1e -3 as the initial value and halved every 25 epochs. Besides, 
+
+the training set and the test set samples are divided into 9:1. 
+
+B. Effectiveness verification 
+
+Firstly, the proposed hybrid -driven method is verified under 
+
+different saturation scenarios , results shown in Fig.7. Fig. 7(a), 
+
+(b) , and (c) show that FCN can accurately distinguish between 
+
+the saturated and unsaturated portion under different saturation 
+
+levels, which verifies the high sensitivity of the data model for 
+
+CT saturation detection. Fig. 7(b), (c) , and (d) show that the 
+
+start time of saturation, whether in the first cycle or non -first 
+
+cycle, does not affect th e accuracy of FCN , which extends the 
+
+application of the proposed method . Furthermore, the 
+
+effectiveness of the proposed saturation compensation model is 
+
+demonstrated in Fig. 7 as the compensation result is almost the 
+
+same as the real short circuit current of the power system . The 
+
+excellent performance of the proposed compens ation model is 
+
+of great significance to prevent the relay protection devices 
+
+from malfunction. 
+
+To further verify the effectiveness of the proposed method, 
+
+the performance indexes shown in (13 ) are proposed as follows .( )( )                                  
+
+> ()()()1121()()()21211()()()312122()()()4121221
+
+max 1, 1, 2, ,max 1          
+
+> kkkkNkkkkkkkkNkkkk
+
+e i i ie i i iN k Ne i i ie i i iN  
+
+> ==
+
+ = − = − = = − = −
+
+# 
+
+(13 ),
+
+where N denotes the number of samples. The indexes 1e and 3e
+
+represent the worst -case sample while 2e and 4e represent the 
+
+overall perfo rmance. A smaller performance index value 
+
+indicates that the CT measurement is more accurate. 
+
+TABLE III present s the comparison of performance indexes 
+
+with/without the compensation. The EKF  [21]  and modified            
+
+> TABLE II
+> VALUES OF MAJOR INFLUENCE PARAMETERS
+> Symbol Quantity Values
+> system 1T
+> /ms time constant 50, 6 0, 70, …, 290, 300 
+> initial fault angle 0,15 , …, 315 ,330 f
+
+R         
+
+> /fault resista nce 0, 1, 10, 50, 100
+> CT2T
+> /s time constant 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2 r
+> 
+> residual flux 80% ,40% ,20% , 0
+> Fig. 7 . Effect of propo sed method on typical samples. (a) Unsaturated sample.
+> (b) Slightly saturated sample. (c) Heavily saturated sample. (d) Non -first wave
+> saturated sample.
+> TABLE III
+> COMPARISON OF PERFORMANCE INDEXES WITH /WITHOUT COMPENSATION 1
+
+e2e3e4e                 
+
+> Without Compensation 1.0001 0.7876 0.9693 0.5668
+> Method in ref. [21] 0.0736 0.0512 0.0754 0.0431
+> Method in ref. [25] 0.26 40 0.1256 0.2740 0.1321
+> Proposed Method 0.0499 0.0241 0.0608 0.0153
+
+IEEE Transactions on Power Delivery 7
+
+least square error  [25]  are selected as references to the proposed 
+
+method. The results show that the performance indexes are 
+
+reduced significantly after compensation, indicating that the 
+
+above three methods can all effectively mitigate the CT 
+
+satu ration. Moreover, the proposed hybrid -driven method is 
+
+more effective than the reference methods. After the 
+
+compensation, the overall error decreases from 78% to 2.0% 
+
+(2.41% and 1.53%) while the error of worst -case is no more 
+
+than 6.1% (4.99% and 6.08%). Therefore, it is verified that the 
+
+proposed method can effectively detect the saturation and 
+
+accurately reproduce the real current waveform. 
+
+C. Data window Flexibility and calculation efficiency 
+
+The proposed method can flexibly deal with variable -length 
+
+sampl es due to the adoption of FCN. Fig. 8 shows the results of 
+
+the proposed hybrid -driven method under different data 
+
+window lengths, i.e. 0.01s, 0.06s, 0.02s, and 0.04s, respectively. 
+
+The results indicate that the proposed method can accurately 
+
+detect the sat urated portion and compensate the current 
+
+waveform as same as the real current waveform with variable 
+
+data window length. This feature is of high engineering value, 
+
+as the proposed method can be directly applied to various 
+
+scenarios with different requirem ents for the data window 
+
+without extra modification. 
+
+More over , the proposed method has high computational 
+
+efficiency under different data window lengths . As the 
+
+computation burden of the LM -NLS algorithm is much less 
+
+than that of the FCN , the calculation time of the hybrid -driven 
+
+method is dominated by the FCN. The relation between the 
+
+computation time of the proposed method and the data window 
+
+length is presented in Fig. 9, which is approximately linear as 
+
+the time complexity of the one -dimensional FCN is exactly ( )O N 
+
+if N denotes the sample length. This linear characteristic 
+
+is beneficial to highlight the flexibility and applicability of the 
+
+proposed method . Specifically, with the hardware 
+
+configuration shown in Fig. 9, the computatio n time is about 
+
+3ms in a considerable range of data window s, which can satisfy 
+
+most scenarios in practice .
+
+In summary, the proposed method is not only capable of 
+
+dealing with variable -length samples, but also computationally 
+
+efficient. This is a major a spect that the proposed method is 
+
+superior to the existing methods based on ANN, which require 
+
+a fixed window due to the network structure. 
+
+D. Sen sitivity and robustness 
+
+In th e issue of CT saturation , sensitivity emphasizes the 
+
+ability to detect slight satur ation while robustness represents 
+
+anti -noise performance. The mutation information contained in 
+
+the noise may be mistaken for CT saturation, which makes 
+
+accurate saturation detection more difficult. Although various 
+
+measures such as morphology filtering an d Kalman filtering 
+
+have been taken to improve the anti -noise ability of CT 
+
+saturation detection method s, it remains a very challenging task 
+
+to select a proper threshold to achieve the balance of sensitivity 
+
+and robustness. 
+
+Fig. 1 0 shows the comparison of sensitivity and robustness 
+
+between the proposed method and the state -of -the -art 
+
+software -based method in  [21] . The contrast between Fig. 14(a) 
+
+and (b) indicates that a higher threshold,  , can indeed 
+
+im prove the robustness of CT saturation detection, however at 
+
+the cost of sensitivity. Conversely, reducing the threshold 
+
+makes the method accurately recognize slightly saturated 
+
+samples, but it weakens the anti -noise performance. Hence, for 
+
+filter -based met hods like  [21] , it is arduous to choose a proper 
+
+threshold that can balance robustness and sensitivity. By
+
+contrast, the proposed hybrid -driven method can not only 
+
+accurately detect light saturation samples, but also has good 
+
+an ti -noise performance, as shown in Fig. 10 . The excellent 
+
+balance of robustness and sensitivity is achieved by the 
+
+proposed method as it avoids the complicated threshold 
+
+parameters tuning .                
+
+> Fig. 8 Performance of the proposed method on samples with different data
+> window length. (a) 0.01s. (b) 0.06s. (c) 0.02s. (d) 0.04s
+> Fig. 9 The calculation time of the proposed method with different data window
+> Fig. 10 Sensitivity and robustness comparison between the pr oposed method
+> and reference [21] in (a) sl ightly saturated s cenario without noise and (b)
+> unsa turated scenario with 35dB noise .
+
+IEEE Transactions on Power Delivery 8
+
+V. EXPERIMENTAL VALIDATION AND APPLICATION 
+
+Similar to other data -driv en methods, the proposed 
+
+hybrid -driven method faces the essential cha llenge that whether 
+
+the network trained by certain CT model simulation data can be 
+
+applied in scenarios with other CT model s or even real CT 
+
+devices. In this section, the hardware experim ent is carried out 
+
+to verify the generalization of the proposed method. Moreover, 
+
+its potential application to relay protection is also explored. 
+
+A. Hardware Experiment 
+
+Since the difference between CT models and real CT devices 
+
+is inevitable, a hardware expe riment is necessary to verify the 
+
+validity of the proposed method in practice . In this regard, an 
+
+experimental platform for CT saturation test was designed and 
+
+established to obtain the real saturated current . The design and 
+
+hardware platform are given in Fig. 11. 
+
+As Fig. 11 shows, the primary circuit of the experiment 
+
+consists of an ac generator, a current measurer, breaks , and the 
+
+adjustable resistor and inductor. The primary current can be 
+
+accurately measured by a high -power precise non -inductive 
+
+resist ance , i.e. the current measurer . The adjustable resistor and 
+
+inductor are used to reali ze different short -circuit currents. The 
+
+secondary current is measured by the tested CT de vices via the 
+
+current busbar. The DC voltage source is equipped to 
+
+demagnetize CT if necessary. 
+
+Note that the short -circuit current is synthesized by Fig. 11 .
+
+The damping dc component of the short -circuit current is 
+
+change d by the breaker with a different closing angle. The 
+
+adjustable resistor dominates the time -constant of dc 
+
+compon ent while the adjustable inductor controls the periodic 
+
+ac component of the short -circuit current. By changing the 
+
+inductance, resistance , and closing angle of the primary circuit, 
+
+different short -circuit currents can be synthesized to adequately 
+
+test the transient transformation characteristics of CT. 
+
+Three types of CT devices are tested to fully verify the 
+
+performance of the proposed method. The details of the tested 
+
+CTs are listed in TABLE IV. ‘SH’ and ‘ZX’ represent different 
+
+manufacturers while ‘5P20’ and ‘5P30’ indicate the accuracy 
+
+level. For example , ‘5P20 ’ requests that the composite error of 
+
+secondary current is less than ±5% when the prima ry current is 
+
+20 times the rated current. 
+
+For each type of CT device, 20 sets of experiments were 
+
+performed, and a total of 60 sets of experimental data were 
+
+obtained. For better verification, the experimental results 
+
+include the unsaturated, slightly saturated , and severely 
+
+saturated current waveforms. 
+
+B. Generalization performance verification 
+
+In this section, t he generalization verification of the proposed 
+
+method is twofold. On the one hand, the JA model and the 
+
+Lucas model  [36]  are adopted for simulation verification .
+
+Differ ent from the JA model, the Luc as model is based on the 
+
+technical scheme of establishing the equivalent nonlinear 
+
+circuit of CT. According to the simulation system shown in Fig. 
+
+6, the Lucas CT model built -in PSCAD is used to generat e the 
+
+data set , the parameter traversal shown in TABLE II. On the 
+
+other hand, a more realistic test is carried out with the real CT 
+
+measurement data obtained by the above hardware experiment.  
+
+> Fig. 12 Comparison of performance indexes with/without the proposed method
+> for different CT model /experiment data s et .
+
+Fig. 1 2 shows the performance of the proposed method in the 
+
+JA model data set (410,284 samples), Lucas model data set 
+
+(146,510 samples) , and experimental data set (60 samples) . The 
+
+indicators “ C” and “ NC ” in Fig. 1 2 repres ent the samples with 
+
+and witho ut the proposed saturation compensat ion method ,
+
+respectively. The performance indexes without compensation 
+
+are large, indicating that the current saturation is considerable 
+
+in three data set s. However, the performance indexes are 
+
+reduced significantly afte r the compensation, which verifies 
+
+that the saturat ed currents are effectively compensated with the 
+
+proposed method in all data sets . Though the performance 
+
+indexes in the Lucas model data set and experiment data set are 
+
+slightly larger than that in the JA model data set, the overall 
+
+error (e2 and e4) is less than 2.85% (2.76% and 1.94% for Lucas 
+
+model data set, 2.79% and 2.85 % for experiment data set ). In 
+
+conclusion, though trained by JA model simulation data, the 
+
+proposed method is accurate and effective in the scenarios with                 
+
+> TABLE IV
+> PARAMETERS OF THE EXPERIMENTAL CT
+> CT type Accuracy
+> level
+> Transformation
+> ratio
+> Rated
+> capacity
+> Power
+> factor
+> SH5P20 5P20 1:1000 20VA 1
+> SH5P30 5P30 1: 1000 20VA 1
+> ZX5P20 5P20 1:1000 20VA 0.8
+> (a ) Experimental design
+> (b) Experimental platform
+> Fig. 11. CT saturation hardware experiment
+
+IEEE Transactions on Power Delivery 9
+
+other CT model s or CT devices .
+
+C. Application Potential in relay protection 
+
+To explore the application potential, the proposed method is 
+
+assumed to integrate in to the relay protection and verify 
+
+whether the performance of the protection is improved. In this 
+
+regard, the current differential protection principle , one 
+
+classical protection principle, is adopted. 
+
+Denote op I as the operating current and re I as the 
+
+restraining current, which can be expressed as follows  [37] :,op ij ji re ij ji I I I I I I= + = −
+
+(14 )
+
+The percentage differential relay operate s when &op o op re I I I KI  
+
+, (15 )
+
+where oI is a pick -up current and (0,1) K  is the restraint 
+
+coefficien t, and K=0.3 is adopted in this paper. The data 
+
+window of the differential protection is 20ms. 
+
+The differential protection is equipped on a transmission line 
+
+i-j. Assum e that the CT on the i-th side is never saturated while 
+
+the CT on the j-th side is one of the tested CTs. Under the 
+
+condition of external fault, ij I is the same with primary current 
+
+provided by the current measurer and ji I is measured by the 
+
+tested CTs provided by the data collector in Fig. 11 .
+
+TABLE V compares the malfunction rate of the protection 
+
+with/without the proposed method . The results show that the 
+
+overal l malfunction rate is 23/60 before the compensation, 
+
+indicating that the protection performance is seriously 
+
+influenced by the CT satu ration . After the compensation by the 
+
+proposed method, all malfunctions are effectively avoided, and 
+
+the protection performance is guaranteed. 
+
+Fig. 13 shows how the proposed method avoids the 
+
+malfunction of current differentia l protection that is caused by 
+
+CT saturation . The measured current waveforms, operating 
+
+current and restraining current, and the output signal of current 
+
+differential protection are given in Fig.13 . Fig. 13 (a), (b), and (d)
+
+show that the saturated current produces a considerable 
+
+operating current and finally leads the protection to 
+
+malfunction. After compensation by the proposed method in 
+
+Fig. 13 (a), the saturated current is accurately detected and 
+
+properly compensated, thus the operating current is quietly 
+
+small in Fig. 13 (c). The malfunction is eventually avoided as 
+
+shown in Fig.13 (d).
+
+D. Discussion on t ime delay 
+
+If the saturation compensation method is integrated into the 
+
+protection, its calculation time may cause a time delay. Fig.14 
+
+illustrates the influen ce of such time delay on relay operation. 
+
+As Fig. 14 shows, for the scenarios without saturation 
+
+compensation, the primary protection will trigger immediately 
+
+after the fault is detected. Denote 1
+
+ as the length of the data 
+
+window and 2
+
+ as the calculation time of the protection, then 
+
+the trigger time of the primary protection is 1 2pt
+
+ = + . For the 
+
+backup protection with a time delay Tdelay , the trigger time is 
+
+tb=tp+T delay . Note that the rel ay is continuously calcul ating with 
+
+the sliding data window during the delay time. Generally 
+
+speaking, 2
+
+ is larger than the sampling time interval, thus the 
+
+updating period of the sliding data window is 2
+
+ , as shown in 
+
+Fig.14. 
+
+For the scenarios with the proposed method, the primary 
+
+protection operates after obtaining the data window, 
+
+compensating the saturated currents , and calculating the 
+
+protection. Thus, the trigger time of the primary protection 
+
+is 1 3 2pt
+
+##    = + + , which leads to a time delay of 3
+
+ compared 
+
+with the scenarios without compensation. Similarly, the trigger 
+
+time of the backup protection with the proposed method is b p delay t t T = +
+
+, and a time delay of 3
+
+ is inevitable. In 
+
+conclus ion, a time delay of 3
+
+ is introduced for the relay 
+
+protection after the integration of the proposed method. 
+
+Compared with the ben efits of av oi ding protection 
+
+malfunctions, t he slight time delay by the integration of the 
+
+proposed method is worthwhile.                           
+
+> TABLE V
+> PERFORMANCE OF PROPOSED METHOD IN ANTI -MALFUNCTION OF CURRENT
+> DIFFERENTIAL PROTECTION
+> CT type Malfunction rate
+> without proposed metho dwith proposed method
+> SH5P30 6/20 0/20
+> SH5P20 7/20 0/20
+> ZH5P20 10/20 0/20
+> Fig. 13. Protection -related sequential information. (a) Measured current
+> waveform. (b) Operating current and restraining current before saturation
+> compensation. (c) Operating current and restraining after satu ratio n
+> compensation. (d) Trip or block signal of current differential protection.
+> Fig. 14 The time -delay caused by the proposed method in relay protection. 1
+> 
+> : length of data window, 2
+> : updating period o f dat a window 3
+> 
+> : time delay of the proposed method, Tdelay : delay time of backup protection
+
+IEEE Transactions on Power Delivery 10 
+
+It should be noted that the updating period of the sliding data 
+
+window changes to 2 3
+
+ + with the proposed method. In other 
+
+words, the updating period of the dat a window is extended by 3
+
+ .
+
+This restriction is acceptable for the protection as the general 
+
+value for 2
+
+ is 3-5ms while the calculation time of the 
+
+proposed method is nearly 3ms. Moreover, the calculation tim e
+
+can be further reduced with the development of chip technology. 
+
+It has been reported that the calculation speed of Google's AI 
+
+chip TPU is 15 -30 times faster than that of GPU/CPU  [38] .
+
+Therefore, though the proposed method cou ld not be deployed 
+
+in actual protection device s presently due to the limited 
+
+computing power of the microprocessor, it has great application 
+
+potential in future protection. 
+
+VI. CONCLUSION 
+
+In this paper, a hybrid physical model - and data -driven 
+
+method is propo sed for CT saturation detection and 
+
+compensation. A one -dimensional FCN is constructed to detect 
+
+CT saturation and the physical model of short -circuit current is 
+
+used to compensate saturated current. The major merits of the 
+
+proposed method consist in the tactful integration of the 
+
+physical model and data model. The special structure of FCN 
+
+endows it with the flexibility of processing variable -length 
+
+samples, which is the main aspect that the proposed method is 
+
+superior to the existing ANNs -based methods. Co mpared with 
+
+the state -of -the -art software -based method s, the proposed 
+
+method can effectively balance robustness and sensitivity 
+
+without arduous parameters tuning. The hardware experiment s
+
+further verif y the gene ra lization of the proposed method and 
+
+explore its app li cation potential in relay protection . The 
+
+malfunctions of the protections caused by CT saturation can be 
+
+effectively avoided by the proposed method at the cost of a
+
+slight time delay .
+
+REFERENCES 
+
+[1] S. Kucuksari and G. G. Karady, “Complete model dev elopment for an 
+
+optical current transformer,” IEEE Trans. Power Del. , vol. 27, no . 4, pp. 
+
+1755 –1762, Oct. 2012. 
+
+[2] M. Chiampi, G. Crotti, and A. Morando, “Evaluation of flexible Rogowski 
+
+coil performances in power frequency applications,” IEEE Trans. Instrum. 
+
+Meas. , vol. 60, no. 3, pp. 854 –862, Mar. 2011. 
+
+[3] B. Bozoki, H. J. Calhoun, and C. M. Gadsden et al., “IEEE Committee 
+
+Report, Gapped core current transformer characteristics and performance,” 
+
+IEEE Trans. Power Del. , vol. 5, no. 4, pp. 1732 –1740, Oct. 1990. 
+
+[4] IEEE Guide for the Application of Current Transformers Used for 
+
+Protective Relaying Purposes , IEEE Standard C37.110, 2007. 
+
+[5] E. Lesniewska and W. Jalmuzny, “Influence of the number of core air gaps 
+
+on transient state parameters of TPZ class protective current transformers,” 
+
+Inst . Eng. Technol. Sci., Meas. Technol. , pp. 105 –112, Mar. 2009. 
+
+[6] M. Davarpanah, M. Sanaye -Pasand, and R. Iravani, “A saturation 
+
+suppression approach for the current transformer —Part I: Fundamental 
+
+concepts and design,” IEEE Trans. Power De l. , vol. 28, no. 3, pp. 
+
+1928 -1935, Jul. 2013. 
+
+[7] E. Hajipour, M. Vakilian, and M. Sanaye -Pasand, “Current -transformer 
+
+saturation prevention using a controlled voltage -source compensator,” 
+
+IEEE Trans. Power Del. , vol. 32, no. 2, pp. 1039 –1048, Apr. 2017. 
+
+[8] M. De lzendeh and H. Kazemi Karegar, “Current Transformer Saturation 
+
+Compensator by Using Negative Voltage Feedback, ” IEEE Trans. on 
+
+Power Del. , vol. 35, no. 3, pp. 1200 -1208, June 2020. 
+
+[9] Y. C. Kang, J. K. Park, S. H. Kang, A. T. Johns, and R. K. Aggarwal, “An 
+
+al gorithm for compensating secondary currents of current transformers,” 
+
+IEEE Trans. Power Del. , vol. 12, no. 1, pp. 116 –124, Jan. 1997. 
+
+[10] N. Locci and C. Muscas, “A digital compensation method for improving 
+
+current transformer accuracy, ” IEEE Trans. on Power D el. , vol. 15, no. 4, 
+
+pp. 1104 -1109, Oct. 2000. 
+
+[11] N. Locci and C. Muscas, “Hysteresis and eddy currents compensation in 
+
+current transformers,” IEEE Trans. on Power Del. , vol. 16, no. 2, pp. 
+
+154 -159, April 2001. 
+
+[12] Yong Cheol Kang, Ui Jai Lim, Sang Hee Kang and P. A. Crossley, 
+
+“Compensation of the distortion in the secondary current caused by 
+
+saturation and remanence in a CT,” IEEE Trans. on Power Del. , vol. 19, 
+
+no. 4, pp. 1642 -1649, Oct. 2004. 
+
+[13] E. Hajipour, M. Vakilian and M. Sanaye -Pasand, “Current -Transformer 
+
+Saturation Compensation for Transformer Differential Relays, ” IEEE 
+
+Trans. on Power Del. , vol. 30, no. 5, pp. 2293 -2302, Oct. 2015. 
+
+[14] Ozgonenel, O., “Correction of saturated current from measurement current 
+
+transformer,” IET Electr. Power Appl. , vol. 7, no. 7, pp. 580 -585, Aug. 
+
+2013. 
+
+[15] Jiuping Pan, Khoi Vu and Yi Hu, “An efficient compensation algorithm 
+
+for current transformer saturation effects, ” IEEE Trans. on Power Del. ,
+
+vol. 19, no. 4, pp. 1623 -1628, Oct. 2004. 
+
+[16] A. Hooshyar, M. Sanaye -Pasand, and M. Davarpanah , “Development of a 
+
+new derivative -based algorithm to detect current transformer saturation, ”
+
+IET Gen., Transm. Distrib. , vol. 6, no. 3, pp. 207 –217, 2012. 
+
+[17] B. Schettino, C. Duque, P. Silveira, P. Ribeiro, and A. Cerqueira, “A new 
+
+method of current -transfor mer saturation detection in the presence of 
+
+noise,” IEEE Trans. Power Del. , vol. 29, no. 4, pp. 1760 –1767, Aug. 
+
+2014. 
+
+[18] Y. C. Kang, S. H. Ok, and S. H. Kang, “A CT saturation detection 
+
+algorithm,” IEEE Trans. on Power Del ., vol. 19, no. 1, pp. 78 –85, Jan. 
+
+20 04. 
+
+[19] Y. Y. Hong and D. W. Wei, “Compensation of distorted secondary current 
+
+caused by saturation and remanence in a current transformer,” IEEE Trans. 
+
+Power Del. , vol. 25, no. 1, pp. 47 –54, Jan. 2010. 
+
+[20] R. P. Medeiros and F. B. Costa, “A wavelet -based transfor mer differential 
+
+protection with differential current transformer saturation and 
+
+crosscountry fault detection,” IEEE Trans. Power Del. , vol. 33, no. 2, pp. 
+
+789 –799, Apr. 2018. 
+
+[21] F. Naseri, Z. Kazemi, E. Farjah and T. Ghanbari, “Fast Detection and 
+
+Compensatio n of Current Transformer Saturation Using Extended 
+
+Kalman Filter, ” IEEE Trans. on Power Del. , vol. 34, no. 3, pp. 1087 -1097, 
+
+June 2019. 
+
+[22] Xiangning Lin, Li Zou, Qing Tian, Hanli Weng and Pei Liu, “A series 
+
+multiresolution morphological gradient -based criteri on to identify CT 
+
+saturation, ” IEEE Trans. on Power Del. , vol. 21, no. 3, pp. 1169 -1175, 
+
+July 2006. 
+
+[23] T. Ji, M. Shi, M. Li, L. Zhang, and Q. Wu, “Current transformer saturation 
+
+detection using morphological gradient and morphological decomposition 
+
+and its ha rdware implementation,” IEEE Trans. Ind. Electron. , vol. 64, no. 
+
+6, pp. 4721 –4729, Jun. 2017. 
+
+[24] D. C. Yu and J. C. Cummins, “Correction of current transformer distorted 
+
+secondary currents due to saturation using artificial neural networks,” 
+
+IEEE Trans. Power Del. , vol. 16, no. 2, pp. 189 –194, Apr. 2001. 
+
+[25] F. Haghjoo and M. Hadi Pak, “Compensation of CT distorted secondary 
+
+current waveform in online conditions,” IEEE Trans. Power Del. , vol. 31, 
+
+no. 2, pp. 711 –720, Apr. 2016. 
+
+[26] Q. Wang, F. Li, Y. Tang, and Y. Xu, “Integrating model -driven and 
+
+datadriven methods for power system frequency stability assessment and 
+
+control, ” IEEE Trans. Power Syst. , vol. 34, no. 6, pp. 4557 –4568, Nov. 
+
+2019. 
+
+[27] M. K. Jena, S. R. Samantaray and B. K. Panigrahi, “A New Adaptive 
+
+Dependability -Security Approach to Enhance Wide Area Back -Up 
+
+Protection of Transmission System, ” IEEE Trans. on Smart Grid , vol. 9, 
+
+no. 6, pp. 6378 -6386, Nov. 2018. 
+
+[28] J. Wang, H. Zhong, X. Lai, Q. Xia, Y. Wang and C. Kang, “Exploring Key 
+
+Weather Factors From Analytical M odeling Toward Improved Solar 
+
+Power Forecasting, ” IEEE Trans. on Smart Grid , vol. 10, no. 2, pp. 
+
+1417 -1427, March 2019. 
+
+[29] H. Zhang, Q. Li, Z. Sun, and Y. Liu, “Combining Data -driven and 
+
+model -driven methods for robust facial landmark detection,” IEEE Trans. 
+
+Inf. Forensics Secur ., vol. 13, no. 10, pp. 2409 –2422, Oct. 2018. 
+
+[30] J. S. Kinnebrew, J. R. Segedy, and G. Biswas, “Integrating model -driven 
+
+and data -driven techniques for analyzing learning behaviors in openended 
+
+learning environments,” IEEE Trans. Learn. Te chnol. , vol. 10, no. 2, pp. 
+
+140 –153, Apr. –Jun. 2017. IEEE Transactions on Power Delivery 11                               
+
+> [31] E. Shelhamer, J. Long, and T. Darrell, “Fully convolutional networks for
+> semantic segmentation, ”IEEE Trans. Pattern Anal. Mach. Intell. , vol. 39,
+> no. 4, pp. 640 –651, Apr. 2017.
+> [32] J. J. Moré , “The Levenber g-Marquardt algorithm: Implementation and
+> theory,” in Numerical Analysis. New York, NY, USA: Springer, 1978, pp.
+> 105 –116.
+> [33] J. Nalepa, M. Myller, and M. Kawulok, “Training -and test -time data
+> augmentation for hyperspectral image segmentation,” IEEE Geosci.
+> Remote Sens. Lett. , vol. 17, no. 2, pp. 292 –296, Feb. 2020.
+> [34] C. Szegedy et al., “Going deeper with convolutions, ”in Proc. IEEE Conf.
+> Comput. Vis. Pattern Recognit. , Jun. 2015, pp. 1 –9.
+> [35] D. C. Jiles and D. L. Atherton, "Theory of ferromagnetic hysteresis," J.
+> Magn. Magn. Mater. , vol. 61, nos. 1 –2, pp. 48 –60, 1986.
+> [36] J. R. Lucas, P. G. McLaren, W. W. L. Keerthipala, and R. P. Jayasinghe,
+> “Improved simulation models for current and voltage transformers in relay
+> studies,” IEEE Trans. Power Del. , vol. 7, no. 1, pp. 152 –159, Jan. 1992.
+> [37] S. Dambhare, S. A. Soman and M. C. Chandorkar, "Adaptive Current
+> Differential Protection Schemes for Transmission -Line Protection," IEEE
+> Trans. on Power Del. , vol. 24, no. 4, pp. 1832 -1841, Oct. 2009.
+> [38] Jouppi et al., “In -datacenter perf ormance analysis of a tensor processing
+> unit,” in ACM/IEEE 44th Ann. Int. Symp. Comput. Architecture (ISCA) ,
+> Toronto, ON, Canada, 2017, pp. 1 –12.
+
+Songhao Yang. (S’18 -M’19 ) was born in 
+
+Shandong, China, in 1989 . He received the 
+
+B.S. and Ph.D. degrees in electrical 
+
+engineering from the Xi’an Jiaotong 
+
+University, Xi’an, China, in 2012 and 
+
+2019, respectivel y. Besides, he received 
+
+the Ph. D. degree in electrical and 
+
+electronic engineering from Tokushima 
+
+University, Japan, in 2019. 
+
+Currently, he is an Assistan t Professor at Xi’an Jiaotong 
+
+University. His research interest includes powe r system control 
+
+and protection .
+
+Yu bo Zhang . (S’21 ) received the B.S. 
+
+degree in electrical engineering from 
+
+Xi’an Jiaotong University, China, in 2019. 
+
+He is currently pursuing the Ph.D. degree 
+
+in the school of Electrical Engineering in 
+
+Xi’an Jiaotong University. His main field 
+
+of interest includes the control for 
+
+renewable energy, and power system 
+
+frequency stability. 
+
+Zhiguo Hao . (M’10 ) was born in Ordos, 
+
+China, in 1976. He received his B.Sc. and 
+
+Ph.D. degrees in electrical engineering 
+
+from Xi'an Jiaotong University, Xi'an, 
+
+China, in 1998 and 2007, respectively. He 
+
+has been a Professor with the Electrical 
+
+Engineering Department, Xi'an Jiaotong 
+
+University. His research interes t includes 
+
+powe r system protection and control .
+
+Zexuan Lin . received the B.S . degree 
+
+from Shandong University, Jinan, China, 
+
+in 2016. He is currently working toward 
+
+M.S . degree in Xi'an Jiaotong University, 
+
+Xi'an, China. His research intersests is the 
+
+appl ication of artificial intelligence in the 
+
+relay protection. 
+
+Baohui Zhang . (SM‘99 -’F’19 ) was born 
+
+in Hebei Province, China, in 1953. He 
+
+received the M.Eng. and Ph.D. degrees in 
+
+electrical engineering from Xi’an Jiaotong 
+
+University, Xi’an, China, i n 1982 and 1988, 
+
+respectively. He has been a Professor in the 
+
+Electrical Engineering Department at 
+
+Xi’an Jiaotong University since 1992. His 
+
+research interests are system analysis, 
+
+control, communication, and protection.

@@ -1,0 +1,1194 @@
+Title: A Tensor-Train Framework for Bayesian Inference in High-Dimensional Systems: Applications to MIMO Detection and Channel Decoding
+
+URL Source: https://arxiv.org/pdf/2604.05890v1
+
+Published Time: Wed, 08 Apr 2026 01:06:57 GMT
+
+Number of Pages: 13
+
+Markdown Content:
+> SUBMITTED VERSION, APRIL 8, 2026 1
+
+# A Tensor-Train Framework for Bayesian Inference in High-Dimensional Systems: Applications to MIMO Detection and Channel Decoding 
+
+Luca Schmid, Dominik Sulz, Shrinivas Chimmalgi, and Laurent Schmalen, Fellow, IEEE 
+
+Abstract —Bayesian inference in high-dimensional discrete-input additive noise models is a fundamental challenge in commu-nication systems, as the support of the required joint a posteriori probability (APP) mass function grows exponentially with the number of unknown variables. In this work, we propose a tensor-train (TT) framework for tractable, near-optimal Bayesian infer-ence in discrete-input additive noise models. The central insight is that the joint log-APP mass function admits an exact low-rank representation in the TT format, enabling compact storage and efficient computations. To recover symbol-wise APP marginals, we develop a practical inference procedure that approximates the exponential of the log-posterior using a TT-cross algorithm initialized with a truncated Taylor-series. To demonstrate the generality of the approach, we derive explicit low-rank TT con-structions for two canonical communication problems: the linear observation model under additive white Gaussian noise (AWGN), applied to multiple-input multiple-output (MIMO) detection, and soft-decision decoding of binary linear block error correcting codes over the binary-input AWGN channel. Numerical results show near-optimal error-rate performance across a wide range of signal-to-noise ratios while requiring only modest TT ranks. These results highlight the potential of tensor-network methods for efficient Bayesian inference in communication systems. 
+
+Index Terms —Tensor-trains, tensor networks, Bayesian infer-ence, MIMO detection, channel decoding. 
+
+I. I NTRODUCTION 
+
+Many problems in communications and signal processing reduce to probabilistic inference over noisy observations [1]. In most communication scenarios, the randomness of the channel, together with prior knowledge about the transmitter naturally leads to a Bayesian formulation at the receiver: the posterior distribution over the unknown quantities, e.g., the transmitted symbols, given the received signal is characterized and evalu-ated via its modes, marginals, or the model evidence [2]. A fundamental challenge underlying Bayesian inference is the high dimensionality of the posterior distribution for large 
+
+The work of L. Schmid, S. Chimmalgi and L. Schmalen has received funding from the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme (grant agree-ment No. 101001899). The work of D. Sulz was funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – TRR 352 – Project-ID 470903074. L. Schmid and L. Schmalen are with the Communications Engineering Lab (CEL), Karlsruhe Institute of Technology (KIT), Hertzstr. 16, 76187 Karlsruhe, Germany (e-mail: first.last@kit.edu ). C. Chimmalgi is now with Qoherent, Toronto, ON, Canada. D. Sulz is with the Technical University of Munich (TUM), Boltzmannstr. 3, 85748 Garching b. M¨ unchen, Germany (e-mail: first.last@tum.de ). 
+
+system sizes. For discrete-valued unknowns, the posterior can be interpreted as a multidimensional probability table whose order grows linearly with the number of variables while the number of entries grows exponentially. Explicit storage of this probability mass function (PMF) or any operation performed on it quickly becomes infeasible beyond small problem in-stances, a phenomenon known as the curse of dimensionality .This challenge has motivated a substantial line of research on approximate inference algorithms, all of which have found application in communications. Message passing algorithms such as belief propagation (BP) [3], [4], [5] exploit the local structure of the PMF to perform inference without explicitly computing the global distribution. Variational methods and expectation propagation (EP) [6], [7] approximate the posterior within a restricted family of tractable distributions, such as Gaussian or factorized models. Sampling-based techniques [8], [9] avoid a closed-form posterior representation altogether and instead approximate expectations and marginals through Monte Carlo estimates. More recently, deep learning has enabled flexible posterior approximations where intractable components of the distribution are parameterized by neural networks, as in variational autoencoders [10], [11] and diffu-sion models [12], [13]. A complementary perspective is to retain the posterior in its original form and instead seek a compact representation of this high-dimensional PMF. Tensor network (TN) repre-sentations [14], [15] provide such a memory-efficient, data-sparse representation. By decomposing a high-order tensor into a network of connected low-order factors, TNs exploit the inherent low-rank structure of the underlying tensor and have proven effective across diverse fields, including supervised learning [16], quantum many-body physics [17], numerical optimization [18], and plasma physics [19]. Comprehensive surveys can be found in [14], [20]. Early foundational works [21], [22], [23] recognized the paradigm shift towards high-dimensional signal representa-tions via multiway arrays (i.e., tensors) and advocated tensor decompositions as a natural modeling tool for signal represen-tations in modern communication systems. Signals in modern communication and sensing systems are inherently multidi-mensional, including coupled domains such as time, frequency, space, and user indices. Tensor algebra enables these multi-way relationships to be represented and processed jointly, often leading to significantly more compact models than conventional approaches that treat dimensions separately [24]. Motivated by this perspective, tensor methods have been  
+
+> arXiv:2604.05890v1 [cs.IT] 7 Apr 2026 SUBMITTED VERSION, APRIL 8, 2026 2
+
+applied to various communication problems, including chan-nel estimation in multiple-input multiple-output (MIMO)-orthogonal frequency-division multiplexing (OFDM) [25] and MIMO-affine frequency-division multiplexing (AFDM) sys-tems [26], as well as parameter estimation in array processing and MIMO radar [27]. They have also been explored for user separation in unsourced massive random access, signal modulation design, and remote multidimensional sensing, as surveyed in [24]. These works exploit the tensor structure in the signal or channel domain, representing received signals, propagation channels, or sensing data as low-rank tensors and leveraging this structure for efficient estimation or recovery. A conceptually distinct and, to our knowledge, largely unexplored direction is to apply tensor methods to the infer-ence domain . Instead of modeling the physical communica-tion signals themselves, this perspective treats the posterior PMF itself as the high-dimensional object to be represented and manipulated in a tensor format. Hence, it focuses the approximation directly on the probabilistic representation used for inference and decision making at the receiver, rather than on the underlying physical signal representation. This viewpoint naturally motivates the use of TN representations to obtain compact and tractable approximations of the posterior distribution. In this work, we investigate the potential of TNs, specifically tensor-trains (TTs) [28], as a framework for efficient Bayesian inference in discrete-input additive noise models. Our central observation is that the a posteriori probability (APP) mass function of the transmitted symbols often admits a low-rank representation in the TT format when expressed in the logarith-mic domain. Exploiting this structure enables computationally tractable inference in regimes where an explicit representation of the PMF would otherwise be prohibitively large. Specifically, we construct the log-posterior directly in the TT format by building the log-likelihood contributions of all independent observations together with the log-prior using basic TT arithmetic. This construction in the logarithmic domain is exact with low TT ranks. To obtain symbol-wise APPs, the log-posterior must subsequently be exponentiated and marginalized. While marginalization in the linear domain is straightforward in the TT format, exponentiation is the main computational challenge. We address this step using a cross algorithm for TT [29], initialized by a truncated Taylor-series. This approximation is controllable: by increasing the maximum TT rank, the resulting approximation can be made arbitrarily accurate, enabling near-optimal inference with com-plexity adaptable to the available computational resources. We demonstrate the proposed framework on two well-known problems in communications. First, we consider MIMO detection in the additive white Gaussian noise (AWGN) chan-nel. Second, we consider soft-decision decoding of binary linear block codes over the binary-AWGN (BI-AWGN) chan-nel. For both problems, we derive explicit TT constructions of the log-APP and show that the resulting representations exhibit low ranks. Numerical results demonstrate near-optimal error-rate performance across wide signal-to-noise ratio (SNR) regimes, in many cases outperforming established algorithms such as EP-based detection and BP-based decoding while requiring only modest TT ranks. We summarize the main contributions of this work:  
+
+> •
+
+We propose a TT framework for Bayesian inference in discrete-input additive white noise models and provide an exact low-rank construction of the log-APP mass function in the TT format for two canonical models: the linear observation model under AWGN, and channel decoding of binary linear block codes over the BI-AWGN channel.  
+
+> •
+
+We develop a practical method for marginal inference that recovers symbol-wise APPs by approximating the exponential of the log-posterior in TT format via a trun-cated Taylor-series followed by a cross-approximation. We compare a variant of the TT-cross algorithm and a density matrix renormalization group (DMRG)-like cross algorithm and analyze their trade-offs in terms of accuracy and robustness.  
+
+> •
+
+We evaluate the proposed framework on MIMO detection and soft-decision channel decoding, demonstrating near-optimal performance in terms of error rate across all SNR regimes while requiring only modest TT ranks. The remainder of this paper is organized as follows. Sec-tion II introduces the TT format and relevant arithmetics in the TT format. Section III describes the general discrete-input additive white noise observation model and the proposed TT construction of the log-APP, as well as the proposed inference method for exponentiation and marginalization. Sections IV and V specialize the framework to MIMO detection and chan-nel decoding, respectively, providing explicit TT constructions and numerical evaluations. Section VI concludes the paper. 
+
+Notation 
+
+Throughout the paper, uppercase bold letters denote matri-ces X with entries Xij at row i and column j. Lowercase bold letters denote column vectors x, whose ith element is written as xi. ∥·∥ denotes the Euclidean norm, and dH(x, y) denotes the Hamming distance between two vectors x, y. The matrix transpose is denoted by (·)⊤ and ⊗ is the Kronecker product for matrices. The all-ones column vector of length n is written as 1n, and the n × n identity matrix is denoted by In. For a vector x, the diagonal matrix with x on its main diagonal is denoted by diag (x), e.g., diag (1n) = In.We use uppercase nonbold letters to denote tensors A.For consistency in this context, tensor slices, which may be matrices or vectors, are also denoted by nonbold symbols. In our notation, individual tensor entries are indexed using parentheses, e.g., A(k1, . . . , k N ).We use exp (·) to denote the exponential function, and log( ·)
+
+and log 10 (·) to denote the natural logarithm and the base-10 
+
+logarithm, respectively. For a complex number c ∈ C, Re {c}
+
+(Im {c}) denotes its real (imaginary) part. We use calligraphic letters to denote sets X of cardinality |X | . The indicator function 1{x=a} equals 1 if x = a and 0 otherwise. The probability density function of a continuous random variable y is denoted by py (y) or p(y) and the PMF of a discrete random variable x is Px(x) or P (x). To keep the notation simple, we do not use a special notation for random variables since it is always clear from the context. The SUBMITTED VERSION, APRIL 8, 2026 3
+
+Gaussian distribution, characterized by its mean μ and variance 
+
+σ2, is written as N (μ, σ 2). The tail distribution function, or Q-function, of the standard normal distribution is denoted as Q(·). The circular complex standard Gaussian distribution is denoted by CN (0 , 1) . The noncentral chi-squared distribution with k degrees of freedom and noncentrality parameter λ is denoted by χ2
+
+> k
+
+(λ). In case of λ = 0 , we simply write χ2
+
+> k
+
+.II. T HE TENSOR -T RAIN FORMAT 
+
+Tensors are a multidimensional generalization of matrices and are widely used in many applications [20]. Due to their exponential scaling in memory requirements, tensors are typ-ically approximated in a decomposed form. Classical tensor formats are the canonical polyadic (CP) decomposition [30], Tucker tensors [31], tensor-trains (TTs) [28] and the more general class of tree tensor networks (TTNs) [15]. In this work, we consider TTs, which are also known as matrix product states (MPSs) in other fields [32]. Consider a tensor A ∈ Rn1×···× nN of order N with the physical dimensions ni, i = 1 , . . . , N . The memory require-ment of the full tensor A in explicit form scales exponentially with N . The decomposition of A in the TT format is given by 
+
+A(k1, . . . , k N ) = G1(k1)G2(k2) · · · GN (kN ),
+
+with Gi(ki) ∈ Rri−1×ri , i = 1 , . . . , N , and r0 = rN = 1 .Equivalently, the TT decomposition can be expressed in index notation as 
+
+A(k1, . . . , k N )= X
+
+> j0,j 1,...,j N
+
+G1(j0, k 1, j 1)G2(j1, k 2, j 2) · · · GN (jN −1, k N , j N ).
+
+Fig. 1 visualizes the TT decomposition of a tensor A into a sequence of core tensors Gi. For indexing the core ten-sors Gi ∈ Rri−1×ni×ri of order 3, we follow the standard nomenclature in TN literature [28]: The second dimension representing the physical index ni, is oriented along the z-axis (depth). The first and third dimensions correspond to the aux-iliary rank indices ri−1 and ri, which encode the connection between adjacent cores, respectively, as illustrated in Fig. 1. The matrices Gi(kj ) =: Gi(: , k j , :) for kj = 1 , . . . , n i are often called slices of the tensor Gi.The maximum rank of a TT is defined as 
+
+rmax = max i=0 ,...N ri. While any tensor theoretically admits a TT representation, the format only yields significant gains in storage and computational efficiency when the ranks of the underlying tensor, or an approximation thereof, remain small. For a more intuitive grasp of the TT format, we refer the reader to Appendix A, where we provide an illustrative example. 
+
+A. Arithmetics in the Tensor-Train Format 
+
+Many basic operations, such as addition and element-wise multiplication, can directly be performed in the TT format, without forming the full tensor. We briefly summarize the most basic operations, which can be originally found in [28]. Consider two TTs A = A1(k1) · · · AN (kN ) and 
+
+B = B1(k1) · · · BN (kN ) and denote by (rAi )Ni=0 and 
+
+(rBi )Ni=0 their respective ranks. 
+
+G1 G2 G3 G4 GN
+
+r1 r2 r3 r4 rN −1r0 rN
+
+n1 n2 n3 n4 nN 
+
+> Fig. 1. Graphical representation of the TT decomposition. Each edge can be interpreted as a tensor contraction.
+
+1) Addition : The sum C = A + B can be computed as 
+
+Ci(ki) = 
+
+Ai(ki) 00 Bi(ki)
+
+
+
+, i = 2 , . . . , N − 1,C1(k1) =  A1(k1) B1(k1) , CN (kN ) = 
+
+AN (kN )
+
+BN (kN )
+
+
+
+.
+
+This strategy requires no arithmetic operations but increases the ranks of C to rCi = rAi + rBi , i = 1 , . . . , N − 1. Typically, a rank truncation is performed after the addition, which finds a rank-reduced approximation, see Sec. II-A6. 
+
+2) Tensor-matrix multiplication : Let A ∈ Rn1×···× nN be a full tensor and U ∈ Rm×ni a matrix. The tensor-matrix multiplication A ×i U is defined by [33] 
+
+(A ×i U )( k1, . . . , k i, . . . , k N ):= 
+
+> ni
+
+X
+
+> j=1
+
+A(k1, . . . , k i−1, j, k i+1 , . . . , k N )( U ⊤)jk i ,
+
+for ki = 1 , . . . , m . This operation can be interpreted as the contraction of the matrix U with the tensor A in the ith mode. In the following, we slightly abuse the notation ×i to denote the tensor-matrix multiplication in the TT format. Specifically, 
+
+A ×i U is defined as the TT obtained from A by replacing its 
+
+ith core Gi with the tensor Gi ×2 U .
+
+3) Marginalization : The marginalization in the ith com-ponent of a tensor A is the summation over all dimensions except i, which is mathematically equivalent to 
+
+A
+
+> N
+
+# ×j=1  
+
+> j̸=i
+
+1⊤ 
+
+> nj
+
+, 1nj = (1 , . . . , 1) ⊤ ∈ Rnj ,
+
+where 
+
+A
+
+> N
+
+# ×j=1 
+
+Uj = A ×1 U1 · · · × N UN .
+
+4) Element-wise multiplication : The element-wise multi-plication or Hadamard product C = A ◦ B is computed by 
+
+Ci(ki) = Ai(ki) ⊗ Bi(ki), i = 1 , . . . , N. 
+
+The Kronecker product for matrices ⊗ causes a multiplication of the ranks of the two tensors A and B in the TT format, i.e., rCi = rAi · rBi for i = 0 , . . . , N .
+
+5) Scalar multiplication : The product λA of a tensor A in the TT format with a scalar λ ∈ R is obtained by multiplying 
+
+λ to one of the core tensors of A. It does not matter to which of the N core tensors the multiplication is applied, and the rank is not increased. SUBMITTED VERSION, APRIL 8, 2026 4
+
+6) Truncation : Many operations, such as addition or element-wise multiplication of tensors in the TT format, significantly increase the ranks. To keep computations and memory feasible, these operations are typically followed by a rank truncation. Common truncation algorithms use consec-utive singular value decompositions of the core tensors. By discarding singular values smaller than a tolerance ϑ > 0,the tensor is typically compressed to a TT representation of lower ranks. This procedure ensures that the approximation error remains bounded and is directly controlled by the choice of ϑ, as the error grows linearly with ϑ [15], [28]. Since rank truncation is a standard operation in the context of tensor networks, we refer to [28] for a detailed description. 
+
+7) TT-cross algorithm : Another key component of the proposed method is the element-wise application of a non-linear function f (A), where A is a tensor in TT format. We consider TT-cross algorithms [34], [35] to evaluate f (A)
+
+directly in the TT format. The TT-cross can be interpreted as an interpolation scheme for multivariate functions on a tensor grid. This method allows evaluations without forming the full tensor. Since a detailed description of the algorithm would obscure the main ideas of this work, we refer to Appendix B and [34] for a more detailed discussion and to [29] for a broader survey of tensor cross algorithms. 
+
+Remark. Our considerations can be extended to the more general class of tree tensor networks (TTN), which were first introduced in quantum chemistry [36]. In mathematical litera-ture, they were considered first as hierarchical Tucker tensors in the binary case [15], [37] and in [38] for the general case. We note that both binary and general TTNs include TTs as a special case. While TTNs often allow representations with lower ranks, their implementation is considerably more involved. 
+
+III. D ETECTION IN ADDITIVE NOISE MODELS 
+
+A. System Model 
+
+We consider the real-valued 1 observation model with addi-tive white noise 
+
+y = f (x) + n, x ∈ A NT , n ∈ RNR (1) where n1, . . . , n NR are independent and identically distributed (i.i.d.) noise samples from an exponential family distribu-tion. The transmit sequence x consists of i.i.d. symbols xi,
+
+i = 1 , . . . , N T, each drawn from a discrete alphabet A ⊂ R
+
+of cardinality |A| = L with probability P (xi). In the context of Bayesian inference, we are interested in the symbol-wise APPs 
+
+P (xi = a|y) = X
+
+> a∈A NT
+> ai=a
+
+P (x = a|y), a ∈ A , i = 1 , . . . , N T. (2) The symbol-wise maximum a posteriori (MAP) detector, which minimizes the symbol error probability, is defined as 
+
+ˆxi, MAP := arg max  
+
+> a∈A
+
+P (xi = a|y). (3) 
+
+> 1All considerations can trivially be extended to complex-valued models. For the sake of exposition, we only consider the real-valued case.
+
+Using Bayes’ theorem, the APP distribution can be written as 
+
+P (x|y) ∝ p(y|x)P (x) ∝
+
+> NR
+
+Y
+
+> j=1
+
+eℓ(yj |x)
+
+> NT
+
+Y
+
+> i=1
+
+P (xi)
+
+where ℓ(yj |x) denotes the log-likelihood of the observation yj ,and the proportionality ∝ means that two terms differ only in a factor independent of x. Equivalently, the APP can be expressed in the logarithmic domain as 
+
+log P (x|y) = C +
+
+> NR
+
+X
+
+> j=1
+
+ℓ(yj |x) + 
+
+> NT
+
+X
+
+> i=1
+
+log P (xi) =: C + Λ( x).
+
+(4) Since C is a constant with respect to x, we can neglect it in the context of detection and instead consider the unnormalized log-APP metric Λ( x) in the following. 
+
+B. Main Contribution 
+
+Our proposed approach represents the log-likelihood terms ℓ(yj |x) and the log-prior log P (x) exactly in the TT format with low ranks. In this framework, the tensor structure serves as a probability lookup table, where each entry of the tensor in RL×···× L corresponds to an evaluation of the discrete APP mass function. If the problem admits a low-rank TT decomposition or approximation, this representation enables efficient Bayesian inference in high-dimensional settings. We construct the APP in the logarithmic domain according to (4), as this typically yields much lower TT ranks compared to the linear domain. The symbol-wise APPs are then obtained by exponentiation and marginalization, with all operations carried out directly in the TT format, as described in Sec. II-A. 
+
+1) Construction of log P (x) = PNT 
+
+> i=1
+
+log P (xi): The prior can be exactly represented by a rank-2 TT, where the rank is independent of NR and NT. We de-note the vector of log-priors for any symbol xi by 
+
+v = (log P (xi = a1), . . . , log P (xi = aL)) ⊤ ∈ RL, where 
+
+{a1, . . . , a L} = A. The TT construction has the first and last core 
+
+G1 =  1L v ∈ R1×L×2,GNT =
+
+v⊤
+
+1⊤
+
+> L
+
+
+
+∈ R2×L×1.
+
+The remaining cores Gi ∈ R2×L×2, for i = 2 , . . . , N T − 1,can be constructed by 
+
+Gi(: , j, :) = 
+
+1 vj
+
+0 1
+
+
+
+, for j = 1 , . . . , L. 
+
+2) Sum over log-likelihoods : For a low-rank TT represen-tation of the sum over the log-likelihood terms in (4), we con-sider two strategies: constructing the full sum directly in the TT format, or constructing each log-likelihood term ℓ(yj |x),
+
+j = 1 , . . . , N R, separately and summing the resulting NR TTs. Both strategies are mathematically equivalent; the choice is problem-dependent and can be based on the simplicity of the construction, respectively. If each log-likelihood term ℓ(yj |x), i = 1 , . . . , N R, is con-structed individually in the TT format of rank at most r,SUBMITTED VERSION, APRIL 8, 2026 5
+
+summing the Nr log-likelihood terms also sums the ranks, yielding a result of rank at most rN R. The rank of the directly constructed full sum typically scales with NR as well. In either case, a truncation with tolerance ϑ > 0 may recompress the resulting tensor to a moderate rank. Note that the above rank estimates are only upper bounds. Finally, we add the log-prior log P (x) to the joint log-likelihood, completing the TT construction of the full log-APP in (4). 
+
+3) Exponentiation : Let A denote the TT representation of the log-APP metric Λ( x) in (4), constructed as described above. Our goal is to compute exp( A), however, since exp( ·)
+
+is nonlinear, the ranks of an exact representation of exp( A)
+
+can become prohibitively large. Therefore, we approximate 
+
+exp( A) using a TT-cross approach (cf. Sec. II-A7). We con-sider two TT-cross algorithms, a classical TT-cross variant and a DMRG-like cross algorithm. For the numerical evaluation we use the implementations multifuncrs and funcrs from the TT-toolbox [39], respectively. To improve the quality of the approximation, both methods support an initialization step for the TT-cross algorithm. We use a truncated Taylor series 
+
+exp( A) ≈
+
+> p
+
+X
+
+> k=0
+
+Ak
+
+k! ,
+
+for initialization, where Ak denotes the element-wise power. For this, we use the tt_exp implementation from the TT-toolbox [39]. Typically, p ≈ 10 provides a reliable initial-ization. The tt_exp function also accepts a maximum rank parameter r_max to keep the computation tractable. The two cross functions differ in their underlying algo-rithmic strategy. The multifuncrs routine follows a more classical TT-cross interpolation approach, reconstructing the tensor from adaptively sampled entries. In contrast, funcrs 
+
+employs a DMRG-like sweeping algorithm that updates local TT cores through low-rank projections, while still falling into the class of cross approximations. The latter typically achieves higher accuracy at the cost of increased computational com-plexity. A central ingredient in both cross functions is the use of random sampling in each core. This enables the addition of new directions to avoid getting stuck in local minima. Consequently, both functions are non-deterministic. 
+
+4) Marginalization : To obtain the symbol-wise APPs in (2), the marginalization over all dimensions except for one needs to be computed. This can efficiently be done in the TT format as described in Sec. III-B4. The result of the marginalization is a tensor of dimension 1, i.e., a vector that represents the entries proportional to P (xi = a|y), a ∈ A .
+
+C. Computational Complexity 
+
+The computational complexity is dominated by the TT-cross algorithm and the truncation function, both of which rely on successive singular value decompositions (SVDs) of the underlying core tensors. If the core tensors are of size 
+
+r×n×r, the computational complexity of a single SVD scales with O(r3), where r ≤ rmax . One full sweep through the TT scales with O(N r 3). Such sweeps are performed iteratively, for instance, to evaluate the terms of the truncated Taylor series. 
+
+Remark. Instead of computing the exponential of A followed by a marginalization, an alternative approach is to find the maximal element of the full tensor A in the log-domain, which corresponds to MAP sequence estimation. A promising candidate for solving this maximization problem is the TT Optimizer (TTOpt) [40], which provides a gradient-free and efficient optimization approach in the TT format. We leave this maximization-based approach for future investigation and fo-cus here on the marginalization, i.e., the symbol-wise detection problem. 
+
+In the following, we consider two inference problems relevant to the field of communications: MIMO detection and channel decoding for AWGN channels. We provide ex-plicit log-APP constructions in the TT format and thereby demonstrate that these problems inherently admit low-rank representations. IV. E XAMPLE : MIMO D ETECTION 
+
+MIMO systems are a key technology in many current and emerging wireless communication systems due to their high spectral efficiency and throughput [41]. In this context, efficient symbol detection is a crucial computational bottleneck in realizing these theoretical performance gains in practical systems [7]. 
+
+A. MIMO Channel Model 
+
+We consider a MIMO system with ˜NT antennas at the transmitter and ˜NR antennas at the receiver. The transmit symbols ˜xi, i = 1 , . . . , ˜NT are independently and uniformly drawn from an M -quadrature amplitude modulation (QAM) constellation M ⊂ C. The channel output ˜y ∈ C ˜NR is given by ˜y = ˜H ˜x + ˜ n, where ˜n is circular complex AWGN. We assume a Rayleigh-fading MIMO channel, i.e., each element of ˜H is independently sampled from a circular complex stan-dard Gaussian distribution CN (0 , 1) . We define the receiver SNR of each transmission as SNR := 10 log 10 
+
+∥ ˜H ˜x∥2
+
+∥ ˜n∥2
+
+!
+
+in dB .
+
+The complex-valued MIMO system can be decomposed into an equivalent real-valued representation 
+
+H =
+
+Re { ˜H} −Im { ˜H}
+
+Im { ˜H} Re { ˜H}
+
+
+
+∈ RNR×NT , NT = 2 ˜NT,NR = 2 ˜NR,
+
+to match the model in (1) with y = ( Re { ˜y}, Im { ˜y})⊤, x =(Re { ˜x}, Im { ˜x})⊤, f (x) = Hx , n = ( Re { ˜n}, Im { ˜n})⊤, and 
+
+A = {± 1, ±3, . . . } with L = |A| = √M .In general, MIMO detection refers to the task of inferring the transmit vector x from the channel observation y [41], and is a proven nondeterministic polynomial-time (NP)-hard problem [42]. In this work, we assume perfect channel state information (CSI) at the receiver, i.e., knowledge of H and the SNR. SUBMITTED VERSION, APRIL 8, 2026 6
+
+In the following, we consider symbol-wise MAP MIMO detection, which minimizes the symbol error probability, and requires the computation of the marginal APPs P (xi|y),cf. (2). This marginalization involves the summation over an exponentially large set of transmit vectors x and is therefore #P-hard in general. 
+
+Remark. The following considerations regarding symbol-wise MAP detection for MIMO channels apply to any real-valued linear observation model with AWGN 
+
+y = Hx + n, n ∼ N (0, σ 2INR ), (5) 
+
+where y is the received signal, H =: (h1, . . . , hNR )⊤ ∈
+
+RNR×NT is the observation matrix, and x is the discrete-valued vector of unknowns. B. TT Construction of the Log-Likelihood Terms 
+
+Our objective is to express the unnormalized log-APP metric Λ( x) in (4) in the TT format. The construction of the log-priors log P (x), which is described in Sec. III-B1, can be omitted in case of uniform priors, as assumed here. This sec-tion focuses on the specific construction of the log-likelihood terms ℓ(yj |x) = −(yj − h⊤ 
+
+> j
+
+x)2/(2 σ2), j = 1 , . . . , N R for the linear observation model (5), such as the MIMO channel model. 
+
+1) Construction of yj : The jth channel observation yj ∈ R
+
+can be trivially represented as a rank-1 TT. We obtain an exact TT representation by setting G1 = yj 1L and all core tensors 
+
+Gj = 1L for j = 2 , . . . , N R. Note that this is equivalent to the representation 
+
+yjN
+
+# ×j=1 
+
+1L ∈ RL×···× L.
+
+2) Construction of h⊤ 
+
+> j
+
+x: Let v = ( a1, . . . , a L)⊤ be the alphabet vector with A = {a1, . . . , a L}. Further, let hj ∈ RNT
+
+and define U = ( v, 1L) ∈ RL×2. Using h⊤ 
+
+> j
+
+= ( h1 
+
+> j
+
+, . . . , h NT 
+
+> j
+
+),
+
+h⊤ 
+
+> j
+
+x can be represented in the TT format of rank 3 with the core tensors 
+
+G1 =
+
+0 hNT 
+
+> j
+
+01 0 0
+
+
+
+×2 U ∈ R1×L×3,GNT =
+
+
+
+h1 
+
+> j
+
+00 10 0
+
+ ×2 U ∈ R3×L×1.
+
+For i = 2 , . . . , N T − 1 we first define the slices 
+
+eGi(: , 1, :) = 
+
+
+
+0 hNT−i+1  
+
+> j
+
+00 0 hNT−i+1 
+
+> j
+
+0 0 hNT−i+1 
+
+> j
+
+ , eGi(: , 2, :) = I3,
+
+and then set Gi = eGi ×2 U ∈ R3×L×3. Although the reversed ordering of hNT 
+
+> j
+
+, . . . , h 1 
+
+> j
+
+within G1, . . . , G NT may appear un-conventional, this construction is, to the best of our knowledge, the simplest. We note, however, that alternative constructions exist that represent the same tensor. The addition yj − h⊤ 
+
+> j
+
+x is of rank at most 4, recall Sec. II-A. By performing the element-wise and scalar multiplication from Sec. II-A, we can exactly represent each of the NR
+
+Algorithm 1: TTDet for MIMO detection 
+
+Initialization: r_max , ϑ
+
+Data: Observation y ∈ RNR , CSI H ∈ RNR×NT , σ 2   
+
+> // TT construction
+> 1
+
+Construct ℓ(yj |x), j = 1 , . . . , N R // Sec. IV-B  
+
+> 2
+
+Compute Λ( x) = PNR 
+
+> j=1
+
+ℓ(yj |x) // Sec. III-B2 // TT exponentiation & marginalization  
+
+> 3
+
+Compute symbol-wise APPs // Sec. III-B3-B4 
+
+P (xi = a|y) ∝ X
+
+> a∈A NT
+> ai=a
+
+eΛ( a), a ∈ A , i = 1 , . . . , N T,        
+
+> // Switch from TT to explicit vector format
+> 4
+
+MAP hard decision ˆxi = arg max  
+
+> a∈A
+
+P (xi = a|y)
+
+Result: Detection result ˆx ← (ˆ x1, . . . , ˆxNT )⊤
+
+log-likelihood terms ℓ(yj |x) = −(yj − h⊤ 
+
+> j
+
+x)2/(2 σ2) in TT format with rank 16 or lower. For a possible rank reduction, we perform a truncation with given tolerance ϑ > 0 after constructing each log-likelihood term. Algorithm 1 summarizes the proposed TT-based algorithm for symbol-wise MIMO detection. Note that all constructions and operations in Algorithm 1 are performed in the TT format, except for the hard decision in line 4, which operates on the explicit vector representation of the symbol-wise posterior marginals. We refer to this algorithm as TTDet, and distinguish its two variants by the cross approximation method applied for the exponentiation in TT format in line 3: TTDet-sample, based on the more classical TT-cross algorithm, and TTDet-sweep, based on the DMRG-like cross algorithm. 
+
+C. Numerical Evaluation 
+
+We numerically evaluate the performance of the TTDet algorithm for different MIMO settings 2. We consider 4- and 
+
+16 -QAM constellations and quadratic MIMO channel matri-ces with ˜NT = ˜NR =: ˜N = 8 , 16 , 32 . For these dimensions, a full tensor representation of the APP distribution P (x|y) is infeasible, as it would require storage of M ˜N elements. As a baseline, we consider three well-established MIMO detection algorithms:  
+
+> •
+
+The linear minimum mean squared error (LMMSE) de-tector, and the EP detector [7] with 10 iterations. Both algorithms rely on a Gaussian approximation of the APP distribution, followed by a symbol-wise nearest-neighbor decision.  
+
+> •
+
+The sphere decoder [41], a tree-search based MIMO de-tection algorithm. We employ the sphere detector without early termination, such that it achieves optimal perfor-mance in the maximum likelihood sequence estimation (MLSE) sense. Fig. 2 shows the SER over the SNR for the considered MIMO detectors. To estimate the SER, we perform Monte  
+
+> 2All numerical results in this paper were obtained using the MATLAB TT-Toolbox [39] and the MATLAB Tensor Toolbox [43]. We provide the source code for all simulations in [44]. SUBMITTED VERSION, APRIL 8, 2026 7
+
+−10 −8 −6 −4 −2 0 2 4 6 8 10 
+
+10 −3
+
+10 −2
+
+10 −1    
+
+> 4-QAM
+> ˜N= 16
+> 4-QAM
+> ˜N= 32
+> 16 -QAM
+> ˜N= 8
+> 16 -QAM
+> ˜N= 16
+
+SNR (dB)                 
+
+> SER
+> LMMSE
+> EP [7]
+> TTDet-sample (new)
+> TTDet-sweep (new)
+> Sphere decoder
+> Fig. 2. SER over SNR for various MIMO detectors across different ˜N×˜Nsystem configurations (real-valued dimensions NT=NR= 2 ˜N). The maximum rank r_max in the truncated Taylor-series initialization is set to (from left to right) 10 ,10 ,40 ,20 .
+
+Carlo simulations in which the transmit vector x and the channel matrix H are randomly sampled for each new trans-mission, as described in Sec. IV-A. All detection algorithms are then evaluated on the same data samples. For each SNR value, the simulation is continued until the sphere decoder records 100 block errors, i.e., transmissions in which one or more symbol errors occur. For the 4-QAM scenarios, the proposed TTDet algorithm achieves near-optimal performance, closely approaching the MLSE-optimal performance of the sphere decoder. It signifi-cantly outperforms the LMMSE detector, and yields a 0.7 dB gain over the EP detector at a target SER = 10 −2. The TTDet-sample variant behaves more robustly in the low-SNR regime, where it slightly outperforms the TTDet-sweep variant and the sphere decoder in terms of SER 3.We emphasize that TTs with a maximum rank of r_max = 10 are sufficient to initialize the TT-cross algorithm and achieve this quasi-optimal performance, indicating the low-rank nature of this problem. Note that the DMRG-like TT-cross algorithm may require substantially higher intermediate ranks than r_max = 10 . Table I reports the maximum TT rank rmax after exponentiation at the output of the TT-cross algorithm (TTDet-sample variant) for the 
+
+4-QAM scenario with ˜N = 32 . Additionally, we analyze the memory savings relative to the explicit tensor representation, where the latter requires M ˜N floating-point numbers to store. In our simulations, this corresponds to a memory reduction in the order of 10 13 and 10 14 at SNR = −11 dB and −5 dB, respectively. Finally, we consider the SER performance for the 16 -QAM scenarios in Fig. 2. The TTDet algorithm significantly outperforms the LMMSE detector and achieves a 2 dB gain over the EP detector. In the high-SNR regime, the TTDec algorithm exhibits a performance degradation relative to the sphere decoder. Here, the TTDet-sweep variant slightly out-                       
+
+> 3Note that the sphere detector is optimal in the MLSE sense, but not necessarily in terms of SER, which explains the slightly lower SER of the TTDet-sample and EP detector for low SNR values. TABLE I MEMORY COMPLEXITY OF THE TTD ET -SAMPLE ALGORITHM FOR ˜N= 32 AND 4-QAM
+> rmax after TT-cross Memory savings w.r.t. M˜N
+> Eb/N 0mean median mean median
+> −11 dB 210 209 10 13 10 13
+> −5dB 98 86 10 14 10 14
+
+performs the TTDet-sample variant. This suggests that in this regime, the TT-cross algorithm may fail to approximate the exponential sufficiently accurate, which indicates that the Taylor-series initialization with r_max = 20 and 40 , respec-tively, is insufficient to achieve optimal performance or higher intermediate ranks in the TT-cross are required. Fig. 3 illustrates the dependency of the SER performance on the maximum rank r_max of the truncated Taylor series initialization for ˜N = 8 . At low SNR, a small rank r_max = 6 
+
+suffices to achieve quasi-optimal performance. In the high-SNR regime, we can observe a clear convergence behavior as 
+
+r_max increases. This indicates that higher ranks are required to close the remaining gap to optimality. V. E XAMPLE : D ECODING OF LINEAR CHANNEL CODES 
+
+Error-correction coding is a fundamental component of modern digital communication systems, enabling reliable data transmission over noisy channels [45] and forming the basis of many wireless, storage, and optical communication standards. Efficient channel decoding algorithms are essential to approach theoretical performance limits while remaining computation-ally feasible in practical implementations. In this section, we consider the problem of decoding linear block codes [5]. 
+
+A. Linear Coding over the BI-AWGN Channel 
+
+Consider the problem of reliably transmitting an information word u ∈ Fk 
+
+> 2
+
+over a noisy communication channel, where each bit ui is independently and uniformly sampled from the finite SUBMITTED VERSION, APRIL 8, 2026 8
+
+6 7 8 9 10 
+
+10 −3
+
+10 −2
+
+10 −1
+
+SNR (dB) 
+
+> SER
+> TTDet-sample
+> Sphere decoder
+
+6
+
+8
+
+12 
+
+16 
+
+20 
+
+30 
+
+r_max       
+
+> Fig. 3. SER over SNR for different ranks r_max of the truncated Taylor series initialization of the TTDet-sample algorithm for a MIMO system with
+> ˜N= 8 and 16 -QAM.
+
+field F2 := {0, 1}. To introduce redundancy and enable error correction capabilities, a binary linear block encoder maps each of the 2k information words u bijectively to a codeword 
+
+c = Gu , G ∈ Fn×k 
+
+> 2
+
+,
+
+using the generator matrix G. The set of all 2k codewords forms a linear subspace of Fn 
+
+> 2
+
+and defines the binary linear block code C(n, k ) with rate R := k/n < 1.We consider the BI-AWGN channel, where each codeword c
+
+is mapped to a sequence of binary phase-shift keying (BPSK) symbols x with xj = ( −1) cj , j = 1 , . . . , n and transmitted over an AWGN channel 
+
+y = x + n, n ∼ N 
+
+
+
+0, N0
+
+2 In
+
+
+
+,
+
+where we define the SNR in terms of the energy per informa-tion bit 
+
+Eb/N 0 := −10 log 10 (rN 0) in dB .
+
+Channel decoding aims to reconstruct the information word u based on the observation y ∈ Rn at the receiver. It can be formulated as a detection problem in the additive noise model defined in Sec. III-A with NR = n, NT = k. The corresponding APP is given by 
+
+P (u|y) ∝ p(y|u)P (u) = X
+
+> c∈Fn
+> 2
+
+p(y|u, c)P (c|u)P (u)
+
+∝ X
+
+> c∈Fn
+> 2
+> n
+
+Y
+
+> j=1
+
+exp 
+
+
+
+− (yj − (−1) cj )2
+
+N0
+
+
+
+1{c=Gu },
+
+or, equivalently, in the logarithmic domain 
+
+log P (u|y) = C − 1
+
+N0
+
+> n
+
+X
+
+> j=1
+
+
+
+yj − (−1) (Gu )j
+
+2
+
+,
+
+= C +
+
+> n
+
+X
+
+> j=1
+
+ℓ(yj |u) =: C + Λ( u), (6) where C is a constant independent of u.
+
+B. TT Construction of the Log-APP 
+
+Our objective is to express the unnormalized log-APP metric Λ( u) in (6) in the TT format. Although the code is linear, the decoding problem does not correspond to the linear observation model in (5). This is because the linearity of the code c = Gu is defined over F2, rather than over R.Therefore, we incorporate the code constraint directly into the TT construction. Specifically, we construct a single TT representation of Λ( u) rather than forming the NR = n log-likelihood terms ℓ(yj |u) individually and summing their cor-responding TTs representations afterwards. We expand the quadratic term of (6) into 
+
+Λ( u) = − 1
+
+N0
+
+> n
+
+X
+
+> j=1
+
+y2 
+
+> j
+
++ 1 − 2yjkY
+
+> i=1
+> Gji =1
+
+(−1) ui
+
+ . (7) The term − 1
+
+> N0
+
+Pnj=1 (y2 
+
+> j
+
++ 1) in (7) is constant with respect to u and can be omitted in the context of decoding, as discussed in Sec. III-A. Each summand 
+
+2yj
+
+N0
+
+> k
+
+Y
+
+> i=1
+> Gji =1
+
+(−1) ui , j = 1 , . . . , n 
+
+is a scalar function that admits a rank-1 TT representation. Consequently, the sum over the n scalar terms can be ex-pressed by a TT of rank at most n. For the construction, we define 
+
+sij := 
+
+(
+
+−1 if Gji = 1 ,
+
++1 otherwise .
+
+The first core G1 and the last core GNT have the form 
+
+G1 = 2
+
+N0
+
+y1s11 y2s12 · · · yns1
+
+> n
+
+y1 y2 · · · yn
+
+
+
+∈ R1×2×n, (8) 
+
+Gk =
+
+sk 
+
+> 1
+
+sk 
+
+> 2
+
+· · · skn
+
+1 1 · · · 1
+
+⊤
+
+∈ Rn×2×1.
+
+The remaining cores Gi ∈ Rn×2×n, i = 2 , . . . , k − 1, can be constructed by 
+
+Gi(: , 1, :) = diag  (si
+
+> 1
+
+, s i
+
+> 2
+
+, . . . , s in)⊤ ,Gi(: , 2, :) = diag (1n) .
+
+Note that the construction of the cores G2, . . . , G k is indepen-dent of the observation y. Hence, for a given code, only G1
+
+needs to be updated when a new y is received. The presented construction is the simplest one we found, although it is not optimal in terms of rank. However, applying a standard truncation with a small tolerance (e.g., ϑ = 10 −12 )yields a TT representation with smaller ranks. Based on the TT construction of the log-APP term in Sec. V-B, followed by exponentiation and marginalization as described in Sec. III-B, we obtain symbol-wise APPs. The decoded information word ˆu is then obtained via the MAP hard decision in (3). SUBMITTED VERSION, APRIL 8, 2026 9
+
+C. Adaptive Rank Decoding 
+
+The rank required to reliably represent the joint APP distribution after exponentiation varies significantly across transmissions, as it strongly depends on the specific noise realization. The TT-cross algorithm inherently finds low-rank representations and adapts intermediate ranks during the ap-proximation procedure, see Sec. III-B3. Nevertheless, certain hyperparameters must be selected in advance, in particular the maximum rank r_max of the truncated Taylor-series initialization. Configuring this parameter for the worst case scenario introduces unnecessary computational overhead in the majority of transmissions, where lower ranks are sufficient. We therefore propose an adaptive decoding strategy that operates with reduced complexity in the low-rank regime and increases r_max only when required. An additional consid-eration is the stochastic nature of the TT-cross algorithm. Due to the random initialization of the inflated ranks in each sweep, repeated runs may yield different results. Both aspects motivate a statistical test that assesses whether the current decoding result is sufficiently reliable. In general, verifying whether a candidate corresponds to the maximum likelihood (ML) solution is as hard as solving the original detection problem. Channel decoding, however, offers a structural advantage: the observation y is a noisy version of a codeword. Classical decoders exploit this by checking whether a candidate ˆx ∈ Fn 
+
+> 2
+
+satisfies the code constraints, i.e., ˆx ∈ C (n, k ) [5]. In the proposed approach, we instead estimate the information word u directly, and every vector in Fk is a valid candidate, i.e., code membership cannot serve as a reliability indicator. Instead, we leverage the known noise statistics together with structural properties of the code, in particular its minimum Hamming distance dmin .Specifically, we consider the squared Euclidean distance 
+
+d( ˆ x, y) = 
+
+> n
+
+X
+
+> j=1
+
+(yj − ˆxj )2 , ˆxj = ( −1) ˆcj , ˆc = G ˆu
+
+between the re-encoded and BPSK-modulated candidate ˆx and the observation y, and formulate a binary hypothesis test:  
+
+> •
+
+H0 : correct decoding , ˆc = c ⇔ dH(ˆ c, c) = 0 , 
+
+> •
+
+H1 : decoding to incorrect codeword , dH(ˆ c, c) = dmin .For simplicity, H1 only considers decoding to an incorrect codeword at the minimum Hamming distance dmin , which represents the dominant decoding error event at high SNR. Under H0, the squared Euclidean distance reduces to the squared noise norm d( ˆ x, y) = ∥n∥2, which follows a scaled chi-squared distribution N0 
+
+> 2
+
+χ2 
+
+> n
+
+with n degrees of freedom. Under H1, the dmin positions where ˆc and c differ each contribute a shifted noise term. Consequently, d( ˆ x, y) follows a scaled noncentral chi-squared distribution N0 
+
+> 2
+
+χ2
+
+> n
+
+(λ) with noncentrality parameter λ = 8dmin  
+
+> N0
+
+. Let fH0 and fH1 denote the probability density functions of d( ˆ x, y) under H0 and H1,respectively. Since both hypotheses are simple, i.e., fH0 and fH1 are fully specified with known n, N0, and dmin , the Neyman-Pearson lemma guarantees that the likelihood-ratio test 
+
+T (d( ˆ x, y)) = fH1 (d( ˆ x, y)) 
+
+fH0 (d( ˆ x, y)) 
+
+> H1
+
+≷
+
+> H0
+
+η
+
+Algorithm 2: TTDec for decoding of linear codes 
+
+Initialization: G, ϑ, ν ⋆ ← ∞ , (r_max (1) , . . . , r_max (t))   
+
+> // Offline preprocessing
+> 1
+
+Construct TT cores G2, . . . , G k of Λ( u) // Sec. V-B // Online per-observation processing 
+
+Data: Observation y ∈ Rn, CSI {N0} 
+
+> 2
+
+Construct G1 to obtain full TT of Λ( u) // Eq. (8)  
+
+> 3
+
+Evaluate ˜Pe and η( ˜Pe) // Eqs. (9) and (10)  
+
+> 4
+
+for r_max = r_max (1) , . . . , r_max (t) do // Sec. V-C // TT exponentiation & marginalization  
+
+> 5
+
+Compute symbol-wise APPs // Sec. III-B3-B4 
+
+P (ui = a|y) ∝ X 
+
+> a∈Fk
+> 2,a i=a
+
+eΛ( a), a ∈ F2, i = 1 , . . . , k,         
+
+> // Switch from TT to explicit vector format
+> 6
+
+MAP hard decision ˆui = arg max 
+
+> a∈Fk
+> 2
+
+P (ui = a|y) 
+
+> 7
+
+Evaluate νcand = d (−1) G ˆu, y, ˆu = (ˆ u1, . . . , ˆuk)⊤ 
+
+> 8
+
+if νcand < ν ⋆ then  
+
+> 9
+
+ˆu⋆ ← ˆu, ν⋆ ← νcand  
+
+> 10
+
+if ν⋆ < η ( ˜Pe) then break // H0 : early stopping 
+
+> 11
+
+Result: Decoding result ˆu ← ˆu⋆
+
+is uniformly most powerful [46]. Since the likelihood ratio is monotonic in d( ˆ x, y), the test reduces to a simple threshold test on this quantity. If the test selects H1, we re-execute the decoder with incremented r_max ; otherwise the result is accepted and the algorithm stops early. We choose the threshold η to set the type-II error prob-ability, i.e., the probability that the decoder terminates early although the candidate is incorrect, 
+
+P (accept H0 | H1) = P (d( ˆ x, y) < η | H1)= Fχ2
+
+> n(λ)
+
+ 2ηN0
+
+ !
+
+= ˜Pe
+
+100 ,
+
+relative to the minimum achievable block error probability ˜Pe.Here, Fχ2 
+
+> n(λ)
+
+denotes the cumulative distribution function of the noncentral chi-square distribution. Solving for η leads to the threshold 
+
+η( ˜Pe) = N0
+
+2 F −1
+
+> χ2
+> n(λ)
+
+˜Pe
+
+100 
+
+!
+
+. (9) To approximate ˜Pe for a given code of rate R and block-length n, we use the refined normal approximation from finite-blocklength information theory [47], [48]: 
+
+˜Pe := Q C − R + log n
+
+> 2n
+
+pV /n 
+
+!
+
+, (10) where C denotes the channel capacity and V the channel dispersion, as defined in [48]. Algorithm 2 summarizes the proposed TT-based algo-rithm for bit-wise channel decoding of linear codes over the BI-AWGN channel. The offline phase precomputes the TT cores G2, . . . , G k once per code, while the online phase SUBMITTED VERSION, APRIL 8, 2026 10 
+
+1 2 3 4 5 6
+
+10 −4
+
+10 −3
+
+10 −2
+
+10 −1
+
+Eb/N 0 (dB)            
+
+> BER
+> BCH(15,7)
+> BCH(31,16)
+> BCH(63,30)
+> BP-SPA
+> TTDec-sample (new)
+> TTDec-sweep (new)
+> bit-wise OSD-3
+> Fig. 4. BER over Eb/N 0for various decoding algorithms across different BCH codes. The maximum rank in the Taylor-series initialization was set to r_max = 30 for the BCH (63 ,30) code and r_max = 10 for the other codes.
+
+processes each observation y by constructing G1, evaluating the early stopping threshold η( ˜Pe), and iteratively increasing the rank r_max of the truncated Taylor-series intialization until either the stopping criterion is met or the maximum rank is reached. Note that the constructions and operations in lines 1, 2, and 5 are performed entirely in the TT format. We refer to this algorithm as TTDec, and distinguish its two variants by the cross approximation method used for the exponentiation: TTDec-sample, based on the more classical TT-cross algorithm, and TTDec-sweep, based on the DMRG-like cross algorithm. 
+
+D. Numerical Evaluation 
+
+We evaluate the performance of the TTDec algorithm for different linear block codes. Fig. 4 shows the bit error rate (BER) over Eb/N 0 for Bose–Chaudhuri–Hocquenghem (BCH) codes of different block lengths n and code rates R ≈ 0.5. We estimate the BER via Monte Carlo simula-tions. For each Eb/N 0 value, we run simulations until at least 
+
+100 block errors (i.e., transmissions in which one or more bit errors occur) are accumulated for both variants of the TTDec algorithm. To ensure a fair comparison, we use the identical noise realizations for the TTDec-sample and TTDec-sweep algorithms. We compare the results against ordered statistics decoding (OSD) with order 3. To obtain bit-wise decisions, we compute approximate marginals from the list of candidate codewords L produced by OSD and select the most likely bit value according to 
+
+ˆci, OSD = arg max 
+
+> a∈{ 0,1}
+
+X
+
+> c∈L
+> ci=a
+
+p(y|c), i = 1 , . . . , n, 
+
+which serves as a near-optimal bit-wise decoding baseline for the considered codes. As a low-complexity baseline, we employ a BP decoder with the sum-product algorithm (SPA) update rule, using up to 1000 parallel message-passing itera-tions and early stopping upon detection of a valid codeword. 
+
+0 200 400 600 800 1000 
+
+10 −3
+
+10 −2
+
+10 −1
+
+10 0
+
+rmax 
+
+> frequency
+
+Eb/N 0 = 2 dB 
+
+Eb/N 0 = 3 dB 
+
+Eb/N 0 = 4 dB Distribution Mean Median        
+
+> Fig. 5. Histogram of the maximum TT rank rmax after TT-cross approxima-tion of the joint APP mass function for the TTDet-sweep algorithm applied to the BCH (63 ,30) code at different Eb/N 0values.
+
+For the latter, we use the sparse “ 1-min” parity check matrix provided in [49]. For the BCH (15 , 7) and BCH (31 , 16) codes, both TTDec variants achieve a BER performance comparable to OSD-3 across the entire evaluated Eb/N 0 range. For the BCH (63 , 30) 
+
+code, a small performance gap to OSD-3 becomes visible in the high-SNR regime. Consistent with the behavior observed for the TTDet algorithm in MIMO detection (Sec. IV-C), the TTDec-sweep algorithm achieves a lower BER than the TTDec-sample variant. Compared to BP-based decod-ing, we can observe a significant gain of 2 dB for a target BER = 10 −4.We further analyze the maximum ranks rmax encountered after the TT-cross approximation to represent the joint APP mass function in the linear domain. Fig. 5 shows the histogram of rmax for the TTDet-sweep algorithm across different Eb/N 0
+
+values for the BCH (63 , 30) code. We can observe that in all cases, the majority of decoding instances require relatively low ranks (note the logarithmic scale of the relative frequency axis in Fig. 5). At Eb/N 0 = 1 dB, however, instances with high ranks rmax > 1000 do occur, with a mean rmax of 322 
+
+and a median of 144 . As Eb/N 0 increases, the occurence of high ranks decreases significantly. At Eb/N 0 = 4 dB, the mean (median) rmax reduces to 17 (14 ), confirming the low-rank nature of the problem, particularly at high Eb/N 0.VI. C ONCLUSION 
+
+We propose a TT-based framework for tractable Bayesian inference in discrete-input additive noise models, motivated by the observation that the joint log-APP mass function often admits an exact low-rank representation in the TT format. To perform the exponentiation in the TT format required for marginalization, we employ a truncated Taylor-series initial-ization followed by a TT-cross approximation, and compare two complementary variants: a sample-based algorithm that is more robust at low SNR, and a DMRG-based scheme that achieves higher accuracy at high SNR. We demonstrated the proposed framework for MIMO detection and for decoding binary linear block codes, deriving explicit low-rank TT SUBMITTED VERSION, APRIL 8, 2026 11 
+
+A = A(: , 2, :) 
+
+A(: , 1, :)                 
+
+> Fig. 6. Visualization of a tensor A∈R2×2×2as defined in (11). Each cube represents one tensor entry. The slices A(: ,1,:) and A(: ,2,:) correspond to
+> 2×2matrices, colored in blue and orange, respectively.
+
+constructions for both problems. Numerical results confirm near-optimal performance across a wide SNR range while maintaining modest TT ranks, demonstrating the efficiency and effectiveness of the proposed framework. Moreover, the framework allows for tuning the balance between accuracy and computational complexity. Opting for smaller maximal ranks results in a controlled reduction of accuracy. Promising directions for future work include exploring alternative approaches to approximate the exponentiation of the log-APP. Another direction is the extension of the frame-work to hierarchical TTNs, which may provide even more compact and efficient representations tailored to the structure of the underlying problem. We highlight the flexibility of the TT framework, which enables the direct adaptation of established signal processing techniques to tensor networks, thereby opening new research opportunities and directions. ACKNOWLEDGMENTS 
+
+We thank Alexander Fengler and Jonathan Mandelbaum for helpful discussions. APPENDIX 
+
+A. Example for Tensor Train Decomposition 
+
+We provide a simple example to build some intuition for the construction of TT representations. To illustrate the idea of a low-rank decomposition, consider the tensor A ∈ R2×2×2
+
+with entries 
+
+A(: , 1, :) = 
+
+1 22 4
+
+
+
+, A(: , 2, :) = 
+
+2 44 8
+
+
+
+, (11) as visualized in Fig. 6. A trivial TT representation of A is obtained using the core tensors 
+
+G1 =
+
+1 00 1
+
+
+
+∈ R1×2×2,G2 = A ∈ R2×2×2,G3 =
+
+1 00 1
+
+
+
+∈ R2×2×1.
+
+As described in Sec. II, we can reconstruct individual entries of the full tensor by multiplying the corresponding slices of each core tensors. For example, to compute A(1 , 2, 2) , we select the slices 
+
+G1(: , 1, :) =  1 0 , G2(: , 2, :) = 
+
+2 44 8
+
+
+
+,G3(: , 2, :) = 
+
+01
+
+
+
+.
+
+ =
+
+!−1 ! 
+
+> Fig. 7. Graphical illustration of the cross decomposition in (12).
+
+and obtain 
+
+A(1 , 2, 2) =  1 0 2 44 8
+
+  01
+
+
+
+= 4 .
+
+This representation does not yield any compression, as it es-sentially reproduces the original tensor. However, the tensor A
+
+exhibits significant linear dependencies: both slices A(: , 1, :) 
+
+and A(: , 2, :) have linearly dependent columns, and A(: , 2, :) 
+
+is a scaled version of A(: , 1, :) . Hence, the tensor contains redundant information. The key idea of a low-rank tensor decomposition is to ex-ploit and remove such redundancies. In this example, tensor A
+
+admits an exact rank– 1 TT representation with the core tensors 
+
+Gi =
+
+12
+
+
+
+∈ R1×2×1, i = 1 , 2, 3.
+
+This representation is exact while requiring fewer parameters compared to the full tensor. 
+
+B. Intuition behind the TT-Cross Algorithm 
+
+We briefly outline the main idea underlying cross approxi-mation algorithms. First, we explain the concept for matrices and then discuss how it generalizes to tensors and the TT format. Let A ∈ Rn×m, let f be an element-wise function, and let 
+
+B = f (A). Suppose that B is of low rank r < n . Then there exist r linearly independent columns of B, whose indices we collect in the set J = ( j1, . . . , j r ). While J is assumed to be known here for simplicity, it is determined in practice via an iterative alternating-directions search. Since r is small, we can compute the matrix C = B(: , J ) ∈ Rn×r by evaluating only 
+
+nr entries of the full matrix B = f (A). We then choose r rows of C. Specifically, we select the row index set I = ( i1, . . . , i r )
+
+such that | det( B(I, J )) | is maximized, which promotes linear independence and is accomplished efficiently by the maxvol 
+
+algorithm [50]. This yields the low-rank decomposition 
+
+B = CB (I, J )−1R, (12) where C = B(: , J ) and R = B(I, :) . Because the index sets 
+
+I and J form a cross-shaped structure in the matrix B, as visualized in Fig 7, methods of this type are referred to as cross algorithms. Tensor-cross algorithms generalize the matrix cross decom-position by successively applying this interpolation idea along each physical dimension to obtain a full TT decomposition. To formalize this, let Mat j (B) denote the matricization of a tensor B ∈ Rn1×···× nN , in which the kth row aligns all entries of B whose jth index equals k. To compute the first TT core, we apply the matrix cross-decomposition described above to Mat 1(B) ∈ Rn1×m with m = QNi=2 ni. Since mSUBMITTED VERSION, APRIL 8, 2026 12 
+
+is generally too large to store R = B(I, :) explicitly, we instead set G1 = C B (I, J )−1 as the first core tensor. The remaining factor R can be reshaped into a tensor of size 
+
+r1n2 × n3 × · · · × nN by concatenating the indices in I
+
+with the second physical dimension. This procedure is applied recursively until all cores are obtained. A detailed description is given in [34, Sec. 3]. REFERENCES [1] J. Proakis and M. Salehi, Digital Communications , 5th ed. McGraw Hill, Nov. 2007. [2] C. M. Bishop, Pattern recognition and machine learning . New York: Springer, 2006. [3] F. R. Kschischang and H.-A. Loeliger, “Factor graphs and the sum-product algorithm,” IEEE Trans. Inf. Theory , vol. 47, no. 2, pp. 498–519, Feb. 2001. [4] A. Worthen and W. Stark, “Unified design of iterative receivers using factor graphs,” IEEE Trans. Inf. Theory , vol. 47, no. 2, pp. 843–849, Feb. 2001. [5] T. Richardson and R. Urbanke, Modern Coding Theory . Cambridge University Press, 2008. [6] T. P. Minka, “Expectation propagation for approximate Bayesian infer-ence,” in Proc. UAI , Seattle, WA, USA, 2001, pp. 362–369. [7] J. C´ espedes, P. M. Olmos, M. S´ anchez-Fern´ andez, and F. Perez-Cruz, “Expectation propagation detection for high-order high-dimensional MIMO systems,” IEEE Trans. Commun. , vol. 62, no. 8, pp. 2840–2849, Aug. 2014. [8] A. Doucet and X. Wang, “Monte Carlo methods for signal processing: A review in the statistical signal processing context,” IEEE Signal Process. Mag. , vol. 22, no. 6, pp. 152–170, 2005. [9] B. Farhang-Boroujeny, H. Zhu, and Z. Shi, “Markov chain Monte Carlo algorithms for CDMA and MIMO communication systems,” IEEE Trans. Signal Process. , vol. 54, no. 5, pp. 1896–1909, 2006. [10] D. P. Kingma and M. Welling, “Auto-encoding variational Bayes,” in 
+
+Proc. Int. Conf. Learning Representations (ICLR) , Banff, Canada, 2014. [11] V. Lauinger, F. Buchali, and L. Schmalen, “Blind equalization and channel estimation in coherent optical communications using variational autoencoders,” IEEE J. Sel. Areas Commun. , vol. 40, no. 9, pp. 2529– 2539, Sep. 2022. [12] J. Ho, A. Jain, and P. Abbeel, “Denoising diffusion probabilistic models,” 
+
+Proc. Advances in Neural Information Processing Systems (NeurIPS) ,vol. 33, pp. 6840–6851, 2020. [13] B. Fesl, M. Baur, F. Strasser, M. Joham, and W. Utschick, “Diffusion-based generative prior for low-complexity MIMO channel estimation,” 
+
+IEEE Wireless Commun. Lett. , vol. 13, no. 12, pp. 3493–3497, 2024. [14] L. Grasedyck, D. Kressner, and C. Tobler, “A literature survey of low-rank tensor approximation techniques,” GAMM-Mitteilungen , vol. 36, no. 1, pp. 53–78, 2013. [15] W. Hackbusch, Tensor spaces and numerical tensor calculus , ser. Springer Series in Computational Mathematics. Springer, Cham, 2019, vol. 56, second edition. [16] E. Stoudenmire and D. J. Schwab, “Supervised learning with tensor networks,” Proc. Advances in Neural Information Processing Systems (NeurIPS) , vol. 29, 2016. [17] J. Haegeman, C. Lubich, I. Oseledets, B. Vandereycken, and F. Ver-straete, “Unifying time evolution and optimization with matrix product states,” Physical Review B , vol. 94, no. 16, p. 165116, 2016. [18] S. Holtz, T. Rohwedder, and R. Schneider, “The alternating linear scheme for tensor optimization in the tensor train format,” SIAM Journal on Scientific Computing , vol. 34, no. 2, pp. A683–A713, 2012. [19] K. Kormann, “A semi-Lagrangian Vlasov solver in tensor train format,” 
+
+SIAM Journal on Scientific Computing , vol. 37, no. 4, pp. B613–B632, 2015. [20] T. G. Kolda and B. W. Bader, “Tensor decompositions and applications,” 
+
+SIAM review , vol. 51, no. 3, pp. 455–500, 2009. [21] A. Cichocki, D. Mandic, L. De Lathauwer, G. Zhou, Q. Zhao, C. Caiafa, and H. A. Phan, “Tensor decompositions for signal processing applica-tions: From two-way to multiway component analysis,” IEEE Signal Process. Mag. , vol. 32, no. 2, pp. 145–163, 2015. [22] A. L. F. de Almeida, G. Favier, J. P. C. L. da Costa, and J. C. M. Mota, “Overview of tensor decompositions with applications to com-munications,” in Signals and Images: Advances and Results in Speech, Estimation, Compression, Recognition, Filtering, and Processing . Boca Raton, FL, USA: CRC Press, 2016, pp. 325–356. [23] N. D. Sidiropoulos, L. De Lathauwer, X. Fu, K. Huang, E. E. Papalex-akis, and C. Faloutsos, “Tensor decomposition for signal processing and machine learning,” IEEE Trans. Signal Process. , vol. 65, no. 13, pp. 3551–3582, 2017. [24] N. Tokcan et al. , “Tensor decompositions for signal processing: Theory, advances, and applications,” Signal Processing , vol. 234, p. 110191, 2025. [25] D. C. Ara´ ujo, A. L. F. de Almeida, J. P. C. L. Da Costa, and R. T. de Sousa, “Tensor-based channel estimation for massive MIMO-OFDM systems,” IEEE Access , vol. 7, pp. 42 133–42 147, 2019. [26] R. Wang, C. Pan, H. Ren, H. Wu, and J. Wang, “Tensor train decomposition-based channel estimation for MIMO-AFDM systems with fractional delay and doppler,” preprint arXiv:2603.09293 , 2026. [27] H. Chen, F. Ahmad, S. Vorobyov, and F. Porikli, “Tensor decompositions in wireless communications and MIMO radar,” IEEE J. Sel. Topics Signal Process. , vol. 15, no. 3, pp. 438–453, 2021. [28] I. V. Oseledets, “Tensor-train decomposition,” SIAM Journal on Scien-tific Computing , vol. 33, no. 5, pp. 2295–2317, 2011. [29] S. Ahmadi-Asl, C. F. Caiafa, A. Cichocki, A. H. Phan, T. Tanaka, I. Oseledets, and J. Wang, “Cross tensor approximation methods for compression and dimensionality reduction,” IEEE Access , vol. 9, pp. 150 809–150 838, 2021. [30] F. L. Hitchcock, “The expression of a tensor or a polyadic as a sum of products,” Journal of Mathematics and Physics , vol. 6, no. 1-4, pp. 164–189, 1927. [31] L. R. Tucker, “Some mathematical notes on three-mode factor analysis,” 
+
+Psychometrika , vol. 31, no. 3, pp. 279–311, 1966. [32] D. Perez-Garcia, F. Verstraete, M. M. Wolf, and J. I. Cirac, “Matrix product state representations,” Quantum Information & Computation ,vol. 7, no. 5, pp. 401–430, 2007. [33] L. De Lathauwer, B. De Moor, and J. Vandewalle, “A multilinear singular value decomposition,” SIAM J. Matrix Anal. Appl. , vol. 21, pp. 1253–1278, 2000. [34] I. Oseledets and E. Tyrtyshnikov, “TT-cross approximation for multidi-mensional arrays,” Linear Algebra and its Applications , vol. 432, no. 1, pp. 70–88, 2010. [35] B. Ghahremani and H. Babaee, “A DEIM Tucker tensor cross algorithm and its application to dynamical low-rank approximation,” Comput. Methods Appl. Mech. Eng. , vol. 423, p. 116879, 2024. [36] H. Wang and M. Thoss, “Multilayer formulation of the multiconfigu-ration time-dependent Hartree theory,” J. Chem. Phys. , vol. 119, no. 3, pp. 1289–1299, 2003. [37] W. Hackbusch and S. K¨ uhn, “A new scheme for the tensor representa-tion,” J. Fourier Anal. Appl. , vol. 15, no. 5, pp. 706–722, 2009. [38] A. Falc´ o, W. Hackbusch, and A. Nouy, “Geometric structures in tensor representations,” preprint arXiv:1505.03027 , 2015. [39] I. Oseledets, S. Dolgov, V. Kazeev, D. Savostyanov, O. Lebedeva, P. Zhlobich, T. Mach, and L. Song, http://oseledets.github.io/software, 2016, TT-Toolbox in MATLAB. [40] K. Sozykin, A. Chertkov, R. Schutski, A.-H. Phan, A. S. Cichocki, and I. Oseledets, “TTOpt: A maximum volume quantized tensor train-based optimization and its application to reinforcement learning,” Proc. Advances in Neural Information Processing Systems (NeurIPS) , vol. 35, pp. 26 052–26 065, 2022. [41] S. Yang and L. Hanzo, “Fifty years of MIMO detection: The road to large-scale MIMOs,” IEEE Commun. Surveys Tuts. , vol. 17, no. 4, pp. 1941–1988, 2015. [42] S. Verd´ u, “Computational complexity of optimum multiuser detection,” 
+
+Algorithmica , vol. 4, no. 1, pp. 303–312, Jun. 1989. [43] B. W. Bader, T. G. Kolda et al. , https://www.tensortoolbox.org, April 2021, MATLAB Tensor Toolbox Version 3.2.1. [44] L. Schmid, D. Sulz, S. Chimmalgi, and L. Schmalen, https://github.com/ kit-cel/tt-bayesian-inference, 2026, source code to be published upon acceptance of the paper. [45] C. E. Shannon, “A mathematical theory of communication,” Bell Syst. Tech. J. , vol. 27, no. 3, pp. 379–423, 1948. [46] G. Casella and R. L. Berger, Statistical Inference , 2nd ed. Pacific Grove, CA: Duxbury, 2002. [47] Y. Polyanskiy, H. V. Poor, and S. Verd´ u, “Channel coding rate in the finite blocklength regime,” IEEE Trans. Inf. Theory , vol. 56, no. 5, pp. 2307–2359, 2010. [48] G. Durisi and A. Lancho, “Transmitting short packets over wireless channels - an information-theoretic perspective,” https://gdurisi.github. io/fbl-notes/, Nov. 2020. [49] M. Helmling, S. Scholl, F. Gensheimer, T. Dietz, K. Kraft, O. Griebel, S. Ruzika, and N. Wehn, “Database of channel codes and ML simulation results,” www.rptu.de/channel-codes, 2025. SUBMITTED VERSION, APRIL 8, 2026 13 
+
+[50] S. Goreinov and E. Tyrtyshnikov, “The maximal-volume concept in approximation by low-rank matrices,” Contemporary Mathematics , vol. 268, pp. 47–51, 2001.

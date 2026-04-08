@@ -1,0 +1,65 @@
+{
+  "label": "2026-04-08",
+  "date": "2026-04-08",
+  "generated_at": "2026-04-08T20:59:46",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202604/08/2604.00309v1-nonlinear-moving-horizon-estimation-using-state--and-control-dependent-models",
+      "section": "quick",
+      "title_en": "Nonlinear Moving-Horizon Estimation Using State- and Control-Dependent Models",
+      "authors": "Mohammadreza Kamaldar",
+      "date": "2026-03-31",
+      "pdf": "https://arxiv.org/pdf/2604.00309v1",
+      "score": "6.0",
+      "evidence": "用于从测量值进行状态重建的非线性估计算法",
+      "tldr": "本文提出了一种针对非线性离散系统的状态和控制依赖移动时域估计（SCD-MHE）算法。该方法通过伪线性化表示将非线性动力学转化为依赖于状态和控制的系数模型，并在滑动窗口内迭代求解二次规划问题。相比EKF和UKF，它无需雅可比矩阵即可处理非线性和约束，并具有理论保证的收敛性。实验证明，该方法在保持高精度的同时，计算速度比全非线性MHE快一个数量级以上。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper presents a state- and control-dependent moving-horizon estimation (SCD-MHE) algorithm for nonlinear discrete-time systems. Within this framework, a pseudo-linear representation of nonlinear dynamics is leveraged utilizing state- and control-dependent coefficients, where the solution to a moving-horizon estimation problem is iteratively refined. At each discrete time step, a quadratic program is executed over a sliding window of historical measurements. Moreover, system matrices are consecutively updated based upon prior iterates to capture nonlinear regimes. In contrast to the extended Kalman filter (EKF) and the unscented Kalman filter (UKF), nonlinearities and bounds are accommodated within a structured optimization framework, thereby circumventing the reliance on local Jacobian matrices. Furthermore, theoretical analysis is presented to establish the convergence of the iterative sequence, and bounded estimation errors are mathematically guaranteed under uniform observability conditions. Finally, comparative numerical experiments utilizing a quadrotor vertical kinematics system demonstrate that the SCD-MHE achieves superior estimation accuracy relative to the EKF, the UKF, and a fully nonlinear moving-horizon estimator, while reducing per-step computational latency by over an order of magnitude.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/08/2604.01921v1-learning-spatial-structure-from-pre-beamforming-per-antenna-range-doppler-radar-data-via-visibility-aware-cross-modal-supervision",
+      "section": "quick",
+      "title_en": "Learning Spatial Structure from Pre-Beamforming Per-Antenna Range-Doppler Radar Data via Visibility-Aware Cross-Modal Supervision",
+      "authors": "George Sebastian, Philipp Berthold, Bianca Forkel, Leon Pohl, Mirko Maehlisch",
+      "date": "2026-04-02",
+      "pdf": "https://arxiv.org/pdf/2604.01921v1",
+      "score": "6.0",
+      "evidence": "从预波束成形传感器数据中学习空间结构",
+      "tldr": "本研究探讨了汽车雷达感知中一个关键的表示问题：能否直接从波束成形前的每天线距离-多普勒（RD）数据中学习空间结构。研究者利用6发8收的商用雷达，设计了一个双脉冲共享权重的编码器，并引入基于LiDAR的可视性感知跨模态监督。通过鸟瞰图（BEV）占据空间作为几何探测指标，实验证明了无需显式的波束成形或手工信号处理，模型即可从原始RD张量中直接提取并恢复复杂的空间几何信息。",
+      "tags": "query:tmr",
+      "abstract_en": "Automotive radar perception pipelines commonly construct angle-domain representations via beamforming before applying learning-based models. This work instead investigates a representational question: can meaningful spatial structure be learned directly from pre-beamforming per-antenna range-Doppler (RD) measurements? Experiments are conducted on a 6-TX x 8-RX (48 virtual antennas) commodity automotive radar employing an A/B chirp-sequence frequency-modulated continuous-wave (CS-FMCW) transmit scheme, in which the effective transmit aperture varies between chirps (single-TX vs. multi-TX), enabling controlled analysis of chirp-dependent transmit configurations. We operate on pre-beamforming per-antenna RD tensors using a dual-chirp shared-weight encoder trained in an end-to-end, fully data-driven manner, and evaluate spatial recoverability using bird's-eye-view (BEV) occupancy as a geometric probe rather than a performance-driven objective. Supervision is visibility-aware and cross-modal, derived from LiDAR with explicit modeling of the radar field-of-view and occlusion-aware LiDAR observability via ray-based visibility. Through chirp ablations (A-only, B-only, A+B), range-band analysis, and physics-aligned baselines, we assess how transmit configurations affect geometric recoverability. The results indicate that spatial structure can be learned directly from pre-beamforming per-antenna RD tensors without explicit angle-domain construction or hand-crafted signal-processing stages.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/08/2604.05334v1-ct-saturation-detection-and-compensation-a-hybrid-physical-model--and-data-driven-method",
+      "section": "quick",
+      "title_en": "CT Saturation Detection and Compensation: A Hybrid Physical Model- and Data-Driven Method",
+      "authors": "Songhao Yang, Yubo Zhang, Zhiguo Hao, Zexuan Lin, Baohui Zhang",
+      "date": "2026-04-07",
+      "pdf": "https://arxiv.org/pdf/2604.05334v1",
+      "score": "6.0",
+      "evidence": "电流互感器饱和检测与补偿",
+      "tldr": "针对电流互感器（CT）饱和导致的继电保护误动问题，本文提出一种结合物理模型与数据驱动的混合方法。利用全卷积网络（FCN）检测CT运行状态，并结合短路电流物理模型进行波形补偿。该方法避免了传统方法中复杂的参数调整，同时增强了数据驱动模型的泛化性与可解释性，经仿真和实验验证了其在保障电力系统安全运行方面的有效性。",
+      "tags": "query:tmr",
+      "abstract_en": "Current transformer (CT) saturation is one of the dominant causes of relay protection devices' malfunctions, which pose a threat to the safe operation of the power system. To address this problem, we propose a hybrid physical model- and data-driven method. The method firstly detects the CT saturation and then compensates it to reproduce the real waveform. Considering the multi-factor and strong nonlinearity of CT saturation, a data-driven model, namely the Fully Convolutional Network (FCN), is built to detect the operation status of CT. As for the compensation, a physical model of short-circuit current is used for its conciseness and universality. Through tactfully integrating the data model and the physical model, the proposed method is endowed with two major merits: the arduous adjustment of universal thresholds and parameters in existing methods is avoided, and the deficiency in generalization and interpretability of the data-driven method is assuaged. Simulation and experimental results verify the effectiveness of the proposed method. Furthermore, its application potential to future protection is explored.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/08/2604.05890v1-a-tensor-train-framework-for-bayesian-inference-in-high-dimensional-systems-applications-to-mimo-detection-and-channel-decoding",
+      "section": "quick",
+      "title_en": "A Tensor-Train Framework for Bayesian Inference in High-Dimensional Systems: Applications to MIMO Detection and Channel Decoding",
+      "authors": "Luca Schmid, Dominik Sulz, Shrinivas Chimmalgi, Laurent Schmalen",
+      "date": "2026-04-07",
+      "pdf": "https://arxiv.org/pdf/2604.05890v1",
+      "score": "6.0",
+      "evidence": "高维信号重建的贝叶斯推理",
+      "tldr": "本文针对通信系统中高维离散输入加性噪声模型的贝叶斯推理难题，提出了一种张量列（TT）框架。该方法利用对数后验概率函数的低秩TT表示，通过TT-cross算法和泰勒级数初始化实现高效推理。在MIMO检测和信道译码应用中，该框架以适中的计算复杂度实现了接近最优的性能，证明了张量网络在处理高维通信问题上的有效性。",
+      "tags": "query:tmr",
+      "abstract_en": "Bayesian inference in high-dimensional discrete-input additive noise models is a fundamental challenge in communication systems, as the support of the required joint a posteriori probability (APP) mass function grows exponentially with the number of unknown variables. In this work, we propose a tensor-train (TT) framework for tractable, near-optimal Bayesian inference in discrete-input additive noise models. The central insight is that the joint log-APP mass function admits an exact low-rank representation in the TT format, enabling compact storage and efficient computations. To recover symbol-wise APP marginals, we develop a practical inference procedure that approximates the exponential of the log-posterior using a TT-cross algorithm initialized with a truncated Taylor-series. To demonstrate the generality of the approach, we derive explicit low-rank TT constructions for two canonical communication problems: the linear observation model under additive white Gaussian noise (AWGN), applied to multiple-input multiple-output (MIMO) detection, and soft-decision decoding of binary linear block error correcting codes over the binary-input AWGN channel. Numerical results show near-optimal error-rate performance across a wide range of signal-to-noise ratios while requiring only modest TT ranks. These results highlight the potential of tensor-network methods for efficient Bayesian inference in communication systems.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
