@@ -1,0 +1,926 @@
+Title: 2604.00839v1.pdf
+
+URL Source: https://arxiv.org/pdf/2604.00839v1
+
+Published Time: Thu, 02 Apr 2026 00:59:29 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+Impact of gate voltage on switching field of perpendicular magnetic tunnel junctions 
+
+with a synthetic antiferromagnetic free layer 
+
+K. Fan *1,2 , S. V. Beek 1, G. Talmelli 1, V. Kateel 1, D. Giu liano 1, 3, B . Vermeulen 1, 3, K. Cai 1, B.
+
+Sorée 1,2 ,4 , J. D. Boeck 1,2 , R. Carpenter 1, S. Rao 1, S. Couet 1, V. D. Nguyen 1* and G. S. Kar 1
+
+> 1
+
+Interuniversity Microelectronics Center (IMEC), Kapeldreef 75, 3001 Leuven, Belgium 
+
+> 2
+
+Department of Electrical Engineering, ESAT -INSYS Division, Katholieke Universiteit 
+
+Leuven, Kasteelpark Arenberg 10, 3001 Leuven, Belgium 
+
+> 3
+
+Department of Physics and Astronomy, QS P Division, Katholieke Universiteit  Leuven, 
+
+Celestijnenlaan 200D Box 2414, 3001 Leuven, Belgium 
+
+> 4
+
+Department of Physics, Universiteit Antwerpen, Groenenborgerlaan 171, 2020 Antwerp, 
+
+Belgium 
+
+* Corresponding authors:  Kaiquan.Fan@imec.be  and  Van.Dai.Nguyen@imec.be 
+
+Abstract 
+
+We present micromagnetic simulations and experiments on voltage -assisted field 
+
+switching in perpendicular magnetic tunnel junction s (MTJs ) with a synthetic 
+
+antiferromagnetic (SAF) free layer, where the magnetic state of one sublayer is detected via 
+
+tunneling magnetoresistance (TMR ). Simulations reveal that local modulation of perpendicular 
+
+magnetic anisotropy (PMA) in one SAF sublayer leads to distinct switching characteristics .
+
+The switching field varies linearly with the anisotropy field, indicating volta ge -controlled 
+
+magnetic anisotropy ( VCMA )-dominated dynamics similar to single free -layer devices. We 
+
+then experimentally study the magnetic switching field of MTJ devices with SAF free layers 
+
+under applied gate voltage. By varying the MgO tunnel barrier thickness to systematically 
+
+modulate the resistance -area (RA) product , we enabl e quantitative separation of spin -transfer 
+
+torque (STT), VCMA , and Joule heating contributions . Our findings indicate that VCMA 
+
+dominates in devices with a high RA product, while low -RA devices exhibit nonlinear 
+
+switching behavior due to enhanced contributions from STT and Joule heating. Furthermore, 
+
+the effective fields derived from STT, VCMA, and Joule heating contributions under various 
+
+gate voltages show minimal dependence on device critical dimensions, indicating favorable 
+
+scaling behavior . This work presents a unified framework analyzing the roles of STT, VCMA, 
+
+and Joule heating in SAF -based volta ge -gated spin -orbit torque (SOT) MRAM , offering key insights for the optimization of performance, energy efficiency, and scalability in SOT -MRAM 
+
+technologies. 
+
+Magnetic random -access memory (MRAM) is a promising candidate for embedded 
+
+memory due to its non -volatility, speed, low power, and CMOS compatibility. 1–3 Among 
+
+MRAM technologies, spin -orbit torque (SOT) -MRAM, with separate read and write paths, 
+
+address es the speed -endurance trade -offs of spin -transfer torque (STT) -MRAM ,4–7 offer ing a
+
+fast, high -endurance , and reliable alternative to SRAM replacemen t.8–10 Howe ver , the 3 -
+
+terminal design of SOT -MRAM requires at least two transistors per memory cell , limiting 
+
+density capability . Voltage -gated SOT -MRAM (VGSOT -MRAM) ha s been proposed to 
+
+mitigate this limitation by utilizing the voltage -controlled magnetic anisotropy (VCMA) effect 
+
+to reduce the SOT switching current, also enabling selective writing in high -density multi -pillar 
+
+architectures. 11,12 This concept has been demonstrated using CoFeB -based free -layer magnetic 
+
+tunnel junction s (MTJ s) grown on β -W-based SOT track s.11,13 However, integration into back -
+
+end -of -line (BEOL) processes with annealing temperatures up to 400 °C remains challenging 
+
+due to interfacial material intermixing and degradation of perpendicular magnetic anisotropy 
+
+(PMA) .14 Synthetic antiferromagnetic hybrid free layer (SAF -HFL) has been proposed as a 
+
+promising alternative to overcome these issues ,14 –16 offering fast switching, enhanced retention ,
+
+and tunable magnetic properties through modulation of interlayer exchange coupling and 
+
+anisotropy in each sublayer .17,18 Therefore, integrating VG -SOT with SAF -HFL is expected to 
+
+reduce power consumption and enable higher integration density for next -generation memory 
+
+technologies .
+
+Previous studies reported that applying a gate voltage across the MTJ induces STT, 
+
+VCMA, and Joule heating effects, which collectively influence the switching of the CoFeB 
+
+free layer .19,20 In particular, the VCMA effect directly modulates the magnetic anisotropy 
+
+linearly, thereby altering the switching .11,20,21 However, SAF structures, comprising two 
+
+ferromagnetic layers antiferromagnetically coupled via a Ru spacer, exhibit more complex 
+
+switching behavior, governed by the coupling strength and the relative magnetic anisotropy of 
+
+the two layers .17,22,23 Therefore, it remains unclear how voltage -induced local modulation of 
+
+anisotropy in one sublayer impacts the overall switching behavior of the SAF -HFL system. 
+
+Additionally, most of the previous research has focused on MTJs with a low resistance -area 
+
+(RA) product, typically below 100 Ω· μm² .24,25 In such devices, thin MgO barrier s permit 
+
+considerable current s to flow through, which can degrade the barrier and impact device reliability .26,27 Th is high tunnelling current also generates pronounced STT and Joule heating 
+
+effects, often overshadowing the contribution of the VCMA effect .24 Consequently, the 
+
+complex interplay of STT, VCMA, and Joule heating in low -RA devices incorporating SAF -
+
+HFLs makes their individual contributions difficult to disentangle .
+
+This work investigates the influence of gate voltage on the switching dynamics of SAF -
+
+HFL structures through combin ed micromagnetic simulations and experiment s. The 
+
+simulations reveal that local modulation of PMA within the SAF sublayers leads to distinct 
+
+switching modes, while the switching field exhibits a linear dependence on the anisotropy field 
+
+Bk, consistent with VCMA behavior in single free -layer systems. Experimentally, by varying 
+
+MgO tunnel barrier thicknesses, we further model and quantify the competing contributions of 
+
+STT, VCMA, and Joule heating by analyzing the evolution of the hysteresis loop under varying 
+
+gate voltages. Additionally, we investigate the dependence of these effects on the RA product s
+
+and MTJ dimensions to isolate their individual contributions . These results advance the 
+
+understanding of voltage -controlled magnetization dynamics in coupled magnetic systems and 
+
+support the development of SAF -HFL -based VGSOT -MRAM devices. 
+
+We investigate three -terminal perpendicular magnetized top -pinned MTJs with a Pt 
+
+SOT track and a SAF -based free layer as illustrated in Fig . 1( a). The SAF -HFL comprises a
+
+multilayer stack of CoFeB (0.8nm)/ Spacer 1 / Co 1 (0.8nm )/Spacer 2 / Co 2 (0.8nm ) where 
+
+Spacer 1 and Spacer 2 correspond to WCoFeB and Ru consistent with our previous study ,
+
+respectively. 28,29 The top CoFeB layer is ferromagnetically coupled with the top Co1 layer, 
+
+forming the composite layer referred to as M1 . Meanwhile, this M1 layer couples 
+
+antiferromagnetically with the bottom Co 2 layer via Ruderman -Kittel -Kasuya -Yosida (RKKY) 
+
+interactio n.30 –32 To systematically investigate the effects of gate voltage across the MgO tunnel 
+
+barrier, devices with varying RA products were fabricated by tuning the MgO thickness to 
+
+1.3 nm, 1.6 nm, and 1.7 nm, corresponding to RA values of 110, 600, and 1500 Ω·μm², 
+
+res pectively . All samples were annealed at 400 ℃ for 30 min utes . Th ese SOT -MRAM devices 
+
+were fabricated and integrated by imec’s 300 mm MRAM platform as reported in previous 
+
+studies .14,15,17 
+
+In our experiments, a sensing voltage is applied through the MTJ’s top electrode to 
+
+measure resistance , therefore M1 layer switching is directly monitored via tunnel 
+
+magnetoresistance (TMR) .33 This sensing voltage also serves as a gate voltage , dropping 
+
+mainly across the MgO barrier to modulate the effective PMA of the M1 layer linearly via the 
+
+VCMA effect .11 Unlike a conventional single free layer, the SAF device introduces additional 
+
+complexity due to the interplay of coupling and anisotropy among two magnetic layers. As previous ly reported , the switching characteristics of SAF can display a two -step or three -step 
+
+process depending on the exchange coupling strength between the two magnetic layers and 
+
+their relative magnetic properties .34,35           
+
+> Figure 1(a) The schematic of STT, VCMA, and Joule heating effect in VG SOT -MRAM devices , including the schematic of SAF -HFL .The
+> simulated hysteresis loop of all layers when (b) B k(M1) = 50mT (c) Bk(M1) = 350mT. (d) The summarized B sw as a function of B k
+> (M1). The simulated hysteresis loop of M1layer when (e) B k(M1) = 50mT (f) B k(M1) = 350mT.
+
+To understand how local modulation of anisotropy in the M1 layer affects the 
+
+switching fields of the SAF -HFL system, we performed micromagnetic simulations using 
+
+Mu Max3 .36 A simplified two -layer SAF model was adopted to represent the SAF -HFL stack, 
+
+comprising an M1 layer (composite of CoFeB/Co 1) and an M2 layer (representing Co 2). 
+
+The detailed simulation parameters are provided in supplementary materials. We 
+
+hypothesized that the gate voltage tuned the PMA of the M1 layer due to the voltage drop 
+
+across the CoFeB/MgO interface . Accordingly, the effective anisotropy field of M1,  𝐵 𝑘 (M1),
+
+was varied from 50 mT to 400 mT, while  𝐵 𝑘 (M2) was fixed at 200 mT. Figures 1(b) and 1(c) 
+
+show the simulated hysteresis loops of the SAF structure under out -of -plane field sweeps for 
+
+two representative values of  𝐵 𝑘 (M1). When the PMA of M1 is weak , the SAF exhibits a 
+
+three -step switching process, characterized by the concurrent switching of M1 and M2 .
+
+During the positive field sweep (i.e., red curve of Fig.1 (b)), an initial switching event is 
+
+observed prior to crossing zero field, corresponding to the activation of the SAF coupling. 
+
+With increasing field, a concurrent reversal of both magnetic layers occurs , followed by the 
+
+SAF saturation regime at higher fields. In contrast, under a strong PMA of M1, a two -step 
+
+reversal is observed , corresponding to activation and saturation of SAF configuration . In our device, the switching of the M1 layer is electrically detected via the TMR signal. Therefore ,
+
+Fig. 1(d) summarizes the evolution of the M1 switching fields as a function of  𝐵 𝑘 (M1), while 
+
+Figs. 1(e) and 1(f) show the corresponding hysteresis loops , enabling direct comparison with 
+
+experimental results later . Compared to the hysteresis loop of the M1 layer (cf. Fig. 1 (e) and 
+
+1(f)) and the full SAF structure M all (cf. Fig. 1 (b) and 1 (c)), the M1 switching occurs 
+
+concurrently during the three -step SAF switching but during SAF saturation in the two -step 
+
+SAF . Notably, regardless of the switching SAF characteris tics , the switching field of M1 
+
+shows a linear dependence on  𝐵 𝑘 , consistent with VCMA behavior observed in single free -
+
+layer systems .                
+
+> Figure 2.(a) TMR -based hysteresis loop readout of SAF -HFL in SOT -MRAM devices .Box plots of (b) MTJ resistance in the parallel state .
+> (c) TMR and (d) Coercivity as functions of the RA product ( Ω·
+> μm² )and CD (nm) .The central line in each box represents the median,
+> while box edges correspond to the first and third quartiles. Whiskers indicate the range within 1.5× the interquartile range. The filled
+> circle denotes mean.
+
+To validate the simulation predictions, SAF -HFL -based MTJ devices with varying R A
+
+products and critical dimensions (CDs) were characterized, based on statistical data from 300 
+
+devices. Fig . 2(a) exhibits a typical TMR hysteresis loop of 80 nm MTJ device , capturing the 
+
+magnetization reversal of the M1 layer . The parallel -state resistance ( Rp) in Fig . 2(b) exhibits 
+
+a decrease with larger CDs, which is consistent across all RA categories. An enhancement of 
+
+Rp for higher RA devices is attributed to increased MgO barrier thickness, which reduces 
+
+tunneling current and raises Rp. The median TMR ratio in Fig. 2(c) is approximately 120% for devices with RA = 110 Ω·μm 2. The TMR ratio slightly increases with increasing RA, which 
+
+can be attributed to an improved CoFeB/MgO interface quality associated with thicker MgO 
+
+barriers .15 The coerciv ity field (Bc) in Fig . 2(d) increases slightly from ~100 mT to ~110 mT 
+
+with increasing RA . This trend reflects enhanced PMA in devices with thicker MgO, consistent 
+
+with better CoFeB/MgO interface. Mo reover, f rom the switching field distributions over 400 
+
+switching cycles , a thermal stability factor of  Δ ≈ 120 is extracted in 80 nm CD devices ,
+
+indicating adequate retention (see Supplementary Materials S2).          
+
+> Figure 3. (a) TMR hysteresis loops under varying gate voltages in an RA 110 Ω·μm 2device. (b) Summarized free layer switching fields
+> as functions of gate voltages among devices with different RAs .
+
+To examine the voltage -gate effects on SAF -HFL switching , we measured the TMR 
+
+hysteresis loops of SAF -HFL devices under varying gate voltages and extracted switching 
+
+fields. Fig . 3(a) shows representative TMR hysteresis loops under varying gate voltages for an 
+
+RA = 110 Ω·μm² device with CD = 80 nm . Averaged over 50 cycles, the square loops and high 
+
+TMR indicat e robust PMA and consistent device quality across all voltage s. A significant 
+
+modulation of the switching field with gate voltage is observed, confirm ing tunable free layer 
+
+magnetic properties . Fig . 3(b) summarizes the switching fields for both P→AP and AP→P 
+
+transitions as functions of gate voltage for devices with different RA values. In RA = 600 and 
+
+1500 Ω·μm² devices, the switching fields exhibit a linear dependence on gate voltage 11,20 , in 
+
+agreement with the simulation results. In contrast, RA = 110 Ω·μm² devices show a parabolic 
+
+modulation, indicating additional contributions from STT and Joule heating, which become 
+
+significant in low -RA devices due to increased tunneling current. 19,24 
+
+To quantify the individual contributions from each effect, we express the switching 
+
+field as a function of gate voltage using the following model 19 (1)
+
+where the switching fields during both the P to AP and AP to P processes are considered 
+
+simultaneously . Here , Bc0 represents the intrinsic coercivity of the free layer , and Boff denotes 
+
+the stray field from the reference and hard layers. The coefficients  𝛼 , 𝜖  and  𝜁  describe the 
+
+contributions from STT, VCMA, and Joule heating effects , respectively. RA and RA’ are the 
+
+resistance -area products under the P and AP states .                          
+
+> Figure 4.InanRA 110 Ω·μm² device , g ate voltage dependence ofmeasured and fitted (a) RA and RA’ .(b) Bsw during P to AP process
+> and AP to P process . Fitted STT ( fitted BSTT ), VCMA ( fitted BVCMA ), and Joule heating ( fitted BHeating ) effective fields with the fitted sum
+> (fitted Bsum )of all effective fields and the measured sum (measured B sum )in (c) P to AP process (d) AP to P process.
+
+In this analysis, we first examined the voltage dependence of MTJ resistance . As shown 
+
+in Fig . 4(a), in an RA 110 Ω·μ m² and CD 80 nm device, both the RA in the P state and RA’ in 
+
+the AP exhibit a clear dependence on gate voltage. This behavior is described by the following 
+
+expression: 
+
+(2) 
+
+{
+
+𝐵 𝑠𝑤  
+
+> 𝑃 →𝐴𝑃
+
+= 𝐵 𝑐 0 + 𝐵 𝑜𝑓𝑓 + 𝛼 𝑉 𝑔 
+
+𝑅𝐴 (𝑉 𝑔 ) + 𝜖 𝑉 𝑔 − 𝜁 𝑉 𝑔 
+
+> 2
+
+𝑅𝐴 (𝑉 𝑔 )
+
+𝐵 𝑠𝑤  
+
+> 𝐴𝑃 →𝑃
+
+= −𝐵 𝑐 0 + 𝐵 𝑜𝑓𝑓 + 𝛼 𝑉 𝑔 
+
+𝑅𝐴 ′(𝑉 𝑔 ) − 𝜖 𝑉 𝑔 + 𝜁 𝑉 𝑔 
+
+> 2
+
+𝑅𝐴 ′(𝑉 𝑔 )
+
+{ 𝑅𝐴 (𝑉 𝑔 ) = 𝑅𝐴 0 + 𝑎 |𝑉 𝑔 |
+
+𝑅𝐴 ′(𝑉 𝑔 ) = 𝑅𝐴 0 
+
+> ′
+
++ 𝑏 |𝑉 𝑔 |where RA 0 and RA 0’ are fitted RA under zero gate voltage for the P and AP states ,
+
+respectively . For each device , RA(V g) and RA′(V g) were globally fitted using Equation 2. 
+
+These fits were then substituted into Equation 1 to perform a second global fit for the switching 
+
+fields  𝐵 𝑠𝑤  
+
+> 𝑃 →𝐴𝑃
+
+and  𝐵 𝑠𝑤  
+
+> 𝐴𝑃 →𝑃
+
+, capturing the combined influence of all three effects. Fig . 4(b )
+
+highlights the switching field s for transitions between P and AP states and vice versa . The solid 
+
+fitted curves align well with the experimental data, validating the analytical framework. As 
+
+shown by simulation above, different SAF configurations exhibit distinct switching pathways 
+
+including two -step or three -step switching characteristics. However, the switching field of M1 
+
+displays a linear dependence on B k across all cases. This indicates that this unified model can 
+
+be extended to different SAF designs, as variations in SAF do not affect the underlying physical 
+
+mechanisms captured by the model .
+
+To quantitatively compare STT, VCMA , and Joule heating effects under various gate 
+
+voltages, each effect was converted into an effective field using Equation 1. Fig s. 4(c) and (d) 
+
+show these calculated effective fields as function s of gate voltage during field -driven switching ,
+
+including the calculated sum of all effective fields ( Fitted Bsum ) and measured sum (Measured 
+
+Bsum ). The measured sum was determined as the measured switching field minus the constant 
+
+intrinsic coercivity and offset field for each specific device . The STT effective field ( BSTT )
+
+exhibits an approximately linear dependence on Vg, with an approximate slope of 7 mT/V. This 
+
+near -linear trend originates from the voltage -induced modulation in MTJ resistance, which 
+
+directly affects the current density. Despite its linear increase, the contribution of STT remains 
+
+smaller than that of VCMA and Joule heating effects at higher voltages, indicating its 
+
+secondary role in these conditions. The VCMA effective field ( BVCMA ) demonstrates a linear 
+
+dependence on Vg, with a higher slope of 16 mT/V. Th is effect is decided by the voltage polarity ,
+
+aiding switching effectively when the gate voltage is positive , consistent with modulation of 
+
+anisotropy at the CoFeB/MgO interface . Th is observed voltage -induced modulation 
+
+corresponds to an effective SAF response, while the intrinsic VCMA contribution is expected 
+
+to be comparable to that of conventional CoFeB/MgO -based devices , owing to the presence of 
+
+a similar CoFeB/MgO interface . We compared gate voltage impact on effective magnetic 
+
+anisotropy field between SAF -HFL and single free layer in supplementary material S 4. The 
+
+Joule heating effective field ( BHeating ) shows a symmetric dependence on Vg, peaking at 
+
+approximately 25 mT for ∣Vg∣=1.0 V. This symmetry reflects the quadratic dependence of 
+
+Joule heating on voltage, as the dissipated power scales with Vg2 and is therefore independent of polarity. As a result, the Joule heating contribution increases rapidly at higher gate voltages, 
+
+effectively reducing the switching energy barrier.              
+
+> Figure 5(a) RA dependence o feffective fields at V g= 1 V for 15 CD =80 nm devices, the dashed lines as guide for the eye. (b) CD
+> dependence o feffective fields at V g= 1 V for 15 RA =600 Ω·
+
+μm² devices. (c) SOT switching loops under varying gate voltage with   
+
+> 1ns SOT pulse and B x=40mT .(d) Summarized critical SOT switching current density as a function of gate voltage.
+
+RA (Ω·μm²)  VCMA Voltage 
+
+(V) 
+
+STT Current 
+
+(μA) 
+
+Current Density 
+
+(*10 9A/m 2)
+
+Joule heating 
+
+(°C )
+
+110  1 54.0  1.8  33.8 
+
+600  1 9.5  1. 9 4.8 
+
+1500  1 4.1  0.8  3.4              
+
+> Table 1. Estimated STT current, current Density, and device temperature increase under 1 Vgate voltage for different RA values.
+
+To evaluate the scalability of VGSOT devices, we investigate the RA and CD 
+
+dependence of all effect ive fields under 1V gate voltage from 15 devices . Fig . 5(a) show s the 
+
+extracted STT, VCMA , and Joule heating effects as a function of RA for 80 nm devices. The 
+
+STT effective field decreases rapidly as RA increases, from approximately 10 mT in low -RA 
+
+devices to below 2 mT in high -RA devices . This behavior can be attributed to the decreasing 
+
+current density in high -RA devices, which directly weakens the STT effect . Similarly, the Joule 
+
+heating effective field exhibits a sharper decrease , indicating that it is strongly suppressed in high -RA devices due to lower power dissipation . In contrast, the VCMA effective field remains 
+
+relatively constant at 20 mT across RA s, highlighting its dependence on the applied gate 
+
+voltage. Table 1 summarizes the estimated STT current, STT current density, and increased 
+
+temperature induced by Joule heating under 1 V gate voltage for three representative RA values 
+
+in CD = 80 nm devices . Th is data show s that STT current and current density decrease 
+
+significantly with increasing RA, while the estimated device temperature drops from 58.8 °C 
+
+to near room temperature, consistent with reduced Joule heating at higher RA. The temperature 
+
+rise due to Joule heating was estimated based on the correlation between coercivity and ambient 
+
+temperature obtained from temperature dependence measurements provided in supplementary 
+
+materials S8 . Fig. 5(b) shows the dependence of effective fields on CD ranging from 50 –
+
+200 nm for devices with RA = 600 Ω·μm². The effective fields exhibit minimal sensitivity to 
+
+CD, indicating stable performance with scaling. Minor variations likely arise from RA 
+
+differences during fabrication. Finally, to assess the potential of SAF -HFL for voltage -gated 
+
+SOT MRAM, we examine SOT -induced magneti zation switching of high RA devices where 
+
+STT and Joule heating are minimized. In this study, we performed SOT switching 
+
+measurements under an 40mT in -plane field to achieve deterministic switching. Figure 5(c) 
+
+shows SOT -induced switching loops with 1ns SOT pulse under different gate voltages, 
+
+averaged from 50 loops. A clear shift of the switching current is observed while maintain ing 
+
+deterministic transitions. Figure 5(d) summarizes the gate -voltage dependence of the critical 
+
+SOT current density for both P to AP and AP to P switching from 10 devices , evidencing a 
+
+systematic and reversible modulation of switching current threshold by the ga te voltage. 
+
+In summary, we systematically investigated the impact of gate voltage on switching 
+
+field of MTJs with a SAF free layer . Through micromagnetic simulations and experiment s, we 
+
+demonstrated that localized modulation of anisotropy in the M1 layer governs the switching 
+
+behavior of the SAF system . We also validated that an analytical model of switching fields 
+
+developed for single free -layer devices can be effectively extended to SAF , allow ing to 
+
+quanti fy the voltage -dependent contributions from STT, VCMA, and Joule heating . Our result s
+
+reveal , in high -RA devices, VCMA effect dominated, leading to a linear voltage dependence 
+
+of the switching field , while low -RA devices exhibit nonlinear switching behavior due to 
+
+significant contributions from both STT and Joule heating . The VCMA effect exhibits a 
+
+consistent linear voltage dependence across RA values, while Joule heating becomes prominent 
+
+in low -RA devices. Effective field contributions were found limited CD dependence ,
+
+supporting the scaling potential . Finally, we confirm ed that the gate voltage enables reversible 
+
+control of the critical SOT current, highlighting its potential for voltage -gated SOT MRAM. This work provide d a framework for understanding the roles of STT, VCMA, and Joule heating 
+
+in SAF free layer devices , enabling systematic optimization of performance and scalability of 
+
+SOT -MRAM .
+
+Supplementary Material 
+
+See the Supplementary Material for additional figures, tables, simulation details, and 
+
+supporting analyses. 
+
+Availability of data 
+
+The data that support the findings of this study are available from the corresponding author 
+
+upon reasonable request. 
+
+Acknowledgement 
+
+This project has received funding from the European Union’s Horizon 2020 research 
+
+and innovation program under the Marie Skłodowska -Curie grant agreement No 955671 . This 
+
+work was supported by imec’s Industrial Affiliation Program on MRAM devices . D.G. and 
+
+B.V. acknowledge FWO -Vlaanderen for Strategic Basic Research PhD Fellowships (No. 
+
+1SHEV24N and No. 1S72225N, respectively). This work has been enabled in part by the 
+
+NanoIC pilot line. The acquisition and operation are jointly funded by the Chips Joint 
+
+Und ertaking, through the European Union’s Digital Europe (101183266) and Horizon Europe 
+
+programs (101183277), as well as by the participating states Belgium (Flanders), France, 
+
+Germany, Finland, Ireland and Romania. For more information, visit nanoic -project. eu. Reference  
+
+> 1
+
+B. Dieny, I.L. Prejbeanu, K. Garello, P. Gambardella, P. Freitas, R. Lehndorff, W. Raberg, 
+
+U. Ebels, S.O. Demokritov, J. Akerman, A. Deac, P. Pirro, C. Adelmann, A. Anane, A.V. 
+
+Chumak, A. Hirohata, S. Mangin, S.O. Valenzuela, M.C. Onbaşlı, M. d’Aquino, G. 
+
+Prenat, G. Finocchio, L. Lopez -Diaz, R. Chantrell, O. Chubykalo -Fesenko, and P. 
+
+Bortolotti, “Opportunities and challenges for spintronics in the microelectronics 
+
+industry,” Nat. Electron. 3(8), 446 –459 (2020).  
+
+> 2
+
+Z. Wang, X. Hao, P. Xu, L. Hu, D. Jung, W. Kim, K. Satoh, B. Yen, Z. Wei, L. Wang, J. 
+
+Zhang, and Y. Huai, “STT -MRAM for Embedded Memory Applications,” in 2020 IEEE 
+
+Int. Mem. Workshop IMW , (2020), pp. 1 –3.  
+
+> 3
+
+O. Golonzka, J. -G. Alzate, U. Arslan, M. Bohr, P. Bai, J. Brockman, B. Buford, C. Connor, 
+
+N. Das, B. Doyle, T. Ghani, F. Hamzaoglu, P. Heil, P. Hentges, R. Jahan, D. Kencke, B. 
+
+Lin, M. Lu, M. Mainuddin, M. Meterelliyoz, P. Nguyen, D. Nikonov, K. O’brien, J.O. 
+
+Donnell, K. Oguz, D. Ouellette, J. Park, J. Pellegren, C. Puls, P. Quintero, T. Rahman, A. 
+
+Romang, M. Sekhar, A. Selarka, M. Seth, A.J. Smith, A.K. Smith, L. Wei, C. Wiegand, 
+
+Z. Zhang, and K. Fischer, “MRAM as Embedded Non -Volatile Memory Solution fo r
+
+22FFL FinFET Technology,” in 2018 IEEE Int. Electron Devices Meet. IEDM , (IEEE, 
+
+San Francisco, CA, 2018), p. 18.1.1 -18.1.4.  
+
+> 4
+
+J.J. Kan, C. Park, C. Ching, J. Ahn, Y. Xie, M. Pakala, and S.H. Kang, “A Study on 
+
+Practically Unlimited Endurance of STT -MRAM,” IEEE Trans. Electron Devices 64 (9), 
+
+3639 –3646 (2017).  
+
+> 5
+
+J.G. Alzate, U. Arslan, P. Bai, J. Brockman, Y.J. Chen, N. Das, K. Fischer, T. Ghani, P. 
+
+Heil, P. Hentges, R. Jahan, A. Littlejohn, M. Mainuddin, D. Ouellette, J. Pellegren, T. 
+
+Pramanik, C. Puls, P. Quintero, T. Rahman, M. Sekhar, B. Sell, M. Seth, A.J. S mith, 
+
+A.K. Smith, L. Wei, C. Wiegand, O. Golonzka, and F. Hamzaoglu, “2 MB Array -Level 
+
+Demonstration of STT -MRAM Process and Performance Towards L4 Cache 
+
+Applications,” in 2019 IEEE Int. Electron Devices Meet. IEDM , (2019), p. 2.4.1 -2.4.4.  
+
+> 6
+
+D.C. Worledge, and G. Hu, “Spin -transfer torque magnetoresistive random access memory 
+
+technology status and future directions,” Nat. Rev. Electr. Eng. 1(11), 730 –747 (2024).  
+
+> 7
+
+B. Jiang, D. Wu, Q. Zhao, K. Lou, Y. Zhao, Y. Zhou, C. Tian, and C. Bi, “Write 
+
+Asymmetry of Spin -Orbit Torque Memory Induced by in -Plane Magnetic Fields,” IEEE 
+
+Electron Device Lett. 42 (12), 1766 –1769 (2021).  
+
+> 8
+
+V.D. Nguyen, S. Rao, K. Wostyn, and S. Couet, “Recent progress in spin -orbit torque 
+
+magnetic random -access memory,” Npj Spintron. 2(1), 48 (2024).  
+
+> 9
+
+K. Garello, F. Yasin, S. Couet, L. Souriau, J. Swerts, S. Rao, S. Van Beek, W. Kim, E. Liu, 
+
+S. Kundu, D. Tsvetanova, K. Croes, N. Jossart, E. Grimaldi, M. Baumgartner, D. Crotti, 
+
+A. Fumémont, P. Gambardella, and G.S. Kar, “SOT -MRAM 300MM Integration for L ow 
+
+Power and Ultrafast Embedded Memories,” in 2018 IEEE Symp. VLSI Circuits , (2018), 
+
+pp. 81 –82.  
+
+> 10
+
+V. Krizakova, M. Perumkunnil, S. Couet, P. Gambardella, and K. Garello, “Spin -orbit 
+
+torque switching of magnetic tunnel junctions for memory applications,” J. Magn. Magn. 
+
+Mater. 562 , 169692 (2022).  
+
+> 11
+
+Y.C. Wu, K. Garello, W. Kim, M. Gupta, M. Perumkunnil, V. Kateel, S. Couet, R. 
+
+Carpenter, S. Rao, S. Van Beek, K.K. Vudya Sethu, F. Yasin, D. Crotti, and G.S. Kar, 
+
+“Voltage -Gate -Assisted Spin -Orbit -Torque Magnetic Random -Access Memory for High -
+
+Density and Low -Power Embedded Applications,” Phys. Rev. Appl. 15 (6), 064015 
+
+(2021).  
+
+> 12
+
+K. Cai, S. Van Beek, S. Rao, K. Fan, M. Gupta, V.D. Nguyen, G. Jayakumar, G. Talmelli, 
+
+S. Couet, and G.S. Kar, “Selective operations of multi -pillar SOT -MRAM for high density and low power embedded memories,” in 2022 IEEE Symp.  VLSI Technol. 
+
+Circuits VLSI Technol. Circuits , (IEEE, Honolulu, HI, USA, 2022), pp. 375 –376.  
+
+> 13
+
+H. Zhang, X. Li, Z. Liu, J. Liu, W. Li, J. Lu, S. Lu, D. Xiong, K. Cao, and S. Peng, 
+
+“Ultrafast Switching and Selective Data Writing Through Voltage -Gated Spin -Orbit 
+
+Torque in Perpendicular Magnetic Tunnel Junction Arrays,” IEEE Trans. Magn., 1 –1
+
+(2025).  
+
+> 14
+
+S. Couet, S. Rao, S.V. Beek, V.D. Nguyen, K. Garello, V. Kateel, G. Jayakumar, J.D. 
+
+Costa, K. Cai, F. Yasin, D. Crotti, and G.S. Kar, “BEOL compatible high retention 
+
+perpendicular SOT -MRAM device for SRAM replacement and machine learning,” 
+
+Symp. VLSI Tech nol. Dig. Tech. Pap., (2021).  
+
+> 15
+
+S. Rao, K. Cai, G. Talmelli, N. Franchina -Vergel, W. Janssens, H. Hody, F. Yasin, K. 
+
+Wostyn, and S. Couet, “Spin -orbit torque MRAM for ultrafast cache and neuromorphic 
+
+computing applications,” in 2023 IEEE Int. Mem. Workshop IMW , (IEEE, Monterey, CA, 
+
+USA, 2023), pp. 1 –4.  
+
+> 16
+
+T. Xu, J. Liu, X. Zhang, Q. Zhang, H. -A. Zhou, Y. Dong, P. Gargiani, M. Valvidares, Y. 
+
+Zhou, and W. Jiang, “Systematic Control of the Interlayer Exchange Coupling in 
+
+Perpendicularly Magnetized Synthetic Antiferromagnets,” Phys. Rev. Appl. 18 (5), 
+
+054051 (2022).  
+
+> 17
+
+V. Kateel, M.G. Monteiro, S. Jeong, G. Talmelli, G. Jayakumar, B. Sorée, J. De Boeck, S. 
+
+Couet, and S. Rao, “Impact of net magnetization on spin –orbit torque switching of 
+
+synthetic ferromagnets in magnetic tunnel junctions,” Appl. Phys. Lett. 124 (6), 062402 
+
+(2024).  
+
+> 18
+
+V.D. Nguyen, G. Talmelli, M.G. Monteiro, A. Palomino, V. Kateel, D. Giuliano, S. Van 
+
+Beek, N.V. Meeren, N.F. Vergel, K. Wostyn, and S. Couet, “Achieving 1ppm Write -
+
+Error Rate in SOT -MRAM with Synthetic Antiferromagnetic Free Layer,” in 2024 IEEE 
+
+Int. Electron Devices Meet. IEDM , (2024), pp. 1 –4.  
+
+> 19
+
+G. Mihajlović, N. Smith, T. Santos, J. Li, M. Tran, M. Carey, B.D. Terris, and J.A. Katine, 
+
+“Origin of the Resistance -Area -Product Dependence of Spin -Transfer -Torque Switching 
+
+in Perpendicular Magnetic Random -Access Memory Cells,” Phys. Rev. Appl. 13 (2), 
+
+024004 (2020).  
+
+> 20
+
+J. Lu, W. Li, J. Liu, Z. Liu, Y. Wang, C. Jiang, J. Du, S. Lu, N. Lei, S. Peng, and W. Zhao, 
+
+“Voltage -gated spin -orbit torque switching in IrMn -based perpendicular magnetic tunnel 
+
+junctions,” Appl. Phys. Lett. 122 (1), 012402 (2023).  
+
+> 21
+
+W. Li, S. Peng, J. Lu, H. Wu, X. Li, D. Xiong, Y. Zhang, Y. Zhang, K.L. Wang, and W. 
+
+Zhao, “Experimental demonstration of voltage -gated spin -orbit torque switching in an 
+
+antiferromagnet/ferromagnet structure,” Phys. Rev. B 103 (9), 094436 (2021).  
+
+> 22
+
+C. Bi, H. Almasi, K. Price, T. Newhouse -Illige, M. Xu, S.R. Allen, X. Fan, and W. Wang, 
+
+“Anomalous spin -orbit torque switching in synthetic antiferromagnets,” Phys. Rev. B 
+
+95 (10), 104434 (2017).  
+
+> 23
+
+R.Y. Chen, R.Q. Zhang, L.Y. Liao, X.Z. Chen, Y.J. Zhou, Y.D. Gu, M.S. Saleem, X.F. 
+
+Zhou, F. Pan, and C. Song, “Magnetic field direction dependent magnetization reversal in 
+
+synthetic antiferromagnets,” Appl. Phys. Lett. 115 (13), 132403 (2019).  
+
+> 24
+
+V. Krizakova, E. Grimaldi, K. Garello, G. Sala, S. Couet, G.S. Kar, and P. Gambardella, 
+
+“Interplay of Voltage Control of Magnetic Anisotropy, Spin -Transfer Torque, and Heat 
+
+in the Spin -Orbit -Torque Switching of Three -Terminal Magnetic Tunnel Junctions,” 
+
+Phys. Rev. Appl. 15 (5), 054055 (2021).  
+
+> 25
+
+M. -C. Hong, Y. -H. Su, G. -L. Chen, Y. -C. Hsin, Y. -J. Chang, K. -M. Chen, S. -Y. Yang, I. -J. 
+
+Wang, S.Z. Rahaman, H. -H. Lee, J. -H. Wei, S. -S. Sheu, W. -C. Lo, S. -C. Chang, and T. -
+
+H. Hou, “Design of High -RA STT -MRAM for Future Energy -Efficient In -Memory Computing,” in 2023 Int.  VLSI Symp. Technol. Syst. Appl. VLSI -TSAVLSI -DAT , (IEEE, 
+
+HsinChu, Taiwan, 2023), pp. 1 –2.  
+
+> 26
+
+S. Van Beek, V. Kateel, K. Cai, N. Jossart, S. Rao, and S. Couet, “Impact of SOT & STT 
+
+stress on MTJ degradation in SOT -MRAM,” in 2023 IEEE Int. Magn. Conf. - Short Pap. 
+
+INTERMAG Short Pap. , (2023), pp. 1 –2.  
+
+> 27
+
+S. Van Beek, K. Cai, K. Fan, G. Talmelli, A. Trovato, N. Jossart, S. Rao, A. Chasin, and S. 
+
+Couet, “MTJ degradation in multi -pillar SOT -MRAM with selective writing,” in 2023 
+
+IEEE Int. Reliab. Phys. Symp. IRPS , (2023), pp. 1 –7.  
+
+> 28
+
+S. Couet, T. Devolder, J. Swerts, S. Mertens, T. Lin, E. Liu, S. Van Elshocht, and G. 
+
+Sankar Kar, “Impact of Ta and W -based spacers in double MgO STT -MRAM free layers 
+
+on perpendicular anisotropy and damping,” Appl. Phys. Lett. 111 (15), 152406 (2017).  
+
+> 29
+
+E. Raymenants, O. Bultynck, D. Wan, T. Devolder, K. Garello, L. Souriau, A. Thiam, D. 
+
+Tsvetanova, Y. Canvel, D.E. Nikonov, I.A. Young, M. Heyns, B. Soree, I. Asselberghs, I. 
+
+Radu, S. Couet, and V.D. Nguyen, “Nanoscale domain wall devices with magnetic tun nel 
+
+junction read and write,” Nat. Electron. 4(6), 392 –398 (2021).  
+
+> 30
+
+M.A. Ruderman, and C. Kittel, “Indirect Exchange Coupling of Nuclear Magnetic 
+
+Moments by Conduction Electrons,” Phys. Rev. 96 (1), 99 –102 (1954).  
+
+> 31
+
+T. Kasuya, “A Theory of Metallic Ferro - and Antiferromagnetism on Zener’s Model,” 
+
+Prog. Theor. Phys. 16 (1), 45 –57 (1956).  
+
+> 32
+
+K. Yosida, “Magnetic Properties of Cu -Mn Alloys,” Phys. Rev. 106 (5), 893 –898 (1957).  
+
+> 33
+
+S.S.P. Parkin, C. Kaiser, A. Panchula, P.M. Rice, B. Hughes, M. Samant, and S. -H. Yang, 
+
+“Giant tunnelling magnetoresistance at room temperature with MgO (100) tunnel 
+
+barriers,” Nat. Mater. 3(12), 862 –867 (2004).  
+
+> 34
+
+O. Koplak, A. Talantsev, Y. Lu, A. Hamadeh, P. Pirro, T. Hauet, R. Morgunov, and S. 
+
+Mangin, “Magnetization switching diagram of a perpendicular synthetic ferrimagnet 
+
+CoFeB/Ta/CoFeB bilayer,” J. Magn. Magn. Mater. 433 , 91 –97 (2017).  
+
+> 35
+
+R. Lavrijsen, A. Fernández -Pacheco, D. Petit, R. Mansell, J.H. Lee, and R.P. Cowburn, 
+
+“Tuning the interlayer exchange coupling between single perpendicularly magnetized 
+
+CoFeB layers,” Appl. Phys. Lett. 100 (5), 052411 (2012).  
+
+> 36
+
+A. Vansteenkiste, J. Leliaert, M. Dvornik, M. Helsen, F. Garcia -Sanchez, and B. Van 
+
+Waeyenberge, “The design and verification of MuMax3,” AIP Adv. 4(10), 107133 
+
+(2014).

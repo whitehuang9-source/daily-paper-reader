@@ -1,0 +1,216 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-09T21:42:07.795350+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 11,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.00839v1",
+      "title": "Impact of gate voltage on switching field of perpendicular magnetic tunnel junctions with a synthetic antiferromagnetic free layer",
+      "abstract": "We present micromagnetic simulations and experiments on voltage-assisted field switching in perpendicular magnetic tunnel junctions (MTJs) with a synthetic antiferromagnetic (SAF) free layer, where the magnetic state of one sublayer is detected via tunneling magnetoresistance (TMR). Simulations reveal that local modulation of perpendicular magnetic anisotropy (PMA) in one SAF sublayer leads to distinct switching characteristics. The switching field varies linearly with the anisotropy field, indicating voltage-controlled magnetic anisotropy (VCMA)-dominated dynamics similar to single free-layer devices. We then experimentally study the magnetic switching field of MTJ devices with SAF free layers under applied gate voltage. By varying the MgO tunnel barrier thickness to systematically modulate the resistance-area (RA) product, we enable quantitative separation of spin-transfer torque (STT), VCMA, and Joule heating contributions. Our findings indicate that VCMA dominates in devices with a high RA product, while low-RA devices exhibit nonlinear switching behavior due to enhanced contributions from STT and Joule heating. Furthermore, the effective fields derived from STT, VCMA, and Joule heating contributions under various gate voltages show minimal dependence on device critical dimensions, indicating favorable scaling behavior. This work presents a unified framework analyzing the roles of STT, VCMA, and Joule heating in SAF-based voltage-gated spin-orbit torque (SOT) MRAM, offering key insights for the optimization of performance, energy efficiency, and scalability in SOT-MRAM technologies.",
+      "authors": [
+        "K. Fan",
+        "S. V. Beek",
+        "G. Talmelli",
+        "V. Kateel",
+        "D. Giuliano",
+        "B. Vermeulen",
+        "K. Cai",
+        "B. Sorée",
+        "J. D. Boeck",
+        "R. Carpenter",
+        "S. Rao",
+        "S. Couet",
+        "V. D. Nguyen",
+        "G. S. Kar"
+      ],
+      "primary_category": "cond-mat.mes-hall",
+      "categories": [
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-01T12:50:36+00:00",
+      "link": "https://arxiv.org/pdf/2604.00839v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "magnetic tunnel junctions and tunneling magnetoresistance (TMR) characteristics",
+      "llm_evidence_cn": "磁隧道结与隧道磁阻 (TMR) 特性",
+      "llm_evidence": "磁隧道结与隧道磁阻 (TMR) 特性",
+      "canonical_evidence": "磁隧道结与隧道磁阻 (TMR) 特性",
+      "llm_tldr_en": "Studies the switching characteristics and TMR effects in magnetic tunnel junctions with SAF free layers.",
+      "llm_tldr_cn": "研究了具有SAF自由层的磁隧道结的开关特性和TMR效应。",
+      "llm_tldr": "研究了具有SAF自由层的磁隧道结的开关特性和TMR效应。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.02884v1",
+      "title": "Optimization and vectorization of a Mz-type optically-pumped Rubidium magnetometer",
+      "abstract": "Optically pumped magnetometers (OPMs) have demonstrated significant potential in weak magnetic field detection due to their high sensitivity. In this study, we developed an Mz-type optically pumped rubidium magnetometer using a paraffin-coated anti-relaxation vapor cell. The system optimization and performance characterization were conducted inside a magnetic shield. Specifically, the pump light intensity and radio-frequency (RF) magnetic field were jointly optimized by using the linewidth-amplitude ratio as the core metric. Based on the frequency-domain noise spectrum, the sensitivity in open-loop mode was measured to be approximately 30.8 pT/Hz^{1/2}. Furthermore, a closed-loop feedback locking technique was applied, reducing the measured noise floor under the tested conditions and improving the sensitivity to 22.9 pT/Hz^{1/2}, with a measured -3 dB bandwidth of 123 Hz. The dynamic characteristics were evaluated via magnetic-field step response, showing that the system could track magnetic-field changes stably under closed-loop operation. Finally, by using tri-axial modulation and frequency-domain demodulation, we overcame the scalar measurement limitation of traditional Mz magnetometers. This work realizes vector magnetic field detection and provides a technical basis for applications such as geomagnetic navigation and magnetic anomaly detection.",
+      "authors": [
+        "Zhengyu Su",
+        "Yang Li",
+        "Yongbiao Yang",
+        "Yanhua Wang",
+        "Jun He",
+        "Junmin Wang"
+      ],
+      "primary_category": "physics.atom-ph",
+      "categories": [
+        "physics.atom-ph"
+      ],
+      "published": "2026-04-03T08:48:08+00:00",
+      "link": "https://arxiv.org/pdf/2604.02884v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magnetometer optimization and sensitivity characterization",
+      "llm_evidence_cn": "磁力计优化与灵敏度表征",
+      "llm_evidence": "磁力计优化与灵敏度表征",
+      "canonical_evidence": "磁力计优化与灵敏度表征",
+      "llm_tldr_en": "Optimizes an optically-pumped magnetometer for high-sensitivity magnetic field detection.",
+      "llm_tldr_cn": "优化了光泵磁力计，以实现高灵敏度的磁场检测。",
+      "llm_tldr": "优化了光泵磁力计，以实现高灵敏度的磁场检测。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.04594v1",
+      "title": "Harnessing the VO2 Phase Transition for Automatic Gain Control in Transimpedance Amplifiers",
+      "abstract": "Transimpedance amplifiers (TIAs) are essential in sensor electronics, converting input currents into output voltages. Conventional TIAs utilize fixed-gain resistors, which saturate under high input currents and consequently result in undesirable recovery times. To overcome this limitation, volatile resistive switching devices have emerged as a promising alternative, offering intrinsic automatic gain control (AGC). Among these, vanadium dioxide (VO2) devices stand out for their reversible insulator-metal transition (IMT), producing abrupt, energy-efficient resistance changes near the transition temperature (67 C). In this work, a switching device was fabricated by sputtering a VO2 thin film and patterning 200 nm electrode gaps atop it. Before integrating this device into the TIA circuit, its switching dynamics were characterized under electrical pulse excitation. Slightly exceeding the temperature-dependent IMT threshold voltage (Vth) yielded fast and reproducible switching. Complementary pump-probe measurements showed that operating well below TC effectively suppresses short-term memory effects linked to the stochastic nature of the first-order transition. Leveraging these insights, a custom VO2-based TIA was developed, demonstrating variable gain and AGC functionality. Furthermore, applying a constant DC current bias during switching induced self-sustained oscillations (2 pJ per spike) with frequencies up to 60 MHz, consistent with the thermal timescale of the VO2 devices. Overall, these results provide a detailed understanding of VO2 switching dynamics and demonstrate their potential for enabling compact, energy-efficient AGC in high-speed TIAs for advanced sensing applications.",
+      "authors": [
+        "Amir Gildor",
+        "Sariel Hodisan",
+        "Shahar Kvatinsky",
+        "Yoav Kalcheim"
+      ],
+      "primary_category": "cond-mat.str-el",
+      "categories": [
+        "cond-mat.str-el"
+      ],
+      "published": "2026-04-06T11:15:09+00:00",
+      "link": "https://arxiv.org/pdf/2604.04594v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "transimpedance amplifiers for converting sensor input currents",
+      "llm_evidence_cn": "用于转换传感器输入电流的跨阻放大器",
+      "llm_evidence": "用于转换传感器输入电流的跨阻放大器",
+      "canonical_evidence": "用于转换传感器输入电流的跨阻放大器",
+      "llm_tldr_en": "Uses VO2 phase transition for automatic gain control in sensor transimpedance amplifiers.",
+      "llm_tldr_cn": "利用VO2相变实现传感器跨阻放大器的自动增益控制。",
+      "llm_tldr": "利用VO2相变实现传感器跨阻放大器的自动增益控制。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "multi-sensor array for current measurement",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.05788v1",
+      "title": "Sparse Gain Radio Map Reconstruction With Geometry Priors and Uncertainty-Guided Measurement Selection",
+      "abstract": "Radio maps are important for environment-aware wireless communication, network planning, and radio resource optimization. However, dense radio map construction remains challenging when only a limited number of measurements are available, especially in complex urban environments with strong blockages, irregular geometry, and restricted sensing accessibility. Existing methods have explored interpolation, low-rank cartography, deep completion, and channel knowledge map (CKM) construction, but many of these methods insufficiently exploit explicit geometric priors or overlook the value of predictive uncertainty for subsequent sensing. In this paper, we study sparse gain radio map reconstruction from a geometry-aware and active sensing perspective. We first construct \\textbf{UrbanRT-RM}, a controllable ray-tracing benchmark with diverse urban layouts, multiple base-station deployments, and multiple sparse sampling modes. We then propose \\textbf{GeoUQ-GFNet}, a lightweight network that jointly predicts a dense gain radio map and a spatial uncertainty map from sparse measurements and structured scene priors. The predicted uncertainty is further used to guide active measurement selection under limited sensing budgets. Extensive experiments show that our proposed GeoUQ-GFNet method achieves strong and consistent reconstruction performance across different scenes and transmitter placements generated using UrbanRT-RM. Moreover, uncertainty-guided querying provides more effective reconstruction improvement than non-adaptive sampling under the same additional measurement budget. These results demonstrate the effectiveness of combining geometry-aware learning, uncertainty estimation, and benchmark-driven evaluation for sparse radio map reconstruction in complex urban environments.",
+      "authors": [
+        "Zhihan Zeng",
+        "Ning Wei",
+        "Muhammad Baqer Mollah",
+        "Kaihe Wang",
+        "Phee Lep Yeoh",
+        "Fei Xu",
+        "Yue Xiu",
+        "Zhongpei Zhang"
+      ],
+      "primary_category": "cs.CV",
+      "categories": [
+        "cs.CV"
+      ],
+      "published": "2026-04-07T12:23:49+00:00",
+      "link": "https://arxiv.org/pdf/2604.05788v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstruction from sparse measurements with geometry priors",
+      "llm_evidence_cn": "基于几何先验的稀疏测量重建",
+      "llm_evidence": "基于几何先验的稀疏测量重建",
+      "canonical_evidence": "基于几何先验的稀疏测量重建",
+      "llm_tldr_en": "Proposes a geometry-aware method for reconstructing radio maps from sparse sensor measurements.",
+      "llm_tldr_cn": "提出了一种利用几何先验从稀疏传感器测量中重建无线电图的方法。",
+      "llm_tldr": "提出了一种利用几何先验从稀疏传感器测量中重建无线电图的方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.06534v1",
+      "title": "FOSSA: First-Order Optimality-Based Sensor Selection for PINN Inverse Problems, with Application to Electrocardiographic Imaging",
+      "abstract": "Physics-informed neural networks (PINNs) have emerged as a powerful framework for modeling physical systems and solving inverse problems. In such settings, sensors are deployed to capture observable system responses; however, the quality of reconstruction critically depends on how these sensors are selected. Existing sensor selection strategies for PINNs are closely related to active learning and experimental design, typically relying on iterative refinement schemes that sequentially add sensors and retrain the model. While effective under limited data regimes, these approaches incur substantial computational cost due to repeated retraining and primarily focus on selecting subsets of sensors, without providing a global characterization of sensor importance. In this work, we propose FOSSA, a first-order optimality-based sensor selection algorithm for inverse PINNs. Unlike existing methods, FOSSA evaluates sensor importance in a post-training manner, requiring only a single trained PINN. FOSSA assigns importance scores to all candidate sensing locations based on the first-order optimality condition at convergence. To improve robustness, a refinement scheme is further proposed to handle instability in the inverse solver. FOSSA facilitates a global assessment of the contribution of each sensor to reconstruction. We validate the proposed approach on the inverse electrocardiography (ECG) modeling and show that not all sensors contribute positively to predictive performance. Incorporating low-importance sensors can, in fact, degrade reconstruction accuracy. These findings highlight the need for principled sensor importance evaluation and provide a scalable pathway for guiding sensor deployment in physics-informed inverse modeling.",
+      "authors": [
+        "Jianxin Xie"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "eess.IV"
+      ],
+      "published": "2026-04-08T00:11:00+00:00",
+      "link": "https://arxiv.org/pdf/2604.06534v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "sensor selection for inverse problems and reconstruction",
+      "llm_evidence_cn": "反演问题和重建中的传感器选择",
+      "llm_evidence": "反演问题和重建中的传感器选择",
+      "canonical_evidence": "反演问题和重建中的传感器选择",
+      "llm_tldr_en": "Proposes a sensor selection method for PINNs to improve reconstruction quality in physical system modeling.",
+      "llm_tldr_cn": "提出了一种用于PINN的传感器选择方法，以提高物理系统建模中的重建质量。",
+      "llm_tldr": "提出了一种用于PINN的传感器选择方法，以提高物理系统建模中的重建质量。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

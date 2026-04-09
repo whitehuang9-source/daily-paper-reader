@@ -1,0 +1,336 @@
+Title: Optimization and vectorization of a Mz-type optically-pumped Rubidium magnetometer
+
+URL Source: https://arxiv.org/pdf/2604.02884v1
+
+Published Time: Mon, 06 Apr 2026 00:36:30 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+# Optimization and vectorization of a Mz-type optically-pumped Rubidium magnetometer 
+
+ZHENGYU SU, 1 YANG LI, 1 YONGBIAO YANG, 1 YANHUA WANG, 2,3 
+
+JUN HE, 1,3 AND JUNMIN WANG 1,3* 
+
+> 1
+
+State Key Laboratory of Quantum Optics Technologies and Devices, and Institute of Opto-Electronics, Shanxi University, Taiyuan, 030006, China 
+
+> 2
+
+School of Physics and Electronic Engineering, Shanxi University, Taiyuan 030006, China 
+
+> 3
+
+Collaborative Innovation Center of Extreme Optics, Shanxi University, Taiyuan, 030006, China 
+
+> *wwjjmm@sxu.edu.cn
+
+Abstract: Optically pumped magnetometers (OPMs) have demonstrated significant potential in weak magnetic field detection due to their high sensitivity. In this study, we developed an Mz-type optically pumped rubidium magnetometer using a paraffin-coated anti-relaxation vapor cell. The system optimization and performance characterization were conducted inside a magnetic shield. Specifically, the pump light intensity and radio-frequency (RF) magnetic field were jointly optimized by using the linewidth-amplitude ratio as the core metric. Based on the frequency-domain noise spectrum, the sensitivity in open-loop mode was measured to be approximately 30.8 pT/Hz 1/2. Furthermore, a closed-loop feedback locking technique was applied, reducing the measured noise floor under the tested conditions and improving the sensitivity to 22 .9 pT /Hz 1/2, with a measured −3 dB bandwidth of 123 Hz. The dynamic characteristics were evaluated via magnetic-field step response, showing that the system could track magnetic-field changes stably under closed-loop operation. Finally, by using tri-axial modulation and frequency-domain demodulation, we overcame the scalar measurement limitation of traditional Mz magnetometers. This work realizes vector magnetic field detection and provides a technical basis for applications such as geomagnetic navigation and magnetic anomaly detection. 
+
+> © 2026 Optica Publishing Group
+
+1. Introduction 
+
+High-sensitivity weak magnetic field detection technology plays a pivotal role in modern science and engineering, particularly in applications such as geomagnetic navigation [1, 2], geological exploration [3], and biomagnetic signal detection [4,5] , where it serves an indispensable function. Among various magnetic sensing technologies, while Superconducting Quantum Interference Devices (SQUIDs) offer extremely high sensitivity, they rely on expensive liquid helium cooling equipment. In contrast, Optically Pumped Magnetometers (OPMs) have demonstrated immense application potential [6, 7] due to their advantages of operating without cryogenic cooling, compact size, and high sensitivity, making them widely regarded as the ideal alternative to traditional SQUIDs. Among the various types of OPMs, the Mz-type magnetometer, based on the light-RF double-resonance principle, has been extensively investigated [8] owing to its compact structure and fast response. Considerable efforts have been devoted to improving its sensitivity. In 2014, Gu et al. [9] systematically optimized five key parameters, including the pump light intensity and RF frequency, in a DFB-laser-pumped cesium magnetometer, improving the sensitivity by an order of magnitude. In 2021, Zhang et al. [10] introduced a repumping technique that significantly enhanced the amplitude of the 85 Rb magnetic resonance signal. In 2023, Xu et al. [11] proposed the linewidth-amplitude ratio (LAR) as an optimization metric for joint parameter tuning, achieving a sensitivity of 1.5 pT /Hz 1/2. To address magnetic-noise suppression, in 2024 Zhan et al. [12] developed an FPGA-based closed-loop feedback control 
+
+> arXiv:2604.02884v1 [physics.atom-ph] 3 Apr 2026
+
+system, verifying that closed-loop locking can effectively suppress current-noise power spectral density and improve detection performance. More recently, in 2025, Zhu et al. [13] and Zhai 
+
+et al. [14] further improved system performance through orthogonal experimental design and vapor-cell size optimization, respectively. Despite these significant advances, traditional Mz-type magnetometers typically employ buffer gases to suppress spin relaxation. To obtain sufficient atomic number density, the vapor cell often requires heating to high temperatures ( > 100 ◦C). This not only leads to high power consumption and complex thermal insulation but also limits applications involving temperature-sensitive samples. Furthermore, it significantly constrains deployment in scenarios with strict power and volume limitations, such as micro-nano satellite payloads and portable field geomagnetic surveying. To address this, this work develops an 87 Rb atomic magnetometer based on a paraffin-coated anti-relaxation vapor cell. An isotopically enriched 87 Rb vapor cell with deliberately chosen dimensions was adopted to balance spectral purity, interaction volume, and practical compactness. Leveraging the excellent anti-relaxation properties of the coating, the system maintains a long spin coherence time at near room temperature (30–40 ◦C) without the need for buffer gas. However, the long coherence time also renders the atomic system extremely sensitive to variations in pump light intensity and RF field intensity, making the coupling between power broadening and RF saturation effects more pronounced. Drawing on the approach by Xu et al. [11], we propose a joint parameter optimization strategy based on the “Linewidth-Amplitude Ratio (LAR)”, precisely locating the system’s global optimal working point. On this basis, a closed-loop feedback control circuit was constructed to lock the Larmor precession frequency in real time, reduce the measured noise floor under the tested conditions, and improve detection sensitivity. Simultaneously, a magnetic field step response test method was introduced to characterize the system’s dynamic tracking capability and locking robustness. Moreover, traditional Mz-type optical magnetometers are inherently scalar sensors, measuring only the magnitude (modulus) of the total magnetic field, which fails to meet the demand for full vector information in geomagnetic matching navigation and magnetic anomaly detection. Vectorization technology has thus become a research frontier in recent years. As early as 1970, Cohen-Tannoudji et al. [15] laid the theoretical foundation for magnetic parametric resonance. Building on this foundation, a series of vectorization schemes have been developed in recent years. In 2021, Xiao et al. [16] employed three-axis parametric modulation and lock-in amplification to achieve ultra-high-sensitivity vector measurement under near-zero-field conditions. In 2024, Dawson et al. [17] proposed a triaxial vectorization scheme based on harmonic demodulation, while Zou et al. [18] reported a rotating-RF-field method for a single-beam optically pumped magnetometer, demonstrating applicability in high-field environments such as the geomagnetic field while retaining a compact architecture favorable for sensor miniaturization. In 2025, Chism et al. [19] designed a vectorized rubidium scalar magnetometer for CubeSat applications using dedicated three-axis modulation coils, and Wang et al. [20] demonstrated vector magnetic field reconstruction using an alternating fast-rotating field. Nevertheless, many previously reported vectorization schemes still rely on relatively complex structures, specialized modulation configurations, or additional components, which increase implementation difficulty and system cost. To address this gap, based on the optimized scalar magnetometer, this paper further applies or-thogonal low-frequency modulation magnetic fields via tri-axial coils. Using a frequency-domain signal extraction algorithm to resolve the magnetic field vector components, we successfully validated a low-cost, highly integrated vectorization solution based on a single-beam Mz mag-netometer within a laboratory magnetic shielding environment. This work provides technical support for applications in complex field scenarios such as geomagnetic surveys. 2. Theoretical Analysis 
+
+2.1. Basic Principle of the Mz-type Optically Pumped Magnetometer 
+
+The operation of the Mz-type optically pumped magnetometer is based on the Zeeman effect and optical pumping technology of alkali metal atoms. As shown in Fig. 1, the D1 line transition (52𝑆 1/2 −52 𝑃 1/2) of 87 Rb atoms was selected as the working energy level in our experiment. In the absence of an external magnetic field, the ground and excited state energy levels are degenerate, and the population of atoms in each magnetic sublevel follows the Boltzmann distribution, remaining in a state of thermal equilibrium. When a static magnetic field 𝐵 0 is applied along the 𝑧 -axis, the energy levels split due to the Zeeman effect; specifically, the ground state 𝐹 𝑔 = 2
+
+splits into five magnetic sublevels ( 𝑚 𝐹 = −2, −1, 0, +1, +2). To break this thermal equilibrium, a beam of circularly polarized light ( 𝜎 +) with a wavelength of 795 nm propagating along the 𝑧 -axis illuminates the vapor cell. According to the law of conservation of angular momentum, when atoms absorb 𝜎 + photons and undergo stimulated transitions, the selection rule Δ𝑚 𝐹 = +1 must be satisfied. The transition probability is determined by the Clebsch-Gordan (CG) coefficients (as indicated by the values on the dashed lines in Fig. 1(a)). Atoms in the excited state are unstable and rapidly decay back to the ground state via spontaneous emission (following the 
+
+Δ𝑚 𝐹 = 0, ±1 rule). After multiple "optical absorption-spontaneous emission" cycles, since there is no 𝑚 𝐹 = +3 energy level in the excited state 𝐹 𝑒 = 1, atoms in the ground state 𝐹 𝑔 = 2,
+
+𝑚 𝐹 = +2 cannot absorb 𝜎 + photons and are thus trapped in this level. This state is referred to as the "dark state." With the continuous action of the pump light, the majority of atoms eventually accumulate in the 𝑚 𝐹 = +2 state, achieving macroscopic spin polarization of the atoms (as shown in Fig. 1(b)). At this point, the medium’s absorption of the pump light is minimized, macroscopically manifesting as the transmittance of the vapor cell reaching its maximum. Once the atoms are in the polarized state, a radio-frequency (RF) magnetic field 𝐵 rf with a frequency of Ωrf is applied perpendicular to the optical axis (along the 𝑦 -axis) (denoted as Ωrf in Fig. 1(a)). When the scanning RF field frequency matches the atomic Larmor precession frequency 𝜔 𝐿 (i.e., satisfying ℏ𝜔 rf = Δ 𝐸 ), the RF field induces magnetic resonance transitions between adjacent Zeeman sublevels. This causes the atoms originally accumulated in the 𝑚 𝐹 = +2 state to be redistributed to other 𝑚 𝐹 states, destroying the atomic polarization state (i.e., "depolarization"). The depolarized atoms can re-absorb the pump light, leading to a significant decrease in light intensity transmitted through the cell, forming a distinct absorption dip at the resonance frequency. This constitutes the typical Mz magnetic resonance signal. Based on the resonance condition, by measuring the resonance frequency 𝜔 𝐿 and combining it with the gyromagnetic ratio of the 87 Rb atom ground state ( 𝛾 = 6.99583 Hz/nT), the magnitude of the external static magnetic field can be precisely deduced using the formula 𝐵 0 = 𝜔 𝐿 /𝛾 .
+
+2.2. Signal Model and Sensitivity Optimization Theory 
+
+In the Mz-type optically pumped magnetometer, the dynamic behavior of the macroscopic magnetic moment ®𝑀 = (𝑀 𝑥 , 𝑀 𝑦 , 𝑀 𝑧 ) of the alkali metal atomic ensemble, under the combined action of external magnetic fields and relaxation mechanisms, can be described by the Bloch equations: 
+
+𝑑 ®𝑀 𝑑𝑡 = 𝛾 ( ® 𝑀 × ® 𝐵 tot ) − Γ( ® 𝑀 − ® 𝑀 0) + 𝑅 op (𝑀 max ˆ𝑧 − ® 𝑀 ) (1) where 𝛾 denotes the gyromagnetic ratio, ®𝐵 tot represents the total magnetic field vector, and 
+
+Γ is the relaxation rate. 𝑅 op stands for the optical pumping rate, which is proportional to the pump laser power 𝑃 pump . It plays a dual role: generating spin polarization while simultaneously introducing an additional power broadening relaxation mechanism. (a)  (b) Fig. 1. Schematic diagram of the working principle of the 87 Rb Mz atomic magnetometer. 
+
+(a) Energy level transition diagram of the 87 Rb D1 line. The thick red arrow on the left indicates the D1 transition ( 52 𝑆 1/2 − 52 𝑃 1/2) at 795 nm. Solid blue arrows represent the stimulated transitions caused by the absorption of 𝜎 + pump light, while dashed black arrows represent the spontaneous emission processes from the excited state back to the ground state. The fractions labeled on the dashed lines indicate the relative transition probabilities (Clebsch-Gordan coefficients) for each path. The curved green arrows ( Ωrf ) at the bottom represent the magnetic resonance transitions induced by the radio-frequency field between adjacent Zeeman sublevels. (b) Schematic of the polarization model. The yellow sphere illustrates the atomic ensemble accumulating in the 𝑚 𝐹 = +2 state under the action of optical pumping, resulting in macroscopic spin polarization. 
+
+For the Mz magnetometer, our primary focus is on the magnetic moment component along the optical axis, 𝑀 𝑧 , as it directly determines the vapor cell’s absorption characteristics for the probe light (i.e., the transmitted light intensity). The steady-state solution in the rotating coordinate frame reveals that as the RF frequency 𝜔 is scanned across the Larmor frequency 𝜔 𝐿 , 𝑀 𝑧 exhibits a characteristic Lorentzian absorption dip profile: 
+
+𝑀 𝑧 (𝛿 ) = 𝑀 0 1 − Ω2 Γ2
+
+> Γ1
+
+𝛿 2 + Γ2
+
+> eff
+
+!
+
+. (2) where 𝛿 = 𝜔 − 𝜔 𝐿 represents the frequency detuning between the RF field and the Larmor frequency. 𝑀 0 denotes the initial macroscopic magnetic moment in the absence of the RF field, which depends on the optical pumping rate 𝑅 op . Ω = 𝛾𝐵 rf corresponds to the Rabi frequency, characterizing the intensity of the RF magnetic field. Γ1, Γ2 are the longitudinal and transverse relaxation rates, respectively; both include the intrinsic relaxation rate Γrel and the broadening term induced by the optical pumping rate 𝑅 op .The sensitivity of the magnetometer, 𝛿𝐵 , is determined by the ratio of the full width at half maximum (FWHM) of the magnetic resonance linewidth, Δ 𝑓 , to the signal-to-noise ratio (SNR): 
+
+𝛿𝐵 ∝ Δ 𝑓 𝑆 amp 
+
+∝ Γeff 
+
+𝑆 amp 
+
+, (3) Based on the analytical expression of 𝑀 𝑧 (𝛿 ), we can derive the mathematical expressions for the signal amplitude 𝑆 amp and the effective linewidth Γeff , and analyze their dependence on experimental parameters. The signal amplitude 𝑆 amp corresponds to the depth of the absorption dip at the resonance point ( 𝛿 = 0): 
+
+𝑆 amp = 𝑀 𝑧 (∞) − 𝑀 𝑧 (0) = 𝑀 0
+
+Ω2
+
+Ω2 + Γ1Γ2
+
+. (4) The optical pumping rate 𝑅 op is determined by the pump light intensity. As the light intensity increases, the initial magnetization 𝑀 0 grows (indicating a larger number of polarized atoms), which consequently enhances the signal amplitude 𝑆 amp . The RF magnetic field intensity determines the Rabi frequency Ω. As 𝐵 rf increases, the Ω2 term in the numerator becomes dominant, leading to an increase in 𝑆 amp . However, when the condition Ω2 ≫ Γ1Γ2 is met, the signal tends to saturate. The effective linewidth corresponds to the half-width at half-maximum (HWHM) of the Lorentzian curve: 
+
+Γeff =√︂ Γ22 + Γ2
+
+Γ1
+
+Ω2. (5) Considering the linear dependence of the relaxation rate on the optical pumping rate, Γ2 ≈
+
+Γrel + 𝛼𝑃 pump , substituting this into the above equation reveals that Γeff exhibits a linear growth trend with the pump power 𝑃 pump . Excessive pump power will directly result in spectral line broadening. Meanwhile, Γeff shows a nonlinear increase with the RF intensity Ω; when Ω
+
+becomes excessive, the linewidth broadens significantly. Synthesizing the two equations above, it is evident that the sensitivity 𝛿𝐵 does not vary monotonically with these parameters. Increasing the pump power enhances 𝑆 amp , but simultaneously increases Γeff via the Γ2 term. Similarly, increasing the RF field strength enhances 𝑆 amp , yet it induces saturation and broadening through the Ω term. Therefore, theoretically, there exists an optimal combination of 𝑃 pump and 𝐵 rf that minimizes the ratio Γeff /𝑆 amp (corresponding to the highest sensitivity). This derivation explicitly validates the necessity and scientific rationality of employing a multi-parameter joint optimization strategy. 
+
+2.3. Principle of Vector Measurement via Tri-axial Modulation 
+
+Traditional Mz-type optically pumped magnetometers are inherently scalar sensors, as their output signal responds only to the magnitude (modulus) of the total magnetic field. To achieve vector measurement, this study adopts a vectorization scheme based on auxiliary magnetic field modulation. This method establishes a mapping relationship between the scalar magnitude and the vector components by applying weak low-frequency modulation magnetic fields along three orthogonal axes. Assume the static magnetic field to be measured is ®𝐵 0, with components ( 𝐵 𝑥 , 𝐵 𝑦 , 𝐵 𝑧 ) in the Cartesian coordinate system, and its scalar magnitude is denoted as | ® 𝐵 0 |. To extract directional information, we apply sinusoidal modulation magnetic fields with frequencies 𝜔 𝑥 , 𝜔 𝑦 , 𝜔 𝑧 and a uniform amplitude 𝛽 along the 𝑥, 𝑦 , and 𝑧 orthogonal axes, respectively. Consequently, the total instantaneous magnetic field vector ®𝐵 tot (𝑡 ) sensed by the atomic vapor cell is the vector sum of the static magnetic field and the modulation magnetic fields: 
+
+®𝐵 tot (𝑡 ) = ®𝐵 0 + ® 𝐵 mod (𝑡 ) = ®𝐵 0 +∑︁ 
+
+> 𝑖 =𝑥,𝑦,𝑧
+
+𝛽 cos (𝜔 𝑖 𝑡 ) ® 𝑒 𝑖 , (6) where ®𝑒 𝑖 denotes the unit vector along each axis ( 𝑖 = 𝑥, 𝑦, 𝑧 ), and the modulation depth satisfies the perturbation condition 𝛽 ≪ | ® 𝐵 0 |.The detection signal of the Mz magnetometer corresponds to the scalar magnitude | ® 𝐵 tot (𝑡 )| of the total magnetic field. According to the definition of the vector magnitude: 
+
+| ® 𝐵 tot (𝑡 )| =√︃ ®𝐵 tot (𝑡 ) · ® 𝐵 tot (𝑡 ) =√︃ | ® 𝐵 0 |2 + 2 ®𝐵 0 · ® 𝐵 mod (𝑡 ) + | ® 𝐵 mod (𝑡 )| 2. (7) By substituting each component into the expression and expanding it, given the condition 
+
+𝛽 ≪ | ® 𝐵 0 |, the second-order infinitesimal of the modulation field, | ® 𝐵 mod (𝑡 )| 2, can be neglected. Utilizing the first-order Taylor expansion approximation, √𝐴 2 + 𝑥 ≈ 𝐴 + 𝑥 /( 2𝐴 ), the magnitude of the total magnetic field can be approximately expressed as: 
+
+| ® 𝐵 tot (𝑡 )| ≈ | ® 𝐵 0 | + ®𝐵 0 · ® 𝐵 mod (𝑡 )| ® 𝐵 0 | . (8) Further expand the dot product terms into component form: 
+
+| ® 𝐵 tot (𝑡 )| ≈ | ® 𝐵 0 | + ∑︁ 
+
+> 𝑖 =𝑥,𝑦,𝑧
+
+𝐵 𝑖 
+
+| ® 𝐵 0 | 𝛽 
+
+!
+
+cos (𝜔 𝑖 𝑡 ). (9) The above equation clearly demonstrates that the output signal of the scalar magnetometer comprises a DC component | ® 𝐵 0 | (i.e., the magnitude of the static magnetic field) as well as three AC modulation components with frequencies of 𝜔 𝑥 , 𝜔 𝑦 , 𝜔 𝑧 , respectively. According to the principles of spectral analysis, the spectral amplitude ℎ𝑖 corresponding to the modulation frequency 𝜔 𝑖 can be expressed as: 
+
+ℎ𝑖 = 𝐵 𝑖 
+
+| ® 𝐵 0 | 𝛽, (10) where 𝐵 𝑖 represents the scalar component of the static magnetic field along the 𝑖 -axis. Conse-quently, the inversion formula for each vector component can be derived as: 
+
+𝐵 𝑖 = ℎ𝑖 · | ® 𝐵 0 |
+
+𝛽 (𝑖 = 𝑥, 𝑦, 𝑧 ). (11) This equation indicates that the spectral amplitude ℎ𝑖 is directly proportional to the projected magnetic field component 𝐵 𝑖 along the corresponding axis, while being inversely proportional to the total magnetic field magnitude | ® 𝐵 0 |. Experimentally, by extracting ℎ𝑥 , ℎ 𝑦 , and ℎ𝑧 via Fast Fourier Transform (FFT), and combining them with the total magnitude | ® 𝐵 0 | measured by the magnetometer and the known modulation depth 𝛽 , the three-dimensional vector ®𝐵 0 of the static magnetic field can be uniquely determined. 
+
+3. Experimental Setup 
+
+Figure 2 illustrates the schematic diagram of the experimental setup for the Mz-type optically pumped rubidium atomic magnetometer. The core sensing unit is a cylindrical high-borosilicate glass vapor cell with a diameter of 25 mm and a length of 75 mm. The cell is filled with isotopically enriched 87 Rb rather than natural-abundance rubidium, in order to suppress the resonance overlap and additional optical absorption arising from 85 Rb and thereby obtain a cleaner working resonance for optical pumping and frequency locking [21]. The cell dimensions were selected as an engineering compromise among interaction volume, wall-relaxation suppression, and compact implementation, rather than as a universal optimum [7, 14]. In particular, the relatively long cell length helps provide a sufficiently long interaction path and enough participating atoms under near-room-temperature operation. The inner wall of the cell is coated with a paraffin anti-relaxation coating. The paraffin coating effectively suppresses the destruction of spin polarization during collisions between alkali metal atoms and the glass wall, thereby extending the spin coherence time. To maintain an optimal operating temperature, two flexible non-magnetic electric heating films were symmetrically attached to the side walls of the cell to ensure heating uniformity. The heating films were driven by a high-frequency alternating current at 477 kHz to eliminate electromagnetic interference generated by the heating current. Furthermore, the cell temperature was stably maintained at 40 ◦C via a closed-loop temperature control system. The light source system employed a Distributed Bragg Reflector (DBR) laser with a center wavelength of 795 nm. Using a Saturated Absorption Spectroscopy (SAS) frequency stabilization setup, the laser frequency was precisely locked to the 𝐹 𝑔 = 2 → 𝐹 𝑒 = 1 hyperfine transition peak of the 87 Rb D1 line. After the laser output, the light intensity was adjusted via a half-wave plate (𝜆 /2) and a Polarization Beam Splitter (PBS), and the beam was subsequently converted into circularly polarized light by a quarter-wave plate ( 𝜆 /4). Considering the 25 mm diameter of the vapor cell, the pump beam was collimated and expanded by a Keplerian telescope system composed of lenses to a spot diameter of approximately 20 mm, so as to improve the overlap between the pump light and the active vapor volume, thereby increasing the effective number of atoms participating in the optical pumping process while retaining a margin to avoid beam clipping at the cell edge. The expanded circularly polarized pump light was incident upon the vapor cell along the 𝑧 -axis to achieve optical pumping spin polarization of the atoms. To isolate interferences from the geomagnetic field and environmental magnetic noise, the vapor cell was placed at the center of a four-layer permalloy magnetic shield. A set of tri-axial double-wound Helmholtz coils was installed inside the shield to generate the required magnetic field environment. The static magnetic field ( 𝐵 0) was generated by the 𝑧 -axis coil driven by a B2961A precision current source, with its direction aligned along the light wave vector (𝑧 -axis). The radio-frequency field ( 𝐵 rf ) was produced by the 𝑦 -axis coil driven by the signal generation module of a digital lock-in amplifier (MFLI, Zurich Instruments, 5 MHz). Its direction was perpendicular to the optical axis ( 𝑦 -axis), serving to drive magnetic resonance transitions. In the vector measurement mode, these tri-axial coils were also utilized to apply orthogonal low-frequency modulation magnetic fields. Current      
+
+> source
+> 1/6
+> z
+> x
+> yB0Brf
+> Cell λ/4 BE Lens
+> PD
+> Lock-in
+> DBR@795 nm
+> λ/2 PBS
+> HR NDF Cell λ/4 PBS Lens PD
+> SAS
+> PID
+> Sin Function
+> Generator
+> z
+> x
+> yB0Brf
+
+Fig. 2. Schematic diagram of the experimental setup for the Mz-type Rb atomic magnetometer. Cell: Paraffin-coated 87 Rb vapor cell; PD: Photodetector; NDF: Neutral density filter; HR: High-reflectivity mirror; PID: Proportional-integral-derivative controller; Lock-in: Digital lock-in amplifier. The vapor cell is placed inside a four-layer permalloy magnetic shield, where tri-axial Helmholtz coils provide the static magnetic field ( 𝐵 0), the radio-frequency field ( 𝐵 rf ), and the modulation magnetic fields required for vector measurement. 
+
+The light beam transmitted through the cell was collected by a photodetector. The magnetic resonance signal output from the detector was fed into the digital lock-in amplifier for demodulation. The demodulated error signal (zero-crossing signal) was processed by an internal PID controller to feedback-control the frequency of the RF signal source. Through this closed-loop feedback mechanism, the system locked the RF field frequency to the Larmor precession frequency corresponding to the static magnetic field in real-time, thereby realizing real-time tracking and measurement of the magnetic field. 4. Experimental Results and Analysis 
+
+4.1. Parameter Joint Optimization 
+
+To achieve the optimal detection sensitivity of the magnetometer, it is essential to determine the optimal operating points for the pump laser power and the RF magnetic field intensity. Due to the long spin coherence time of the paraffin-coated vapor cell used in the experiment, the system performance is extremely sensitive to variations in light intensity and RF field. Traditional single-variable scanning methods struggle to address the coupling relationship between these two parameters. Therefore, this study adopts a multi-parameter joint optimization strategy. Under a constant cell temperature of 40 ◦C, the linewidth-amplitude ratio (LAR) was utilized as the key figure of merit for evaluating the signal-to-noise ratio (SNR) to locate the system’s global optimal working point. The experiment first characterized the influence of RF magnetic field on the magnetic resonance signal. We set the pump laser power to distinct fixed values within the range of 100 𝜇 W to 600 𝜇 W and scanned the RF magnetic field (ranging from 30 nT to 300 nT). The results are presented in Fig. 3. Fig. 3(a) indicates that as the RF magnetic field increases, the magnetic resonance linewidth exhibits a linear growth trend. This is primarily attributed to RF broadening, where a strong RF magnetic field shortens the atomic transverse relaxation time. Fig. 3(b) shows that the signal amplitude rises rapidly with increasing RF strength but tends to plateau at high field intensities ( > 200 nT) due to the gradual saturation of atomic transitions. Synthesizing these variations, Fig. 3(c) illustrates the variation curves of LAR with respect to the RF field. It can be observed that the LAR curves under all light intensities exhibit a trend of initially decreasing and subsequently increasing. This reveals the existence of an optimal RF magnetic field interval (150–180 nT) where the LAR reaches a minimum value. To precisely locate this extremum point, a fine scan with reduced step size was performed within this interval (as shown in the inset of Fig. 3(c)), finally determining the optimal RF magnetic field to be approximately 165 nT. 1/6                                         
+
+> 50 100 150 200 250 300 400 600 800 1000 1200 1400 1600
+> Linewidth (Hz) RF intensity (nT)
+> 100 μW
+> 200 μW
+> 300 μW
+> 400 μW
+> 500 μW
+> 600 μW
+> 50 100 150 200 250 300 0.00 0.01 0.02 0.03 0.04 0.05 0.06
+> Amplitude (V) RF intensity (nT)
+> 100 μW
+> 200 μW
+> 300 μW
+> 400 μW
+> 500 μW
+> 600 μW
+> 50 100 150 200 250 300 40000 80000 120000 160000
+> LAR (Hz/V) RF intensity (nT)
+> 100 μW
+> 200 μW
+> 300 μW
+> 400 μW
+> 500 μW
+> 600 μW
+> 125 150 175 16000 18000 20000 22000 24000 26000
+> LAR (Hz/V) RF intensity (nT)
+> 100 μW
+> 150 μW
+> 200 μW
+> 250 μW
+> 300 μW
+
+(a)  (b)  (c) 
+
+Fig. 3. Impact of radio-frequency (RF) field intensity on the characteristics of the magnetic resonance signal. Different colored curves correspond to different pump laser powers ranging from 100 𝜇 W to 600 𝜇 W. (a) Dependence of magnetic resonance linewidth on RF magnetic field. (b) Dependence of signal amplitude on RF magnetic field. (c) Dependence of the Linewidth-Amplitude Ratio (LAR) on RF magnetic field. The inset displays the fine-scan results around the minimum (125–175 nT), used to precisely locate the optimal RF magnetic field ( ∼165 nT). 
+
+Subsequently, the influence of pump laser power (ranging from 100 to 600 𝜇 W) on system performance was systematically characterized under different RF magnetic field (30–300 nT), as illustrated in Fig. 4. Fig. 4(a) indicates that with the increase of pump laser power, the magnetic resonance linewidth exhibits a slight broadening trend. Although the magnitude of this variation is smaller compared to RF broadening, it still reflects the power broadening effect induced by the increased optical pumping rate. Fig. 4(b) reveals that the signal amplitude displays a distinct characteristic of initially increasing and subsequently decreasing with respect to light intensity: at low light intensities, the amplitude rises rapidly with increasing power, reaching a peak at approximately 200 𝜇 W; subsequently, as the light intensity increases further, the signal amplitude exhibits a slow decay due to optical pumping saturation and inhomogeneous light broadening. The LAR curves in Fig. 4(c) demonstrate that excessively low light intensity results in weak signals, whereas excessively high intensity leads to reduced amplitude coupled with linewidth broadening. Observation of the LAR curves suggests that the optimal optical power range lies between 100 𝜇 W and 300 𝜇 W. Through the fine scan analysis shown in the inset, the optimal pump laser power under the optimal RF field was determined to be approximately 250 𝜇 W. 100 200 300 400 500 600 400 600 800 1000 1200 1400               
+
+> Linewidth (Hz)
+> Laser Power (μW)
+> 37.03 nT
+> 74.07 nT
+> 111.10 nT
+> 148.14 nT
+> 185.18 nT
+> 222.21 nT
+> 259.25 nT
+> 296.28 nT
+> 100 200 300 400 500 600 0.01 0.02 0.03 0.04 0.05 0.06
+> Amplitude (V)
+> Laser Power (μW)
+> 37.03 nT
+> 74.07 nT
+> 111.10 nT
+> 148.14 nT
+> 185.18 nT
+> 222.21 nT
+> 259.25 nT
+> 296.28 nT
+> 100 200 300 400 500 600 040000 80000 120000 160000 200000
+> LAR (Hz/V)
+> Laser Power (μW)
+> 37.03 nT
+> 74.07 nT
+> 111.10 nT
+> 148.14 nT
+> 185.18 nT
+> 222.21 nT
+> 259.25 nT
+> 296.28 nT
+> 100 150 200 250 300 16000 18000 20000 22000 24000 26000
+> LAR (Hz/V)
+> Laser Power (μW)
+> 111.10 nT
+> 129.62 nT
+> 148.14 nT
+> 166.66 nT
+> 185.18 nT
+
+(a)  (b)  (c) 
+
+Fig. 4. Impact of pump laser power on the characteristics of the magnetic resonance signal. Different colored curves correspond to different radio-frequency (RF) field intensities ranging from 37.03 nT to 296.28 nT. (a) Dependence of magnetic resonance linewidth on pump laser power. (b) Dependence of signal amplitude on pump laser power. (c) Dependence of the Linewidth-Amplitude Ratio (LAR) on pump laser power. The inset displays the fine-scan results under the optimal RF field, identifying the optimal pump laser power at approximately 250 𝜇 W. 050 100 10 100 1000 10000 Power spectral density of magnetic noise  ( pT/Hz 1/2 )Frequency (Hz)           
+
+            
+
+       
+
+calibrationfield:1840pT@63Hz
+
+
+
+30.8pT/Hz1/2
+
+Fig. 5. Power spectral density of magnetic noise of the magnetometer in open-loop mode. A sinusoidal calibration magnetic field with a frequency of 63 Hz and an amplitude of 1.84 nT was applied. The sharp peak represents the response to the calibration signal, while the blue dashed line indicates the average noise floor of the system. Based on the signal-to-noise ratio calculation from the calibration signal, the open-loop sensitivity at this operating point is 30.8 pT/Hz 1/2.
+
+In summary, through the LAR-based joint optimization strategy, the optimal operating parameters of the magnetometer were determined to be: RF magnetic field intensity 𝐵 rf = 165 nT and pump laser power 𝑃 pump = 250 𝜇 W. The corresponding static magnetic field was set to 
+
+𝐵 0 = 1216 nT. At this optimal working point, the sensitivity of the magnetometer was calibrated by applying a weak alternating calibration magnetic field (1.84 nT at 63 Hz). The measured Power Spectral Density (PSD) is presented in Fig. 5, yielding a sensitivity of 30.8 pT/Hz 1/2.
+
+4.2. Closed-Loop Locking and Dynamic Response 
+
+To achieve real-time continuous measurement of the external magnetic field, the system was switched from the open-loop scanning mode to the closed-loop locking mode. Fig. 6(a) displays the Mz magnetic resonance signal obtained by scanning the RF frequency under open-loop conditions, which exhibits a typical Lorentzian lineshape. Fig. 6(b) presents the error signal obtained after demodulation by the lock-in amplifier. In the vicinity of the resonance frequency, the error signal exhibits a distinct linear zero-crossing characteristic, serving as an excellent frequency discrimination curve. We utilized a PID controller to lock the system to the zero-crossing point of this error signal. When variations in the external magnetic field induce a drift in the Larmor frequency, the PID controller adjusts the RF frequency in real-time to maintain the locked state, thereby achieving precise tracking of the magnetic field changes. 246810 12 14 16 1.24 1.26 1.28 1.30  Mz Signal  Scan Signal  Lorentz Fit Frequency (kHz) Amplitude (V) 0369Amplitude (V) 7000 8000 9000 10000 -0.008 -0.004 0.000 0.004 0.008  In-phase Signal  Quadrature Signal Frequency (Hz) Signal (V) 0.000 0.005 0.010 0.015 0.020 Signal (V) (a) (b) 
+
+Fig. 6. Typical Mz magnetic resonance signal and its demodulated error signal. (a) 
+
+Magnetic resonance absorption signal observed by scanning the radio frequency (RF) in open-loop mode. When the RF frequency matches the Larmor frequency, the transmitted light intensity decreases significantly, exhibiting a standard Lorentzian lineshape. (b) 
+
+Error signal (frequency discrimination curve) obtained after demodulation by the lock-in amplifier. The signal displays a distinct linear zero-crossing characteristic (S-curve) near the resonance center. This zero-crossing point serves as the locking reference for the PID controller to achieve closed-loop operation of the magnetometer. 
+
+Upon successfully implementing the closed-loop locking, we first evaluated the system’s tracking capability for dynamic magnetic field variations. A square-wave current with a duration of 5 s was applied to the 𝑧 -axis coil to generate a step magnetic field with an amplitude of approximately 430 pT. This step signal was initiated at 𝑡 = 1 s and automatically terminated at 
+
+𝑡 = 6 s. The transient response of the system was characterized by monitoring the real-time variations in the magnetometer’s output frequency. The measurement results are depicted in Fig. 7, where the blue solid line represents the real-time frequency signal output by the magnetometer. It can be observed that upon the application of the step magnetic field, the system’s output frequency exhibited a step change of approximately 3.02 Hz. Considering the gyromagnetic ratio of 87 Rb atoms, this frequency shift corresponds to a magnetic field variation of approximately 430 pT. Furthermore, the system responded rapidly to the abrupt magnetic field change. During the step-holding phase, the frequency remained stable without significant overshoot or loss-of-lock phenomena. These results strongly validate that the closed-loop control circuit of the proposed magnetometer possesses excellent dynamic characteristics and robustness. 02468510 8512 8514 8516 8518 Frequency (Hz) Time (s)     2 . 7 H z       
+
+>        ×102pT
+> 
+> 8514.9Hz
+> 1217.1nT
+> 8512.2Hz
+> 1216.8nT
+
+Fig. 7. Magnetic field step response test under closed-loop locking conditions. A step magnetic field with an amplitude of approximately 430 pT was applied (turned on at 
+
+𝑡 = 1 s and turned off after a duration of 5 s). The results show that the system can accurately track the magnetic field mutation, demonstrating stable closed-loop tracking under the tested step perturbation. 
+
+Following the verification of the system’s superior dynamic locking capability, we further evaluated the sensitivity performance of the magnetometer under closed-loop conditions. A weak sinusoidal calibration magnetic field with a frequency of 63 Hz and an amplitude of 1.84 nT was applied. The measured Power Spectral Density (PSD) is illustrated in Fig. 8. Spectral analysis results indicate that, under the present test conditions, the closed-loop locked state reduces the measured noise floor and leads to an enhancement of the signal-to-noise ratio (SNR) at the calibration frequency. Based on the noise floor calculation, the closed-loop sensitivity of the system reaches 22.9 pT/Hz 1/2.050 100 10 100 1000 10000 Power spectral density of magnetic noise  ( pT/Hz 1/2 )Frequency (Hz)      
+
+> calibrationfield:1840pT@63Hz
+>          
+>           
+>      
+> 22.9pT/Hz
+> 1/2
+
+Fig. 8. Power spectral density of magnetic noise of the magnetometer in closed-loop locked mode. The experimental conditions were identical to the open-loop test, with a calibration magnetic field of 63 Hz and 1.84 nT applied. Under the present test conditions, the measured noise floor is further reduced in the closed-loop state. The measured closed-loop sensitivity is 22.9 pT/Hz 1/2.
+
+Finally, the closed-loop bandwidth of the system was characterized using the frequency sweep method. A weak alternating calibration magnetic field with an amplitude of 1.8 nT was applied, and the variation of the FFT response peak was recorded. As shown in Fig. 9, the response amplitude exhibits a gradual attenuation with increasing frequency. Defining the bandwidth as the frequency where the response amplitude decreases by 3 dB, the measured −3 dB bandwidth of the magnetometer is approximately 123 Hz. This measured bandwidth indicates that the system can track low-frequency magnetic-field variations within the tested frequency range. 0 50 100 150 -6 -5 -4 -3 -2 -1 01    
+
+> Frequency response (dB) Frequency (Hz) 123 Hz
+> Fig. 9. Closed-loop bandwidth test results of the magnetometer. A sinusoidal sweeping magnetic field with an amplitude of 1.8 nT was applied. The black curve represents the measured response amplitude (in dB) at different frequencies. The blue dashed line indicates the −3dB attenuation point, determining the system’s −3dB bandwidth to be approximately 123 Hz.
+
+4.3. Implementation of Vector Measurement 
+
+Following the achievement of high-sensitivity scalar magnetic field measurement and closed-loop locking, the vector measurement capability of the magnetometer was experimentally validated at the optimal operating point, based on the principle of tri-axial modulation. To realize the vectorization of the Mz magnetometer, weak low-frequency alternating magnetic fields were individually applied along the three orthogonal axes ( 𝑥, 𝑦, 𝑧 ) to serve as modulation signals. To effectively avoid the influence of 50 Hz power line interference and its harmonics, while preventing crosstalk between axial signals, three non-harmonically related frequencies were selected for the experiment: 63 Hz for the 𝑥 -axis, 71 Hz for the 𝑦 -axis, and 67 Hz for the 𝑧 -axis. To ensure that the modulation signals remained within the perturbation regime and to avoid inducing nonlinear interference in the detection of the main scalar magnetic field, the modulation amplitudes along all three directions were uniformly set to 1 nT. Given that the experiment was conducted within a magnetically shielded environment, to construct a non-zero magnetic field vector for measurement, specific DC bias magnetic fields were simultaneously applied via the tri-axial coils to simulate ambient vector components. The experimental results are depicted in Fig. 10, which presents the FFT spectrum of the system output signal following the application of the tri-axial modulation fields. Spectral Analysis: Within the analysis bandwidth of 0–100 Hz, the spectral background clearly exhibits three discrete signal peaks. The center frequencies of these peaks correspond precisely to the preset modulation frequencies (63 Hz, 71 Hz, and 67 Hz). By extracting the peak amplitudes at these frequency points from the FFT spectrum and combining them with the known modulation depth, the magnetic field components currently applied along the 𝑥, 𝑦 , and 𝑧 axes can be successfully retrieved. These experimental results fully demonstrate that, through coil modulation and the frequency-domain extraction algorithm, this study successfully realizes the functional extension from scalar measurement to vector measurement. 0 50 100 10 100 1000 10000   
+
+> Magnetic Field Spectra (nT) Frequency (Hz)
+> (a) (b)
+> zy
+> x
+
+Fig. 10. Experimental results in vector measurement mode. (a) Signal spectrum response. Sinusoidal modulation magnetic fields with an amplitude of 1 nT were applied along the 𝑥 , 𝑦 , and 𝑧 orthogonal axes at frequencies of 63 Hz, 71 Hz, and 67 Hz, respectively. The spectrum clearly displays three discrete signal peaks corresponding to the modulation frequencies. (b) 3D visualization of the reconstructed magnetic field vector. The static magnetic field components ( 𝐵 𝑥 , 𝐵 𝑦 , 𝐵 𝑧 ) are resolved from the amplitudes of the spectral peaks in (a) , and the resultant total magnetic field vector (𝐵 tot ) is synthesized in the Cartesian coordinate system, demonstrating the system’s vector detection capability. 
+
+It should be noted that while the vectorization scheme based on auxiliary magnetic field modulation successfully enables the detection of magnetic field direction, the vector sensitivity inevitably suffers a degradation compared to the scalar sensitivity. According to the theoretical model of vectorization [19], the noise level in vector measurement is amplified by a factor of 𝐵 0/𝛽 ,where 𝐵 0 denotes the background static magnetic field strength and 𝛽 represents the amplitude of the modulation magnetic field. In this experiment, with a background field of 𝐵 0 = 1216 nT and a modulation amplitude of 𝛽 = 1 nT, the corresponding noise amplification factor is approximately 1216. Given the system’s baseline scalar sensitivity of 22.9 pT/Hz 1/2, the vector measurement sensitivity at this operating point is estimated to be approximately 27.8 nT/Hz 1/2. This result indicates that, while maintaining the compact single-beam architecture, further improvement in vector detection precision relies on the further suppression of the scalar noise floor and the rational optimization of the modulation depth 𝛽 , provided that the perturbation approximation condition is satisfied. Although this sensitivity is slightly inferior to that of high-performance handheld tri-axial fluxgate magnetometers (e.g., MEDA FVM400 [22], resolution ∼1 nT), it is of a comparable order of magnitude to standard handheld fluxgate magnetometers (e.g., TUNKIA TM4300B [23], resolution ∼10 nT), demonstrating the capability for effective directional identification in geomagnetic environments. More importantly, unlike traditional fluxgate magnetometers that only provide nT-level detection capabilities, the proposed system integrates pT-level high-sensitivity scalar detection with nT-level vector detection functions, offering unique application advantages over standalone fluxgate magnetometers. 5. Conclusion 
+
+This paper presents the development of an 87 Rb Mz-type atomic magnetometer based on a paraffin-coated anti-relaxation vapor cell. By employing multi-parameter joint optimization and closed-loop locking techniques, the system achieved scalar magnetic-field detection of 
+
+22 .9 pT /Hz 1/2 under near-room-temperature operation. Step magnetic-field response tests further indicate stable closed-loop tracking under the tested perturbation. By applying weak low-frequency modulation magnetic fields along three orthogonal axes and utilizing frequency-domain demodulation algorithms, we demonstrated vector magnetic measurement in a laboratory magnetic shielding environment. Owing to the intrinsic noise amplification associated with perturbative modulation, the current vector sensitivity remains at the nT level. Future work will focus on further optimizing the modulation and demodulation algorithms and improving three-axis coil calibration to enhance vector accuracy and sensitivity. Overall, this system provides an experimental basis for future development toward applications such as geomagnetic navigation and magnetic anomaly detection. 
+
+Funding. This work was supported by the Basic Research Program of Shanxi Province (Grant No. 202403021211013), the National Natural Science Foundation of China (Grant No. 12474483), and the Teaching Instrument Development Project of School of Physics and Electronic Engineering, Shanxi University. 
+
+Disclosures. The authors declare no conflicts of interest. 
+
+Data availability. Data underlying the results presented in this paper are available from the corresponding author upon reasonable request. 
+
+References 
+
+1. M. S. Mrozowski, A. S. Bell, P. F. Griffin, D. Hunter, D. Burt, J. P. McGilligan, E. Riis, C. D. Beggan, and S. J. Ingleby, “Distributed network of optically pumped magnetometers for space weather monitoring,” Sci. Rep. 14 , 28229 (2024). 2. T. S. Horbury, H. O’Brien, I. Carrasco Blazquez, M. Bendyk, P. Brown, R. Hudson, V. Evans, T. M. Oddy, C. M. Carr, T. J. Beek, E. Cupido, S. Bhattacharya, J. A. Dominguez, L. Matthews, V. R. Myklebust, B. Whiteside, S. D. Bale, W. Baumjohann, D. Burgess, and A. P. Walsh, “The solar orbiter magnetometer,” Astron. Astrophys. 642 , A9 (2020). 3. Y. Lu, T. Zhao, W. Zhu, L. Liu, X. Zhuang, G. Fang, and X. Zhang, “Recent progress of atomic magnetometers for geomagnetic applications,” Sensors 23 , 5318 (2023). 4. X. Zhang, C. Q. Chen, M. K. Zhang, C. Y. Ma, Y. Zhang, H. Wang, Q. Q. Guo, T. Hu, Z. B. Liu, Y. Chang, K. J. Hu, and X. D. Yang, “Detection and analysis of MEG signals in occipital region with double-channel OPM sensors,” J. Neurosci. Methods 346 , 108948 (2020). 5. T. Wu, W. Xiao, X. Peng, T. Wu, and H. Guo, “Compact high-bandwidth single-beam optically-pumped magnetometer for biomagnetic measurement,” Opt. Express 16 , 235 (2024). 6. D. Budker and M. Romalis, “Optical magnetometry,” Nat. Phys. 3, 227 (2007). 7. A. Fabricant, I. Novikova, and G. Bison, “How to build a magnetometer with thermal atomic vapor: a tutorial,” New J. Phys. 25 , 025001 (2023). 8. S. Groeger, G. Bison, J. L. Schenker, R. Wynands, and A. Weis, “A high-sensitivity laser-pumped Mx magnetometer,” Eur. Phys. J. D 38 , 239 (2006). 9. Y. Gu, R. Shi, and Y. Wang, “Study on sensitivity-related parameters of distributed feedback laser pumped rubidium magnetometer,” Acta Phys. Sinica 63 , 110701 (2014). (in Chinese) 10. L. Zhang, L. Bai, Y. Yang, Y. Yang, Y. Wang, X. Wen, J. He, and J. Wang, “Improving the sensitivity of optically pumped rubidium atomic magnetometer by using repumping light ,” Acta Phys. Sinica 70 , 230702 (2021).(in Chinese) 11. K. Xu, X. Ren, Y. Xiang, M. Zhang, X. Zhao, K. Ma, Y. Tian, D. Wu, Z. Zeng, and G. Wang, “Multi-parameter optimization of rubidium laser optically pumped magnetometers with geomagnetic field intensity,” Sensors 23 , 8919 (2023). 12. C. Zhan, Z. Ma, J. Wu, M. Li, C. Han, B. Lu, and C. Lee, “Magnetic field stabilization system designed for the cold-atom coherent population-trapping clock,” Chin. Opt. Lett. 22 , 080202 (2024). 13. R. Zhu, Y. Zhang, P. Du, Y. Xuan, F. Yang, Y. Zhou, K. Zhang, X. Li, S. Sun, T. Cheng, J. Li, S. Zheng, W. Quan, and J. Li, “A compact optically pumped potassium atomic magnetometer with high sensitivity under geomagnetic field intensity,” Measurement 250 , 117099 (2025). 14. H. Zhai, W. Li, and G. Jin, “Improving the sensitivity of a dark-resonance atomic magnetometer,” Sensors 25 , 1229 (2025). 15. C. Cohen-Tannoudji, J. Dupont-Roc, S. Haroche, and F. Laloë, “Diverses résonances de croisement de niveaux sur des atomes pompés optiquement en champ nul. I. Théorie,” Rev. Phys. Appl. (Paris) 5, 95 (1970). 16. W. Xiao, Y. Wu, X. Zhang, Y. Feng, C. Sun, T. Wu, J. Chen, X. Peng, and H. Guo, “Single-beam three-axis optically pumped magnetometers with sub-100 femtotesla sensitivity,” Appl. Phys. Express 14 , 066002 (2021). 17. R. Dawson, M. S. Mrozowski, D. Hunter, C. O’Dwyer, E. Riis, P. F. Griffin, and S. Ingleby, “A triaxial vectorization technique for a single-beam zero-field atomic magnetometer to suppress cross-axis projection error,” arXiv Preprint arXiv:2408.12994 (2024). 18. Y. Zou, L. Jiang, H. Bai, J. Liu, C. Fang, J. Zhu, Q. Shao, J. Xu, X. Zhou, and W. Quan, “Vector magnetometry employing a rotating RF field in a single-beam optically pumped magnetometer,” Sensors Actuators A 379 , 115009 (2024). 19. C. T. Chism, R. A. Marshall, A. Aguilar-Nadalini, S. Knappe, D. Malaspina, K. J. Hughes, M. Ellmeier, S. Wankmueller, C. Cunningham, T. Maydew, and O. Alem, “Design of a vectorized rubidium scalar magnetometer for SmallSat applications,” Adv. Space Res. 76 , 4635 (2025). 20. T. Wang, W. Lee, M. Limes, T. Kornack, E. Foley, and M. Romalis, “Pulsed vector atomic magnetometer using an alternating fast-rotating field,” Nat. Commun. 16 , 1374 (2025). 21. Q. Gan, J. Shang, Y. Ji, and L. Wu, “Simultaneous excitation of 85 Rb and 87 Rb isotopes inside a microfabricated vapor cell with double-RF fields for a chip-scale Mz magnetometer,” Rev. Sci. Instrum. 88 , 115009 (2017). 22. MEDA, Inc., “FVM400 Vector Magnetometer Instruction Manual,” Dulles, VA, USA (2018). 23. TUNKIA Co., Ltd., “TM4300B Hand-held Three-axis Fluxgate Magnetometer User Manual,” Changsha, China.

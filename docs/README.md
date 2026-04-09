@@ -6,35 +6,38 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-08
-- 运行时间：2026-04-08 20:59:14 UTC
+- 最新运行日期：2026-04-09
+- 运行时间：2026-04-09 21:42:44 UTC
 - 运行状态：成功
-- 本次总论文数：4
+- 本次总论文数：5
 - 精读区：0
-- 速读区：4
+- 速读区：5
 
 ### 今日简报（AI）
-今日速读 4 篇前沿论文，聚焦于利用混合建模与跨模态学习突破非线性估计与雷达感知的精度瓶颈。
-重点推荐 CT 饱和补偿的物理-数据双驱动方案，以及通过跨模态监督从原始雷达数据中提取空间结构的新方法。
-建议关注物理先验与深度学习融合的趋势，这是解决复杂工业信号处理与状态估计问题的关键路径。
-- 详情：[/202604/08/README](/202604/08/README)
+今日速览 5 篇前沿硬件论文，聚焦自旋电子学、量子传感及新型相变材料的电路应用。
+重点关注栅极电压对磁隧道结翻转场的调控，以及利用 VO2 相变实现放大器自动增益控制的创新方案。
+建议对低功耗存储和高灵敏传感感兴趣的读者，深入了解物理层特性如何赋能硬件性能优化。
+- 详情：[/202604/09/README](/202604/09/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Nonlinear Moving-Horizon Estimation Using State- and Control-Dependent Models](/202604/08/2604.00309v1-nonlinear-moving-horizon-estimation-using-state--and-control-dependent-models)  
+1. [Impact of gate voltage on switching field of perpendicular magnetic tunnel junctions with a synthetic antiferromagnetic free layer](/202604/09/2604.00839v1-impact-of-gate-voltage-on-switching-field-of-perpendicular-magnetic-tunnel-junctions-with-a-synthetic-antiferromagnetic-free-layer)  
+   标签：评分：7.0/10、query:tmr
+   evidence：磁隧道结与隧道磁阻 (TMR) 特性
+2. [Optimization and vectorization of a Mz-type optically-pumped Rubidium magnetometer](/202604/09/2604.02884v1-optimization-and-vectorization-of-a-mz-type-optically-pumped-rubidium-magnetometer)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于从测量值进行状态重建的非线性估计算法
-2. [Learning Spatial Structure from Pre-Beamforming Per-Antenna Range-Doppler Radar Data via Visibility-Aware Cross-Modal Supervision](/202604/08/2604.01921v1-learning-spatial-structure-from-pre-beamforming-per-antenna-range-doppler-radar-data-via-visibility-aware-cross-modal-supervision)  
+   evidence：磁力计优化与灵敏度表征
+3. [Harnessing the VO2 Phase Transition for Automatic Gain Control in Transimpedance Amplifiers](/202604/09/2604.04594v1-harnessing-the-vo2-phase-transition-for-automatic-gain-control-in-transimpedance-amplifiers)  
    标签：评分：6.0/10、query:tmr
-   evidence：从预波束成形传感器数据中学习空间结构
-3. [CT Saturation Detection and Compensation: A Hybrid Physical Model- and Data-Driven Method](/202604/08/2604.05334v1-ct-saturation-detection-and-compensation-a-hybrid-physical-model--and-data-driven-method)  
+   evidence：用于转换传感器输入电流的跨阻放大器
+4. [Sparse Gain Radio Map Reconstruction With Geometry Priors and Uncertainty-Guided Measurement Selection](/202604/09/2604.05788v1-sparse-gain-radio-map-reconstruction-with-geometry-priors-and-uncertainty-guided-measurement-selection)  
    标签：评分：6.0/10、query:tmr
-   evidence：电流互感器饱和检测与补偿
-4. [A Tensor-Train Framework for Bayesian Inference in High-Dimensional Systems: Applications to MIMO Detection and Channel Decoding](/202604/08/2604.05890v1-a-tensor-train-framework-for-bayesian-inference-in-high-dimensional-systems-applications-to-mimo-detection-and-channel-decoding)  
+   evidence：基于几何先验的稀疏测量重建
+5. [FOSSA: First-Order Optimality-Based Sensor Selection for PINN Inverse Problems, with Application to Electrocardiographic Imaging](/202604/09/2604.06534v1-fossa-first-order-optimality-based-sensor-selection-for-pinn-inverse-problems-with-application-to-electrocardiographic-imaging)  
    标签：评分：6.0/10、query:tmr
-   evidence：高维信号重建的贝叶斯推理
+   evidence：反演问题和重建中的传感器选择
 
 
 <div class="dpr-home-promo-card">

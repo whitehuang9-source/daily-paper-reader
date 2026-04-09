@@ -1,0 +1,546 @@
+Title: Sparse Gain Radio Map Reconstruction With Geometry Priors and Uncertainty-Guided Measurement Selection
+
+URL Source: https://arxiv.org/pdf/2604.05788v1
+
+Published Time: Wed, 08 Apr 2026 01:11:11 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+> 1
+
+# Sparse Gain Radio Map Reconstruction With Geometry Priors and Uncertainty-Guided Measurement Selection 
+
+Zhihan Zeng, Graduate Student Member, IEEE , Ning Wei, Member, IEEE ,Muhammad Baqer Mollah, Graduate Student Member, IEEE , Kaihe Wang, Graduate Student Member, IEEE ,Phee Lep Yeoh, Senior Member, IEEE , Fei Xu, Yue Xiu, Member, IEEE , Zhongpei Zhang 
+
+Abstract —Radio maps are important for environment-aware wireless communication, network planning, and radio resource optimization. However, dense radio map construction remains challenging when only a limited number of measurements are available, especially in complex urban environments with strong blockages, irregular geometry, and restricted sensing accessibility. Existing methods have explored interpolation, low-rank cartog-raphy, deep completion, and channel knowledge map (CKM) construction, but many of these methods insufficiently exploit explicit geometric priors or overlook the value of predictive uncertainty for subsequent sensing. In this paper, we study sparse gain radio map reconstruction from a geometry-aware and active sensing perspective. We first construct UrbanRT-RM, a controllable ray-tracing benchmark with diverse urban layouts, multiple base-station deployments, and multiple sparse sampling modes. We then propose GeoUQ-GFNet, a lightweight network that jointly predicts a dense gain radio map and a spatial uncertainty map from sparse measurements and structured scene priors. The predicted uncertainty is further used to guide active measurement selection under limited sensing budgets. Extensive experiments show that our proposed GeoUQ-GFNet method achieves strong and consistent reconstruction performance across different scenes and transmitter placements generated using UrbanRT-RM. Moreover, uncertainty-guided querying provides more effective reconstruction improvement than non-adaptive sampling under the same additional measurement budget. These results demonstrate the effectiveness of combining geometry-aware learning, uncertainty estimation, and benchmark-driven evaluation for sparse radio map reconstruction in complex urban environments. 
+
+I. I NTRODUCTION 
+
+# THE evolution toward sixth-generation (6G) wireless net-works is expected to fundamentally transform communi-cation systems from connectivity-centric infrastructures into deeply integrated intelligent platforms that jointly support 
+
+Zhihan Zeng, Ning Wei, Yue Xiu and Zhongpei Zhang are with the National Key Laboratory of Wireless Communications, University of Electronic Science and Technology of China (UESTC), Chengdu 611731, China (E-mail: 202511220608@std.uestc.edu.cn, wn@uestc.edu.cn, xiuyue12345678@163.com, zhangzp@uestc.edu.cn). Kaihe Wang is with the University of Electronic Science and Technology of China (UESTC), Chengdu 611731, China (E-mail: khewang@yeah.net). Muhammad Baqer Mollah is with the Department of Information Science Technology, University of Houston, TX 77004, USA (E-mail:mmollah@uh.edu). Phee Lep Yeoh is with the School of Science, Technology and Engineering, University of the Sunshine Coast, Moreton Bay Campus, Petrie, QLD 4502, Australia (E-mail:pyeoh@usc.edu.au). Fei Xu is with the ZGC Institute of Ubiquitous-X Innovation and Applications, Beijing, China (E-mail: xufei@zgc-xnet.com). The corresponding author is Ning Wei. 
+
+communication, sensing, computing, control, and autonomous decision making [58], [63], [69]–[71]. In this vision, future networks are not only required to deliver higher spectral efficiency, lower latency, and broader coverage, but also to acquire, represent, and exploit environmental knowledge in a native and scalable manner. This trend is consistent with the IMT-2030 vision, where intelligence, ubiquitous connec-tivity, and environment-aware operation are regarded as key characteristics of beyond-5G and 6G systems. [20] Against this background, spatial channel knowledge representation is becoming an essential enabler for predictive and proactive wireless operation rather than a secondary support function. Radio maps provide a spatial representation of wireless propagation conditions over a geographic region and have become increasingly important for future intelligent wireless systems [7], [8], [13], [21], [72], [73]. By describing channel-related quantities such as path loss, received power, or channel gain as functions of location, radio maps can support awide range of tasks, including coverage analysis, deployment optimization, beam management, pilot reduction, routing, and environment-aware sensing [17], [20], [29], [30], [58], [61]– [63]. As wireless networks evolve toward more adaptive, data-driven, and environment-aware operation, radio maps are shifting from an auxiliary planning tool to a core infrastructure component for perception-assisted communication [19], [22], [65]–[68]. Despite their promise, accurate radio map construction remains difficult in realistic environments. In principle, a dense map requires exhaustive measurements over the entire target area, but such acquisition is often prohibitively expensive in practice due to limited sensing budgets, constrained accessi-bility, and dynamic deployment requirements. This difficulty is especially pronounced in urban environments, where propa-gation is jointly shaped by blockage, building geometry, line-of-sight conditions, and transmitter placement. As a result, the practical problem is not dense measurement-based mapping, but sparse-to-dense reconstruction, namely how to infer a reliable dense radio map from only a small subset of accessible observations [23]. A long line of research has focused on radio map estimation and channel gain cartography using interpolation, tomography, kernel regression, and structure-exploiting recovery. Repre-sentative examples include radio tomography and cartogra-phy methods based on spatial inversion, low-rank structure, 
+
+> arXiv:2604.05788v1 [cs.CV] 7 Apr 2026 2
+
+sparsity priors, and side information [25], [27], [28], [34], [38], [46], [47], [49], [51], [53]. These methods provide useful modeling insights, but they usually rely on relatively rigid assumptions about spatial smoothness, kernel correlation, or linear structure, which limits their effectiveness in highly heterogeneous urban scenes. More recently, deep learning has substantially advanced radio map reconstruction by learning complex nonlinear prop-agation patterns directly from data. Early deep models such as RadioUNet and deep completion autoencoders showed that convolutional networks can effectively recover dense maps from sparse spatial observations and environmental inputs [18], [26], [35]–[37], [42], [44], [45], [48], [56], [74]–[78]. Subsequent studies further explored graph-based modeling, in-painting, deformable attention, restricted-area reconstruction, and generative diffusion-based radio map construction [32], [40], [41], [43], [54], [55]. In parallel, the emerging channel knowledge map (CKM) literature has expanded the construc-tion paradigm toward image inpainting, super-resolution, dif-fusion generation, flow matching, beam-aware mapping, and cross-access-point inference [1]–[6], [14]–[16], [33]. These advances clearly demonstrate the potential of data-driven radio environment reconstruction. However, two important gaps remain. First, although many recent methods achieve strong reconstruction accuracy, explicit integration of fine-grained geometric priors is still insufficient in sparse urban mapping. Existing works have started to exploit environmental information from depth maps, point clouds, and higher-dimensional scene representations [10]– [12], [55], yet for sparse gain map completion under limited observations, the question of how to effectively fuse obsta-cle structure, building height, relative transmitter geometry, accessibility constraints, and sparse measurements within a unified lightweight architecture is still underexplored. Second, most existing reconstruction methods mainly optimize one-shot prediction quality, whereas in practical measurement cam-paigns the more important question is often where to measure next. In this sense, predictive uncertainty is not merely an auxiliary output but a decision variable for active sensing. Although Bayesian active learning and adaptive tomography have demonstrated the value of uncertainty-aware sampling in radio map reconstruction [24], [28], [52], the integration of geometry-aware deep reconstruction and uncertainty-guided measurement selection remains limited. Motivated by these observations, this paper studies sparse gain radio map reconstruction from a problem-oriented per-spective centered on geometry priors and uncertainty-guided sensing. We first build UrbanRT-RM, a controllable ray-tracing benchmark over diverse synthetic urban scenes, enabling systematic analysis across different scene categories, base-station deployments, and sparse sampling modes. We then propose GeoUQ-GFNet, a geometry-aware and uncertainty-aware reconstruction network that jointly predicts a dense gain radio map and a spatial uncertainty map from sparse observations and structured scene priors. The model introduces a Geometry-Gated Front-End to adaptively fuse heterogeneous inputs, a lightweight multi-stage encoder combining Ghost modules [59] and Grid-KAN-style nonlinear enhancement in-spired by Kolmogorov-Arnold network (KAN) representations [60], and dual output heads for gain prediction and uncertainty estimation. The predicted uncertainty is further used to guide active measurement selection under limited sensing budgets. The main contributions of this paper are summarized as follows.  
+
+> •
+
+We introduce a geometry-aware and uncertainty-aware formulation of sparse gain radio map reconstruction that explicitly accounts for accessibility-constrained sensing and connects reconstruction with sequential measurement decision.  
+
+> •
+
+We develop UrbanRT-RM, a controllable ray-tracing benchmark that disentangles the effects of scene geome-try, transmitter deployment, and sparse sampling pattern on reconstruction difficulty.  
+
+> •
+
+We propose GeoUQ-GFNet, a lightweight geometry-aware network with a geometry-gated front-end and dual gain–uncertainty heads for joint dense radio map reconstruction and uncertainty estimation from sparse observations.  
+
+> •
+
+We further develop an uncertainty-guided measurement selection strategy and show that the learned uncertainty improves sample efficiency over non-adaptive querying under the same sensing budget. The rest of this paper is organized as follows. Section II reviews related work on radio map reconstruction, CKM construction, and uncertainty-aware active sensing. Section III introduces the system model and problem formulation. Sec-tion IV presents the proposed GeoUQ-GFNet architecture and the uncertainty-guided measurement selection strategy. Sec-tion V describes the UrbanRT-RM dataset generation process and the experimental setup. Section VI reports the reconstruc-tion and active sensing results. Finally, Section VII concludes the paper. II. R ELATED WORK 
+
+A. Traditional Radio Map Reconstruction and Cartography 
+
+Early studies on radio map estimation mainly relied on inter-polation, tomography, and structure-based recovery. Classical radio tomography works analyzed the relationship between measurement geometry, reconstruction accuracy, and spatial resolution, and later extended the framework toward blind estimation and adaptive Bayesian sensing [25], [27], [28], [57]. In parallel, channel gain cartography studied the recovery of large-scale spatial gain fields by exploiting structural priors such as low rank and sparsity [34]. Related studies fur-ther investigated kernel-based online reconstruction, quantized measurement learning, location-free cartography, and space-frequency interpolation [46], [47], [49], [51]. These methods established an important theoretical and methodological foun-dation for radio map reconstruction. However, they usually rely on explicit statistical assumptions or handcrafted spatial models, which makes it difficult to capture the highly non-linear propagation effects caused by complex urban geometry, irregular blockage, and heterogeneous sensing support. 3
+
+B. Deep Learning and Generative Construction of Radio Maps and CKMs 
+
+Deep learning has significantly improved sparse radio map reconstruction by learning nonlinear mappings from environ-ment information and sparse observations to dense propagation maps. Representative radio map estimation methods include RadioUNet, deep completion autoencoders, tensor completion with learned neural models, graph-attention-based reconstruc-tion, deformable-attention modeling, and several task-specific variants for V2X, UAV, and dynamic radio environments [35]– [37], [39]–[41], [43], [54], [56]. These studies show that learned models can substantially outperform classical recovery techniques when sufficient data and environmental context are available. In the emerging CKM literature, recent methods have re-formulated the task as image completion, super-resolution, or generative modeling. For example, image-to-image inpainting has been used to recover dense channel knowledge maps from sparse observations [1], while super-resolution style reconstruction has been explored to enhance map resolution from sparse or coarse inputs [14]. Generative approaches based on diffusion models and flow matching further extend the con-struction paradigm beyond deterministic regression, enabling more flexible distribution modeling for partially observed or even observation-free scenarios [5], [6], [16]. In addition, CKM construction has been broadened from single-antenna gain maps to multi-antenna and beam-aware settings, where beamforming vectors, codebooks, and cross-AP information are explicitly incorporated into the mapping process [2]–[4], [15]. Recent works also explored point-cloud-based CKM construction, 2D-to-3D environmental representation, and 6D scene-aware modeling [10]–[12]. Public benchmarks such as CKMImageNet and SpectrumNet further promote standardized evaluation for AI-based radio environment learning [9], [31]. Although these studies clearly demonstrate the importance of environment-aware modeling, many existing methods are either relatively heavy, tailored to beam-aware or generative settings, or primarily optimized for one-shot reconstruction. For the sparse gain radio map task considered in this paper, there is still a need for a lightweight architecture that can explicitly and effectively fuse structured geometry priors with sparse measurements under accessibility constraints. 
+
+C. Uncertainty-Aware Reconstruction and Active Measure-ment Selection 
+
+In practical radio map acquisition, the challenge is not only to reconstruct a dense map from limited data, but also to decide how to allocate future measurements efficiently. This has moti-vated active sensing and uncertainty-aware sampling methods. Bayesian active learning for radio map reconstruction has shown that uncertainty estimates can substantially improve sample efficiency by prioritizing informative sensing locations [24]. Related ideas also appear in adaptive Bayesian radio tomography and active UAV-based spectrum surveying, where uncertainty or posterior information is used to guide sequen-tial measurements [28], [50], [52]. These works demonstrate that uncertainty is highly valuable for measurement planning. However, most existing uncertainty-aware methods are built on Gaussian process or Bayesian inference frameworks and are not tightly integrated with modern geometry-aware deep reconstruction networks. As a result, the interaction between structured scene priors, learned uncertainty, and active mea-surement selection remains insufficiently studied in sparse urban radio map reconstruction. 
+
+D. Position of This Work 
+
+Compared with the above studies, this work differs in three main aspects. First, we focus on sparse gain radio map reconstruction in complex urban environments with explicit accessibility constraints, which is closely aligned with realistic outdoor measurement campaigns. Second, instead of using geometry merely as an auxiliary input, we design a dedi-cated geometry-gated fusion mechanism to modulate sparse observation features using structural priors and sensing masks. Third, we explicitly connect uncertainty estimation with active measurement selection , so that the model output is useful not only for one-shot reconstruction but also for subsequent sensing decisions under limited sensing budgets. In addition, we support the study with UrbanRT-RM, a controllable ray-tracing benchmark designed for scene-level and deployment-level evaluation of sparse radio map reconstruction. In this sense, the proposed framework sits at the intersection of geometry-aware deep radio map learning, benchmark-driven evaluation, and uncertainty-aware active sensing, which re-mains insufficiently explored in the current literature. III. S YSTEM MODEL 
+
+A. Network Scenario 
+
+We consider a downlink wireless sensing and reconstruction scenario in a complex urban environment, as illustrated in Fig. 1. A transmitter, typically a base station (BS), is deployed at a known location ptx = [ xtx , y tx , z tx ]T, and the objective is to infer a dense radio map over a target region of interest, following the propagation-map based formulation widely used in radio map and channel cartography studies [29], [34], [56]. Let Q ⊂ R2 denote the horizontal service region. For tractable representation and learning, the region is discretized into an 
+
+H × W grid. The center coordinate of the (i, j )-th grid cell and the corresponding dense gain radio map G are defined as: 
+
+qi,j = [ xi,j , y i,j ]T ∈ Q , 1 ≤ i ≤ H, 1 ≤ j ≤ W, (1) 
+
+G ∈ RH×W , (2) where Gi,j denotes the large-scale channel gain associated with location qi,j .The environment contains buildings and other geometric structures that profoundly affect signal propagation. These deterministic scene attributes are encoded into several ge-ometry maps, including obstacle occupancy, building height, relative transmitter position, transmitter distance, and a line-of-sight (LoS) proxy. Since measurements can only be collected in physically feasible outdoor regions, we further define an accessibility mask Ma ∈ {0, 1}H×W , where Ma,i,j = 1
+
+indicates that location qi,j is accessible for measurement, 4
+
+Fig. 1: Radio Map reconstruction scenario from sparse measurements in a complex 3D urban environment. while Ma,i,j = 0 corresponds to inaccessible regions such as building interiors. This formulation is consistent with practical radio map acquisition, where the geographic support of the map, the physical scene structure, and the feasible sensing area are all known or can be precomputed from digital maps or ray-tracing based scene models [12], [32], [55]. 
+
+B. Channel Gain Model 
+
+The target quantity in this paper is the spatial distribution of channel gain. To support geometry-aware reconstruction, the physical gain model and the deterministic prior tensor P are formulated together as: 
+
+G(q) = Ptx − L(q) − S(q) + ε(q), (3) 
+
+P = [ O, H, Rx, Ry , D, L], (4) where for each location q ∈ Q , Ptx denotes the transmit power in dB scale, L(q) represents the distance and geometry dependent path loss, S(q) denotes shadowing caused by surrounding obstructions, and ε(q) captures residual small-scale fluctuations or numerical approximation effects. In this work, the radio map is generated from ray-tracing simula-tion and mainly reflects the spatially structured propagation strength over the environment. Therefore, our reconstruction target should be interpreted primarily as a location dependent gain field dominated by large-scale propagation geometry, rather than instantaneous fast fading at a single carrier phase realization. After discretization, the continuous field G(q) is represented by the grid map G defined above [29], [32], [34]. In the prior tensor representation (4), O ∈ { 0, 1}H×W is the obstacle occupancy map, H ∈ RH×W is the building height map, Rx and Ry ∈ RH×W denote the relative horizontal coordinate maps with respect to the transmitter, D ∈ RH×W
+
+is the transmitter-to-grid distance map, and L ∈ { 0, 1}H×W
+
+is a LoS proxy map indicating whether the straight line between the transmitter and a grid location is blocked by obstacles. These maps provide explicit geometric cues for learning propagation-aware spatial completion [11], [55], [56]. 
+
+C. Measurement and Observation Model 
+
+Because exhaustive measurement over all locations is costly, only a sparse subset of the accessible grid points can be observed. The observation model, the sparse gain map, and the resulting full network input are grouped as follows: 
+
+Y = Ms ⊙ (G + N), (5) 
+
+Gs = Ms ⊙ G, (6) 
+
+X = [ P, Gs, Ms, Ma, Ginit ], (7) where Ms ∈ {0, 1}H×W denotes the sampling mask sat-isfying Ms ⪯ Ma (Ms,i,j = 1 means a measurement is acquired at qi,j ), ⊙ denotes element-wise multiplication, and N ∈ RH×W is the measurement noise map. In the simulation benchmark, the measurement noise is typically negligible compared with the propagation variation, so the observed sparse gain map is effectively computed as (6). Furthermore, Ginit ∈ RH×W represents a dense initialization map constructed from (Gs, Ms, Ma) by neighborhood-based iterative filling over unobserved accessible regions, which provides a coarse spatial prior to ease the prediction burden [1], [35], [55]. To study the impact of measurement support patterns, we consider three representative sparse sampling modes. The first is random sampling, where observed locations are randomly selected from accessible cells. The second is grid sampling, where measurements follow a structured lattice-like deploy-ment. The third is road-constrained sampling, where measure-ments are limited to road-accessible trajectories. These modes produce different spatial support patterns even under the same sampling ratio and therefore induce different reconstruction difficulties [24], [33], [52]. 5
+
+Fig. 2: The overall architecture of the proposed GeoUQ-GFNet. It integrates heterogeneous structural geometry cues, relative-position features, and sparse observations through a Geometry-Gated Front-End. Multi-scale representations are extracted using a Ghost and Grid-KAN-based encoder, followed by a feature pyramid network (FPN) fusion decoder. The dual heads produce both the reconstructed gain map and a predictive uncertainty map, which iteratively guides the active measurement loop. 
+
+D. Reconstruction and Active Sensing Objectives 
+
+Given the sparse observations and geometry-aware inputs defined in (7), the overall task studies sparse-to-dense radio map reconstruction and uncertainty-guided active measure-ment selection. The key mappings and spatial domain subsets are defined as: 
+
+ˆG = fθ (X), (8) 
+
+Ωunobs = {(i, j ) | Ma,i,j = 1 , M s,i,j = 0 }, (9) 
+
+Ωcand = {(i, j ) | Ma,i,j = 1 , M s,i,j = 0 }, (10) 
+
+Q(t) ⊆ Ωcand , (11) where ˆG is the reconstructed dense radio map, Ωunobs denotes the valid but currently unobserved region, Ωcand defines the candidate measurement region (which coincides with unob-served accessible locations), and Q(t) denotes the subset of queried locations selected at iteration t.The first objective is to minimize the prediction error over unobserved accessible locations (9), such that ˆGi,j ≈ Gi,j 
+
+for all (i, j ) ∈ Ωunobs . In addition to the mean gain map, the model also estimates a spatial predictive uncertainty map 
+
+ˆU ∈ RH×W 
+
+> +
+
+, reflecting the reconstruction confidence. Under a limited sensing budget, the second objective is to design an active sensing policy that logically selects the new measure-ment locations Q(t) from Ωcand based on ˆU, maximizing the overall reconstruction improvement under a fixed query budget [24], [28], [52]. IV. M ETHODOLOGY 
+
+A. Overview of GeoUQ-GFNet 
+
+The overall architecture of the proposed GeoUQ-GFNet is illustrated in Fig. 2. Given the input tensor X defined in (7), the network is designed to jointly predict a dense gain map and a spatial uncertainty map. The model con-sists of four main functional components. First, a Geometry-Gated Front-End separately encodes structural priors, relative position features, and sparse observations before executing adaptive fusion. Second, a lightweight multi-stage encoder based on Ghost modules, Grid-KAN blocks, and large-kernel convolutions manages multi-scale feature extraction. Third, a feature pyramid network (FPN)-based decoder intricately combines shallow details with deep semantic context. Finally, dual prediction heads jointly yield the gain reconstruction and the corresponding uncertainty estimation. Rather than directly regressing the final radio map, the model predicts a residual correction over the initialized map Ginit , which stabilizes learning and encourages the network to focus on correcting initialization errors in difficult regions, consistent with deep completion and inpainting style reconstruction strategies [1], [35], [55]. 
+
+B. Geometry-Gated Front-End 
+
+To effectively integrate heterogeneous inputs, we first di-vide the input tensor into three semantically distinct groups. The structural geometry cues are denoted by Xstr =[O, H, Ma, L, E], where E represents an edge cue derived from obstacle and height discontinuities. The relative position 6
+
+Fig. 3: Illustration of the Geometry-Gated Front-End. Obser-vation features are dynamically modulated by geometry and mask gates derived from structural priors, explicitly blocking invalid information propagation at physical wall boundaries and inaccessible areas. features are organized as Xrel = [ Rx, Ry , D], and the obser-vation features are formed by Xobs = [ Gs, Ms, Ginit ]. These three groups are encoded by dedicated branches as follows: 
+
+Fstr = fstr (Xstr ), (12) 
+
+Frel = frel (Xrel ), (13) 
+
+Fobs = fobs (Xobs ). (14) Here, fstr (·) focuses on extracting geometry-aware structural features, frel (·) captures large-scale spatial trends relative to the transmitter, and fobs (·) embeds the sparse measurement cues, in line with the broader environment-aware radio map modeling paradigm [11], [54], [56]. A key architectural design is that the observation branch is not fused directly but is dynamically modulated by geometry dependent and mask dependent gates. These gates and the resulting modulated observation feature are computed as 
+
+Ggeo = ggeo (Xstr ), (15) 
+
+Gmask = gmask ([ Ms, Ma]) , (16) 
+
+˜Fobs = Fobs ⊙ (1 + Ggeo + Gmask ) . (17) This mechanism explicitly suppresses invalid or misleading propagation across obstacles and inaccessible regions while preserving informative cues from observed locations, which is particularly relevant to restricted-area radiomap reconstruction and geometry-guided completion [32], [55]. Finally, the three branches are fused as F0 = ffuse 
+
+
+
+[Fstr , Frel , ˜Fobs ]
+
+
+
+, where 
+
+ffuse (·) is implemented using 1 × 1 projection and residual refinement. 
+
+C. Lightweight Multi-Stage Encoder 
+
+Built upon the fused feature F0, the backbone follows a progressive encoder context fusion design. The encoder contains three cascaded stages configured as 
+
+(F1, S1) = E1(F0), (18) 
+
+(F2, S2) = E2(F1), (19) 
+
+(F3, S3) = E3(F2), (20) 
+
+Fig. 4: Detailed architecture of the Grid-KAN block. Inter-mediate features are projected to a hidden dimension and processed by multiple learnable radial basis functions, whose outputs are concatenated and mixed to enhance the nonlinear fitting capability. where S1, S2, and S3 are multi-scale features safely retained for the subsequent decoder fusion. To improve efficiency, the encoder mainly adopts Ghost residual blocks. For an input feature map Z, the Ghost residual transformation is abstractly expressed as G(Z) = ϕ(Z + hghost (Z)) , where 
+
+hghost (·) denotes lightweight feature generation and ϕ(·) is the nonlinear activation. Compared with standard convolution blocks, this design significantly reduces feature redundancy while thoroughly maintaining adequate representation capa-bility [59]. The overall encoder–decoder organization also follows the practical design philosophy of modern deep radio map reconstruction networks [35], [40], [56]. 
+
+D. Grid-KAN Nonlinear Enhancement 
+
+To better model complex nonlinearity induced by blockage transitions, shadow regions, and distance dependent attenua-tion, Grid-KAN blocks are logically inserted into the deeper encoder stages. Given an intermediate feature map Z, the Grid-KAN layer first projects it to a hidden representation 
+
+H and then applies a set of learnable radial basis responses parameterized as 
+
+Bm = exp 
+
+
+
+− (H − cm)2
+
+2σ2
+
+> m
+
+
+
+, m = 1 , . . . , M, (21) where cm and σm are learnable centers and scales, and M is the strictly defined number of basis functions. These responses are organically concatenated and mixed to form the output feature K(Z) = ψ([ B1, . . . , BM ]) , where ψ(·) denotes com-prehensive channel mixing and projection. In our overarching design, Grid-KAN is combined with residual and depthwise separable convolutional operations, enhancing the ability of the backbone to fit irregular channel variation patterns that are inherently difficult to capture by plain convolution alone [45], [60]. 
+
+E. Large-Kernel Context Modeling 
+
+Radio map reconstruction requires both localized boundary awareness and a much broader spatial context. Therefore, the 7
+
+deepest encoder stage and bottleneck context module employ large-kernel depthwise convolution to robustly enlarge the receptive field. The context feature is mathematically written as Fctx = C(F3), where C(·) combines large-kernel depthwise convolution, small-kernel refinement, channel mixing, and residual connection. This specific design is highly suitable for radio map completion because large-scale signal trends are primarily governed by broad geometry layout rather than purely local texture continuity, which is consistent with recent deep reconstruction and attention-based radiomap estimation studies [32], [40], [56]. 
+
+F. FPN-Based Multi-Scale Fusion 
+
+To merge shallow structural details and deep semantic features efficiently, we adopt a feature pyramid network (FPN) style fusion module. The multi-scale features are first projected to a common channel dimension, aligned spatially, and further refined through the following operations: 
+
+Ffpn = ffpn ([ p1(S1), Up( p2(S2)) , Up( p3(Fctx ))]) , (22) 
+
+Fref = fref (Ffpn ). (23) Here, p1(·), p2(·), and p3(·) are lateral projections, Up( ·)
+
+denotes standard bilinear upsampling, and Fref serves as the shared representation for the final prediction heads. This multi-scale fusion strategy is also compatible with prior radio map estimation architectures that rely on hierarchical spatial features [35], [56]. 
+
+G. Residual Gain Reconstruction 
+
+Instead of directly predicting the full gain map, GeoUQ-GFNet estimates a targeted residual correction over the ini-tialization map Ginit , and conditionally merges it to form the final reconstruction map. The progression of these mapping transformations is expressed as 
+
+∆G = fmean (Fref ), (24) 
+
+ˆGu = Ginit + ∆ G, (25) 
+
+ˆG = Ms ⊙ Gs + (1 − Ms) ⊙ ˆGu. (26) In practice, the prediction can be optionally restricted to a physically reasonable gain range during implementation, but the core analytical formulation is strictly given by (26). This residual strategy is highly advantageous because the initial-ization already captures coarse spatial continuity, allowing the network to concentrate strictly on correcting hard regions such as obstacle boundaries, non-line-of-sight (NLoS) transitions, and sparsely supported areas [1], [35], [55]. 
+
+H. Uncertainty Estimation 
+
+To thoroughly quantify predictive confidence, GeoUQ-GFNet uses a second prediction head to estimate a spatial log-variance map. Specifically, the uncertainty branch condi-tions the shared feature on several observation-related masks, yielding the final predictive standard deviation map through the operations: 
+
+Fuq = fuq ([ Fref , Ms, Ma, L]) , (27) 
+
+S = fvar (K(Fuq )) , where S = log ˆ σ2, (28) 
+
+ˆU = exp 
+
+ 12 S
+
+
+
+. (29) Hence, for each location (i, j ), the model safely outputs 
+
+ˆGi,j = μi,j and si,j = log ˆ σ2 
+
+> i,j
+
+. We actively adopt a het-eroscedastic Gaussian likelihood over the unobserved accessi-ble region, modeled as 
+
+LNLL = X
+
+> (i,j )∈Ωunobs
+
+ 12 e−si,j ( ˆGi,j − Gi,j )2 + 12 si,j 
+
+
+
+. (30) This formulation allows the model to reliably assign larger un-certainty to difficult regions that exhibit intrinsically higher re-construction ambiguity, which is aligned with the uncertainty-aware radio map sampling literature [24], [28]. 
+
+I. Training Objective 
+
+To balance reconstruction fidelity and uncertainty quality seamlessly, the full training objective incorporates four core terms into the total loss calculation L = λ1L1 + λgrad Lgrad +
+
+λnll LNLL +λvar Lreg . Here, L1 is the masked ℓ1 reconstruction loss isolated precisely over Ωunobs , Lgrad is a gradient consis-tency loss that encourages continuous local spatial smoothness alongside edge preservation, LNLL is the robust heteroscedas-tic Gaussian negative log-likelihood detailed previously, and 
+
+Lreg is an essential variance regularization term strategically used to stabilize the uncertainty estimation. This unified ob-jective effectively encourages the network to produce both accurate dense radio map estimates and uncertainty maps that remain highly meaningful for downstream active sensing scenarios [24], [35]. 
+
+J. Uncertainty-Guided Active Measurement Selection 
+
+Beyond simple one-shot reconstruction, we fundamentally consider an iterative sensing setting in which the model can ac-tively request additional measurements under a tightly limited budget. At iteration t, the current observation mask is denoted by M(t), and the model predicts both a reconstructed radio map ˆG(t) and a targeted uncertainty map ˆU(t). Candidate query locations are rigorously restricted to accessible but unobserved cells forming the set Ω(t) = {(i, j ) | M (t) 
+
+> i,j
+
+=0, M a,i,j = 1 }. The next optimal query set is smartly selected by ranking the uncertainty values over this candidate region using Q(t) = TopK 
+
+ ˆU(t) ⊙ Ma ⊙ (1 − M(t))
+
+
+
+, where 
+
+TopK( ·) returns the K highest-scoring candidate locations. After successfully querying these target locations, the sparse measurement map and observation mask are functionally up-dated as 
+
+M(t+1) = M(t) ∪ Q (t), (31) 
+
+G(t+1)  
+
+> s
+
+= M(t+1) ⊙ G. (32) 8
+
+Algorithm 1 Radio Map Completion and Active Sensing 
+
+Require: Geometry maps {O, H, Rx, Ry , D, L, Ma}, initial sparse observations (G(0)  
+
+> s
+
+, M(0) ), query budget K, active iteration number T , trained network Fθ
+
+Ensure: Final reconstructed gain map ˆG(T ) 
+
+> 1:
+
+G(0) init ← Init( G(0)  
+
+> s
+
+, M(0) , Ma) 
+
+> 2:
+
+for t = 0 to T − 1 do  
+
+> 3:
+
+X(t) ← [O, H, Rx, Ry , D, L, G(t) 
+
+> s
+
+, M(t), Ma, G(t)init ] 
+
+> 4:
+
+(∆ ˆG(t), S(t)) ← F θ (X(t)) 
+
+> 5:
+
+ˆG(t) 
+
+> u
+
+← G(t)init + ∆ ˆG(t) 
+
+> 6:
+
+ˆG(t) ← M(t) ⊙ G(t) 
+
+> s
+
++ (1 − M(t)) ⊙ ˆG(t) 
+
+> u
+> 7:
+
+ˆU(t) ← exp   12 S(t) 
+
+> 8:
+
+Ω(t) ← { (i, j ) | Ma,i,j = 1 , M (t) 
+
+> i,j
+
+= 0 } 
+
+> 9:
+
+if Ω(t) = ∅ then  
+
+> 10:
+
+break  
+
+> 11:
+
+end if  
+
+> 12:
+
+Q(t) ← TopK 
+
+ ˆU(t) ⊙ Ma ⊙ (1 − M(t))
+
+ 
+
+> 13:
+
+M(t+1) ← M(t) ∪ Q (t) 
+
+> 14:
+
+G(t+1)  
+
+> s
+
+← M(t+1) ⊙ G 
+
+> 15:
+
+G(t+1) init ← Init( G(t+1)  
+
+> s
+
+, M(t+1) , Ma) 
+
+> 16:
+
+end for  
+
+> 17: 18:
+
+return ˆG(T )
+
+Following this collection, the fundamental initialization map 
+
+G(t+1) init is rapidly recomputed from the newly updated ob-servations, and the model is seamlessly re-applied for the following iteration. The complete iterative procedure is sum-marized in Algorithm 1. Since remarkably high uncertainty usually appears in poorly supported or geometrically difficult regions, this intuitive policy naturally prioritizes acquiring measurements that are mathematically expected to improve the final radio map significantly more efficiently than uninformed random selection methodologies [24], [28], [52]. V. E XPERIMENTAL SETUP 
+
+A. Dataset Generation 
+
+The experiments are conducted on the proposed UrbanRT-RM, a controlled ray tracing benchmark generated from synthetic urban scenes. In total, we construct seven scene instances, including four road oriented layouts and three non road building layouts. The road oriented group contains a crossroad scene, a T junction scene, a canyon scene, and an offset crossroad scene. The non road group contains dense, medium, and sparse building layouts. This design allows us to jointly vary road topology, building density, and spatial block-age complexity, while also complementing recent benchmark efforts on AI-based CKM and radio map learning [9], [31]. For each scene, buildings are randomly generated under geometric constraints on width, length, height, and inter build-ing clearance. More specifically, the map extent is set to 
+
+400 m on each horizontal axis, the global map resolution is 
+
+512 × 512 , and the cropped patch size is 128 × 128 . The street width is fixed to 30 m. Depending on the scene category, the number of buildings varies from 120 to 300 , producing low 
+
+> (a) Mixed rooftop and roadside BSs deployment modes.
+> (b) 3D perspective view of a syn-thetic urban scene used for RT.
+> (c) 2D scene layout with road geometry, buildings, and BS.
+> (d) Dense gain map generated by the RT simulator.
+
+Fig. 5: Illustration of the proposed UrbanRT-RM synthetic urban ray tracing dataset. The dataset includes diverse 2D road/building layouts, corresponding 3D geometric scene real-izations, mixed rooftop/roadside BS deployments, and dense gain maps generated by Sionna RT. Together, these compo-nents provide paired geometry and propagation data for radio map reconstruction under different blockage and sampling conditions. density, medium density, and high density propagation envi-ronments. Each scene contains 8 BS deployments drawn from roadside and rooftop modes, which yields diverse transmitter positions and viewing geometries. Representative examples of the generated layouts, 3D scene realizations, deployment modes, and ray traced gain fields are shown in Fig. 5. Such a controlled scene-and-deployment design is also motivated by recent interest in standardized CKM/radio-map datasets and urban sparse-measurement evaluation [9], [31], [32]. Dense gain maps are generated by the Sionna RT engine under a unified propagation configuration [64]. The carrier frequency is set to 3.5 GHz, the receiver height is set to 1.5 m, and the ray tracing depth is limited to 3. For each transmitter, the ray tracing solver uses 2 × 10 5 samples to compute the dense gain field over the full spatial grid. The resulting target map therefore represents a location dependent large scale gain field shaped by distance attenuation, shadowing, and geometric blockage, which is consistent with the propagation-map abstraction adopted in recent radio map and CKM studies [29], [32], [56]. Based on the generated scene and BS configuration, we further construct geometry aware side information channels, including the obstacle map, height map, relative horizontal coordinates, transmitter distance, accessible region mask, and LoS proxy map. The final reconstruction input also includes sparse observations and a dense initialization obtained from 9
+
+iterative neighborhood propagation, following the general idea of combining environment priors and sparse observations in deep radio map reconstruction [12], [55], [56]. To evaluate the effect of measurement support, we generate sparse observations under three sampling modes, namely ran-dom sampling, grid sampling, and road constrained sampling. The observation ratio is selected from {5% , 10% , 20% , 40% }.In the main comparison, we focus on the random 10% setting, while additional experiments are conducted under random 5% ,grid 10% , and road 10% conditions. For each valid BS, we extract 160 patches, subject to constraints on building coverage and valid gain support, so that each patch contains sufficient structural diversity for reconstruction. The choice to explicitly vary the observation ratio and support pattern is also related to prior discussions on sample efficiency and data requirement in CKM/radio map construction [24], [33]. The final dataset index is built at the patch level, and the train, validation, and test splits are generated using non overlapping patch identities. The split ratios are 70% , 15% ,and 15% , respectively. Since the split is performed by patch identity rather than by sampling variant, different sparse versions of the same underlying patch never appear across different data partitions. This prevents information leakage and ensures a fair evaluation protocol, which is consistent with benchmark-oriented evaluation practice in recent radio map and CKM datasets [9], [31]. 
+
+B. Implementation Details 1) Hardware and Software Environment: All experiments were conducted on a workstation equipped with an Intel Core i9-12900KF CPU, an NVIDIA GeForce RTX 5060 Ti GPU with 16 GB memory, and 64 GB RAM. The ray-tracing benchmark was generated in Python 3.11 using Sionna RT together with TensorFlow, while the reconstruction models were implemented in PyTorch 2.x. GPU acceleration was en-abled through CUDA 11.8 and cuDNN. The dataset generation pipeline also uses the Sionna RT backend. 
+
+2) Training Strategy: The proposed GeoUQ-GFNet is trained for the radio map completion task with the random 
+
+10% sparse observation setting as the default training variant. Unless otherwise stated, the model uses a batch size of 8 and is optimized for at most 120 epochs using AdamW with learning rate 10 −4 and weight decay 10 −5. A ReduceLROnPlateau scheduler is used to reduce the learning rate by a factor of 0.5 when the validation loss saturates. Early stopping is applied with a patience of 20 epochs. To stabilize optimization, gradient clipping with maximum norm 1.0 is used throughout training. The GeoUQ-GFNet configuration follows the imple-mentation in our codebase. The base channel width is set to 
+
+32 , the hidden dimension of the Grid-KAN module is set to 
+
+32 , the Ghost ratio is set to 2, the FPN channel dimension is set to 64 , and the number of radial basis functions in each Grid-KAN layer is set to 10 . The dropout rate is set to zero in the reported experiments. The lightweight backbone design is motivated by the efficiency-oriented feature generation of Ghost modules and the nonlinear modeling capability of KAN-style representations [45], [59], [60]. Input normalization is performed channel-wise. The height map is normalized by the maximum height value observed in the training set. The relative coordinate maps and distance map are standardized us-ing the training-set mean and standard deviation. Gain-related channels, including sparse gain and initialization gain, are clipped to the interval from −140 dB to −50 dB and then lin-early normalized to [0 , 1] . The target gain map is normalized in the same way. To improve generalization, data augmentation is applied only to the training set. Specifically, random rotations and horizontal or vertical flips are used. During augmentation, the relative coordinate channels are transformed consistently with the geometric operation so that their physical meaning is preserved after rotation or reflection. For the composite training objective defined in Section IV, the empirical loss weights are set to λ1 = 1 .0, λgrad = 0 .05 , λnll = 0 .2, and 
+
+λvar = 0 .001 . The reconstruction and negative log-likelihood terms are computed exclusively over unobserved accessible cells, whereas the gradient consistency term is evaluated over all valid accessible regions. To maintain numerical stability during optimization, the predicted log-variance map from the uncertainty head is explicitly clipped to the range of 
+
+[−6.0, 2.0] . For active measurement evaluation, the trained model is iteratively queried on test patches. The initial sparse observation is updated over 4 rounds, and each round adds an additional observation budget equal to 1% of the patch area. The uncertainty-guided policy selects the highest-uncertainty unobserved accessible cells, while the random baseline uses the same budget but samples uniformly from the candidate set. This evaluation protocol is closely related to prior active radio map acquisition works that compare uncertainty-driven querying against uninformed sampling under matched budgets [24], [28], [52]. 
+
+C. Performance Evaluation Metrics 
+
+We evaluate reconstruction quality using both normalized-domain and physical-domain metrics. Let ˆG and G denote the predicted and ground-truth gain maps, respectively. All metrics are computed over the accessible region, and for training-related analysis the error on unobserved accessible cells is emphasized. The normalized root mean square error RMSE is defined as 
+
+RMSE norm =
+
+vuuutP 
+
+> i,j
+
+Ma,i,j 
+
+ ˆGnorm  
+
+> i,j
+
+− Gnorm 
+
+> i,j
+
+2
+
+P 
+
+> i,j
+
+Ma,i,j 
+
+. (33) In the physical domain, we report the RMSE and Mean Absolute Error (MAE) in dB: 
+
+RMSE dB =
+
+vuuutP 
+
+> i,j
+
+Ma,i,j 
+
+ ˆGi,j − Gi,j 
+
+2
+
+P 
+
+> i,j
+
+Ma,i,j 
+
+, (34) 
+
+MAE dB =
+
+P 
+
+> i,j
+
+Ma,i,j ˆGi,j − Gi,j 
+
+P 
+
+> i,j
+
+Ma,i,j 
+
+. (35) For uncertainty-aware models, we additionally evaluate the usefulness of the predicted uncertainty map through the 10 
+
+TABLE I: Scene level average RMSE in dB                                         
+
+> Scene type Efficient-UNet GeoUQ-GFNet Nearest ResNet-UNet ViT-UNet Building-medium 5.6122 5.3739 7.8389 5.7396 7.1343 Building-sparse 6.0882 5.7654 9.0199 6.1814 6.8790 Canyon 5.7237 5.4255 8.0844 5.8100 6.9207 Crossroad 5.4449 5.2028 7.5684 5.5203 6.9970 Offset-crossroad 4.9781 4.7831 7.0034 5.0875 6.6338 T-junction 5.5080 5.3109 7.8881 5.6255 7.0008 Average over scenes 5.5592 5.3102 7.9005 5.6607 6.9276
+
+correlation between absolute prediction error and predicted standard deviation. A higher positive correlation indicates that the model assigns larger uncertainty to regions that are indeed harder to reconstruct, which is important for active sensing [24], [28]. For active measurement selection, we report the recon-struction RMSE after each additional measurement budget increment. This metric directly reflects the practical value of uncertainty-guided querying under a fixed sensing budget. In the comparison, uncertainty-guided selection and random selection are evaluated under exactly the same incremental budget, which makes the resulting performance gap a direct indicator of decision utility [24], [52]. VI. R ESULTS AND ANALYSIS 
+
+This section evaluates scene level generalization, overall reconstruction accuracy, BS level robustness, and the practical value of uncertainty guided active measurement selection. Unless otherwise stated, all numerical comparisons in the text follow the results summarized in Tables I, II, and III. 
+
+Fig. 6: Scene wise RMSE heatmap in dB. The scene dependent behavior is first reported in Table I, Fig. 6, and Fig. 7. Several clear patterns can be observed. First, GeoUQ-GFNet remains the best model in every scene category. Its average RMSE over all scene types is 5.3102 
+
+dB, which is lower than Efficient-UNet at 5.5592 dB, ResNet-UNet at 5.6607 dB, ViT-UNet at 6.9276 dB, and Nearest at 
+
+7.9005 dB. Second, scene difficulty is not uniform. Building-sparse is the hardest family for all methods, while Offset-crossroad is the easiest. For example, GeoUQ-GFNet obtains 
+
+5.7654 dB in Building-sparse but only 4.7831 dB in Offset-crossroad. The same trend appears for all other models. This is 
+
+Fig. 7: RMSE grouped by scene type. physically consistent with the geometry of the scenes. Sparse building layouts contain both broad open regions and sharp blockage transitions, which makes the gain field harder to infer from limited observations. In contrast, the Offset-crossroad layout has a more regular geometric structure, so the dominant spatial propagation trend is easier to recover. Third, the nearest interpolation baseline is consistently much weaker than the learned models in every scene. This confirms that sparse radio map reconstruction should not be viewed as a purely local interpolation problem. Since the missing area is shaped by geometry, visibility, and observation support, our results highlight that learning propagation aware spatial structure is necessary. TABLE II: Overall Reconstruction Performance                   
+
+> Model RMSE (dB) MAE (dB) Error uncertainty corr. GeoUQ-GFNet 7.1025 1.6191 0.5818
+> Efficient-UNet 7.7557 2.0449 0.5780 ViT-UNet 7.7895 2.0978 0.5814 ResNet-UNet 7.8529 2.1139 0.5813 Nearest 11.9412 3.7052 0.0000
+
+The overall comparison is then summarized in Table II. GeoUQ-GFNet achieves the best RMSE of 7.1025 dB, the best MAE of 1.6191 dB, and the best error uncertainty correlation of 0.5818 . Efficient-UNet is the second strongest model, with RMSE 7.7557 dB and MAE 2.0449 dB. ViT-UNet and ResNet-UNet follow closely, and both remain clearly better than the nearest interpolation baseline. The improvement of GeoUQ-GFNet is substantial rather than marginal. Relative to Efficient-UNet, the RMSE is reduced by about 0.65 dB. Relative to ViT-UNet and ResNet-UNet, the reduction is about 
+
+0.69 dB and 0.75 dB, respectively. The MAE ranking is fully consistent with the RMSE ranking. These results show 11   
+
+> (a) Scene layout and BS placement. (b) Ground truth radio map. (c) GeoUQ-GFNet prediction.
+
+Fig. 8: Representative qualitative example for a crossroad scene. The proposed model closely recovers the dominant propagation corridor and the main angular energy structure of the ground truth radio map. that the proposed design improves both global reconstruction fidelity and local error magnitude. It is also important that the uncertainty branch does not weaken reconstruction quality. Instead, the same model attains the best reconstruction metrics and the highest error uncertainty correlation, which supports the core claim of the paper that uncertainty estimation can be introduced without sacrificing one shot prediction quality. 
+
+Fig. 9: BS wise RMSE heatmap in dB in each scene. Beyond the average metrics, it is also useful to inspect a representative qualitative example. Fig. 8 shows one cross-road scene together with its ground truth radio map and the corresponding prediction of GeoUQ-GFNet. Several observa-tions can be made. First, the predicted map preserves the dominant propagation structure radiating from the selected BS and accurately captures the strong corridor aligned with the road geometry. Second, the major energy branches and blockage induced angular transitions are well maintained, indicating that the model does not merely smooth the field but is able to recover physically meaningful spatial structure. Third, although minor local discrepancies remain in some weak reflection regions and fine branches, the overall topology of the gain field is highly consistent with the ground truth. This qualitative case complements the quantitative results above and visually demonstrates that the proposed model can reconstruct not only average intensity levels but also the main geometric propagation pattern of a realistic scene. A finer analysis is provided by the BS level heatmap in Fig. 9. Here we keep the representative top three BS instances from each scene, which makes the comparison much easier to read than the full BS list while still preserving the cross scene trend. The main conclusion remains unchanged. GeoUQ-GFNet gives the lowest RMSE for nearly all listed BS cases, and Nearest remains the weakest baseline throughout. This result is important because it shows that the gain of the proposed model is not concentrated on only a few favorable transmitters. Instead, the advantage persists across different BS placements and across both road oriented and building dominated environments. The BS wise view also reveals meaningful intra scene variation. In the Canyon family, BS 2 is much easier than BS 0 and BS 1 for every model. In the Building-sparse family, BS 2 is distinctly more difficult than BS 0 and BS 1. This is expected because changing the BS location changes the angular visibility, the blockage configuration, and the balance between line of sight and non line of sight regions. Therefore, scene averages alone are not sufficient to characterize sparse radio map difficulty. A strong model must remain robust to both scene topology and BS placement, and the results in Fig. 9 support that conclusion for GeoUQ-GFNet. TABLE III: Active sensing comparison at budget ratio 0.04                   
+
+> Model UQ RMSE (dB) Rand. RMSE (dB) Gain (dB) GeoUQ-GFNet 3.1002 5.9144 2.8142
+> ViT-UNet 3.4558 6.2599 2.8041 Efficient-UNet 3.5101 6.2742 2.7641 ResNet-UNet 3.5543 6.3106 2.7563 Nearest 9.8791 9.8791 0.0000
+
+The most practically important result concerns active mea-surement selection. The final comparison is summarized in Table III, and the full budget trajectory of GeoUQ-GFNet is shown in Fig. 10. Several observations are especially important. First, uncertainty guided sensing produces a large gain for all learned models. At the final additional sensing budget ratio of 0.04 , GeoUQ-GFNet reaches 3.1002 dB, while 12 
+
+Fig. 10: Active sensing result of GeoUQ-GFNet. Uncertainty guided querying steadily reduces RMSE as the additional sensing budget increases and clearly outperforms random selection. random selection remains at 5.9144 dB. This corresponds to a gain of 2.8142 dB. Efficient-UNet, ResNet-UNet, and ViT-UNet show similarly large gains of 2.7641 dB, 2.7563 dB, and 
+
+2.8041 dB, respectively. Second, the nearest baseline shows no gain because it does not provide a useful uncertainty estimate and therefore cannot support informed query selection. Third, the improvement curve of GeoUQ-GFNet is smooth and monotonic over the full sensing process. The RMSE decreases from 6.79 dB to 5.49 dB, then to 4.48 dB, then to 3.73 dB, and finally to 3.10 dB. In contrast, the random policy only decreases from 6.79 dB to 5.91 dB over the same budget range. This result directly supports the central argument of the paper. The main value of predictive uncertainty lies not only in confidence reporting, but more importantly in guiding where to measure next under a limited sensing budget. In other words, uncertainty has strong decision utility, and this utility is larger than the gap seen in one shot reconstruction metrics alone. Taken together, the results support the following three novel conclusions for sparse gain radio map reconstruction: (1) GeoUQ-GFNet is the strongest overall model in reconstruction accuracy and uncertainty quality. (2) Scene geometry and BS placement both have a strong effect on reconstruction difficulty, so evaluation should be performed beyond a single average number. (3) Most importantly, uncertainty is especially valuable as a decision signal for measurement acquisition. This is why sparse radio map reconstruction should be studied not only as a spatial prediction task, but also as a measurement aware decision problem. VII. C ONCLUSION 
+
+This paper studied sparse gain radio map reconstruction under geometry and sensing constraints. We constructed a controllable ray tracing benchmark, termed UrbanRT-RM, with multiple scenes, BS deployments, and sampling modes, and developed GeoUQ-GFNet for joint gain reconstruction and uncertainty estimation. The results show that GeoUQ-GFNet achieves the best overall reconstruction performance and re-mains robust across different scene types and BS placements. They also show that reconstruction difficulty depends strongly on scene geometry and transmitter location, and that predictive uncertainty is especially useful for active measurement selec-tion, where uncertainty guided querying yields much larger gains than one shot reconstruction improvement alone. These findings suggest that sparse radio map reconstruction should be treated not only as a spatial prediction problem but also as a geometry aware and measurement aware decision problem. REFERENCES [1] Z. Jin, L. You, J. Wang, X.-G. Xia, and X. Gao, “An I2I Inpainting Approach for Efficient Channel Knowledge Map Construction,” IEEE Trans. Wireless Commun. , vol. 24, no. 2, pp. 1415–1429, Feb. 2025. [2] H. Wang, X. Shi, H. Zhang, Y. Cao, S. Yang, J. Wang, and K. Huang, “BeamCKM: A Framework of Channel Knowledge Map Construction for Multi-Antenna Systems,” arXiv preprint arXiv:2511.18376 , 2025. [3] L. Zhao, Y. Wang, X. Wang, Z. Fei, and Y. Zeng, “BeamCKMD-iff: Beam-Aware Channel Knowledge Map Construction via Diffusion Transformer,” arXiv preprint arXiv:2601.10207 , 2026. [4] H. Wang, X. Shi, H. Zhang, Y. Cao, and J. Wang, “Beamforming-Codebook-Aware Channel Knowledge Map Construction for Multi-Antenna Systems,” arXiv preprint arXiv:2505.16132 , 2025. [5] Z. Huang, Y. Zeng, S. Fu, X. Xu, and H. Du, “Channel Knowledge Map Construction via Guided Flow Matching,” unpublished manuscript / preprint, 2025. [6] Y. Zhu, X. Liao, Z. Gao, L. Zeng, and Y. Zeng, “Channel Knowledge Map Construction via Physics-Inspired Diffusion Model Without Prior Observations,” arXiv preprint arXiv:2512.02757 , 2025. [7] X. Liu, S. Sun, M. Tao, A. Kaushik, and H. Yan, “Channel Knowledge Maps for 6G Wireless Networks: Construction, Applications, and Future Challenges,” review manuscript, 2025. [8] X. Wang, Y. Shi, T. Wang, Y. Huang, Z. Hu, L. Chen, and Z. Jiang, “Channel Knowledge Map-Aided Channel Prediction With Measurements-Based Evaluation,” IEEE Trans. Commun. , vol. 73, no. 5, pp. 3622–3636, May 2025. [9] Z. Wu, D. Wu, S. Fu, Y. Qiu, and Y. Zeng, “CKMImageNet: A Dataset for AI-Based Channel Knowledge Map Towards Environment-Aware Communication and Sensing,” arXiv preprint arXiv:2504.09849 , 2025. [10] J. Zhou, C. Hu, G. Wu, Z. Ren, H. Hu, J. Zhang, R. Zhang, and J. Xu, “6D Channel Knowledge Map Construction via Bidirectional Wireless Gaussian Splatting,” arXiv preprint arXiv:2510.26166 , 2025. [11] Y. Wang, W. Guo, C. Huang, G. Chen, Y. Zhang, and S. Cui, “Point Cloud Environment-Based Channel Knowledge Map Construction,” 
+
+arXiv preprint arXiv:2506.21112 , 2025. [12] Y. Wang, C. Huang, S. Zhang, G. Chen, W. Guo, S. Lan, L. Xu, X. Cheng, X. Tang, and S. Cui, “Towards Precise Channel Knowledge Map: Exploiting Environmental Information from 2D Visuals to 3D Point Clouds,” arXiv preprint arXiv:2510.08140 , 2025. [13] J. Liu, G. Ding, Y. Xu, J. Gu, H. Wang, J. Wang, and X. Zhou, “Channel Knowledge Map-Assisted Routing Scheme for Low-Altitude Economy,” 
+
+IEEE Trans. Veh. Technol. , early access, 2025. [14] S. Wang, X. Xu, and Y. Zeng, “Deep Learning-Based CKM Construction with Image Super-Resolution,” arXiv preprint arXiv:2411.08887 , 2025. [15] Z. Dai, D. Wu, X. Xu, and Y. Zeng, “Generating CKM Using Others’ Data: Cross-AP CKM Inference with Deep Learning,” IEEE Trans. Veh. Technol. , early access, 2025. [16] S. Fu, Z. Wu, D. Wu, and Y. Zeng, “Generative CKM Construction using Partially Observed Data with Diffusion Model,” in Proc. IEEE VTC2025-Spring , 2025. [17] X. Shi, H. Wang, Y. Cao, H. Zhang, S. Yang, and J. Wang, “Leveraging Channel Knowledge Map for Multi-User Hierarchical Beam Training Under Position Uncertainty,” arXiv preprint arXiv:2511.22902 , 2025. [18] B. Yang, W. Zhang, and S. Zhang, “AIGC-Based Radio Map Con-struction for Channel Estimation in Low-Altitude Economy,” in Proc. IEEE/CIC Int. Conf. Commun. China Workshops , 2025. [19] L. Cai, G. Xu, Q. Zhang, Z. Song, and W. Zhang, “Deep Learning Based Channel Estimation for Deep-Space Communications,” IEEE Trans. Veh. Technol. , vol. 74, no. 12, pp. 19743–19755, Dec. 2025. 13 
+
+[20] R. Sun, N. Cheng, C. Li, W. Quan, H. Zhou, Y. Wang, W. Zhang, and X. Shen, “A Comprehensive Survey of Knowledge-Driven Deep Learning for Intelligent Wireless Network Optimization in 6G,” IEEE Commun. Surveys Tuts. , vol. 28, pp. 1099–1135, 2026. [21] B. Yang, W. Wang, and W. Zhang, “Radio Map-Based Beamforming Assisted With Reduced Pilots,” IEEE Trans. Wireless Commun. , vol. 24, no. 10, pp. 8878–8891, Oct. 2025. [22] M. Gao, G. Xu, Z. Song, Q. Zhang, and W. Zhang, “Performance Anal-ysis of LEO Satellite-Assisted Deep Space Communication Systems,” 
+
+IEEE Trans. Aerosp. Electron. Syst. , vol. 61, no. 5, pp. 12628–12648, Oct. 2025. [23] C. Wu, Z. Yang, and C. Xiao, “Automatic Radio Map Adaptation for Indoor Localization Using Smartphones,” IEEE Trans. Mobile Comput. ,vol. 17, no. 3, pp. 517–531, Mar. 2018. [24] K. D. Polyzos, A. Sadeghi, W. Ye, S. Sleder, K. Houssou, J. Calder, Z.-L. Zhang, and G. B. Giannakis, “Bayesian Active Learning for Sample Efficient 5G Radio Map Reconstruction,” IEEE Trans. Wireless Commun. , vol. 23, no. 12, pp. 19382–19396, Dec. 2024. [25] D. Romero, D. Lee, and G. B. Giannakis, “Blind Radio Tomography,” 
+
+IEEE Trans. Signal Process. , vol. 66, no. 8, pp. 2055–2069, Apr. 2018. [26] R. K. Jaiswal, M. Elnourani, S. Deshmukh, and B. Beferull-Lozano, “A Data-Driven Transfer Learning Method for Indoor Radio Map Estimation,” IEEE Trans. Veh. Technol. , vol. 75, no. 3, pp. 4261–4277, Mar. 2026. [27] R. K. Martin, A. Folkerts, and T. Heinl, “Accuracy vs. Resolution in Radio Tomography,” IEEE Trans. Signal Process. , vol. 62, no. 10, pp. 2480–2490, May 2014. [28] D. Lee, D. Berberidis, and G. B. Giannakis, “Adaptive Bayesian Radio Tomography,” IEEE Trans. Signal Process. , vol. 67, no. 8, pp. 1964– 1979, Apr. 2019. [29] D. Romero, P. Q. Viet, and R. Shrestha, “Aerial Base Station Placement via Propagation Radio Maps,” IEEE Trans. Commun. , vol. 72, no. 9, pp. 5349–5364, Sep. 2024. [30] D. Wu, Y. Zeng, S. Jin, and R. Zhang, “Environment-Aware Hybrid Beamforming by Leveraging Channel Knowledge Map,” IEEE Trans. Wireless Commun. , vol. 23, no. 5, pp. 4990–5005, May 2024. [31] S. Zhang, S. Jiang, W. Lin, Z. Fang, K. Liu, H. Zhang, and K. Chen, “Generative AI on SpectrumNet: An Open Benchmark of Multiband 3-D Radio Maps,” IEEE Trans. Cogn. Commun. Netw. , vol. 11, no. 2, pp. 886–899, Apr. 2025. [32] X. Chen, X. Zhong, Z. Zhang, L. Dai, and S. Zhou, “High-Efficiency Urban 3D Radio Map Estimation Based on Sparse Measurements,” IEEE Trans. Veh. Technol. , vol. 74, no. 10, pp. 16488–16493, Oct. 2025. [33] X. Xu and Y. Zeng, “How Much Data Is Needed for Channel Knowledge Map Construction?,” IEEE Trans. Wireless Commun. , vol. 23, no. 10, pp. 13011–13021, Oct. 2024. [34] D. Lee, S.-J. Kim, and G. B. Giannakis, “Channel Gain Cartography for Cognitive Radios Leveraging Low Rank and Sparsity,” IEEE Trans. Wireless Commun. , vol. 16, no. 9, pp. 5953–5966, Sep. 2017. [35] Y. Teganya and D. Romero, “Deep Completion Autoencoders for Radio Map Estimation,” IEEE Trans. Wireless Commun. , vol. 21, no. 3, pp. 1710–1724, Mar. 2022. [36] S. Shrestha, X. Fu, and M. Hong, “Deep Spectrum Cartography: Completing Radio Map Tensors Using Learned Neural Models,” IEEE Trans. Signal Process. , vol. 70, pp. 1170–1185, 2022. [37] S. Roger, M. Brambilla, B. Camajori Tedeschini, C. Botella-Mascarell, M. Cobos, and M. Nicoli, “Deep-Learning-Based Radio Map Recon-struction for V2X Communications,” IEEE Trans. Veh. Technol. , vol. 73, no. 3, pp. 3863–3876, Mar. 2024. [38] J. A. Bazerque and G. B. Giannakis, “Distributed Spectrum Sensing for Cognitive Radio Networks by Exploiting Sparsity,” IEEE Trans. Signal Process. , vol. 58, no. 3, pp. 1847–1862, Mar. 2010. [39] X. Chen, J. Wang, and Q. Huang, “Dynamic Spectrum Cartography: Reconstructing Spatial-Spectral-Temporal Radio Frequency Map via Tensor Completion,” IEEE Trans. Signal Process. , vol. 73, pp. 1184– 1199, 2025. [40] K. Liu, C. Qiu, K. Chen, Q. Zheng, L. Song, and Y. Wang, “Paying Deformable Attention to Sparse Spatial Observations for Deep Radio Map Estimation,” IEEE Trans. Cogn. Commun. Netw. , vol. 12, pp. 1436– 1450, 2026. [41] H. Zhao, Q. Hao, Y. He, H. Huang, H. Sari, F. Adachi, and G. Gui, “Radio Map Reconstruction Based on Deep Denoising Regularization for UAV Communications,” IEEE Trans. Veh. Technol. , vol. 74, no. 6, pp. 9876–9881, Jun. 2025. [42] B. Li and J. Chen, “Radio Map-Assisted Approach for Interference-Aware Predictive UAV Communications,” IEEE Trans. Wireless Com-mun. , vol. 23, no. 11, pp. 16725–16741, Nov. 2024. [43] X. Wang, K. Tao, N. Cheng, Z. Yin, Z. Li, Y. Zhang, and X. Shen, “RadioDiff: An Effective Generative Diffusion Model for Sampling-Free Dynamic Radio Map Construction,” IEEE Trans. Cogn. Commun. Netw. ,vol. 11, no. 2, pp. 738–750, Apr. 2025. [44] X. Mu, Y. Liu, L. Guo, J. Lin, and R. Schober, “Intelligent Reflecting Surface Enhanced Indoor Robot Path Planning: A Radio Map-Based Approach,” IEEE Trans. Wireless Commun. , vol. 20, no. 7, pp. 4732– 4747, Jul. 2021. [45] C. Liao, X. Ge, M. He, Y. Zheng, and S. Liu, “KAN-Based Interpretable Radio Map Prediction Framework With Symbolic Data Fusion,” IEEE Trans. Cogn. Commun. Netw. , vol. 12, pp. 1788–1802, 2026. [46] M. Kasparick, R. L. G. Cavalcante, S. Valentin, S. Stanczak, and M. Yukawa, “Kernel-Based Adaptive Online Reconstruction of Coverage Maps With Side Information,” IEEE Trans. Veh. Technol. , vol. 65, no. 7, pp. 5461–5473, Jul. 2016. [47] D. Romero, S.-J. Kim, G. B. Giannakis, and R. Lopez-Valcarce, “Learn-ing Power Spectrum Maps From Quantized Power Measurements,” IEEE Trans. Signal Process. , vol. 65, no. 10, pp. 2547–2560, May 2017. [48] R. K. Jaiswal, M. Elnourani, S. Deshmukh, and B. Beferull-Lozano, “Leveraging Transfer Learning for Radio Map Estimation via Mixture of Experts,” IEEE Trans. Cogn. Commun. Netw. , vol. 12, pp. 846–863, 2026. [49] Y. Teganya, D. Romero, L. M. Lopez Ramos, and B. Beferull-Lozano, “Location-Free Spectrum Cartography,” IEEE Trans. Signal Process. ,vol. 67, no. 15, pp. 4013–4028, Aug. 2019. [50] Y. Zeng, X. Xu, S. Jin, and R. Zhang, “Simultaneous Navigation and Radio Mapping for Cellular-Connected UAV With Deep Reinforcement Learning,” IEEE Trans. Wireless Commun. , vol. 20, no. 7, pp. 4205– 4220, Jul. 2021. [51] K. Sato, K. Suto, K. Inage, K. Adachi, and T. Fujii, “Space-Frequency-Interpolated Radio Map,” IEEE Trans. Veh. Technol. , vol. 70, no. 1, pp. 714–725, Jan. 2021. [52] R. Shrestha, D. Romero, and S. P. Chepuri, “Spectrum Surveying: Active Radio Map Estimation With Autonomous UAVs,” IEEE Trans. Wireless Commun. , vol. 22, no. 1, pp. 627–640, Jan. 2023. [53] D. Romero, T. N. Ha, R. Shrestha, and M. Franceschetti, “Theoretical Analysis of the Radio Map Estimation Problem,” IEEE Trans. Wireless Commun. , vol. 23, no. 10, pp. 13722–13737, Oct. 2024. [54] X. Li, S. Zhang, H. Li, X. Li, L. Xu, H. Xu, H. Mei, G. Zhu, N. Qi, and M. Xiao, “RadioGAT: A Joint Model-Based and Data-Driven Framework for Multi-Band Radiomap Reconstruction via Graph Attention Networks,” IEEE Trans. Wireless Commun. , vol. 23, no. 11, pp. 17777–17792, Nov. 2024. [55] S. Zhang, T. Yu, B. Choi, F. Ouyang, and Z. Ding, “Radiomap Inpainting for Restricted Areas Based on Propagation Priority and Depth Map,” 
+
+IEEE Trans. Wireless Commun. , vol. 23, no. 8, pp. 9330–9344, Aug. 2024. [56] R. Levie, C. Yapar, G. Kutyniok, and G. Caire, “RadioUNet: Fast Radio Map Estimation With Convolutional Neural Networks,” IEEE Trans. Wireless Commun. , vol. 20, no. 6, pp. 4001–4015, Jun. 2021. [57] J. Wilson and N. Patwari, “See-Through Walls: Motion Tracking Using Variance-Based Radio Tomography Networks,” IEEE Trans. Mobile Comput. , vol. 10, no. 5, pp. 612–621, May 2011. [58] D. C. Nguyen, M. Ding, P. N. Pathirana, A. Seneviratne, J. Li, D. Niyato, O. Dobre, and H. V. Poor, “6G Internet of Things: A Comprehensive Survey,” IEEE Internet Things J. , vol. 9, no. 1, pp. 359–383, Jan. 2022. [59] K. Han, Y. Wang, Q. Tian, J. Guo, C. Xu, and C. Xu, “GhostNet: More Features From Cheap Operations,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. , pp. 1580–1589, 2020. [60] Z. Liu, Y. Wang, S. Vaidya, F. Ruehle, J. Halverson, M. Soljaˇ ci´ c, T. Y. Hou, and M. Tegmark, “KAN: Kolmogorov–Arnold Networks,” in Proc. Int. Conf. Learn. Represent. , 2025. [61] N. Kato, Z. M. Fadlullah, F. Tang, B. Mao, S. Tani, A. Okamura, and J. Liu, “Optimizing Space-Air-Ground Integrated Networks by Artificial Intelligence,” IEEE Wireless Commun. , vol. 26, no. 4, pp. 140–147, Aug. 2019. [62] J. Liu, Y. Shi, Z. M. Fadlullah, and N. Kato, “Space-Air-Ground Integrated Network: A Survey,” IEEE Commun. Surveys Tuts. , vol. 20, no. 4, pp. 2714–2741, 2018. [63] W. Saad, M. Bennis, and M. Chen, “A Vision of 6G Wireless Systems: Applications, Trends, Technologies, and Open Research Problems,” 
+
+IEEE Netw. , vol. 34, no. 3, pp. 134–142, May 2020. [64] J. Hoydis, F. A¨ ıt Aoudia, S. Cammerer, M. Nimier-David, N. Binder, G. Marcus, and A. Keller, “Sionna RT: Differentiable Ray Tracing for Radio Propagation Modeling,” in Proc. IEEE Globecom Workshops (GC Wkshps) , pp. 317–321, 2023. 14 
+
+[65] Z. Zeng, K. Wang, Z. Zhang, and Y. Xiu, “GAC-KAN: An Ultra-Lightweight GNSS Interference Classifier for GenAI-Powered Con-sumer Edge Devices,” arXiv preprint arXiv:2602.11186 , 2026. [66] Z. Zeng, Y. Zhao, K. Wang, D. Niyato, Y. Xiu, L. Chen, Z. Zhang, and N. Wei, “PhyG-MoE: A Physics-Guided Mixture-of-Experts Framework for Energy-Efficient GNSS Interference Recognition,” arXiv preprint arXiv:2601.12798 , 2026. [67] Z. Zeng, Y. Zhao, K. Wang, D. Niyato, H. Shu, J. Zhao, Y. Huang, Y. Xiu, Z. Zhang, and N. Wei, “SKANet: A Cognitive Dual-Stream Framework with Adaptive Modality Fusion for Robust Compound GNSS Interference Classification,” arXiv preprint arXiv:2601.12791 , 2026. [68] Z. Zeng, H. Shu, K. Wang, L. Chen, A. Hussain, Y. Huang, J. Zhao, Y. Xiu, and Z. Zhang, “JSR-GFNet: Jamming-to-Signal Ratio-Aware Dynamic Gating for Interference Classification in future Cognitive Global Navigation Satellite Systems,” arXiv preprint arXiv:2602.00042 ,2026. [69] Y. Xiu et al. , “Robust Optimization for Movable Antenna-Aided Cell-Free ISAC With Time Synchronization Errors,” IEEE Trans. Wireless Commun. , vol. 25, pp. 10082–10097, 2026. [70] Y. Xiu et al. , “Power Source Allocation for RIS-aided Integrating Sensing, Communication, and Power Transfer Communication Systems Based on NOMA,” IEEE Trans. Mob. Comput. , pp. 1–14, 2026. [71] Y. Xiu et al. , “Movable Antenna-Aided Cooperative ISAC Network with Time Synchronization Error and Imperfect CSI,” IEEE Trans. Commun. ,p. 1, 2025. [72] Y. Xiu et al. , “Latency Minimization for Movable Relay-Aided D2D-MEC Communication Systems,” IEEE Trans. Mob. Comput. , vol. 25, no. 1, pp. 533–549, 2026. [73] Y. Xiu, W. Lyu, P. L. Yeoh, Y. Ai, and N. Wei, “Secure Enhancement for RIS-Aided UAV with ISAC: Robust Design and Resource Allocation,” 
+
+IEEE Trans. Veh. Technol. , pp. 1–16, 2025. [74] Z. Zhang, Y. Xiu, Z. Dong, J. Yin, M. J. Khabbaz, C. Assi, and N. Wei, “Crosstalk-Resilient Beamforming for Movable Antenna Enabled Integrated Sensing and Communication,” IEEE Wireless Commun. Lett. ,p. 1, 2026. [75] Z. Zhang, Y. Xiu, P. L. Yeoh, G. Liu, Z. Wu, and N. Wei, “Distortion-Aware Hybrid Beamforming for Integrated Sensing and Communica-tion,” IEEE Commun. Lett. , vol. 30, pp. 682–686, 2026. [76] X. Dong, W. Lyu, R. Yang, Y. Xiu, W. Mei, and Z. Zhang, “Movable An-tenna Enhanced Secure Simultaneous Wireless Information and Power Transfer,” IEEE Commun. Lett. , vol. 29, no. 10, pp. 2356–2360, 2025. [77] Y. Xiu et al. , “Robust Beamforming Design for Near-Field DMA-NOMA mmWave Communications With Imperfect Position Informa-tion,” IEEE Trans. Wireless Commun. , vol. 24, no. 2, pp. 1678–1692, 2025. [78] S. Yang et al. , “Flexible WMMSE Beamforming for MU-MIMO Mov-able Antenna Communications,” IEEE Trans. Signal Process. , vol. 73, pp. 4479–4491, 2025.
