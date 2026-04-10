@@ -1,0 +1,973 @@
+Title: Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees
+
+URL Source: https://arxiv.org/pdf/2604.08018v1
+
+Published Time: Fri, 10 Apr 2026 01:02:31 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees 
+
+Enno Breukelman, Takumi Shinohara, Joowon Lee, and Henrik Sandberg 
+
+Abstract — In this paper, we consider data-driven recon-struction of unknown inputs to linear time-invariant (LTI) multiple-input multiple-output (MIMO) systems. We propose a novel autoregressive estimator based on a constrained least-squares formulation over Hankel matrices, splitting the problem into an output-consistency constraint and an input-history-matching objective. Our method relies on previously recorded input–output data to represent the system, but does not require knowledge of the true input to initialize the algorithm. We show that the proposed estimator is strictly stable if and only if all the invariant zeros of the trajectory-generating system lie strictly inside the unit circle, which can be verified purely from input and output data. This mirrors existing results from model-based input reconstruction and closes the gap between model-based and data-driven settings. Lastly, we provide numerical examples to demonstrate the theoretical results. 
+
+I. I NTRODUCTION 
+
+Data-driven representations of linear time-invariant (LTI) systems have become an established topic, driven by de-velopments in behavioral systems theory [1] and subspace identification methods [2]. A central idea in this framework is that the input-output behavior of a dynamical system is represented not through state-space matrices or transfer functions, but through linear combinations of previously recorded input-output trajectories. This perspective has also significantly influenced controller design, enabling closed-loop synthesis without the explicit identification of system matrices [3]–[5]. These data-driven formulations rely on Hankel matrices constructed from measured trajectories. Under the assump-tion of persistently excited inputs, strong connections can be drawn between model-based and behavioral approaches [6]. This includes the ability to identify model properties from data, even when the inputs are not persistently exciting [7]. Despite these emerging connections, certain techniques remain rigorously proven only in the model-based setting, with their data-driven counterparts yet to be shown. One example is the problem of left inversion, namely, the reconstruction of the unique input that generated ameasured output. This particular problem is motivated by fault detection, cyber-attack estimation, and inversion-based control, and has foundational work in [8], [9]. Recent research continues to connect system properties with the    
+
+> This work was supported in part by the Wallenberg AI, Autonomous Systems and Software Program (WASP) funded by the Knut and Alice Wallenberg Foundation, and by the Swedish Research Council (grant 2023-04770). The authors are with KTH Royal Institute of Technology, School of Electrical Engineering and Computer Science, Department of Decision and Control Systems, Malvinas v¨ ag 10, SE-100 44 Stockholm, Sweden.
+> {cebre, tashin, joowon, hsan }@kth.se
+
+ability to recover unknown inputs, such as [10], [11] in the continuous case. Model-based inversion and unknown input estimation methods for the discrete-time case are also well documented; see [12], [13]. Key aspects of inversion methods are the system’s initial condition as well as the existence and position of invariant zeros. Motivated by the rise of behavioral and data-driven meth-ods, a growing body of work investigates left inversion directly from data matrices, bypassing explicit model iden-tification. Data-driven estimation approaches that include state estimation in the presence of unknown inputs can be found in [14]–[17], while [18]–[21] specifically address system invertibility and input reconstruction. These methods share a common structure: a previously recorded input-output trajectory is used to represent the system dynamics, while online measurements are used to estimate the current input. A key limitation of existing approaches is that, in addition to online output measurements, they require exact knowledge of the true inputs immediately preceding the estimation window, or at initialization. This assumption is unrealistic in practice, since it is precisely these inputs that one seeks to recover. For the single-input single-output (SISO) case, [20] ad-dress this limitation and provide a convergence proof for arbitrary initial conditions using transfer-function arguments. For multiple-input multiple-output (MIMO) systems, [21] propose an estimator by characterizing a general matrix inverse; however, they do so without providing a system-theoretic explanation of when and why the method succeeds. Consequently, an open problem remains for MIMO systems. No existing data-driven method guarantees convergence of the input reconstruction for arbitrary initial conditions while connecting these guarantees to the system-theoretic proper-ties that govern model-based inversion. Our main contributions are as follows: 1) We develop a novel, data-driven, autoregressive input estimation algorithm for MIMO systems that does not require knowledge of the initial input trajectory. 2) We provide a rigorous convergence analysis linking the estimator’s behavior to the invariant zeros of the trajectory-generating system, mirroring the structural assumptions of model-based inversion. 3) We establish a necessary and sufficient condition which can be checked from input and output data, for all invariant zeros to lie strictly inside the unit circle. 4) We illustrate the theoretical results in numerical exam-ples, highlighting the role of invariant-zero locations. 
+
+Outline: In Section II, we review existing results on model-based and data-driven input reconstruction with 
+
+> arXiv:2604.08018v1 [eess.SY] 9 Apr 2026
+
+known initial conditions. Section III then presents our algo-rithm for estimating unknown inputs under arbitrary initial conditions, along with its convergence analysis. Numerical examples demonstrate our theoretical findings in Section IV, and we conclude the paper in Section V. 
+
+Notation: R denotes the set of real numbers, C the com-plex numbers, and N the natural numbers; column vectors in Rn are denoted by small letters, e.g., x, and matrices in 
+
+Rn×m by capital letters, e.g., A. We use the notations ∥x∥2
+
+and ∥A∥2 to denote the ℓ2 norm of a vector x and the induced 
+
+ℓ2 norm of a matrix, respectively. By im( A), we denote the image, i.e., the column space of A, and by dim(im( A)) , we denote the dimension of said image. For a square matrix A,the set of eigenvalues (spectrum) and the maximum absolute eigenvalue (spectral radius) are represented by σ(A) and 
+
+ρ(A), respectively. II. P RELIMINARIES 
+
+In this section, we collect existing results on model-based and data-driven system inversion. 
+
+A. Model-based System Inversion 
+
+Consider the discrete-time linear time-invariant system S
+
+with u ∈ Rm, y ∈ Rp and x ∈ Rn satisfying 
+
+S :
+
+(xk+1 = Ax k + Bu k,yk = Cx k + Du k. (1) To design the inverse of S, we begin by considering the stacked vector of L + 1 outputs 
+
+yk:k+L = y⊤ 
+
+> k
+
+y⊤ 
+
+> k+1
+
+· · · y⊤
+
+> k+L
+
+⊤ , (2) which can also be written as 
+
+yk:k+L = OL xk + IL uk:k+L, (3) where OL denotes the observability and IL the invertibility matrix for the unknown input. These matrices are computed recursively using 
+
+OL =
+
+ C
+
+OL−1A
+
+
+
+, IL =
+
+ D 0
+
+OL−1B IL−1
+
+
+
+,
+
+with O0 = C and I0 = D. We characterize the existence of an L-delay left inverse as the ability to recover uk uniquely from yk:k+L, given a zero or known initial state xk.
+
+Lemma 1 (Chapter 2 in [13]) . An L-delay left inverse exists if and only if either of the following conditions holds: 
+
+i) There exists at least one z ∈ C for which 
+
+rank 
+
+A − zI BC D
+
+
+
+= n + m. 
+
+ii) There exists L ≤ n and P ∈ Rm×(L+1) p for which 
+
+P IL = Im 0 .
+
+In the remainder of the paper, we refer to the existence of an L-delay left inverse as the invertibility property. Note further that invertibility requires that p ≥ m, i.e., there are at least as many outputs as inputs. We now make the following assumptions on S.
+
+Assumption 1. The system S
+
+1) is minimal, i.e., (A, C ) is observable and (A, B ) is controllable, and 
+
+2) is invertible for some L0 ≤ n, c.f. Lemma 1. 
+
+Knowing that S is invertible, we invoke statement ii) from Lemma 1 with L = L0 and left-multiply (3) by P to obtain 
+
+uk = P y k:k+L − P OL xk. (4) Next, we substitute (4) back into (1) providing us with a dynamical system that has yk:k+L as inputs and uk as outputs. Using ˜A := ( A − BP OL), ˜B := BP , ˜C := −P OL
+
+and ˜D := P , we can write the inverse Sinv as 
+
+Sinv :
+
+(xk+1 = ˜A x k + ˜B y k:k+L,uk = ˜C x k + ˜D y k:k+L. (5) Note that S and Sinv describe the exact same dynamical system with the same states xk. The matrix P from statement ii) in Lemma 1 is not unique, rendering the matrix ˜A
+
+not unique. Before we can connect the poles of ˜A to the dynamics of S, we introduce the concept of invariant zeros .
+
+Definition 1 (Section 4.5.1 in [22]) . The invariant zeros of 
+
+S are described by the values of z ∈ C for which 
+
+rank 
+
+A − zI BC D
+
+
+
+< n + m. 
+
+Using this definition, we state the following lemma. 
+
+Lemma 2. All eigenvalues of ˜A can be placed freely by design of the matrix P , except for the invariant zeros of S.Proof. See the proof of Theorem 3.2 in [13]. We now return to the input estimation using the system inverse Sinv . The input uk can be computed directly from 
+
+yk:k+L in (4) if an exact state estimate xk is available, or if the matrix P can be designed such that −P OL = ˜C = 0 .If neither is the case, it is straightforward to see that 
+
+ˆuk − uk = ˜C(ˆ xk − xk), (6) 
+
+ˆxk+1 − xk+1 = ˜A(ˆ xk − xk), (7) where ˆuk and ˆxk follow Sinv , but with a different initial state. Therefore, we need to consider the dynamics of the inverse 
+
+Sinv in (5), governed by the poles in ˜A. This shows that for the model-based input reconstruction, the convergence for arbitrary initial conditions depends on the existence and location of invariant zeros of S. In particular, Theorems 2.5 and 2.8 in [13] show that 
+
+rank OL IL
+
+ = n + rank[ IL], for some L ≤ n, (8) if and only if there are no invariant zeros. Under this condition, a matrix P satisfying statement ii) in Lemma 1 and P OL = 0 exists. We summarize the results from model-based input reconstruction in the following proposition. Proposition 1. Suppose that Assumption 1 holds. Given only the output trajectory yk:k+L, the following statements hold for the convergence of model-based input reconstruction for an arbitrary initial condition ˆx0 ∈ Rn:
+
+i) ˆuk = uk for all k ≥ 0 if and only if S has no invariant zero, and 
+
+ii) ˆuk − uk → 0 as k → ∞ if and only if S has only stable invariant zeros. 
+
+Note that if the initial condition is exact, ˆx0 = x0, due to invertibility, the input estimate will satisfy ˆuk = uk for any set of invariant zeros. Additionally, note that we refer to stability in the Schur sense. 
+
+Remark 1. In the model-based case, the property that all invariant zeros lie inside the unit circle is also called strong detectability , while having no invariant zeros is referred to as strong observability [13]. B. Data-Driven System Inversion 
+
+We begin by introducing standard notations in the data-driven literature. For a signal u0: T +N +L ∈ Rm(T +N +L+1) ,we denote the block Hankel matrix Ht(u0: T +N +L) ∈
+
+Rmt ×(T +N +L+2 −t) of depth t by 
+
+Ht(u0: T +N +L) := 
+
+
+
+u0 u1 · · · uT +N +L+1 −t
+
+u1 u2 · · · uT +N +L+2 −t
+
+... ... . . . ...
+
+ut−1 ut · · · uT +N +L
+
+ .
+
+(9) Note that the subscript t refers to the number of block rows of the Hankel matrix. Then, u0: T +N +L is said to be persistently exciting of order t if the Hankel matrix Ht(u0: T +N +L) has full row rank [1]. To be able to state the system inversion problem for trajec-tories generated by the system S in (1), let ud := u0: T +N +L
+
+and yd := y0: T +N +L denote recorded data, and partition the Hankel matrices as follows 
+
+ Up
+
+U Lf
+
+
+
+:= HN +L+1 (ud) ∈ Rm(N +L+1) ×(T +1) , (10) 
+
+ Yp
+
+Y Lf
+
+
+
+:= HN +L+1 (yd) ∈ Rp(N +L+1) ×(T +1) , (11) where Up and U Lf consist of the first mN rows and the last 
+
+m(L + 1) rows of HN +L+1 (ud), respectively. Similarly, Yp
+
+and Y Lf consist of the first pN rows and the last p(L + 1) 
+
+block rows of HN +L+1 (yd), respectively. We define Uf as the first m rows of U Lf . We refer to these matrices as offline data , which we use to represent the system S. Note that 
+
+N ≥ n and L ≥ L0, where n is the state dimension and L0
+
+the internal delay of the trajectory generating system S.While n and L0 may not be known a priori, there exist methods to estimate them from data. For example, see Section 2.2 in [2] to compute n, and Algorithm 2 in [16] to compute L0.
+
+Assumption 2. The signal ud is persistently exciting of order n + N + L + 1 , i.e., the corresponding Hankel matrix 
+
+Hn+N +L+1 (ud) has full row rank. 
+
+We are now in place to state the data-based inversion problem for a window of one time step. 
+
+Lemma 3 (Theorem 2 in [19]) . Suppose that Assumptions 1 and 2 hold. Then, uk = ˆ uk = Uf g, where g ∈ RT +1 is a solution to 
+
+HLg =
+
+
+
+Up
+
+Yp
+
+Y Lf
+
+ g =
+
+
+
+uk−N :k−1
+
+yk−N :k−1
+
+yk:k+L
+
+
+
+← ini. cond. for u, 
+
+← ini. cond. for y, 
+
+← measured output. 
+
+(12) The key insight is that the invertibility of S results in Uf
+
+being linearly dependent on Up, Yp, and Y Lf . We can use this to write Uf = h⊤HL, where h ∈ R(N (m+p)+ p(L+1)) ×m. If we combine this with (12), we obtain 
+
+ˆuk = Uf g = h⊤HLg = h⊤
+
+
+
+uk−N :k−1
+
+yk−N :k−1
+
+yk:k+L
+
+ . (13) For an invertible system, the estimate satisfies ˆuk = uk
+
+whenever the true input uk−N :k−1 is available, either from direct knowledge at every step k or from exact initialization of a recursive algorithm. III. D ATA -D RIVEN INPUT RECONSTRUCTION WITH 
+
+UNKNOWN INITIAL CONDITION 
+
+If the initial condition uk−N :k−1 is not known exactly, (13) is no longer well defined. This is because, contrary to (12), for ˆuk−N :k−1̸ = uk−N :k−1, the fundamental lemma in [1] does not guarantee the existence of some g for which 
+
+HLg =
+
+
+
+Up
+
+Yp
+
+Y Lf
+
+ g =
+
+
+
+ˆuk−N :k−1
+
+yk−N :k−1
+
+yk:k+L
+
+ . (14) Since the computation of ˆuk depends recursively on previous, potentially incorrect, estimates ˆuk−N :k−1, a stability analysis of the estimation is necessary. In the SISO case, [20] investigated the convergence prop-erties of (13) when h⊤ = Uf (HL)† and ˆuk−N :k−1 unknown, using the Moore–Penrose inverse. Their result in Corollary 4 states that the unknown input estimate converges if and only if the underlying LTI system is minimum-phase. For the MIMO case, [21] develops a recursive algorithm using a gen-eralized inverse of HL via linear matrix inequalities (LMIs), yielding a stable estimator. However, existence conditions of such an estimator are not provided. The main contribution of this paper is the design of a novel unknown input estimator for the MIMO case, whose convergence can be characterized by invariant zeros of S.
+
+A. Data-Driven Input Estimator Design 
+
+Instead of computing the Moore–Penrose inverse h⊤ =
+
+Uf (HL)†, we split the problem of computing a candidate 
+
+g into two parts. By virtue of the fundamental lemma, we know that there must exist a g for which 
+
+Y g =
+
+ Yp
+
+Y Lf
+
+
+
+g =
+
+yk−N :k−1
+
+yk:k+L
+
+
+
+. (15) This is independent of the unknown inputs and has to hold strictly. In a second part, we propose to minimize the error in Upg = ˆ uk−N :k−1, which is the mismatch between the previous input estimates and the feasible linear combinations of the offline data. This procedure can be summarized in a least-squares problem over Hankel matrices, where the output consistency is enforced as a hard constraint 
+
+g⋆ ∈ arg min  
+
+> g
+
+∥Upg − ˆuk−N :k−1∥22
+
+subject to 
+
+ Yp
+
+Y Lf
+
+
+
+g =
+
+yk−N :k−1
+
+yk:k+L
+
+
+
+,
+
+ˆuk = Uf g⋆. (16) If the true input ˆuk−N :k−1 = uk−N :k−1 is used in (16), there exists some g that results in a zero residual, i.e., 
+
+∥Upg⋆ − ˆuk−N :k−1∥22 = 0 . This means that there exists a g
+
+satisfying (13). If we additionally assume that the system is invertible, by the proof in [19], ˆuk = Uf g⋆ is the unique and exact solution uk.To facilitate further analysis, we choose the following closed-form solution g⋆ to (16): 
+
+g⋆ = Y †
+
+yk−N :k−1
+
+yk:k+L
+
+
+
++ ( I − Y †Y )( Up(I − Y †Y )) †
+
+×
+
+
+
+ˆuk−N :k−1 − UpY †
+
+yk−N :k−1
+
+yk:k+L
+
+ 
+
+.
+
+The matrix Π⊥ 
+
+> Y
+
+:= ( I − Y †Y ) is the orthogonal projector onto ker( Y ). To complete the algorithm, we compute the input estimate ˆuk = Uf g⋆ as 
+
+ˆuk = Uf Π⊥ 
+
+> Y
+
+(UpΠ⊥ 
+
+> Y
+
+)† ˆuk−N :k−1
+
++ Uf (Y † − Π⊥ 
+
+> Y
+
+(UpΠ⊥ 
+
+> Y
+
+)†UpY †)yk−N :k+L (17) 
+
+= Mu ˆuk−N :k−1 + My yk−N :k+L, (18) using 
+
+Mu := Uf Π⊥ 
+
+> Y
+
+(UpΠ⊥ 
+
+> Y
+
+)†, (19) 
+
+My := Uf (Y † − Π⊥ 
+
+> Y
+
+(UpΠ⊥ 
+
+> Y
+
+)†UpY †). (20) 
+
+B. Data-driven Input Estimator Convergence Analysis 
+
+A necessary condition for the data-driven input estimator to converge for arbitrary initial conditions is that S is invertible, i.e., ˆuk = uk = Mu uk−N :k−1 + My yk−N :k+L.To be able to investigate the convergence of (18) towards the correct input, we hence compute the difference between the two iterations as 
+
+ek = ˆ uk − uk = Mu(ˆ uk−N :k−1 − uk−N :k−1)+ My (yk−N :k+L − yk−N :k+L)= Mu ek−N :k−1. (21) By introducing ϵk := ek−N :k−1 we can analyze the conver-gence as a linear system following ϵk+1 = R ϵ k for some R
+
+admitting the structure 
+
+R := 
+
+
+
+0 Im · · · 0 0
+
+... . . . ...
+
+0 0 · · · 0 Im
+
+Mu
+
+ .
+
+We are now ready to present the main result. 
+
+Theorem 1. Under Assumptions 1 and 2, R is Schur stable if and only if system S in (1) has only stable invariant zeros. 
+
+We present the proof of Theorem 1 at the end of this section. Theorem 1 shows that the estimation error evolves according to linear dynamics encoded in R. The invariant zeros of S in (1) appear as eigenvalues of R, while all remaining eigenvalues are stable. Thus, the estimator is asymptotically correct for every initialization if and only if 
+
+S has only stable invariant zeros, consistent with the stable pole-zero cancellations in the SISO case [20]. As mentioned in Remark 1, the property that S has only stable invariant zeros is, in the model-based case, referred to as strong detectability. A data-driven condition for strong detectability was already presented in Theorem 5.7 in [6], but it requires state, input, and output data. In contrast, ρ(R) can be computed only using input-output data, as visible from the definition of Mu in (19). By Theorem 1, the convergence property of the proposed algorithm in (18) is characterized as follows. 
+
+Corollary 1. Under Assumptions 1 and 2, the following statements hold for the data-driven unknown-input estima-tion algorithm in (18) , for an arbitrary initial estimate 
+
+ˆuk−N :k−1 ∈ RmN :
+
+(i) ˆuk = uk at the first iteration if S has no invariant zeros, and 
+
+(ii) ˆuk − uk → 0 as k → ∞ if and only if S has only stable invariant zeros. 
+
+Corollary 1 admits a direct interpretation: if the plant has no invariant zeros, the input is recovered after a single update; if it has only stable invariant zeros, the effect of an incorrect initialization decays asymptotically. This estab-lishes a direct connection between the data-driven algorithm in (18) and the model-based Proposition 1: the system-theoretic conditions guaranteeing convergence under inexact initialization are identical in both settings. We now continue with untangling R using (19), leading up to the proof of our main result and the corresponding corollary. For that, we find relationships between the data matrices Up, U f , Y p and Y Lf . Inspired by the derivations in [19], we can find the following connection using the state-space matrices of an inverse Sinv :
+
+Up
+
+Uf
+
+
+
+= ˜ON X + ˜IN W
+
+ Yp
+
+Y Lf
+
+
+
+, (22) where ˜ON and ˜IN are defined analogously to ON and 
+
+IN , using the system matrices of Sinv in (5). The matrix 
+
+W ∈ R(N +1) p(L+1) ×p(N +L+1) consists of N + 1 stacked, horizontally shifted, identity matrices of size p(L + 1) , each shifted by p columns. The matrix X ∈ Rn×(T +1) contains state trajectories and is not available. Recall that Y Π⊥ 
+
+> Y
+
+= Y − Y Y †Y = 0. Then, right-multiplying (22) by Π⊥ 
+
+> Y
+
+results in 
+
+Up
+
+Uf
+
+
+
+Π⊥ 
+
+> Y
+
+= ˜ON XΠ⊥ 
+
+> Y
+
+, with ˜ON =
+
+ ˜ON −1
+
+˜C ˜AN
+
+
+
+. (23) If we now let ˜X = XΠ⊥ 
+
+> Y
+
+, we get 
+
+UpΠ⊥ 
+
+> Y
+
+= ˜ON −1 ˜X, Uf Π⊥ 
+
+> Y
+
+= ˜C ˜AN ˜X. (24) We can use this to write Mu as 
+
+Mu = ˜C ˜AN ˜X( ˜ON −1 ˜X)†. (25) Then, the following lemma characterizes the image of ˜X.
+
+Lemma 4. Suppose that Assumptions 1 and 2 hold. Let 
+
+V0 := {ξ ∈ Rn : ∃¯u ∈ Rm(N +L+1) 
+
+s.t. ON +Lξ + IN +L ¯u = 0 }. (26) 
+
+Then, im( ˜X) = V0.Proof. Since im(Π ⊥ 
+
+> Y
+
+) = ker( Y ), we have im( ˜X) = {Xw :
+
+w ∈ ker( Y )}. Let ξ = Xw with w ∈ ker( Y ). Consider now the stacked outputs of the forward system 
+
+Y = ON +LX + IN +L
+
+ Up
+
+U Lf
+
+| {z } 
+
+> U
+
+. (27) Due to persistence of excitation, U has full row rank. We then find 
+
+Y w = 0 = ON +LXw + IN +LU w (28) which implies ξ ∈ V 0, and thus we have im( ˜X) ⊆ V 0.Conversely, let ξ ∈ V 0. Then there exists an input sequence 
+
+¯u ∈ Rm(N +L+1) such that ON +Lξ +IN +L ¯u = 0 . Therefore, 
+
+(¯ u, 0) is a (N + L + 1) -length input-output trajectory of the system (1). By the fundamental lemma, applied with horizon 
+
+N + L + 1 , there exists w ∈ RT +1 such that U w = ¯ u and 
+
+Y w = 0 . Hence, 
+
+0 = Y w = ON +LXw + IN +L ¯u = ON +L(Xw − ξ).
+
+Since (A, C ) is observable and N +L ≥ n−1, ON +L has full column rank (i.e., ker( ON +L) = {0}), and thus Xw = ξ.Due to Y w = 0 , we have w ∈ ker( Y ), and therefore 
+
+ξ = Xw ∈ X ker( Y ) = im( XΠ⊥ 
+
+> Y
+
+) = im( ˜X), (29) which proves im( ˜X) = V0.Under Assumptions 1 and 2, V0 is the largest weakly unobservable subspace (see Chapter 7 in [23] for details) of S in (1). Hence, for ξ ∈ V 0 = im( ˜X), there exists an input sequence such that the corresponding output is zero. 
+
+Lemma 5. Under Assumptions 1 and 2, im( ˜X) is ˜A-invariant, i.e., ˜A im( ˜X) ⊆ im( ˜X).Proof. Let ξ ∈ im( ˜X). From Lemma 4, im( ˜X) = V0, which is the largest weakly unobservable subspace, and hence there exists a zero-output trajectory (xk, u k)k≥0 such that yk ≡ 0
+
+of the system S from x0 = ξ. From Lemma 1, there exists a matrix P such that P IL = [ Im 0 ] . From (3), we have 
+
+OLxk + ILuk:k+L = 0 , and left-multiplying by P yields 
+
+uk = −P OLxk = ˜Cx k. Hence, 
+
+xk+1 = Ax k + Bu k = Ax k − BP OLxk = ˜Ax k.
+
+Since the trajectory is output-nulling, xk+1 ∈ V 0. In partic-ular, for k = 0 , we obtain ˜Aξ = x1 ∈ V 0 = im( ˜X), which implies ˜A im( ˜X) ⊆ im( ˜X).To continue investigating the properties of Mu, we state the following technical lemma on ˜ON −1.
+
+Lemma 6. Under Assumptions 1 and 2, the observability matrix ˜ON −1 of the inverse system Sinv in (5) satisfies 
+
+im( ˜X) ∩ ker( ˜ON −1) = {0}.Proof. We prove this by contradiction. Consider a nonzero vector v ∈ im( ˜X) ∩ ker( ˜ON −1). By Lemma 4, im( ˜X) = 
+
+V0, and hence there exists a zero-output trajectory of the system S starting from x0 = v. Since the inverse system 
+
+Sinv in (5) describes the same trajectory of S, and yk ≡ 0
+
+along the trajectory, we have xk+1 = ˜Ax k and uk = ˜Cx k.Therefore, xk = ˜Akv and uk = ˜C ˜Akv. By the premise that v ∈ ker( ˜ON −1), it follows that uk = ˜C ˜Akv = 0 for 
+
+k = 0 , . . . , N − 1.For these time steps, the original system S reduces to 
+
+xk+1 = Ax k and yk = Cx k, so that xk = Akv for k =0, . . . , N − 1. Since the output trajectory is zero, we obtain 
+
+CA kv = 0 for k = 0 , . . . , N − 1, implying v ∈ ker( ON −1).The assumptions that (A, C ) is observable and N ≥ n imply 
+
+ker( ON −1) = {0}, and thus v = 0 , which contradicts the premise. Therefore, im( ˜X) ∩ ker( ˜ON −1) = {0}.This allows us to proceed with the last technical lemma leading to the proof of Theorem 1. 
+
+Lemma 7. Under Assumptions 1 and 2, R ˜ON −1v =˜ON −1 ˜Av for v ∈ im( ˜X).Proof. Consider v ∈ im( ˜X). There exists β ∈ RT +1 such that v = ˜Xβ . Due to the design of R and ˜ON −1, we get 
+
+R ˜ON −1v =
+
+
+
+˜C ˜Av 
+
+˜C ˜A2v
+
+...
+
+˜C ˜AN ˜X( ˜ON −1 ˜X)† ˜ON −1v
+
+ . (30) The last block can be written as 
+
+˜C ˜AN ˜X( ˜ON −1 ˜X)† ˜ON −1v
+
+= ˜C ˜AN ˜X( ˜ON −1 ˜X)†( ˜ON −1 ˜X)β. 
+
+Let w := ˜X( ˜ON −1 ˜X)†( ˜ON −1 ˜X)β. Note that w ∈ im( ˜X).Then, 
+
+˜ON −1w = ˜ON −1 ˜X( ˜ON −1 ˜X)†( ˜ON −1 ˜X)β
+
+= ˜ON −1 ˜Xβ = ˜ON −1v. (31) By virtue of Lemma 6, we have im( ˜X) ∩ ker( ˜ON −1) = {0},providing us with w = v, and hence v =˜X( ˜ON −1 ˜X)† ˜ON −1v. Therefore, 
+
+R ˜ON −1v =
+
+
+
+˜C ˜Av 
+
+˜C ˜A2v
+
+...
+
+˜C ˜AN v
+
+ = ˜ON −1 ˜Av, (32) which concludes the proof. Now, we are in place to proof Theorem 1. 
+
+Proof of Theorem 1. Choose a basis matrix Xz ∈ Rn×r of 
+
+im( ˜X), where r := dim(im( ˜X)) . From Lemma 5, im( ˜X)
+
+is ˜A-invariant, and thus we can define Az ∈ Rr×r such that 
+
+˜AX z = Xz Az . (33) Define J := ˜ON −1Xz . By Lemma 6, ˜ON −1 is injective on 
+
+im( ˜X), and hence J has full column rank. According to Lemma 7, we have R ˜ON −1v = ˜ON −1 ˜Av for v ∈ im( ˜X).Applying this with v = Xz α yields 
+
+RJα = R ˜ON −1Xz α
+
+= ˜ON −1 ˜AX z α = ˜ON −1Xz Az α = JA z α
+
+for all α ∈ Rr , and therefore, 
+
+RJ = JA z , (34) which implies im( J) is R-invariant. Consider an orthogonal matrix Q := [ Q1 Q2 ] such that the columns of Q1 and Q2 form an orthonormal basis of 
+
+im( J) and im( J)⊥, respectively. Then, we have 
+
+Q⊤RQ =
+
+Q⊤ 
+
+> 1
+
+RQ 1 Q⊤ 
+
+> 1
+
+RQ 2
+
+Q⊤ 
+
+> 2
+
+RQ 1 Q⊤ 
+
+> 2
+
+RQ 2
+
+
+
+, (35) where im( RQ 1) ⊆ im( J), and thus Q⊤ 
+
+> 2
+
+RQ 1 = 0 . Conse-quently, it follows that 
+
+Q⊤RQ =
+
+Q⊤ 
+
+> 1
+
+RQ 1 Q⊤ 
+
+> 1
+
+RQ 2
+
+0 Q⊤ 
+
+> 2
+
+RQ 2
+
+
+
+, (36) which implies that R is similar to the matrix on the right-hand side of (36). Since the spectrum of a block upper triangular matrix is the union of the spectra of its diagonal blocks, 
+
+σ(R) = σ(Q⊤ 
+
+> 1
+
+RQ 1) ∪ σ(Q⊤ 
+
+> 2
+
+RQ 2). (37) We next address σ(Q⊤ 
+
+> 1
+
+RQ 1). Since J has full column rank, we may choose Q1 = J(J⊤J)−1/2. Then, 
+
+Q⊤ 
+
+> 1
+
+RQ 1 = ( J⊤J)−1/2J⊤RJ (J⊤J)−1/2(34) 
+
+= (J⊤J)−1/2J⊤JA z (J⊤J)−1/2
+
+= ( J⊤J)1/2Az (J⊤J)−1/2. (38) Note that (J⊤J)1/2 and (J⊤J)−1/2 are invertible because J
+
+has full column rank. Therefore, Q⊤ 
+
+> 1
+
+RQ 1 and Az are similar, and thus σ(Q⊤ 
+
+> 1
+
+RQ 1) = σ(Az ).Next, consider σ(Q⊤ 
+
+> 2
+
+RQ 2). By the definition of R, we can rewrite it as 
+
+R =
+
+
+
+0 I
+
+. . .
+
+I
+
+0 0 · · · 0
+
+| {z }
+
+> ˜S
+
++( eN ⊗ I)Mu,
+
+where eN is the N th canonical basis vector of RN and ⊗
+
+denotes the Kronecker product. Then, we have 
+
+Mu(I −JJ †)= ˜C ˜AN ˜X( ˜ON −1 ˜X)†
+
+I −( ˜ON −1 ˜X)( ˜ON −1 ˜X)†
+
+= 0 .
+
+Moreover, since the columns of Q2 lie in im( J)⊥, we have 
+
+JJ †Q2 = 0 , and hence (I − JJ †)Q2 = Q2. Consequently, we have 
+
+RQ 2 = R(I − JJ †)Q2 = ( ˜S + ( eN ⊗ I)Mu)( I − JJ †)Q2
+
+= ˜S(I − JJ †)Q2 = ˜SQ 2, (39) which implies that Q⊤ 
+
+> 2
+
+RQ 2 = Q⊤ 
+
+> 2
+
+˜SQ 2 and σ(Q⊤ 
+
+> 2
+
+RQ 2) = 
+
+σ(Q⊤ 
+
+> 2
+
+˜SQ 2). Together with the above result, the spectrum of 
+
+R can be characterized by 
+
+σ(R) = σ(Az ) ∪ σ(Q⊤ 
+
+> 2
+
+˜SQ 2). (40) From the definition of ˜S, ∥ ˜S∥2 = 1 . Thus, we have 
+
+ρ(Q⊤ 
+
+> 2
+
+˜SQ 2) ≤ ∥ Q⊤ 
+
+> 2
+
+˜SQ 2∥2 ≤ ∥ Q⊤ 
+
+> 2
+
+∥2∥S∥2∥Q2∥2 = 1 .
+
+To exclude eigenvalues on the unit circle, assume for contra-diction that (Q⊤ 
+
+> 2
+
+˜SQ 2)v = λv for some nonzero vector and 
+
+|λ| = 1 . Then, 
+
+∥v∥2 = ∥(Q⊤ 
+
+> 2
+
+˜SQ 2)v∥2(a)
+
+≤ ∥ ˜SQ 2v∥2 ≤ ∥ Q2v∥2 = ∥v∥2,
+
+so equality holds throughout. Equality (a) implies ˜SQ 2v ∈
+
+im( J)⊥. Therefore, 
+
+˜SQ 2v = Q2Q⊤ 
+
+> 2
+
+˜SQ 2v = λQ 2v, (41) which implies λ is an eigenvalue of ˜S. However, ˜S is nilpotent, so its only eigenvalue is 0, which is a contradic-tion. Thus, (Q⊤ 
+
+> 2
+
+˜SQ 2) has no eigenvalue on the unit circle. Therefore, ρ(Q⊤ 
+
+> 2
+
+˜SQ 2) < 1, and from (40), 
+
+ρ(R) < 1 ⇐⇒ ρ(Az ) < 1. (42) Finally, we show that σ(Az ) is identical to the set of invariant zeros of (1). By Lemma 4, im( ˜X) = V0, and hence Xz is a basis matrix of V0. For any ξ ∈ V0, if 
+
+¯u := u0: L is an output-nulling input sequence satisfying 
+
+OLξ + IL ¯u = 0 , then, since there exists a matrix P such that P IL = [ Im 0 ] from Lemma 1, its first element is uniquely given by u0 = −P OLξ = ˜Cξ . Therefore, the map 
+
+˜Aξ = ( A − BP OL)ξ = Aξ + B ˜Cξ = Aξ + Bu 0 is precisely the zero-dynamics map on V0.Let λ ∈ σ(Az ). Then, there exists α̸ = 0 such that Az α =
+
+λα . Set ξ := Xz α̸ = 0 and μ := ˜Cξ . Since ξ ∈ V 0, the input μ is the first input of a zero-output trajectory, and thus 
+
+Cξ + Dμ = 0 . Moreover, we obtain 
+
+(A − λI )ξ + Bμ = ( A + B ˜C − λI )ξ = ( ˜A − λI )ξ
+
+= ( ˜AX z − Xz Az )α (33) 
+
+= 0.
+
+Hence, A − λI BC D
+
+  ξμ
+
+
+
+=
+
+00
+
+
+
+. (43) Therefore, λ is an invariant zero of (1). Conversely, let λ be an invariant zero of (1). Then, by definition, there exists a nonzero pair (ξ, μ ) such that (43) holds. The trajectory defined by xk = λkξ and uk = λkμ
+
+yields yk ≡ 0, and therefore ξ ∈ V 0 = im( ˜X) = im( Xz ).Considering k = 0 , from (5), we have μ = ˜Cξ + ˜Dy 0: L =˜Cξ . By the definition of ˜C, thus, μ = −P OLξ. Also, ξ =
+
+Xz α for some α̸ = 0 . Consequently, it follows that 
+
+˜Aξ = ( A − BP OL)ξ = Aξ + Bμ = λξ. 
+
+Using (33) and ξ = Xz α, we obtain 
+
+Xz Az α = ˜AX z α = λX z α. 
+
+Since Xz has full column rank, left-multiplying by X†
+
+> z
+
+gives Az α = λα . Therefore, λ ∈ σ(Az ). Hence, the set of invariant zeros of (1) coincides with σ(Az ). Combining this with (42), we conclude that R is Schur stable if and only if (1) has only stable invariant zeros, which proves the claim. Lastly, we provide the proof of Corollary 1. 
+
+Proof of Corollary 1. For (i), having no invariant zeros im-plies the system S is strongly observable (c.f. Remark 1), and thus, by Theorem 7.16 in [23], V0 = {0}. Thus, Lemma 4 implies im( ˜X) = {0}, i.e., ˜X = 0 . Therefore, Mu = 0 ,which implies ek = Muek−N :k−1 = 0 for any ek−N :k−1.Statement (ii) follows directly from Theorem 1. IV. N UMERICAL EXAMPLES 
+
+We illustrate the theoretical results through numerical examples, applying (16) to invertible systems with various invariant zero configurations. First, we address numerical considerations for implementing (17). 
+
+A. Numerical Implementation 
+
+The algorithm in (17) requires computing Π⊥ 
+
+> Y
+
+= I −Y †Y ,which can be numerically inconvenient to form explicitly for large T . To compensate for this, we use a nullspace parameterisation that yields an equivalent problem of smaller dimension. For that, we compute the singular value decom-position (SVD) Y = UY ΣY V ⊤ 
+
+> Y
+
+and partition VY into range-space columns Vr and null-space columns Vnull . Using this, every solution to Y g = y can now also be written as 
+
+g = Y †y + Vnull α, α ∈ RT +1 −rY , (44) where Y †y is a particular solution and Vnull α always lies in ker( Y ). For the practical implementation, we truncate the singular values of Y at 10 −4. Substituting (44) into the objective of (16) gives an unconstrained problem 
+
+min  
+
+> α
+
+∥UpVnull α − (ˆ u − UpY †y)∥22, (45) which has dimension T + 1 − rY , where rY = rank[ Y ].We solve (45) via truncated SVD, with a threshold of 10 −3.Because the substitution is an exact reparameterisation of the feasible set, the recovered 
+
+g∗ = Y †y + Vnull U †
+
+> p, 0
+
+(ˆ u − UpY †y), Up, 0 = UpVnull , (46) is the minimizer of the original constrained problem. Finally, we obtain 
+
+Mu := Uf Vnull U †
+
+> p, 0
+
+, (47) 
+
+My := Uf (Y † − MuUpY †) (48) for the recursive estimation algorithm 1.
+
+B. Numerical examples 
+
+We consider three numerical examples, each with two inputs, two outputs, and four states, differing only in their set of invariant zeros. 
+
+Stable invariant zeros. Figure 1 shows results for a system with only stable invariant zeros at z = 0.7 and 
+
+z = 0.8. The estimate converges asymptotically to the true input. After estimation begins (marked by the vertical black line), the residual drops sharply over N steps as the algorithm flushes out the incompatible initial guess, then decays asymptotically to zero.    
+
+> Fig. 1. With N= 10 , estimation converges quickly for a system with only stable invariant zeros.
+
+No invariant zeros. Figure 2 presents a strongly observ-able system with no invariant zeros. The algorithm yields an exact input estimate from the first step. The residual con-verges to zero in finite time, indicating that the g generated in early iterations is incompatible with the fundamental lemma, yet this does not affect the input estimate. 
+
+Unstable invariant zeros. Figure 3 shows a system with an unstable invariant zero at z = 1 .25 . The input estimate diverges while the residual converges to zero, confirming that the algorithm finds a g satisfying the fundamental lemma. Yet, this g does not provide a unique input estimate, a consequence of the unstable invariant zero.  
+
+> 1The code can be accessed at https://github.com/ennobr/DD_ INV_MIMO .
+
+Fig. 2. With N = 10 , estimation is exact from the first step for a strongly observable system. 
+
+Fig. 3. With N = 10 , estimation diverges despite the algorithm finding a suitable g, due to an unstable invariant zero. 
+
+V. C ONCLUSIONS AND FUTURE WORK 
+
+In this paper, we established a rigorous connection be-tween model-based and data-driven input reconstruction for MIMO systems, without requiring knowledge of the initial input trajectory. The central result is that our proposed data-driven estimator inherits the same convergence conditions as its model-based counterpart: the estimation error decays to zero if and only if all invariant zeros are stable, while the ab-sence of invariant zeros guarantees exact recovery in a single step. As a byproduct, we obtained a necessary and sufficient condition for all invariant zeros being stable, verifiable purely from input-output data. To ensure numerical tractability, we proposed an SVD-based nullspace reparametrization and demonstrated our theoretical findings across three distinct invariant-zero configurations through numerical examples. Future research directions include extensions to process and measurement noise. USAGE OF GENERATIVE AI During the preparation of this work, the authors used Claude AI to reason about derivations, improve the syntax and grammar in the manuscript, and support code generation for the numerical examples. After using this tool, the authors reviewed and edited the content and take full responsibility for the publication’s content. REFERENCES [1] J. C. Willems, P. Rapisarda, I. Markovsky, and B. L. De Moor, “A note on persistency of excitation,” Systems & Control Letters , vol. 54, no. 4, pp. 325–329, Apr. 2005. [2] P. Van Overschee and B. De Moor, Subspace Identification for Linear Systems . Boston, MA: Springer US, 1996. [3] I. Markovsky and P. Rapisarda, “Data-driven simulation and control,” 
+
+International Journal of Control , vol. 81, no. 12, pp. 1946–1959, Dec. 2008. [4] C. De Persis and P. Tesi, “Formulas for Data-Driven Control: Stabi-lization, Optimality, and Robustness,” IEEE Transactions on Automatic Control , vol. 65, no. 3, pp. 909–924, Mar. 2020. [5] J. Berberich, A. Koch, C. W. Scherer, and F. Allgower, “Robust data-driven state-feedback design,” in 2020 American Control Conference (ACC) . Denver, CO, USA: IEEE, Jul. 2020, pp. 1532–1538. [6] H. J. van Waarde, M. K. Camlibel, and H. L. Trentelman, Data-Based Linear Systems and Control Theory . Kindle Direct Publishing, 2025. [7] H. J. Van Waarde, J. Eising, M. K. Camlibel, and H. L. Trentelman, “The Informativity Approach: To Data-Driven Analysis and Control,” 
+
+IEEE Control Systems , vol. 43, no. 6, pp. 32–66, Dec. 2023. [8] A. Willsky, “On the invertibility of linear systems,” IEEE Transactions on Automatic Control , vol. 19, no. 3, pp. 272–274, Jun. 1974. [9] P. Moylan, “Stable inversion of linear systems,” IEEE Transactions on Automatic Control , vol. 22, no. 1, pp. 74–78, Feb. 1977. [10] F. J. Bejarano, L. Fridman, and A. Poznyak, “Unknown Input and State Estimation for Unobservable Systems,” SIAM Journal on Control and Optimization , vol. 48, no. 2, pp. 1155–1178, Jan. 2009. [11] M. D. Loreto and D. Eberard, “Strong Left Inversion of Linear Systems and Input Reconstruction,” IEEE Transactions on Automatic Control ,vol. 68, no. 6, pp. 3612–3617, Jun. 2023. [12] S. Gillijns, “Kalman Filtering Techniques for System Inversion and Data Assimilation,” PhD Thesis, Katholieke Universiteit Leuven, 2007. [13] S. Sundaram, “Fault-Tolerant and Secure Control Systems,” 2012, Lecture Notes. [14] G. Disar` o and M. E. Valcher, “Delayed unknown-input observers for LTI systems: A data-driven approach,” in 2024 IEEE 63rd Conference on Decision and Control (CDC) . Milan, Italy: IEEE, Dec. 2024, pp. 6813–6818. [15] ——, “On the Equivalence of Model-Based and Data-Driven Ap-proaches to the Design of Unknown-Input Observers,” IEEE Trans-actions on Automatic Control , vol. 70, no. 3, pp. 2074–2081, Mar. 2025. [16] V. K. Mishra, S. A. Hiremath, and N. Bajcinca, “Data-driven si-multaneous input and state estimation,” in 2025 33rd Mediterranean Conference on Control and Automation (MED) . Tangier, Morocco: IEEE, Jun. 2025, pp. 334–339. [17] M. S. Turan and G. Ferrari-Trecate, “Data-Driven Unknown-Input Observers and State Estimation,” IEEE Control Systems Letters , vol. 6, pp. 1424–1429, 2022. [18] V. K. Mishra, A. Iannelli, and N. Bajcinca, “A Data-Driven Approach to System Invertibility and Input Reconstruction,” in 2023 62nd IEEE Conference on Decision and Control (CDC) . Singapore, Singapore: IEEE, Dec. 2023, pp. 671–676. [19] Y. Eun, J. Lee, and H. Shim, “Data-Driven Inverse of Linear Systems and Application to Disturbance Observers,” in 2023 American Control Conference (ACC) . San Diego, CA, USA: IEEE, May 2023, pp. 2806–2811. [20] J. Lee, N. H. Jo, H. Shim, F. D¨ orfler, and J. Kim, “Input-Output Data-Driven Representation: Non-Minimality and Stability,” Dec. 2025, arXiv:2512.01238 [eess]. [Online]. Available: http: //arxiv.org/abs/2512.01238 [21] J. Shi, Y. Lian, and C. N. Jones, “Data-Driven Input Reconstruction and Experimental Validation,” IEEE Control Systems Letters , vol. 6, pp. 3259–3264, 2022. [22] S. Skogestad and I. Postlethwaite, Multivariable feedback control: analysis and design , 2nd ed. Chichester: Wiley, 2010. [23] H. L. Trentelman, A. A. Stoorvogel, and M. Hautus, Control Theory for Linear Systems , ser. Communications and Control Engineering. London: Springer London, 2001.

@@ -6,38 +6,41 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-09
-- 运行时间：2026-04-09 21:42:44 UTC
+- 最新运行日期：2026-04-10
+- 运行时间：2026-04-10 20:14:41 UTC
 - 运行状态：成功
-- 本次总论文数：5
+- 本次总论文数：6
 - 精读区：0
-- 速读区：5
+- 速读区：6
 
 ### 今日简报（AI）
-今日速览 5 篇前沿硬件论文，聚焦自旋电子学、量子传感及新型相变材料的电路应用。
-重点关注栅极电压对磁隧道结翻转场的调控，以及利用 VO2 相变实现放大器自动增益控制的创新方案。
-建议对低功耗存储和高灵敏传感感兴趣的读者，深入了解物理层特性如何赋能硬件性能优化。
-- 详情：[/202604/09/README](/202604/09/README)
+今日聚焦 MIMO 系统数据驱动重构与 SDR 硬件自校准，共收录 6 篇前沿速读。
+重点关注具备收敛保证的 MIMO 未知输入重构技术，以及提升波束成形精度的自校准 SDR 方案。
+建议关注信号处理算法的读者优先研读数据驱动重构论文，以获取更稳健的系统建模思路。
+- 详情：[/202604/10/README](/202604/10/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Impact of gate voltage on switching field of perpendicular magnetic tunnel junctions with a synthetic antiferromagnetic free layer](/202604/09/2604.00839v1-impact-of-gate-voltage-on-switching-field-of-perpendicular-magnetic-tunnel-junctions-with-a-synthetic-antiferromagnetic-free-layer)  
+1. [Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees](/202604/10/2604.08018v1-data-driven-unknown-input-reconstruction-for-mimo-systems-with-convergence-guarantees)  
    标签：评分：7.0/10、query:tmr
-   evidence：磁隧道结与隧道磁阻 (TMR) 特性
-2. [Optimization and vectorization of a Mz-type optically-pumped Rubidium magnetometer](/202604/09/2604.02884v1-optimization-and-vectorization-of-a-mz-type-optically-pumped-rubidium-magnetometer)  
+   evidence：MIMO系统的驱动未知输入重建
+2. [A Self-Calibrating SDR for High Fidelity Beam- and Null-forming Arrays](/202604/10/2604.02498v1-a-self-calibrating-sdr-for-high-fidelity-beam--and-null-forming-arrays)  
    标签：评分：6.0/10、query:tmr
-   evidence：磁力计优化与灵敏度表征
-3. [Harnessing the VO2 Phase Transition for Automatic Gain Control in Transimpedance Amplifiers](/202604/09/2604.04594v1-harnessing-the-vo2-phase-transition-for-automatic-gain-control-in-transimpedance-amplifiers)  
+   evidence：阵列中的干扰抑制和零点形成
+3. [Regularized Approximate Message Passing for Overloaded Discrete Linear Inversion](/202604/10/2604.03717v1-regularized-approximate-message-passing-for-overloaded-discrete-linear-inversion)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于转换传感器输入电流的跨阻放大器
-4. [Sparse Gain Radio Map Reconstruction With Geometry Priors and Uncertainty-Guided Measurement Selection](/202604/09/2604.05788v1-sparse-gain-radio-map-reconstruction-with-geometry-priors-and-uncertainty-guided-measurement-selection)  
+   evidence：超载系统中信号检测的低复杂度算法
+4. [Joint Shape-Position Optimization Enhanced 2D DOA Estimation in Movable Antenna Systems](/202604/10/2604.04132v1-joint-shape-position-optimization-enhanced-2d-doa-estimation-in-movable-antenna-systems)  
    标签：评分：6.0/10、query:tmr
-   evidence：基于几何先验的稀疏测量重建
-5. [FOSSA: First-Order Optimality-Based Sensor Selection for PINN Inverse Problems, with Application to Electrocardiographic Imaging](/202604/09/2604.06534v1-fossa-first-order-optimality-based-sensor-selection-for-pinn-inverse-problems-with-application-to-electrocardiographic-imaging)  
+   evidence：天线阵列的形状-位置联合优化
+5. [Uncertainty Estimation for Deep Reconstruction in Actuatic Disaster Scenarios with Autonomous Vehicles](/202604/10/2604.06387v1-uncertainty-estimation-for-deep-reconstruction-in-actuatic-disaster-scenarios-with-autonomous-vehicles)  
    标签：评分：6.0/10、query:tmr
-   evidence：反演问题和重建中的传感器选择
+   evidence：基于稀疏传感器观测的标量场重建与不确定性估计
+6. [Design and Implementation of a Multi-Sensor DAQ System for Comparative Photovoltaic Performance Analysis](/202604/10/2604.06670v1-design-and-implementation-of-a-multi-sensor-daq-system-for-comparative-photovoltaic-performance-analysis)  
+   标签：评分：6.0/10、query:tmr
+   evidence：集成高精度电流传感器的多传感器数据采集系统
 
 
 <div class="dpr-home-promo-card">

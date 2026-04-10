@@ -1,0 +1,249 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-10T20:14:02.758063+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 6,
+    "quick_skim_target": 11,
+    "quick_selected": 6
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.08018v1",
+      "title": "Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees",
+      "abstract": "In this paper, we consider data-driven reconstruction of unknown inputs to linear time-invariant (LTI) multiple-input multiple-output (MIMO) systems. We propose a novel autoregressive estimator based on a constrained least-squares formulation over Hankel matrices, splitting the problem into an output-consistency constraint and an input-history-matching objective. Our method relies on previously recorded input-output data to represent the system, but does not require knowledge of the true input to initialize the algorithm. We show that the proposed estimator is strictly stable if and only if all the invariant zeros of the trajectory-generating system lie strictly inside the unit circle, which can be verified purely from input and output data. This mirrors existing results from model-based input reconstruction and closes the gap between model-based and data-driven settings. Lastly, we provide numerical examples to demonstrate the theoretical results.",
+      "authors": [
+        "Enno Breukelman",
+        "Takumi Shinohara",
+        "Joowon Lee",
+        "Henrik Sandberg"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-09T09:17:35+00:00",
+      "link": "https://arxiv.org/pdf/2604.08018v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Data-driven unknown input reconstruction for MIMO systems",
+      "llm_evidence_cn": "MIMO系统的驱动未知输入重建",
+      "llm_evidence": "MIMO系统的驱动未知输入重建",
+      "canonical_evidence": "MIMO系统的驱动未知输入重建",
+      "llm_tldr_en": "Proposes a data-driven method for input reconstruction in MIMO systems, highly applicable to current reconstruction.",
+      "llm_tldr_cn": "提出一种MIMO系统输入重建的数据驱动方法，高度适用于电流重建算法。",
+      "llm_tldr": "提出一种MIMO系统输入重建的数据驱动方法，高度适用于电流重建算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.02498v1",
+      "title": "A Self-Calibrating SDR for High Fidelity Beam- and Null-forming Arrays",
+      "abstract": "Null forming is increasingly essential in modern wireless systems for spectrum-sharing, anti-jamming, and covert communications in contested and congested environments. Achieving deep nulls, however, is far more demanding than conventional beam steering: nulls are intrinsically narrow, and even small phase, timing, or gain mismatches across RF chains can significantly degrade suppression. This work develops and validates a self-calibrating SDR architecture tailored for high-fidelity null forming using a compact reference transmitter directionally coupled to the antenna feeds. We demonstrate the effectiveness of the approach through simulation and experimental measurements on an SDR platform operating from 3.0 to 3.5GHz, a band of growing importance for Department of Defense spectrum-sharing initiatives.",
+      "authors": [
+        "Yongjun Kim",
+        "Aditya Dhananjay",
+        "Sundeep Rangan",
+        "Sachin Shetty",
+        "C. Nicolas Barati",
+        "Michael Zappe",
+        "Kimberly Gold",
+        "Junil Choi"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-02T19:57:53+00:00",
+      "link": "https://arxiv.org/pdf/2604.02498v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interference suppression and null-forming in arrays",
+      "llm_evidence_cn": "阵列中的干扰抑制和零点形成",
+      "llm_evidence": "阵列中的干扰抑制和零点形成",
+      "canonical_evidence": "阵列中的干扰抑制和零点形成",
+      "llm_tldr_en": "Self-calibrating architecture for high-fidelity null-forming to suppress interference in arrays.",
+      "llm_tldr_cn": "一种用于高保真零点形成的自校准架构，用于抑制阵列干扰。",
+      "llm_tldr": "一种用于高保真零点形成的自校准架构，用于抑制阵列干扰。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.03717v1",
+      "title": "Regularized Approximate Message Passing for Overloaded Discrete Linear Inversion",
+      "abstract": "We propose regularized approximate message passing (RAMP), a low-complexity algorithm for discrete signal detection in overloaded multiple-input multiple-output (MIMO) systems where the number of transmit antennas exceeds the number of receive antennas. While the state-of-the-art (SotA) iterative discrete least squares (IDLS) framework achieves near-optimal discrete-aware performance, its iterative matrix inversions impose a prohibitive $\\mathcal{O}(M^3)$ complexity. RAMP resolves this by deriving an adaptive, state-dependent scalar denoiser that enforces arbitrary discrete constellation constraints within the approximate message passing (AMP) framework, reducing per-iteration complexity to $\\mathcal{O}(NM)$. A robust variant is further proposed by incorporating an $\\ell_2$-norm penalty, analogous to a linear minimum mean squared error (LMMSE) estimator, to enhance noise resilience. Simulation results under uncorrelated Rayleigh fading demonstrate that both proposed algorithms closely track their exact IDLS counterparts while avoiding the catastrophic failure of standard AMP in the overloaded regime, achieving steep bit error rate (BER) waterfall curves at a fraction of the computational cost.",
+      "authors": [
+        "Shreesal Shrestha",
+        "Getuar Rexhepi",
+        "Kuranage Roche Rayan Ranasinghe",
+        "Hyeon Seok Rou",
+        "Giuseppe Thadeu Freitas de Abreu"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-04T12:51:23+00:00",
+      "link": "https://arxiv.org/pdf/2604.03717v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "low-complexity algorithm for signal detection in overloaded systems",
+      "llm_evidence_cn": "超载系统中信号检测的低复杂度算法",
+      "llm_evidence": "超载系统中信号检测的低复杂度算法",
+      "canonical_evidence": "超载系统中信号检测的低复杂度算法",
+      "llm_tldr_en": "Proposes a message passing algorithm for linear inversion, useful for current reconstruction algorithms.",
+      "llm_tldr_cn": "提出一种用于线性反演的消息传递算法，可用于电流重建算法。",
+      "llm_tldr": "提出一种用于线性反演的消息传递算法，可用于电流重建算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.04132v1",
+      "title": "Joint Shape-Position Optimization Enhanced 2D DOA Estimation in Movable Antenna Systems",
+      "abstract": "Movable Antenna (MA) technology is emerging as a promising advancement with the potential to significantly enhance the performance of future wireless communication and sensing systems. In this paper, we address two-dimensional (2D) direction of arrival (DOA) estimation via joint shape-position optimization. Specifically, we formulate an optimization problem aimed at minimizing the Cramér-Rao Bound (CRB) based on a 2D DOA estimation model for MA systems. To tackle the highly non-convex nature of this CRB minimization, we investigate the spatial utilization of the movable region (MR) under minimum antenna spacing constraints. By demonstrating that an equilateral triangle yields the minimum overlap area, we strategically design an equilateral triangular MR. This specific geometric configuration enables the exploitation of structural symmetry to simplify the geometric constraints, which effectively reduces the complexity of solving the optimization problem. Subsequently, we derive the optimal MA positions by selecting the candidate locations farthest from the centroid of MR. The results demonstrate that the proposed joint shape-position optimization substantially enhances 2D DOA estimation performance.",
+      "authors": [
+        "Chengzhi Ye",
+        "Ruoyu Zhang",
+        "Lei Yao",
+        "Wen Wu"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-05T14:28:34+00:00",
+      "link": "https://arxiv.org/pdf/2604.04132v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "joint shape-position optimization for antenna arrays",
+      "llm_evidence_cn": "天线阵列的形状-位置联合优化",
+      "llm_evidence": "天线阵列的形状-位置联合优化",
+      "canonical_evidence": "天线阵列的形状-位置联合优化",
+      "llm_tldr_en": "Optimization of array geometry to improve sensing performance, applicable to sensor array design.",
+      "llm_tldr_cn": "优化阵列几何结构以提高传感性能，适用于传感器阵列设计。",
+      "llm_tldr": "优化阵列几何结构以提高传感性能，适用于传感器阵列设计。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.06387v1",
+      "title": "Uncertainty Estimation for Deep Reconstruction in Actuatic Disaster Scenarios with Autonomous Vehicles",
+      "abstract": "Accurate reconstruction of environmental scalar fields from sparse onboard observations is essential for autonomous vehicles engaged in aquatic monitoring. Beyond point estimates, principled uncertainty quantification is critical for active sensing strategies such as Informative Path Planning, where epistemic uncertainty drives data collection decisions. This paper compares Gaussian Processes, Monte Carlo Dropout, Deep Ensembles, and Evidential Deep Learning for simultaneous scalar field reconstruction and uncertainty decomposition under three perceptual models representative of real sensor modalities. Results show that Evidential Deep Learning achieves the best reconstruction accuracy and uncertainty calibration across all sensor configurations at the lowest inference cost, while Gaussian Processes are fundamentally limited by their stationary kernel assumption and become intractable as observation density grows. These findings support Evidential Deep Learning as the preferred method for uncertainty-aware field reconstruction in real-time autonomous vehicle deployments.",
+      "authors": [
+        "Samuel Yanes Luis",
+        "Alejandro Casado Pérez",
+        "Alejandro Mendoza Barrionuevo",
+        "Dame Seck Diop",
+        "Sergio Toral Marín",
+        "Daniel Gutiérrez Reina"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO",
+        "cs.AI"
+      ],
+      "published": "2026-04-07T19:17:44+00:00",
+      "link": "https://arxiv.org/pdf/2604.06387v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstruction of scalar fields from sparse sensor observations and uncertainty estimation",
+      "llm_evidence_cn": "基于稀疏传感器观测的标量场重建与不确定性估计",
+      "llm_evidence": "基于稀疏传感器观测的标量场重建与不确定性估计",
+      "canonical_evidence": "基于稀疏传感器观测的标量场重建与不确定性估计",
+      "llm_tldr_en": "Evaluates deep learning methods for scalar field reconstruction from sparse sensor data with uncertainty quantification.",
+      "llm_tldr_cn": "评估了从稀疏传感器数据进行标量场重建的深度学习方法及不确定性量化。",
+      "llm_tldr": "评估了从稀疏传感器数据进行标量场重建的深度学习方法及不确定性量化。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.06670v1",
+      "title": "Design and Implementation of a Multi-Sensor DAQ System for Comparative Photovoltaic Performance Analysis",
+      "abstract": "The rigorous analysis of specialized physical processes often demands custom data acquisition architectures that offer flexibility and precision beyond the capabilities of general-purpose commercial loggers. This paper presents the design and implementation of a robust data acquisition system (DAQ) for a comparative analysis of the performance of two photovoltaic panels with two different cooling systems. The system integrates a custom PCB design for 20 thermistors, dual high-precision INA228 current/voltage sensors, environmental monitoring equipment, and a Raspberry Pi 4-based acquisition platform. The software architecture implements autonomous operation with enhanced fault recovery, dual storage redundancy (local CSV and InfluxDB), cloud synchronization via Google Drive, and real-time visualization through Grafana dashboards. Field deployment demonstrated system reliability, including automatic recovery from power interruptions, a 1-minute sampling rate, remote monitoring capabilities, and continuous operation during a 5 AM to 6 PM daily window. The modular hardware and software architecture enables simultaneous monitoring of two photovoltaic panels for research on direct performance comparison under identical environmental conditions.",
+      "authors": [
+        "Maickol Fernandez-Obando",
+        "Luis G. Leon-Vega",
+        "Leonardo Cardinale-Villalobos",
+        "Christopher Vega-Sanchez",
+        "Luis D. Murillo-Soto"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY",
+        "eess.SP"
+      ],
+      "published": "2026-04-08T04:44:26+00:00",
+      "link": "https://arxiv.org/pdf/2604.06670v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "multi-sensor DAQ system with high-precision current sensors",
+      "llm_evidence_cn": "集成高精度电流传感器的多传感器数据采集系统",
+      "llm_evidence": "集成高精度电流传感器的多传感器数据采集系统",
+      "canonical_evidence": "集成高精度电流传感器的多传感器数据采集系统",
+      "llm_tldr_en": "Describes a multi-sensor DAQ system integrating current sensors for performance analysis.",
+      "llm_tldr_cn": "描述了一种集成电流传感器的多传感器数据采集系统，用于性能分析。",
+      "llm_tldr": "描述了一种集成电流传感器的多传感器数据采集系统，用于性能分析。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "multi-sensor array for current measurement",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

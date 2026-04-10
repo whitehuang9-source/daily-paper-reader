@@ -1,0 +1,93 @@
+{
+  "label": "2026-04-10",
+  "date": "2026-04-10",
+  "generated_at": "2026-04-10T20:14:54",
+  "count": 6,
+  "papers": [
+    {
+      "paper_id": "202604/10/2604.08018v1-data-driven-unknown-input-reconstruction-for-mimo-systems-with-convergence-guarantees",
+      "section": "quick",
+      "title_en": "Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees",
+      "authors": "Enno Breukelman, Takumi Shinohara, Joowon Lee, Henrik Sandberg",
+      "date": "2026-04-09",
+      "pdf": "https://arxiv.org/pdf/2604.08018v1",
+      "score": "7.0",
+      "evidence": "MIMO系统的驱动未知输入重建",
+      "tldr": "本文研究线性时不变（LTI）多输入多输出（MIMO）系统的未知输入数据驱动重构问题。提出一种基于Hankel矩阵约束最小二乘法的自回归估计器，将问题分解为输出一致性约束和输入历史匹配目标。该方法仅依赖历史输入输出数据，无需真实输入初始化。研究证明了估计器的稳定性与系统不变零点在单位圆内的分布直接相关，填补了模型驱动与数据驱动方法间的理论空白。",
+      "tags": "query:tmr",
+      "abstract_en": "In this paper, we consider data-driven reconstruction of unknown inputs to linear time-invariant (LTI) multiple-input multiple-output (MIMO) systems. We propose a novel autoregressive estimator based on a constrained least-squares formulation over Hankel matrices, splitting the problem into an output-consistency constraint and an input-history-matching objective. Our method relies on previously recorded input-output data to represent the system, but does not require knowledge of the true input to initialize the algorithm. We show that the proposed estimator is strictly stable if and only if all the invariant zeros of the trajectory-generating system lie strictly inside the unit circle, which can be verified purely from input and output data. This mirrors existing results from model-based input reconstruction and closes the gap between model-based and data-driven settings. Lastly, we provide numerical examples to demonstrate the theoretical results.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/10/2604.02498v1-a-self-calibrating-sdr-for-high-fidelity-beam--and-null-forming-arrays",
+      "section": "quick",
+      "title_en": "A Self-Calibrating SDR for High Fidelity Beam- and Null-forming Arrays",
+      "authors": "Yongjun Kim, Aditya Dhananjay, Sundeep Rangan, Sachin Shetty, C. Nicolas Barati, Michael Zappe, Kimberly Gold, Junil Choi",
+      "date": "2026-04-02",
+      "pdf": "https://arxiv.org/pdf/2604.02498v1",
+      "score": "6.0",
+      "evidence": "阵列中的干扰抑制和零点形成",
+      "tldr": "本研究针对现代无线通信中零陷成形对相位和增益一致性的极高要求，提出了一种自校准软件定义无线电（SDR）架构。该架构通过在天线馈源处引入定向耦合的紧凑型参考发射机，实现了对射频链失配的精确校准。实验证明，该方案在3.0-3.5GHz频段能有效提升零陷深度，为频谱共享和抗干扰通信提供了关键技术支持。",
+      "tags": "query:tmr",
+      "abstract_en": "Null forming is increasingly essential in modern wireless systems for spectrum-sharing, anti-jamming, and covert communications in contested and congested environments. Achieving deep nulls, however, is far more demanding than conventional beam steering: nulls are intrinsically narrow, and even small phase, timing, or gain mismatches across RF chains can significantly degrade suppression. This work develops and validates a self-calibrating SDR architecture tailored for high-fidelity null forming using a compact reference transmitter directionally coupled to the antenna feeds. We demonstrate the effectiveness of the approach through simulation and experimental measurements on an SDR platform operating from 3.0 to 3.5GHz, a band of growing importance for Department of Defense spectrum-sharing initiatives.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/10/2604.03717v1-regularized-approximate-message-passing-for-overloaded-discrete-linear-inversion",
+      "section": "quick",
+      "title_en": "Regularized Approximate Message Passing for Overloaded Discrete Linear Inversion",
+      "authors": "Shreesal Shrestha, Getuar Rexhepi, Kuranage Roche Rayan Ranasinghe, Hyeon Seok Rou, Giuseppe Thadeu Freitas de Abreu",
+      "date": "2026-04-04",
+      "pdf": "https://arxiv.org/pdf/2604.03717v1",
+      "score": "6.0",
+      "evidence": "超载系统中信号检测的低复杂度算法",
+      "tldr": "针对发射天线多于接收天线的超载MIMO系统，本文提出了一种正则化近似消息传递（RAMP）算法。该算法通过在AMP框架中引入自适应标量去噪器来强制执行离散星座约束，将计算复杂度从传统IDLS算法的O(M^3)降低至O(NM)。此外，通过引入l2范数惩罚项增强了抗噪性，在保持近优性能的同时显著降低了计算开销，解决了标准AMP在超载场景下失效的问题。",
+      "tags": "query:tmr",
+      "abstract_en": "We propose regularized approximate message passing (RAMP), a low-complexity algorithm for discrete signal detection in overloaded multiple-input multiple-output (MIMO) systems where the number of transmit antennas exceeds the number of receive antennas. While the state-of-the-art (SotA) iterative discrete least squares (IDLS) framework achieves near-optimal discrete-aware performance, its iterative matrix inversions impose a prohibitive $\\mathcal{O}(M^3)$ complexity. RAMP resolves this by deriving an adaptive, state-dependent scalar denoiser that enforces arbitrary discrete constellation constraints within the approximate message passing (AMP) framework, reducing per-iteration complexity to $\\mathcal{O}(NM)$. A robust variant is further proposed by incorporating an $\\ell_2$-norm penalty, analogous to a linear minimum mean squared error (LMMSE) estimator, to enhance noise resilience. Simulation results under uncorrelated Rayleigh fading demonstrate that both proposed algorithms closely track their exact IDLS counterparts while avoiding the catastrophic failure of standard AMP in the overloaded regime, achieving steep bit error rate (BER) waterfall curves at a fraction of the computational cost.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/10/2604.04132v1-joint-shape-position-optimization-enhanced-2d-doa-estimation-in-movable-antenna-systems",
+      "section": "quick",
+      "title_en": "Joint Shape-Position Optimization Enhanced 2D DOA Estimation in Movable Antenna Systems",
+      "authors": "Chengzhi Ye, Ruoyu Zhang, Lei Yao, Wen Wu",
+      "date": "2026-04-05",
+      "pdf": "https://arxiv.org/pdf/2604.04132v1",
+      "score": "6.0",
+      "evidence": "天线阵列的形状-位置联合优化",
+      "tldr": "本文研究了可移动天线（MA）系统中的二维波达方向（2D DOA）估计问题。针对克拉美罗界（CRB）最小化这一非凸优化难题，提出了一种联合形状与位置优化的策略。通过设计等边三角形的可移动区域（MR）以最大化空间利用率并利用对称性简化约束，最终确定了远离质心的最优天线位置。该方法显著提升了2D DOA的估计精度，为未来无线感知系统提供了新思路。",
+      "tags": "query:tmr",
+      "abstract_en": "Movable Antenna (MA) technology is emerging as a promising advancement with the potential to significantly enhance the performance of future wireless communication and sensing systems. In this paper, we address two-dimensional (2D) direction of arrival (DOA) estimation via joint shape-position optimization. Specifically, we formulate an optimization problem aimed at minimizing the Cramér-Rao Bound (CRB) based on a 2D DOA estimation model for MA systems. To tackle the highly non-convex nature of this CRB minimization, we investigate the spatial utilization of the movable region (MR) under minimum antenna spacing constraints. By demonstrating that an equilateral triangle yields the minimum overlap area, we strategically design an equilateral triangular MR. This specific geometric configuration enables the exploitation of structural symmetry to simplify the geometric constraints, which effectively reduces the complexity of solving the optimization problem. Subsequently, we derive the optimal MA positions by selecting the candidate locations farthest from the centroid of MR. The results demonstrate that the proposed joint shape-position optimization substantially enhances 2D DOA estimation performance.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/10/2604.06387v1-uncertainty-estimation-for-deep-reconstruction-in-actuatic-disaster-scenarios-with-autonomous-vehicles",
+      "section": "quick",
+      "title_en": "Uncertainty Estimation for Deep Reconstruction in Actuatic Disaster Scenarios with Autonomous Vehicles",
+      "authors": "Samuel Yanes Luis, Alejandro Casado Pérez, Alejandro Mendoza Barrionuevo, Dame Seck Diop, Sergio Toral Marín, Daniel Gutiérrez Reina",
+      "date": "2026-04-07",
+      "pdf": "https://arxiv.org/pdf/2604.06387v1",
+      "score": "6.0",
+      "evidence": "基于稀疏传感器观测的标量场重建与不确定性估计",
+      "tldr": "本研究针对水下灾害监测中自主航行器对环境标量场重建的需求，探讨了不确定性估计的重要性。通过对比高斯过程（GP）、MC Dropout、深度集成和证据深度学习（EDL）四种方法，评估其在不同传感器模型下的重建精度与不确定性分解能力。研究发现，EDL在保持高精度的同时，具有最佳的不确定性校准效果和最低的推理成本，为实时自主路径规划提供了可靠的技术支持。",
+      "tags": "query:tmr",
+      "abstract_en": "Accurate reconstruction of environmental scalar fields from sparse onboard observations is essential for autonomous vehicles engaged in aquatic monitoring. Beyond point estimates, principled uncertainty quantification is critical for active sensing strategies such as Informative Path Planning, where epistemic uncertainty drives data collection decisions. This paper compares Gaussian Processes, Monte Carlo Dropout, Deep Ensembles, and Evidential Deep Learning for simultaneous scalar field reconstruction and uncertainty decomposition under three perceptual models representative of real sensor modalities. Results show that Evidential Deep Learning achieves the best reconstruction accuracy and uncertainty calibration across all sensor configurations at the lowest inference cost, while Gaussian Processes are fundamentally limited by their stationary kernel assumption and become intractable as observation density grows. These findings support Evidential Deep Learning as the preferred method for uncertainty-aware field reconstruction in real-time autonomous vehicle deployments.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/10/2604.06670v1-design-and-implementation-of-a-multi-sensor-daq-system-for-comparative-photovoltaic-performance-analysis",
+      "section": "quick",
+      "title_en": "Design and Implementation of a Multi-Sensor DAQ System for Comparative Photovoltaic Performance Analysis",
+      "authors": "Maickol Fernandez-Obando, Luis G. Leon-Vega, Leonardo Cardinale-Villalobos, Christopher Vega-Sanchez, Luis D. Murillo-Soto",
+      "date": "2026-04-08",
+      "pdf": "https://arxiv.org/pdf/2604.06670v1",
+      "score": "6.0",
+      "evidence": "集成高精度电流传感器的多传感器数据采集系统",
+      "tldr": "本文设计并实现了一种定制化的多传感器数据采集（DAQ）系统，用于对比分析采用不同冷却系统的两块光伏面板性能。该系统基于树莓派4，集成了20路热敏电阻自定义PCB、高精度电流电压传感器及环境监测设备。软件架构支持自主运行、故障恢复、双重存储冗余及Grafana实时可视化。现场部署证明，该系统具备高可靠性、远程监控能力和自动断电恢复功能，为光伏性能对比研究提供了灵活且精确的硬件与软件平台。",
+      "tags": "query:tmr",
+      "abstract_en": "The rigorous analysis of specialized physical processes often demands custom data acquisition architectures that offer flexibility and precision beyond the capabilities of general-purpose commercial loggers. This paper presents the design and implementation of a robust data acquisition system (DAQ) for a comparative analysis of the performance of two photovoltaic panels with two different cooling systems. The system integrates a custom PCB design for 20 thermistors, dual high-precision INA228 current/voltage sensors, environmental monitoring equipment, and a Raspberry Pi 4-based acquisition platform. The software architecture implements autonomous operation with enhanced fault recovery, dual storage redundancy (local CSV and InfluxDB), cloud synchronization via Google Drive, and real-time visualization through Grafana dashboards. Field deployment demonstrated system reliability, including automatic recovery from power interruptions, a 1-minute sampling rate, remote monitoring capabilities, and continuous operation during a 5 AM to 6 PM daily window. The modular hardware and software architecture enables simultaneous monitoring of two photovoltaic panels for research on direct performance comparison under identical environmental conditions.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
