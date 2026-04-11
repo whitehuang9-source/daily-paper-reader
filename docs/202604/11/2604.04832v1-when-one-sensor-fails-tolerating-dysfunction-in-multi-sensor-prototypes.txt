@@ -1,0 +1,356 @@
+Title: When One Sensor Fails: Tolerating Dysfunction in Multi-Sensor Prototypes
+
+URL Source: https://arxiv.org/pdf/2604.04832v1
+
+Published Time: Tue, 07 Apr 2026 02:05:47 GMT
+
+Number of Pages: 14
+
+Markdown Content:
+## When One Sensor Fails: Tolerating Dysfunction in Multi-Sensor Prototypes 
+
+Freek Hens a † *, Amirhossein Sadough a †, Aleksa Bokˇ san b †,Mahyar Shahsavari a and Mohammad Mahdi Dehshibi c ** 
+
+> a
+
+Department of Machine Learning and Neural Computing, Donders Institute for Brain, Cognition and Behaviour, Radboud University, the Netherlands 
+
+> b
+
+Delft University of Technology, Delft, the Netherlands 
+
+> c
+
+Unconventional Computing Lab., University of the West of England, Bristol, U.K. 
+
+ARTICLE HISTORY 
+
+Compiled April 7, 2026 
+
+ABSTRACT 
+
+Surface electromyography (sEMG) sensors are widely used in human-computer inter-action, yet the failure of a single sensor can compromise system usability. We propose a methodological framework for implementing a fail-safe mechanism in multi-sensor sEMG systems. Using arm sEMG recordings of rock-paper-scissors gestures, we ex-tracted hand-crafted features and quantified class separability via the maximum Fisher discriminant ratio (FDR). A multi-layer perceptron validated our approach, consistent with prior findings and physiological evidence. Systematic sensor abla-tions and FDR analysis produced a ranking of crucial versus replaceable sensors. This ranking informs robust device design, sensor redundancy, and reliability in clinical and practical applications. 
+
+KEYWORDS 
+
+Sensor Ablation, Fault Tolerance, Gesture Recognition, Wearable Devices, Class Separability 
+
+1. Introduction 
+
+Multi-sensor systems are the backbone of modern Human-Computer Interaction (HCI), driving applications ranging from physiological computing and wearable devices to in-telligent environments [35, 38]. However, the operational brittleness of these systems to sensor failure remains a critical bottleneck, hindering their transition from controlled laboratory prototypes to robust real-world deployments [34]. A single sensor malfunc-tioning, whether from signal loss, hardware faults, or battery exhaustion, can have severe consequences. Such failures can silently corrupt data collection in user studies or even render interactive systems entirely unusable, jeopardising the validity of research out-comes and the reliability of critical applications such as assistive technologies, medical devices, and safety-critical human–machine interfaces [16]. This challenge is particularly acute in high-stakes HCI domains. In assistive tech-     
+
+> * Freek Hens, Corresponding Author, Rfreek.hens@outlook.com ** Mohammad Mahdi Dehshibi, Principal Corresponding Author, Rmohammad.dehshibi@yahoo.com
+> †Equal contribution.
+> arXiv:2604.04832v1 [cs.HC] 6 Apr 2026
+
+nology or remote healthcare monitoring, for instance, sensor failure is not merely an inconvenience but a direct threat to user safety and well-being [32]. While established engineering fields employ fault-tolerant strategies like hardware triplication or complex software-based “digital twins” [1, 22], these heavyweight solutions are often ill-suited to the rapid, iterative, and resource-constrained nature of HCI prototyping. The com-munity’s de facto approach often involves building a complete system and training a downstream machine learning model to assess performance—a costly, time-consuming, and fundamentally reactive process that only reveals failures after significant invest-ment. What is missing is a lightweight, a priori method to audit the robustness of a sensor configuration before committing to costly data collection and model development. We argue that the HCI field needs a tool analogous to the “zero-cost” or “training-free” proxies emerging in Neural Architecture Search (NAS), which can estimate a model’s final performance without the expensive training process [19]. Adapting this paradigm to HCI would enable rapid, data-driven evaluation of sensor configurations, aligning perfectly with the field’s user-centred and iterative design cycles. Such a proxy would allow designers and researchers to proactively evaluate questions such as: “How resilient is my sensor design?” and “Which sensors are most critical for the intended task?” To bridge this gap, we introduce a model-free framework for quantifying a system’s Fault Tolerance Capability (see Fig. 1). This reliability engineering concept describes a system’s robustness in the presence of component failures [11]. Our framework serves as a training-free proxy for performance expectations by measuring the data’s inherent class separability. Using surface electromyography (sEMG)-based gesture recognition as a challenging exemplar for its notoriously low signal-to-noise ratio [37], we quantify task separability via the maximum Fisher discriminant ratio (FDR)—a robust, non-parametric metric that maximises the ratio of between-class to within-class variance [7]. This process yields a sensor criticality ranking, distinguishing indispensable sensors from those that are replaceable. 
+
+Figure 1.: Fall back mechanism for sEMG-based gesture recognition. This approach provides a generalizable, lightweight auditing tool that allows HCI developers to proactively design and validate resilient interactive systems. It enables apriori analysis of task complexity and informs early-stage design decisions to enhance system robustness, ensuring reliability in both laboratory and real-world settings. In summary, this paper makes the following contributions: 
+
+• Introducing a generalizable, model-free framework for quantifying Fault Tolerance Capability (FTC) in multi-sensor interactive systems. 2• Proposing a lightweight, training-free proxy for system performance and sensor criticality using the maximum Fisher discriminant ratio and systematic sensor ablation. 
+
+• Validating the framework on a challenging sEMG-based gesture recognition task, demonstrating its utility for a priori task complexity analysis and robust system design. 
+
+2. Related Work 
+
+Our research builds on foundational work in HCI system evaluation, fault tolerance in engineering, and a priori performance proxies in machine learning. Given the novelty of our lightweight, model-free framework for auditing the robustness in HCI prototypes, we draw on adjacent fields to highlight persistent gaps. Specifically, we trace how gaps in hardware reliability emerged in HCI’s shift toward sensor-heavy systems, how prior efforts attempted to address them through reactive or heavyweight methods, and why these fell short—paving the way for our FDR-based sensor ablation approach as a proactive, training-free solution tailored to HCI’s iterative design needs. 
+
+2.1. Evaluating Interactive Systems in HCI 
+
+The evaluation of interactive systems has been central to HCI since its inception, evolv-ing to address the growing complexity of multi-sensor technologies like wearables and physiological interfaces [35, 38]. Early gaps emerged from the field’s focus on software usability, leaving hardware robustness underexplored. For instance, sensor failures in prototypes could invalidate user studies or deployments, although evaluations were pre-dominantly conducted post-hoc [16, 34]. Initial attempts involved adapting expert-oriented techniques, including heuristic evaluations [27] and cognitive walkthroughs [20], which facilitated cost-effective iden-tification of design flaws in prototypes. Later, user-centred summative methods such as lab-based usability testing [31] and field studies [3] aimed to encompass real-world performance, including in sensor-driven human-computer interaction contexts, such as surface electromyography for gesture control [37]. However, these methods remained reactive: they assess built systems and often overlook silent hardware faults, such as sEMG sensor dropout in prosthetics, which pose risks to user safety in critical areas like healthcare [5, 13, 32]. Surveys on evaluation methods for wearable and sensor-based systems further illus-trate this limitation, revealing a predominance of post-deployment assessments that do not anticipate hardware vulnerabilities during the design phase [12, 17]. This leaves a critical gap in a priori hardware auditing, as HCI prototyping demands rapid iteration without costly failures. Our framework addresses this by quantifying class separabil-ity and sensor criticality in advance through the maximum Fisher discriminant ratio and ablation [7], complementing conventional evaluations with a data-driven proxy for robustness. 
+
+2.2. Fault Tolerance: From Heavyweight Engineering to Lightweight HCI 
+
+Fault tolerance principles originated in reliability engineering to mitigate component failures in critical systems, a gap that widened as HCI incorporated multi-sensor setups 3prone to brittleness (e.g., signal loss in wearable devices [34]). Early engineering solutions employed hardware redundancy, such as Triple Modular Redundancy, where components are triplicated for voting-based error masking, successfully applied in aviation but at a high cost [22]. More recent efforts have shifted toward software alternatives, such as digital twins for simulating failures [1, 18] and, in HCI contexts, adaptive machine learning (ML) for sensor dropout in gesture recognition [30]. For sEMG systems, studies have attempted to enhance resilience by retraining models on ablated data [23, 24], but these approaches remain reactive and require full datasets and models. Such approaches are impractical for HCI’s resource-constrained prototyping, where failures like battery exhaustion can halt iterations [16]. Recent work on fault tolerance in multi-sensor fusion, particularly in autonomous driving and wearable health monitoring, has attempted to enhance system-level re-silience through simulated faults and memristive associative learning circuits [2, 36]. However, these approaches could not fully close the gap due to their heavyweight na-ture, incompatible with HCI’s agile cycles. Our method addresses this by providing a model-free FTC assessment through sensor ablation, identifying critical sensors a priori 
+
+without redundancy or simulation, thus enabling fail-safe designs in sEMG and similar applications. 
+
+2.3. A Priori Performance Expectation: Bridging Machine Learning and HCI 
+
+In machine learning, the resource demands of model assessment [4, 29, 33]created a gap for efficient proxies, inspiring “zero-cost” methods in Neural Architecture Search (NAS) [26]. Conventional NAS entailed exhaustive candidate training [39], but proxies, such as those analysing untrained network properties (e.g., expressivity), provided quick estimates [19], thereby addressing the gap by predicting performance without training. Associated data complexity metrics, such as the maximum Fisher discriminant ra-tio (FDR) for class separability [7, 14], attempted to quantify task difficulty before modelling and were applied in pattern recognition but rarely to hardware. In HCI, this paradigm remains an emerging one. While some sEMG studies use separability post-hoc [6, 9], they do not audit sensor configurations upfront, leaving prototypes vul-nerable. Recent advancements in zero-cost proxies, including evaluations of their robustness and evolutionary designs, have refined these tools for broader generalization [15, 21]. Nonetheless, these machine learning advancements have not been extensively integrated into human-computer interaction due to their focus on models over hardware. Our framework adapts them as a training-free proxy. In practice, measuring FDR under sensor ablations estimates robustness and task complexity early, bridging the gap for resilient multi-sensor designs in iterative HCI prototyping. 
+
+3. A Framework for A Priori Robustness Auditing 
+
+We introduce a general-purpose, model-free framework for auditing the robustness of multi-sensor interactive systems. This framework provides actionable insights into a sys-tem’s Fault Tolerance Capability (FTC) during the early design and prototyping stages. Directly analysing the inherent statistical properties of sensor data enables researchers to make informed design decisions and anticipate potential failure points without build-4ing and deploying a complete system upfront. The framework is sensor-agnostic and comprises two primary stages: (1) A Priori Task Complexity Analysis, and (2) Sensor Criticality and FTC Assessment. 
+
+3.1. Data Representation in a Latent Feature Space 
+
+The framework operates on the principle that the state of an interactive system can be represented as a point in a high-dimensional feature space, enabling generalised analysis. Let X ∈ Rn×m be the raw data from a multi-sensor system, where n is the number of samples and m is the number of raw sensor channels. For each task category ci (e.g., a gesture), we apply a set of feature extraction functions ϕk : Rm → R, k = 1 , . . . , d . This transforms the raw data into a more descriptive latent space. The result is a feature matrix for each category, Fci ∈ Rni×d, where ni is the number of samples in ci. This matrix serves as the basis for all subsequent analysis and is formally defined using Eq. (1). 
+
+Fci =
+
+> 
+
+ϕ1(Xci,1) ϕ2(Xci,1) · · · ϕd(Xci,1)
+
+ϕ1(Xci,2) ϕ2(Xci,2) · · · ϕd(Xci,2)... ... . . . ...
+
+ϕ1(Xci,n i ) ϕ2(Xci,n i ) · · · ϕd(Xci,n i ) 
+
+> 
+
+, (1) where Xci,j is the j-th sample from category ci.
+
+3.2. Core Analytic: Quantifying Distributional Separability 
+
+The analytical core of our framework is a set of metrics, drawn from the data complex-ity literature [14], that quantify the separability between two distributions in a feature space. These metrics are applied in a one-vs-rest manner, comparing a target distribu-tion (e.g., a specific class or system state) against a reference distribution (e.g., all other classes or a baseline state). 
+
+3.2.1. Maximum Fisher Discriminant Ratio (F1) 
+
+This metric, also known as the maximum Fisher Discriminant Ratio (FDR), identifies the single most discriminative feature for separating a target distribution ( ci) from a reference distribution (“rest”). For each feature k, the ratio is defined using Eq. (2). F1 k(ci) = (μi,k − μrest ,k )2
+
+σ2 
+
+> i,k
+
++ σ2rest ,k 
+
+, (2) where μi,k and σ2 
+
+> i,k
+
+are the mean and variance of feature k for the target distribution 
+
+ci, with analogous definitions for the “rest” distribution. The final score is the maxi-mum value across all features, F1( ci) = max k F1 k(ci). Higher F1 values indicate better separability along at least one feature dimension. 53.2.2. Volume of Overlapping Region (F2) 
+
+This metric quantifies the geometric overlap of the feature distributions. For each feature dimension k, we first define the minimum and maximum feature values for both the target ( ci) and reference (“rest”) distributions, see Eq. (3). min  
+
+> i,k
+
+= min 
+
+> x∈ci
+
+Fx,k , max  
+
+> i,k
+
+= max 
+
+> x∈ci
+
+Fx,k ,
+
+min  
+
+> rest ,k
+
+= min 
+
+> x / ∈ci
+
+Fx,k , max  
+
+> rest ,k
+
+= max 
+
+> x / ∈ci
+
+Fx,k . (3) The length of the overlapping segment (overlap k) and the total span of values (range k)for dimension k are then computed using Eq. (4). overlap k = max 
+
+> (
+
+0, min(max  
+
+> i,k
+
+, max 
+
+> rest ,k
+
+) − max(min  
+
+> i,k
+
+, min 
+
+> rest ,k
+
+)
+
+> )
+
+,
+
+range k = max(max  
+
+> i,k
+
+, max 
+
+> rest ,k
+
+) − min(min  
+
+> i,k
+
+, min 
+
+> rest ,k
+
+). (4) The F2 metric is the product of these overlap ratios across all dimensions, representing the volume of the overlapping hyper-rectangle. F2 is formally defined using Eq. (5). F2( ci) = 
+
+> d∏
+> k=1
+
+overlap k
+
+range k
+
+(where range k > 0) . (5) where a lower F2 value signifies less overlap and thus better separability. 
+
+3.2.3. Maximum Individual Feature Efficiency (F3) 
+
+This metric complements F1 by identifying the single feature that provides the “clean-est” separation, defined as the largest non-overlapping portion of the distributions (see Eq. (6)). Higher F3 values indicate better separability. F3( ci) = max 
+
+> k=1 ,...,d
+> (
+
+1 − overlap k
+
+range k
+
+> )
+
+. (6) 
+
+3.3. Stage 1: A Priori Task Complexity Analysis 
+
+In this stage, we assess the inherent difficulty of distinguishing between different task categories. We apply the separability metrics by treating one task class as the target distribution and another (or all others) as the reference distribution. For instance, to quantify the difficulty of separating ‘Rock’ from ‘Paper’, we compute F2 ( Frock , Fpaper ). A low separability score (e.g., a high F2 value) indicates significant distributional over-lap, predicting that the system will struggle to distinguish these two tasks. This concept is illustrated in Fig. 2a, where the minimal overlap between the ‘Rock’ and ‘Paper’ distri-butions indicates an easily separable task, whereas the substantial overlap between the ‘Paper’ and ‘Scissors’ distributions suggests a considerably more challenging one. This provides an early diagnostic for designers to refine interactions that may be ambiguous. 6(a) F{ci, baseline } F{ci, ablated } (b) 
+
+Figure 2.: (a) Conceptual illustration of class separability. The figure visualises the vary-ing degrees of distributional overlap for three gesture classes. The simplified 1D distri-butions at the bottom show that ‘Rock’ and ‘Paper’ are well-separated (low overlap, high separability), while ‘Paper’ and ‘Scissors’ have a large overlapping region (shaded), indicating they are inherently more difficult to distinguish from each other based on the sensor data. (b) Conceptual illustration of distributional shift. This figure illustrates how sensor ablation affects the distribution of the baseline, i.e., the intact sensors. 
+
+3.4. Stage 2: Sensor Criticality and FTC Assessment 
+
+In this stage, we audit the system’s robustness to sensor failure. Here, we repurpose the same separability metrics to quantify each sensor’s informational contribution. First, a baseline latent space distribution is established for a given class ci using all functional sensors, yielding F{ci, baseline }. Then, a sensor failure is simulated by nullifying that sensor’s data stream before feature extraction, resulting in an ablated distribution, 
+
+F{ci, ablated }. The magnitude of the distributional shift is quantified by computing the separability between these two states, e.g., F1 
+
+> (
+
+F{ci, baseline }, F{ci, ablated }
+
+> )
+
+. This concept is illustrated in Fig. 2b, where 
+
+• a large shift (high F1/F3, low F2) implies the sensor’s absence fundamentally alters the data’s structure. Such a sensor is deemed indispensable for that task. 
+
+• a minimal shift (low F1/F3, high F2) implies that other sensors sufficiently capture the necessary information, rendering this sensor redundant or replaceable .This analysis, extendable to combinatorial ablations (pairs, triplets), yields a sensor criticality ranking and identifies the system’s tolerance thresholds, providing an action-able blueprint for designing robust, fail-safe systems. 
+
+4. Case Study: Auditing Robustness in an sEMG-based Gesture Interface 
+
+To demonstrate and validate our framework in a realistic HCI scenario, we apply it to a publicly available sEMG hand-gesture recognition dataset [10]. This case study serves as a challenging exemplar for three reasons: (1) it employs a multi-sensor sEMG system, a common but notoriously noisy modality; (2) the gesture set includes classes known to 7be difficult to distinguish, providing a robust test for our task complexity analysis; and (3) the original publication provides baseline classification results, allowing for direct validation of our framework’s predictive power. 
+
+4.1. Case Study Context: The Roshambo Dataset 
+
+The dataset contains recordings from ten participants using a Myo armband, which has eight sEMG sensors evenly distributed around the forearm and operates at a sampling frequency of 200 Hz [6] (see Fig. 3). 
+
+Figure 3.: Conceptual illustration of the data collection setup using the Myo armband with eight sEMG sensors, based on the description in Garg et al. [10]. The original dataset does not specify the anatomical mapping for each sensor index. Participants performed three gestures (i.e., rock, paper, and scissors) alongside a con-trol state representing the arm and hand in a resting position. The protocol consisted of three sessions for each participant, with five trials lasting 3 seconds each for each gesture, resulting in a total of 450 trials. To ensure accurate benchmarking, the initial and final 600 ms of each trial were trimmed to focus on the steady-state portion of the gestures. For our analysis, we employed a standard sliding-window approach (400 timestamps, or 2 seconds, with 50% overlap) on the processed signals. This methodology produced 296 uniform samples per class, each with dimensions of 8 × 400 (sensors × timestamps). 
+
+4.2. Audit Configuration 
+
+Feature Selection. Following established practice in sEMG analysis [28], we extracted nine general-purpose features for each sensor. This set includes Shannon Entropy ,
+
+Sample Entropy , Zero Crossings , Waveform Length , Root Mean Square (RMS) , Slope Sign Changes , Median Frequency , Wavelet Energy , and Fractal Dimension . This comprehensive set was deliberately chosen to be modality-agnostic, capturing a broad range of a signal’s temporal, spectral, and complexity characteristics. This approach ensures our audit’s findings are not dependent on domain-specific feature engineering. The extraction process transformed each 8 × 400 sample into a 72-dimensional feature vector (8 sensors × 9 features). 
+
+Validation Oracle. To validate our framework’s a priori predictions, we implemented a simple Multi-Layer Perceptron (MLP) classifier. The goal was not to achieve state-of-the-art accuracy, but to use a standard classifier as an “oracle” to confirm whether the 8separability issues predicted by our framework manifest in a typical learning model. We adopted a one-vs-one binary classification design (e.g., ‘paper’ vs ‘scissors’) rather than a single multiclass model. This approach provides a fine-grained “magnifying glass” to directly test the pairwise separability predictions from our framework, which would be obscured in an aggregate multiclass accuracy score. Performance was measured with the Matthew’s Correlation Coefficient (MCC) [25], a robust metric for binary classification. 
+
+4.3. Results and Implications for Design 
+
+4.3.1. Stage 1: A Priori Prediction of Task Difficulty 
+
+Our framework’s audit immediately and correctly identified the inherent difficulty in the gesture set. The analysis was conducted using the one-vs-one Fisher’s Discriminant Ratio (FDR), a direct measure of class separability equivalent to the F1 metric in a binary context. As shown in Fig. 4(a), the ‘paper’ vs ‘scissors’ pair yielded a consid-erably low normalised FDR of 0.073, indicating severe overlap in their feature spaces. In stark contrast, the ‘rock’ vs ‘paper’ and ‘rock’ vs ‘scissors’ pairs produced high nor-malised FDR scores of 0.842 and 1.00, respectively, indicating that they would be easily distinguishable. Paper-Scissors Rock-Paper Rock-Scissors 
+
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> FDR (normalized)
+> 0.073
+> 0.842
+> 1.000
+
+(a) Paper-Scissors Rock-Paper Rock-Scissors   
+
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> MCC
+> 0.872
+> 0.990 1.000
+
+(b) 
+
+Figure 4.: Stage 1 Results: (a) Our framework’s model-free analysis predicts that the ‘paper’ vs ‘scissors’ task is over 10 × more difficult (lower FDR) than the other pairs. (b) This prediction is validated by an MLP classifier, which achieves a demonstrably lower MCC score on the same pair. This model-free prediction was directly validated by the MLP’s performance (Fig-ure 4(b)). The ‘paper’ vs ‘scissors’ classifier achieved a significantly lower MCC of 0.90 (corresponding to 95% accuracy), whereas the other two pairs achieved near-perfect MCC scores approaching 1.0. The near-perfect validation scores are not an indicator of overfitting, but rather a confirmation of the extreme class separability for those pairs, as predicted by our framework’s high FDR scores. Our findings are in complete agreement with the confusion matrices reported in the original Roshambo paper [10]. Additionally, the physiological basis for this difficulty is well-established: ‘rock’ primarily involves a distinct set of flexor muscles, while both ‘paper’ and ‘scissors’ rely on overlapping ex-tensor muscles in the forearm [8]. Our framework successfully identified this underlying physiological ambiguity directly from the signal data, validating its use as a powerful proxy for task complexity. 
+
+4.3.2. Stage 2: Sensor Criticality and Neighbour Compensation Analysis 
+
+The sensor ablation audit revealed that sensor importance is highly task-dependent. Figure 5 shows the distributional shift (FDR) caused by ablating each sensor for each 9gesture. S1 S2 S3 S4 S5 S6 S7 S8 
+
+> 0.00
+> 0.25
+> 0.50
+> 0.75
+> 1.00
+> FDR (normalized)
+
+(a) Rock S1 S2 S3 S4 S5 S6 S7 S8 (b) Paper S1 S2 S3 S4 S5 S6 S7 S8 (c) Scissors 
+
+Figure 5.: Stage 2 Results: Per-class sensor criticality. A larger bar indicates a more critical sensor for that specific gesture. The analysis identifies both indispensable sensors (e.g., Sensor 2 for Paper) and redundant ones (e.g., Sensors 6, 7). 
+
+Neighbour Compensation Analysis. By analysing the scores in the context of the armband’s circular layout, we can infer regional redundancy. For the ‘paper’ gesture, Sensor 2 is highly critical. Its immediate neighbours, Sensor 1 and Sensor 3, are far less critical. This suggests the information captured by the sensor at position 2 is highly localised and cannot be effectively compensated for by adjacent sensors, making it a critical single point of failure for this gesture. Conversely, for ‘scissors’, the low criticality of adjacent sensors 6 and 7 suggests a region of high redundancy, where the failure of one is likely to be tolerated. 
+
+Implications for Interaction Design. A designer armed with this audit during pro-totyping could: (1) Reinforce Critical Components: Knowing that the sensors at positions 2, 3, 4, and 5 are frequently critical, they would ensure these locations on their own prototype have robust physical placement and perform targeted data integrity checks on their signal streams. (2) Implement Graceful Degradation: If the sensor at position 2 fails, the sys-tem’s software could be designed to alert the user that ‘paper’ gesture recognition may be unreliable, while other gestures remain fully functional. (3) Optimise for Efficiency: Sensors 6 and 7 consistently produce minimal distri-butional shifts across all gestures, indicating high redundancy. A designer could confidently experiment with removing these sensors in a future iteration to reduce hardware costs, complexity, and power consumption, with a predictable, minimal impact on performance. This case study demonstrates the framework’s ability to go beyond simple perfor-mance metrics, providing deep, actionable insights to build more robust, reliable, and efficient interactive systems a priori .
+
+5. Discussion 
+
+In this paper, we introduced a model-free framework for auditing the robustness of multi-sensor interactive systems a priori . The central contribution is a lightweight, data-driven method that provides HCI researchers and practitioners with early insights into a system’s potential failure points, moving beyond the conventional ‘build-then-test’ paradigm. Our goal was to enable a more proactive design cycle where decisions about 10 system reliability can be made before committing to costly data collection and model training. Our case study on the sEMG-based Roshambo dataset served to validate the frame-work’s core hypotheses. The principal findings were twofold. First, the framework’s task complexity analysis correctly predicted that the ‘paper’ and ‘scissors’ gestures were inherently difficult to distinguish, a prediction that was subsequently confirmed by our validation MLP and the findings of the original dataset authors [10]. This demon-strates that quantifying class separability can serve as a powerful and accurate proxy for downstream performance. Second, the sensor criticality audit provided a granu-lar, task-dependent ranking of each sensor’s importance, identifying both indispensable components and redundant ones. 
+
+5.1. Implications for HCI Design and Practice 
+
+The true value of this framework lies in its ability to inform concrete design decisions. An a priori robustness audit empowers HCI teams in several ways: 
+
+1. Proactively Shaping Interaction Design. The framework can act as an early-warning system for interactional ambiguity. If the audit reveals high distributional over-lap between two intended gestures or actions, designers can intervene early. They might choose to redesign the interactions to be more physically distinct, provide clearer user feedback, or even prune an ambiguous action from the set entirely, thereby preventing user frustration and improving system accuracy before a single line of application code is written. 
+
+2. Informing Hardware Prototyping and Sensor Selection. The sensor criticality ranking provides an empirical basis for hardware decisions. Teams can use this audit to justify allocating resources to higher-quality sensors for positions identified as criti-cal. Conversely, they can explore cost and complexity reductions by removing sensors identified as consistently redundant. This data-driven approach moves hardware design beyond intuition, allowing for a more deliberate and defensible prototyping process. 
+
+3. Designing for Graceful Degradation. Silent failures are a notorious problem in interactive systems. Our framework provides the necessary map to design intelligent, fail-aware systems. When a sensor identified by the audit as critical begins to drift or fail, the system can be designed to respond gracefully. Rather than failing completely, it could trigger a targeted recalibration, temporarily disable the specific interactions that rely on that sensor, or notify the user that certain functions may be unreliable, thus preserving the usability of the rest of the system. 
+
+5.2. Limitations and Future Work 
+
+Our work provides a strong foundation, but it has limitations that encourage future research contributions. Our validation was conducted on a single, albeit challenging, sensing modality (sEMG) and dataset. Future work should validate the framework’s generalizability across other modalities, such as accelerometers, electroencephalography (EEG), and capacitive sensing, as well as on various interactive tasks. The current analysis primarily focused on single-sensor failures. While we suggest that this can be extended to combinatorial failures, a systematic investigation into multi-sensor failure regimes is a critical next step in fully understanding a system’s tolerance thresholds. Furthermore, our audit was performed on a static feature space. An interesting line of future inquiry would be to examine whether the same auditability 11 is preserved in dynamically learned feature representations from deep learning models. Finally, embedding this audit as a real-time, online component within an interactive sys-tem could provide continuous health checks, adapt to sensor drift, and provide dynamic reliability assurances to the user. 
+
+6. Conclusion 
+
+This paper presented a general-purpose, model-free framework for the early auditing of fault tolerance in multi-sensor HCI systems. By providing a training-free proxy for system performance, our method allows designers to identify interactional ambiguities and critical hardware components during the initial stages of prototyping. The case study demonstrated that this approach can accurately predict system vulnerabilities and yield actionable insights for building more robust, reliable, and efficient interactive systems. Ultimately, this work contributes a practical pre-mortem tool for the HCI community, aiming to reduce wasted iteration and surface system failure modes when they are cheapest and easiest to correct at the very beginning. 
+
+Acknowledgement 
+
+The authors declare no competing interests. 
+
+References 
+
+[1] Tanish Baranwal, Srihari Varada, Santanu Das, and Mohammad R. Haider. Fault-Tolerant IoT System Using Software-Based “Digital Twin”. In 2024 IEEE 10th World Forum on Internet of Things (WF-IoT) , pages 828–833. IEEE, 2024. [2] Kapil Bhardwaj, Dmitrii Semenov, Roman Sotner, and Sayani Majumdar. A memristive associative learning circuit for fault-tolerant multi-sensor fusion in autonomous vehicles. 
+
+Advanced Intelligent Systems , page 2500215, 2025. [3] Sunny Consolvo, David W. McDonald, Tammy Toscos, Mike Y. Chen, Jon Froehlich, Beverly Harrison, Predrag Klasnja, Anthony LaMarca, Louis LeGrand, Ryan Libby, Ian Smith, and James A. Landay. Activity sensing in the wild: a field trial of ubifit garden. In 
+
+Proceedings of the SIGCHI Conference on Human Factors in Computing Systems , pages 1797–1806. Association for Computing Machinery, 2008. [4] Mohammad Mahdi Dehshibi, Mona Ashtari-Majlan, Gereziher Adhane, and David Masip. ADVISE: ADaptive feature relevance and VISual Explanations for convolutional neural networks. The Visual Computer , 40(8):5407–5419, 2024. [5] Mohammad Mahdi Dehshibi, Temitayo Olugbade, Fernando Diaz-de Maria, Nadia Bianchi-Berthouze, and Ana Tajadura-Jim´ enez. Pain level and pain-related behaviour classification using gru-based sparsely-connected rnns. IEEE Journal of Selected Topics in Signal Processing , 17(3):677–688, 2023. [6] Elisa Donati. Emg from forearm datasets for hand gestures recognition, May 2019. [7] Ronald A. Fisher. The use of multiple measurements in taxonomic problems. Annals of Eugenics , 7(2):179–188, 1936. [8] Akira Furui, Shintaro Eto, Kosuke Nakagaki, Kyohei Shimada, Go Nakamura, Akito Masuda, Takaaki Chin, and Toshio Tsuji. A myoelectric prosthetic hand with muscle synergy–based motion determination and impedance model–based biomimetic control. 
+
+Science Robotics , 4(31):eaaw6339, 2019. 
+
+12 [9] Nikhil Garg, Ismael Balafrej, Yann Beilliard, Dominique Drouin, Fabien Alibart, and Jean Rouat. Signals to spikes for neuromorphic regulated reservoir computing and emg hand gesture recognition. In International conference on neuromorphic systems 2021 , pages 1–8, 2021. [10] Nikhil Garg, Ismael Balafrej, Yann Beilliard, Dominique Drouin, Fabien Alibart, and Jean Rouat. Signals to Spikes for Neuromorphic Regulated Reservoir Computing and EMG Hand Gesture Recognition. In International Conference on Neuromorphic Systems 2021 .Association for Computing Machinery, 2021. [11] Elif I. Gokce, Abhishek K. Shrivastava, and Yu Ding. Fault tolerance analysis of surveil-lance sensor systems. IEEE Transactions on Reliability , 62(2):478–489, 2013. [12] Harish Haresamudram, Chi Ian Tang, Sungho Suh, Paul Lukowicz, and Thomas Pl¨ otz. Past, present, and future of sensor-based human activity recognition using wearables: A surveying tutorial on a still challenging task. Proceedings of the ACM on Interactive, Mobile, Wearable and Ubiquitous Technologies , 9(2), 2025. [13] Freek Hens, Mohammad Mahdi Dehshibi, Leila Bagheriye, Ana Tajadura-Jim´ enez, and Mahyar Shahsavari. Last-pain: Learning adaptive spike thresholds for low back pain biosignals classification. IEEE Transactions on Neural Systems and Rehabilitation Engi-neering , 33:1038–1047, 2025. [14] Tin Kam Ho and M. Basu. Complexity measures of supervised classification problems. 
+
+IEEE Transactions on Pattern Analysis and Machine Intelligence , 24(3):289–300, 2002. [15] Junhao Huang, Bing Xue, Yanan Sun, and Mengjie Zhang. Evolving Comprehensive Prox-ies for Zero-Shot Neural Architecture Search , pages 1246–1254. Association for Computing Machinery, 2025. [16] Mi Ok Kim, Enrico Coiera, and Farah Magrabi. Problems with health information technol-ogy and their effects on care delivery and patient outcomes: a systematic review. Journal of the American Medical Informatics Association , 24(2):246–250, 2017. [17] Younghyun Kim, Woosuk Lee, Anand Raghunathan, Vijay Raghunathan, and Niraj K. Jha. Chapter 8 - reliability and security of implantable and wearable medical devices. In Swarup Bhunia, Steve J.A. Majerus, and Mohamad Sawan, editors, Implantable Biomed-ical Microsystems , pages 167–199. William Andrew Publishing, 2015. [18] Martin Wolfgang Lauer-Schmaltz. Digital Twin in Healthcare: Patient System Mod-elling for Rehabilitation by Exoskeleton . Phd thesis, Technical University of Denmark, September 2024. Available at https://backend.orbit.dtu.dk/ws/files/394475134/ Lauer-Schmaltz_Digital_Twin_in_Healthcare.pdf .[19] Junghyup Lee. AZ-NAS: Assembling Zero-Cost Proxies for Network Architecture Search. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recogni-tion (CVPR) , pages 5893–5903. IEEE, 2024. [20] Clayton Lewis and Cathleen Wharton. Chapter 30 - Cognitive Walkthroughs. In Mar-ting G. Helander, Thomas K. Landauer, and Prasad V. Prabhu, editors, Handbook of Human-Computer Interaction (Second Edition) , pages 717–732. North-Holland, second edition edition, 1997. [21] Jovita Lukasik, Michael Moeller, and Margret Keuper. An Evaluation of Zero-Cost Prox-ies - from Neural Architecture Performance Prediction to Model Robustness. International Journal of Computer Vision , 133(5):2635–2652, 2025. [22] Richard E. Lyons and Wouter Vanderkulk. The Use of Triple-Modular Redundancy to Improve Computer Reliability. IBM Journal of Research and Development , 6(2):200–209, 1962. [23] Yongqiang Ma, Badong Chen, Pengju Ren, Nanning Zheng, Giacomo Indiveri, and Elisa Donati. Emg-based gestures classification using a mixed-signal neuromorphic process-ing system. IEEE Journal on Emerging and Selected Topics in Circuits and Systems ,10(4):578–587, 2020. [24] Yongqiang Ma, Elisa Donati, Badong Chen, Pengju Ren, Nanning Zheng, and Giacomo Indiveri. Neuromorphic implementation of a recurrent neural network for emg classifica-tion. In 2020 2nd IEEE International Conference on Artificial Intelligence Circuits and 
+
+13 Systems (AICAS) , pages 69–73. IEEE, 2020. [25] B.W. Matthews. Comparison of the predicted and observed secondary structure of t4 phage lysozyme. Biochimica et Biophysica Acta (BBA) - Protein Structure , 405(2):442– 451, 1975. [26] Joe Mellor, Jack Turner, Amos Storkey, and Elliot J Crowley. Neural Architecture Search without Training. In Proceedings of the 38th International Conference on Machine Learn-ing , pages 7588–7598. PMLR, 2021. [27] Jakob Nielsen. Enhancing the explanatory power of usability heuristics. In Proceedings of the SIGCHI Conference on Human Factors in Computing Systems , pages 152–158. Association for Computing Machinery, 1994. [28] Angkoon Phinyomark, Rami N Khushaba, Honghai Hu, Pornchai Phukpattaranont, and Chusak Limsakul. Evaluating emg feature and classifier selection for application to partial-hand prosthesis control. Frontiers in Neurorobotics , 6:17, 2012. [29] Marjan Ramin, Alireza Sepas-Moghaddam, Payam Ahmadvand, and Mohammad Mahdi Dehshibi. Counting the number of cells in immunocytochemical images using genetic algorithm. In 12th International Conference on Hybrid Intelligent Systems (HIS) , pages 185–190. IEEE, 2012. [30] Zhou Ren, Junsong Yuan, Jingjing Meng, and Zhengyou Zhang. Robust Part-Based Hand Gesture Recognition Using Kinect Sensor. IEEE Transactions on Multimedia , 15(5):1110– 1120, 2013. [31] Jeffrey Rubin and Dana Chisnell. Handbook of usability testing: How to plan, design, and conduct effective tests . John Wiley & Sons, 2008. [32] Michel Schukat, David McCaldin, Kejia Wang, Guenter Schreier, Nigel H Lovell, Michael Marschollek, and Stephen J Redmond. Unintended Consequences of Wearable Sensor Use in Healthcare. Yearbook of Medical Informatics , 25(01):73–86, 2016. [33] Alireza Sepas-Moghaddam, Alireza Arabshahi, Danial Yazdani, and Mohammad Mahdi Dehshibi. A novel hybrid algorithm for optimization in multimodal dynamic environ-ments. In 12th International Conference on Hybrid Intelligent Systems (HIS) , pages 143–148. IEEE, 2012. [34] Abhishek Sharma, Leana Golubchik, and Ramesh Govindan. On the Prevalence of Sensor Faults in Real-World Deployments. In 2007 4th Annual IEEE Communications Society Conference on Sensor, Mesh and Ad Hoc Communications and Networks , pages 213–222, 2007. [35] Hugo Pl´ acido Da Silva, Stephen Fairclough, Andreas Holzinger, Robert Jacob, and Desney Tan. Introduction to the Special Issue on Physiological Computing for Human-Computer Interaction. ACM Trans. Comput.-Hum. Interact. , 21(6), 2015. [36] Zilu Wang, Xiaoping Wang, Zezao Lu, Weiguo Wu, and Zhigang Zeng. The Design of Memristive Circuit for Affective Multi-Associative Learning. IEEE Transactions on Biomedical Circuits and Systems , 14(2):173–185, 2020. [37] Sheng Wei, Yue Zhang, and Honghai Liu. A multimodal multilevel converged atten-tion network for hand gesture recognition based on semg and a-mode ultrasound. IEEE Transactions on Cybernetics , 53(12):7723–7734, 2023. [38] Luyao Yang, Osama Amin, and Basem Shihada. Intelligent Wearable Systems: Opportu-nities and Challenges in Health and Sports. ACM Comput. Surv. , 56(7), 2024. [39] Barret Zoph and Quoc Le. Neural Architecture Search with Reinforcement Learning. In 
+
+International Conference on Learning Representations , 2017. 
+
+14

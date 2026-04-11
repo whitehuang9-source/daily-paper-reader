@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-11",
+  "date": "2026-04-11",
+  "generated_at": "2026-04-11T20:34:18",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/11/2604.02749v1-residual-aware-distributionally-robust-ekf-absorbing-linearization-mismatch-via-wasserstein-ambiguity",
+      "section": "quick",
+      "title_en": "Residual-Aware Distributionally Robust EKF: Absorbing Linearization Mismatch via Wasserstein Ambiguity",
+      "authors": "Minhyuk Jang, Jungjin Lee, Astghik Hakobyan, Naira Hovakimyan, Insoon Yang",
+      "date": "2026-04-03",
+      "pdf": "https://arxiv.org/pdf/2604.02749v1",
+      "score": "6.0",
+      "evidence": "用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波",
+      "tldr": "针对扩展卡尔曼滤波（EKF）在处理非线性系统时面临的噪声模型失配和线性化误差问题，本文提出了一种残差感知的分布鲁棒EKF框架。该方法利用Wasserstein距离构建模糊集，将线性化残差视为不确定性并将其吸收进统一的鲁棒估计模型中。该滤波器在保持递归结构的同时，通过半正定规划求解，为真实非线性估计误差提供了均方误差上界，显著提升了在模型失配和强非线性环境下的估计精度与安全性。",
+      "tags": "query:tmr",
+      "abstract_en": "The extended Kalman filter (EKF) is a cornerstone of nonlinear state estimation, yet its performance is fundamentally limited by noise-model mismatch and linearization errors. We develop a residual-aware distributionally robust EKF that addresses both challenges within a unified Wasserstein distributionally robust state estimation framework. The key idea is to treat linearization residuals as uncertainty and absorb them into an effective uncertainty model captured by a stage-wise ambiguity set, enabling noise-model mismatch and approximation errors to be handled within a single formulation. This approach yields a computable effective radius along with deterministic upper bounds on the prior and posterior mean-squared errors of the true nonlinear estimation error. The resulting filter admits a tractable semidefinite programming reformulation while preserving the recursive structure of the classical EKF. Simulations on coordinated-turn target tracking and uncertainty-aware robot navigation demonstrate improved estimation accuracy and safety compared to standard EKF baselines under model mismatch and nonlinear effects.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/11/2604.04832v1-when-one-sensor-fails-tolerating-dysfunction-in-multi-sensor-prototypes",
+      "section": "quick",
+      "title_en": "When One Sensor Fails: Tolerating Dysfunction in Multi-Sensor Prototypes",
+      "authors": "Freek Hens, Amirhossein Sadough, Aleksa Bokšan, Mahyar Shahsavari, Mohammad Mahdi Dehshibi",
+      "date": "2026-04-06",
+      "pdf": "https://arxiv.org/pdf/2604.04832v1",
+      "score": "6.0",
+      "evidence": "多传感器系统的故障保护机制和传感器冗余",
+      "tldr": "本研究针对多传感器表面肌电（sEMG）系统中单传感器失效导致系统不可用的问题，提出了一种实现故障保护机制的方法论框架。研究通过采集剪刀石头布手势数据，提取手工特征并利用最大Fisher判别比（FDR）量化类别可分性，结合多层感知机验证了该方法的有效性。通过系统性传感器消融分析，得出了传感器重要性排名，为构建具有鲁棒性、冗余性和高可靠性的临床及实际应用设备提供了设计指导。",
+      "tags": "query:tmr",
+      "abstract_en": "Surface electromyography (sEMG) sensors are widely used in human-computer interaction, yet the failure of a single sensor can compromise system usability. We propose a methodological framework for implementing a fail-safe mechanism in multi-sensor sEMG systems. Using arm sEMG recordings of rock-paper-scissors gestures, we extracted hand-crafted features and quantified class separability via the maximum Fisher discriminant ratio (FDR). A multi-layer perceptron validated our approach, consistent with prior findings and physiological evidence. Systematic sensor ablations and FDR analysis produced a ranking of crucial versus replaceable sensors. This ranking informs robust device design, sensor redundancy, and reliability in clinical and practical applications.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/11/2604.05045v1-pca-driven-adaptive-sensor-triage-for-edge-ai-inference",
+      "section": "quick",
+      "title_en": "PCA-Driven Adaptive Sensor Triage for Edge AI Inference",
+      "authors": "Ankit Hemant Lade, Sai Krishna Jasti, Nikhil Sinha, Indar Kumar, Akanksha Tiwari",
+      "date": "2026-04-06",
+      "pdf": "https://arxiv.org/pdf/2604.05045v1",
+      "score": "6.0",
+      "evidence": "基于PCA的多通道传感器网络自适应采样",
+      "tldr": "针对工业物联网中多通道传感器网络带宽受限的问题，本文提出 PCA-Triage 算法。该算法利用增量主成分分析（PCA）的载荷量，在带宽预算内动态调整各通道的采样率。PCA-Triage 无需训练参数，计算效率极高（单次决策 0.67ms），在多个基准数据集上表现优异，能在大幅降低带宽占用的同时保持接近全量数据的推理精度，且对噪声和丢包具有鲁棒性。",
+      "tags": "query:tmr",
+      "abstract_en": "Multi-channel sensor networks in industrial IoT often exceed available bandwidth. We propose PCA-Triage, a streaming algorithm that converts incremental PCA loadings into proportional per-channel sampling rates under a bandwidth budget. PCA-Triage runs in O(wdk) time with zero trainable parameters (0.67 ms per decision).   We evaluate on 7 benchmarks (8--82 channels) against 9 baselines. PCA-Triage is the best unsupervised method on 3 of 6 datasets at 50% bandwidth, winning 5 of 6 against every baseline with large effect sizes (r = 0.71--0.91). On TEP, it achieves F1 = 0.961 +/- 0.001 -- within 0.1% of full-data performance -- while maintaining F1 > 0.90 at 30% budget. Targeted extensions push F1 to 0.970. The algorithm is robust to packet loss and sensor noise (3.7--4.8% degradation under combined worst-case).",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

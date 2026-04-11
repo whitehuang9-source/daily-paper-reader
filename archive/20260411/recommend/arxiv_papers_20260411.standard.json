@@ -1,0 +1,133 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-11T20:33:49.555456+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.02749v1",
+      "title": "Residual-Aware Distributionally Robust EKF: Absorbing Linearization Mismatch via Wasserstein Ambiguity",
+      "abstract": "The extended Kalman filter (EKF) is a cornerstone of nonlinear state estimation, yet its performance is fundamentally limited by noise-model mismatch and linearization errors. We develop a residual-aware distributionally robust EKF that addresses both challenges within a unified Wasserstein distributionally robust state estimation framework. The key idea is to treat linearization residuals as uncertainty and absorb them into an effective uncertainty model captured by a stage-wise ambiguity set, enabling noise-model mismatch and approximation errors to be handled within a single formulation. This approach yields a computable effective radius along with deterministic upper bounds on the prior and posterior mean-squared errors of the true nonlinear estimation error. The resulting filter admits a tractable semidefinite programming reformulation while preserving the recursive structure of the classical EKF. Simulations on coordinated-turn target tracking and uncertainty-aware robot navigation demonstrate improved estimation accuracy and safety compared to standard EKF baselines under model mismatch and nonlinear effects.",
+      "authors": [
+        "Minhyuk Jang",
+        "Jungjin Lee",
+        "Astghik Hakobyan",
+        "Naira Hovakimyan",
+        "Insoon Yang"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-03T05:40:05+00:00",
+      "link": "https://arxiv.org/pdf/2604.02749v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Robust EKF for state estimation and noise-model mismatch handling",
+      "llm_evidence_cn": "用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波",
+      "llm_evidence": "用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波",
+      "canonical_evidence": "用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波",
+      "llm_tldr_en": "A distributionally robust EKF framework that handles linearization errors and noise mismatch in state estimation.",
+      "llm_tldr_cn": "一种分布鲁棒扩展卡尔曼滤波框架，可处理状态估计中的线性化误差和噪声失配。",
+      "llm_tldr": "一种分布鲁棒扩展卡尔曼滤波框架，可处理状态估计中的线性化误差和噪声失配。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.04832v1",
+      "title": "When One Sensor Fails: Tolerating Dysfunction in Multi-Sensor Prototypes",
+      "abstract": "Surface electromyography (sEMG) sensors are widely used in human-computer interaction, yet the failure of a single sensor can compromise system usability. We propose a methodological framework for implementing a fail-safe mechanism in multi-sensor sEMG systems. Using arm sEMG recordings of rock-paper-scissors gestures, we extracted hand-crafted features and quantified class separability via the maximum Fisher discriminant ratio (FDR). A multi-layer perceptron validated our approach, consistent with prior findings and physiological evidence. Systematic sensor ablations and FDR analysis produced a ranking of crucial versus replaceable sensors. This ranking informs robust device design, sensor redundancy, and reliability in clinical and practical applications.",
+      "authors": [
+        "Freek Hens",
+        "Amirhossein Sadough",
+        "Aleksa Bokšan",
+        "Mahyar Shahsavari",
+        "Mohammad Mahdi Dehshibi"
+      ],
+      "primary_category": "cs.HC",
+      "categories": [
+        "cs.HC"
+      ],
+      "published": "2026-04-06T16:35:25+00:00",
+      "link": "https://arxiv.org/pdf/2604.04832v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "fail-safe mechanism and sensor redundancy for multi-sensor systems",
+      "llm_evidence_cn": "多传感器系统的故障保护机制和传感器冗余",
+      "llm_evidence": "多传感器系统的故障保护机制和传感器冗余",
+      "canonical_evidence": "多传感器系统的故障保护机制和传感器冗余",
+      "llm_tldr_en": "Proposes a framework for sensor redundancy and reliability in multi-sensor systems to tolerate dysfunction.",
+      "llm_tldr_cn": "提出了多传感器系统中的传感器冗余和可靠性框架，以应对传感器失效。",
+      "llm_tldr": "提出了多传感器系统中的传感器冗余和可靠性框架，以应对传感器失效。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.05045v1",
+      "title": "PCA-Driven Adaptive Sensor Triage for Edge AI Inference",
+      "abstract": "Multi-channel sensor networks in industrial IoT often exceed available bandwidth. We propose PCA-Triage, a streaming algorithm that converts incremental PCA loadings into proportional per-channel sampling rates under a bandwidth budget. PCA-Triage runs in O(wdk) time with zero trainable parameters (0.67 ms per decision).   We evaluate on 7 benchmarks (8--82 channels) against 9 baselines. PCA-Triage is the best unsupervised method on 3 of 6 datasets at 50% bandwidth, winning 5 of 6 against every baseline with large effect sizes (r = 0.71--0.91). On TEP, it achieves F1 = 0.961 +/- 0.001 -- within 0.1% of full-data performance -- while maintaining F1 > 0.90 at 30% budget. Targeted extensions push F1 to 0.970. The algorithm is robust to packet loss and sensor noise (3.7--4.8% degradation under combined worst-case).",
+      "authors": [
+        "Ankit Hemant Lade",
+        "Sai Krishna Jasti",
+        "Nikhil Sinha",
+        "Indar Kumar",
+        "Akanksha Tiwari"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "eess.SY"
+      ],
+      "published": "2026-04-06T18:00:47+00:00",
+      "link": "https://arxiv.org/pdf/2604.05045v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "PCA-based adaptive sampling for multi-channel sensor networks",
+      "llm_evidence_cn": "基于PCA的多通道传感器网络自适应采样",
+      "llm_evidence": "基于PCA的多通道传感器网络自适应采样",
+      "canonical_evidence": "基于PCA的多通道传感器网络自适应采样",
+      "llm_tldr_en": "Proposes a PCA-driven algorithm for efficient data sampling in multi-channel sensor networks.",
+      "llm_tldr_cn": "提出一种PCA驱动的算法，用于多通道传感器网络的高效数据采样。",
+      "llm_tldr": "提出一种PCA驱动的算法，用于多通道传感器网络的高效数据采样。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "multi-sensor array for current measurement",
+      "matched_requirement_id": "req-1",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

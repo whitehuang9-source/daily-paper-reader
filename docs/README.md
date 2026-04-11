@@ -6,41 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-10
-- 运行时间：2026-04-10 20:14:41 UTC
+- 最新运行日期：2026-04-11
+- 运行时间：2026-04-11 20:34:08 UTC
 - 运行状态：成功
-- 本次总论文数：6
+- 本次总论文数：3
 - 精读区：0
-- 速读区：6
+- 速读区：3
 
 ### 今日简报（AI）
-今日聚焦 MIMO 系统数据驱动重构与 SDR 硬件自校准，共收录 6 篇前沿速读。
-重点关注具备收敛保证的 MIMO 未知输入重构技术，以及提升波束成形精度的自校准 SDR 方案。
-建议关注信号处理算法的读者优先研读数据驱动重构论文，以获取更稳健的系统建模思路。
-- 详情：[/202604/10/README](/202604/10/README)
+今日聚焦提升多传感器系统的鲁棒性与效率，涵盖了改进型EKF滤波、故障容错及边缘AI推理优化。
+重点关注利用Wasserstein模糊集吸收EKF线性化偏差，以及通过PCA驱动的自适应分选提升边缘端感知性能。
+建议关注自动驾驶与边缘计算的读者，参考这些方案来增强复杂环境下感知系统的稳定性和资源利用率。
+- 详情：[/202604/11/README](/202604/11/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Data-Driven Unknown Input Reconstruction for MIMO Systems with Convergence Guarantees](/202604/10/2604.08018v1-data-driven-unknown-input-reconstruction-for-mimo-systems-with-convergence-guarantees)  
-   标签：评分：7.0/10、query:tmr
-   evidence：MIMO系统的驱动未知输入重建
-2. [A Self-Calibrating SDR for High Fidelity Beam- and Null-forming Arrays](/202604/10/2604.02498v1-a-self-calibrating-sdr-for-high-fidelity-beam--and-null-forming-arrays)  
+1. [Residual-Aware Distributionally Robust EKF: Absorbing Linearization Mismatch via Wasserstein Ambiguity](/202604/11/2604.02749v1-residual-aware-distributionally-robust-ekf-absorbing-linearization-mismatch-via-wasserstein-ambiguity)  
    标签：评分：6.0/10、query:tmr
-   evidence：阵列中的干扰抑制和零点形成
-3. [Regularized Approximate Message Passing for Overloaded Discrete Linear Inversion](/202604/10/2604.03717v1-regularized-approximate-message-passing-for-overloaded-discrete-linear-inversion)  
+   evidence：用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波
+2. [When One Sensor Fails: Tolerating Dysfunction in Multi-Sensor Prototypes](/202604/11/2604.04832v1-when-one-sensor-fails-tolerating-dysfunction-in-multi-sensor-prototypes)  
    标签：评分：6.0/10、query:tmr
-   evidence：超载系统中信号检测的低复杂度算法
-4. [Joint Shape-Position Optimization Enhanced 2D DOA Estimation in Movable Antenna Systems](/202604/10/2604.04132v1-joint-shape-position-optimization-enhanced-2d-doa-estimation-in-movable-antenna-systems)  
+   evidence：多传感器系统的故障保护机制和传感器冗余
+3. [PCA-Driven Adaptive Sensor Triage for Edge AI Inference](/202604/11/2604.05045v1-pca-driven-adaptive-sensor-triage-for-edge-ai-inference)  
    标签：评分：6.0/10、query:tmr
-   evidence：天线阵列的形状-位置联合优化
-5. [Uncertainty Estimation for Deep Reconstruction in Actuatic Disaster Scenarios with Autonomous Vehicles](/202604/10/2604.06387v1-uncertainty-estimation-for-deep-reconstruction-in-actuatic-disaster-scenarios-with-autonomous-vehicles)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于稀疏传感器观测的标量场重建与不确定性估计
-6. [Design and Implementation of a Multi-Sensor DAQ System for Comparative Photovoltaic Performance Analysis](/202604/10/2604.06670v1-design-and-implementation-of-a-multi-sensor-daq-system-for-comparative-photovoltaic-performance-analysis)  
-   标签：评分：6.0/10、query:tmr
-   evidence：集成高精度电流传感器的多传感器数据采集系统
+   evidence：基于PCA的多通道传感器网络自适应采样
 
 
 <div class="dpr-home-promo-card">
