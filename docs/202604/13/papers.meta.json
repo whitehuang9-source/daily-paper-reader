@@ -1,0 +1,23 @@
+{
+  "label": "2026-04-13",
+  "date": "2026-04-13",
+  "generated_at": "2026-04-13T21:27:00",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202604/13/2604.06056v1-fine-grained-power-and-energy-attribution-on-amd-gpuapu-based-exascale-nodes",
+      "section": "quick",
+      "title_en": "Fine-Grained Power and Energy Attribution on AMD GPU/APU-Based Exascale Nodes",
+      "authors": "Adam McDaniel, Michael Jantz, Ashesh Sharma, Steve Abbott, Steven Martin, Shreyas Khandekar, Brandon Neth, Bruno Villasenor Alvarez, Aditya Kashi, Wael Elwasif, Oscar Hernandez",
+      "date": "2026-04-07",
+      "pdf": "https://arxiv.org/pdf/2604.06056v1",
+      "score": "6.0",
+      "evidence": "通过多个能量传感器重建功率并修正传感器效应",
+      "tldr": "针对AMD GPU/APU架构的百亿亿次级系统，本文提出了一种细粒度的功耗与能耗归因方法。研究通过受控负载量化了不同传感器在采样率和延迟上的差异，利用累积能量计数器重建高频功耗流，并集成至Score-P/PAPI工具中。该方法实现了对rocHPL等基准测试的精确相位级能效分析，揭示了混合精度技术在大幅降低能耗方面的显著作用，为系统级功耗优化提供了重要指导。",
+      "tags": "query:tmr",
+      "abstract_en": "Modern exascale GPU- and APU-based systems provide multiple power and energy sensors, but differences in scope, update rate, timing, and filtering complicate the attribution of short-lived accelerator activity. This paper presents a methodology to characterize and correct these effects on Cray EX systems with AMD Instinct MI250X GPUs (Frontier) and MI300A APUs (Portage). Using controlled square-wave workloads, we quantify update intervals, delay, aliasing, and variability across up to 512 GPUs and 480 APUs with on-chip (rocm-smi/amd-smi) and off-chip Cray Power Management sensors. We reconstruct power from cumulative energy counters to achieve faster response times, validate it against on-chip, off-chip, and node-level sensors, and integrate the resulting streams into a Score-P/PAPI-based tool for time-aligned, phase-level attribution. Applied to rocHPL, rocHPL-MxP, and HPG-MxP, the method separates energy savings due to reduced runtime from changes in power. Mixed precision reduces node energy on Frontier by 79% for rocHPL-MxP and 31% for HPG-MxP, with similar trends on Portage. These results provide portable guidance for sensor validation and power-aware optimization on current and future exascale systems.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

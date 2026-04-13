@@ -6,22 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-12
-- 运行时间：2026-04-12 20:45:05 UTC
+- 最新运行日期：2026-04-13
+- 运行时间：2026-04-13 21:26:52 UTC
 - 运行状态：成功
-- 本次总论文数：0
+- 本次总论文数：1
 - 精读区：0
-- 速读区：0
+- 速读区：1
 
 ### 今日简报（AI）
-> 今日无新推荐，系统未产出可展示论文。
-- 详情：[/202604/12/README](/202604/12/README)
+今日聚焦 AMD GPU/APU 超算节点的细粒度功耗与能量归因研究。
+论文重点解析了在百亿亿次级计算环境下，如何实现精确的能耗监测与任务级能量分配。
+建议关注高性能计算能效优化的读者参考其方法，以提升大规模并行系统的能源利用效率。
+- 详情：[/202604/13/README](/202604/13/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-- 本次无速读推荐。
+1. [Fine-Grained Power and Energy Attribution on AMD GPU/APU-Based Exascale Nodes](/202604/13/2604.06056v1-fine-grained-power-and-energy-attribution-on-amd-gpuapu-based-exascale-nodes)  
+   标签：评分：6.0/10、query:tmr
+   evidence：通过多个能量传感器重建功率并修正传感器效应
 
 
 <div class="dpr-home-promo-card">

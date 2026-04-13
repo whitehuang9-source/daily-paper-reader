@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-04-13 <!--dpr-date:20260413-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/13/2604.06056v1-fine-grained-power-and-energy-attribution-on-amd-gpuapu-based-exascale-nodes" data-sidebar-item="{&quot;title&quot;: &quot;Fine-Grained Power and Energy Attribution on AMD GPU/APU-Based Exascale Nodes&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.06056v1-fine-grained-power-and-energy-attribution-on-amd-gpuapu-based-exascale-nodes&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;通过多个能量传感器重建功率并修正传感器效应&quot;}">Fine-Grained Power and Energy Attribution on AMD GPU/APU-Based Exascale Nodes</a>
   * 2026-04-11 <!--dpr-date:20260411-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/11/2604.02749v1-residual-aware-distributionally-robust-ekf-absorbing-linearization-mismatch-via-wasserstein-ambiguity" data-sidebar-item="{&quot;title&quot;: &quot;Residual-Aware Distributionally Robust EKF: Absorbing Linearization Mismatch via Wasserstein Ambiguity&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.02749v1-residual-aware-distributionally-robust-ekf-absorbing-linearization-mismatch-via-wasserstein-ambiguity&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;用于状态估计和处理噪声模型失配的鲁棒扩展卡尔曼滤波&quot;}">Residual-Aware Distributionally Robust EKF: Absorbing Linearization Mismatch via Wasserstein Ambiguity</a>

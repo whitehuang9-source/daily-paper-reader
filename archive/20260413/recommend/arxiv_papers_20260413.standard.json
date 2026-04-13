@@ -1,0 +1,62 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-13T21:26:31.721571+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.06056v1",
+      "title": "Fine-Grained Power and Energy Attribution on AMD GPU/APU-Based Exascale Nodes",
+      "abstract": "Modern exascale GPU- and APU-based systems provide multiple power and energy sensors, but differences in scope, update rate, timing, and filtering complicate the attribution of short-lived accelerator activity. This paper presents a methodology to characterize and correct these effects on Cray EX systems with AMD Instinct MI250X GPUs (Frontier) and MI300A APUs (Portage). Using controlled square-wave workloads, we quantify update intervals, delay, aliasing, and variability across up to 512 GPUs and 480 APUs with on-chip (rocm-smi/amd-smi) and off-chip Cray Power Management sensors. We reconstruct power from cumulative energy counters to achieve faster response times, validate it against on-chip, off-chip, and node-level sensors, and integrate the resulting streams into a Score-P/PAPI-based tool for time-aligned, phase-level attribution. Applied to rocHPL, rocHPL-MxP, and HPG-MxP, the method separates energy savings due to reduced runtime from changes in power. Mixed precision reduces node energy on Frontier by 79% for rocHPL-MxP and 31% for HPG-MxP, with similar trends on Portage. These results provide portable guidance for sensor validation and power-aware optimization on current and future exascale systems.",
+      "authors": [
+        "Adam McDaniel",
+        "Michael Jantz",
+        "Ashesh Sharma",
+        "Steve Abbott",
+        "Steven Martin",
+        "Shreyas Khandekar",
+        "Brandon Neth",
+        "Bruno Villasenor Alvarez",
+        "Aditya Kashi",
+        "Wael Elwasif",
+        "Oscar Hernandez"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC",
+        "cs.AR"
+      ],
+      "published": "2026-04-07T16:42:47+00:00",
+      "link": "https://arxiv.org/pdf/2604.06056v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstructing power from multiple energy sensors and correcting sensor effects",
+      "llm_evidence_cn": "通过多个能量传感器重建功率并修正传感器效应",
+      "llm_evidence": "通过多个能量传感器重建功率并修正传感器效应",
+      "canonical_evidence": "通过多个能量传感器重建功率并修正传感器效应",
+      "llm_tldr_en": "Develops methodology to reconstruct power and correct sensor timing/filtering effects in exascale systems.",
+      "llm_tldr_cn": "开发了一种在百亿亿次级系统中重建功率并修正传感器定时与滤波效应的方法。",
+      "llm_tldr": "开发了一种在百亿亿次级系统中重建功率并修正传感器定时与滤波效应的方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
