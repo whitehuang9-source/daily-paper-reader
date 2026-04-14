@@ -1,0 +1,162 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-14T21:58:24.878244+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.11190v1",
+      "title": "Cross-Sensor RGB Spectrograms: A Visual Method for Anomaly Detection in Classical and Quantum Magnetometer Triads",
+      "abstract": "Stationary multi-magnetometer arrays are routinely deployed in geomagnetic observatories, laboratory shielded rooms, and ground-based monitoring stations. The standard analysis pipeline reduces each sensor to an independent power spectrum, discarding any inter-sensor structure that is itself diagnostic of measurement health and of localised magnetic activity. This paper develops a purely theoretical framework for a deliberately simple visualisation that maps the short-time Fourier (STFT) power spectra of three concurrent magnetometers into the red, green, and blue channels of a single image: the \\emph{cross-sensor RGB spectrogram}. Inter-sensor coherence appears as neutral grey or white, while spectral energy that is unique to one or two sensors stands out as saturated colour. We formalise the construction of the image, derive its time-frequency resolution properties, give an explicit account of the per-channel normalisation choice, and present a colour-anomaly taxonomy that distinguishes coherent broadband activity, single-sensor faults, asymmetric pairwise sources, and slow temporal drift. A companion long-window variant is described for resolving features in the ultra-low frequency (ULF) band. The construction is presented without reference to any particular dataset or implementation; it is intended as a self-contained methodological building block that can be inserted into any monitoring pipeline whose front end is a synchronously sampled magnetometer triad. Because the construction operates on scalar magnitude time series alone, it applies equally to classical fluxgate sensors and to quantum magnetometers -- optically pumped magnetometers (OPMs), nitrogen-vacancy (NV) centre arrays, and superconducting quantum interference devices (SQUIDs) -- where distinguishing quantum-limited noise from technical artefacts is a central diagnostic challenge.",
+      "authors": [
+        "Manas Pandey"
+      ],
+      "primary_category": "quant-ph",
+      "categories": [
+        "quant-ph",
+        "physics.ins-det"
+      ],
+      "published": "2026-04-13T08:49:01+00:00",
+      "link": "https://arxiv.org/pdf/2604.11190v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "multi-magnetometer arrays and inter-sensor structure for localized magnetic activity",
+      "llm_evidence_cn": "多磁力计阵列及用于局部磁活动的传感器间结构",
+      "llm_evidence": "多磁力计阵列及用于局部磁活动的传感器间结构",
+      "canonical_evidence": "多磁力计阵列及用于局部磁活动的传感器间结构",
+      "llm_tldr_en": "Presents a visualization method for anomaly detection in magnetometer triads and arrays.",
+      "llm_tldr_cn": "提出一种用于磁力计三元组和阵列异常检测的可视化方法。",
+      "llm_tldr": "提出一种用于磁力计三元组和阵列异常检测的可视化方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.05389v1",
+      "title": "DDA-Net: Accurate TDD Channel Estimation via Deep Unfolding the Doppler-Delay-Angle Representation of Channel Signals",
+      "abstract": "In TDD massive MIMO systems, channel estimation under sparse frequency-hopping pilots is challenging: each snapshot captures only one narrow pilot block that hops across frequency, with tens of milliseconds between adjacent snapshots. Finite-window leakage and off-grid effects weaken the ideal Doppler-delay-angle (DDA) sparsity, limiting both classical sparse recovery and purely data-driven approaches lacking an explicit structured transform-domain model. We propose DDA-Net, a model-driven 3D deep unfolding network for joint multi-snapshot channel state reconstruction. DDA-Net unfolds an ADMM formulation with an exact closed-form data-consistency update that avoids tensor inversion, learns the prior via a lightweight Doppler-domain denoiser, and uses delay oversampling to reduce basis mismatch. On QuaDRiGa UMa-NLOS, DDA-Net improves NMSE over the best baseline by more than 5 dB at 10 dB SNR, and retains a lead of about 1.5 dB under zero-shot testing on 3GPP CDL-B channels at the same SNR. Ablation studies show that window-level 3D processing is necessary across scenarios, while Doppler parameterization adds in-distribution gains and recovers a clear lead under scenario shift after few-shot fine-tuning with only 20 target-domain samples. These results demonstrate that combining exact physical data consistency with a learned DDA-domain prior is an effective and sample-efficient approach to channel state acquisition under sparse frequency-hopping pilots.",
+      "authors": [
+        "Yufei Ma",
+        "Xu Zhu",
+        "Tiejun Li"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-07T03:40:24+00:00",
+      "link": "https://arxiv.org/pdf/2604.05389v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "deep unfolding for joint multi-snapshot reconstruction from sparse signals",
+      "llm_evidence_cn": "用于稀疏信号多快照联合重建的深度展开网络",
+      "llm_evidence": "用于稀疏信号多快照联合重建的深度展开网络",
+      "canonical_evidence": "用于稀疏信号多快照联合重建的深度展开网络",
+      "llm_tldr_en": "A model-driven deep unfolding network for accurate signal reconstruction from sparse measurements.",
+      "llm_tldr_cn": "一种用于从稀疏测量中准确重建信号的模型驱动深度展开网络。",
+      "llm_tldr": "一种用于从稀疏测量中准确重建信号的模型驱动深度展开网络。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.08812v1",
+      "title": "Sensor Placement for Tsunami Early Warning via Large-Scale Bayesian Optimal Experimental Design",
+      "abstract": "Real-time tsunami early warning relies on distributed sensor networks to infer seismic sources and seafloor motion. Optimizing these networks via Bayesian optimal experimental design (OED) is exceptionally challenging for systems governed by hyperbolic partial differential equations, which lack the spectral decay required by standard low-rank approximations. We present a scalable Bayesian OED framework for linear time-invariant systems. By reformulating the inverse problem in the data space, we transform OED into dense matrix subset selection. We propose a multi-GPU, Schur-complement-update-based, greedy algorithm that solves the OED problem using a pipelined approach that fully overlaps I/O with GPU computations. Our framework achieves near-perfect weak and strong scaling across hundreds of GPUs on Perlmutter and Frontier. Applied to the 2025 Gordon Bell Prize-winning digital twin for tsunami forecasting in the Cascadia Subduction Zone, we optimize a 175-sensor network, minimizing the uncertainty of a parameter field with over one billion degrees of freedom.",
+      "authors": [
+        "Sreeram Venkat",
+        "Stefan Henneking",
+        "Omar Ghattas"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC",
+        "math.NA"
+      ],
+      "published": "2026-04-09T23:04:34+00:00",
+      "link": "https://arxiv.org/pdf/2604.08812v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Bayesian optimal experimental design for sensor placement in distributed networks",
+      "llm_evidence_cn": "分布式网络中传感器布局的贝叶斯优化实验设计",
+      "llm_evidence": "分布式网络中传感器布局的贝叶斯优化实验设计",
+      "canonical_evidence": "分布式网络中传感器布局的贝叶斯优化实验设计",
+      "llm_tldr_en": "A scalable Bayesian framework for optimizing sensor placement in large-scale distributed networks.",
+      "llm_tldr_cn": "一种用于优化大规模分布式网络中传感器布局的可扩展贝叶斯框架。",
+      "llm_tldr": "一种用于优化大规模分布式网络中传感器布局的可扩展贝叶斯框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.11588v1",
+      "title": "Distributed State Estimation for Discrete-Time Systems With Unknown Inputs: An Optimization Approach",
+      "abstract": "This paper proposes a novel Distributed Unknown Input Observer (DUIO) framework for state estimation in large-scale systems subject to local unknown inputs. We consider systems where outputs are measured by a network of spatially distributed sensors and inputs are introduced through multiple dispersed channels. In this framework, each local node utilizes only its local input and output measurements to estimate the maximal locally reconstructible state. Subsequently, nodes collaboratively reconstruct the whole system state via a distributed optimization algorithm that fuses these partial estimates. We provide a rigorous analysis showing that the estimation error is bounded, with the error bound explicitly dependent on the number of communication iterations per time step and strongly convexity constant determined by the system parameters. Furthermore, to counteract curvature anisotropy induced by poor conditioned system geometry, we embed a normalization step into the distributed optimization procedure. Simulation results demonstrate the effectiveness of the proposed framework and the performance improvements yielded by the normalization procedure.",
+      "authors": [
+        "Ruixuan Zhao",
+        "Guitao Yang",
+        "Nicola Bastianello",
+        "Boli Chen"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-13T15:03:40+00:00",
+      "link": "https://arxiv.org/pdf/2604.11588v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "distributed state estimation and reconstruction using a network of spatially distributed sensors",
+      "llm_evidence_cn": "利用空间分布传感器网络进行分布式状态估计与重建",
+      "llm_evidence": "利用空间分布传感器网络进行分布式状态估计与重建",
+      "canonical_evidence": "利用空间分布传感器网络进行分布式状态估计与重建",
+      "llm_tldr_en": "Develops a distributed observer framework for state reconstruction in large-scale systems using sensor networks.",
+      "llm_tldr_cn": "开发了一种分布式观测器框架，利用传感器网络对大规模系统进行状态重建。",
+      "llm_tldr": "开发了一种分布式观测器框架，利用传感器网络对大规模系统进行状态重建。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

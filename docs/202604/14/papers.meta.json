@@ -1,0 +1,65 @@
+{
+  "label": "2026-04-14",
+  "date": "2026-04-14",
+  "generated_at": "2026-04-14T21:58:54",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202604/14/2604.11190v1-cross-sensor-rgb-spectrograms-a-visual-method-for-anomaly-detection-in-classical-and-quantum-magnetometer-triads",
+      "section": "quick",
+      "title_en": "Cross-Sensor RGB Spectrograms: A Visual Method for Anomaly Detection in Classical and Quantum Magnetometer Triads",
+      "authors": "Manas Pandey",
+      "date": "2026-04-13",
+      "pdf": "https://arxiv.org/pdf/2604.11190v1",
+      "score": "7.0",
+      "evidence": "多磁力计阵列及用于局部磁活动的传感器间结构",
+      "tldr": "本文提出了一种用于多磁力计阵列异常检测的可视化方法，通过将三个同步传感器的短时傅里叶变换（STFT）功率谱映射到单张图像的红、绿、蓝（RGB）通道中，构建“跨传感器RGB谱图”。该方法保留了传感器间的结构信息，使相干信号呈现为中性灰色，而单传感器异常则显示为饱和彩色。该框架适用于经典和量子磁力计，能有效区分宽带活动、传感器故障及技术伪影，为磁场监测提供了一种通用的诊断工具。",
+      "tags": "query:tmr",
+      "abstract_en": "Stationary multi-magnetometer arrays are routinely deployed in geomagnetic observatories, laboratory shielded rooms, and ground-based monitoring stations. The standard analysis pipeline reduces each sensor to an independent power spectrum, discarding any inter-sensor structure that is itself diagnostic of measurement health and of localised magnetic activity. This paper develops a purely theoretical framework for a deliberately simple visualisation that maps the short-time Fourier (STFT) power spectra of three concurrent magnetometers into the red, green, and blue channels of a single image: the \\emph{cross-sensor RGB spectrogram}. Inter-sensor coherence appears as neutral grey or white, while spectral energy that is unique to one or two sensors stands out as saturated colour. We formalise the construction of the image, derive its time-frequency resolution properties, give an explicit account of the per-channel normalisation choice, and present a colour-anomaly taxonomy that distinguishes coherent broadband activity, single-sensor faults, asymmetric pairwise sources, and slow temporal drift. A companion long-window variant is described for resolving features in the ultra-low frequency (ULF) band. The construction is presented without reference to any particular dataset or implementation; it is intended as a self-contained methodological building block that can be inserted into any monitoring pipeline whose front end is a synchronously sampled magnetometer triad. Because the construction operates on scalar magnitude time series alone, it applies equally to classical fluxgate sensors and to quantum magnetometers -- optically pumped magnetometers (OPMs), nitrogen-vacancy (NV) centre arrays, and superconducting quantum interference devices (SQUIDs) -- where distinguishing quantum-limited noise from technical artefacts is a central diagnostic challenge.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/14/2604.05389v1-dda-net-accurate-tdd-channel-estimation-via-deep-unfolding-the-doppler-delay-angle-representation-of-channel-signals",
+      "section": "quick",
+      "title_en": "DDA-Net: Accurate TDD Channel Estimation via Deep Unfolding the Doppler-Delay-Angle Representation of Channel Signals",
+      "authors": "Yufei Ma, Xu Zhu, Tiejun Li",
+      "date": "2026-04-07",
+      "pdf": "https://arxiv.org/pdf/2604.05389v1",
+      "score": "6.0",
+      "evidence": "用于稀疏信号多快照联合重建的深度展开网络",
+      "tldr": "针对TDD大规模MIMO系统中稀疏跳频导频导致的信道估计难题，本文提出DDA-Net。该方法利用深度展开技术，将ADMM算法与多维多快照信道信号的Doppler-Delay-Angle（DDA）稀疏表征相结合。通过精确的数据一致性更新和轻量化去噪器，DDA-Net有效克服了窗泄露和离网效应，在显著提升估计精度的同时，展现了极强的泛化能力和样本效率。",
+      "tags": "query:tmr",
+      "abstract_en": "In TDD massive MIMO systems, channel estimation under sparse frequency-hopping pilots is challenging: each snapshot captures only one narrow pilot block that hops across frequency, with tens of milliseconds between adjacent snapshots. Finite-window leakage and off-grid effects weaken the ideal Doppler-delay-angle (DDA) sparsity, limiting both classical sparse recovery and purely data-driven approaches lacking an explicit structured transform-domain model. We propose DDA-Net, a model-driven 3D deep unfolding network for joint multi-snapshot channel state reconstruction. DDA-Net unfolds an ADMM formulation with an exact closed-form data-consistency update that avoids tensor inversion, learns the prior via a lightweight Doppler-domain denoiser, and uses delay oversampling to reduce basis mismatch. On QuaDRiGa UMa-NLOS, DDA-Net improves NMSE over the best baseline by more than 5 dB at 10 dB SNR, and retains a lead of about 1.5 dB under zero-shot testing on 3GPP CDL-B channels at the same SNR. Ablation studies show that window-level 3D processing is necessary across scenarios, while Doppler parameterization adds in-distribution gains and recovers a clear lead under scenario shift after few-shot fine-tuning with only 20 target-domain samples. These results demonstrate that combining exact physical data consistency with a learned DDA-domain prior is an effective and sample-efficient approach to channel state acquisition under sparse frequency-hopping pilots.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/14/2604.08812v1-sensor-placement-for-tsunami-early-warning-via-large-scale-bayesian-optimal-experimental-design",
+      "section": "quick",
+      "title_en": "Sensor Placement for Tsunami Early Warning via Large-Scale Bayesian Optimal Experimental Design",
+      "authors": "Sreeram Venkat, Stefan Henneking, Omar Ghattas",
+      "date": "2026-04-09",
+      "pdf": "https://arxiv.org/pdf/2604.08812v1",
+      "score": "6.0",
+      "evidence": "分布式网络中传感器布局的贝叶斯优化实验设计",
+      "tldr": "本研究针对海啸预警中的传感器布局优化问题，提出了一种基于大规模贝叶斯最优实验设计（OED）的可扩展框架。针对双曲偏微分方程缺乏谱衰减的挑战，该方法将逆问题重构为数据空间中的稠密矩阵子集选择问题，并利用多GPU加速的贪婪算法实现高效求解。该框架在超级计算机上表现出极佳的扩展性，成功应用于卡斯卡迪亚俯冲带的海啸预测数字孪生系统，优化了包含十亿级自由度的参数场。",
+      "tags": "query:tmr",
+      "abstract_en": "Real-time tsunami early warning relies on distributed sensor networks to infer seismic sources and seafloor motion. Optimizing these networks via Bayesian optimal experimental design (OED) is exceptionally challenging for systems governed by hyperbolic partial differential equations, which lack the spectral decay required by standard low-rank approximations. We present a scalable Bayesian OED framework for linear time-invariant systems. By reformulating the inverse problem in the data space, we transform OED into dense matrix subset selection. We propose a multi-GPU, Schur-complement-update-based, greedy algorithm that solves the OED problem using a pipelined approach that fully overlaps I/O with GPU computations. Our framework achieves near-perfect weak and strong scaling across hundreds of GPUs on Perlmutter and Frontier. Applied to the 2025 Gordon Bell Prize-winning digital twin for tsunami forecasting in the Cascadia Subduction Zone, we optimize a 175-sensor network, minimizing the uncertainty of a parameter field with over one billion degrees of freedom.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/14/2604.11588v1-distributed-state-estimation-for-discrete-time-systems-with-unknown-inputs-an-optimization-approach",
+      "section": "quick",
+      "title_en": "Distributed State Estimation for Discrete-Time Systems With Unknown Inputs: An Optimization Approach",
+      "authors": "Ruixuan Zhao, Guitao Yang, Nicola Bastianello, Boli Chen",
+      "date": "2026-04-13",
+      "pdf": "https://arxiv.org/pdf/2604.11588v1",
+      "score": "6.0",
+      "evidence": "利用空间分布传感器网络进行分布式状态估计与重建",
+      "tldr": "本文针对受局部未知输入影响的大规模离散时间系统，提出了一种新型分布式未知输入观测器（DUIO）框架。该框架通过各节点估计局部可重构状态，并利用分布式优化算法融合这些局部估计以重建全局状态。研究不仅证明了估计误差的有界性及其与通信迭代次数的关系，还引入归一化步骤以优化病态系统下的估计性能，为分布式状态估计提供了有效的优化方案。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper proposes a novel Distributed Unknown Input Observer (DUIO) framework for state estimation in large-scale systems subject to local unknown inputs. We consider systems where outputs are measured by a network of spatially distributed sensors and inputs are introduced through multiple dispersed channels. In this framework, each local node utilizes only its local input and output measurements to estimate the maximal locally reconstructible state. Subsequently, nodes collaboratively reconstruct the whole system state via a distributed optimization algorithm that fuses these partial estimates. We provide a rigorous analysis showing that the estimation error is bounded, with the error bound explicitly dependent on the number of communication iterations per time step and strongly convexity constant determined by the system parameters. Furthermore, to counteract curvature anisotropy induced by poor conditioned system geometry, we embed a normalization step into the distributed optimization procedure. Simulation results demonstrate the effectiveness of the proposed framework and the performance improvements yielded by the normalization procedure.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
