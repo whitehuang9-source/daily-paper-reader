@@ -6,35 +6,41 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-14
-- 运行时间：2026-04-14 21:58:45 UTC
+- 最新运行日期：2026-04-16
+- 运行时间：2026-04-16 21:42:19 UTC
 - 运行状态：成功
-- 本次总论文数：4
+- 本次总论文数：6
 - 精读区：0
-- 速读区：4
+- 速读区：6
 
 ### 今日简报（AI）
-今日聚焦多传感器信号处理前沿，涵盖量子磁力计异常检测、TDD信道估计及海啸预警优化。
-重点推荐利用RGB频谱图进行跨传感器视觉化异常检测，以及通过深度展开技术提升复杂信道估计的精度。
-建议关注信号可视化与深度学习结合在复杂物理系统监测中的跨界应用。
-- 详情：[/202604/14/README](/202604/14/README)
+今日聚焦分布式高斯过程、模块化射频感知及光学干涉优化等前沿算法研究。
+重点关注 RF-LEGO 提出的信号处理与深度学习协同设计，以及基于共识机制的多输出递归建模方案。
+建议深入了解深度展开技术在射频感知中的应用，探索硬件与算法模块化结合的新思路。
+- 详情：[/202604/16/README](/202604/16/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Cross-Sensor RGB Spectrograms: A Visual Method for Anomaly Detection in Classical and Quantum Magnetometer Triads](/202604/14/2604.11190v1-cross-sensor-rgb-spectrograms-a-visual-method-for-anomaly-detection-in-classical-and-quantum-magnetometer-triads)  
-   标签：评分：7.0/10、query:tmr
-   evidence：多磁力计阵列及用于局部磁活动的传感器间结构
-2. [DDA-Net: Accurate TDD Channel Estimation via Deep Unfolding the Doppler-Delay-Angle Representation of Channel Signals](/202604/14/2604.05389v1-dda-net-accurate-tdd-channel-estimation-via-deep-unfolding-the-doppler-delay-angle-representation-of-channel-signals)  
+1. [Consensus-based Recursive Multi-Output Gaussian Process](/202604/16/2604.10146v1-consensus-based-recursive-multi-output-gaussian-process)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于稀疏信号多快照联合重建的深度展开网络
-3. [Sensor Placement for Tsunami Early Warning via Large-Scale Bayesian Optimal Experimental Design](/202604/14/2604.08812v1-sensor-placement-for-tsunami-early-warning-via-large-scale-bayesian-optimal-experimental-design)  
+   evidence：具有输出间相关性的向量值场分布式学习
+2. [RF-LEGO: Modularized Signal Processing-Deep Learning Co-Design for RF Sensing via Deep Unrolling](/202604/16/2604.10183v1-rf-lego-modularized-signal-processing-deep-learning-co-design-for-rf-sensing-via-deep-unrolling)  
    标签：评分：6.0/10、query:tmr
-   evidence：分布式网络中传感器布局的贝叶斯优化实验设计
-4. [Distributed State Estimation for Discrete-Time Systems With Unknown Inputs: An Optimization Approach](/202604/14/2604.11588v1-distributed-state-estimation-for-discrete-time-systems-with-unknown-inputs-an-optimization-approach)  
+   evidence：用于物理感知信号处理的深度展开算法
+3. [Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer](/202604/16/2604.10320v1-optimal-null-constrained-source-basis-sensing-in-a-time-reversed-young-interferometer)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用空间分布传感器网络进行分布式状态估计与重建
+   evidence：用于参数估计和噪声抑制的最佳传感器设计
+4. [A CMOS-compatible, scalable and compact magnetoelectric spin-torque microwave detector](/202604/16/2604.12366v1-a-cmos-compatible-scalable-and-compact-magnetoelectric-spin-torque-microwave-detector)  
+   标签：评分：6.0/10、query:tmr
+   evidence：集成天线的磁隧道结用于无线信号检测
+5. [Respiration Monitoring of Multiple People using Multi-site FMCW SISO Radar Systems](/202604/16/2604.12556v1-respiration-monitoring-of-multiple-people-using-multi-site-fmcw-siso-radar-systems)  
+   标签：评分：6.0/10、query:tmr
+   evidence：多站传感器系统中的干扰和虚假目标抑制
+6. [Phase transition in compressed sensing using log-sum penalty and adaptive smoothing](/202604/16/2604.13511v1-phase-transition-in-compressed-sensing-using-log-sum-penalty-and-adaptive-smoothing)  
+   标签：评分：6.0/10、query:tmr
+   evidence：从欠定线性系统中恢复稀疏信号
 
 
 <div class="dpr-home-promo-card">

@@ -1,0 +1,2443 @@
+Title: Phase transition in compressed sensing using log-sum penalty and adaptive smoothing
+
+URL Source: https://arxiv.org/pdf/2604.13511v1
+
+Published Time: Thu, 16 Apr 2026 00:32:48 GMT
+
+Number of Pages: 34
+
+Markdown Content:
+## Phase transition in compressed sensing using log-sum penalty and adaptive smoothing 
+
+Keisuke Morita ∗
+
+Graduate School of Information Sciences, Tohoku University, Sendai 980-8579, Japan 
+
+Federico Ricci-Tersenghi 
+
+Department of Physics, Sapienza University of Rome, Rome 00185, Italy 
+
+Masayuki Ohzeki 
+
+Graduate School of Information Sciences, Tohoku University, Sendai 980-8579, Japan Department of Physics, Institute of Science Tokyo, Tokyo 152-8550, Japan Research and Education Institute for Semiconductors and Informatics, Kumamoto University, Kumamoto 860-8555, Japan and Sigma-i Co., Ltd., Tokyo 108-0075, Japan 
+
+(Dated: April 16, 2026) 
+
+1
+
+> arXiv:2604.13511v1 [cs.IT] 15 Apr 2026
+
+## Abstract       
+
+> In many real-world problems, recovering sparse signals from underdetermined linear systems remains a fundamental challenge. Although ℓ1norm minimization is widely used, it suffers from estimation bias that prevents it from reaching the Bayes-optimal reconstruction limit. Nonconvex alternatives, such as the log-sum penalty, have been proposed to promote stronger sparsity. How-ever, maintaining their algorithmic stability is challenging. To address this challenge, we introduce an adaptive smoothing strategy within an approximate message passing framework to mitigate al-gorithmic instability. Furthermore, we evaluate the typical exact-recovery threshold for Gaussian measurement matrices using the replica method and state evolution. The results indicate that the adaptive method achieves exact recovery over a broader region than ℓ1norm minimization, although metastable states hinder reaching the information-theoretic limit.
+> I. INTRODUCTION
+
+Compressed sensing is a framework for recovering sparse signals from fewer measurements than the signal dimension. Its basic idea is that, although a signal may be high-dimensional, the amount of essential information it contains is often much smaller because many of its components are zero or negligibly small. This property enables reconstruction of the original signal from incomplete observations under suitable conditions, and it has found many real-world applications in areas such as accelerated magnetic resonance imaging (MRI) [1], computational imaging [2, 3], and millimeter-wave communications [4]. In the standard setting, compressed sensing is formulated as an underdetermined linear system, where the number of measurements is smaller than the signal dimension. The goal is to identify the sparsest signal among all solutions consistent with the observations. In principle, this can be achieved by minimizing the ℓ0 pseudo-norm, which counts the number of nonzero components. However, ℓ0 minimization is nonconvex and NP-hard, and is therefore computationally intractable in general. For this reason, ℓ1 norm minimization, a convex relaxation of ℓ0 minimization, has become the standard approach. It has been shown that, when the signal is sufficiently sparse and the measurement matrix satisfies suitable conditions, such as the restricted isometry property (RIP), this convex formulation  
+
+> ∗mory22k@dc.tohoku.ac.jp
+
+2can accurately recover the original signal [5, 6]. To understand the fundamental capabilities and limitations of reconstruction methods, one often studies their typical performance, namely, the average reconstruction performance in the high-dimensional limit under a random measurement matrix and a stochastic signal model. Such an analysis requires a theoretical benchmark that represents the best perfor-mance permitted by the statistical structure of the problem. This role is played by the Bayes-optimal limit, which corresponds to the ideal setting where the true signal prior and observation model are correctly specified, so that all information available for reconstruc-tion is fully exploited [7]. A representative framework for evaluating typical performance is approximate message passing (AMP) together with state evolution (SE), which character-izes the asymptotic behavior of AMP [8, 9]. For i.i.d. Gaussian measurement matrices, the reconstruction error of AMP at each iteration can be tracked asymptotically by SE [9]. An-other important framework is the replica method, a statistical-mechanical approach based on free-energy analysis [10–13]. In representative settings such as ℓ1 norm minimization and Bayes-optimal estimation, replica method and SE yield consistent predictions for typical performance [10–13]. They are therefore regarded as complementary tools for characterizing reconstruction thresholds and algorithmic performance in the high-dimensional limit. From this perspective, although ℓ1 norm minimization has strong theoretical guarantees and computational tractability, it also has intrinsic limitations. Because the ℓ1 penalty imposes nearly uniform shrinkage regardless of coefficient magnitude, even large true coeffi-cients are biased toward zero [14]. It may also produce false positives, in which truly zero components are estimated as small but nonzero [15]. More fundamentally, its reconstruction threshold generally falls short of the Bayes-optimal limit [10–13]. To overcome the limitations of ℓ1 penalty, nonconvex penalty functions have emerged as a strategy to induce stronger sparsity and to mitigate estimation bias. Examples include 
+
+smoothly clipped absolute deviation (SCAD) [15], ℓp quasi-norm with 0 < p < 1 [16], minimax concave penalty (MCP) [17], and log-sum penalty [18, 19]. A critical property of such nonconvex penalties is their steep gradient near the origin and the vanishing penalty for large signals. This feature promotes stronger sparsity while avoiding overshrinking bias. To exploit these advantages of nonconvex penalties, specific algorithms such as iteratively reweighted least squares (IRLS) [20, 21], and AMP [8, 22, 23] have also been proposed. While the introduction of nonconvex penalties offers significant theoretical advantages, it 3simultaneously presents algorithmic challenges. In contrast to ℓ1 minimization, signal recon-struction using a nonconvex penalty can encounter algorithmic issues, including sensitivity to initialization and difficulty escaping local minima. In addition, as the effective noncon-vexity increases, the basin of attraction to fixed points generally shrinks, making algorithms more prone to divergence [24]. These considerations motivate a focused study of a representative nonconvex penalty that enables the analysis of both recovery performance and algorithmic behavior. Among various nonconvex functions, this study focuses on the log-sum penalty. A key advantage of the log-sum penalty is that it allows adjustment of its nonconvexity through a single smoothness parameter and provides a closed-form, proximal operator. Recently, an explicit closed-form solution for the proximal operator of the log-sum penalty has been derived [25]. This derivation enables its incorporation into iterative algorithms such as the iterative shrinkage-thresholding algorithm (ISTA) [26, 27], the alternating direction method of multi-pliers (ADMM) [28], and AMP. On the theoretical side, the log-sum penalty has been proven to enable exact signal recovery under milder conditions on the RIP than the ℓ1 norm [29]. Despite these advancements, prior studies have largely been limited to numerical experi-ments on artificial cases. The typical exact-recovery threshold and the associated phase structure remain unclear. In this paper, we bridge this gap between theoretical guarantees and typical performance. Our contributions are as follows. We derive an AMP algorithm specialized to the log-sum penalty using the closed-form proximal operator and demonstrate the algorithmic instability arising from the penalty’s nonconvexity. To stabilize the algorithm, we propose an adaptive schedule for the smoothness parameter that keeps the proximal operator in the convex regime throughout the iterations. In addition, we characterize the typical exact-recovery threshold for i.i.d. Gaussian measurement matrices via SE and replica analysis, and demonstrate that the log-sum penalty with the proposed adaptive smoothing achieves perfect reconstruction over a broader region than the ℓ1 penalty. The rest of this paper is organized as follows. In Sec. II, we present the problem setting and describe the introduction of the log-sum penalty and the closed-form definition of the proximal operator. In Sec. III, we explain the details of the AMP algorithm for the log-sum penalty and analyze its asymptotic behavior using SE. In Sec. IV, we use the replica method to analyze the macroscopic behavior of the system. In Sec. V, we present the comprehensive 4phase diagram and discuss the relationship between the performance limits of the proposed method and the theoretical reconstruction limits. Finally, in Sec. VI, we summarize the results of this study and discuss future prospects.   
+
+> II. PROBLEM SETTING AND FORMULATION A. Problem formulation
+
+Consider an unknown original signal vector x0 ∈ RN , a measurement matrix A ∈ RM ×N ,and an observed vector y ∈ RM . y is obtained by noise-free linear observation y = Ax 0.The measurement rate, defined as the ratio of the number of measurements to the signal dimension, is denoted by α = M/N . We in particular consider the underdetermined case where 0 < α < 1. Each entry Aμi of the measurement matrix A is i.i.d. distributed according to Aμi ∼ N (0 , 1/N ). The original signal x0 is sparse, and each component x0 
+
+> i
+
+follows the zero-mean Bernoulli–Gaussian distribution with sparsity level ρ ∈ (0 , 1): 
+
+Ptrue (x0) = 
+
+> N
+
+Y
+
+> i=1
+
+ (1 − ρ)δ(x0 
+
+> i
+
+) + ρϕ (x0 
+
+> i
+
+). (1) Here, δ(·) is Dirac delta function, and ϕ(·) is the probability density function of the standard normal distribution N (0 , 1). The expected number of nonzeros in the signal is K = ρN .The reconstruction of the sparse signal x0 using the log-sum penalty is formulated as ˆx = arg min 
+
+> x
+
+R(x) s.t. y = Ax , (2) where 
+
+R(x) = 
+
+> N
+
+X
+
+> i=1
+
+log( |xi| + ε). (3) Here, ε > 0 is a parameter. It controls the tradeoff between sparsity promotion and compu-tational stability. To further understand this optimization problem, it can be interpreted as the low-temperature limit of a related probabilistic system. Consider a Bayesian linear model with Gaussian noise of variance σ2. The posterior probability distribution of x given y and A is 
+
+Pβ (x) exp 
+
+
+
+− 12σ2 ∥y − Ax ∥22
+
+
+
+, (4) 5where Pβ (x) is the prior distribution parametrized by the inverse temperature β. The prior distribution Pβ (x) is defined based on the penalty function as 
+
+Pβ (x) ∝ exp( −βR (x)) . (5) We can relate the constrained optimization to a Bayesian model via two distinct limits. First, taking σ2 → 0+ enforces the constraint y = Ax . Second, taking β → ∞ yields the global minimizer by concentrating the probability mass on the minimizers of R(x) under the constraint. By analyzing these limits, we can characterize the behavior of solutions to the optimization problem through the statistical properties of the corresponding posterior probability distribution. The log-sum penalty function exhibits properties intermediate between the ℓ1 norm and the ℓ0 pseudo-norm. When ε ≫ | x|, the log-sum penalty can be approximated as log( |x| +
+
+ε) = log( ε) + |x|/ε − O(|x|2/ε 2). This approximation reveals that the penalty behaves like a scaled ℓ1 norm in the ε → ∞ limit, satisfying lim  
+
+> ε→∞
+
+ε(R(x) − N log ε) = ∥x∥1. (6) When ε ≪ | x|, the log-sum penalty approaches the scaled ℓ0 norm. For a fixed x with bounded nonzero components, in the infinitesimal ε limit, we obtain lim 
+
+> ε→0+
+
+R(x) − N log ε
+
+log(1 + 1 /ε ) = ∥x∥0. (7) Thus, these properties indicate that the smoothing parameter ε governs the tradeoff between theoretical performance and algorithmic stability. For instance, choosing ε ≫ | x| promotes global optimization by making the problem essentially convex. However, this choice reduces solution sparsity and increases the number of required observations for exact reconstruction, as shown in Ref. [25]. On the other hand, using ε ≪ | x| enhances sparsity of the solution but makes global optimization more difficult, turning the task into a challenging nonconvex problem. Given these observations, the main point now is to consider how small ε can be set in practice. The key to answering this question lies in the specific behavior of the proximal operator.  
+
+> B. Proximal operator
+
+The behavior of sparse estimators can be described by the proximal operator. The prox-imal operator is an important tool used in many iterative algorithms for sparse estimation, 6such as the AMP algorithm. Given a vector x ∈ RN , a penalty function R : RN → R, and a regularization parameter λ ≥ 0, the proximal operator prox λR (·) is defined as the minimizer 
+
+z of the linear combination of the ℓ2 norm of x − z and R(z). In the remainder of this paper, we denote this operator as a function of x by S(x; λR (·)) = prox λR (·)(x) and call it the thresholding function . That is, we define 
+
+S(x; λR (·)) = prox 
+
+> λR (·)
+
+(x) = arg min 
+
+> z∈RN
+
+12∥z − x∥22 + λR (z)
+
+
+
+. (8) Since the log-sum penalty term R(z) is separable component-wise, S(x; λR (·)) can also be computed component-wise. When the argument is a scalar x, S(x; λR (·)) represents a univariate thresholding function, while when it is a vector x, S(x; λR (·)) is a vector formed by applying the single-variable thresholding function to each part. −8 −6 −4 −2 0 2 4 6 8
+
+x
+
+−8
+
+−6
+
+−4
+
+−202468             
+
+> S(x; λR (·))
+> ε=√λ/ 4
+> ε=√λ/ 2
+> ε=√λε= 2 √λε= 4 √λ
+> 012345012345
+
+FIG. 1. Thresholding function S(x; λR (·)) for the log-sum penalty with ε = √λ/ 4, √λ/ 2, √λ,2√λ, and 4 √λ with λ = 4. The thick solid line representing ε = √λ indicates the limit at which the threshold function remains continuous. 
+
+Here, we briefly review the closed form of the thresholding function derived in Ref. [25]. The solution is obtained by minimizing the objective function 
+
+φλ,x (z) = 12(z − x)2 + λ log( |z| + ε). (9) Depending on the values of the regularization parameter λ and smoothness parameter ε,we have two situations: the convex case √λ ≤ ε and the nonconvex case √λ > ε . In the 7convex case √λ ≤ ε, the objective function φλ,x (z) has a unique local minimum, and S is a continuous function with respect to the input. The thresholding function in this case is given by 
+
+S(x; λR (·)) = 
+
+
+
+sign( x)r+(|x|) if |x| > λε ,
+
+0 otherwise ,
+
+(10) where r+(x) is the positive root of φ′
+
+> λ,x
+
+(z) = 0 for x > 0, given by 
+
+r+(x) = x − ε
+
+2 +
+
+r(x + ε)2
+
+4 − λ. (11) In the nonconvex case √λ > ε , on the other hand, φλ,x (z) has two local minima: z ∈{0, sign( x)r+(|x|)}. The solution switches between these two options at a threshold |x| = xc,which is the unique root of c(x) = φλ,x (r+(x)) − φλ,x (0) on the interval x ∈ [2 √λ − ε, λ/ε ]. This switching of the global minimum z makes S discontinuous. The closed-form solution is given as 
+
+S(x; λR (·)) = 
+
+
+
+0 if |x| < x c,
+
+0 or sign( x)r+(|x|) if |x| = xc,
+
+sign( x)r+(|x|) if |x| > x c.
+
+(12) Note that for |x| = xc, both z = 0 and z = sign( x)r+(|x|) are global minimizers of φλ,x (z). In subsequent numerical experiments, we select z = 0. This choice does not affect the asymptotic analysis and has a negligible impact on numerical computations. The threshold 
+
+xc can be found numerically, for example, by bisection search. Here, we simply compute 
+
+φλ,x (z) for both candidates z ∈ { 0, sign( x)r+(|x|)} and use the one with the smaller objective value. Figure 1 shows the thresholding function S(x; λR (·)) in both regimes of ε. In the convex regime ε ≥ √λ, S is continuous. As ε → ∞ , S approaches the soft-thresholding function used in ℓ1 minimization. Conversely, when ε is in the nonconvex regime ε < √λ, the thresholding function displays jumps at x = ±xc. As ε → 0+, its behavior increasingly resembles that for ℓ0 minimization. The discontinuity of the thresholding function in the nonconvex case is critical for the stability of algorithms. By applying implicit differentiation to the optimality condition, we 8obtain the derivative of the thresholding function as 
+
+S′(x; λR (·)) = 
+
+
+
+(|z| + ε)2
+
+(|z| + ε)2 − λ if z := S(x; λR (·)) ̸ = 0 ,
+
+0 otherwise .
+
+(13) For ε2 ≤ λ, i.e., ε ≤ √λ, the derivative S′(x; λR (·)) diverges as |x| → x+ 
+
+> c
+
+. This divergence implies that the rate of change becomes infinite when the input x crosses the threshold 
+
+|x| = xc. In terms of algorithmic behavior, this means that small noise or perturbations in the input are amplified into large disturbances in the output. To achieve stable signal reconstruction, we have to control the parameter ε so that the thresholding function remains continuous. The next section gives a concrete example of this adaptive control. 
+
+III. APPROXIMATE MESSAGE PASSING AND ADAPTIVE SMOOTHING A. Approximate message passing for log-sum penalty 
+
+This section formulates the update rules of the AMP algorithm for the compressed sensing problem addressed in this study. AMP is an iterative algorithm that computes marginal probabilities, a key task to solve inference problems in high dimensions [8]. The update rules of the AMP for the minimization of the log-sum penalty with i.i.d. zero-mean Gaussian measurements are the following: 
+
+h[t] 
+
+> i
+
+= ˆ x[t] 
+
+> i
+
++ NM
+
+> M
+
+X
+
+> μ=1
+
+Aμi z[t] 
+
+> μ
+
+, (14) 
+
+λ[t] = χ[t]
+
+α , (15) 
+
+k[t] = 1
+
+αN 
+
+> N
+
+X
+
+> i=1
+
+S′
+
+
+
+h[t] 
+
+> i
+
+; λ[t]R(·)
+
+
+
+, (16) ˆx[t+1]  
+
+> i
+
+= S
+
+
+
+h[t] 
+
+> i
+
+; λ[t]R(·)
+
+
+
+, (17) 
+
+z[t+1]  
+
+> μ
+
+= yμ −
+
+> N
+
+X
+
+> i=1
+
+Aμi ˆx[t+1]  
+
+> i
+
++ z[t] 
+
+> μ
+
+k[t], (18) 
+
+χ[t+1] = χ[t]k[t], (19) where, at iteration t, h[t] 
+
+> i
+
+is an effective observation, ˆ x[t] 
+
+> i
+
+is the estimated signal, z[t] 
+
+> μ
+
+is a measurement residual with Onsager correction, and χ[t] 
+
+> i
+
+is an effective noise variance; i ∈
+
+90 10 20 30 40 50 
+
+t
+
+10 −6
+
+10 −4
+
+10 −2
+
+10 0
+
+10 2
+
+10 4
+
+> MSE
+
+# (a)      
+
+> ε= 0 .4
+> ε= 0 .7
+> ε= 1 .0
+> ε= 1 .3
+> ε= 1 .6
+
+0 10 20 30 40 50 
+
+t
+
+10 −2
+
+10 0
+
+10 2
+
+10 4
+
+> χ/χ c
+
+# (b)      
+
+> ε= 0 .4
+> ε= 0 .7
+> ε= 1 .0
+> ε= 1 .3
+> ε= 1 .6
+
+FIG. 2. Time evolution of (a) MSE and (b) χ/χ c when ε is fixed to various values. The symbols represent the numerical results by AMP ( N = 10 4), while the curves indicate the theoretical predictions by SE in the limit N → ∞ . Measurement rate α = 0 .5 and signal density ρ = 0 .2. 
+
+{1, . . . , N } is the signal index, and μ ∈ { 1, . . . , M } is the observation index. The AMP algorithm described above assumes that S is continuous, i.e., ε ≥ √λ[t]. Otherwise, this algorithm becomes highly unstable. Under standard assumptions [7, 9], the asymptotic dynamics of AMP are characterized by SE. The third term in the right-hand side of Eq. (18) cancels the correlation of estimation errors during the iteration process, maintaining the effective noise at each step as a Gaussian distribution. SE tracks the time evolution of the mean squared error (MSE), which is defined by MSE [t] = 1
+
+N ∥ ˆx[t] − x0∥22, (20) in the N → ∞ limit. Here, ˆ x[t] ∈ RN is the estimated signal at iteration t and x0 ∈ RN is the true signal. The SE equations for the aforementioned AMP algorithm are given as 
+
+h[t] = x0 +
+
+s
+
+MSE [t]
+
+α ξ, (21) MSE [t+1] = Ex0
+
+Z
+
+Dξ 
+
+
+
+S
+
+
+
+h[t]; χ[t]
+
+α R(·)
+
+
+
+− x0
+
+2
+
+, (22) 
+
+χ[t+1] = χ[t]
+
+α Ex0
+
+Z
+
+Dξ S ′
+
+
+
+h[t]; χ[t]
+
+α R(·)
+
+
+
+, (23) where Dξ = ϕ(ξ)dξ is the standard Gaussian measure. 10 Numerical experiments demonstrate that the stability of AMP depends on the parameter 
+
+ε, as shown in Fig. 2. Figure 2(a) shows the time evolution of MSE by AMP and SE when ε is fixed to various values. Here, we initialize ˆ xt=0 = 0 and χt=0 = 1 for AMP and MSE t=0 = ρ
+
+and χt=0 = 1 for SE. In the case of ε ≥ 1, MSE monotonically decreases and converges to zero. However, when ε < 1, the MSE diverges, and the time evolution of AMP differs from that of SE. The instability of AMP stems from the discontinuity of the thresholding function. As stated in Sec. II, the thresholding function S(x; λR (·)) has discontinuity points x = ±xc
+
+when ε < √λ, and the derivative S′(x; λR (·)) diverges at this discontinuity. Considering that λ on the right-hand side of the condition is λ[t] = χ[t]/α in the AMP algorithm, this discontinuity condition corresponds to χ[t] > ε 2α. That is to say, the algorithm is unstable when χ[t] > χ c where χc = ε2α. To confirm this, Fig. 2(b) plots the time evolution of χ[t]/χ c.While χ[t] always satisfies χ[t] ≤ χc in the setting of ε ≥ 1, χ[t] exceeds χc at a certain time in the setting of ε < 1, after which the algorithm heads towards divergence. These findings suggest that a fixed parameter strategy is insufficient for the log-sum penalty. Instead, ε
+
+should be set large at the beginning of optimization and should be gradually decreased as 
+
+χ[t] shrinks.  
+
+> B. Adaptive smoothing
+
+To address algorithmic instability, we propose an adaptive smoothing method that en-forces continuity of the thresholding function across iterations. We treat the smoothing parameter ε as an iteration-dependent quantity ε[t]. Then, at each iteration step t, we introduce an offset from √λ[t] and define ∆ε = ε[t] − √λ[t], (24) so that the smoothing parameter at iteration t is written as ε[t] = √λ[t] + ∆ ε. When ∆ ε ≥ 0, 
+
+ε[t] stays on the continuous side. This setting ensures the thresholding function remains continuous at each iteration step, leading to stable algorithmic behavior. Numerical simulation confirms that the value of ∆ ε governs the stability and the con-vergence speed of the proposed method, as shown in Fig. 3. When ∆ ε ≥ 0, MSE decreases monotonically and converges to zero. In addition, within this range, the smaller ∆ ε is, the 11 0 10 20 30 40 50 60 70 
+
+# t
+
+# 10 −24 
+
+# 10 −20 
+
+# 10 −16 
+
+# 10 −12 
+
+# 10 −8
+
+# 10 −4
+
+# 10 0
+
+# 10 4       
+
+> MSE
+> ∆ε=−10 −1
+> ∆ε=−10 −2
+> ∆ε= 0 ∆ε= 10 −2
+> ∆ε= 10 −1
+
+FIG. 3. Time evolution of MSE with the adaptive smoothing ε[t] = √λ[t] + ∆ ε. The symbols and curves represent the results of AMP ( N = 10 4) and SE ( N → ∞ ), respectively. Measurement rate and signal density are set to α = 0 .5 and ρ = 0 .2. 
+
+faster the convergence. This trend is consistent with the intuition that a smaller ε yields a sharper shrinkage profile near the origin. Conversely, when ∆ ε < 0, MSE diverges. Based on these results, we conclude that fixing the parameter to ∆ ε = 0, which corresponds to setting ε[t] = √λ[t], is the optimal choice for the adaptive smoothing. 
+
+IV. REPLICA ANALYSIS A. Replica method 
+
+In this section, we investigate the asymptotic behavior of the posterior probability dis-tribution Pβ (x | y, A) defined in Eq. (4). We study its behavior in the β → ∞ limit to evaluate typical reconstruction performance. We are interested in the asymptotic behavior of the MSE, which is expressed using two macroscopic order parameters, Q = ∥x∥22/N and 
+
+m = x · x0/N as MSE = Ex,x0 [Q − 2m] + ρ. (25) To study the system as N becomes large, we calculate the average free energy density f
+
+using the replica method. As N grows, Q and m approach the values determined by the 12 saddle-point of the free energy density 
+
+f = − 1
+
+N β log Z. (26) Here, Z is the partition function defined by 
+
+Z =
+
+Z
+
+dx exp 
+
+
+
+−βR (x) − 12σ2 ∥A(x − x0)∥22
+
+
+
+. (27) We assume the self-averaging property f = EA,x0 [f ] as N → ∞ . Following the standard replica method, we use the identity EA,x0 [log Z] = lim n→0+ n−1 log EA,x0 [Zn] to express the free energy density as 
+
+f = − 1
+
+N β EA,x0 [log Z] = − 1
+
+N β lim 
+
+> n→0+
+
+1
+
+n log EA,x0 [Zn]. (28) The calculation proceeds as follows. We first calculate the n-th moment EA,x0 [Zn] as-suming an integer number of replicas n ∈ N. In the thermodynamic limit N → ∞ , this moment is evaluated via the saddle-point method with respect to the order parameters. Assuming we can continue the formula for integer n to positive real values, we then take the limit as n approaches zero. Subsequently, we take the noiseless limit σ2 → 0+ to enforce the measurement constraint precisely. Finally, we take the zero-temperature limit β → ∞ .Here we briefly sketch the calculation. Detailed calculations are provided in Appendix A. We introduce the following order parameters: 
+
+Qab = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+xai xbi , (29) 
+
+ma = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+xai x0 
+
+> i
+
+. (30) Using these variables, EA,x0 [Zn] is simplified as 
+
+EA,x0 [Zn] = 
+
+Z nY
+
+> a,b =1
+
+dQ ab d eQab 
+
+Z nY
+
+> a=1
+
+dm ad ema
+
+exp N
+
+2
+
+> n
+
+X
+
+> a,b =1
+
+i eQab Qab + N
+
+> n
+
+X
+
+> a=1
+
+i emama − N nβα Ψ − N nβ eΨ
+
+!
+
+, (31) where 
+
+nβ Ψ = − log Eya,y 0 exp − 12σ2
+
+> n
+
+X
+
+> a=1
+
+(ya − y0)2
+
+!
+
+, (32) 
+
+nβ eΨ = − log Ex0
+
+Z Y
+
+> a
+
+dx a exp − 12
+
+X
+
+> a,b
+
+i eQab xaxb − X
+
+> a
+
+i emaxax0 − β X
+
+> a
+
+R(xa)
+
+!
+
+. (33) 13 ya and y0 follow a zero-mean multivariate Gaussian distribution satisfying 
+
+Eyaμ,y bμ [yaμybμ] = Qab , (34) 
+
+Eyaμ,y 0 
+
+> μ
+
+[yaμy0
+
+> μ
+
+] = ma, (35) 
+
+Ey0 
+
+> μ
+
+[( y0
+
+> μ
+
+)2] = ρ. (36) The right-hand side of Eq. (31) still depends on n being discrete, so we cannot yet analytically continue to n → 0+. To proceed, we need to make some assumptions about the order parameters. 
+
+B. Replica symmetry solution 
+
+We now assume that the order parameters have the following replica symmetric (RS) structure: 
+
+Qab = q + δab (Q − q), (37) 
+
+i eQab = ˜ q + δab ( eQ − ˜q), (38) 
+
+ma = m, (39) 
+
+i ˜ma = ˜ m. (40) Taking the limit n → 0+ under this assumption yields the following expression of the RS free energy density :
+
+−βf RS = extr   
+
+> Q,q,m, eQ, ˜q, ˜m
+
+( eQQ 
+
+2 − ˜qq 
+
+2 + ˜ mm − βα ΨRS − β eΨRS 
+
+)
+
+, (41) where 
+
+βΨRS = 12
+
+q − 2m + ρσ2 + Q − q + log  σ2 + Q − q − log σ2
+
+
+
+, (42) 
+
+β eΨRS = −Ex0
+
+Z
+
+Dξ log 
+
+Z
+
+dx exp − eQ − ˜q
+
+2 x2 + ( p−˜q ξ − ˜mx 0)x − βR (x)
+
+!
+
+. (43) 14 Here, extr means the extremization with respect to the order parameters and their conjugate variables. The extremum condition of the free energy yields the saddle-point equations 
+
+− eQ = −˜q + ˜ m, (44) 
+
+−˜q = α(q − 2m + ρ)(Q − q)2 , (45) 
+
+− ˜m = αQ − q , (46) 
+
+Q = Ex0
+
+Z
+
+Dξ x2
+
+> x
+
+, (47) 
+
+q = Ex0
+
+Z
+
+Dξ ⟨x⟩2
+
+> x
+
+, (48) 
+
+m = Ex0
+
+Z
+
+Dξ x0x x. (49) Here, ⟨·⟩ x represents the expectation with respect to x ∼ π(x | ξ, x 0), where 
+
+π(x | ξ, x 0) ∝ exp − eQ − ˜q
+
+2 x2 + ( p−˜qξ − ˜mx 0)x − βR (x)
+
+!
+
+. (50) The detailed derivations of Eq. (41) are presented in Appendix B. Next, to describe the ground state behavior, we analyze the zero-temperature limit by introducing proper rescalings with respect to β. In the β → ∞ limit, the order parameters are explained by the scaled parameters χ = β(Q − q), bQ = β−1( eQ − ˜q), ˆ χ = −β−2 ˜q, and ˆm = −β−1 ˜m. By applying these rescalings and subsequently taking the β → ∞ limit, we obtain the following set of equations: 
+
+bQ = ˆ m = αχ , (51) ˆχ = α(Q − 2m + ρ)
+
+χ2 , (52) 
+
+Q = Ex0
+
+Z
+
+Dξ (x∗)2, (53) 
+
+χ = Ex0
+
+Z
+
+Dξ ξx ∗
+
+√ ˆχ, (54) 
+
+m = Ex0
+
+Z
+
+Dξ x 0x∗, (55) where 
+
+x∗ = S
+
+
+
+hRS ; 1
+
+bQR(·)
+
+
+
+, (56) 
+
+hRS = ˆm
+
+bQ x0 +
+
+√ ˆχ
+
+bQ ξ = x0 +
+
+rQ − 2m + ρα ξ. (57) 15 When ε > bQ−1/2, this set of equations is equivalent to the SE equations in Eqs. (21)–(23). This equivalence guarantees that the RS solution accurately describes the convergent point of the AMP algorithm.  
+
+> C. Stability of perfect reconstruction
+
+We investigate the stability of the fixed-point solution corresponding to perfect signal reconstruction (MSE = 0) based on the zero-temperature equations given as Eqs. (51)–(55). In this regime, the order parameters converge to Q → ρ, m → ρ, χ → 0+, and bQ = ˆ m → ∞ .Consequently, only ˆ χ converges to a nontrivial fixed stable point ˆ χ∗ = O(1). Assuming the convexity condition 
+
+ε > 
+
+r χα , (58) the self-consistent equation that determines ˆ χ∗ is given as 
+
+ε2 ˆχ = 1
+
+α 2(1 − ρ)  ε2 ˆχ + 1 H 1
+
+pε2 ˆχ
+
+!
+
+− pε2 ˆχϕ 1
+
+pε2 ˆχ
+
+!! 
+
++ ρ
+
+
+
+ε2 ˆχ + ε2
+
+Z
+
+Dξ 1(|ξ| + ε)2
+
+!
+
+. (59) The detailed derivation is provided in Appendix C. By examining the local stability of the fixed point ˆ χ∗, we determine the linear stability boundary αc(ρ). This boundary is required for the perfect reconstruction solution to be locally stable. The condition corresponds to α > α c(ρ) with 
+
+αc(ρ) = ρ + 2(1 − ρ)H 1
+
+pε2 ˆχ∗
+
+!
+
+. (60) Here, H(x) = R ∞ 
+
+> x
+
+Dξ is the complementary cumulative distribution function (CCDF) of the standard normal distribution. In the region α < α c(ρ), perfect reconstruction (MSE = 0) is unstable and is theoretically unreachable. The resulting phase boundary on the α–ρ plane is illustrated in Sec. V. Moreover, Eqs. (58)–(60) suggest that the log-sum penalty allows for perfect reconstruc-tion up to the information-theoretic limit, αc = ρ. Considering the perfect reconstruction limit where bQRS → ∞ and ˆ χRS → 0+, the right-hand side of Eq. (58) converges to 0 +. As a 16 result, this convergence allows ε to approach an arbitrarily small positive value without vio-lating the convexity condition. In addition, as ε → 0+, the second term in Eq. (60) vanishes, leading to the limit αc(ρ) → ρ+. These observations imply that, in principle, MSE = 0 is reachable for all α > ρ when using the log-sum penalty. However, the actual success region is restricted by the emergence of a metastable fixed point, as discussed in Sec. V.  
+
+> D. Stability of RS solution
+
+We examine the validity of the replica symmetric (RS) ansatz, which assumes that all replicas are treated identically. To do this, we derive the de Almeida–Thouless (dAT) stability condition. This condition refers to the case in which the RS fixed point described above remains stable under perturbations that violate the symmetry between replicas. For the model discussed in this paper, the dAT stability condition is 
+
+α > Ex0
+
+Z
+
+Dξ S ′
+
+
+
+x0 +
+
+√ ˆχRS 
+
+bQRS 
+
+ξ; 1
+
+bQRS 
+
+R(·)
+
+2
+
+. (61) Here, bQRS and ˆ χRS are the RS fixed points of bQ and ˆ χ, respectively. The detailed derivation is provided in Appendix D. In the MSE → 0+ limit, the right-hand side of Eq. (61) coincides with αc(ρ). Consequently, we see that in the region α > α c(ρ), the RS fixed point remains stable.  
+
+> V. PHASE DIAGRAM AND NUMERICAL VALIDATIONS
+
+In this section, we visualize the exact-recovery thresholds of the log-sum penalty and compare them against those of ℓ1 minimization and Bayes-optimal spinodal limit [7]. In Fig. 4, we plot the condition for perfect reconstruction αc, derived in Sec. IV, as a function of ρ, along with the success boundary of the log-sum penalty using the adaptive smoothing. The boundary for the adaptive ε is determined numerically as follows. Specif-ically, we use binary search for the minimum α where MSE achieves MSE < 10 −4 at each 
+
+ρ. For each ρ and α, we iterate the SE equation given as Eqs. (21)–(23) until either the iteration count reaches tmax = 10 3, the MSE falls below 10 −4, or the MSE exceeds 10 4. The SE dynamics are initialized with MSE [0] = ρ and χ[0] = 1, which corresponds to ˆ x[0] = 0
+
+and χ[0] = 1 for the AMP algorithm, to verify whether MSE = 0 is typically achievable from 17 0.0 0.2 0.4 0.6 0.8 1.0
+
+ρ = K/N 
+
+0.00.20.40.60.81.0    
+
+> αcε= 10 −2
+> ε= 10 −1
+> ε= 10 0
+> adaptive ε`1
+> Bayes IT
+
+FIG. 4. Critical measurement rate αc for perfect reconstruction as a function of the signal den-sity ρ. The colored lines represent the theoretical limits of the log-sum penalty for fixed parameter values ε = 10 −2, 10 −1, and 10 0, while the thick solid black line corresponds to the adaptive smooth-ing. For comparison, the reconstruction limits for ℓ1 minimization ( ℓ1), the spinodal limit under Bayes-optimal inference (Bayes), and the information-theoretic limit (IT) are also plotted. 
+
+such an uninformed initial condition. Reconstruction is declared successful if MSE < 10 −3 is achieved when the algorithm terminates. We hereafter refer to this limit as the adaptive limit .For comparison, we display the reconstruction limit for ℓ1 minimization, the spinodal limit under Bayes-optimal conditions, and the information-theoretic limit. The phase diagram, as shown, reveals two key points that clarify the observed behavior. First, and as discussed in Sec. IV, the reconstruction limit for a fixed ε approaches the information-theoretic limit 
+
+αc = ρ as ε is reduced towards zero. Second, it is apparent that the adaptive limit lies between the information-theoretic limit and the ℓ1 threshold. More precisely, we observe that the adaptive limit lies slightly above the Bayes-optimal limit. While MSE = 0 is locally stable within the entire region where α > ρ , it is important to note that adaptive smoothing does not reach that limit. The phase in this gap—the region between the information-theoretic and adaptive ε limits—is characterized by the emergence of a metastable state, as we discuss below. In the rest of the paper, we will refer to this phase as the hard phase .Now we investigate the cause of the algorithmic failure in the hard phase. To understand 18 0.00 0.05 0.10 0.15 
+
+> χ
+> 0.00 0.05 0.10 0.15 MSE
+
+(a) ( ρ, α ) = (0 .2, 0.6)    
+
+> 0.00 0.05 0.10 0.15
+> χ
+
+(b) ( ρ, α ) = (0 .2, 0.38)    
+
+> 0.00 0.05 0.10 0.15
+> χ
+
+(c) ( ρ, α ) = (0 .2, 0.16)              
+
+> 0.00.20.40.6√(∆ χ)2 + (∆MSE) 2FIG. 5. Vector field of the SE dynamics with adaptive smoothing on the MSE– χplane. (a) Easy phase, ( ρ, α ) = (0 .2,0.6). (b) Hard phase, ( ρ, α ) = (0 .2,0.38). (c) Impossible phase, (ρ, α ) = (0 .2,0.16). Red stars denote locally stable fixed points. The color scale shows the velocity magnitude
+> q
+> (MSE [t+1] −MSE [t])2+ ( χ[t+1] −χ[t])2.
+
+dynamics across phases, we visualize the SE dynamics from Eqs. (21)– (23). We show them as a vector field on the MSE– χ plane in Fig. 5. In the easy phase (Fig. 5(a)), the vector field has a large basin of attraction. It directs trajectories toward a fixed point where MSE = χ = 0. In the impossible phase (Fig. 5(c)), there are no locally stable fixed points. The dynamics diverge from any initial conditions except for MSE = χ = 0. Between these, the hard phase (Fig. 5(b)) is characterized by two locally stable fixed points: one persisting at the origin and another with MSE > 0. The stable fixed point at the origin persists, and there exists a flow toward MSE = χ = 0. However, a new stable fixed point appears where MSE > 0. This metastable state traps algorithm trajectories with large initial MSEs, thereby distinguishing the behavior in the hard phase. These findings suggest that, in the hard phase, AMP with adaptive smoothing will converge to MSE = 0 only from sufficiently small initial MSE values. Unless the algorithm starts from such exceptional initial conditions, its dynamics do not eventually reach MSE = 0, reinforcing the challenge in the hard phase. As a result, AMP dynamics and SE flow from reasonable initial states typically reach a metastable state. The algorithm then fails to achieve full reconstruction in the hard phase. To further confirm the practical benefits of the proposed adaptive smoothing, we examine how many iterations the AMP algorithm needs to converge. This performance metric is especially important in real-world scenarios, since excessively slow convergence limits the 19 0.6 0.7 0.8 0.9 1.0
+
+α
+
+10 1
+
+10 2
+
+10 3
+
+10 4 
+
+> Iterations to convergence  τ
+> αlog-sum α`1
+
+# ρ = 0 .4
+
+log-sum 
+
+`1FIG. 6. Number of iterations for AMP to converge as a function of measurement rate α for 
+
+ρ = 0 .4. Symbols represent the averages over 10 independent results with N = 10 4, and error bars indicate the standard error. Curves correspond to the SE predictions in the N → ∞ limit. 
+
+practical applicability of an algorithm, even when it ultimately reconstructs the ground truth. Figure 6 displays how many iterations the AMP algorithm needs to converge for 
+
+ρ = 0 .4 and α between 0 .6 and 1. We generate 10 independent instances of Gaussian measurement matrices A and signals x0 of dimension N = 10 4, drawn from the Bernoulli– Gaussian distribution Ptrue (x0). The typical number of nonzero components is K = 4 × 10 3.For each instance, the AMP algorithm is initialized at ˆ x[0] = 0 and terminated when MSE <
+
+10 −10 is satisfied. We define the convergence time τ as the number of iterations required to meet this criterion. If convergence does not occur within tmax = 5 × 10 4 iterations, τ is set to ∞. For α < 0.6, the algorithm never converges to the true signal. In the range where the algorithm converges, the log-sum version requires approximately one order of magnitude fewer iterations than the ℓ1 version. Over most of that range, τ stays nearly constant. It increases only slightly as α approaches the reconstruction limit αc = αlog-sum .
+
+VI. DISCUSSION AND CONCLUSION 
+
+In this paper, we presented an AMP algorithm for sparse signal recovery using a log-sum penalty and evaluated its typical performance using statistical mechanical methods. 20 Previous studies have focused on worst-case analysis based on the RIP or deterministic analysis of local minima [25, 29], lacking quantitative evaluation of typical recovery limits in large scale systems using random matrices. In contrast, this study incorporates the proximal operator of the log-sum penalty into the AMP algorithm and applies SE to derive the typical reconstruction limit under random measurements, which conventional worst-case analysis could not capture. The AMP iterations for the log-sum penalty easily diverge with a fixed small parameter ε due to the discontinuity of the thresholding function. We also proposed an adaptive smoothing method for the parameter ε to ensure computa-tional stability. This strategy maintains algorithmic stability by keeping the objective func-tion of the proximal operator convex, thereby ensuring that the derivative of the thresholding function remains finite. This approach enables the algorithm to exploit the potential of the log-sum penalty while maintaining computational stability. Our replica analysis demon-strates that the proposed algorithm achieves exact recovery over a wider region compared to ℓ1-norm minimization. Despite these improvements, a theoretical discrepancy remains between the reconstruc-tion limit of adaptive smoothing and the theoretical boundary in the ε → 0+ limit. While stability analysis suggests that the theoretical reconstruction limit for the log-sum penalty reaches the information-theoretic limit, a discrepancy exists between the limit reachable by the adaptive smoothing and the theoretical limit. This inaccessibility stems from the fact that although MSE = 0 is locally stable, the basin of attraction of this zero-error fixed point is small, making the dynamics more likely to be attracted to nonzero-error fixed points. It is worth noting here that our results share important similarities with those of Y. Nagano and K. Hukushima [30, 31]. They reinterpreted Bayesian linear regression using a horseshoe prior in the context of compressed sensing and derived asymptotic prop-erties. In their formulation of compressed sensing, the boundary for perfect reconstruction in the α–ρ plane lies between the ℓ1 minimization and the information-theoretic limit. This curve shifts upward or downward depending on the global shrinkage parameter τ . Theoret-ically, a smaller τ makes the reconstructable region wider. However, if τ is smaller than a certain threshold, the system enters a hard phase , where the algorithm is unable to reach MSE = 0 unless it starts from a position very close to the fully reconstructed signal. This phenomenon is very similar to what we have observed when running the AMP algorithm with a fixed ε and a log-sum penalty: As shown in Fig. 4, the smaller the ε, the wider the 21 region where MSE = 0 is linearly stable. If ε is set below a certain threshold, however, the algorithm cannot accurately recover the signal, and the recovery only works when it starts near MSE = 0. This tendency suggests that τ in the Nagano and Hukushima formulation plays a similar role to the smoothing parameter ε in the log-sum penalty. These similar trends are related to the fact that the horseshoe distribution has a heavy tail that decays as a power law [32], implying a logarithmically decaying penalty in MAP estimation. It should be noted that the horseshoe distribution and the log-sum penalty are not perfectly equiva-lent. The horseshoe distribution diverges near the origin and strongly pulls small coefficients toward zero. This property is not present in the log-sum penalty. As a direct extension to the Bayesian estimation, the generalized double Pareto distribution [33] corresponds to the log-sum penalty. A major future challenge is to enhance practical applicability by relaxing assumptions regarding measurement matrices and signal priors. In many real-world problems, measure-ment matrices may have nonzero means or strong correlations between columns or rows. In such conditions, the standard AMP is known to lose convergence properties. To address this issue, extensions to orthogonal AMP (OAMP) [34] or vector AMP (VAMP) [35] can be con-sidered. Addressing various types of signal and measurement models is also indispensable. In image processing and communications, block sparsity or tree structured sparsity is often more appropriate than independent sparsity. Therefore, combining the log-sum penalty with grouped regularization or total variation (TV) regularization and analyzing the changes in metastability under structured priors would be very welcome. In addition, applications for nonlinear observations, such as low-bit observations, would also be an interesting future prospect. In addition to the log-sum penalty focused on in this study, extending the scope of per-formance evaluation to other, more modern penalty functions is also an interesting topic for future research. Notable examples include differentiable sparse regularization penalties such as the weakly convex envelope of piecewise penalty (WEEP) [36]. These methods emerged from a strong demand for differentiability to achieve effective sparse learning in large-scale neural networks with minimal computational overhead. Applying the analysis used in this research to penalty functions designed for such specific purposes is also effective for under-standing their theoretical properties. In particular, analyzing the possibility of emerging suboptimal solutions, the conditions where true sparse signals can be recovered in com-22 pressed sensing, and how closely their typical performance can approach the Bayes-optimal conditions would be an important contribution to the development of sparse modeling. 
+
+ACKNOWLEDGMENTS 
+
+K.M. thanks M. Doi for valuable discussions. We received financial support from pro-grams for bridging the gap between R&D and IDeal society (Society 5.0) and Generating Economic and social value (BRIDGE) and Cross-ministerial Strategic Innovation Promo-tion Program (SIP) from the Cabinet Office (No. 23836436). The work of F.R.T. was sup-ported by the “National Centre for HPC, Big Data and Quantum Computing”, Project CN 00000013, CUP B83C22002940006, NRRP Mission 4 Component 2 Investment 1.4, Funded by the European Union - NextGenerationEU. 
+
+Appendix A: Derivation of Eq. (31) 
+
+This appendix provides a detailed derivation of Eq. (31). We start from the following replicated partition function: 
+
+EA,x0 [Zn]= EA,x0
+
+Z nY
+
+> a=1
+
+dxa exp − β
+
+> n
+
+X
+
+> a=1
+
+R(xa) − 12σ2
+
+> n
+
+X
+
+> a=1
+
+∥A(xa − x0)∥22
+
+!
+
+= Ex0
+
+Z nY
+
+> a=1
+
+dxa exp − β
+
+> n
+
+X
+
+> a=1
+
+R(xa)
+
+!
+
+EA exp − 12σ2
+
+> n
+
+X
+
+> a=1
+
+∥A(xa − x0)∥22
+
+!
+
+> (P1)
+
+. (A1) We first introduce the following auxiliary variables: 
+
+yaμ =
+
+> N
+
+X
+
+> i=1
+
+Aμi xai , y0 
+
+> μ
+
+=
+
+> N
+
+X
+
+> i=1
+
+Aμi x0 
+
+> i
+
+(for μ = 1 , . . . , M, a = 1 , . . . , n ). (A2) The A-dependent part ( P1) can be rewritten as 
+
+EA exp − 12σ2
+
+> n
+
+X
+
+> a=1
+
+∥A(xa − x0)∥22
+
+!
+
+=
+
+> M
+
+Y
+
+> μ=1
+
+Eyaμ,y 0 
+
+> μ∼Py
+
+exp − 12σ2
+
+> n
+
+X
+
+> a=1
+
+(yaμ − y0
+
+> μ
+
+)2
+
+!
+
+= exp( −M nβ Ψ) , (A3) 23 where Ψ is defined as Eq. (32), and Py is a multivariate Gaussian distribution with zero mean and second moments given by 
+
+E{yaμ,y 0
+
+> μ}∼ Py
+
+yaμybμ
+
+ = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+xai xbi =: Qab , (A4) 
+
+E{yaμ,y 0
+
+> μ}∼ Py
+
+yaμy0
+
+> μ
+
+ = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+xai x0 
+
+> i
+
+=: ma, (A5) 
+
+E{yaμ,y 0
+
+> μ}∼ Py
+
+(y0
+
+> μ
+
+)2 = 1
+
+N
+
+> N
+
+X
+
+> i=1
+
+(x0 
+
+> i
+
+)2 =: ρ′. (A6) In the large system size limit N → ∞ , ρ′ value becomes self-averaging, and the following identity holds: 
+
+ρ′ = Ex0 [( x0)2] = ρ. (A7) Thus, we replace it with ρ and treat it as a constant hereafter. Ensuring that other moments take defined values is achieved by redefining the order parameters as random variables following the distributions below: 
+
+Qab ∼ δ N Q ab −
+
+> N
+
+X
+
+> i=1
+
+xai xbi
+
+!
+
+, (A8) 
+
+ma ∼ δ N m a −
+
+> N
+
+X
+
+> i=1
+
+xai x0
+
+> i
+
+!
+
+. (A9) The resultant replicated partition function is as follows. 
+
+EA,x0 [Zn] = 
+
+Z Y
+
+> a,b
+
+dQ ab 
+
+Z Y
+
+> a
+
+dm a exp( −M n Ψ) Ex0
+
+Z nY
+
+> a=1
+
+dxa exp −β
+
+> n
+
+X
+
+> a=1
+
+R(xa)
+
+!Y
+
+> a,b
+
+δ N Q ab −
+
+> N
+
+X
+
+> i=1
+
+xai xbi
+
+! Y
+
+> a
+
+δ N m a −
+
+> N
+
+X
+
+> i=1
+
+xai x0
+
+> i
+
+!
+
+> (P2)
+
+. (A10) Next, we use Fourier integral representations of the delta functions: 
+
+δ N Q ab −
+
+> N
+
+X
+
+> i=1
+
+xai xbi
+
+!
+
+=
+
+Z
+
+d eQab exp i eQab 
+
+2 N Q ab −
+
+> N
+
+X
+
+> i=1
+
+xai xbi
+
+!! 
+
+, (A11) 
+
+δ N m a −
+
+> N
+
+X
+
+> i=1
+
+xai x0
+
+> i
+
+!
+
+=
+
+Z
+
+d ˜ma exp i ˜ma N m a −
+
+> N
+
+X
+
+> i=1
+
+xai x0
+
+> i
+
+!! 
+
+. (A12) 24 Substituting these expressions and collecting all terms depending on xai and x0 
+
+> i
+
+, the ( P2)part is calculated as 
+
+Ex0
+
+Z nY
+
+> a=1
+
+dxa exp −β
+
+> n
+
+X
+
+> a=1
+
+R(xa)
+
+! Y
+
+> a,b
+
+δ N Q ab −
+
+> N
+
+X
+
+> i=1
+
+xai xbi
+
+! Y
+
+> a
+
+δ N m a −
+
+> N
+
+X
+
+> i=1
+
+xai x0
+
+> i
+
+!
+
+=
+
+Z Y
+
+> a,b
+
+d eQab 
+
+Z Y
+
+> a
+
+d ˜ma exp N
+
+2
+
+X
+
+> a,b
+
+i eQab Qab + N X
+
+> a
+
+i ˜mama
+
+!
+
+×
+
+> N
+
+Y
+
+> i=1
+
+Ex0
+
+> i
+
+Z nY
+
+> a=1
+
+dx ai exp −12
+
+X
+
+> a,b
+
+i eQab xai xbi − X
+
+> a
+
+i ˜maxai x0 
+
+> i
+
+− β
+
+> n
+
+X
+
+> a=1
+
+R(xai )
+
+!
+
+. (A13) Because the single-site integral is identical for all i ∈ { 1, . . . , N }, the {xa}-dependent part can be rewritten as the following single-site contribution: 
+
+> N
+
+Y
+
+> i=1
+
+Ex0
+
+> i
+
+Z nY
+
+> a=1
+
+dx ai exp −12
+
+X
+
+> a,b
+
+i eQab xai xbi − X
+
+> a
+
+i ˜maxai x0 
+
+> i
+
+− β
+
+> n
+
+X
+
+> a=1
+
+R(xai )
+
+!
+
+= exp 
+
+
+
+−N nβ eΨ
+
+
+
+,
+
+(A14) with eΨ defined as Eq. (33). Combining summation terms and the single-site contribution yields Eq. (31). 
+
+Appendix B: Derivation of RS free energy density 
+
+This appendix gives the derivation of Eq. (41) from Eq. (31) under the RS ansatz given as Eqs. (37)–(40). The Ψ term (Eq. (32)) is simplified as follows. The random variables ya − y0 can be expressed as the linear combination of n + 1 standard Gaussian variables ξ0, {ξa 
+
+> 1
+
+}a=1 ,...,n :
+
+ya − y0 = pq − 2m + ρ ξ 0 + pQ − q ξ a 
+
+> 1
+
+. (B1) This decomposition yields 
+
+nβ Ψ = − log 
+
+Z
+
+Dξ 0
+
+Z 
+
+Dξ 1 exp 
+
+
+
+− 12σ2
+
+p q − 2m + ρ ξ 0 + pQ − q ξ 1
+
+2 n
+
+. (B2) Here, we used Q
+
+> a
+
+R Dξ a 
+
+> 1
+
+f (ξa 
+
+> 1
+
+) =  R Dξ 1f (ξ1)n. Then, by repeatedly applying the following Gaussian integral formula, 
+
+Z
+
+Dξ exp 
+
+
+
+−λ
+
+2 (Aξ + B)2
+
+
+
+=  1 + λA 2−1/2 exp 
+
+
+
+−12
+
+λB 2
+
+1 + λA 2
+
+
+
+, (B3) 25 we obtain the following expression for small n:
+
+nβ Ψ = − log 
+
+
+
+1 + nq − 2m + ρσ2 + Q − q
+
+− 12 
+
+1 + Q − qσ2
+
+− n
+
+> 2
+
+= n
+
+2
+
+q − 2m + ρσ2 + Q − q + log 
+
+
+
+1 + Q − qσ2
+
+ 
+
++ O(n2). (B4) Next, the eΨ term (Eq. (33)) is simplified as follows. By applying the RS ansatz, the summation terms become 
+
+X
+
+> a,b
+
+i eQab xaxb = ˜ q X
+
+> a
+
+xa
+
+!2
+
++ ( eQ − ˜q) X
+
+> a
+
+(xa)2, (B5) 
+
+X
+
+> a
+
+i ˜maxax0 = ˜ mx 0 X
+
+> a
+
+xa, (B6) which gives 
+
+nβ eΨ= − log Ex0
+
+Z Y
+
+> a
+
+dx a
+
+exp − eQ − ˜q
+
+2
+
+X
+
+> a
+
+(xa)2 − ˜q
+
+2
+
+X
+
+> a
+
+xa
+
+!2
+
+− ˜mx 0 X
+
+> a
+
+xa − β X
+
+> a
+
+R(xa)
+
+!
+
+= − log Ex0
+
+Z
+
+Dξ 
+
+Z Y
+
+> a
+
+dx a Y
+
+> a
+
+exp − eQ − ˜q
+
+2 (xa)2 + ( p−˜qξ − ˜mx 0)xa − βR (xa)
+
+!
+
+. (B7) In the last line, we apply the Hubbard–Stratonovich transformation exp 
+
+− ˜q
+
+2
+
+X
+
+> a
+
+xa
+
+!2 =
+
+Z
+
+Dξ Y
+
+> a
+
+exp 
+
+p −˜qx aξ
+
+
+
+. (B8) Now that the n-fold integral with respect to xa is identical to the n-th power of the same integral, we obtain 
+
+nβ eΨ = − log Ex0
+
+Z
+
+Dξ 
+
+Z
+
+dx exp − eQ − ˜q
+
+2 x2 + ( p−˜qξ − ˜mx 0)x − βR (x)
+
+!! n
+
+= −nEx0
+
+Z
+
+Dξ log 
+
+Z
+
+dx exp − eQ − ˜q
+
+2 x2 + ( p−˜qξ − ˜mx 0)x − βR (x)
+
+!
+
++ O(n2). (B9) 26 The rest term is calculated as follows: 
+
+N
+
+2
+
+X
+
+> a,b
+
+i eQab Qab = N
+
+2
+
+X
+
+> a,b
+
+(˜ q + δab ( eQ − ˜q))( q + δab (Q − q)) = N n 
+
+2 eQQ − N n 
+
+2 ˜qq + O(n2), (B10) 
+
+N
+
+> n
+
+X
+
+> a=1
+
+i ˜mama = N n ˜mm. (B11) Combining the expressions above yields 
+
+EA,x0 [Zn] = 
+
+Z
+
+dQd eQdqd ˜qdmd ˜m
+
+exp 
+
+(
+
+N n 
+
+ eQQ 
+
+2 − ˜qq 
+
+2 + ˜ mm − βα ΨRS − β eΨRS 
+
+)
+
+, (B12) where Ψ RS and eΨRS are defined as Eqs. (42) and (43), respectively. Then, we apply −βf RS =lim N →∞ N −1 lim n→0+ n−1 log E[Zn]. Since the contribution to the integral is dominated by the saddle point as N → ∞ , we obtain Eq. (41). 
+
+Appendix C: Derivation of Eqs. (59) and (60) 
+
+In this appendix, we derive the single self-consistent equation for ˆ χ given as Eq. (59), which describes the system in the limit of perfect reconstruction, i.e., Q → ρ, m → ρ,
+
+χ → 0+, bQ → ∞ , and ˆ m → 0+. We also derive the linear stability condition for this fixed point. We start from the following equation obtained by removing χ from Eq. (51) and Eq. (52): ˆχ = bQ2(Q − 2m + ρ)
+
+α
+
+= bQ2
+
+α Ex0
+
+Z
+
+Dξ (x∗ − x0)2. (C1) This equation suggests that we need to evaluate the asymptotic forms of x∗ − x0 up to the order of O( bQ−1) to derive the self-consistent equation for ˆ χ. Thus, we first analyze the asymptotic behavior of the estimator x∗ defined in Eq. (55), and then use the result to evaluate x∗ − x0.Hereafter, we assume that ε satisfies the convexity condition ε ≥ bQ−1/2. When this 27 condition is satisfied, x∗ is given by the following expression 
+
+x∗ =
+
+
+
+sign( hRS ) |hRS | − ε
+
+2 +
+
+s
+
+(|hRS | + ε)2
+
+4 − 1
+
+bQ
+
+!
+
+if |hRS | > 1
+
+bQε ,
+
+0 otherwise ,
+
+(C2) where hRS = x0 + ( √ ˆχ/ bQ)ξ. Here, we consider two cases separately: when x0 = 0 and 
+
+x0 ∼ N (0 , 1). 
+
+• For x0 = 0, the expression becomes 
+
+x∗ 
+
+> x0=0
+
+=
+
+
+
+sign( ξ)
+
+12
+
+ √ ˆχ
+
+bQ ξ − ε
+
+
+
++
+
+s
+
+14
+
+ √ ˆχ
+
+bQ ξ + ε
+
+2
+
+− 1
+
+bQ
+
+ if |ξ| > 1
+
+pε2 ˆχ,
+
+0 otherwise .
+
+(C3) Taking a first-order expansion around bQ−1 = 0, we obtain 
+
+x∗ 
+
+> x0=0
+
+=
+
+
+
+1
+
+bQ
+
+p ˆχξ − sign( ξ)
+
+ε
+
+
+
++ O( bQ−2) if |ξ| > 1
+
+pε2 ˆχ,
+
+0 otherwise .
+
+(C4) The contribution from this part is therefore 
+
+bQ2(1 − ρ)
+
+Z
+
+Dξ (x∗
+
+> x0=0
+
+)2 = (1 − ρ)
+
+Z
+
+> |ξ|>1/
+
+√ε2 ˆχ
+
+p ˆχξ − sign( ξ)
+
+ε
+
+2
+
+= 2(1 − ρ)
+
+ε2
+
+ ε2 ˆχ + 1 H 1
+
+pε2 ˆχ
+
+!
+
+− pε2 ˆχϕ 1
+
+pε2 ˆχ
+
+!! 
+
+.
+
+(C5) 
+
+• For x0̸ = 0, taking a first-order expansion around bQ−1 = 0 yields 
+
+x∗  
+
+> x0̸=0
+
+=
+
+
+
+x0 + 1
+
+bQ
+
+p ˆχξ + sign( x0)
+
+|x0| + ε
+
+
+
++ O( bQ−2) if bQx 0 + p ˆχξ > 1
+
+ε ,
+
+0 otherwise .
+
+(C6) The contribution from this part is given by 
+
+bQ2ρ
+
+Z
+
+Dx 0
+
+Z
+
+Dξ (x∗  
+
+> x0̸=0
+
+− x0)2 = ρ
+
+Z
+
+Dx 0
+
+Z
+
+Dξ 
+
+p ˆχξ + sign( x0)
+
+|x0| + ε
+
+2
+
+= ρ
+
+
+
+ˆχ +
+
+Z
+
+Dξ 1(|ξ| + ε)2
+
+
+
+. (C7) Here, the contribution from the case x∗  
+
+> x0̸=0
+
+= 0 is of order bQ−1 and is thus neglected. 28 By summing the contributions from Eqs. (C5) and (C7), the reduced self-consistent equation for ˆ χ is derived as Eq. (59). For the fixed point ˆ χ∗ to be locally stable, |F ′( ˆ χ∗)| < 1 should hold, where F ( ˆ χ) is the right-hand side of Eq. (59). Differentiating F ( ˆ χ) and using the identities ϕ′(z) = −zϕ (z)and H′(z) = −ϕ(z) leads to the following expression: 
+
+|F ′( ˆ χ)| = 1
+
+α 2(1 − ρ)H 1
+
+pε2 ˆχ
+
+!
+
++ ρ
+
+!
+
+. (C8) Thus, the stability condition is given as α > α c, where αc is defined as Eq. (60). 
+
+> Appendix D: Derivation of dAT stability condition
+
+This appendix explains the derivation of the dAT condition. To derive this condition, we first formulate the saddle-point equations under the one-step replica symmetry breaking (1RSB) ansatz, which is a one-step generalization of the RS ansatz. We then determine the condition under which the system returns to the RS fixed point when a small perturbation is applied in a symmetry-breaking direction.  
+
+> 1. 1RSB free energy density
+
+We consider the following block structure of the order parameters. The replica indices 
+
+a, b ∈ { 1, . . . , n } are divided into n/m 1 blocks of size m1. Each replica index a is uniquely rep-resented using a block index a0 ∈ { 1, . . . , n/m 1} and an intra-block index a1 ∈ { 1, . . . , m 1}
+
+as a = m1(a0 − 1) + a1. Based on this hierarchical structure, the order parameters are parameterized as follows: 
+
+Qab = Qδ ab + q1(δa0b0 − δab ) + q(1 − δa0b0 ), (D1) 
+
+i eQab = eQδ ab + ˜ q1(δa0b0 − δab ) + ˜ q(1 − δa0b0 ), (D2) 
+
+ma = m, (D3) 
+
+i ˜ma = ˜ m. (D4) Under this ansatz, the free energy density is simplified as follows. Similarly to the deriva-tion of the RS solution in Appendix B, we hierarchically decompose the random variables 29 ya − y0 by introducing 1 + n/m 1 + n standard Gaussian variables ξ0, {ξa0 
+
+> 1
+
+}a0 , {ξa0,a 1 
+
+> 2
+
+}a0,a 1 as 
+
+ya − y0 = √E ξ 0 + p∆1 ξa0 
+
+> 1
+
++ p∆2 ξa0,a 1 
+
+> 2
+
+, (D5) where 
+
+E = q − 2m + ρ, (D6) ∆1 = q1 − q, (D7) ∆2 = Q − q1. (D8) This decomposition and Gaussian integration lead to the following expression: 
+
+nβ Ψ = n
+
+2
+
+ Eσ2 + ∆ 2 + m1∆1
+
++ 1
+
+m1
+
+log 
+
+
+
+1 + m1∆1
+
+σ2 + ∆ 2
+
+
+
++ log 
+
+
+
+1 + ∆2
+
+σ2
+
+ 
+
++ O(n2). (D9) For the term eΨ, we linearize the quadratic interaction P 
+
+> a,b
+
+i eQab xaxb by applying the Hubbard-Stratonovich transformation. The single-site integral is then simplified as 
+
+nβ eΨ = − log Ex0
+
+Z
+
+Dξ 0
+
+Z 
+
+Dξ 1
+
+Z 
+
+dx exp  −βHeff (x, ξ 0, ξ 1, x 0)m1 n/m 1
+
+, (D10) where 
+
+βHeff (x, ξ 0, ξ 1, x 0) = eQ − ˜q1
+
+2 x2 − (p−˜qξ 0 + p−(˜ q1 − ˜q)ξ1 + ˜ mx 0)x + βR (x). (D11) The rest term is simplified as 
+
+N
+
+2
+
+X
+
+> a,b
+
+i eQab Qab = N n 
+
+2
+
+ eQQ + ( m1 − 1)˜ q1q1 + ( n − m1)˜ qq 
+
+
+
+. (D12) By combining these terms, taking the limit n → 0+ and applying the saddle-point method, the free energy density is obtained as the saddle-point condition with respect to the order parameters Θ = {Q, q 1, q, m, eQ, ˜q1, ˜q, ˜m} as follows: 
+
+−βf 1RSB = extr 
+
+> Θ
+
+( eQQ 
+
+2 − (1 − m1)˜ q1q1
+
+2 − m1 ˜qq 
+
+2 + ˜ mm − βα Ψ1RSB − β eΨ1RSB 
+
+)
+
+, (D13) where 
+
+βΨ1RSB = 12
+
+Eσ2 + ∆ 2 + m1∆1
+
++ 1
+
+m1
+
+log  σ2 + ∆ 2 + m1∆1
+
+ − 1 − m1
+
+m1
+
+log  σ2 + ∆ 2
+
+
+
+− log σ2
+
+!
+
+, (D14) 
+
+β eΨ1RSB = − 1
+
+m1
+
+Ex0
+
+Z
+
+Dξ 0 log 
+
+Z
+
+Dξ 1
+
+Z 
+
+dx exp  −βHeff (x, ξ 0, ξ 1, x 0)m1
+
+. (D15) If m1 = 1, this saddle-point condition reduces to the RS solution. 30 2. dAT stability condition 
+
+To obtain the dAT stability condition, we fix the order parameters other than q1 and ˜ q1
+
+at their RS values, denoted by QRS , qRS , mRS , eQRS , ˜ qRS and ˜ mRS , and derive the asymptotic self-consistent equation of q1 − qRS when q1 ≈ qRS . By deriving the condition that q1 − qRS 
+
+does not expand per iteration, the AT stability condition can be determined. Here, we use the following scaling of the RS order parameters: 
+
+χRS = β(QRS − qRS ), (D16) 
+
+bQRS = eQRS − ˜qRS 
+
+β , (D17) ˆχRS = − ˜qRS 
+
+β2 . (D18) The deviations from the RS solution are explained by the following variables: 
+
+b∆ = − ˜q1 − ˜qRS 
+
+β2 , (D19) ∆ = q1 − qRS . (D20) If the deviations b∆ and ∆ expand, the RS solution is unstable. First, we derive the saddle-point equation for b∆. From the self-consistent equations of ˜ q
+
+and ˜ q1 obtained by differentiating f1RSB with respect to q and q1, respectively, the equation for b∆ is obtained as follows: 
+
+b∆ = αχ2RS 
+
+∆ + O(∆ 2). (D21) Next, we derive the saddle-point equation for ∆. We differente f1RSB with respect to ˜ q
+
+and ˜ q1, respectively, to obtain the equations for q and q1. By calculating their difference, ∆ can be interpreted as the variance of the estimator in the effective single-site problem with respect to the intra-block auxiliary field ξ1:∆ = Ex0
+
+Z
+
+Dξ 0
+
+
+
+x2 
+
+> ξ1
+
+− ⟨ x⟩2
+
+> ξ1
+
+
+
+. (D22) Here, ⟨·⟩ ξ1 denotes the average with respect to the following probability density function 
+
+π1(ξ1 | ξ0, x 0): 
+
+π1(ξ1 | ξ0, x 0) = 1
+
+Z(ξ0, x 0) exp 
+
+
+
+−ξ21
+
+2
+
+ Z
+
+dx exp 
+
+
+
+−βHeff (x, ξ 0, ξ 1, x 0)
+
+!m1
+
+. (D23) 31 In the low-temperature limit β → ∞ , π1 is dominated by the point x = x∗ that minimizes 
+
+Heff , and the integral concentrates around x∗. In the vicinity of the RS solution, the estimator 
+
+x∗ is expressed using the thresholding function as follows: 
+
+x∗ = S
+
+
+
+h1RSB ; 1
+
+bQRS 
+
+R(·)
+
+
+
+. (D24) Here, 
+
+h1RSB = hRS +
+
+p b∆
+
+bQRS 
+
+ξ1 = x0 +
+
+√ ˆχRS 
+
+bQRS 
+
+ξ0 +
+
+p b∆
+
+bQRS 
+
+ξ1, (D25) and the deviation from the RS solution is given by 
+
+p b∆ ξ1/ bQRS . Regarding this quantity as infinitesimal, we expand x∗ around x∗ 
+
+> RS
+
+as 
+
+x∗ = x∗ 
+
+> RS
+
++ ∂x ∗
+
+∂h x∗=x∗
+
+> RS
+
+p b∆
+
+bQRS 
+
+ξ1 + O( b∆) , (D26) where 
+
+x∗ 
+
+> RS
+
+= S
+
+
+
+hRS ; 1
+
+bQRS 
+
+R(·)
+
+
+
+, (D27) 
+
+∂x ∗
+
+∂h x∗=x∗
+
+> RS
+
+= S′
+
+
+
+hRS ; 1
+
+bQRS 
+
+R(·)
+
+
+
+. (D28) Using this expansion, the variance term is evaluated as 
+
+⟨x2⟩ξ1 − ⟨ x⟩2 
+
+> ξ1
+
+≃ 1
+
+bQ2RS 
+
+S′
+
+
+
+hRS ; 1
+
+bQRS 
+
+R(·)
+
+2
+
+b∆ × σ2 
+
+> ξ1
+
+, (D29) where σ2 
+
+> ξ1
+
+is the variance of ξ1 ∼ π1(ξ1 | ξ0, x 0). The distribution π1 is expressed as π1(ξ1 |
+
+ξ0, x 0) ∝ exp( −ϕ(ξ1)) using the effective potential ϕ(ξ1) := (1 /2) ξ21 + m1βHeff (x∗, ξ 1). The variance σ2 
+
+> ξ1
+
+can be approximated by the inverse of the curvature of the potential ϕ′′ (ξ1)−1,where the curvature ϕ′′ (ξ1) is evaluated as follows: 
+
+ϕ′′ (ξ1) = 1 + m1β
+
+∂2Heff 
+
+∂ξ 21
+
++ ∂2Heff 
+
+∂x∂ξ 1
+
+∂x ∗
+
+∂ξ 1
+
+
+
+= 1 + O( b∆) . (D30) These results lead to the following relationship: ∆ = 1
+
+bQ2RS 
+
+Ex0
+
+Z
+
+DξS ′
+
+
+
+hRS ; 1
+
+bQRS 
+
+R(·)
+
+2
+
+b∆ + O( b∆2). (D31) 32 Combining Eqs. (D21) and (D31), the condition for the perturbation ∆ to contract to zero is derived as follows: 
+
+αχ2RS 
+
+1
+
+bQ2RS 
+
+Ex0
+
+Z
+
+DξS ′
+
+
+
+hRS ; 1
+
+bQRS 
+
+R(·)
+
+2
+
+< 1. (D32) Applying bQRS = α/ ˆχRS to this expression reduces it to Eq. (61). 
+
+[1] M. Lustig, D. Donoho, and J. M. Pauly, Magn. Reson. Med. 58 , 1182 (2007). [2] M. F. Duarte, M. A. Davenport, D. Takhar, J. N. Laska, T. Sun, K. F. Kelly, and R. G. Baraniuk, IEEE Signal Process. Mag. 25 , 83 (2008). [3] A. Wagadarikar, R. John, R. Willett, and D. Brady, Appl. Opt. 47 , B44 (2008). [4] O. E. Ayach, S. Rajagopal, S. Abu-Surra, Z. Pi, and R. W. Heath, IEEE Trans. Wirel. Commun. 13 , 1499 (2014). [5] D. L. Donoho, IEEE Trans. Inf. Theory 52 , 1289 (2006). [6] E. J. Cand` es, J. K. Romberg, and T. Tao, Commun. Pure Appl. Math. 59 , 1207 (2006). [7] F. Krzakala, M. M´ ezard, F. Sausset, Y. Sun, and L. Zdeborov´ a, J. Stat. Mech. 2012 , P08009 (2012). [8] D. L. Donoho, A. Maleki, and A. Montanari, Proc. Natl. Acad. Sci. U. S. A. 106 , 18914 (2009). [9] M. Bayati and A. Montanari, IEEE Trans. Inf. Theory 57 , 764 (2011). [10] Y. Kabashima, T. Wadayama, and T. Tanaka, J. Stat. Mech. 2009 , L09003 (2009). [11] S. Ganguli and H. Sompolinsky, Phys. Rev. Lett. 104 , 188701 (2010). [12] F. Krzakala, M. M´ ezard, F. Sausset, Y. F. Sun, and L. Zdeborov´ a, Phys. Rev. X. 2, 021005 (2012). [13] Y. Wu and S. Verdu, IEEE Trans. Inf. Theory 58 , 6241 (2012). [14] H. Zou, J. Am. Stat. Assoc. 101 , 1418 (2006). [15] J. Fan and R. Li, J. Am. Stat. Assoc. 96 , 1348 (2001). [16] R. Chartrand, IEEE Signal Processing Letters 14 , 707 (2007). [17] C.-H. Zhang, Ann. Stat. 38 , 894 (2010). [18] R. R. Coifman and M. V. Wickerhauser, IEEE Trans. Inf. Theory 38 , 713 (1992). 
+
+33 [19] E. J. Cand` es, M. B. Wakin, and S. P. Boyd, J Fourier Anal Appl Springer Texts in Statistics, 
+
+14 , 877 (2008). [20] I. Daubechies, R. DeVore, M. Fornasier, and C. S. G¨ unt¨ urk, Commun. Pure Appl. Math. 63 ,1 (2010). [21] R. Chartrand and W. Yin, in 2008 IEEE International Conference on Acoustics, Speech and Signal Processing (IEEE, 2008) pp. 3869–3872. [22] A. Sakata and Y. Xu, J. Stat. Mech. 2018 , 033404 (2018). [23] X. Gu, A. Sakata, and T. Obuchi, arXiv [stat.ML] (2025). [24] A. Sakata and T. Obuchi, J. Stat. Mech. 2021 , 093401 (2021). [25] A. Prater-Bennette, L. Shen, and E. E. Tripp, J. Sci. Comput. 93 , 67 (2022). [26] I. Daubechies, M. Defrise, and C. De Mol, Commun. Pure Appl. Math. 57 , 1413 (2004). [27] A. Beck and M. Teboulle, SIAM J. Imaging Sci. 2, 183 (2009). [28] S. Boyd, Found. Trends ® Mach. Learn. 3, 1 (2010). [29] Y. Shen, J. Fang, and H. Li, IEEE Signal Process. Lett. 20 , 1223 (2013). [30] Y. Nagano and K. Hukushima, Phys. Rev. E. 107 , 034126 (2023). [31] Y. Nagano and K. Hukushima, J. Stat. Mech. (2024). [32] C. M. Carvalho, N. G. Polson, and J. G. Scott, Biometrika 97 , 465 (2010). [33] A. Armagan, D. B. Dunson, and J. Lee, Stat. Sin. 23 , 119 (2013). [34] J. Ma and L. Ping, IEEE Access 5, 2020 (2017). [35] S. Rangan, P. Schniter, and A. K. Fletcher, in 2017 IEEE International Symposium on Infor-mation Theory (ISIT) (IEEE, 2017) pp. 1588–1592. [36] T. Furuhashi, H. Hontani, Q. Zhao, and T. Yokota, arXiv [cs.LG] (2026). 
+
+34

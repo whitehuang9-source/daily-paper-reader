@@ -1,0 +1,929 @@
+Title: Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer
+
+URL Source: https://arxiv.org/pdf/2604.10320v1
+
+Published Time: Tue, 14 Apr 2026 00:51:00 GMT
+
+Number of Pages: 15
+
+Markdown Content:
+# Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer 
+
+Jianming Wen 1, ∗
+
+> 1
+
+Department of Electrical and Computer Engineering, Binghamton University, Binghamton, New York 13902, USA 
+
+(Dated: April 14, 2026) We develop a general theory of null-constrained parameter estimation in a time-reversed Young (TRY) interferometer, where measurement is performed through programmable source-basis encod-ing with a fixed detector. We address the fundamental question of how to design source patterns that enforce a true metrological null—vanishing nominal response at the operating point—while preserving finite first-order sensitivity to the parameter. Under a general shot-noise-limited channel model, we show that the optimal null-constrained receiver is obtained by projecting the derivative response onto the subspace orthogonal to the nominal background in the inverse-noise metric. This yields a constructive solution in which the optimal source-basis code is given by the inverse-noise-weighted derivative response with its background-parallel component removed. We further derive an exact and universal information-retention law: the locally accessible Fisher information is reduced by a factor 1 − χ2, where χ quantifies the inverse-noise overlap between the nominal and derivative response vectors. This result establishes a precise geometric interpretation of the cost of null en-forcement. Numerical examples demonstrate the null-coded TRY receivers can retain nearly the full local information and can be accurately implemented using binary and positive-only source patterns. These findings identify source-basis null engineering as a distinct and practically viable modality for derivative-mode sensing, with implications for superresolution metrology and programmable optical measurement architectures. 
+
+I. INTRODUCTION 
+
+The fundamental limits of optical resolution are most fruitfully understood through parameter estimation rather than image formation alone. In this viewpoint, the central quantity is the Fisher information carried by the measurement record about the parameter of interest, which sets the ultimate precision through the Cram´ er– Rao bound [1–6]. This perspective has led to a broad reexamination of how optical measurements should be designed near symmetric points and other operating con-ditions where conventional intensity-based readout can become locally uninformative [6–10]. A recurring lesson from these developments is that the most useful local information is often carried not by the nominal intensity itself, but by how that intensity changes under a small parameter perturbation. Near a symmetry point, the direct signal can be dominated by a large background component, while the informa-tive variation resides in derivative-like structure that is easily obscured in standard measurements [6–10]. This observation underlies several important superresolution and precision-sensing strategies, including spatial-mode demultiplexing, parity-sensitive detection, and nulling-based receivers [11–15]. Although these methods are physically diverse, they share a common principle: sup-press the nominal background while preserving the com-ponent of the signal that changes most sensitively with the parameter.  
+
+> ∗jwen7@binghamton.edu
+
+In many such schemes, interference plays a decisive role because it determines whether the measurement record contains sufficiently sharp signed structure to support derivative-sensitive estimation. In particular, the contrast or visibility of the underlying interference pattern controls how strongly parameter-dependent re-distribution appears across the available measurement channels. When interference visibility is weak, the re-sponse becomes dominated by a slowly varying positive background, and the derivative channel tends to align more strongly with the nominal signal. When visibil-ity is stronger, the response develops more pronounced alternating structure, which can increase the deriva-tive content that is distinguishable from the background and thereby improve the effectiveness of null-constrained sensing. Thus, visibility is not merely an experimental quality factor; it directly influences the geometry of the estimation problem. A time-reversed Young (TRY) interferometer provides a fundamentally different physical realization of this gen-eral principle [16–18]. In contrast to the conventional Young geometry, where interference fringes are observed in the detection plane, the TRY configuration organizes the measurement directly in the source coordinate, using a fixed detector together with a programmable, point-addressable source plane [16–18]. This inversion turns the source plane itself into the measurement basis. As a result, measurement design is performed not through detector-side mode sorting or output-port engineering, but through controlled source-basis coding. Recent work [18] showed that this source-basis pro-grammability enables differential encoding, in which two positive source patterns are combined to synthe-
+
+> arXiv:2604.10320v1 [physics.optics] 11 Apr 2026
+
+2size an antisymmetric response channel and thereby re-alize derivative-sensitive local estimation. That result established that TRY can access informative first-order structure without raster-style scanning and can outper-form simple source-plane intensity sampling. At the same time, it left open a more stringent and practically impor-tant question: how should the source basis be designed when the receiver is required to operate at a true metro-logical null? This distinction is essential. A dark output alone does not guarantee a useful sensing configuration [11, 13, 15]. A single nonnegative intensity channel can vanish at an operating point yet remain even in the perturbation, so that its leading response is quadratic and does not pre-serve the sign of the parameter shift. By contrast, a metrologically useful null must satisfy two conditions si-multaneously: the nominal response must vanish at the operating point, and the first derivative with respect to the parameter must remain finite. Such a receiver is not merely dark; it is locally informative. In the TRY architecture, this requirement becomes a source-basis design problem. Because the primitive record is distributed across addressable source channels, the null need not be tied to any individual dark phys-ical port. Instead, it can be synthesized by combining multiple finite-flux channels so that the nominal output cancels while the derivative response survives. This turns null operation into a constrained coding problem in re-sponse space: one seeks source-basis weights that reject the background but preserves as much first-order sensi-tivity as possible. In this work, we develop a general theory of null-constrained source-basis sensing in a TRY interferome-ter. Under a shot-noise-limited channel model, we show that the optimal null-coded receiver is obtained by pro-jecting the derivative response onto the subspace orthog-onal to the nominal background in the inverse-noise met-ric. Equivalently, the optimal code is the inverse-noise-weighted derivative response with its background-parallel component removed . This identifies null-coded TRY metrology as a source-basis realization of derivative-mode sensing [8, 10, 12], implemented not through detection-mode projections but through programmable source-coordinate coding. The developed theory also yields an exact and com-pact information-retention law. We show that the locally accessible Fisher information under the null constraint is reduced from the unconstrained full-channel value by the factor 1 − χ2, where χ is the inverse-noise-metric over-lap between the nominal and derivative response vectors. This result gives a precise geometric characterization of when null operation is essentially lossless and when it incurs a substantial penalty. Within this framework, interference visibility acquires a second and more structured meaning. Beyond con-trolling fringe contrast in the primitive channel pattern, it influences the overlap between the nominal response and the derivative response and therefore helps determine the information cost of null enforcement. Higher visibil-ity generally sharpens the derivative-bearing interference structure and can reduce the degree to which the infor-mative variation is masked by the nominal background, whereas lower visibility tends to wash out the signed in-terference content and can make the null-constrained pro-jection less favorable. For this reason, visibility should be regarded as an estimation-relevant control parame-ter of the TRY architecture, not merely as a descriptive property of the underlying fringe pattern. The remainder of the paper develops this frame-work systematically. Section II introduces the primi-tive source-basis channel model and clarifies the role of interference structure and visibility in shaping the lo-cal response manifold. Section III defines a true differ-ential null and distinguishes it from one-port darkness. Section IV derives the optimal null code and the exact information-retention law. Section V presents explicit TRY examples and quantitative comparisons, including how interference visibility affects code structure, retained information, and robustness under detuning. Section VI analyzes binary and positive-only implementations, and Section VII places the results in the broader context of nulling, superresolution, and programmable measure-ment design.  
+
+> II. PRIMITIVE SOURCE-BASIS CHANNEL MODEL
+
+A TRY interferometer is naturally described in asource-basis representation, in which a fixed detector is paired with a programmable, point-addressable source plane [16, 17]. In this formulation, the measurement record is organized over source coordinate rather than an observation plane, and the source plane itself serves as the basis in which the measurement is defined. This representation makes clear that measurement design is carried out through source-basis coding rather than detector-side mode selection.  
+
+> A. General channel model
+
+We discretize the source plane into M addressable channels centered at coordinates {xm}Mm=1 . For a given value of the unknown scalar parameter θ, the primi-tive measurement record consists of independent photon counts 
+
+nm ∼ Pois( λm(θ)) , m = 1 , . . . , M, (1) where λm(θ) denotes the mean response of the mth source channel. Collecting these channel means into a 3vector, 
+
+λ(θ) = 
+
+
+
+λ1(θ)
+
+λ2(θ)...
+
+λM (θ)
+
+ , (2) we obtain a complete statistical description of the prim-itive TRY measurement in the source basis [18]. This formulation is deliberately model-independent. The null-coding theory developed below depends only on the local behavior of λ(θ) in a neighborhood of a chosen operating point θ0. It therefore applies equally to analytically derived forward models, experimentally calibrated response functions, or numerically generated channel families.  
+
+> B. Local expansion and noise structure
+
+We define the nominal response and its first two deriva-tives at the operating point θ0 as 
+
+λ0 = λ(θ0), λ1 = dλ
+
+dθ θ0
+
+, λ2 = d2λ
+
+dθ 2 θ0
+
+. (3) For a small perturbation δ = θ − θ0, the channel response admits the expansion 
+
+λ(θ0 + δ) = λ0 + λ1δ + 12 λ2δ2 + O(δ3). (4) Under the independent Poisson model, the noise covari-ance is diagonal, 
+
+D(θ) = diag  λm(θ)Mm=1 = diag  λ1(θ), . . . , λ M (θ), (5) and at the operating point θ0,
+
+D0 = diag( λ0,1, . . . , λ 0,M ). (6) The Fisher information carried by the full primitive chan-nel record at θ0 is thus 
+
+Ifull (θ0) = 
+
+> M
+
+X
+
+> m=1
+
+[λ′
+
+> m
+
+(θ0)] 2
+
+λm(θ0) = λT 
+
+> 1
+
+D−10 λ1, (7) whose quantity provides the natural local benchmark against which all coded receivers will be compared.  
+
+> C. Role of interference visibility in the local response geometry
+
+To make explicit how interference affects the null-coding problem, it is useful to introduce the phenomeno-logical TRY forward law already used in earlier work [18], 
+
+λ(x; θ) = N0η g (x − θ) [1 + V cos( κx + ϕ0)] , (8) with a Gaussian localized envelope 
+
+g(x − θ) = exp 
+
+
+
+− (x − θ)2
+
+2σ2
+
+
+
+. (9) Here N0 is the mean launched photon number per source-addressing interval, η is the overall detection efficiency, 
+
+V is the fringe visibility, κ is the spatial frequency of the source-plane interference, and ϕ0 is a phase offset, and σ
+
+is the width of the localized source-plane response. More-over, for simplicity, θ here parameterizes the displace-ment of the localized source-response envelope relative to a fixed source-basis interference modulation; accordingly, the fringe factor cos( kx + ϕ0) is taken to be stationary in the source coordinate. For the case where θ is meant to represent a literal translation of the entire source-plane intensity pattern, we leave the detailed treatment as an exercise to the reader. Sampling this field at the channel centers at xm gives the primitive means λm(θ) = λ(xm; θ). At the operating point θ0,
+
+λ0,m = N0η g (0)  
+
+> m
+
+[1 + V cos( κx m + ϕ0)] , (10) where g(0)  
+
+> m
+
+≡ g(xm − θ0). Because the parameter enters through a displacement of the localized envelope, the first derivative is 
+
+λ1,m = ∂λ (xm; θ)
+
+∂θ θ0
+
+= N0η xm − θ0
+
+σ2 g(0)  
+
+> m
+
+[1 + V cos( κx m + ϕ0)] . (11) This expression already shows an important point: in the present model, the parameter derivative is multiplica-tively modulated by the same interference factor that ap-pears in the nominal response. The visibility thus enters not only through the signal amplitude, but through the detailed channel-by-channel structure of both λ0 and λ1.The full-channel Fisher information (7) becomes 
+
+Ifull (θ0) = 
+
+> M
+
+X
+
+> m=1
+
+λ21,m 
+
+λ0,m 
+
+= N0η
+
+> M
+
+X
+
+> m=1
+
+(xm − θ0)2
+
+σ4 g(0)  
+
+> m
+
+[1 + V cos( κx m + ϕ0)] .
+
+(12) Hence, within this forward model, visibility changes the local information content directly by reweighting the con-tribution of each source channel. More importantly for the null-constrained problem de-veloped later, visibility also affects the inverse-noise over-lap between the nominal and derivative response vectors. The relevant inner product is 
+
+λT 
+
+> 0
+
+D−10 λ1 =
+
+> M
+
+X
+
+> m=1
+
+λ1,m , (13) 4which here becomes 
+
+λT 
+
+> 0
+
+D−10 λ1 = N0η
+
+> M
+
+X
+
+> m=1
+
+xm − θ0
+
+σ2 g(0)  
+
+> m
+
+[1 + V cos( κx m + ϕ0)] .
+
+(14) This term is precisely the background-aligned component of the derivative response that must be removed by the optimal null code. The visibility V therefore influences the null penalty not abstractly, but through the weighted signed sum above. Several consequences immediately follow: (I) When V =0, the response reduces to a purely posi-tive displaced envelope, 
+
+λ0,m = N0η g (0)  
+
+> m
+
+, λ1,m = N0η xm − θ0
+
+σ2 g(0)  
+
+> m
+
+. (15) In this limit, the local geometry is controlled entirely by the envelope translation. For symmetric sampling about 
+
+θ0, the overlap sum can vanish by parity, but the deriva-tive structure remains smooth and lacks interference-enhanced channel alternation. (II) When V > 0, the interference term redistributes both nominal flux and derivative weight across the source basis. This reshaping can either reduce or increase the overlap between λ0 and λ1, depending on κ, ϕ 0, θ 0, and the discretization. In particular, higher visibility tends to strengthen channel-to-channel contrast and can cre-ate derivative structure that is less background-like in the inverse-noise metric, thereby making null enforce-ment less costly. (III) The quantity that matters later is not visibility alone, but how visibility modifies the normalized overlap 
+
+χ = λT 
+
+> 0
+
+D−10 λ1
+
+q
+
+(λT 
+
+> 0
+
+D−10 λ0)( λT 
+
+> 1
+
+D−10 λ1)
+
+. (16) Accordingly, visibility should be viewed as a physical con-trol parameter that shapes the response-space angle be-tween λ0 and λ1, and thence the fraction of information retained under the null constraint. This quantitative link will be exploited later when we analyze the optimal null code and the exact retention law.  
+
+> D. Scope of the TRY forward model
+
+The explicit model above will be used in later sections only as an illustrative channel family for numerical ex-amples and physical interpretation. None of the general derivations below depends on the Gaussian envelope or cosine modulation specifically. The analytical theory re-quires only the local quantities λ0, λ1, and D0. For this particular discretized model, however, the interference visibility also permits an exact analytical expression for the overlap parameter χ, which is derived in Appendix A and used later to interpret the visibility dependence of the numerical examples in Sec. V.  
+
+> III. DEFINITION OF A TRUE METROLOGICAL NULL
+
+A source-basis receiver in the TRY architecture is spec-ified by a real-valued code vector 
+
+w = ( w1, . . . , w M )T (17) acting linearly on the primitive channel counts. The re-sulting coded observable is 
+
+Sw =
+
+> M
+
+X
+
+> m=1
+
+wmnm = wT n, (18) with mean and variance 
+
+⟨Sw(θ)⟩ = wT λ(θ), Var[ Sw(θ)] = wT D(θ)w, (19) where D(θ) is given by Eq. (5). This linear construction is the basic mechanism by which the TRY architecture turns programmable source patterns into effective mea-surement channels.  
+
+> A. Null condition and local informativeness
+
+Let θ0 denote the operating point. A true metrological null should satisfy not only the vanishing nominal out-put, but also nonvanishing first-order sensitivity to the parameter. We hence define a null-constrained receiver by the pair of conditions 
+
+wT λ0 = 0 , wT λ1̸ = 0 , (20) where, as in Sec. IIB, λ0 = λ(θ0) and λ1 = λ′(θ0). The first condition enforces exact cancellation of the nominal response at θ0. The second ensures that the coded ob-servable remains locally informative: a small parameter displacement still produces a signed linear response. Indeed, for δ = θ − θ0, the expansion of Sec. II gives 
+
+⟨Sw(θ0 + δ)⟩ = wT λ0 + wT λ1 δ + 12 wT λ2 δ2 + O(δ3)= wT λ1 δ + 12 wT λ2 δ2 + O(δ3)
+
+≈ wT λ1 δ + O(δ2). (21) Thus, a metrologically useful null is not merely dark: it is dark while preserving a signed linear response to small parameter displacements. This is the essential distinction between background suppression and local estimation ca-pability. This definition is stronger than merely requiring a small output. It identifies the operating point as one of deliberate background rejection together with retained first-order information. In the present source-basis set-ting, the null is therefore not a passive feature of the channel response, but an actively engineered property of the coded observable. 5 
+
+> B. Distinction from one-port darkness
+
+It is important to distinguish the present null condition from the more common notion of operating at a “dark” physical output [11, 13, 15]. A single nonnegative mea-surement channel μ(θ) ≥ 0 may vanish at θ0 and still fail to provide a useful signed first-order estimator. In a typical dark-port situation one has 
+
+μ(θ0 + δ) = a δ 2 + O(δ4), (22) so that the leading response is even in δ.Such a signal may still carry Fisher information in an idealized Poisson description, but it does not distinguish 
+
+δ from −δ at leading order and therefore does not act as a linear local readout. By contrast, the null defined above is imposed on a differential observable synthesized from multiple finite-flux source channels, so that the nominal response cancels while the first-order derivative contri-bution survives. Thus, the relevant issue is not darkness alone, but whether the coded observable remains linearly informative about the parameter displacement. (The dis-tinction between one-port darkness and the true differ-ential null used here is discussed further in Appendix B.) This distinction is particularly important in the TRY setting. The objective is not merely to identify a low-output channel, but to construct a source-basis observ-able that rejects the background component of the record while preserving the part that changes linearly with the parameter.  
+
+> C. Source-basis interpretation and connection to response geometry
+
+Because the TRY architecture is programmable in the source coordinate, the null is not tied to a fixed inter-ferometric port. Instead, it is engineered through the code vector w. In response-space language, the condition 
+
+wT λ0 = 0 means that the receiver is blind to the nominal source-basis response at θ0, whereas wT λ1̸ = 0 requires the same receiver to remain sensitive to the derivative direction. This directly connects Sec. III to the quantitative dis-cussion in Sec. II.C. There, the interference structure and visibility were shown to shape the local geometry of λ0
+
+and λ1, and in particular the normalized overlap χ (see Eq. (16)). A useful null is therefore possible only to the extent that the derivative response contains a compo-nent distinguishable from the nominal background in this inverse-noise geometry. When the derivative direction is strongly aligned with the background, null enforcement necessarily removes a large portion of the useful signal. When the two are nearly orthogonal, the null can be imposed with much less penalty. In this sense, null operation is not a binary property but a constrained design problem whose quality is governed by the response-space angle between λ0 and 
+
+λ1. 
+
+> D. Transition to optimal design
+
+The next question is therefore not whether a null can be imposed, but how to choose w so that the null-constrained receiver retains the maximum local sensitiv-ity allowed by the primitive channel statistics. This re-quires optimizing the first-order response relative to the shot-noise level at the operating point. Section IV solves this problem exactly and shows that the optimal code is obtained by projecting the derivative response away from the nominal background in the inverse-noise metric.   
+
+> IV. OPTIMAL NULL CODE AND EXACT INFORMATION RETENTION A. Local Fisher information of a coded observable
+
+We now determine the optimal source-basis code under the null constraint. For a small displacement δ = θ − θ0,in Sec. III.A the coded observable responds as 
+
+⟨Sw(θ0 + δ)⟩ = wT λ1δ + O(δ2), Var[ Sw(θ0)] = wT D0w.
+
+In the local Gaussian small-signal approximation, the Fisher information carried by the scalar observable Sw
+
+at θ0 becomes 
+
+Iw(θ0) = [∂δ ⟨Sw(θ0 + δ)⟩]2
+
+Var[ Sw(θ0)] = (wT λ1)2
+
+wT D0w . (23) This quantity should be distinguished from the full-channel Fisher information 
+
+Ifull (θ0) = λT 
+
+> 1
+
+D−10 λ1, (24) introduced in Sec. II.B. The former quantifies the infor-mation captured by a specific coded receiver, whereas the latter is the total information available in the full primitive Poisson channel record. The Equations presented above may also be motivated from the local signal-to-noise ratio, SNR w(δ) ≈ |⟨ Sw(θ0 + δ)⟩| 
+
+pVar[ Sw(θ0)] = |δ| |wT λ1|
+
+pwT D0w , (25) so that Iw(θ0) is precisely the squared slope-to-noise ra-tio governing local resolution. Under the null constraint (20), the design problem be-comes max  
+
+> w
+
+Iw(θ0) subject to wT λ0 = 0 .
+
+Because Iw is invariant under an overall rescaling of w,one may impose the normalization 
+
+wT D0w = 1 (26) without loss of generality. The optimization then be-comes a constrained maximization of wT λ1. The de-tailed Lagrange-multiplier derivation can be found in Ap-pendix C; here we quote the result and then interpret it. 6
+
+B. Optimal null code and the role of α
+
+The optimal null-constrained code is 
+
+w⋆ ∝ D−10 (λ1 − αλ0), (27) where 
+
+α = λT 
+
+> 0
+
+D−10 λ1
+
+λT 
+
+> 0
+
+D−10 λ0
+
+. (28) This is the central constructive result. The vector w⋆
+
+is the actual source-basis code used to form the optimal coded observable Sw⋆ ; in Sec. V it will be used directly to generate the source-basis patterns and sensitivity curves, including the code profiles shown in Fig. 3. So, w⋆ is not just an intermediate algebraic object: it is the optimal receiver prescription produced by the theory. The coefficient α has a clear geometric meaning. It is the inverse-noise-metric projection coefficient of the derivative response onto the nominal background. Equiv-alently, αλ0 is exactly the background-aligned compo-nent of λ1 that must be removed in order to enforce the null. The larger |α| is, the larger the derivative com-ponent that is contaminated by the nominal response, and therefore the larger the penalty associated with null enforcement. This also clarifies the connection to Sec. II.C: the same overlap term λT 
+
+> 0
+
+D−10 λ1 in χ (Eq. (16)) that entered the visibility-sensitive discussion there now appears directly in the optimal subtraction coefficient α. Thus, interfer-ence structure and visibility influence the optimal null code through the amount of derivative response aligned with the background. 
+
+C. Projection interpretation and relation to the full-channel limit 
+
+In the absence of the null constraint, the optimal linear receiver aligns with the inverse-noise-weighted derivative direction D−10 λ1, and the corresponding maximum infor-mation is 
+
+Ilin max = λT 
+
+> 1
+
+D−10 λ1 = Ifull (θ0). (29) The null constraint modifies this by requiring orthogonal-ity to λ0. The optimal code is thus obtained by removing from D−10 λ1 the component parallel to the nominal back-ground. In this sense, 
+
+D−10 λ1 → D−10 (λ1 − αλ0) ∝ w⋆ (30) is an inverse-noise-weighted projection of the derivative response into the null-admissible subspace. This projection picture is shown schematically in Fig. 1. The derivative response is decomposed into background-parallel and background-orthogonal parts in the inverse-noise metric; the latter is exactly the compo-nent retained under the null constraint. This geometric 
+
+FIG. 1. Geometric interpretation of optimal null coding in inverse-noise-weighted response space. The derivative re-sponse ˜λ1 is decomposed into a component parallel to the nominal background ˜λ0 and an orthogonal component ˜λ1,⊥.The null constraint removes the parallel part and retains only the orthogonal derivative component. The overlap parameter 
+
+χ quantifies the angle between ˜λ0 and ˜λ1, yielding the reten-tion law Inull max /Ilin max = 1 −χ2. Note that the figure is schematic and represents response-space geometry rather than the phys-ical TRY layout. 
+
+decomposition becomes fully explicit in the whitened rep-resentation introduced next. Under the null constraint, the maximum achievable lo-cal Fisher information accordingly becomes 
+
+Inull max = λT 
+
+> 1
+
+D−10 λ1 − (λT 
+
+> 0
+
+D−10 λ1)2
+
+λT 
+
+> 0
+
+D−10 λ0
+
+. (31) The second term is the information penalty associated with the background-aligned derivative component. It is exactly the piece removed by the coefficient α. This is also the point at which the physical discussion of Sec. II.C becomes operational: interference visibility and channel structure matter because they control the relative orien-tation of λ0 and λ1, and hence the size of the subtraction term. 
+
+D. Whitened geometry and exact information-retention law 
+
+A more transparent formulation is obtained by intro-ducing the whitened vectors ˜λ0 = D−1/20 λ0, ˜λ1 = D−1/20 λ1. (32) These definitions make explicit the inverse-noise geome-try already used in Sec. II.C. In particular, ˜λT 
+
+> 0
+
+˜λ1 = λT 
+
+> 0
+
+D−10 λ1, (33) and 
+
+∥˜λ0∥2 = λT 
+
+> 0
+
+D−10 λ0, ∥˜λ1∥2 = λT 
+
+> 1
+
+D−10 λ1. (34) Thus, the normalized overlap introduced in Sec. II.C can be written equivalently as 
+
+χ = ˜λT 
+
+> 0
+
+˜λ1
+
+∥˜λ0∥∥ ˜λ1∥ . (35) 7The two definitions are in fact identical, since whitening converts the inverse-noise inner product into an ordinary Euclidean inner product. This representation also clarifies the physical meanings of the two norms. The quantity 
+
+∥˜λ1∥2 = Ifull (θ0) (36) is the full-channel Fisher information, while 
+
+∥˜λ0∥2 = λT 
+
+> 0
+
+D−10 λ0 (37) is the noise-weighted magnitude of the nominal back-ground. Now decompose the derivative response into compo-nents parallel and orthogonal to ˜λ0:˜λ1 = ˜λ1,∥ + ˜λ1,⊥, ˜λ1,⊥ ⊥ ˜λ0. (38) The null constraint removes the parallel component, so that 
+
+Inull max = ∥˜λ1,⊥∥2, Ilin max = ∥˜λ1∥2. (39) Using the orthogonal decomposition, 
+
+∥˜λ1∥2 = ∥˜λ1,∥∥2 + ∥˜λ1,⊥∥2, (40) one obtains 
+
+Inull max 
+
+Ilin max 
+
+= 1 − χ2. (41) This is the exact information-retention law. It shows that the null constraint removes precisely the fraction χ2
+
+of the available local Fisher information and retains the complementary fraction 1 − χ2. The exact information trade-off implied by the null constraint is summarized in Fig. 2. The retained fraction decreases quadratically as 1 − χ2, while the discarded fraction increases as χ2,showing the cost of null enforcement is controlled entirely by the inverse-noise-metric overlap between the nominal and derivative response vectors. When χ ≈ 0, the derivative response is nearly or-thogonal to the nominal background, and null enforce-ment is essentially lossless. When |χ| ≈ 1, the two are strongly aligned, and most of the information is dis-carded. Because χ is the same overlap quantity intro-duced in Sec. II.C, its value is shaped by the physical response structure of the TRY channel, including the in-terference modulation and visibility. In this way, the ex-act retention law connects the abstract projection geom-etry directly back to experimentally meaningful channel properties.  
+
+> V. EXPLICIT TRY EXAMPLE AND QUANTITATIVE COMPARISONS
+
+To illustrate the null-constrained theory in a concrete setting, we return to the phenomenological TRY forward                
+
+> FIG. 2. Exact information trade-off imposed by the null constraint. The retained fraction of local Fisher informa-tion is Inull max /Ilin max = 1 −χ2, while the discarded fraction is ∆I/Ilin max =χ2. Here χis the normalized inverse-noise over-lap between the nominal response λ0and the derivative re-sponse λ1.The result is universal; all system dependence enters only through χ.
+
+model introduced in Sec. II.C as well as in Ref. [18]. We discretize the source coordinate into M = 121 equally spaced channels over the interval [ −6, 6], with spacing 
+
+dx = 0 .1, and take the following parameter set 
+
+N0η = 1 , σ = 1 .2, V = 0 .85 , κ = 2 .6, ϕ0 = π
+
+5 .
+
+For simplicity, we choose the operating point θ0 = 0. These parameters are not chosen to optimize perfor-mance but to provide a smooth and representative chan-nel family in which the structure of the null-coded solu-tion can be displayed transparently.  
+
+> A. Structure of the optimal null code
+
+The structure of the optimal null code and its relation to the primitive channel response are demonstrated in Fig. 3. The figure displays the nominal response λ0,m , the derivative response λ1,m , the optimal real-valued code 
+
+w⋆m, and its binary approximation. This visualization makes clear how the optimal code inherits the derivative structure while removing the component aligned with the nominal background. The close correspondence is be-tween w⋆m and the inverse-noise-weighted derivative di-rection [ D−1λ1]m, not λ1,m itself. For the present for-ward model, since λ1,m = [( xm − θ0)/σ 2]λ0,m , one has [D−10 λ1]m = ( xm − θ0)/σ 2. Thus, when α is small, the optimal null code is approximately an affine ramp across the source basis. Several features are evident. First, the dominant struc-ture of w⋆m follows that of λ1,m , confirming that the in-formation content of the measurement is carried by the 8                       
+
+> FIG. 3. Source-basis structure of the null-coded receiver for the explicit TRY model at the operating point θ0= 0. From top to bottom: nominal response λ0,m , derivative response
+> λ1,m , optimal real-valued null code w⋆m∝[D−10(λ1−αλ0)] m,and its binary approximation w(bin)
+> m= sgn( w⋆m). For the present parameter set, the inverse-noise overlap χis very small, so the subtraction term αλ0produces only a weak correction to the derivative pattern. Since λ1,m = [( xm−
+> θ0)/σ 2]λ0,m , the inverse-noise-weighted derivative direction
+> D−10λ1is approximately ramp-like, and the optimal null code is well captured by by its binary sign structure.
+
+derivative response. The subtraction term αλ0 modifies this pattern only to the extent required to enforce the null condition. Second, for the present parameters, the overlap between λ0 and λ1 is very weak (as quantified by χ below), so the projection does not strongly distort the derivative structure. Consequently, the optimal code is already close to a sign pattern. Third, the binary ap-proximation w(bin ) 
+
+> m
+
+, obtained by retaining only the sign of w⋆m, closely tracks the real-valued solution. This in-dicates that, in regimes where the derivative response is dominated by sign structure rather than amplitude variation, null coding can be implemented using sim-ple two-level source patterns with minimal performance loss. These observations connect directly to the geomet-ric picture of Sec. IV: the null constraint removes only the background-aligned component, leaving the orthogo-nal derivative structure largely intact.  
+
+> B. Information retention and a TRY example
+
+The performance of the null-coded receiver is quan-tified by the exact retention law (41). For the repre-sentative discretized TRY model considered here with the above parameter set, and symmetric sampling about 
+
+θ0 = 0, the overlap is numerically very small: 
+
+χ ≈ − 1.23 × 10 −2.
+
+Accordingly, the null-constrained receiver retains essen-tially all of the locally available Fisher information, 
+
+Inull max 
+
+Ilin max 
+
+≈ 0.99985 ,
+
+so that the discarded fraction is only ∆IIlin max 
+
+= χ2 ≈ 1.50 × 10 −4.
+
+Thus, for this operating point, the null constraint is nearly lossless. On the universal trade-off curve shown in Fig. 2, the TRY example discussed here thus lies ex-tremely close to the χ = 0 limit. The small value of χ
+
+reflects the favorable local response geometry of the chan-nel family: the derivative response is already nearly or-thogonal to the nominal background in the inverse-noise metric, so only a very weak background-aligned compo-nent must be removed by the null projection. This behavior is also consistent with the code profile in Fig. 3. Because the overlap is so small, the subtraction term αλ0 produces only a minor correction to the deriva-tive pattern, and the optimal null code remains visually close to λ1. 
+
+> C. Visibility dependence in the present example
+
+The detailed dependence of the overlap parameter on the visibility is given in Appendix A. For the current discretized model, the quantity χ(V ) is determined by the visibility-dependent weighted sums entering 
+
+χ(V ) = B0 + V B 1
+
+p(A0 + V A 1)( C0 + V C 1) . (42) For the symmetric sampling assumed here, B0 = 0, so 
+
+χ(V ) = V B 1
+
+p(A0 + V A 1)( C0 + V C 1) . (43) This form shows that the overlap vanishes at V = 0 and, for the given parameter set, remains numerically small 9throughout the full visibility range 0 ≤ V ≤ 1. As a result, the corresponding retention fact 1 − χ(V )2
+
+stays very close to unity. In the present illustra-tive model, visibility reshapes the nominal and deriva-tive response amplitudes and therefore changes the Fisher weights and overlap sums. However, because 
+
+λ1,m /λ 0,m = ( xm − θ0)/σ 2, the inverse-noise-weighted derivative direction retains a simple ramp-like form, and visibility affects the null penalty primarily through the weighted overlaps rather than a qualitative change of code shape. This point is important for interpreting the explicit TRY numerics. A high visibility does not by itself imply a large null penalty, nor does a low visibility necessarily imply poor null-constrained performance. What matters is how the visibility-modified channel weights affect the inverse-noise overlap between the nominal and derivative response vectors. In the present geometry, that overlap remains weak, so the null-coded receiver stays close to the nearly lossless regime. At the same time, the exact expression in Appendix A makes clear that this behavior is not universal for all parameter choices. Different operating points, phase off-sets, fringe frequencies, or asymmetric sampling grids can produce substantially larger values of |χ|, in which case the information-retention curve would depart more visi-bly from unity. The current example should therefore be interpreted as a favorable local operating regime rather than a generic visibility trend.  
+
+> D. Robustness under detuning
+
+The theory developed so far is local in θ, so it is im-portant to examine how a code designed at θ0 performs away from the point. For a fixed code w, we define the local Fisher information at a nearby parameter value as 
+
+Iw(θ) = (wT λ1(θ)) 2
+
+wT D(θ)w . (44) We compare four receiver scenarios: (i) the full-channel limit Ilin max (θ), (ii) the optimal null-coded receiver w⋆ designed at θ0,(iii) its binary approximation, and (iv) representative single-channel monitoring at bright and dark source positions. The resulting local Fisher information curves are shown in Fig. 4. For the TRY example considered here, the null-coded receiver is already nearly lossless at the operating point because the overlap parameter χ is very small. Figure 4 displays that this favorable operating-point geometry also leads to strong robustness under moderate detuning: the optimal null-coded receiver re-mains close to the full-channel benchmark over a finite neighborhood around θ0.         
+
+> FIG. 4. Local Fisher information as a function of param-eter detuning δ=θ−θ0for different receiver strategies. Shown are the full-channel limit Ilin max (θ), the optimal null-coded receiver w⋆, its binary approximation, and representa-tive single-channel (bright and dark) measurements. For the TRY example considered in this work, the null-coded receiver is nearly lossless at the operating point and remains close to the full-channel benchmark over a finite detuning range. The binary approximation follows the optimal null code closely, while the single-channel strategies exhibit substantially re-duced local sensitivity.
+
+The binary approximation closely tracks the real-valued optimum throughout the same detuning range. This confirms that, in the present region, the dominant information-bearing structure is encoded primarily in the sign pattern of the source-basis code rather than in finite amplitude modulation. By contrast, the representative bright-channel and dark-channel one-port strategies perform substantially worse. The bright-channel measurement does not re-ject the nominal background and thus mixes informa-tive and noninformative response components, while the dark-channel measurement remains intrinsically weaker and does not provide the same robust linear sensitivity near the operating point. These comparisons highlight the practical advantage of source-basis null coding in the TRY architecture: for a favorable local response geometry, it combines nearly full information retention at the operating point with ro-bustness under detuning and compatibility with simple binary implementations.  
+
+> VI. BINARY CODES AND POSITIVE-ONLY IMPLEMENTATION
+
+The optimal null code derived in Sec. IV is generally real valued, whereas practical source modulation often imposes discrete or nonnegative constraints. It is thus 10 important to determine how closely the ideal null-coded receiver can be approximated using experimentally acces-sible source patterns. As already indicated by the explicit example in Sec. V, the favorable operating-point geom-etry of the representative TRY channel family leads to an optimal code that is close to a sign pattern, suggest-ing that high performance should remain accessible even under practical implementation constraints.  
+
+> A. Binary approximation of the optimal code
+
+A natural discrete approximation is obtained by re-taining only the sign structure of the optimal real-valued code (see Appendix D). Using the notation of Sec. IV, this yields the binary pattern 
+
+w(bin)  
+
+> m
+
+= sgn 
+
+
+
+[D−10 (λ1 − αλ0)] m
+
+
+
+. (45) The corresponding local Fisher information is 
+
+Ibin (θ0) = 
+
+h w(bin) T λ1
+
+i2
+
+ w(bin) T D0w(bin) ≤ I null max (θ0), (46) where the inequality follows because the real-valued code 
+
+w⋆ is optimal over the full continuous class. The relevant question is therefore not whether the bi-nary code is exact, but how much performance is lost when only the channel polarity is retained. The exam-ple of Sec. V shows that this loss can be very small: the binary curve in Fig. 4 closely follows the real-valued opti-mum over the same detuning range, and the sign pattern shown in Fig. 3 already captures the dominant struc-ture of the optimal code. These comparisons imply that the informative content of the receiver is often governed more by the spatial sign structure than by fine amplitude weighting. This is practically important. It means that the metro-logical advantage of null-coded sensing is not tied to high-precision analog control of every source channel. In fa-vorable regimes, near-optimal performance can already be obtained using simple two-level source patterns, which substantially lowers the experimental burden.  
+
+> B. Positive-only realization via sequential coding
+
+In many experimental implementations, the source in-tensity must remain nonnegative in each exposure. Asigned code must then be realized indirectly by decom-posing it into positive and negative parts, 
+
+wm = w(+)  
+
+> m
+
+− w(−) 
+
+> m
+
+, (47) with 
+
+w(+)  
+
+> m
+
+= max( wm, 0) , w(−) 
+
+> m
+
+= max( −wm, 0) , (48) so that 
+
+w(+)  
+
+> m
+
+≥ 0, w(−) 
+
+> m
+
+≥ 0, w(+)  
+
+> m
+
+w(−) 
+
+> m
+
+= 0 . (49) The two nonnegative source patterns w(+) and w(−) are then applied sequentially, yielding total detected counts 
+
+N+ and N−. The signed observable is reconstructed as 
+
+Sdiff = N+ − ζN −, (50) where ζ = 1 is the ideally balanced case, and more gener-ally ζ can compensate for systematic imbalance between the two exposures, such as drifts in source power, detec-tion efficiency, or acquisition time. A direct positive-only realization of the signed null code in this form is described in Appendix E. This construction follows the same basic logic as earlier differential source-basis encoding in the TRY architec-ture [18], but it is now applied to the optimal null-coded receiver. The null is hence not enforced by requiring any individual exposure to be dark. Rather, each exposure can remain strictly nonnegative and finite-flux, while the null emerges only after differential combination of the two measurements. The practical significance is that the optimal null-coded receiver remains implementable without negative source intensities and without continuously variable ana-log modulation. The essential ingredients are only non-negative source patterns and sequential differencing of the resulting bright measurements.  
+
+> C. Practical implications
+
+Taken together, these observations show that source-basis null engineering in the TRY architecture is not sim-ply a formal optimization result. Its core advantages— background cancellation, preserved first-order sensitiv-ity, and strong local information capture—remain acces-sible even under experimentally realistic modulation con-straints. The binary approximation demonstrates that the op-timal receiver is often robust to coarse quantization of the source weights. The positive-only construction shows that even the signed nature of the null-coded observable does not require physically negative modulation; it can be synthesized from ordinary nonnegative exposures. In this sense, the practical receiver preserves the same concep-tual structure established in Secs. III and IV: the useful observable is a coded differential combination of finite-flux source-basis measurements, not a single weak or dark branch. For this reason, the implementation constraints ad-dressed here do not undermine the main message of the theory. Rather, they strengthen it by showing that the source-basis null can be realized in forms that are ex-perimentally plausible while still retaining the essential performance benefits demonstrated in Sec. V. 11  
+
+> VII. RELATION TO EXISTING NULL AND SUPERRESOLUTION STRATEGIES
+
+The use of nulls, antisymmetric channels, and derivative-sensitive measurements is a well-established theme in optical metrology and superresolution [6, 7, 9– 13]. Methods such as spatial-mode demultiplexing, par-ity sorting, and nulling interferometry all build on the same broad insight: near symmetry points, conventional intensity measurements may fail to access the most infor-mative degrees of freedom, whereas suitably engineered observables can isolate the variation that carries local parameter information. In that broad sense, the present work belongs to a larger family of background-rejecting, derivative-sensitive measurement strategies. At the same time, the specific role played by the null here is different from that in these earlier approaches. The central distinction is not merely that the receiver operates near a dark point, but that the null is engineered directly in a programmable source basis . The relevant comparison is therefore not only with nulling strategies in general, but also with where and how the informative measurement basis is physically constructed.  
+
+> A. Relation to derivative-mode and nulling strategies
+
+In conventional nulling interferometry and derivative-mode sensing, the measurement basis is typically defined on the detection side, either through optical interference, modal projection, or spatial sorting [8, 10–13, 15]. The receiver isolates informative field components by acting on detected optical modes or image-plane signals after propagation. By contrast, in the TRY architecture developed here, the measurement basis is defined in the source coordi-nate through programmable weighting of source chan-nels. The detector remains fixed, and the null is synthe-sized not by destructive interference at a detection port but by constructing a coded observable whose nominal re-sponse cancels while its first-order derivative response is retained. In this sense, detection-basis nulling is a projec-tion performed on optical fields at the receiver, whereas source-basis nulling is a projection performed on the mea-sured channel responses themselves. The two strategies are therefore governed by the same general objective— background rejection with preserved local sensitivity— but they realize that objective at different physical layers of the measurement process. For this reason, the optimal receiver derived here is best understood as a source-basis realization of derivative-mode sensing [8, 10, 12]. It embodies the same information principle that motivates antisymmet-ric and derivative-sensitive receivers—namely, isolation of informative variation from a dominant background– but it does so in a different physical layer. The informa-tive observable is engineered through source-basis coding rather than through detection-side mode selection. This distinction matters both conceptually and prac-tically. Conceptually, it shows that derivative-mode metrology need not be tied to a detector-mode basis. Practically, it opens a route to implementing derivative-sensitive receivers in systems where the source plane is easier to program than the detection optics.  
+
+> B. Relation to differential and computational imaging
+
+It is also useful to distinguish the present approach from broader classes of differential and computational measurement strategies. In many computational imaging and differential sensing methods [19–26], useful signals are obtained by subtracting or combining multiple mea-surements taken under different illumination or acquisi-tion conditions. At a superficial level, the positive-only sequential implementation of Sec. VI may appear simi-lar, since it also forms an informative observable from a difference of finite-flux measurements. The key distinction is that the present work is not built around subtraction as a numerical post-processing step alone. Rather, the subtraction is dictated by an explicit metrological optimization problem. The code w⋆ is cho-sen so that the resulting differential observable satisfies a true null condition and maximizes the local Fisher in-formation subject to that constraint. In other words, the differencing rule is not heuristic; it is the optimal solution of a constrained information-theoretic design problem. This is also what differentiates the present approach from generic computational imaging ideas. The purpose is not to reconstruct a full image or invert a forward operator from multiple coded exposures. Instead, the goal is to engineer a single locally informative observ-able for parameter estimation. The framework is there-fore inherently estimation-theoretic rather than image-reconstruction-based.  
+
+> C. Relation to structured illumination and resolution enhancement
+
+Structured illumination and related resolution-enhancement techniques also exploit source-side control [27, 28], so the distinction here should be stated clearly. In those methods, the illumination pattern is designed to mix spatial frequencies and shift otherwise inaccessible spectral content into the passband of the imaging system. Resolution enhancement is then achieved through reconstruction of the redistributed spectral information. The present work operates on a different principle. The null-coded TRY receiver is not based on frequency mix-ing, image reconstruction, or recovery of an extended spa-tial spectrum. Instead, it is formulated entirely as a local estimation problem. The purpose of source modulation 12 here is not to encode high spatial frequencies for later in-version, but to construct an observable that is maximally sensitive to small parameter variations while remaining exactly null at the operating point. Thus, although both approaches involve structured source control, they belong to different conceptual categories: structured illumina-tion modifies spectral accessibility for imaging, whereas source-basis null coding engineers the local information geometry of the measurement itself.  
+
+> D. Distinct contribution of the present work
+
+The novelty of the present work can be stated precisely: (i) It formulates null-constrained metrology in a pro-grammable source basis within the time-reversed Young architecture. The null is not treated as an incidental dark operating condition, but as a design constraint imposed directly on the coded observable. (ii) It derives an explicit and constructive expres-sion for the optimal null code under a general shot-noise-limited channel model. The resulting receiver is the inverse-noise-weighted derivative response with its background-parallel component removed. (iii) It establishes an exact and model-independent information-retention law, Inull max /Ilin max = 1 − χ2, which quantifies the metrological cost of imposing a null in terms of the inverse-noise-metric overlap between nomi-nal and derivative responses. (iv) It shows that the resulting strategy remains com-patible with experimentally realistic constraints, includ-ing binary source patterns and positive-only sequential implementation. Taken together, these results show that null-coded TRY metrology is not merely another instance of dark-port sensing, nor a reformulation of generic differential or computational imaging ideas. It is a distinct source-basis implementation of derivative-sensitive metrology, made possible by the programmable structure of the TRY plat-form.  
+
+> VIII. CONCLUSION
+
+In summary, we have developed a local theory of null-constrained source-basis metrology in a time-reversed Young interferometer. The central result is that a true metrological null is not simply a dark output, but a coded observable whose nominal response vanishes at the oper-ating point while its first-order sensitivity remains finite. Within a general shot-noise-limited channel model, the optimal null-constrained receiver is obtained by removing from the inverse-noise-weighted derivative response the component aligned with the nominal background. This yields both a constructive source-basis code and an exact information-retention law, Inull max /Ilin max = 1 − χ2, which quantifies the metrological cost of imposing the null. The explicit TRY examples show that, for favorable lo-cal response geometry, the null-coded receiver can retain nearly all locally available information while remaining compatible with binary and positive-only implementa-tions. These results establish source-basis null engineer-ing as a distinct and practically meaningful capability of the TRY architecture. 
+
+> ACKNOWLEDGMENTS
+
+The author is grateful to Drs. B. He, Y. Zhai, and D. Zhang, and Ms. Y. Zhang for encouragement and useful conversations related to the results reported in this work. This work was partially supported by startup funds from Binghamton University and NSF ExpandQISE 2329027. 
+
+> Appendix A: Visibility Dependence of the Overlap Parameter
+
+In this appendix, we derive an explicit expression for the normalized inverse-noise overlap parameter χ as a function of the interference visibility V for the discretized TRY channel model introduced in Sec. II. Using Eqs. (8) and (9) of the forward model in Sec. II.C, we evaluate the channel responses at discrete posi-tions xm and define 
+
+ym ≡ xm − θ0, g m ≡ e− y2 
+
+> m
+> 2σ2
+
+, c m ≡ cos( κx m + ϕ0).(A1) At the operating point θ0, the nominal and derivative responses [Eqs. (10) and (11)] can be recast as 
+
+λ0,m = N0η g m(1 + V c m),λ1,m = N0η ym
+
+σ2 gm(1 + V c m). (A2) Substituting them into the definition of χ [Eq. (16)], and using D0 = diag( λ0,m ), one obtains 
+
+χ(V ) = 
+
+X
+
+> m
+
+ym
+
+σ2 gm(1 + V c m)
+
+vuut"X
+
+> m
+
+gm(1 + V c m)
+
+# " X
+
+> m
+
+y2
+
+> m
+
+σ4 gm(1 + V c m)
+
+# .
+
+(A3) The overall factor N0η cancels identically. For notational compactness, one defines 
+
+A0 = X
+
+> m
+
+gm, A1 = X
+
+> m
+
+gmcm,B0 = 1
+
+σ2
+
+X
+
+> m
+
+ymgm, B1 = 1
+
+σ2
+
+X
+
+> m
+
+ymgmcm,C0 = 1
+
+σ4
+
+X
+
+> m
+
+y2
+
+> m
+
+gm, C1 = 1
+
+σ4
+
+X
+
+> m
+
+y2
+
+> m
+
+gmcm.13 Then Eq. (A3) can be written exactly as 
+
+χ(V ) = B0 + V B 1
+
+p(A0 + V A 1)( C0 + V C 1) . (A4) In the common case of symmetric sampling about θ0, one has B0 = 0, yielding 
+
+χ(V ) = V B 1
+
+p(A0 + V A 1)( C0 + V C 1) . (A5) This expression shows that the visibility dependence of χ
+
+is governed by the weighted sums A1, B1, and C1, which depend on the sampling grid, fringe phase ϕ0, and spatial frequency κ. In particular, the overlap is not determined by V alone, but by how the interference modulation re-shapes the relative weighting of the source channels in the inverse-noise metric. Finally, the corresponding information-retention frac-tion follows directly from 
+
+Inull max 
+
+Ilin max 
+
+= 1 − χ(V )2, (A6) which provides an explicit connection between visibility and null-constrained sensitivity. 
+
+> Appendix B: One-Port Dark Channels and Differential Nulls
+
+This appendix clarifies why a one-port dark response is not equivalent to the true differential null defined in Sec. III. Consider a single nonnegative measurement channel 
+
+μ(θ) ≥ 0 whose mean vanishes at the operating point θ0.Expanding around θ0 with δ = θ − θ0, one typically has 
+
+μ(θ0 + δ) = aδ 2 + O(δ4), a > 0. (B1) The derivative of the mean is then 
+
+dμ (θ0 + δ)
+
+dθ = 2 aδ + O(δ3). (B2) Under a Poisson model, the corresponding Fisher infor-mation is 
+
+I1ch (θ) = [dμ (θ)/dθ ]2
+
+μ(θ) . (B3) Substituting the local expansions (B1) and (B2) gives 
+
+I1ch (θ0 + δ) = (2 aδ )2
+
+aδ 2 + O(δ2) = 4 a + O(δ2), (B4) for δ̸ = 0. Thus, a dark point in a single channel does not by itself imply vanishing Fisher information. However, this does not make it equivalent to a useful differential null. The essential problem is that the leading response is even: 
+
+μ(θ0 + δ) = μ(θ0 − δ). (B5) As a result, the measurement does not distinguish the sign of the parameter shift at leading order and there-fore cannot serve as a signed linear local readout. In addition, as δ → 0, the useful signal is concentrated in a weak branch, making the operating point more frag-ile with respect to background contamination, detector imperfections, and model mismatch. By contrast, the differential null used in Sec. III satis-fies 
+
+wT λ0 = 0 , wT λ1̸ = 0 ,
+
+so that 
+
+⟨Sw(θ0 + δ)⟩ = wT λ1 δ + O(δ2).
+
+The leading response is therefore linear and signed in δ.The null arises not from a vanishing one-port intensity, but from a differential combination of finite-flux channels whose nominal contributions cancel while the derivative-bearing part survives. This is the sense in which a true metrological null is fundamentally different from one-port darkness. 
+
+> Appendix C: Derivation of the Optimal Null Code
+
+In this appendix we derive the source-basis code that maximizes the local sensitivity under the null constraint. The problem is to optimize the quadratic ratio 
+
+I(w) = 
+
+ wT λ1
+
+2
+
+wT D0w , (C1) subject to wT λ0 = 0 (Eq. (20)). Here, again, λ0 =
+
+λ(θ0) is the nominal response vector at the operating point, λ1 = ∂θ λ(θ)|θ=θ0 is the corresponding parameter-derivative vector, and D0 = diag( λ0,1, λ 0,2, . . . , λ 0,M ) is the diagonal shot-noise matrix at θ0.Because the functional in Eq. (C1) is homogeneous in 
+
+w, the overall scale of the code does not affect the op-timization. It is therefore convenient to impose the nor-malization 
+
+wT D0w = 1 , (C2) in which case maximizing I(w) is equivalent to maximiz-ing the linear quantity wT λ1 under the two constraints in Eqs. (20) and (C2). We therefore introduce the La-grangian 
+
+L = wT λ1 − β
+
+2
+
+ wT D0w − 1 − γ wT λ0, (C3) where β and γ are Lagrange multipliers. Stationarity with respect to w gives 
+
+∂L
+
+∂w = λ1 − βD0w − γλ0 = 0 . (C4) 14 Solving for w yields 
+
+w = β−1D−10 (λ1 − γλ0) . (C5) The multiplier γ is then fixed by the null condition. Substituting Eq. (C5) into Eq. (20) gives 
+
+λT 
+
+> 0
+
+D−10 (λ1 − γλ0) = 0 , (C6) from which 
+
+γ = λT 
+
+> 0
+
+D−10 λ1
+
+λT 
+
+> 0
+
+D−10 λ0
+
+. (C7) Identifying this coefficient with the quantity denoted by 
+
+α in the main text, we obtain the optimal null-code di-rection 
+
+w⋆ ∝ D−10 (λ1 − αλ0) , α = λT 
+
+> 0
+
+D−10 λ1
+
+λT 
+
+> 0
+
+D−10 λ0
+
+,
+
+which are the exact expressions (27) and (28) quoted in Sec. IV.B of the main text. This result has a simple interpretation. The factor 
+
+D−10 weights each source-basis channel by the inverse of its shot-noise variance, while the subtraction of the 
+
+αλ0 term removes the component of the derivative re-sponse that lies parallel to the nominal background in the inverse-noise metric. The optimal null code therefore retains only the derivative component that survives the null constraint. Finally, substituting the above result back into the Rayleigh quotient in Eq. (C1) gives the maximal null-constrained sensitivity 
+
+Imax null = λT 
+
+> 1
+
+D−10 λ1 −
+
+ λT 
+
+> 0
+
+D−10 λ1
+
+2
+
+λT 
+
+> 0
+
+D−10 λ0
+
+,
+
+which is the result (31) given in the main text to quantify the information retained under the null constraint. 
+
+> Appendix D: Sign of Binary Approximation
+
+The binary approximation to the optimal null code is obtained by taking the sign of the optimal real-valued solution: 
+
+w(bin)  
+
+> m
+
+=
+
+
+
++1 , D−10 (λ1 − αλ0) 
+
+> m
+
+> 0,
+
+−1, D−10 (λ1 − αλ0) 
+
+> m
+
+< 0,
+
+0, D−10 (λ1 − αλ0) 
+
+> m
+
+= 0 .
+
+(D1) This expression makes explicit that the binary code pre-serves only the sign structure of the optimal null code. As discussed in Sec. VI, this approximation is effective when the optimal solution is close to a sign pattern, which typ-ically occurs when the overlap χ is small. 
+
+> Appendix E: Positive-Only Realization of a Signed Null Code
+
+The optimal null code derived in Sec. IV is generally signed. In many source-modulation platforms, however, each exposure must remain nonnegative. This appendix shows explicitly how the null-coded observable can nev-ertheless be implemented using only positive source pat-terns. For any real code vector w, one defines its positive and negative parts by w(+)  
+
+> m
+
+and w(−) 
+
+> m
+
+. Equivalently, 
+
+w = w(+) − w(−). (E1) The two nonnegative patterns w(+) and w(−) can then be applied in two sequential measurements. Let the cor-responding detected counts be N+ and N−. A signed coded observable is reconstructed as Sdiff = N+ − ζN −.The expectation value then becomes 
+
+⟨Sdiff (θ)⟩ =  w(+) − ζw(−)T λ(θ). (E2) In the balanced ideal case ζ = 1, this reduces to 
+
+⟨Sdiff (θ)⟩ = wT λ(θ), (E3) so the sequential implementation reproduces exactly the same mean response as the signed code. In particular, if w = w⋆, then the differential observable inherits the null condition and first-order sensitivity as established in Secs. III and IV. This construction makes clear that the null does not re-quire any single exposure to be dark, nor does it require physically negative source intensity. Each exposure re-mains nonnegative and finite-flux; the null emerges only after differential recombination. This is fully consistent with the source-basis interpretation of the TRY architec-ture and with the earlier differential source-basis frame-work [18] on which the present implementation builds. A practical consequence is that the signed structure of the optimal null-coded observable can be realized us-ing standard nonnegative modulation hardware, with the main experimental requirements being sequential stabil-ity and calibration of the balancing factor ζ. In this sense, the positive-only construction is not an approximation to the theory, but a direct physical implementation of the same coded measurement principle. 
+
+> [1] E. Bettens, D. Van Dyck, A. J. den Dekker, J. Sijbers, and A. van den Bos, Model-based two-object resolution from observations having counting statistics, Ultrami-
+
+15 
+
+croscopy 77 , 37–48 (1999). [2] S. Ram, E. S. Ward, and R. J. Ober, Beyond Rayleigh’s criterion: A resolution measure with application to single-molecule microscopy, Proc. Natl. Acad. Sci. U.S.A. 
+
+103 , 4457–4462 (2006). [3] C. W. Helstrom, Quantum Detection and Estimation Theory (Academic Press, New York, 1976). [4] S. M. Kay, Fundamentals of Statistical Signal Processing: Estimation Theory (Prentice Hall, Upper Saddle River, 1993). [5] H. L. Van Trees, Optimum Array Processing: Part IV of Detection, Estimation, and Modulation Theory (Wiley, New York, 2002). [6] M. Tsang, R. Nair, and X.-M. Lu, Quantum theory of superresolution for two incoherent optical point sources, Phys. Rev. X 6, 031033 (2016). [7] R. Nair and M. Tsang, Far-field superresolution of ther-mal electromagnetic sources at the quantum limit, Phys. Rev. Lett. 117 , 190801 (2016). [8] R. Nair and M. Tsang, Interferometric superlocalization of two incoherent optical point sources, Opt. Express 24 ,3684–3701 (2016). [9] M. Pa´ ur, B. Stoklasa, Z. Hradil, L. L. S´ anchez-Soto, and J. ˇReh´ aˇ cek, Achieving the ultimate optical resolution, Optica 3, 1144–1147 (2016). [10] M. Tsang, Subdiffraction incoherent optical imaging via spatial-mode demultiplexing: Semiclassical treatment, Phys. Rev. A 97 , 023830 (2018). [11] E. Serabyn, Nulling interferometry: Working on the dark fringe, in Optical and IR Interferometry from Ground and Space , ASP Conference Series Vol. 194, edited by C. J. Merkle (Astronomical Society of the Pacific, San Fran-cisco, 1999), pp. 437–448. [12] M. Tsang, Subdiffraction incoherent optical imaging via spatial-mode demultiplexing, New J. Phys. 19 , 023054 (2017). [13] M.-A. Martinod, B. Norris, P. Tuthill, T. Lagadec, N. Jovanovic, N. Cvetojevic, S. Gross, A. Arriola, T. Gret-zinger, M. J. Withford, O. Guyon, J. Lozi, S. Vievard, V. Deo, J. S. Lawrence, and S. Leon-Saval, Scalable photonic-based nulling interferometry with the dispersed multi-baseline GLINT instrument, Nat. Commun. 12 ,2465 (2021). [14] S. A. Wadood, K. Liang, Y. Zhou, J. Yang, M. A. Alonso, X.-F. Qian, T. Malhotra, S. M. H. Rafsanjani, A. N. Jordon, R. W. Boyd, and A. N. Vamivakas, Experimen-tal demonstration of superresolution of partially coher-ent light sources using parity sorting, Opt. Express 29 ,22034–22043 (2021). [15] A. Sanny, L. Labadie, S. Gross, K. Barjot, R. Laugier, G. Garreau, M.-A. Martinod, D. Defr` ere, and M. J. With-ford, Asgard/NOTT: L-band nulling interferometry at the VLTI, Astronomy & Astrophysics 705 , A37 (2026). [16] J. Wen, Time-reversed Young’s experiment: Determinis-tic, diffractionless second-order interference effect, Opt. Commun. 597 , 132612 (2025). [17] J. Wen, Metadata-conditioned coherence enables label-conditioned deterministic interference (submitted). https://doi.org/10.1364/opticaopen.31198534 [18] J. Wen, Differential source-basis encoding for superre-solved parameter estimation in a time-reversed Young interferometer, arXiv:2603.27407. [19] J. H. Shapiro, Computational ghost imaging, Phys. Rev. A 78 , 061802(R) (2008). [20] Y. Bromberg, O. Katz, and Y. Silberberg, Ghost imaging with a single detector, Phys. Rev. A 79 , 053840 (2009). [21] B. I. Erkmen and J. H. Shapiro, Ghost imaging: from quantum to classical to computational, Adv. Opt. Pho-ton. 2, 405–450 (2010). [22] F. Ferri, D. Magatti, L. A. Lugiato, and A. Gatti, Dif-ferential ghost imaging, Phys. Rev. Lett. 104 , 253603 (2010). [23] K.-H. Luo, B.-Q. Huang, W.-M. Zheng, and L.-A. Wu, Nonlocal imaging by conditional averaging of random reference measurements, Chin. Phys. Lett. 29 , 074216 (2012). [24] J. Wen, Forming positive-negative images using condi-tioned partial measurements from reference arm in ghost imaging, J. Opt. Soc. Am. A 29 , 1906–1911 (2012). [25] M. P. Edgar, G. M. Gibson, and M. J. Padgett, Principles and prospects for single-pixel imaging, Nat. Photonics 
+
+13 , 13–20 (2019). [26] M.-J. Sun and J. M. Zhang, Single-pixel imaging and its applications in three-dimensional reconstruction: A brief review, Sensors 19 , 732 (2019). [27] M. G. L. Gustafsson, Surpassing the lateral resolution limit by a factor of two using structured illumination mi-croscopy, J. Microscopy 198 , 82–87 (2001). [28] M. G. L. Gustafsson, Nonlinear structured-illumination microscopy: Wide-field fluorescence imaging with the-oretically unlimited resolution, Proc. Natl. Acad. Sci. U.S.A. 102 , 13081–13086 (2005).

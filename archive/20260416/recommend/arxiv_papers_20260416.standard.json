@@ -1,0 +1,248 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-16T21:41:38.784274+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 6,
+    "quick_skim_target": 11,
+    "quick_selected": 6
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.10146v1",
+      "title": "Consensus-based Recursive Multi-Output Gaussian Process",
+      "abstract": "Multi-output Gaussian Processes provide principled uncertainty-aware learning of vector-valued fields but are difficult to deploy in large-scale, distributed, and streaming settings due to their computational and centralized nature. This paper proposes a Consensus-based Recursive Multi-Output Gaussian Process (CRMGP) framework that combines recursive inference on shared basis vectors with neighbour-to-neighbour information-consensus updates. The resulting method supports parallel, fully distributed learning with bounded per-step computation while preserving inter-output correlations and calibrated uncertainty. Experiments on synthetic wind fields and real LiDAR data demonstrate that CRMGP achieves competitive predictive performance and reliable uncertainty calibration, offering a scalable alternative to centralized Gaussian process models for multi-agent sensing applications.",
+      "authors": [
+        "Yogesh Prasanna Kumar Rao",
+        "Tamas Keviczky",
+        "Raj Thilak Rajan"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "eess.SP"
+      ],
+      "published": "2026-04-11T10:21:03+00:00",
+      "link": "https://arxiv.org/pdf/2604.10146v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "distributed learning of vector-valued fields with inter-output correlations",
+      "llm_evidence_cn": "具有输出间相关性的向量值场分布式学习",
+      "llm_evidence": "具有输出间相关性的向量值场分布式学习",
+      "canonical_evidence": "具有输出间相关性的向量值场分布式学习",
+      "llm_tldr_en": "A distributed Gaussian Process framework for learning vector fields, applicable to sensor array data.",
+      "llm_tldr_cn": "一种用于学习向量场的分布式高斯过程框架，可应用于传感器阵列数据。",
+      "llm_tldr": "一种用于学习向量场的分布式高斯过程框架，可应用于传感器阵列数据。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.10183v1",
+      "title": "RF-LEGO: Modularized Signal Processing-Deep Learning Co-Design for RF Sensing via Deep Unrolling",
+      "abstract": "Wireless sensing, traditionally relying on signal processing (SP) techniques, has recently shifted toward data-driven deep learning (DL) to achieve performance breakthroughs. However, existing deep wireless sensing models are typically end-to-end and task-specific, lacking reusability and interpretability. We propose RF-LEGO, a modular co-design framework that transforms interpretable SP algorithms into trainable, physics-grounded DL modules through deep unrolling. By replacing hand-tuned parameters with learnable ones while preserving core processing structures and mathematical operators, RF-LEGO ensures modularity, cascadability, and structure-aligned interpretability. Specifically, we introduce three deep-unrolled modules for critical RF sensing tasks: frequency transform, spatial angle estimation, and signal detection. Extensive experiments using real-world data for Wi-Fi, millimeter-wave, UWB, and 6G sensing demonstrate that RF-LEGO significantly outperforms existing SP and DL baselines, both standalone and when integrated into multiple downstream tasks. RF-LEGO pioneers a novel SP-DL co-design paradigm for wireless sensing via deep unrolling, shedding light on efficient and interpretable deep wireless sensing solutions. Our code is available at https://github.com/aiot-lab/RF-LEGO.",
+      "authors": [
+        "Luca Jiang-Tao Yu",
+        "Chenshu Wu"
+      ],
+      "primary_category": "cs.DC",
+      "categories": [
+        "cs.DC",
+        "cs.LG"
+      ],
+      "published": "2026-04-11T12:32:55+00:00",
+      "link": "https://arxiv.org/pdf/2604.10183v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Deep unrolling for physics-grounded signal processing in sensing",
+      "llm_evidence_cn": "用于物理感知信号处理的深度展开算法",
+      "llm_evidence": "用于物理感知信号处理的深度展开算法",
+      "canonical_evidence": "用于物理感知信号处理的深度展开算法",
+      "llm_tldr_en": "Proposes a modular deep unrolling framework to improve interpretability and performance in wireless sensing tasks.",
+      "llm_tldr_cn": "提出一种模块化深度展开框架，通过结合物理模型与深度学习提升无线感知的可解释性与性能。",
+      "llm_tldr": "提出一种模块化深度展开框架，通过结合物理模型与深度学习提升无线感知的可解释性与性能。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.10320v1",
+      "title": "Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer",
+      "abstract": "We develop a general theory of null-constrained parameter estimation in a time-reversed Young (TRY) interferometer, where measurement is performed through programmable source-basis encoding with a fixed detector. We address the fundamental question of how to design source patterns that enforce a true metrological null -- vanishing nominal response at the operating point -- while preserving finite first-order sensitivity to the parameter. Under a general shot-noise-limited channel model, we show that the optimal null-constrained receiver is obtained by projecting the derivative response onto the subspace orthogonal to the nominal background in the inverse-noise metric. This yields a constructive solution in which the optimal source-basis code is given by the inverse-noise-weighted derivative response with its background-parallel component removed. We further derive an exact and universal information-retention law: the locally accessible Fisher information is reduced by a factor $1-χ^2$, where $χ$ quantifies the inverse-noise overlap between the nominal and derivative response vectors. This result establishes a precise geometric interpretation of the cost of null enforcement. Numerical examples demonstrate the null-coded TRY receivers can retain nearly the full local information and can be accurately implemented using binary and positive-only source patterns. These findings identify source-basis null engineering as a distinct and practically viable modality for derivative-mode sensing, with implications for superresolution metrology and programmable optical measurement architectures.",
+      "authors": [
+        "Jianming Wen"
+      ],
+      "primary_category": "physics.optics",
+      "categories": [
+        "physics.optics",
+        "physics.data-an",
+        "physics.ins-det",
+        "quant-ph"
+      ],
+      "published": "2026-04-11T18:54:36+00:00",
+      "link": "https://arxiv.org/pdf/2604.10320v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "optimal sensor design for parameter estimation and noise suppression",
+      "llm_evidence_cn": "用于参数估计和噪声抑制的最佳传感器设计",
+      "llm_evidence": "用于参数估计和噪声抑制的最佳传感器设计",
+      "canonical_evidence": "用于参数估计和噪声抑制的最佳传感器设计",
+      "llm_tldr_en": "Develops theory for optimal null-constrained sensing patterns to improve parameter estimation sensitivity.",
+      "llm_tldr_cn": "开发了最佳零约束传感模式理论，以提高参数估计的灵敏度。",
+      "llm_tldr": "开发了最佳零约束传感模式理论，以提高参数估计的灵敏度。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.12366v1",
+      "title": "A CMOS-compatible, scalable and compact magnetoelectric spin-torque microwave detector",
+      "abstract": "The development of compact and highly sensitive microwave detectors compatible with complementary-metal-oxide-semiconductor (CMOS) processes is an active research area but remains a major challenge in microwave technology. Spin-torque diodes (STDs) are emerging nanoscale spintronic devices capable of surpassing the theoretical thermodynamic sensitivity limits of Schottky diodes. However, their practical use in compact systems is limited by the need of external antennas or probes. Here, we demonstrate a magnetoelectric (ME) spin-torque microwave detector that monolithically integrates an ME antenna with a magnetic tunnel junction (MTJ). The device directly converts wireless electromagnetic signals into a DC output at sub-microwatt power levels, achieving a sensitivity greater than 90 kV/W, a noise equivalent power of 3 pW*Hz^-0.5, and a compact footprint of 0.4 mm^2. This performance is due to the nonlinear coupling between incoherent magnetization dynamics, driven by a DC current in the MTJ, and the combined effects of the microwave voltage and strain generated by the ME antenna under incident electromagnetic waves. We further show that this design is scalable, enabling the co-integration of an ME antenna with an array of MTJs. A detector incorporating four MTJs, for example, exhibits a sensitivity exceeding 400 kV/W. This work paves the way for a new generation of highly sensitive, compact and scalable microwave detectors that combine ME antennas and spintronic diodes.",
+      "authors": [
+        "Shuhui Liu",
+        "Riccardo Tomasello",
+        "Bin Fang",
+        "Aitian Chen",
+        "Like Zhang",
+        "Zhenhao Liu",
+        "Rui Hu",
+        "Wenkui Lin",
+        "Mario Carpentieri",
+        "Baoshun Zhang",
+        "Xixiang Zhang",
+        "Giovanni Finocchio",
+        "Zhongming Zeng"
+      ],
+      "primary_category": "cond-mat.mes-hall",
+      "categories": [
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-14T06:55:01+00:00",
+      "link": "https://arxiv.org/pdf/2604.12366v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magnetic tunnel junction integrated with antenna for wireless signal detection",
+      "llm_evidence_cn": "集成天线的磁隧道结用于无线信号检测",
+      "llm_evidence": "集成天线的磁隧道结用于无线信号检测",
+      "canonical_evidence": "集成天线的磁隧道结用于无线信号检测",
+      "llm_tldr_en": "Demonstrates a compact microwave detector integrating a magnetic tunnel junction (MTJ) with an antenna.",
+      "llm_tldr_cn": "展示了一种将磁隧道结（MTJ）与天线集成的紧凑型微波探测器。",
+      "llm_tldr": "展示了一种将磁隧道结（MTJ）与天线集成的紧凑型微波探测器。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "non contact current measurement using TMR magnetic sensor arrays",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.12556v1",
+      "title": "Respiration Monitoring of Multiple People using Multi-site FMCW SISO Radar Systems",
+      "abstract": "Continuous contactless respiration monitoring of co-sleeping subjects faces a dilemma: conventional single-site multiple-input multiple-output (MIMO) radars struggle with limited angular resolution for closely spaced individuals, while distributed radar networks typically require complex hardware synchronization. To address these limitations, this paper proposes non-coherent multi-site single-input-single-output (SISO) radar systems that completely eliminate the need for physical synchronization cables or common reference clocks. The fundamental challenge of ghost target ambiguity in such non-coherent multilateration is resolved through a novel physiological-feature-assisted suppression technique. By exploiting the inherent statistical independence of individual respiratory rhythms, true target locations are robustly distinguished from ghosts via cross-correlation analysis. Experimental validation demonstrates that the proposed system can accurately resolve two subjects spaced less than 20 cm apart, surpassing the resolution limits of traditional compact MIMO arrays, while achieving a respiration rate estimation accuracy of 0.7 bpm root mean square error (RMSE) compared to contact-based ground truth.",
+      "authors": [
+        "Lang Qin",
+        "Mandong Zhang",
+        "Wenting Song",
+        "Zhiqiang Huang",
+        "Xiaoguang Liu"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-14T10:34:47+00:00",
+      "link": "https://arxiv.org/pdf/2604.12556v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interference and ghost target suppression in multi-site sensor systems",
+      "llm_evidence_cn": "多站传感器系统中的干扰和虚假目标抑制",
+      "llm_evidence": "多站传感器系统中的干扰和虚假目标抑制",
+      "canonical_evidence": "多站传感器系统中的干扰和虚假目标抑制",
+      "llm_tldr_en": "Introduces a feature-assisted suppression technique for non-coherent multi-site radar systems.",
+      "llm_tldr_cn": "为非相干多站雷达系统引入了一种基于特征辅助的干扰抑制技术。",
+      "llm_tldr": "为非相干多站雷达系统引入了一种基于特征辅助的干扰抑制技术。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.13511v1",
+      "title": "Phase transition in compressed sensing using log-sum penalty and adaptive smoothing",
+      "abstract": "In many real-world problems, recovering sparse signals from underdetermined linear systems remains a fundamental challenge. Although $\\ell_1$ norm minimization is widely used, it suffers from estimation bias that prevents it from reaching the Bayes-optimal reconstruction limit. Nonconvex alternatives, such as the log-sum penalty, have been proposed to promote stronger sparsity. However, maintaining their algorithmic stability is challenging. To address this challenge, we introduce an adaptive smoothing strategy within an approximate message passing framework to mitigate algorithmic instability. Furthermore, we evaluate the typical exact-recovery threshold for Gaussian measurement matrices using the replica method and state evolution. The results indicate that the adaptive method achieves exact recovery over a broader region than $\\ell_1$ norm minimization, although metastable states hinder reaching the information-theoretic limit.",
+      "authors": [
+        "Keisuke Morita",
+        "Federico Ricci-Tersenghi",
+        "Masayuki Ohzeki"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "cond-mat.dis-nn"
+      ],
+      "published": "2026-04-15T05:56:33+00:00",
+      "link": "https://arxiv.org/pdf/2604.13511v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "recovering sparse signals from underdetermined linear systems",
+      "llm_evidence_cn": "从欠定线性系统中恢复稀疏信号",
+      "llm_evidence": "从欠定线性系统中恢复稀疏信号",
+      "canonical_evidence": "从欠定线性系统中恢复稀疏信号",
+      "llm_tldr_en": "Explores compressed sensing algorithms for sparse signal recovery in underdetermined systems.",
+      "llm_tldr_cn": "探讨了欠定系统中稀疏信号恢复的压缩感知算法。",
+      "llm_tldr": "探讨了欠定系统中稀疏信号恢复的压缩感知算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

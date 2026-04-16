@@ -1,0 +1,93 @@
+{
+  "label": "2026-04-16",
+  "date": "2026-04-16",
+  "generated_at": "2026-04-16T21:42:27",
+  "count": 6,
+  "papers": [
+    {
+      "paper_id": "202604/16/2604.10146v1-consensus-based-recursive-multi-output-gaussian-process",
+      "section": "quick",
+      "title_en": "Consensus-based Recursive Multi-Output Gaussian Process",
+      "authors": "Yogesh Prasanna Kumar Rao, Tamas Keviczky, Raj Thilak Rajan",
+      "date": "2026-04-11",
+      "pdf": "https://arxiv.org/pdf/2604.10146v1",
+      "score": "6.0",
+      "evidence": "具有输出间相关性的向量值场分布式学习",
+      "tldr": "针对多输出高斯过程（MOGP）在处理大规模、分布式和流式数据时面临的计算开销大及中心化限制，本文提出了一种基于共识的递归多输出高斯过程（CRMGP）框架。该方法结合了共享基向量的递归推理与邻居间的共识更新机制，实现了具有界计算量的并行分布式学习，同时保留了输出间的相关性和不确定性校准。在合成风场和真实LiDAR数据上的实验证明，CRMGP在多智能体感知任务中具有出色的预测性能和可扩展性。",
+      "tags": "query:tmr",
+      "abstract_en": "Multi-output Gaussian Processes provide principled uncertainty-aware learning of vector-valued fields but are difficult to deploy in large-scale, distributed, and streaming settings due to their computational and centralized nature. This paper proposes a Consensus-based Recursive Multi-Output Gaussian Process (CRMGP) framework that combines recursive inference on shared basis vectors with neighbour-to-neighbour information-consensus updates. The resulting method supports parallel, fully distributed learning with bounded per-step computation while preserving inter-output correlations and calibrated uncertainty. Experiments on synthetic wind fields and real LiDAR data demonstrate that CRMGP achieves competitive predictive performance and reliable uncertainty calibration, offering a scalable alternative to centralized Gaussian process models for multi-agent sensing applications.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/16/2604.10183v1-rf-lego-modularized-signal-processing-deep-learning-co-design-for-rf-sensing-via-deep-unrolling",
+      "section": "quick",
+      "title_en": "RF-LEGO: Modularized Signal Processing-Deep Learning Co-Design for RF Sensing via Deep Unrolling",
+      "authors": "Luca Jiang-Tao Yu, Chenshu Wu",
+      "date": "2026-04-11",
+      "pdf": "https://arxiv.org/pdf/2604.10183v1",
+      "score": "6.0",
+      "evidence": "用于物理感知信号处理的深度展开算法",
+      "tldr": "RF-LEGO是一个针对无线感知的模块化协同设计框架，旨在解决现有深度学习模型缺乏可重用性和解释性的问题。该框架通过深度展开技术，将传统的信号处理算法转化为可训练且具有物理意义的深度学习模块。通过引入频率变换、角度估计和信号检测三个核心模块，RF-LEGO在Wi-Fi、毫米波等多种感知任务中表现优异，实现了信号处理的解释性与深度学习高性能的有机结合。",
+      "tags": "query:tmr",
+      "abstract_en": "Wireless sensing, traditionally relying on signal processing (SP) techniques, has recently shifted toward data-driven deep learning (DL) to achieve performance breakthroughs. However, existing deep wireless sensing models are typically end-to-end and task-specific, lacking reusability and interpretability. We propose RF-LEGO, a modular co-design framework that transforms interpretable SP algorithms into trainable, physics-grounded DL modules through deep unrolling. By replacing hand-tuned parameters with learnable ones while preserving core processing structures and mathematical operators, RF-LEGO ensures modularity, cascadability, and structure-aligned interpretability. Specifically, we introduce three deep-unrolled modules for critical RF sensing tasks: frequency transform, spatial angle estimation, and signal detection. Extensive experiments using real-world data for Wi-Fi, millimeter-wave, UWB, and 6G sensing demonstrate that RF-LEGO significantly outperforms existing SP and DL baselines, both standalone and when integrated into multiple downstream tasks. RF-LEGO pioneers a novel SP-DL co-design paradigm for wireless sensing via deep unrolling, shedding light on efficient and interpretable deep wireless sensing solutions. Our code is available at https://github.com/aiot-lab/RF-LEGO.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/16/2604.10320v1-optimal-null-constrained-source-basis-sensing-in-a-time-reversed-young-interferometer",
+      "section": "quick",
+      "title_en": "Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer",
+      "authors": "Jianming Wen",
+      "date": "2026-04-11",
+      "pdf": "https://arxiv.org/pdf/2604.10320v1",
+      "score": "6.0",
+      "evidence": "用于参数估计和噪声抑制的最佳传感器设计",
+      "tldr": "本研究探讨了在时间反转杨氏（TRY）干涉仪中，如何通过可编程源基编码实现零约束参数估计。研究提出了一种设计最优源模式的通用理论，即在逆噪声度量下将导数响应投影到与背景正交的子空间，从而在保持高灵敏度的同时消除工作点的标称响应。研究揭示了Fisher信息的保留规律，并证明了该方法在超分辨率计量和可编程光学测量中的实用性。",
+      "tags": "query:tmr",
+      "abstract_en": "We develop a general theory of null-constrained parameter estimation in a time-reversed Young (TRY) interferometer, where measurement is performed through programmable source-basis encoding with a fixed detector. We address the fundamental question of how to design source patterns that enforce a true metrological null -- vanishing nominal response at the operating point -- while preserving finite first-order sensitivity to the parameter. Under a general shot-noise-limited channel model, we show that the optimal null-constrained receiver is obtained by projecting the derivative response onto the subspace orthogonal to the nominal background in the inverse-noise metric. This yields a constructive solution in which the optimal source-basis code is given by the inverse-noise-weighted derivative response with its background-parallel component removed. We further derive an exact and universal information-retention law: the locally accessible Fisher information is reduced by a factor $1-χ^2$, where $χ$ quantifies the inverse-noise overlap between the nominal and derivative response vectors. This result establishes a precise geometric interpretation of the cost of null enforcement. Numerical examples demonstrate the null-coded TRY receivers can retain nearly the full local information and can be accurately implemented using binary and positive-only source patterns. These findings identify source-basis null engineering as a distinct and practically viable modality for derivative-mode sensing, with implications for superresolution metrology and programmable optical measurement architectures.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/16/2604.12366v1-a-cmos-compatible-scalable-and-compact-magnetoelectric-spin-torque-microwave-detector",
+      "section": "quick",
+      "title_en": "A CMOS-compatible, scalable and compact magnetoelectric spin-torque microwave detector",
+      "authors": "Shuhui Liu, Riccardo Tomasello, Bin Fang, Aitian Chen, Like Zhang, Zhenhao Liu, Rui Hu, Wenkui Lin, Mario Carpentieri, Baoshun Zhang, Xixiang Zhang, Giovanni Finocchio, Zhongming Zeng",
+      "date": "2026-04-14",
+      "pdf": "https://arxiv.org/pdf/2604.12366v1",
+      "score": "6.0",
+      "evidence": "集成天线的磁隧道结用于无线信号检测",
+      "tldr": "针对微波探测器小型化与高灵敏度的挑战，本研究开发了一种CMOS兼容的磁电自旋扭矩微波探测器。该器件通过将磁电天线与磁隧道结（MTJ）单片集成，利用直流电流驱动的磁化动力学与天线产生的微波电压及应变的非线性耦合，实现了亚微瓦功率下的高效无线信号转直流输出。该探测器具有高灵敏度、低噪声和紧凑尺寸，且支持阵列扩展，为新一代高灵敏度、可扩展的自旋电子微波探测技术奠定了基础。",
+      "tags": "query:tmr",
+      "abstract_en": "The development of compact and highly sensitive microwave detectors compatible with complementary-metal-oxide-semiconductor (CMOS) processes is an active research area but remains a major challenge in microwave technology. Spin-torque diodes (STDs) are emerging nanoscale spintronic devices capable of surpassing the theoretical thermodynamic sensitivity limits of Schottky diodes. However, their practical use in compact systems is limited by the need of external antennas or probes. Here, we demonstrate a magnetoelectric (ME) spin-torque microwave detector that monolithically integrates an ME antenna with a magnetic tunnel junction (MTJ). The device directly converts wireless electromagnetic signals into a DC output at sub-microwatt power levels, achieving a sensitivity greater than 90 kV/W, a noise equivalent power of 3 pW*Hz^-0.5, and a compact footprint of 0.4 mm^2. This performance is due to the nonlinear coupling between incoherent magnetization dynamics, driven by a DC current in the MTJ, and the combined effects of the microwave voltage and strain generated by the ME antenna under incident electromagnetic waves. We further show that this design is scalable, enabling the co-integration of an ME antenna with an array of MTJs. A detector incorporating four MTJs, for example, exhibits a sensitivity exceeding 400 kV/W. This work paves the way for a new generation of highly sensitive, compact and scalable microwave detectors that combine ME antennas and spintronic diodes.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/16/2604.12556v1-respiration-monitoring-of-multiple-people-using-multi-site-fmcw-siso-radar-systems",
+      "section": "quick",
+      "title_en": "Respiration Monitoring of Multiple People using Multi-site FMCW SISO Radar Systems",
+      "authors": "Lang Qin, Mandong Zhang, Wenting Song, Zhiqiang Huang, Xiaoguang Liu",
+      "date": "2026-04-14",
+      "pdf": "https://arxiv.org/pdf/2604.12556v1",
+      "score": "6.0",
+      "evidence": "多站传感器系统中的干扰和虚假目标抑制",
+      "tldr": "针对共同睡眠场景下多目标呼吸监测的难题，本文提出了一种无需硬件同步的非相干多站点SISO雷达系统。该系统通过利用个体呼吸节奏的统计独立性，采用生理特征辅助抑制技术解决了非相干多边定位中的虚假目标问题。实验证明，该系统能有效区分间距小于20cm的两个目标，且呼吸频率估计精度高，克服了传统MIMO雷达角分辨率受限和分布式雷达同步复杂的缺陷。",
+      "tags": "query:tmr",
+      "abstract_en": "Continuous contactless respiration monitoring of co-sleeping subjects faces a dilemma: conventional single-site multiple-input multiple-output (MIMO) radars struggle with limited angular resolution for closely spaced individuals, while distributed radar networks typically require complex hardware synchronization. To address these limitations, this paper proposes non-coherent multi-site single-input-single-output (SISO) radar systems that completely eliminate the need for physical synchronization cables or common reference clocks. The fundamental challenge of ghost target ambiguity in such non-coherent multilateration is resolved through a novel physiological-feature-assisted suppression technique. By exploiting the inherent statistical independence of individual respiratory rhythms, true target locations are robustly distinguished from ghosts via cross-correlation analysis. Experimental validation demonstrates that the proposed system can accurately resolve two subjects spaced less than 20 cm apart, surpassing the resolution limits of traditional compact MIMO arrays, while achieving a respiration rate estimation accuracy of 0.7 bpm root mean square error (RMSE) compared to contact-based ground truth.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/16/2604.13511v1-phase-transition-in-compressed-sensing-using-log-sum-penalty-and-adaptive-smoothing",
+      "section": "quick",
+      "title_en": "Phase transition in compressed sensing using log-sum penalty and adaptive smoothing",
+      "authors": "Keisuke Morita, Federico Ricci-Tersenghi, Masayuki Ohzeki",
+      "date": "2026-04-15",
+      "pdf": "https://arxiv.org/pdf/2604.13511v1",
+      "score": "6.0",
+      "evidence": "从欠定线性系统中恢复稀疏信号",
+      "tldr": "针对压缩感知中L1范数最小化存在的估计偏差及无法达到贝叶斯最优极限的问题，本文研究了非凸的log-sum惩罚项。为解决非凸优化带来的算法不稳定性，提出了一种结合自适应平滑策略的近似消息传递（AMP）框架。通过副本方法和状态演化分析，证明了该方法在精确重构区域上优于L1范数，尽管受亚稳态限制仍未达到信息论极限。",
+      "tags": "query:tmr",
+      "abstract_en": "In many real-world problems, recovering sparse signals from underdetermined linear systems remains a fundamental challenge. Although $\\ell_1$ norm minimization is widely used, it suffers from estimation bias that prevents it from reaching the Bayes-optimal reconstruction limit. Nonconvex alternatives, such as the log-sum penalty, have been proposed to promote stronger sparsity. However, maintaining their algorithmic stability is challenging. To address this challenge, we introduce an adaptive smoothing strategy within an approximate message passing framework to mitigate algorithmic instability. Furthermore, we evaluate the typical exact-recovery threshold for Gaussian measurement matrices using the replica method and state evolution. The results indicate that the adaptive method achieves exact recovery over a broader region than $\\ell_1$ norm minimization, although metastable states hinder reaching the information-theoretic limit.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
