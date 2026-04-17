@@ -6,41 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-16
-- 运行时间：2026-04-16 21:42:19 UTC
+- 最新运行日期：2026-04-17
+- 运行时间：2026-04-17 21:12:30 UTC
 - 运行状态：成功
-- 本次总论文数：6
+- 本次总论文数：3
 - 精读区：0
-- 速读区：6
+- 速读区：3
 
 ### 今日简报（AI）
-今日聚焦分布式高斯过程、模块化射频感知及光学干涉优化等前沿算法研究。
-重点关注 RF-LEGO 提出的信号处理与深度学习协同设计，以及基于共识机制的多输出递归建模方案。
-建议深入了解深度展开技术在射频感知中的应用，探索硬件与算法模块化结合的新思路。
-- 详情：[/202604/16/README](/202604/16/README)
+今日聚焦磁感应定位与新型硬件集成，深入探讨了多磁力计协同校准及超顺磁隧道结 p-bit 技术。
+重点关注 RoSLAC 算法在多传感器鲁棒定位中的突破，以及 CMOS 集成 p-bit 为概率计算带来的硬件新方案。
+建议对高精度磁场感知或下一代非传统计算
+- 详情：[/202604/17/README](/202604/17/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Consensus-based Recursive Multi-Output Gaussian Process](/202604/16/2604.10146v1-consensus-based-recursive-multi-output-gaussian-process)  
+1. [RoSLAC: Robust Simultaneous Localization and Calibration of Multiple Magnetometers](/202604/17/2604.14353v1-roslac-robust-simultaneous-localization-and-calibration-of-multiple-magnetometers)  
+   标签：评分：7.0/10、query:tmr
+   evidence：多个磁力计的同时定位与校准
+2. [Estimating coil features from an equilibrium](/202604/17/2604.12339v1-estimating-coil-features-from-an-equilibrium)  
    标签：评分：6.0/10、query:tmr
-   evidence：具有输出间相关性的向量值场分布式学习
-2. [RF-LEGO: Modularized Signal Processing-Deep Learning Co-Design for RF Sensing via Deep Unrolling](/202604/16/2604.10183v1-rf-lego-modularized-signal-processing-deep-learning-co-design-for-rf-sensing-via-deep-unrolling)  
+   evidence：用于线圈设计的电流势表述和局部磁场特性
+3. [CMOS-integrated superparamagnetic tunnel junction-based p-bit](/202604/17/2604.14446v1-cmos-integrated-superparamagnetic-tunnel-junction-based-p-bit)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于物理感知信号处理的深度展开算法
-3. [Optimal Null-Constrained Source-Basis Sensing in a Time-Reversed Young Interferometer](/202604/16/2604.10320v1-optimal-null-constrained-source-basis-sensing-in-a-time-reversed-young-interferometer)  
-   标签：评分：6.0/10、query:tmr
-   evidence：用于参数估计和噪声抑制的最佳传感器设计
-4. [A CMOS-compatible, scalable and compact magnetoelectric spin-torque microwave detector](/202604/16/2604.12366v1-a-cmos-compatible-scalable-and-compact-magnetoelectric-spin-torque-microwave-detector)  
-   标签：评分：6.0/10、query:tmr
-   evidence：集成天线的磁隧道结用于无线信号检测
-5. [Respiration Monitoring of Multiple People using Multi-site FMCW SISO Radar Systems](/202604/16/2604.12556v1-respiration-monitoring-of-multiple-people-using-multi-site-fmcw-siso-radar-systems)  
-   标签：评分：6.0/10、query:tmr
-   evidence：多站传感器系统中的干扰和虚假目标抑制
-6. [Phase transition in compressed sensing using log-sum penalty and adaptive smoothing](/202604/16/2604.13511v1-phase-transition-in-compressed-sensing-using-log-sum-penalty-and-adaptive-smoothing)  
-   标签：评分：6.0/10、query:tmr
-   evidence：从欠定线性系统中恢复稀疏信号
+   evidence：超顺磁隧道结集成
 
 
 <div class="dpr-home-promo-card">

@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-17",
+  "date": "2026-04-17",
+  "generated_at": "2026-04-17T21:12:40",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/17/2604.14353v1-roslac-robust-simultaneous-localization-and-calibration-of-multiple-magnetometers",
+      "section": "quick",
+      "title_en": "RoSLAC: Robust Simultaneous Localization and Calibration of Multiple Magnetometers",
+      "authors": "Qiyang Lyu, Zhenyu Wu, Wei Wang, Hongming Shen, Danwei Wang",
+      "date": "2026-04-15",
+      "pdf": "https://arxiv.org/pdf/2604.14353v1",
+      "score": "7.0",
+      "evidence": "多个磁力计的同时定位与校准",
+      "tldr": "针对室内及地下等GPS信号缺失环境下的自主移动机器人定位难题，本文提出了一种名为RoSLAC的鲁棒同步定位与多磁力计校准方法。该方法利用环境磁场进行定位，通过交替优化算法同时估计机器人位姿和磁力计校准参数，有效解决了传感器平台铁磁材料引起的测量失真问题，且无需复杂的旋转校准，具有高精度和低计算成本的优势。",
+      "tags": "query:tmr",
+      "abstract_en": "Localization of autonomous mobile robots (AMRs) in enclosed or semi-enclosed environments such as offices, hotels, hospitals, indoor parking facilities, and underground spaces where GPS signals are weak or unavailable remains a major obstacle to the deployment of fully autonomous systems. Infrastructure-based localization approaches, such as QR codes and RFID, are constrained by high installation and maintenance costs as well as limited flexibility, while onboard sensor-based methods, including LiDAR- and vision-based solutions, are affected by ambiguous geometric features and frequent occlusions caused by dynamic obstacles such as pedestrians. Ambient magnetic field (AMF)-based localization has therefore attracted growing interest in recent years because it does not rely on external infrastructure or geometric features, making it well-suited for AMR applications such as service robots and security robots. However, magnetometer measurements are often corrupted by distortions caused by ferromagnetic materials present on the sensor platform, which bias the AMF and degrade localization reliability. As a result, accurate magnetometer calibration to estimate distortion parameters becomes essential. Conventional calibration methods that rely on rotating the magnetometer are impractical for large and heavy platforms. To address this limitation, this paper proposes a robust simultaneous localization and calibration (RoSLAC) approach based on alternating optimization, which iteratively and efficiently estimates both the platform pose and magnetometer calibration parameters. Extensive evaluations conducted in high-fidelity simulation and real-world environments demonstrate that the proposed RoSLAC method achieves high localization accuracy while maintaining low computational cost compared with state-of-the-art magnetometer calibration techniques.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/17/2604.12339v1-estimating-coil-features-from-an-equilibrium",
+      "section": "quick",
+      "title_en": "Estimating coil features from an equilibrium",
+      "authors": "Eduardo Rodriguez, Wrick Sengupta",
+      "date": "2026-04-14",
+      "pdf": "https://arxiv.org/pdf/2604.12339v1",
+      "score": "6.0",
+      "evidence": "用于线圈设计的电流势表述和局部磁场特性",
+      "tldr": "本研究提出了一种仅基于平衡态属性构建人工模块化线圈的理论框架。通过在磁面上定义电流势，研究揭示了线圈复杂性（尤其是非平面性）与局部磁场特性之间的强关联。该方法不仅深化了对平衡态与线圈关系的理解，还为仿星器等装置的线圈设计提供了一种高效的预测工具和代理模型。",
+      "tags": "query:tmr",
+      "abstract_en": "We present an explicit theoretical framework for constructing artificial modular coils based solely on equilibrium properties, achieved through the formulation of a current potential defined on flux surfaces. We demonstrate that key measures of coil complexity (particularly coil non-planarity) are strongly governed by local magnetic field properties and show promise as predictors for more realistic coil configurations. This approach provides both a pathway towards deeper understanding of equilibrium-coil relationships and a potential practical proxy for coil design.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/17/2604.14446v1-cmos-integrated-superparamagnetic-tunnel-junction-based-p-bit",
+      "section": "quick",
+      "title_en": "CMOS-integrated superparamagnetic tunnel junction-based p-bit",
+      "authors": "Ju-Young Yoon, Nuno Cacoilo, Advait Madhavan, Jabez J. McClelland, Shun Kanai, Hideo Ohno, Shunsuke Fukami, William A. Borders",
+      "date": "2026-04-15",
+      "pdf": "https://arxiv.org/pdf/2604.14446v1",
+      "score": "6.0",
+      "evidence": "超顺磁隧道结集成",
+      "tldr": "本研究针对概率计算中硬件扩展的难题，成功将作为随机源的超顺磁隧道结（sMTJ）与130 nm CMOS技术集成，开发出概率比特（p-bit）单元。通过实验证明，sMTJ的电阻波动可产生受输入电压调控的数字输出电压。该成果验证了CMOS兼容的概率电路的可行性，是实现大规模、可扩展概率计算硬件的关键一步。",
+      "tags": "query:tmr",
+      "abstract_en": "Probabilistic computers offer promising solutions for computationally hard problems in domains such as combinatorial optimization and machine learning. A key building block in these systems is the probabilistic bit (p-bit), which relies on superparamagnetic tunnel junctions (sMTJs) as its source of randomness. A challenging threshold to cross for scaling sMTJ-based p-bit systems is integration of sMTJs with CMOS technology. In this work, we present experimental results of a p-bit unit cell using sMTJs integrated with 130 nm CMOS technology and demonstrate that the sMTJ's resistance fluctuations can generate a corresponding fluctuating digital output voltage which is tunable via the input voltage. These findings establish the feasibility of CMOS-compatible, sMTJ-based probabilistic circuits and mark a key step toward scalable hardware for real-world probabilistic computing applications.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

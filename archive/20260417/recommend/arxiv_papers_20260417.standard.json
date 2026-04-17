@@ -1,0 +1,131 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-17T21:12:14.218817+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.14353v1",
+      "title": "RoSLAC: Robust Simultaneous Localization and Calibration of Multiple Magnetometers",
+      "abstract": "Localization of autonomous mobile robots (AMRs) in enclosed or semi-enclosed environments such as offices, hotels, hospitals, indoor parking facilities, and underground spaces where GPS signals are weak or unavailable remains a major obstacle to the deployment of fully autonomous systems. Infrastructure-based localization approaches, such as QR codes and RFID, are constrained by high installation and maintenance costs as well as limited flexibility, while onboard sensor-based methods, including LiDAR- and vision-based solutions, are affected by ambiguous geometric features and frequent occlusions caused by dynamic obstacles such as pedestrians. Ambient magnetic field (AMF)-based localization has therefore attracted growing interest in recent years because it does not rely on external infrastructure or geometric features, making it well-suited for AMR applications such as service robots and security robots. However, magnetometer measurements are often corrupted by distortions caused by ferromagnetic materials present on the sensor platform, which bias the AMF and degrade localization reliability. As a result, accurate magnetometer calibration to estimate distortion parameters becomes essential. Conventional calibration methods that rely on rotating the magnetometer are impractical for large and heavy platforms. To address this limitation, this paper proposes a robust simultaneous localization and calibration (RoSLAC) approach based on alternating optimization, which iteratively and efficiently estimates both the platform pose and magnetometer calibration parameters. Extensive evaluations conducted in high-fidelity simulation and real-world environments demonstrate that the proposed RoSLAC method achieves high localization accuracy while maintaining low computational cost compared with state-of-the-art magnetometer calibration techniques.",
+      "authors": [
+        "Qiyang Lyu",
+        "Zhenyu Wu",
+        "Wei Wang",
+        "Hongming Shen",
+        "Danwei Wang"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-04-15T19:11:32+00:00",
+      "link": "https://arxiv.org/pdf/2604.14353v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Simultaneous localization and calibration of multiple magnetometers",
+      "llm_evidence_cn": "多个磁力计的同时定位与校准",
+      "llm_evidence": "多个磁力计的同时定位与校准",
+      "canonical_evidence": "多个磁力计的同时定位与校准",
+      "llm_tldr_en": "Presents a method for calibrating and using magnetic sensor arrays in complex environments.",
+      "llm_tldr_cn": "提出了一种在复杂环境下校准和使用磁传感器阵列的方法。",
+      "llm_tldr": "提出了一种在复杂环境下校准和使用磁传感器阵列的方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.12339v1",
+      "title": "Estimating coil features from an equilibrium",
+      "abstract": "We present an explicit theoretical framework for constructing artificial modular coils based solely on equilibrium properties, achieved through the formulation of a current potential defined on flux surfaces. We demonstrate that key measures of coil complexity (particularly coil non-planarity) are strongly governed by local magnetic field properties and show promise as predictors for more realistic coil configurations. This approach provides both a pathway towards deeper understanding of equilibrium-coil relationships and a potential practical proxy for coil design.",
+      "authors": [
+        "Eduardo Rodriguez",
+        "Wrick Sengupta"
+      ],
+      "primary_category": "physics.plasm-ph",
+      "categories": [
+        "physics.plasm-ph"
+      ],
+      "published": "2026-04-14T06:22:33+00:00",
+      "link": "https://arxiv.org/pdf/2604.12339v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "current potential formulation and local magnetic field properties for coil design",
+      "llm_evidence_cn": "用于线圈设计的电流势表述和局部磁场特性",
+      "llm_evidence": "用于线圈设计的电流势表述和局部磁场特性",
+      "canonical_evidence": "用于线圈设计的电流势表述和局部磁场特性",
+      "llm_tldr_en": "Relates local magnetic field properties to current potential for coil design and complexity estimation.",
+      "llm_tldr_cn": "将局部磁场特性与电流势联系起来，用于线圈设计和复杂性估计。",
+      "llm_tldr": "将局部磁场特性与电流势联系起来，用于线圈设计和复杂性估计。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.14446v1",
+      "title": "CMOS-integrated superparamagnetic tunnel junction-based p-bit",
+      "abstract": "Probabilistic computers offer promising solutions for computationally hard problems in domains such as combinatorial optimization and machine learning. A key building block in these systems is the probabilistic bit (p-bit), which relies on superparamagnetic tunnel junctions (sMTJs) as its source of randomness. A challenging threshold to cross for scaling sMTJ-based p-bit systems is integration of sMTJs with CMOS technology. In this work, we present experimental results of a p-bit unit cell using sMTJs integrated with 130 nm CMOS technology and demonstrate that the sMTJ's resistance fluctuations can generate a corresponding fluctuating digital output voltage which is tunable via the input voltage. These findings establish the feasibility of CMOS-compatible, sMTJ-based probabilistic circuits and mark a key step toward scalable hardware for real-world probabilistic computing applications.",
+      "authors": [
+        "Ju-Young Yoon",
+        "Nuno Cacoilo",
+        "Advait Madhavan",
+        "Jabez J. McClelland",
+        "Shun Kanai",
+        "Hideo Ohno",
+        "Shunsuke Fukami",
+        "William A. Borders"
+      ],
+      "primary_category": "cs.ET",
+      "categories": [
+        "cs.ET"
+      ],
+      "published": "2026-04-15T21:38:28+00:00",
+      "link": "https://arxiv.org/pdf/2604.14446v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "superparamagnetic tunnel junction integration",
+      "llm_evidence_cn": "超顺磁隧道结集成",
+      "llm_evidence": "超顺磁隧道结集成",
+      "canonical_evidence": "超顺磁隧道结集成",
+      "llm_tldr_en": "Demonstrates CMOS integration of superparamagnetic tunnel junctions, relevant to TMR sensor fabrication.",
+      "llm_tldr_cn": "展示了超顺磁隧道结的CMOS集成，与TMR传感器的制造相关。",
+      "llm_tldr": "展示了超顺磁隧道结的CMOS集成，与TMR传感器的制造相关。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,814 @@
+Title: RoSLAC: Robust Simultaneous Localization and Calibration of Multiple Magnetometers
+
+URL Source: https://arxiv.org/pdf/2604.14353v1
+
+Published Time: Fri, 17 Apr 2026 00:13:23 GMT
+
+Number of Pages: 11
+
+Markdown Content:
+> 1
+
+# RoSLAC: Robust Simultaneous Localization and Calibration of Multiple Magnetometers 
+
+Qiyang Lyu ∗, Zhenyu Wu ∗, Wei Wang, Hongming Shen, and Danwei Wang, Life Fellow, IEEE 
+
+Abstract —Localization of autonomous mobile robots (AMRs) in enclosed or semi-enclosed environments such as offices, hotels, hospitals, indoor parking facilities, and underground spaces where GPS signals are weak or unavailable remains a ma-jor obstacle to the deployment of fully autonomous systems. Infrastructure-based localization approaches, such as QR codes and RFID, are constrained by high installation and maintenance costs as well as limited flexibility, while onboard sensor-based methods, including LiDAR- and vision-based solutions, are af-fected by ambiguous geometric features and frequent occlusions caused by dynamic obstacles such as pedestrians. Ambient magnetic field (AMF)-based localization has therefore attracted growing interest in recent years because it does not rely on ex-ternal infrastructure or geometric features, making it well suited for AMR applications such as service robots and security robots. However, magnetometer measurements are often corrupted by distortions caused by ferromagnetic materials present on the sensor platform, which bias the AMF and degrade localization reliability. As a result, accurate magnetometer calibration to estimate distortion parameters becomes essential. Conventional calibration methods that rely on rotating the magnetometer are impractical for large and heavy platforms. To address this limitation, this paper proposes a robust simultaneous localiza-tion and calibration ( RoSLAC ) approach based on alternating optimization, which iteratively and efficiently estimates both the platform pose and magnetometer calibration parameters. Extensive evaluations conducted in high-fidelity simulation and real-world environments demonstrate that the proposed RoSLAC 
+
+method achieves high localization accuracy while maintaining low computational cost compared with state-of-the-art magnetometer calibration techniques. 
+
+I. I NTRODUCTION 
+
+Accurate localization is a fundamental capability for au-tonomous mobile robots (AMRs) [1], [2]. Acting as the perceptual foundation, localization enables AMRs to transform sensory observations into positions and orientations within a predefined coordinate frame, allowing them to understand the environment. Typical tasks following localization include pose tracking [3], [4], loop closure [5], and navigation [6]. To achieve reliable localization, various sensing modalities have been explored. Geometric approaches often rely on extracting and matching features such as corners, edges, and planes captured by cameras or LiDARs. Other techniques utilize signal intensity or phase differences from active beacons [7] 
+
+This research is supported by the National Research Foundation, Singapore under its Medium Sized Centre for Advanced Robotics Technology Innovation (CARTIN). ( Corresponding author: Danwei Wang )The authors are with the School of Electrical and Electronic En-gineering, Nanyang Technological University, Singapore 639798 (e-mail: {qiyang001, zhenyu002, wei013 }@e.ntu.edu.sg; {hongming.shen, ed-wwang }@ntu.edu.sg). 
+
+> ∗
+
+Co-first authorship 
+
+or GNSS [8], or read encoded information from pre-deployed infrastructures such as QR codes [9], magnetic tapes [10], or reflectors [11]. However, these existing methods can fail under challenging conditions. On one hand, feature-based geometric approaches are highly sensitive to feature quality and can de-grade in environments with repetitive or ambiguous structures including long corridors or large industrial warehouses. GNSS will also drift significantly in indoor environments. On the other hand, beacon-based systems are time-consuming, labor-intensive, and deployment and maintenance-costly [12]. Thus, there remains an urgent need for an alternative source of information that provides stable, unique, and infrastructure-free localization cues. Inspired by the ability of birds to navigate using the Earth’s magnetic field [13], recent studies have explored ambient magnetic fields (AMF) as a novel localization modality [1], [14]–[16]. Although the Earth’s magnetic field is locally uni-form and only supports kilometer-level localization, it becomes spatially distinctive in built environments due to distortions caused by ferromagnetic structures such as reinforcing steel bars, shelves, and furniture. These distortions create local magnetic anomalies that are both temporally stable and spa-tially unique [17]. As a result, AMF can serve as a pervasive and re-identifiable signature for localization through magnetic pattern matching, with accuracy reaching the centimeter level. Moreover, unlike visual or LiDAR features, magnetic features can capture structures hidden behind walls or floors and require no additional infrastructure. A major practical challenge of magnetic localization on AMRs, however, is the interference caused by ferromagnetic components within the robot itself [18]. Steel chassis and onboard actuators can dynamically distort the measured mag-netic field, making raw magnetometer readings unreliable and platform-dependent [19]. Some magnetic localization methods [14], [20], [21] assume ideal sensors and non-magnetic carri-ers, which is reasonable for body-mounted human sensing but rarely valid for AMRs. To alleviate this issue, pre-calibration is typically performed before localization. In such procedures, the entire robot-sensor system must be manually rotated in all directions to collect sufficiently informative data for observ-able calibration [22]. However, this requirement is practical only for small and lightweight devices, and becomes infeasible for large or heavy AMRs. To address this limitation, our previous work [23] proposed a one-key calibration method based on a pre-built magnetic anomaly map. Instead of rotating the AMR, the method estimates calibration parameters in a single run by moving the system through a known spatially varying AMF with auxiliary odometry. However, it still operates offline and requires post-
+
+> arXiv:2604.14353v1 [cs.RO] 15 Apr 2026 2
+
+processing. In this paper, we go one step further and propose an online magnetometer calibration framework that simulta-neously compensates carrier-induced magnetic distortions and localizes the system in real time within the magnetic map. The main contributions are summarized as follows:  
+
+> •
+
+A simultaneous localization and calibration framework for magnetometers is proposed, which is feasible for on-line operation and robust to poor parameter initialization.  
+
+> •
+
+A novel alternating optimization approach is proposed to ensure both accuracy and computational efficiency in localization and calibration.  
+
+> •
+
+Extensive simulations and real-world experiments vali-date the effectiveness of the proposed method in accu-rately estimating calibration parameters and enhancing localization performance. The remainder of this paper is organized as follows. Section II reviews related work. Section III describes the system model. Section IV presents the proposed method. Section V evaluates the approach through simulation and real-world experiments. Section VI explains the necessity of each module. Finally, Section VII concludes the paper. II. L ITERATURE REVIEW 
+
+The literature review is organized in two aspects: magnetic calibration methods and the magnetic field-based localization. 
+
+A. Magnetometer Calibration Methods 
+
+Magnetic calibration estimates parameters that model distor-tions in the measured magnetic field and correct magnetometer readings. These distortions are commonly divided into two categories. (a) Interior distortion arises from sensor imper-fections, including axis scaling errors, bias, and axis non-orthogonality [24]. Interior calibration aims to compensate for these intrinsic effects. (b) Exterior distortion is caused by ferromagnetic materials on the carrier platform. It is commonly modeled by the Tolles-Lawson (T-L) model [25], which rep-resents the disturbance as a 3 × 4 affine transformation with a scaling matrix and a bias vector. Exterior calibration therefore seeks to estimate this transformation to recover the undistorted magnetic field. Existing magnetometer calibration methods can be broadly grouped into two categories. 
+
+a) Magnetometer Offline Calibration: Offline calibration is the most widely studied approach. It is typically performed in a static and homogeneous magnetic field by rotating the magnetometer through a sufficiently diverse set of orienta-tions. Under such conditions, the magnetic field magnitude is direction-independent, so ideal measurements in the mag-netometer frame should lie on a sphere centered at the origin. Calibration therefore aims to estimate a transformation that maps distorted measurements onto this sphere. Representative methods include Singular Value Decomposition (SVD) [22] and Least Squares (LS) fitting [26]. To improve robustness, prior work has incorporated field uncertainty through To-tal Least Squares (TLS) [27] and addressed ill-conditioned measurements using regularized LS [28]. More recently, [23] extended offline calibration to non-homogeneous fields by using an auxiliary sensor for localization within a pre-built magnetic map. 
+
+b) Magnetometer Online Calibration: Although offline calibration is generally robust to initialization and can achieve high accuracy, it is often computationally demanding, time-consuming, and dependent on carefully collected data. As a result, increasing attention has been given to online calibration methods, which are typically supported by additional sensing modalities. For instance, Han et al. [29] used an Extended Kalman Filter (EKF) to align magnetometer measurements with gyroscope’s motion data, thereby improving observability along weakly excited directions. More recently, Siebler et al. [18] extended online calibration to unmanned ground vehi-cles by proposing a Rao-Blackwellized Particle Filter (RBPF) that jointly estimates vehicle pose and calibration parameters through a decomposition of the full state into linear and nonlinear components. 
+
+B. Magnetic Field-based Localization Methods 
+
+Given calibrated magnetometers, magnetic-based localiza-tion systems can be constructed. Magnetic information ini-tially serves as an additional sensing modality fused into an existing localization framework. Robertson et al. [20] proposed MagSLAM, which uses a hierarchical grid map and performs localization by matching local magnetic field distributions to grid cells. Similarly, Kok et al. [14] introduced hexagonal block tiling combined with reduced-rank Gaussian Process regression and RBPF to enable localization using smartphone magnetometers, assisted by pedestrian dead reckoning (PDR). Shi et al. [21] further employed particle filtering to fuse PDR and magnetic information for localization on a pre-built map. To improve real-time performance, Viset et al. [15] replaced RBPF with an Extended Kalman Filter (EKF). In Wang et al.’s work [30], an enhanced exponentially weighted particle filter was proposed to reduce the computational complexity. While the above methods rely on fusion with wheel odom-etry [30], PDR [14], [21], or IMU measurements [15], [20], other studies focus on purely magnetic-based localization. In [31], a k-Nearest Neighbors (KNN) approach was used to match magnetometer measurements to a magnetic map. Later, Wu et al. [32] addressed the limitation of orientation dependency in earlier methods by introducing a maximum a posteriori (MAP) estimator and an HVT rotation-invariant descriptor, enabling orientation-independent localization. However, most of the aforementioned approaches rely on a single magnetometer, which limits the observability of magnetic features. Similar to visual- or LiDAR-based SLAM systems [3], [4], such methods may suffer from degeneracy when the magnetic field is locally flat. To mitigate this issue, Subbu et al. [33] proposed magnetic sequence matching using dynamic time warping (DTW) to enhance observability for indoor pedestrian localization. In Wu et al.’s work [1], a sliding magnetometer mounted on an aluminum bar was used to accumulate magnetic sequences for localization initialization. This idea was further extended in [16], where a magnetometer bar was employed and the problem was formulated as a stochastic optimization task, improving purely magnetic-based localization accuracy by addressing heavy-tailed noise effects. In summary, although both magnetometer calibration and magnetic-based localization have been extensively studied, 3
+
+the literature on jointly performing online calibration and localization remains limited. This increases the operational complexity, which requires calibration to be completed prior to localization. This paper therefore focuses on addressing this limitation by investigating a unified framework for simultane-ous localization and calibration. III. S YSTEM MODELING 
+
+A. Magnetic Field-based Robot Localization Modeling 
+
+This paper considers a tri-axial magnetometer array for localization by matching sensor measurements to a pre-built magnetic map M(·), defined as a dense grid of magnetic values over a predefined area. At time tk, the magnetic measurements are denoted by Btk = {Bitk }Ni=1, where Bitk = [ Bix,tk , Biy,tk , Biz,tk ]⊤
+
+is the reading of the i-th magnetometer, and N is the number of sensors in the array. The robot pose in the map frame at time 
+
+tk is defined as xtk = [ p⊤ 
+
+> tk
+
+, ϕ⊤ 
+
+> tk
+
+]⊤, where ptk ∈ R3 and ϕtk ∈ R3
+
+denote the robot position and orientation, respectively. Given 
+
+xtk , the pose of each magnetometer in the array can be expressed in the map frame as: 
+
+f i(xtk ) :=
+
+
+
+Ritk , pitk
+
+
+
+=
+
+
+
+exp 
+
+
+
+ϕ∧
+
+> tk
+
+ bRim, exp 
+
+
+
+ϕ∧
+
+> tk
+
+ bpim + ptk
+
+
+
+(1) 
+
+where bRim and bpim denote the extrinsic rotation and trans-lation between the i-th magnetometer frame and the robot body frame, respectively. Assuming that the magnetic map is accurate, the magnetic field at a given sensor position p within the mapped region is defined as 
+
+Bmap = M(p) (2) where P = {p | p ∈ R3 and within the mapped region } and 
+
+M : P ⊂ R3 → R3. Accordingly, the expected magnetometer measurement at time tk can be expressed as 
+
+[ ˆBmeas ]itk = Ritk
+
+> ⊤
+
+M(pitk ) + nitk
+
+= g
+
+h
+
+M(·), f i(xtk )
+
+i
+
++ nitk , i = 1, . . . , N (3) 
+
+where nitk denotes the measurement noise, and g(·) represents the transformation that maps the magnetic map readings to the robot body frame. Given the robot state xtk , the localization problem can be formulated by defining a loss function that quantifies the discrepancy between the measured magnetic value and the map-predicted values: 
+
+S(xtk ) = 
+
+> N
+
+## ∑
+
+> i=1
+
+Bitk − g
+
+h
+
+M(·), f i(xtk )
+
+i 2
+
+(4) 
+
+B. Magnetic Sensor Intrinsic Calibration Modeling 
+
+The previous section implicitly assumed that the magne-tometer measurement Bitk is ideal and free of distortion, such that it directly represents AMF expressed in the magnetometer frame, i.e. , Bitk = [ Benv ]itk . In practice, however, magnetometer measurements are subject to distortions arising primarily from two sources. The first source is the magnetometer’s intrinsic imperfec-tions, which can cause inconsistent readings across sensors under the same external magnetic field. As shown in [24], the main error sources are axis-dependent scale factors S,     
+
+> (a) Interior Instrumental Imperfection (b) Exterior Platform’s Ferromag-netic Materials Distortion
+> Fig. 1. The measured values of a magnetic sensor can be influenced by two main factors: (a) interior instrumental imperfection of the magnetometer, and (b) the presence of exterior ferromagnetic materials in the platform.
+
+axis non-orthogonality CNO , and constant bias BO (Fig. 1a). Accordingly, the true magnetic field ˜ Bitk and the raw measure-ment Bitk satisfy ˜ Bitk = CiNO SiBitk + BiO. This type of distortion is independent of the surrounding environment and depends solely on the sensor itself. Hence, it can in principle be compensated through magnetometer calibration alone. The second source of distortion is caused by external fer-romagnetic materials on the sensor carrier or platform, which perturb the ambient magnetic field Benv (Fig. 1b). According to the Tolles-Lawson model [25], this distortion consists of hard-iron bias Bh and soft-iron distortion Ks, while the eddy-current effect is neglected in this work [34]. Thus, the recovered environmental magnetic field (or equivalently the magnetic map value when a pre-built map is available) is given by 
+
+[ ˆBmeas ]itk = Kis ˜Bitk + Bih.For simplicity, the intrinsic sensor imperfections and the carrier-induced distortions can be combined into a unified affine model: 
+
+[ ˆBmeas ]itk = CiBitk + bi (5) 
+
+where Ci = KisCiNO Si ∈ R3×3 and bi = KisBiO + Bih ∈ R3
+
+collectively represent the twelve calibration parameters. These parameters are further grouped into a parameter vector 
+
+θi =
+
+h
+
+ci 
+
+> 1
+
+ci 
+
+> 2
+
+ci 
+
+> 3
+
+bi 
+
+> 1
+
+bi 
+
+> 2
+
+bi
+
+> 3
+
+i⊤
+
+=
+
+
+
+θi,C⊤ θi,b⊤⊤
+
+(6) 
+
+where cij = [ cij1 cij2 cij3] denotes the j-th row of the matrix 
+
+Ci, and bij is the j-th element of the bias vector bi. By rearranging (5), the magnetometer calibration model can be rewritten in a linear regression form: 
+
+[ ˆBmeas ]itk =
+
+
+
+Bitk 
+
+> ⊤
+
+01×3 01×3 1 0 0
+
+01×3 Bitk 
+
+> ⊤
+
+01×3 0 1 0
+
+01×3 01×3 Bitk 
+
+> ⊤
+
+0 0 1
+
+ θi + ϵtk
+
+= h(Bitk )θi + ϵtk = Hitk θi + ϵtk
+
+(7) 
+
+where ϵtk denotes the measurement noise. This formulation makes it evident that the overall intrinsic calibration of the magnetometer can be expressed as a linear problem with respect to the calibration parameters. Consequently, the cal-ibration parameters can be estimated via linear optimization by minimizing the following loss function: 
+
+S(θi) = 
+
+> T
+
+## ∑
+
+> k=0
+
+h(Bitk )θi − [Bre f ]itk
+
+> 2
+
+(8) 4   
+
+> Fig. 2. Flowchart of the proposed method. The overall pipeline can be decomposed into two sub-modules: (a) ambient magnetic map pre-building, and (b) the online RoSLAC procedure, featuring sequence accumulation and alternating optimization.
+
+IV. R OBUST SIMULTANEOUS LOCALIZATION AND 
+
+CALIBRATION (RoSLAC ) F RAMEWORK 
+
+A. Magnetic Mapping Method 
+
+As discussed in Section III, both localization and calibration rely on an accurate dense magnetic map. In this work, the map is constructed offline using Gaussian Process Regression (GPR) to ensure high accuracy. GPR is a non-parametric, data-driven method that models the magnetic field as a continuous function using correlations captured by a kernel function [35]. Let S = {(p1, B1), (p2, B2), . . . , (pn, Bn)} be the training set of magnetic fingerprints, where p ∈ Rn×3 denotes the 3-D positions and B ∈ Rn×3 the corresponding three-axis magnetic measurements. GPR is then used to infer the posterior of the latent magnetic field function f (p) conditioned on S. Follow-ing [36], the relation between f (p) and the measurement Bi
+
+at pi is given by:            
+
+> f(p)∼GP (m(p),k(pj,pk))
+> Bi=f(pi) + ε(9)
+
+where m(p) denotes the mean function, which is set to the local-scale Earth magnetic field value, and ε represents zero-mean Gaussian noise with a known variance σ 2 
+
+> n
+
+. Given two input locations p j and pk, the corresponding target magnetic measurements B j and Bk are assumed to be correlated through a covariance (kernel) function, which is expressed as:           
+
+> cov (pj,pk) = k(pj,pk) + σ2
+> nδjk (10)
+
+where k(p j, pk) denotes the kernel function and δ jk is the Kronecker delta, which equals 1 when p = q and 0 otherwise. The performance of the GPR-based magnetic mapping is fully determined by the collected magnetic training data and the chosen kernel function. In this work, the widely used radial basis function (RBF) kernel is adopted [14]. However, since conventional GPR exhibits high computational complexity, our previous work, s-GPR [36], is employed to accelerate the magnetic map construction process. After obtaining the dense magnetic grid map, magnetic field values at arbitrary query points are computed via bilinear interpolation on the grid, producing continuous spatial estimates. 
+
+B. Simultaneous Localization and Calibration on Prebuilt Maps 
+
+Traditionally, to estimate all parameters in Eq. (8), the sensors are rotated in all directions at a fixed position within a homogeneous magnetic field to obtain sufficient observations. However, when sensors are mounted on a heavy or large-scale platform, physically rotating the platform is often impractical, and generating or accessing a sufficiently homogeneous mag-netic field can also be difficult. As an alternative, observability can be achieved by effec-tively rotating the external magnetic field. This can be realized by placing the platform at multiple known positions within a known, non-homogeneous ambient magnetic field, which can be represented by a pre-built dense grid map as introduced earlier. Although this approach may not provide ground-truth environmental magnetic measurements, it enables unifying all magnetometers to a consistent scale with respect to the pre-built map. A key challenge lies in determining the position of the magnetometer within the map in order to obtain ˆ Bmeas .One feasible solution is to use an auxiliary sensor, such as LiDAR, to perform relocalization and provide the pose yitk
+
+as input [23]. Nevertheless, relying on an auxiliary LiDAR sensor introduces additional drawbacks such as difficulties in obtaining accurate prior knowledge of temporal synchroniza-tion and the extrinsic transformation function f i in practice. Consequently, it would be more convenient and practical if the robot could directly obtain localization information using the magnetometers themselves, while simultaneously performing calibration. Thus, we introduce a robust simultaneous localization and calibration method ( RoSLAC ), which is capable of calibrating multiple magnetometers within an array while performing precise localization. To this end, the overall optimization objective is reformulated to jointly incorporate the robot state vector xtk and the calibration parameter vector θi. By aligning Eq. (3) with Eq. (7), the final optimization model can be derived as 
+
+> arg min
+> θi
+> T
+
+## ∑
+
+> k=0
+> arg min
+> xtk
+> N
+
+## ∑       
+
+> i=1
+> h(Bitk)θi−g
+> h
+> M(·),fi(xtk)
+> i2
+> (11) 5
+
+To obtain the optimal estimates of θi and xtk , the overall workflow of the proposed method is illustrated in Fig. 2. First, a dense magnetic grid map is constructed offline using Gaus-sian Process Regression (GPR) and then provided to RoSLAC 
+
+for online state and parameter estimation. However, due to the limited observability of magnetic information and the high dimensionality of the estimation variables, the optimization problem can become ill-conditioned. To address this issue, two strategies are adopted. First, RoSLAC accumulates a sequence of measurements online with wheel odometry to enhance observability. Second, an alternating optimization scheme is employed, in which the estimation variables are decoupled and optimized iteratively to reduce the effective state dimension at each step. Finally, the estimated states and parameters are passed to a filtering module to produce the final output. The details of each module are described in the following sections. 
+
+C. Sequence Accumulation 
+
+To enhance local observability, the received magnetic mea-surements are first accumulated with the assistance of wheel odometry. To incorporate this information, assume that the forward incremental motion provided by the wheel odometry from time t j−1 to t j is given by (∆Rt j , ∆pt j ), where j denotes a time index preceding the current time k (i.e. , j < k). The corresponding backward relative pose of frame t j expressed in the coordinate frame of tk can then be written as  
+
+> tk
+
+Rt j =
+
+> j+1
+
+## ∏
+
+> m=k
+
+∆R⊤ 
+
+> tm
+
+, 
+
+> tk
+
+pt j = −
+
+> k
+
+## ∑ 
+
+> m=j+1
+> m+1
+
+## ∏
+
+> n=k
+
+∆R⊤
+
+> n
+
+!
+
+∆R⊤ 
+
+> m
+
+∆pm
+
+(12) 
+
+For the special case j = k, the relative pose degenerates to  
+
+> tk
+
+Rt j = I and tk pt j = 0. Since the data arrive sequentially, the above formulation is undefined for j > k.Given a sliding time window of size l, Eq. (1) can be extended to an accumulated pose-sequence representation as 
+
+f i(xtk ) : xtk 7 −→ 
+
+
+
+Rtk, j , ptk, j
+
+kj=k−l+1
+
+=
+
+n  exp (ϕ∧ 
+
+> tk
+
+)tk Rt j Rim, exp (ϕ∧ 
+
+> tk
+
+) tk pt j + tk Rt j pim
+
+ + ptk
+
+okj=k−l+1
+
+(13) 
+
+The corresponding magnetometer measurements associated with these accumulated poses are expressed as 
+
+h(Bitk ) : Bitk 7 −→ 
+
+n
+
+Hitk, j
+
+okj=k−l+1 (14) 
+
+D. Alternating Optimization 
+
+Even with the accumulated data sequence, directly solving the above optimization problem remains challenging due to the high dimensionality of the combined state and parameter vectors to be estimated. Fortunately, as shown in Section III, the optimization can be decoupled into the state variables and the calibration parameters, enabling the use of an alternating optimization strategy. In the following, we first focus on the optimization problem at the current time step tk. The two sub-optimization problems are: 
+
+1) Calibration Parameter Optimization with Stochastic Gradient Descent (SGD): Given the robot pose state xtk ,the cost function depends solely on the calibration parameter vector. Specifically, the optimization problem can be written as 
+
+θi,∗ 
+
+> tk
+
+= arg min 
+
+> θitk
+
+h(Bitk )θitk − g
+
+h
+
+M(·), f i(xtk )
+
+i 2
+
++ λ θi,Ctk
+
+> 2
+
+(15) 
+
+Ideally, as discussed in Section III, the calibration model is linear and admits a closed-form solution corresponding to the global minimum at θi,∗. However, due to the limited amount of information available at each time step, directly solving the least-squares problem may suffer from ill-conditioned data, leading to numerical instability caused by the inversion of the normal matrix. Similarly, the Hessian inversion required by Gauss–Newton methods can also be unstable under such con-ditions. To avoid explicit matrix inversion, we instead adopt a gradient descent (GD) strategy, since GD relies only on first-order gradient information and performs parameter updates through iterative descent steps. Moreover, since measurements arrive sequentially, only data up to time tk, i.e. , Bi
+
+> 0: k
+
+, are available at each step. This naturally motivates the use of a mini-batch stochastic gradient descent (SGD) scheme. The core idea of mini-batch SGD is to approximate the full gradient computed over the entire dataset by a local gradient evaluated on a batch of samples. To further stabilize the estimation, an ℓ2 regularization term is incorporated. Given the objective in Eq. (15), the parameter update using the approximate gradient is given by 
+
+θitk ,m+1 = θitk ,m − η ∇r(θitk ,m) (16) 
+
+where η denotes the learning rate and m is the iteration index at time tk. The gradient is computed as 
+
+∇r(θitk ,m) = 
+
+> k
+
+## ∑
+
+> j=k−l+1
+
+Hitk, j
+
+> ⊤
+
+
+
+Hitk, j θitk ,m − g
+
+
+
+M(·),
+
+
+
+Rtk, j , ptk, j
+
+ 
+
++
+
+"
+
+λ θi,Ctk
+
+03×1
+
+#
+
+(17) 
+
+Since the calibration parameters associated with different magnetometers are independent, the optimal solution θi,∗ is updated separately for each sensor. 
+
+2) Robot State Optimization with Gauss-Newton: After ob-taining an updated estimate of the calibration parameters in the previous step, the alternating optimization framework allows the robot state to be refined using the calibrated measurements. Focusing on the state at time tk only, Eq. (11) can be rewritten as a function of xtk :
+
+x∗ 
+
+> tk
+
+= arg min 
+
+> xtk
+> N
+
+## ∑
+
+> i=1
+
+h(Bitk )θi,∗ 
+
+> tk
+
+− g
+
+h
+
+M(·), f i(xtk )
+
+i 2
+
+(18) 
+
+In the state estimation problem, the robot state satisfies xtk ∈
+
+R6. Given a single magnetometer measurement Bitk ∈ R3, the system is underdetermined; however, a sequence of measure-ments collected by a magnetometer array provides sufficient constraints to render the problem well-posed. The main chal-lenge lies in the inherent nonlinearity of the state estimation problem. In this work, we adopt the classical Gauss–Newton method, which offers a favorable trade-off between estimation 6
+
+accuracy and computational efficiency. Let the perturbation vector be defined as ∆x =
+
+h
+
+∆p⊤ δ ϕ⊤
+
+i
+
+, ∆x ∈ R6, where ∆p
+
+and δ ϕ denote the translational and rotational increments, respectively. To express the state update on the underlying manifold in a compact form, we adopt the ⊞ operator follow-ing [37], yielding          
+
+> ri(xtk⊞∆x) = h(Bitk)θi,∗
+> tk−
+> 
+> Ritkexp (δϕ)
+> ⊤
+> M
+> 
+> pitk+∆p
+> 
+> (19)
+
+To solve the Gauss-Newton problem, the residual function ri
+
+is linearized around the current state using a first-order Taylor expansion ri(xtk ⊞ ∆x) ≈ ri(xtk ) + Ji∆x. Here, Ji denotes the Jacobian matrix of the i-th magnetometer observation with respect to the state perturbation which is given by   
+
+> Ji=−
+> k
+
+## ∑       
+
+> j=k−l+1
+> 
+> Ritk,j
+> ⊤∇M(pitk,j)Ritk,j
+> ⊤M(pitk,j)
+> ×
+> 
+> (20)
+
+where ∇M(pitk, j ) denotes the spatial gradient of the magnetic grid map evaluated at the current position, and [·]× represents the skew-symmetric matrix operator. The Gauss-Newton state update is then obtained as xtk,m+1 = xtk,m ⊞ ∆x with the perturbation ∆x computed by   
+
+> ∆x=−
+> N
+
+## ∑ 
+
+> i=1
+> Ji⊤Ji
+> !−1N
+
+## ∑ 
+
+> i=1
+> Ji⊤ri(21)
+
+Within the alternating optimization framework, the calibra-tion parameter optimization and the robot state optimization are executed iteratively until convergence of the overall system is achieved. 
+
+E. Post-iteration Filter 
+
+In the previous section, the alternating optimization strategy considers only the optimal solution at the current time step tk.However, as indicated by Eq. (11), the overall optimization objective for θi is inherently a batch problem defined over the entire time horizon k ∈ [0, T ]. Therefore, after obtaining the optimal state estimate x∗ 
+
+> tk
+
+at each time step, the outer summation over time must be taken into account to recover the globally optimal calibration parameters θi,∗:  
+
+> θi,∗=arg min
+> θi
+> T
+
+## ∑       
+
+> k=0
+> h(Bitk)θi−g
+> h
+> M(·),fi(x∗
+> tk)
+> i2
+> (22)
+
+Directly recomputing this batch summation at every time step is computationally expensive. To address this issue, we adopt a recursive least squares (RLS) formulation. For notational simplicity, we define ri = r(θi), hik = h(Bitk ), and 
+
+gik = g
+
+h
+
+M(·), f i(x∗ 
+
+> tk
+
+)
+
+i
+
+. The optimal calibration parameters θi,∗
+
+> T
+
+after time T satisfy the normal equation ∇θi
+
+h
+
+∑Tk=0 ∥ri∥2
+
+i
+
+= 0.Let PT = ∑Tk=0 hik
+
+> ⊤
+
+hik and bT = ∑Tk=0 hik
+
+> ⊤
+
+gik. Then the closed-form solution can be written as     
+
+> θi,∗
+> T=P−1
+> TbT(23)
+
+It follows directly that           
+
+> PT=PT−1+hiT
+> ⊤hiT
+> bT=bT−1+hiT
+> ⊤giT
+> (24)
+
+Substituting Eq. (24) into Eq. (23) yields the recursive update                 
+
+> θi,∗
+> T=θi,∗
+> T−1+P−1
+> T−1hiT
+> ⊤
+> I+hiTP−1
+> T−1hiT
+> ⊤
+> |{z }
+> gain
+> 
+> giT−hiTθi,∗
+> T−1
+> 
+> (25)
+
+This formulation shows that the optimal calibration parameters at time T depend only on the previous estimate θi,∗ 
+
+> T−1
+
+, the covariance matrix PT −1, and the current measurements hiT
+
+and giT . Since θi,∗ is assumed to be time-invariant during calibration, the forgetting factor in the RLS update is set to 
+
+λ = 1. V. EXPERIMENTS AND ANALYSIS 
+
+A. Evaluation Overview 
+
+This section evaluates the proposed RoSLAC method in both simulation and real-world environments to verify its effectiveness and robustness. All experiments are conducted on the same desktop computer with an Intel i7 CPU at 2.3 GHz and 64 GB RAM. In simulation, an AMR with ground-truth odometry and intrinsic parameters is constructed using the same robot model as in the real-world experiments. The experimental settings are summarized as follows.  
+
+> •
+
+High-fidelity Simulations: Gazebo 1 is used to simu-late an industrial warehouse environment. As shown in Fig. 3b-(5), the warehouse covers 45 m × 40 m and includes repetitive storage racks, reinforced concrete pil-lars, and conveyor belts. A simulated Scout Mini robot (Fig. 4b) is equipped with eight idealized magnetic sen-sors, with four mounted at the front and four at the rear. Zero-mean Gaussian noise with standard deviation 
+
+σ = 0.2 is added to the magnetic measurements. Ground-truth poses are obtained directly from Gazebo joint states.  
+
+> •
+
+Real-world Experiments: A real Scout Mini AMR (Fig. 4a) is used to collect ambient magnetic field data in four representative environments shown in Fig. 3b(1-4): a semi-indoor office walkway (54 m × 19 m), an indoor carpark (126 m × 35 m), an indoor hotel corridor (40 m ×
+
+1.5 m), and an outdoor platform (15 m × 7.5 m). As in simulation, eight RM3100 magnetometers are mounted on the chassis, and a Livox MID-360 LiDAR is installed on top. All sensors are extrinsically calibrated before data collection. Magnetic training points are generated by relocalization with CTE-MLO [38] on a Leica total-station-based prebuilt point cloud map. 
+
+B. Evaluation Protocol 1) Comparison Baseline: The proposed method is quanti-tatively compared with state-of-the-art approaches in terms of localization and calibration accuracy. For localization, each method is evaluated using two types of magnetic inputs: 
+
+(a) raw magnetometer measurements and (b) pre-calibrated measurements obtained using [23]. Four localization methods are considered: PF [21], a pure localization method based on a particle filter; SO [16], a pure localization method based on stochastic optimization; RBPF [18], a joint localization and    
+
+> 1https://gazebosim.org/home 7
+> (a) Pre-built magnetic map and localization results. The color encodes the magnetic field intensity ( ℓ2-norm). The estimated trajectories and the LiDAR-based ground-truth trajectories are shown in red and blue, respectively.
+> (b) The scenario in which magnetic and LiDAR data is collected.
+> Fig. 3. Five different experimental environments. Environments (1)–(4) correspond to real-world scenarios, while (5) represents a simulated warehouse environment constructed in the Gazebo simulator.
+> (a) Real Scout Mini AMR (b) Simulated Scout Mini AMR Fig. 4. The Scout Mini AMR is employed in both real-world and simulated environments to collect experimental data.
+
+calibration approach based on a Rao–Blackwellized particle filter; and RoSLAC , the proposed method that performs simul-taneous localization and calibration via alternating optimiza-tion. For fairness, methods (a) –(c) use the same number of particles, n = 3000, as recommended in [18]. For calibration, only methods supporting online calibration are evaluated using raw magnetic measurements, namely RBPF and RoSLAC .
+
+2) Evaluation Metrics: The compared methods are eval-uated using localization and calibration accuracy. a) Local-ization Accuracy: In simulation, ground truth is obtained from Gazebo. In real-world experiments, LiDAR odometry relocalized on a Leica total-station-based point cloud map [38] is used as ground truth. Localization performance is measured by the Absolute Trajectory Error (ATE) between the estimated trajectory {Tei }Ni=1 and the ground-truth trajectory {Tgi }Ni=1.After rigid alignment by S and Fi = T−1
+
+> g,i
+
+ ST e,i
+
+, the ATE can be computed as 
+
+ATE =
+
+vuut 1
+
+N
+
+> N
+
+## ∑
+
+> i=1
+
+trans (Fi) 2 (26) 
+
+b) Calibration Accuracy: In simulation, the predefined cal-ibration parameters are treated as ground truth. In real-world experiments, the offline calibration results from [23] are used as reference. Let θ∗ 
+
+> e
+
+and θg denote the estimated and ground-truth calibration parameters, respectively. The calibration error is defined with ℓ2-norm as 
+
+eθ = θ∗ 
+
+> e
+
+− θg 2 (27) 
+
+C. Accuracy Evaluation 1) Localization Accuracy: We first evaluate localization performance by comparing the ATE of the proposed method with the baselines. As reported in Table I, the proposed method achieves the best performance in most scenarios, with an average ATE of about 10cm, approaching the accuracy of the LiDAR relocalization reference. When using raw magnetic measurements, it reduces ATE by more than 61% compared with PF and SO. This performance gain arises because PF and SO are purely localization-based methods that fully trust magnetic measurements and do not account for measurement distortions, showing the importance of online calibration under measurement distortion. Even with pre-calibrated measure-ments, it still improves localization accuracy by over 35% relative to PF and SO. This improvement can be attributed to temporal sequence accumulation, which provides richer observations for localization and enhances the model’s ability to converge to a globally optimal solution. For RBPF and RoSLAC , pre-calibration has little effect on localization accuracy, since both methods jointly perform online calibration and localization. This behavior is expected, as both RBPF and RoSLAC jointly perform online calibration and localization. In the Office scenario, RoSLAC achieves an ATE approximately 1cm lower than RBPF, although this difference is not statistically significant due to the narrow office walkway width. As shown in Fig. 3a, the estimated trajectories closely match the LiDAR-based ground truth in all scenarios, further confirming the accuracy of the proposed method. 8                                                                                          
+
+> TABLE I THE LOCALIZATION ACCURACY COMPARISON IN ABSOLUTE TRAJECTORY
+> ERROR (ATE, METER ). T HE BEST RESULT IS HIGHLIGHTED IN BOLD
+> Localization ATE (m) Scenario
+> RS RP SO PF raw p-cal raw p-cal raw p-cal raw p-cal Office 0.114 0.114 0.103 0.107 0.167 0.130 0.153 0.121 Carpark 0.103 0.104 0.127 0.132 0.414 0.161 0.308 0.146 Hotel 0.117 0.118 0.208 0.195 0.448 0.133 0.163 0.112
+> Platform 0.093 0.083 0.100 0.112 0.886 0.199 0.260 0.194 Warehouse 0.087 0.065 0.342 0.489 0.498 0.142 0.453 0.150 Average 0.103 0.097 0.176 0.207 0.483 0.153 0.267 0.145
+> 1RS, RP denote proposed RoSLAC and RBPF, raw/p-cal denote un-/pre-calibrated.
+> TABLE II THE FINAL CALIBRATION PARAMETER ERROR (ℓ2−norm ,μT). T HE BEST RESULT IS HIGHLIGHTED IN BOLD
+> Method Calibration Error ( μT) Office Carpark Hotel Platform Warehouse Average
+> RoSLAC 0.659 0.523 2.055 0.950 1.017 1.041
+> RBPF 0.663 1.001 3.181 3.653 4.138 2.527
+
+2) Calibration Accuracy: Calibration accuracy is further evaluated by comparing the estimated calibration parameter vector with the offline calibration results. As only RBPF and the proposed RoSLAC support online calibration, the compari-son is limited to these two methods. The calibration trajectories are shown in Fig. 5, and the quantitative results are reported in Table II. As illustrated in Fig. 5, the proposed RoSLAC drives the calibration error to a low converged value. In the Office 
+
+and Carpark scenarios, small fluctuations are observed, mainly due to SGD-based optimization under ill-conditioned estima-tion. Nevertheless, once sufficiently informative observations are available, the calibration parameters quickly converge to near-optimal values. By comparison, RBPF exhibits smoother convergence in these cases because of its probabilistic filtering mechanism. However, in the Platform and Warehouse scenar-ios, RBPF tends to become overconfident and get trapped in local optima, as further discussed in the robustness analysis. The final calibration accuracy is summarized in Table II. Consistent with the localization results, the proposed method achieves high calibration accuracy in most scenarios. Relative to the offline calibration baseline, the average calibration error is reduced to about 0 .5μT in the Carpark scenario. Overall, the proposed method remains consistent across environments, except in the Hotel scenario, where the error is larger. This is likely caused by the simple calibration trajectory, which limits observability even near the end of the process. Notably, this reduced calibration accuracy does not significantly de-grade localization performance. One possible reason is that the joint calibration-localization objective may admit multiple local minima, allowing accurate local pose estimation under different calibration parameters. However, such locally optimal solutions may not generalize to other locations, potentially reducing long-term robustness. Therefore, obtaining a globally optimal calibration solution remains important. 
+
+D. Robustness Evaluation 1) Localization Robustness: We further evaluate the robust-ness of the proposed method. In addition to wheel odometry,      
+
+> Fig. 5. Visualization of the convergence of the magnetometer calibration parameters, measured as the ℓ2−norm deviation from the reference values, under different scenarios.
+
+which is used in all compared methods, a global relocalization strategy is applied uniformly for fairness. Specifically, when particle degeneration occurs or the gradient-based solver fails to converge, the real-time ground-truth pose is assigned to the prior state so that localization can resume from a valid estimate at the next step. Fig. 6 shows the robustness of different methods across multiple scenarios. For clearer visualization, three Absolute Trajectory Error (ATE) thresholds are defined: light blue for well-estimated poses (ATE < 0.3m), orange for poorly estimated poses (0 .3m < ATE < 1.0m), and red for failed estimates (ATE > 1.0m). The left column of Fig. 6 uses raw magnetometer measurements without calibration, while the right column uses pre-calibrated measurements. As shown in Fig. 6, when pre-calibrated magnetometer data are used, all methods achieve generally good localization performance, with most poses estimated stably and accurately. In contrast, without magnetometer calibration, only RBPF and the proposed method maintain robust localization over the full trajectory, owing to their ability to update calibration parameters online. In several scenarios, the proposed method demonstrates slightly stronger robustness than RBPF which occasionally exhibits short periods of degraded estimation. 
+
+2) Calibration Robustness: For robust calibration, the algo-rithm should converge to the global optimum even when the initial guess is far from it. To further evaluate this property, Table III presents results from eight runs with randomly generated calibration parameters. Specifically, magnetometer measurements are first undistorted using pre-calibrated param-eters and then re-distorted using random calibration parameters before being used for localization and calibration. In all runs, the identity matrix is adopted as the initial guess. Table III reports the diagonal elements of the calibration matrix C and the bias vector b, averaged over the eight magnetometers for each run. The RS /RP columns further report the corresponding post-calibration estimation errors, together with the ℓ2-norm error of the calibration parameter θ.The results show that the proposed RoSLAC method is largely insensitive to the magnitude of the initial deviation. The estimation of C remains accurate, with the averaged element-wise error consistently below 0 .02, while the bias estimation is also robust. Even when the initial bias reaches about 27 μT, the final error is reduced to around 1 .7μT, and the average error 9
+
+Fig. 6. Localization stability in different scenarios. Performance is compared with LiDAR-based relocalization [38]. Errors smaller than 0 .3 m are marked in blue (well estimated), errors between 0 .3 m and 1 m are marked in orange (poorly estimated), and errors larger than 1 m are marked in red (failed). TABLE III COMPARISON OF ELEMENT -WISE CALIBRATION PARAMETER ACCURACY (IN μT) UNDER DIFFERENT INITIAL GUESSES , ALONG WITH THE CORRESPONDING LOCALIZATION ACCURACY MEASURED BY ABSOLUTE TRAJECTORY ERROR (ATE, IN METERS ). Calibration Parameters Error Scenario No. c11 c22 c33 b1 b2 b3                                                                                                                                                                                                                               
+
+> c11 c22 c33 b1b2b3ℓ2−norm ATE RS RP RS RP RS RP RS RP RS RP RS RP RS RP RS RP Office 11.01 0.98 0.99 19.49 20.60 20.17 0.02 0.03 0.01 0.05 0.03 0.02 0.64 3.47 0.49 0.83 0.45 3.14 1.06 4.82 0.11 0.17 21.03 0.94 0.96 5.33 5.39 5.36 0.02 0.01 0.01 0.02 0.03 0.03 0.30 0.54 0.17 0.46 0.55 0.89 0.73 1.21 0.11 0.10
+> Carpark 30.97 0.97 0.97 5.23 5.82 6.04 0.01 0.01 0.01 0.04 0.01 0.04 0.45 0.87 0.40 1.03 0.18 0.84 0.68 1.64 0.10 0.20 40.98 0.98 1.00 10.85 9.87 12.68 0.01 0.07 0.02 0.02 0.01 0.03 0.67 4.68 0.37 1.88 0.20 1.19 0.85 5.29 0.11 0.52 Platform 50.96 0.91 0.95 5.00 4.49 5.80 0.03 0.08 0.02 0.09 0.02 0.10 0.51 1.87 0.58 1.79 0.21 2.77 0.93 4.50 0.10 0.10 60.91 1.00 1.01 9.66 8.43 15.37 0.02 0.11 0.01 0.10 0.04 0.06 0.34 3.13 0.45 5.02 0.68 4.89 0.97 8.77 0.10 0.17 Warehouse 70.96 0.90 0.98 8.29 7.44 7.78 0.01 0.01 0.01 0.01 0.01 0.05 0.90 3.82 1.16 1.44 0.46 2.02 1.56 4.57 0.10 0.23 80.93 0.99 1.03 15.43 16.10 16.07 0.00 0.02 0.00 0.01 0.00 0.10 0.53 7.99 1.62 2.74 0.13 4.63 1.75 9.68 0.12 0.30 Average 0.02 0.04 0.01 0.04 0.02 0.05 0.54 3.30 0.65 1.90 0.36 2.55 1.07 5.06 0.10 0.22
+> 1RS denotes proposed RoSLAC , RP denotes RBPF. The best results are highlighted in BOLD .
+
+over all settings is only 1 .07 μT. These results demonstrate strong robustness to poor initialization. In contrast, RBPF achieves high calibration accuracy only when initialized close to the ground truth (e.g., Office-2 and Carpark-3 ), but often fails to converge to the global optimum under large initial deviations (e.g., Platform-6 and Warehouse-8 ). This limitation likely arises because: (a) the linear calibration parameters in RBPF are tightly coupled with nonlinear state estimation, making the filter prone to premature convergence when the problem is ill-conditioned in the early stage and causing it to lose sensitivity to the global solution; and (b) each measurement is processed only once, which reduces the ability to escape local optima and may introduce bias into both calibration and localization. The corresponding ATE values are also reported to examine their relationship with calibration accuracy. For both methods, the overall ATE remains relatively small. However, RoSLAC 
+
+maintains stable localization accuracy at about 0 .1m across all initializations, consistent with its stable calibration per-formance. By contrast, larger calibration errors in RBPF are associated with reduced localization stability. 
+
+E. Algorithm Efficiency 
+
+One key hyperparameter of RoSLAC is the accumulated sequence length l, which influences localization accuracy, robustness, and real-time performance. To study its effect, we vary l across different scenarios and measure the mean processing time over the full trajectory. The reported time corresponds to calibration of all eight magnetometers at one time step. For comparison, the mean processing time of RBPF is also included, although it does not use sequence accumulation. The localization error of RoSLAC for each l
+
+is summarized in Fig. 7. In Fig. 7, the horizontal axis denotes the accumulated sequence length in meters. Longer sequences increase the processing time from about 5ms to 10ms. For a fixed l,however, the runtime is similar across scenarios, indicating that computation time is dominated by optimization rather than map queries. In terms of accuracy, l = 0.5m is sufficient for reliable localization. At this setting, the per-frame processing time is about 7 .5ms, corresponding to an output rate of roughly 133Hz. By contrast, RBPF requires at least 15ms per frame, making it about twice as slow as the proposed method. VI. A BLATION STUDY 
+
+To illustrate both the effectiveness and the necessity of each module in the proposed RoSLAC framework, we conduct an ablation study by evaluating different combinations of modules and resulting localization accuracy. Specifically, we report the final localization ATE under different scenarios. The evaluated module combinations are summarized in Table IV, which includes four distinct settings. 10 
+
+Fig. 7. Effect of the sequence accumulation length on the mean per-frame processing time of RoSLAC and the corresponding localization accuracy. The mean processing time is additionally compared with that of RBPF as a reference. TABLE IV DIFFERENT COMBINATIONS OF THE MODULES PROPOSED IN RoSLAC .Algorithm Block RoSLAC S1 S2 S3 Sequence Accumulation ✓ ✓
+
+Online Calibration ✓ ✓
+
+Online Localization ✓ ✓ ✓ ✓
+
+TABLE V THE LOCALIZATION ACCURACY COMPARISON IN ABSOLUTE TRAJECTORY 
+
+ERROR (ATE, METER ). T HE BEST RESULT IS HIGHLIGHTED IN BOLD                                                   
+
+> Scenario Localization ATE (m)
+> RoSLAC S1 S2 S3 raw pre-calib raw pre-calib raw pre-calib raw pre-calib Office 0.114 0.114 0.168 0.119 0.368 0.433 0.232 0.130 Carpark 0.103 0.104 0.330 0.132 0.512 0.547 0.405 0.159 Hotel 0.117 0.118 0.190 0.113 0.504 0.439 0.387 0.183 Platform 0.093 0.083 0.231 0.088 0.533 0.080 0.301 0.092 Warehouse 0.087 0.065 0.669 0.023 0.373 0.294 0.727 0.076
+
+When the magnetometers are not calibrated beforehand, the joint use of all modules becomes critical. As shown in Table V, the proposed full method achieves the smallest ATE of approximately 0 .1m, whereas removing any individual module leads to a significant degradation in performance, with the largest error approaching 0 .7m. By comparing S2 and S3, it can be observed that when online calibration is required, incorporating the sequence accumulation module is essential. This is because calibration increases the degrees of freedom of the overall system, and sequence accumulation provides additional observations to sufficiently constrain the estimation problem. Furthermore, comparing S1 and S3, we observe that sequence accumulation can partially compensate for the distortions introduced by calibration. Nevertheless, the performance of S1 remains inferior to that of the full proposed configuration. When the magnetometers are pre-calibrated, the calibration module becomes less critical as expected. In this case, some small ATE values are achieved under S1. However, the pre-calibration is not guaranteed to be perfect, thus the calibration module can provide crucial assistance and greatly improve robustness in practical deployments. VII. C ONCLUSIONS AND FUTURE WORK 
+
+This paper presented a novel robust simultaneous local-ization and calibration method, termed RoSLAC , for jointly estimating robot pose and magnetometer calibration parame-ters in a pre-built magnetic map. The framework comprises three key components: a sequence accumulator, an alternating optimization module, and a post-processing filter. To miti-gate the limited observability, magnetometer measurements are accumulated along the odometry trajectory to provide more informative constraints. Based on these observations, the alternating optimization module iteratively refines both pose and calibration parameters, while the post-processing filter further drives the solution toward globally optimal cal-ibration. Extensive experiments in both simulation and real-world environments showed that RoSLAC can robustly esti-mate calibration parameters online with an average error of about 1 μT, even under poor initialization, while maintaining stable localization with an average ATE of approximately 10 cm. Future work will focus on CUDA-based acceleration of the Gauss-Newton gradient computation to further improve computational efficiency on mobile platforms. REFERENCES [1] Z. Wu, W. Wang, J. Zhang, Y. Wang, G. Peng, and D. Wang, “Mglt: Magnetic-lead global localization and tracking in degenerated repetitive environments,” IEEE/ASME Transactions on Mechatronics , vol. 29, no. 6, pp. 4687–4698, 2024. [2] C. Xiang, C. Feng, X. Xie, B. Shi, H. Lu, Y. Lv, M. Yang, and Z. Niu, “Multi-sensor fusion and cooperative perception for autonomous driving: A review,” IEEE Intelligent Transportation Systems Magazine , vol. 15, no. 5, pp. 36–58, 2023. [3] T. Qin, P. Li, and S. Shen, “Vins-mono: A robust and versatile monocular visual-inertial state estimator,” IEEE Transactions on Robotics , vol. 34, no. 4, pp. 1004–1020, 2018. [4] W. Xu, Y. Cai, D. He, J. Lin, and F. Zhang, “Fast-lio2: Fast direct lidar-inertial odometry,” IEEE Transactions on Robotics , vol. 38, no. 4, pp. 2053–2073, 2022. [5] W. Hess, D. Kohler, H. Rapp, and D. Andor, “Real-time loop closure in 2d lidar slam,” in 2016 IEEE international conference on robotics and automation (ICRA) , pp. 1271–1278, IEEE, 2016. [6] V. Usinskis, M. Nowicki, A. Dzedzickis, and V. Buˇ cinskas, “Sensor-fusion based navigation for autonomous mobile robot,” Sensors , vol. 25, p. 1248, 02 2025. [7] A. Poulose and D. S. Han, “Uwb indoor localization using deep learning lstm networks,” Applied Sciences , vol. 10, no. 18, 2020. [8] S. Cho, J. Lee, G. Park, and W. Chung, “Outdoor mobile robot localization with factor graph and gnss uncertainty map,” in 2024 24th International Conference on Control, Automation and Systems (ICCAS) ,pp. 1593–1594, 2024. [9] P. Nazemzadeh et al. , “Indoor localization of mobile robots through QR code detection and dead reckoning data fusion,” IEEE/ASME Trans. Mechatronics (TMECH) , vol. 22, no. 6, pp. 2588–2599, 2017. [10] Z. Jiang, Y. Xu, and L. Sun, “A novel path tracking controller for magnetic guided agvs,” in 2021 33rd Chinese Control and Decision Conference (CCDC) , pp. 3292–3296, 2021. [11] S. Roos-Hoefgeest, I. A. Garcia, and R. C. Gonzalez, “Mobile robot localization in industrial environments using a ring of cameras and aruco markers,” in Proc. IECON 2021 - 47th Annu. Conf. of the IEEE Ind. Electron. Soc. , pp. 1–6, IEEE, 2021. [12] Z. Wu, M. Wen, G. Peng, X. Tang, and D. Wang, “Infrastructure-free global localization in repetitive environments: An overview,” in 
+
+Proc. IECON 2020 - 46th Annu. Conf. of the IEEE Ind. Electron. Soc. ,pp. 626–631, IEEE, 2020. [13] H. Mouritsen, “Long-distance navigation and magnetoreception in mi-gratory animals,” Nature , vol. 558, no. 7708, pp. 50–59, 2018. 11 
+
+[14] M. Kok and A. Solin, “Scalable magnetic field slam in 3d using gaussian process maps,” in 2018 21st International Conference on Information Fusion (FUSION) , pp. 1353–1360, 2018. [15] F. Viset, R. Helmons, and M. Kok, “An extended kalman filter for magnetic field slam using gaussian process regression,” Sensors , vol. 22, no. 8, 2022. [16] H. Shen, Z. Wu, W. Wang, Q. Lyu, H. Zhou, and D. Wang, “IDF-MFL: Infrastructure-free and Drift-free Magnetic Field Localization for Mobile Robot,” in 2024 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , pp. 2278–2285, IEEE, 2024. [17] B. Li et al. , “How feasible is the use of magnetic field alone for indoor positioning?,” in Proc. Int. Conf. Ind. Posi. Ind. Navi. (IPIN) , pp. 1–9, IEEE, 2012. [18] B. Siebler, T. Gerstewitz, S. Sand, and U. D. Hanebeck, “Magnetic field-based indoor localization of a tracked robot with simultaneous cal-ibration,” in 2023 13th International Conference on Indoor Positioning and Indoor Navigation (IPIN) , pp. 1–6, 2023. [19] J. Kanamori, “Crystal distortion in magnetic compounds,” Journal of Applied Physics , vol. 31, no. 5, pp. S14–S23, 1960. [20] P. Robertson, M. Frassl, M. Angermann, M. Doniec, B. J. Julian, M. Gar-cia Puyol, M. Khider, M. Lichtenstern, and L. Bruno, “Simultaneous localization and mapping for pedestrians using distortions of the local magnetic field intensity in large indoor environments,” in International Conference on Indoor Positioning and Indoor Navigation , pp. 1–10, 2013. [21] L.-F. Shi, M.-X. Yu, and W. Yin, “Pdr/geomagnetic fusion localization method based on aofa-improved particle filter,” IEEE Transactions on Instrumentation and Measurement , vol. 71, pp. 1–9, 2022. [22] J. F. Vasconcelos, G. Elkaim, C. Silvestre, P. Oliveira, and B. Cardeira, “Geometric approach to strapdown magnetometer calibration in sen-sor frame,” IEEE Transactions on Aerospace and Electronic Systems ,vol. 47, pp. 1293–1306, Apr. 2011. [23] Q. Lyu, W. Wang, Z. Wu, H. Shen, H. Zhou, and D. Wang, “L2m-calib: One-key calibration method for lidar and multiple magnetic sensors,” 2025. [24] L. Yang, C. Li, S. Zhang, C. Xu, H. Chen, S. Xiao, X. Tang, and Y. Li, “Correction method of three-axis magnetic sensor based on da– lm,” Metals , vol. 12, p. 428, Feb. 2022. [25] W. E. Tolles, “Compensation of aircraft magnetic fields,” Oct. 1954. [26] C. Chi, J.-W. Lv, and D. Wang, “Calibration of triaxial magnetome-ter with ellipsoid fitting method,” IOP Conference Series: Earth and Environmental Science , vol. 237, p. 032015, Mar. 2019. [27] W. Chen, H. Zhang, S. Sang, M. Jiang, Y. Chen, and X. Liu, “Magnetic field interference correction of high-precision geomagnetic directional technology,” Measurement , vol. 184, p. 109940, Nov. 2021. [28] Z. Ning, P. Jiang, X. Pan, R. He, and W. Wu, “Compensation Technology of Vehicle Magnetometer Based on TTLS-Tikhonov Regularization,” 
+
+IEEE Sensors Journal , vol. 24, pp. 36594–36603, Nov. 2024. [29] K. Han, H. Han, Z. Wang, and F. Xu, “Extended kalman filter-based gyroscope-aided magnetometer calibration for consumer electronic de-vices,” IEEE Sensors Journal , vol. 17, no. 1, pp. 63–71, 2017. [30] X. Wang, C. Zhang, F. Liu, Y. Dong, and X. Xu, “Exponentially weighted particle filter for simultaneous localization and mapping based on magnetic field measurements,” IEEE Transactions on Instrumentation and Measurement , vol. 66, no. 7, pp. 1658–1667, 2017. [31] S.-C. Yeh, W.-H. Hsu, W.-Y. Lin, and Y.-F. Wu, “Study on an indoor positioning system using earth’s magnetic field,” IEEE Transactions on Instrumentation and Measurement , vol. 69, no. 3, pp. 865–872, 2020. [32] Z. Wu, W. Wang, J. Zhang, Q. Lyu, H. Zhang, and D. Wang, “Global localization in repetitive and ambiguous environments,” in 2023 IEEE International Conference on Robotics and Automation (ICRA) ,pp. 12374–12380, 2023. [33] K. P. Subbu, B. Gozick, and R. Dantu, “Locateme: Magnetic-fields-based indoor localization using smartphones,” ACM Trans. Intell. Syst. Technol. , vol. 4, Oct. 2013. [34] S. Li, D. Cheng, Y. Wang, and J. Zhao, “Compensation method for the carrier magnetic interference of underwater magnetic vector measure-ment system,” IEEE Sensors Journal , vol. 23, no. 10, pp. 10694–10705, 2023. [35] C. E. Rasmussen and C. K. I. Williams, Gaussian Processes for Machine Learning . The MIT Press, 2006. [36] Q. Lyu, Z. Wu, H. Shen, W. Wang, J. Zhang, H. Zhou, and D. Wang, “S-gpr: Sliding gaussian process regression-based magnetic mapping and evaluation of different magnetic mapping methods,” in IECON 2024 - 50th Annual Conference of the IEEE Industrial Electronics Society ,pp. 1–7, 2024. [37] C. Hertzberg, R. Wagner, U. Frese, and L. Schr¨ oder, “Integrating generic sensor fusion algorithms with sound state representations through encap-sulation of manifolds,” Information Fusion , vol. 14, no. 1, pp. 57–77, 2013. [38] H. Shen, Z. Wu, Y. Hui, W. Wang, Q. Lyu, T. Deng, Y. Zhu, B. Tian, and D. Wang, “Cte-mlo: Continuous-time and efficient multi-lidar odometry with localizability-aware point cloud sampling,” IEEE Transactions on Field Robotics , vol. 2, pp. 165–187, 2025. 
+
+Qiyang Lyu received his B.Eng degree of Electronic Information Engineering from University of Elec-tronic Science and Technology of China, China, in 2020, and the M.Sc. degrees of Computer Control and Automation from Nanyang Technological Uni-versity, Singapore, in 2021. Now he is pursuing the Ph.D. degree with the School of Electrical and Elec-tronic Engineering, Nanyang Technological Univer-sity, Singapore. His research interests include sensor calibration, multi-modal mapping, and localization for autonomous robots in real complex scenarios. 
+
+Zhenyu Wu received his B.Eng. degree of Electrical Engineering and Automation from Wuhan Univer-sity, China, in 2016, the M.Sc. and Ph.D. degrees from Nanyang Technological University (NTU), Sin-gapore, in 2017 and 2022, respectively. He is cur-rently a Research Assistant Professor with the Cen-tre for Advanced Robotics Technology Innovation (CARTIN), NTU. He served as an Associate Editor for the IEEE/RSJ IROS in 2025 and is serving as an editorial board member for Robot Learning. His research interests include intelligent perception, localization, and navigation for autonomous systems in complex environments. 
+
+Wei Wang received his B.Eng degree of Automation from Zhejiang University, China, in 2020, and the M.Sc. degrees of Computer Control and Automation from Nanyang Technological University, Singapore, in 2021. Now he is pursuing the Ph.D. degree with the School of Electrical and Electronic Engineer-ing, Nanyang Technological University, Singapore. His research interests include autonomous robots localization and navigation in complex terrains, and intelligent transportation systems. 
+
+Hongming Shen received the B.S. degree in Flight Vehicle Design and Engineering from Central North University, Taiyuan, China, in 2015, and the M.S. degree in Aerospace Transportation and Control from the Beijing Institute of Technology, Beijing, China, in 2017. He received the Ph.D. degree in Control Theory and Control Engineering from Tianjin University, Tianjin, China, in 2023. He is currently a Postdoctoral Research Fellow with the Centre for Advanced Robotics Technology Innova-tion (CARTIN), NTU. His current research interests include state estimation, multisensor fusion, localization and mapping, and aerial Robotics. 
+
+Danwei Wang (Life Fellow, IEEE) received his Ph.D. and M.S.E. degrees from the University of Michigan, Ann Arbor, USA, in 1989 and 1984, respectively. He received his B.E degree from the South China University of Technology, China, in 1982. Since 1989, he has been with the School of Electrical and Electronic Engineering, Nanyang Technological University, Singapore. Currently, he is Emeritus Professor and was the Director of the ST Engineering-NTU Robotics Corporate Lab. He is the Chair of IEEE Singapore Robotics and Automation Chapter and a senator in NTU Academics Council. He has served as general chairman, technical chairman and various positions in international robotics and control conferences, such as ICRA, IROS, and ICARCV conferences. He was a recipient of Alexander von Humboldt Fellowship, Germany, and ST Engineering Distinguished Professor Award, Singapore. He is a Fellow of the Academy of Engineering, Singapore (SAEng) and Life Fellow of the IEEE. His research interests include robotics, control theory and applications.
