@@ -1,0 +1,136 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-18T19:59:32.989557+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.14578v1",
+      "title": "Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors",
+      "abstract": "Understanding and controlling vortex motion in superconductors are important both for suppressing dissipation in superconducting devices and for device applications that exploit vortices. In this work, we quantitatively imaged the stray magnetic field distribution of vortices in an NbN thin film by wide-field magnetic imaging using a perfectly aligned diamond NV ensemble. By continuously measuring while stepwise varying the applied magnetic field under local laser heating, we captured a rearrangement of the vortex configuration in real space and in real time over more than 100 min. The observed vortex rearrangement is consistent with a reduction of the pinning force due to local laser heating and with the Lorentz force exerted by shielding currents induced by the field variation. These results provide insight into vortex dynamics and suggest potential applications, including vortex exclusion from sensitive regions of superconducting devices and vortex positioning in vortex-based devices.",
+      "authors": [
+        "Ryoei Ota",
+        "Shunsuke Nishimura",
+        "Koki Honda",
+        "Takeyuki Tsuji",
+        "Taro Yamashita",
+        "Takayuki Iwasaki",
+        "Mutsuko Hatano",
+        "Kento Sasaki",
+        "Kensuke Kobayashi"
+      ],
+      "primary_category": "cond-mat.supr-con",
+      "categories": [
+        "cond-mat.supr-con"
+      ],
+      "published": "2026-04-16T03:17:28+00:00",
+      "link": "https://arxiv.org/pdf/2604.14578v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "wide-field magnetic imaging of stray fields using quantum sensor ensembles",
+      "llm_evidence_cn": "使用量子传感器集成进行杂散磁场的宽场磁成像",
+      "llm_evidence": "使用量子传感器集成进行杂散磁场的宽场磁成像",
+      "canonical_evidence": "使用量子传感器集成进行杂散磁场的宽场磁成像",
+      "llm_tldr_en": "Uses diamond NV ensembles for real-time wide-field magnetic imaging of vortex-driven stray fields.",
+      "llm_tldr_cn": "利用金刚石NV色心阵列实现了涡流驱动杂散磁场的实时宽场磁成像。",
+      "llm_tldr": "利用金刚石NV色心阵列实现了涡流驱动杂散磁场的实时宽场磁成像。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.14713v1",
+      "title": "Optimal Robust Adaptive Beamforming for a General-Rank Signal Model via Equivalence of Maximin and Minimax SINR Problems",
+      "abstract": "The globally optimal robust adaptive beamforming (RAB) solution is studied for worst-case signal-to-interference-plus-noise ratio (SINR) maximization (the maximin SINR problem) under convex and closed uncertainty sets for the desired signal covariance and interference-plus-noise covariance (INC) matrices, considering a general-rank signal model. First, the corresponding minimax SINR problem is reformulated as a convex optimization problem. In particular, this problem becomes a semidefinite programming (SDP) problem when the uncertainty sets can be represented by finitely many linear matrix inequality constraints. It is then shown that, for a general-rank signal model, the maximin and minimax SINR problems are equivalent when the uncertainty sets are convex and closed, in the sense that they share the same optimal value and the same set of optimal solutions. The requirement of closedness is weaker than the compactness assumption previously used to establish the equivalence between minimax and maximin SINR problems for the rank-one signal model, a state-of-the-art result reported approximately two decades ago. Consequently, an optimal solution to the minimax SINR problem is also globally optimal for the maximin SINR problem, and this solution can be obtained by solving the equivalent SDP of the minimax problem in a single step. In contrast, existing iterative approximation algorithms for the maximin SINR problem yield only locally optimal solutions. Simulation results demonstrate that these approximation algorithms return suboptimal values that can be strictly smaller than the optimal value of the minimax problem, and that the beamformer output SINR obtained via the minimax formulation is higher than that achieved by beamformers derived from the maximin problem using approximation algorithms.",
+      "authors": [
+        "Yongwei Huang",
+        "Zhenhui Huang",
+        "Sergiy A. Vorobyov",
+        "Zhi-Quan Luo"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-16T07:24:14+00:00",
+      "link": "https://arxiv.org/pdf/2604.14713v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "robust adaptive beamforming for interference suppression in sensor arrays",
+      "llm_evidence_cn": "用于传感器阵列干扰抑制的鲁棒自适应波束成形技术",
+      "llm_evidence": "用于传感器阵列干扰抑制的鲁棒自适应波束成形技术",
+      "canonical_evidence": "用于传感器阵列干扰抑制的鲁棒自适应波束成形技术",
+      "llm_tldr_en": "Presents an optimal robust adaptive beamforming solution for signal-to-interference-plus-noise ratio maximization.",
+      "llm_tldr_cn": "提出了一种用于最大化信干噪比的最佳鲁棒自适应波束成形解决方案。",
+      "llm_tldr": "提出了一种用于最大化信干噪比的最佳鲁棒自适应波束成形解决方案。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.14780v1",
+      "title": "Weak Magnetic Sensing via Floquet Driving in an Active Cavity Magnon Coupled System",
+      "abstract": "While significant advancements have been made in weak magnetic field detection, conventional high-sensitivity techniques are often limited by requirements for cryogenic operation or bulky setups. In this work, we develop a sensitive alternating magnetic field sensor based on a coupled system of an active microwave cavity and yttrium iron garnet (YIG), with the components implemented on printed circuit boards (PCBs). By introducing electrically tunable gain to compensate for cavity losses, we substantially improve both the quality factor and the signal intensity. Under the coupled system, Floquet modulation is induced by the alternating magnetic field, allowing for weak field detection by driving a specific hybrid mode and measuring the resulting Floquet sidebands. This miniaturized device operates at room temperature, achieving a detection limit of 121 pT/\\sqrt{Hz}.",
+      "authors": [
+        "Fan Yang",
+        "Xudong Wang",
+        "Lijun Yan",
+        "Yue Zhao",
+        "Jinwei Rao",
+        "Lihui Bai",
+        "Shishen Yan"
+      ],
+      "primary_category": "cond-mat.mes-hall",
+      "categories": [
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-16T08:39:14+00:00",
+      "link": "https://arxiv.org/pdf/2604.14780v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "weak magnetic field sensing using active microwave cavity and YIG",
+      "llm_evidence_cn": "利用有源微波腔和YIG进行弱磁场传感",
+      "llm_evidence": "利用有源微波腔和YIG进行弱磁场传感",
+      "canonical_evidence": "利用有源微波腔和YIG进行弱磁场传感",
+      "llm_tldr_en": "Develops a sensitive alternating magnetic field sensor using Floquet driving in an active cavity magnon system.",
+      "llm_tldr_cn": "利用有源腔磁子系统中的Floquet驱动开发了一种灵敏的交变磁场传感器。",
+      "llm_tldr": "利用有源腔磁子系统中的Floquet驱动开发了一种灵敏的交变磁场传感器。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

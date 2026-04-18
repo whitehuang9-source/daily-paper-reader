@@ -1,0 +1,493 @@
+Title: Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors
+
+URL Source: https://arxiv.org/pdf/2604.14578v1
+
+Published Time: Fri, 17 Apr 2026 00:37:59 GMT
+
+Number of Pages: 8
+
+Markdown Content:
+# Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors 
+
+Ryoei Ota, 1 Shunsuke Nishimura, 1 Koki Honda, 2 Takeyuki Tsuji, 3, 4 Taro Yamashita, 2 Takayuki Iwasaki, 4
+
+Mutsuko Hatano, 4 Kento Sasaki, 1 and Kensuke Kobayashi 1
+
+> 1)
+
+Department of Physics, The University of Tokyo, Bunkyo-ku, Tokyo 113-0033, Japan 
+
+> 2)
+
+Department of Applied Physics, Tohoku University, Sendai, Miyagi 980-8579, Japan 
+
+> 3)
+
+International Center for Young Scientists, National Institute for Materials Science, Tsukuba, Ibaraki 305-0044, Japan 
+
+> 4)
+
+Department of Electrical and Electronic Engineering, Institute of Science Tokyo, Meguro-ku, Tokyo 152-8552, Japan 
+
+Understanding and controlling vortex motion in superconductors are important both for suppressing dissi-pation in superconducting devices and for device applications that exploit vortices. In this work, we quanti-tatively imaged the stray magnetic field distribution of vortices in an NbN thin film by wide-field magnetic imaging using a perfectly aligned diamond NV ensemble. By continuously measuring while stepwise varying the applied magnetic field under local laser heating, we captured a rearrangement of the vortex configuration in real space and in real time over more than 100 min. The observed vortex rearrangement is consistent with a reduction of the pinning force due to local laser heating and with the Lorentz force exerted by shielding currents induced by the field variation. These results provide insight into vortex dynamics and suggest po-tential applications, including vortex exclusion from sensitive regions of superconducting devices and vortex positioning in vortex-based devices. The motion of vortices in superconductors causes en-ergy dissipation, making its suppression a critical issue in the design of superconducting devices. 1–3 Vortex con-trol is also important for exploiting vortices in devices, as indicated by studies suggesting their involvement in the detection mechanism of superconducting strip pho-ton detectors (SSPDs) 4 and by proposed vortex-based device concepts 5,6.To control vortex motion, it is essential to visualize vortex configurations in real space. Imaging of vortex configurations has been achieved by various methods. 7–10 
+
+Magnetic imaging using nitrogen-vacancy (NV) centers in diamond 11 –15 has also been used to image the stray magnetic fields of vortices. 16 –20 Using a perfectly aligned NV ensemble oriented normal to the surface as the sensor, 21 –25 we previously achieved quantitative wide-field imaging of vortex stray-field distributions and have extended this approach to various systems 26 –28 .In this work, we applied the same method and visu-alized the stray magnetic field distribution of vortices in an NbN thin film, a material used in various supercon-ducting devices including SSPDs owing to its excellent properties. 29 –32 We thereby captured, in real space and in real time, the evolution of the vortex configuration over more than 100 min after changes in the applied magnetic field in a region where pinning is weakened by local heat-ing. We show that this vortex motion is driven by the Lorentz force arising from shielding currents flowing in the sample, providing insight into the mechanism of vor-tex rearrangement. Such vortex rearrangement may also be useful for excluding vortices from vortex-sensitive re-gions in superconducting devices or positioning vortices in vortex-based devices, 33 –35 making the present result important as a proof of concept. Figure 1(a) shows a schematic of the experimental setup. An NbN thin film with a diamond sensor at-tached was mounted on the stage of an optical cryo-stat (Montana Instruments Cryostation s50). To obtain the magnetic field distribution by continuous-wave op-tically detected magnetic resonance (CW-ODMR), 12 ,26 
+
+microwaves were applied to the diamond sample from an antenna placed directly above the cryostat, 36 while the sample was simultaneously illuminated with a 515-nm laser beam having an approximately Gaussian profile with a 1 /e 2 radius of about 100 μm. Further details of the laser illumination conditions are provided in the Sup-plementary Material. An out-of-plane magnetic field was applied to the sample using a coil placed directly above the cryostat. The z component of the applied field at the sensor position, Bappl  
+
+> z
+
+, was determined from a calibration curve relating the coil current to the magnetic field mea-sured beforehand using NV centers, with + z defined as the out-of-plane upward direction. The 200 nm-thick NbN thin film was epitaxially grown on an MgO(100) substrate by reactive dc magnetron sputtering in an N 2/Ar atmosphere. The background pressure during deposition was 2 .0 × 10 −5 Pa, the Ar:N 2
+
+flow-rate ratio was 100 : 8 sccm, the deposition pressure was 2 mTorr, and the sputtering current was 1 .0 A. The temperature dependence of the electrical resistivity ρ of the NbN sample, measured by the four-probe method using a Physical Property Measurement System (PPMS, Quantum Design), is shown by the red line in Fig. 1(b). The sample exhibits a sharp superconducting transition at Tc = 15 .7 K. The diamond sensor was grown by chem-ical vapor deposition (CVD) on a (111) Ib diamond sub-strate (1 mm ×1 mm ×0.5 mm), with NV centers incorpo-rated within a 2 .3 μm-thick near-surface layer (NV-layer) and the NV axis controlled to be perfectly aligned along the out-of-plane direction. 21 –25 The diamond sensor was attached to the NbN film with the NV-layer surface fac-ing the film as shown in Fig. 1(c). 
+
+> arXiv:2604.14578v1 [cond-mat.supr-con] 16 Apr 2026
+
+2Antenna Coil Cryostat NbN Diamond Dichroic mirror Objective lens Camera Tube lens Stage Lens pair Filters 
+
+(c) 
+
+> 𝑧
+> NbN Diamond
+> 
+
+(d) (b) (a)                        
+
+> 30 μm
+> 1 mm
+> Laser
+> 35 50 65
+> T(K) 10 20 30
+> 025 50
+>  (μ Ωcm)
+> 050 100
+> 
+> Bz
+> meas  (μT)  Bz
+> meas
+> Bz
+> meas (μT)
+> FIG. 1. (a) Schematic of the experimental setup. (b) Red: Temperature dependence of the electrical resistivity ρof the NbN sample. Blue: Temperature dependence of the mean of the magnetic field Bmeas
+> zover a 55 μm×55 μm region at the center of the field of view measured after cooling the sample to 3 .6 K in zero field, applying 43 μT, and then increasing the temperature. The temperature is that of the cryostat stage. Measurements were repeated 10 times at each temperature and the averages are plotted. Error bars represent 95% con-fidence intervals. (c) Optical microscope image of the sam-ple. (d) Magnetic field distribution measured over a 130 μm
+> ×130 μm field of view on the sample (blue square in panel (c)) after cooling the stage to 3 .6 K under an applied field of
+> −47 .4μT.
+
+Using this setup, we measured the magnetic field dis-tribution Bmeas  
+
+> z
+
+just above the NbN sample in the 130 μm
+
+× 130 μm region indicated by the blue-box of Fig. 1(c). We first measured the temperature dependence of the diamagnetic response of NbN. After cooling the sample to 3 .6 K in zero field and then applying 43 μT, we in-creased the temperature and measured the mean Bmeas 
+
+> z
+
+over a 55 μm × 55 μm region at the center of the field of view; the result is shown by the blue line in Fig. 1(b). At low temperature, the measured field is sufficiently small, indicating a diamagnetic response. At a stage tempera-ture of Tstage = 14 .1 K ≡ T ′
+
+> c
+
+, the measured field increases abruptly and the diamagnetic response disappears. This indicates a transition of the sample from the supercon-ducting to the normal state and is consistent with the temperature dependence of the electrical resistivity (red line in Fig. 1(b)). The difference between the transition temperatures, ∆ T = Tc − T ′ 
+
+> c
+
+= 1 .6 K, is likely due to global heating of the sample by the laser and microwaves used for the magnetic measurements. Next, we show a magnetic image obtained after field cooling. Figure 1(d) shows the magnetic field image ob-tained after cooling to 3 .6 K under an applied field of 
+
+Bappl  
+
+> z
+
+= −47 .4 μT. In the 130 μm × 130 μm field of view, 399 local magnetic peaks were observed, and the peak fields were nearly uniform, with a mean of 62 .6 μT and a standard deviation of 2 .1 μT. Furthermore, the number of observed peaks agrees within 3 .1 % with the number es-timated from the applied field, 47 .4 μT×(130 μm) 2/Φ0 =387, assuming that each vortex carries a single flux quan-tum Φ 0 = 2068 μT · μm2. This indicates that the ob-served peaks correspond to vortices carrying a single flux quantum. We next investigated the motion of vortices. After cooling the sample in a magnetic field of Bcooling  
+
+> z
+
+= 91 μT, we repeatedly performed magnetic imaging while switch-ing the applied field as shown in the top panel of Fig. 2(a), with the stage temperature held at 11 .5 K < T ′
+
+> c
+
+. The acquisition time for each image was about 5 min. The bottom panel of Fig. 2(a) shows, at intervals of approxi-mately 35 min, the time evolution of the mean field in the three 15 μm × 15 μm regions I–III indicated in Fig. 2(b). Figures 2(b)–(e) show snapshots of the field distribution after holding the applied field at each step for a certain time. A movie obtained by concatenating all magnetic images is provided as the Supplementary Material. Figure 2(b) is a snapshot taken while the applied field was held at Bcooling  
+
+> z
+
+. No pronounced spatial inhomogene-ity is observed in the magnetic field distribution. While the applied field was kept at Bcooling  
+
+> z
+
+, the mean field val-ues in regions I–III changed very little, as shown in the bottom panel of Fig. 2(a). After the applied field was then increased to Bcooling  
+
+> z
+
++68 μT, the field in region I in-creased, whereas that in region II decreased, yielding the field distribution shown in Fig. 2(c). This corresponds to vortex motion from top to bottom near the center of the field of view. In contrast, the vortex configuration in the outer part of the field of view did not change. Indeed, the mean field in region III remained almost constant. Next, after the applied field was decreased to Bcooling  
+
+> z
+
+− 68 μT, the field in region I decreased whereas that in region II in-creased, giving the distribution shown in Fig. 2(d). This corresponds to vortex motion from bottom to top, op-posite to that in Fig. 2(b) to (c). Finally, after the ap-plied field was returned to the cooling value Bcooling  
+
+> z
+
+, the field distribution became approximately uniform again (Fig. 2(e)), and the fields in regions I–III recovered close to their initial values. Throughout the continuous mea-surements, the total flux in the entire 130 μm × 130 μmfield of view remained nearly constant, with a mean of 707Φ 0 and a standard deviation of 8 .7Φ 0 (∼ 1.2%), sup-porting the interpretation that the observed field changes reflect rearrangement of the vortex configuration within the field of view. Additional measurements demonstrat-ing that a vortex configuration displaced at elevated tem-perature can be stabilized by subsequent recooling are provided in the Supplementary Material. During the continuous magnetic imaging, changes in the vortex configuration were observed near the center of the field of view, whereas the configuration in the outer region remained unchanged. This suggests that pinning is weaker near the center of the field of view. In the CW-ODMR measurements, laser light of approxi-360 90 120 
+
+200 Elapsed time (min) 
+
+## (a) (d) (e) (b) (c) 
+
+(b) (c) (d) (e) 
+
+100 0100 70 90 0 200 400 600   
+
+> 109 min 311 min
+> 515 min 719 min
+> 30 μm
+> Ⅲ
+> Ⅱ
+> ⅠⅠ
+> Ⅱ
+> Ⅲ
+
+80 
+
+> Bz
+> appl  (μT) Bz
+> meas  (μT)
+
+Bz                 
+
+> cooling
+> Bz
+> meas  (μT)
+> FIG. 2. After cooling the sample under an applied field of Bcooling
+> z= 91 μT, the spatial distribution of the sample field Bmeas
+> z
+> was continuously measured while the applied field Bappl
+> zwas changed stepwise at fixed stage temperature Tstage = 11 .5 K < T ′
+> c.(a) Top: Time dependence of applied field Bappl
+> z. Bottom: Time dependence of the spatially averaged value of measured field
+> Bmeas
+> zin the three regions I–III indicated by squares in (b). Red circles, blue triangles, and black squares correspond to regions I, II, and III, respectively. (b)–(e) Snapshots of the Bmeas
+> zdistribution after holding the applied field at each step for a certain time.
+
+mately 20 mW illuminates a region with a radius of about 100 μm, and we infer that the spatial profile of the laser intensity causes local heating of the sample. Figure 3(a) shows the spatial distribution of the NV photolumines-cence (PL) intensity in this measurement. Because the PL intensity is proportional to the incident laser inten-sity, the laser intensity is higher near the center of the field of view. The local temperature is therefore expected to be higher there, leading to weaker pinning. 37 ,38 
+
+To examine the temperature dependence of vortex de-pinning, we kept the magnetic field constant after field cooling and consecutively imaged the vortex stray-field distribution five times at each temperature in regions A and B (Fig. 3(a)), tracking the motion of individual vortices. The acquisition time for one image was ap-proximately 9 min. Figure 3(b) shows an example at a stage temperature of 11 .03 K. Here, the peak positions extracted from the field maps are indicated by red mark-ers, and nearby pairs of peaks between successive frames were identified. Pairs separated by more than the thresh-old dth = 1 μm were regarded as vortex hopping events and connected by arrows. Several hopping events were detected in region A, whereas none were detected in re-gion B. Figure 3(c) shows the mean fraction of vortices that moved between frames at each temperature. An increase in the depinning fraction is observed above a stage tem-perature of 10 .75 K in region A and above 11 .75 K in region B. Thus, increasing temperature clearly weakens the pinning. Furthermore, because depinning appears in region A at a stage temperature approximately 1 K lower than in region B, region A is inferred to be approx-imately ∆ TAB = 1 K hotter than region B. This tem-perature difference explains why the vortex configuration changed only near the center of the field of view in Fig. 2.The inset of Fig. 3(c) shows a scatter plot of the angles of all detected vortex motions, which are approximately isotropic. It indicates the motions are thermally acti-vated or driven by random local perturbations, such as fluctuations in laser intensity. Next, we discuss the relationship between the applied-field changes and the vortex rearrangement in Fig. 2.When the applied magnetic field is changed, a current flows in the sample so as to shield the field change, and the vortices are expected to move under the Lorentz force exerted by this shielding current. We therefore calculated the shielding-current distribution for the field increment of 68 μT in Fig. 2(b) to (c). 39 Here, we as-sumed complete shielding of the field change. Since the Pearl length Λ, which characterizes the lateral extent of a vortex, is clearly much smaller than the sample width 
+
+w ∼ 5 mm (Λ ≪ w), the assumption of complete shield-ing is justified. 40 Indeed, during the applied-field changes in Fig. 2(a), the field in the outer part of the field of view and the total flux in the entire field of view changed very little, indicating that complete shielding is realized. The calculated shielding-current distribution is shown in Fig. 4, with the current flowing along the white stream-lines. At the magnetic imaging area indicated by the red box, the sheet current density is K = |K| = 37 A /m, corresponding to a current density of j = K/d = 1 .8 ×
+
+10 −2 MA cm −2 where d = 200 nm is the NbN film thick-ness. From the local sheet current density in the mea-surement area, we calculate the Lorentz force K×(Φ 0ez ), acting on a vortex with flux along the + z axis. The force is directed as indicated by the red arrow in Fig. 4 and its 4(c) (a) 
+
+0.0 0.5 1.0 PL (a.u.) 
+
+## AB
+
+## (b) 
+
+30 40 50 60 
+
+9.3 min 18.6 min 0 min t= 
+
+## AB
+
+> t
+
+Ts age (K) 
+
+> t
+
+Ts age = 11.03 K 
+
+12 11 10 9
+
+## AA B 
+
+> 30 μm
+> 0° 270° 90° 180° A
+> B
+> Angle dist.
+> Fraction of moved vortices (%)
+
+0
+
+510 15 (b) 
+
+Bz 
+
+> meas
+
+(μT) 
+
+FIG. 3. (a) Spatial distribution of the diamond photo-luminescence (PL) intensity under laser illumination during the ODMR measurement. The black squares indicate the 30 μm × 30 μm regions A and B used for the analysis. (b) Time evolution of the magnetic field maps Bmeas  
+
+> z
+
+in regions A and B ( t = 0, 9.3, and 18 .6 min) obtained after cooling the sample in a magnetic field of 46 μT and holding it at 
+
+Tstage = 11 .03 K. Red markers: Peak positions extracted from the field maps ( t = 0 min, circles; t = 9 .3 min, trian-gles; t = 18 .6 min, squares). White markers: Peak positions at the preceding time. Red arrows: Pairs of nearest peaks be-tween successive frames separated by more than the threshold 
+
+dth = 1 μm. (c) Stage-temperature dependence of the fraction of moved vortices. Red circles and blue triangles correspond to regions A and B, respectively. Inset: Scatter plot of vortex-motion angles for all temperatures. 
+
+magnitude is 7 .6 × 10 −2 pN. This force direction agrees with the observed direction of vortex motion when the applied field is increased (Fig. 2(b) to (c)). Converting this value to a pinning force per unit length gives a value about one order of magnitude smaller than that mea-sured for an NbN thin film at 12 K by magnetic force mi-croscopy (MFM) in a previous study, 41 but the difference is not inconsistent with the weaker pinning expected at the higher local temperature, 37 ,38 roughly estimated as 
+
+Tstage + ∆ T + ∆ TAB = 14 .1 K. Furthermore, when the applied field is decreased, the shielding current reverses direction and so does the force acting on the vortices, ex-x (mm) 0 2 4 6
+
+> y (mm)
+
+0246
+
+68 μT 
+
+0100 200 300 400 
+
+> Sheet current density (A/m)
+
+FIG. 4. Distribution of the sheet current density K calcu-lated under the assumption of complete shielding of an incre-ment of 68 μT applied along the positive z direction of the sample, corresponding to the field increase in Fig. 2(b) to (c). The black pentagon shows the NbN sample outline, matched to the actual dimensions in Fig. 1(c). The white lines are current streamlines (contours of the stream function), and the current flows along them in the directions indicated by the white arrows. The red box (130 μm × 130 μm) marks the ODMR measurement area, and the red arrow indicates the di-rection of the Lorentz force acting on a vortex with flux along the +z axis estimated from the local sheet current density at the center of the measurement area. 
+
+plaining the direction of vortex motion in Fig. 2(c) to (d). When the applied field is returned to the cooling value, the shielding current decreases and the vortex-vortex re-pulsion relaxes the spatial bias (Fig. 2(d) to (e)). In summary, using a perfectly aligned NV ensemble, we quantitatively imaged the stray magnetic field dis-tribution of vortices in an NbN thin film. Under local heating and global magnetic-field variation, we further captured changes in the vortex configuration in real space and in real time. Exploiting the advantages of wide-field imaging, we statistically analyzed the temperature de-pendence of vortex motion and theoretically calculated the driving force generated by the shielding current un-der field variation, enabling a consistent explanation of the observed vortex motion. This study provides important insight into the driv-ing forces acting on vortices and the temperature depen-dence of pinning. Moreover, by combining local heating with magnetic-field variation, the present method can collectively move vortices in a certain direction within a selected region, which may enable applications such as vortex exclusion in sensitive regions of superconducting devices and vortex positioning in vortex-based devices. See the supplementary material for details of the laser illumination conditions, a movie showing the full time 5sequence of the magnetic-field images corresponding to Fig. 2, and results demonstrating stabilization of the displaced vortex configuration by recooling. This work is partially supported by JST, CREST Grant Number JPMJCR23I2, Japan; JST SPRING, Grant Number JPMJSP2108; JSPS Grants-in-Aid for Scientific Research (Nos. JP26H02007, JP23K25800, JP24K21194, JP25K00934, JP24KJ0657, and JP25H01248); MEXT Quantum Leap Flagship Program (MEXT Q-LEAP) Grant Number JP-MXS0118067395; “Advanced Research Infrastructure for Materials and Nanotechnology in Japan (ARIM)” of the Ministry of Education, Culture, Sports, Science and Technol-ogy (MEXT), Proposal Number JPMXP1225UT1155; the Cooperative Research Project of RIEC, Tohoku University; New Challenge Research hosted by JSR Corporation via JSR-UTokyo Collaboration Hub, CURIE. 
+
+AUTHOR DECLARATIONS Conflict of Interest 
+
+The authors have no conflicts to disclose. 
+
+Author Contributions 
+
+Ryoei Ota : Conceptualization (lead); Data cura-tion (lead); Formal analysis (lead); Investigation (lead); Methodology (equal); Software (lead); Validation (lead); Visualization (lead); Writing – original draft (lead); Writ-ing – review & editing (equal). Shunsuke Nishimura :Conceptualization (equal); Investigation (supporting); Methodology (equal); Software (equal); Writing – review & editing (equal). Koki Honda : Data curation (equal); Investigation (equal); Resources (lead); Writing – review & editing (equal). Takeyuki Tsuji : Resources (lead); Writing – review & editing (equal). Taro Yamashita :Conceptualization (equal); Supervision (equal); Writing – review & editing (equal). Takayuki Iwasaki : Su-pervision (equal); Writing – review & editing (equal). 
+
+Mutsuko Hatano : Supervision (equal); Writing – re-view & editing (equal). Kento Sasaki : Conceptualiza-tion (equal); Funding acquisition (equal); Project admin-istration (equal); Supervision (equal); Writing – review & editing (lead). Kensuke Kobayashi : Conceptualiza-tion (equal); Funding acquisition (lead); Project admin-istration (lead); Supervision (lead); Writing – review & editing (lead). 
+
+DATA AVAILABILITY 
+
+The data that support the findings of this study are available from the corresponding authors upon reason-able request. 
+
+> 1
+
+C. Song, T. W. Heitmann, M. P. DeFeo, K. Yu, R. McDermott, M. Neeley, J. M. Martinis, and B. L. T. Plourde, “Microwave response of vortices in superconducting thin films of Re and Al,” 
+
+Phys. Rev. B 79 , 174512 (2009) .
+
+> 2
+
+T. Yamashita, S. Miki, K. Makise, W. Qiu, H. Terai, M. Fuji-wara, M. Sasaki, and Z. Wang, “Origin of intrinsic dark count in superconducting nanowire single-photon detectors,” Appl. Phys. Lett. 99 , 161105 (2011) .
+
+> 3
+
+V. K. Semenov and M. M. Khapaev, “How Moats Protect Su-perconductor Films From Flux Trapping,” IEEE Trans. Appl. Supercond. 26 , 1–10 (2016) .
+
+> 4
+
+L. N. Bulaevskii, M. J. Graf, and V. G. Kogan, “Vortex-assisted photon counts and their magnetic field dependence in single-photon superconducting detectors,” Phys. Rev. B 85 , 014505 (2012) .
+
+> 5
+
+T. Wakamura, M. Hashisaka, S. Hoshino, M. Bard, S. Okazaki, T. Sasagawa, T. Taniguchi, K. Watanabe, K. Muraki, and N. Ku-mada, “Gate-tunable giant superconducting nonreciprocal trans-port in few-layer Td-MoTe 2,” Phys. Rev. Res. 6, 013132 (2024) .
+
+> 6
+
+T. Golod, A. Iovan, and V. M. Krasnov, “Single Abrikosov vor-tices as quantized information bits,” Nat. Commun. 6, 8628 (2015) .
+
+> 7
+
+U. Essmann and H. Tr¨ auble, “The direct observation of indi-vidual flux lines in type II superconductors,” Phys. Lett. A 24 ,526–527 (1967) .
+
+> 8
+
+K. Harada, T. Matsuda, J. Bonevich, M. Igarashi, S. Kondo, G. Pozzi, U. Kawabe, and A. Tonomura, “Real-time observation of vortex lattices in a superconductor by electron microscopy,” 
+
+Nature 360 , 51–53 (1992) .
+
+> 9
+
+P. E. Goa, H. Hauglin, M. Baziljevich, E. Il’yashenko, P. L. Gam-mel, and T. H. Johansen, “Real-time magneto-optical imaging of vortices in superconducting NbSe 2,” Supercond. Sci. Technol. 14 ,729–731 (2001) .
+
+> 10
+
+L. Embon, Y. Anahory, ˇZ. L. Jeli´ c, E. O. Lachman, Y. Myasoe-dov, M. E. Huber, G. P. Mikitik, A. V. Silhanek, M. V. Miloˇ sevi´ c, A. Gurevich, and E. Zeldov, “Imaging of super-fast dynamics and flow instabilities of superconducting vortices,” Nat. Commun. 8,85 (2017) .
+
+> 11
+
+L. Rondin, J.-P. Tetienne, P. Spinicelli, C. Dal Savio, K. Karrai, G. Dantelle, A. Thiaville, S. Rohart, J.-F. Roch, and V. Jacques, “Nanoscale magnetic field mapping with a single spin scanning probe magnetometer,” Appl. Phys. Lett. 100 , 153118 (2012) .
+
+> 12
+
+L. Rondin, J.-P. Tetienne, T. Hingant, J.-F. Roch, P. Maletinsky, and V. Jacques, “Magnetometry with nitrogen-vacancy defects in diamond,” Rep. Prog. Phys. 77 , 056503 (2014) .
+
+> 13
+
+S. Steinert, F. Dolde, P. Neumann, A. Aird, B. Naydenov, G. Bal-asubramanian, F. Jelezko, and J. Wrachtrup, “High sensitivity magnetic imaging using an array of spins in diamond,” Rev. Sci. Instrum. 81 , 043705 (2010) .
+
+> 14
+
+R. Schirhagl, K. Chang, M. Loretz, and C. L. Degen, “Nitrogen-Vacancy Centers in Diamond: Nanoscale Sensors for Physics and Biology,” Annu. Rev. Phys. Chem. 65 , 83–105 (2014) .
+
+> 15
+
+K.-M. C. Fu, G. Z. Iwata, A. Wickenbrock, and D. Budker, “Sen-sitive magnetometry in challenging environments,” AVS Quan-tum Sci. 2, 044702 (2020) .
+
+> 16
+
+M. Pelliccione, A. Jenkins, P. Ovartchaiyapong, C. Reetz, E. Em-manouilidou, N. Ni, and A. C. Bleszynski Jayich, “Scanned probe imaging of nanoscale magnetism at cryogenic temperatures with a single-spin quantum sensor,” Nat. Nanotechnol. 11 , 700–705 (2016) .
+
+> 17
+
+L. Thiel, D. Rohner, M. Ganzhorn, P. Appel, E. Neu, B. M¨ uller, R. Kleiner, D. Koelle, and P. Maletinsky, “Quantitative nanoscale vortex imaging using a cryogenic quantum magnetometer,” Nat. Nanotechnol. 11 , 677–681 (2016) .
+
+> 18
+
+Y. Schlussel, T. Lenz, D. Rohner, Y. Bar-Haim, L. Bougas, D. Groswasser, M. Kieschnick, E. Rozenberg, L. Thiel, A. Wax-man, J. Meijer, P. Maletinsky, D. Budker, and R. Folman, “Wide-6
+
+Field Imaging of Superconductor Vortices with Electron Spins in Diamond,” Phys. Rev. Appl. 10 , 034032 (2018) .
+
+> 19
+
+V. M. Acosta, L. S. Bouchard, D. Budker, R. Folman, T. Lenz, P. Maletinsky, D. Rohner, Y. Schlussel, and L. Thiel, “Color Centers in Diamond as Novel Probes of Superconductivity,” J. Supercond. Nov. Magn. 32 , 85–95 (2019) .
+
+> 20
+
+R. T. Kapur, P. Kehayias, S. K. Tolpygo, A. A. Libson, G. Halde-man, C. N. Muniz, A. Wynn, N. J. O’Connor, N. A. Par-mar, R. Johnson, A. C. Maccabe, J. Cummings, J. L. Mallek, D. A. Braje, and J. M. Schloss, “Flux Trapping Characteriza-tion for Superconducting Electronics Using a Cryogenic Wide-field NV-Diamond Microscope,” (2026), arXiv:2506.01906 [cond-mat.supr-con] .
+
+> 21
+
+T. Miyazaki, Y. Miyamoto, T. Makino, H. Kato, S. Yamasaki, T. Fukui, Y. Doi, N. Tokuda, M. Hatano, and N. Mizuochi, “Atomistic mechanism of perfect alignment of nitrogen-vacancy centers in diamond,” Appl. Phys. Lett. 105 , 261601 (2014) .
+
+> 22
+
+K. Tahara, H. Ozawa, T. Iwasaki, N. Mizuochi, and M. Hatano, “Quantifying selective alignment of ensemble nitrogen-vacancy centers in (111) diamond,” Appl. Phys. Lett. 107 , 193110 (2015) .
+
+> 23
+
+H. Ozawa, K. Tahara, H. Ishiwata, M. Hatano, and T. Iwasaki, “Formation of perfectly aligned nitrogen-vacancy-center ensem-bles in chemical-vapor-deposition-grown diamond (111),” Appl. Phys. Express 10 , 045501 (2017) .
+
+> 24
+
+H. Ishiwata, M. Nakajima, K. Tahara, H. Ozawa, T. Iwasaki, and M. Hatano, “Perfectly aligned shallow ensemble nitrogen-vacancy centers in (111) diamond,” Appl. Phys. Lett. 111 , 043103 (2017) .
+
+> 25
+
+T. Tsuji, H. Ishiwata, T. Sekiguchi, T. Iwasaki, and M. Hatano, “High growth rate synthesis of diamond film containing perfectly aligned nitrogen-vacancy centers by high-power density plasma CVD,” Diam. Relat. Mater. 123 , 108840 (2022) .
+
+> 26
+
+S. Nishimura, T. Kobayashi, D. Sasaki, T. Tsuji, T. Iwasaki, M. Hatano, K. Sasaki, and K. Kobayashi, “Wide-field quantita-tive magnetic imaging of superconducting vortices using perfectly aligned quantum sensors,” Appl. Phys. Lett. 123 , 112603 (2023) .
+
+> 27
+
+S. Nishimura, T. Tsuji, T. Iwasaki, M. Hatano, K. Sasaki, and K. Kobayashi, “Visualization of Current-Driven Vortex Formation in High-Tc Cuprate Superconductors,” (2025), 
+
+arXiv:2511.19896 [cond-mat.supr-con] .
+
+> 28
+
+K. Shulga, S. Nishimura, P. A. Volkov, R. Hasegawa, M. Hirano, T. Tsuji, T. Iwasaki, M. Hatano, K. Sasaki, and K. Kobayashi, “Observation of individual vortex penetration in a coplanar superconducting resonator,” (2025), arXiv:2512.00790 [cond-mat.supr-con] .
+
+> 29
+
+T. Yamashita, S. Miki, H. Terai, and Z. Wang, “Low-filling-factor superconducting single photon detector with high system detec-tion efficiency,” Opt. Express 21 , 27177–27184 (2013) .
+
+> 30
+
+N. Takeuchi, M. Naruse, S. Miyajima, D. Pham, H. Terai, M. Tanaka, and T. Yamashita, “NbN-based half-flux-quantum el-ement for integration with superconducting qubits,” Appl. Phys. Lett. 124 , 152601 (2024) .
+
+> 31
+
+K. Watanabe, H. Kutsuma, S. Kim, and T. Yamashita, “Loss Mechanisms of Epitaxial NbN Coplanar Waveguide Resonators on an MgO Substrate,” IEEE Trans. Appl. Supercond. 35 , 1–6 (2024) .
+
+> 32
+
+S. Kim, L. V. Abdurakhimov, D. Pham, W. Qiu, H. Terai, S. Ash-hab, S. Saito, T. Yamashita, and K. Semba, “Superconducting flux qubit with ferromagnetic Josephson π-junction operating at zero magnetic field,” Commun. Mater. 5, 216 (2024) .
+
+> 33
+
+C.-S. Lee, B. Jank´ o, I. Der´ enyi, and A.-L. Barab´ asi, “Reduc-ing vortex density in superconductors using the ‘ratchet effect’,” 
+
+Nature 400 , 337–340 (1999) .
+
+> 34
+
+I. S. Veshchunov, W. Magrini, S. V. Mironov, A. G. Godin, J.-B. Trebbia, A. I. Buzdin, P. Tamarat, and B. Lounis, “Optical ma-nipulation of single flux quanta,” Nat. Commun. 7, 12801 (2016) .
+
+> 35
+
+I. Keren, A. Gutfreund, A. Noah, N. Fridman, A. Di Bernardo, H. Steinberg, and Y. Anahory, “Chip-Integrated Vortex Manip-ulation,” Nano Lett. 23 , 4669–4674 (2023) .
+
+> 36
+
+K. Sasaki, Y. Monnai, S. Saijo, R. Fujita, H. Watanabe, J. Ishi-Hayase, K. M. Itoh, and E. Abe, “Broadband, large-area mi-crowave antenna for optically detected magnetic resonance of nitrogen-vacancy centers in diamond,” Rev. Sci. Instrum. 87 ,053904 (2016) .
+
+> 37
+
+L. H. Allen and J. H. Claassen, “Technique for measuring the elementary pinning force in thin films,” Phys. Rev. B 39 , 2054– 2059 (1989) .
+
+> 38
+
+M. J. Goldstein and W. G. Moulton, “Thermally induced flux motion and the elementary pinning force in Nb thin films,” Phys. Rev. B 40 , 8714–8719 (1989) .
+
+> 39
+
+L. Prigozhin and V. Sokolovsky, “Fast Fourier transform-based solution of 2D and 3D magnetization problems in type-II super-conductivity,” Supercond. Sci. Technol. 31 , 055018 (2018) .
+
+> 40
+
+A. A. Babaei Brojeny and J. R. Clem, “Magnetic-field and current-density distributions in thin-film superconducting rings and disks,” Phys. Rev. B 68 , 174514 (2003) .
+
+> 41
+
+T. Shapoval, H. Stopfel, S. Haindl, J. Engelmann, D. S. Inosov, B. Holzapfel, V. Neu, and L. Schultz, “Quantitative assessment of pinning forces and magnetic penetration depth in NbN thin films from complementary magnetic force microscopy and transport measurements,” Phys. Rev. B 83 , 214517 (2011) .Supplemental Information for: Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors 
+
+Ryoei Ota, 1 Shunsuke Nishimura, 1 Koki Honda, 2 Takeyuki Tsuji, 3, 4 Taro Yamashita, 2 Takayuki Iwasaki, 4
+
+Mutsuko Hatano, 4 Kento Sasaki, 1 and Kensuke Kobayashi 1
+
+> 1)
+
+Department of Physics, The University of Tokyo, Bunkyo-ku, Tokyo 113-0033, Japan 
+
+> 2)
+
+Department of Applied Physics, Tohoku University, Sendai, Miyagi 980-8579, Japan 
+
+> 3)
+
+International Center for Young Scientists, National Institute for Materials Science, Tsukuba, Ibaraki 305-0044, Japan 
+
+> 4)
+
+Department of Electrical and Electronic Engineering, Institute of Science Tokyo, Meguro-ku, Tokyo 152-8552, Japan 
+
+I. DETAILS OF THE LASER ILLUMINATION CONDITIONS 
+
+A 515-nm laser (LBX-515, Oxxius) was used for optical excitation. The output was coupled into a multimode fiber, and a De-Speckler (Newport) was used to average out speckle in the illumination profile. The laser power after the objective lens was 20 mW, as measured with an optical power meter (Thorlabs). The beam size at the sample plane was adjusted using a pair of lenses. The illumination profile at the sample plane, estimated from the spatial distribution of the NV photoluminescence under laser illumination [Fig. 3(a) of the main text], was approximately Gaussian, with a 1 /e 2 radius of about 100 μm. 
+
+II. SUPPLEMENTARY MOVIE 
+
+The full time sequence of the magnetic-field images corresponding to Fig. 2 in the main text is provided in SM Movie.mp4. 
+
+III. STABILIZING THE DISPLACED VORTEX CONFIGURATION BY RECOOLING 
+
+In Fig. 2 of the main text, we showed vortex displacement driven by shielding currents induced by changes in the applied field at elevated temperature. In Figure S.1 , we further show that recooling stabilizes the displaced vortex configuration. After cooling the sample to 3 .6 K under an applied field of −47 μT, we varied the applied field and the stage temperature as shown in the upper panels of Fig. S.1 . Fig. S.1 (a) shows the magnetic-field image obtained after field cooling, with vortices visible in the field of view. Note that the vortices carry flux along the −z direction because the field during cooling was directed along −z.When the stage temperature was raised to 11 .5 K and the applied field was changed to 134 μT, the magnetic-field distribution shifted toward the upper part of the image, as shown in Fig. S.1 (b). This direction of motion is consistent with the Lorentz force expected for vortices carrying flux along the −z direction, that is, opposite to that in Fig. 4 of the main text. Next, the temperature was lowered again to 3 .6 K, and the resultant configuration is shown in Fig. S.1 (c). This configuration remained unchanged even when the applied field was changed to −229 μT, which would induce a Lorentz force in the opposite direction, as shown in Fig. S.1 (d). This result indicates that the pinning force was stronger than both the mutual repulsion between vortices and the Lorentz force arising from the shielding current. These results demonstrate the potential of combining local heating with changes in the applied field to move vortices away from vortex-sensitive regions in superconducting devices and then stabilize the resulting configuration by recooling. 2Bz
+
+> appl  (μT)
+
+−250 0250 
+
+Elapsed time (min) 0 10 20 30 40 
+
+> Tstage  (K)
+
+36912 
+
+(a) (b) (c) (d) 
+
+120 
+
+60 0
+
+> |Bz
+> meas | (μT)
+
+(a) 
+
+30 μm 
+
+3.6 K, -47 μT (b) 11.5 K, 134 μT (c) 3.6 K, 134 μT (d) 3.6 K, -229 μT 
+
+FIG. S.1. Top: Time sequences of the applied field Bappl  
+
+> z
+
+and stage temperature Tstage after field cooling under −47 μT. Bottom: Corresponding magnetic-field images at the four time points indicated by the dashed lines in the top panels. The measurement position and field of view are the same as those in the main text (blue box in Fig. 1(c) of the main text).

@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-18",
+  "date": "2026-04-18",
+  "generated_at": "2026-04-18T20:00:08",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/18/2604.14578v1-wide-field-magnetic-imaging-of-shielding-current-driven-vortex-rearrangement-under-local-heating-using-diamond-quantum-sensors",
+      "section": "quick",
+      "title_en": "Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors",
+      "authors": "Ryoei Ota, Shunsuke Nishimura, Koki Honda, Takeyuki Tsuji, Taro Yamashita, Takayuki Iwasaki, Mutsuko Hatano, Kento Sasaki, Kensuke Kobayashi",
+      "date": "2026-04-16",
+      "pdf": "https://arxiv.org/pdf/2604.14578v1",
+      "score": "7.0",
+      "evidence": "使用量子传感器集成进行杂散磁场的宽场磁成像",
+      "tldr": "本研究利用金刚石NV色心系综宽场磁成像技术，对NbN薄膜中的超导涡旋进行了定量成像。通过在局部激光加热的同时逐步改变外磁场，研究人员在长达100多分钟的时间内实时观测到了涡旋在实空间中的重排过程。该现象源于局部加热导致的钉扎力减弱以及屏蔽电流产生的洛伦兹力驱动。这一成果为理解涡旋动力学提供了新视角，并为超导器件中的涡旋操控和定位提供了技术支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "Understanding and controlling vortex motion in superconductors are important both for suppressing dissipation in superconducting devices and for device applications that exploit vortices. In this work, we quantitatively imaged the stray magnetic field distribution of vortices in an NbN thin film by wide-field magnetic imaging using a perfectly aligned diamond NV ensemble. By continuously measuring while stepwise varying the applied magnetic field under local laser heating, we captured a rearrangement of the vortex configuration in real space and in real time over more than 100 min. The observed vortex rearrangement is consistent with a reduction of the pinning force due to local laser heating and with the Lorentz force exerted by shielding currents induced by the field variation. These results provide insight into vortex dynamics and suggest potential applications, including vortex exclusion from sensitive regions of superconducting devices and vortex positioning in vortex-based devices.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/18/2604.14713v1-optimal-robust-adaptive-beamforming-for-a-general-rank-signal-model-via-equivalence-of-maximin-and-minimax-sinr-problems",
+      "section": "quick",
+      "title_en": "Optimal Robust Adaptive Beamforming for a General-Rank Signal Model via Equivalence of Maximin and Minimax SINR Problems",
+      "authors": "Yongwei Huang, Zhenhui Huang, Sergiy A. Vorobyov, Zhi-Quan Luo",
+      "date": "2026-04-16",
+      "pdf": "https://arxiv.org/pdf/2604.14713v1",
+      "score": "6.0",
+      "evidence": "用于传感器阵列干扰抑制的鲁棒自适应波束成形技术",
+      "tldr": "本文研究了一般秩信号模型下鲁棒自适应波束形成的最优解问题，通过证明在凸闭合不确定集下极大极小与极小极大SINR问题的等价性，将原问题转化为可高效求解的半正定规划（SDP）问题。该方法突破了以往仅适用于秩一模型或需紧致性假设的局限，能够一步获得全局最优解，克服了传统迭代算法易陷入局部最优的缺陷，显著提升了波束形成器的输出性能。",
+      "tags": "query:tmr",
+      "abstract_en": "The globally optimal robust adaptive beamforming (RAB) solution is studied for worst-case signal-to-interference-plus-noise ratio (SINR) maximization (the maximin SINR problem) under convex and closed uncertainty sets for the desired signal covariance and interference-plus-noise covariance (INC) matrices, considering a general-rank signal model. First, the corresponding minimax SINR problem is reformulated as a convex optimization problem. In particular, this problem becomes a semidefinite programming (SDP) problem when the uncertainty sets can be represented by finitely many linear matrix inequality constraints. It is then shown that, for a general-rank signal model, the maximin and minimax SINR problems are equivalent when the uncertainty sets are convex and closed, in the sense that they share the same optimal value and the same set of optimal solutions. The requirement of closedness is weaker than the compactness assumption previously used to establish the equivalence between minimax and maximin SINR problems for the rank-one signal model, a state-of-the-art result reported approximately two decades ago. Consequently, an optimal solution to the minimax SINR problem is also globally optimal for the maximin SINR problem, and this solution can be obtained by solving the equivalent SDP of the minimax problem in a single step. In contrast, existing iterative approximation algorithms for the maximin SINR problem yield only locally optimal solutions. Simulation results demonstrate that these approximation algorithms return suboptimal values that can be strictly smaller than the optimal value of the minimax problem, and that the beamformer output SINR obtained via the minimax formulation is higher than that achieved by beamformers derived from the maximin problem using approximation algorithms.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/18/2604.14780v1-weak-magnetic-sensing-via-floquet-driving-in-an-active-cavity-magnon-coupled-system",
+      "section": "quick",
+      "title_en": "Weak Magnetic Sensing via Floquet Driving in an Active Cavity Magnon Coupled System",
+      "authors": "Fan Yang, Xudong Wang, Lijun Yan, Yue Zhao, Jinwei Rao, Lihui Bai, Shishen Yan",
+      "date": "2026-04-16",
+      "pdf": "https://arxiv.org/pdf/2604.14780v1",
+      "score": "6.0",
+      "evidence": "利用有源微波腔和YIG进行弱磁场传感",
+      "tldr": "本研究针对传统高灵敏度磁场探测器依赖低温或体积庞大的局限，开发了一种基于有源微波腔与钇铁石榴石（YIG）耦合系统的微型化交流磁场传感器。通过在PCB上引入电可调增益补偿损耗，显著提升了品质因子。利用交流磁场诱导的Floquet调制，通过测量混合模式下的Floquet边带实现弱磁探测。该设备在室温下运行，探测极限达到121 pT/√Hz，为高灵敏度、小型化磁传感提供了新方案。",
+      "tags": "query:tmr",
+      "abstract_en": "While significant advancements have been made in weak magnetic field detection, conventional high-sensitivity techniques are often limited by requirements for cryogenic operation or bulky setups. In this work, we develop a sensitive alternating magnetic field sensor based on a coupled system of an active microwave cavity and yttrium iron garnet (YIG), with the components implemented on printed circuit boards (PCBs). By introducing electrically tunable gain to compensate for cavity losses, we substantially improve both the quality factor and the signal intensity. Under the coupled system, Floquet modulation is induced by the alternating magnetic field, allowing for weak field detection by driving a specific hybrid mode and measuring the resulting Floquet sidebands. This miniaturized device operates at room temperature, achieving a detection limit of 121 pT/\\sqrt{Hz}.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

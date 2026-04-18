@@ -1,0 +1,126 @@
+Title: Weak Magnetic Sensing via Floquet Driving in an Active Cavity Magnon Coupled System
+
+URL Source: https://arxiv.org/pdf/2604.14780v1
+
+Published Time: Fri, 17 Apr 2026 00:43:01 GMT
+
+Number of Pages: 4
+
+Markdown Content:
+# Weak Magnetic Sensing via Floquet Driving in an Active Cavity Magnon Coupled System 
+
+Fan Yang ( 杨帆), 1 Xudong Wang ( 王旭东), 1, ∗ Lijun Yan ( 闫丽君), 1 Yue Zhao ( 赵越), 1 Jinwei Rao ( 饶金威), 1 Lihui Bai ( 柏利慧), 1, † and Shishen Yan ( 颜世申)1
+
+> 1
+
+School of Physics, Shandong University, 27 Shandanan Road, Jinan, 250100 China 
+
+(Dated: 2026/04/17/00:42:43) While significant advancements have been made in weak magnetic field detection, conventional high-sensitivity techniques are often limited by requirements for cryogenic operation or bulky setups. In this work, we develop a sensitive alternating magnetic field sensor based on a coupled system of an active microwave cavity and yttrium iron garnet (YIG), with the components implemented on printed circuit boards (PCBs). By introducing electrically tunable gain to compensate for cavity losses, we substantially improve both the quality factor and the signal intensity. Under the coupled system, Floquet modulation is induced by the alternating magnetic field, allowing for weak field detection by driving a specific hybrid mode and measuring the resulting Floquet sidebands. This miniaturized device operates at room temperature, achieving a detection limit of 121 pT /√Hz. 
+
+Keywords: Magnetic Detection; Cavity Magnon Coupled System; Floquet; Active Cavity; 
+
+Weak magnetic field detection has remained a focal point of research as a vital tool for exploring fundamen-tal physical phenomena and biological signals. Tradi-tional Superconducting Quantum Interference Devices[1– 4], with their exceptional sensitivity, have played apivotal role in ultra-low-field nuclear magnetic reso-nance detection[15, 17]. Spin-exchange relaxation-free atomic magnetometers have successfully bypassed con-ventional sensitivity limits and are widely employed in the medical field due to their superior noise suppression capabilities[5–9, 13, 16]. Concurrently, diamond-based nitrogen-vacancy center magnetometers[10–12, 14], uti-lizing optomagnetic detection, have pushed the spatial resolution of weak field sensing to the nanometer scale, offering an unprecedented observational window. How-ever, these technologies still face practical challenges, in-cluding cryogenic requirements and large physical foot-prints. Overcoming these limitations to achieve high-sensitivity, room-temperature, and compact sensing re-mains a critical objective in current research. In recent years, cavity magnon coupled systems have witnessed rapid development[19, 20, 35–37], providing a well-suited platform for room-temperature and miniatur-ized weak magnetic field detection[21, 22, 38, 40]. How-ever, traditional planar resonators are hindered by intrin-sic dissipations such as Ohmic losses, which limit their quality factors (Q) and constrain their applications in precision measurement. Recent studies have introduced gain into cavity magnon coupled systems to construct non-Hermitian gain-compensated architectures by lever-aging external energy sources to actively counteract in-ternal losses. These systems provide a foundation for high-Q coupling at room temperature[23–29, 39]. Con-currently, time-domain modulation based on Floquet the-ory has introduced a new dimension for signal ampli-fication and control[30–34]. Through alternating mag-netic field modulation, the system generates sideband signals in the frequency domain, enabling an amplified re-sponse to external alternating fields. Implementing Flo-quet modulation within an active cavity magnon system would theoretically yield even narrower linewidths and stronger responses to external fields, boosting detection sensitivity. Despite its potential for sensitive magnetic sensing, Floquet engineering in active cavity magnon cou-pled systems remains unexplored. In this work, we demonstrate a high-sensitivity alter-nating magnetic field sensing platform based on an ac-tive cavity magnon coupled system. By using tunable gain to compensate for cavity losses, we significantly en-hance the quality factor and boost the signal intensity. In the strong coupled system, we drive one hybrid mode while the target alternating field induces Floquet mod-ulation. By monitoring the resulting sidebands at the other mode, we achieve linear detection of weak mag-netic fields. Experimental results show that the sys-tem achieves a magnetic sensitivity of 121 pT /√Hz at 80 MHz. This work highlights the significant potential of integrating gain mechanisms with Floquet engineering for advanced magnetic sensing applications. The cavity magnon coupled system, as shown in Fig. 1(a), consists of a planar resonant cavity and a Yttrium Iron Garnet (YIG) sphere with a diameter of 1.2 mm. The highlighted orange region in the schematic repre-sents the cavity, with the cavity mode frequency given by ωc/2π = 4 .2 GHz, determined by the length of the resonant cavity. The signal trace (highlighted in light or-ange) on the printed circuit board (PCB) is connected to an amplifier via a discrete wire, establishing a gain circuit. The static magnetic field B is used to adjust the precession frequency of the YIG sphere, thereby altering 
+
+> arXiv:2604.14780v1 [cond-mat.mes-hall] 16 Apr 2026
+
+2      
+
+> FIG. 1. (a) Schematic of the experimental setup. A mi-crowave pump drives the coupled system, while an alternating magnetic field is applied to the YIG sphere. The resulting output sideband signals serve as a linearly amplified repre-sentation of the alternating field for readout. (b) Working principle schematic. The light blue line denotes the trans-mission spectrum of the coupled system, while the dark blue line indicates the frequency of the alternating magnetic field. The pump is applied to the higher frequency mode, and the resulting sideband signals are detected at the lower frequency mode. (c) Transmission spectrum of the cavity during gain off and on states.
+
+the coupling position between the magnon mode and the cavity mode. Additionally, an inductive coil is wound around the vicinity of the YIG sphere to generate an al-ternating magnetic field b that is parallel to the static field B. The coupled system is composed of two hybrid modes. At zero detuning ( ωm = ωc), the frequency split-ting between these modes is equal to twice the coupling strength of the system, defined as 2 g, as shown in Fig. 1(b). By applying an alternating magnetic field b at fre-quency ωD and driving one of the hybrid modes (e.g., 
+
+ω+) with a microwave field, the resonance frequency un-dergoes periodic modulation. This process leads to the generation of sidebands at ω+ ± nω D . Based on this phe-nomenon, the intensity of the sideband signal can be used to characterize the magnitude of the alternating magnetic field. Due to the frequency-selective nature of the cavity magnon system, the sideband intensity peaks with the condition ω+ ± nω D = ω− satisfied, where our subse-quent measurements are conducted. To further amplify the sideband signal, we introduce gain to compensate for the system’s damping, which significantly narrows the mode linewidth. As illustrated in Fig. 1(c), the cavity mode without gain exhibits a low-amplitude, broad pro-file. In contrast, the application of gain results in a much sharper resonance and a substantial increase in signal in-
+
+> FIG. 2. (a) Transmission spectra of the active cavity at vari-ous bias voltages. (b) Cavity mode linewidth extracted from (a) as a function of bias voltage. (c) Transmission spectra of the cavity magnon coupled system. The grey dashed line in-dicates the position of zero detuning. (d) Transmission spec-trum of the coupled system at zero detuning under pump powers of -10, 0, and 10 dBm.
+
+tensity, with the quality factor of the cavity enhanced from 121 to 4600. The amplifier acts directly on the microwave pho-ton modes within the cavity to provide single-photon gain. Upon introducing this gain, the complex frequency of the cavity mode is expressed as eωc = ωc − iκ c =
+
+ωc − i[β + κ + γ|c|2 − G]. Here, κc denotes the total decay rate of the cavity mode, while β and κ repre-sent the intrinsic damping rate and the external damping rate. G corresponds to the single-photon gain rate. The term γ|c|2 accounts for the nonlinear damping, which is proportional to the photon density nc = |c|2 and repre-sents additional dissipation induced by nonlinear effects. As the external bias voltage increases, the single-photon gain rate G rises, causing a corresponding decrease in the total damping κc. Experimentally, after the gain voltage reaches the amplifier turn-on voltage of 4.06 V, the linewidth of the cavity mode gradually narrows, and its intensity gradually increases as the voltage continues to rise (Fig. 2(a)). The linewidth of the cavity mode was extracted using the Lorentz formula and plotted in Fig. 2(b). Before the turn-on voltage, the linewidth re-mains constant as the gain polariton is not yet excited. As the gain voltage continues to increase, the linewidth gradually decreases. The continued rise in voltage drives an increase in photon number, bringing the nonlinear damping term γ |c|2 into competition with the optical gain. Beyond a gain voltage of 4.73 V, κc reaches its minimum value and plateaus. This indicates that the 3     
+
+> FIG. 3. (a) Sideband signal spectra under different alternat-ing magnetic fields. (b) Linear dependence of the sideband signal amplitude on the alternating magnetic field strength, with a slope K= 1.81 V/T and an intercept T= 1.49 nV. (c) The average noise level of the measurement system, measured to be 3.68 nV.
+
+nonlinear damping and the gain have reached a dynamic balance, which in turn leads to stabilization of the spec-tral linewidth. Coupling the active cavity mode to the magnon mode yields an anti-crossing dispersion relation, as presented in Fig. 2(c). At the magnetic field indi-cated by the dashed line, the system operates under a zero-detuning condition, where the pump microwave res-onantly excites the higher-frequency hybrid mode. How-ever, the pump power affects the photon number in the cavity, which in turn influences the gain regime. As il-lustrated in Fig. 2(d), varying the pump power modifies the gain state of the system. At a low power of -10 dBm, the limited number of pump-induced photons allows the system to remain in a self-sustained state. Conversely, at 10 dBm, the high photon density enhances significant nonlinear damping, which increases the total dissipation and consequently broadens the linewidth and suppresses the signal intensity. Therefore, we performed all subse-quent measurements under an optimized pump power of 0 dBm. The alternating magnetic field b applied to the YIG sphere modulates the spin precession, resulting in a pe-riodic modulation of the spin resonance frequency. The following equations can describe the dynamics of the sys-tem: 
+
+i ddt 
+
+ c(t)
+
+m(t)
+
+
+
+=
+
+eωc gg eωm + Ω D cos( ωD t)
+
+  c(t)
+
+m(t)
+
+
+
++
+
+Ωpe−iω pt
+
+0
+
+
+
+(1) where c(t) and m(t) represents the state vector consist-ing of the cavity mode and the magnon mode. Ω D is the amplitude of the alternating magnetic field b. Ω p denotes the intensity of the pump microwave, and ωp represents its frequency. In the limit of weak alternating modulation where Ω D
+
+approaches zero, the high-order sidebands of the coupled system are negligibly weak. By employing Floquet theory to calculate the first-order sideband intensity, the output sideband intensity of the system is derived as follows(See supplementary materials for details): 
+
+A±1 = i√κg 2Ωp(Ω D /2) [ωD (ωD ± 2g) − κcαm − i(±ωD − g)( κc + αm)] [ ig (κc + αm) − κcαm] (2) The derived expression indicates that the output side-band intensity is directly proportional to the alternating field strength. To validate this relationship, we further conducted experimental measurements for quantitative verification. The alternating magnetic field b applied to the YIG sphere modulates the spin precession, leading to a pe-riodic modulation of the spin resonance frequency. By driving the higher-frequency mode at ω2 =4.25 GHz, a sideband signal emerges at ω1 =4.17 GHz under an al-ternating field at ωb =80 MHz. The sideband intensity increases with the magnitude of the alternating field b, as illustrated by the spectra for five different field strengths in Fig. 3(a). Specifically, the signal is buried in the noise floor at b =0.9 nT, whereas it becomes clearly distin-guishable with a high signal-to-noise ratio at b =3.3 nT. Fig. 3(b) shows the linear fit of the sideband intensity versus the alternating field strength, yielding a slope of k = 1.81 V/T, which is in excellent agreement with the theoretical prediction in Eq.2. Furthermore, the noise power spectrum measured by a spectrum analyzer (SA) is presented in Fig. 3(c). At a 100 Hz bandwidth, the mea-sured noise floor corresponds to an equivalent magnetic field of 1.21 nT, yielding a sensitivity of 121 pT /√Hz for the 80 MHz alternating field. In conclusion, we have designed and demonstrated a scheme for alternating magnetic field detection based on an active cavity magnon coupled system. By introduc-ing electrically tunable gain, the damping of the cavity mode is effectively suppressed, leading to a significant im-4provement in the quality factor and signal strength of the resonator. Under strong coupled conditions, detection of an 80 MHz alternating magnetic field is achieved via the Floquet sideband response, with an estimated sensitivity of 121 pT /√Hz. These results demonstrate the efficacy of integrating active cavity with Floquet modulation in enhancing magnetic field detection and pave the way for the development of room-temperature, high-sensitivity, and compact magnetometers. 
+
+ACKNOWLEDGEMENTS 
+
+Project supported by the National Key Re-search and Development Program of China (Grant No.2023YFA1406604), the National Natural Science Foundation of China (Grant Nos. 12274260, 12522405, 12474120, and 12504141), the Shandong Provin-cial Natural Science Foundation, China (Grant Nos. ZR2024YQ001, ZR2025QC1475), the Taishan Young Scholar Program of Shandong Province (Grant No. tsqn202507065).  
+
+> ∗
+
+xudongwang01@mail.sdu.edu.cn  
+
+> †
+
+lhbai@sdu.edu.cn [1] Jaklevic R, Lambe J, Silver A and Mercereau J 1964 
+
+Physical Review Letters 12 159 [2] Greenberg Y S 1998 Reviews of Modern Physics 70 175 [3] Kleiner R, Koelle D, Ludwig F and Clarke J 2004 Pro-ceedings of the IEEE 92 1534–1548 [4] Granata C and Vettoliere A 2016 Physics Reports 614 
+
+1–69 [5] Kominis I K, Kornack T W, Allred J C and Romalis M V 2003 Nature 422 596–599 [6] Savukov I and Romalis M V 2005 Physical review letters 
+
+94 123001 [7] Savukov I M, Seltzer S, Romalis M and Sauer K 2005 
+
+Physical review letters 95 063004 [8] Wang S, Lu J, Zhang K, Zhao L, Qi Y and Fang J 2025 
+
+Physical Review Research 7 L032024 [9] Li J, Fang X, Li R, Chen B, Zhai Y and Liu Y 2023 
+
+Chinese Physics B 32 053201 [10] Wolf T, Neumann P, Nakamura K, Sumiya H, Ohshima T, Isoya J and Wrachtrup J 2015 Physical Review X 5
+
+041001 [11] Wang Z, Kong F, Zhao P, Huang Z, Yu P, Wang Y, Shi F and Du J 2022 Science advances 8 eabq8158 [12] Fescenko I, Jarmola A, Savukov I, Kehayias P, Smits J, Damron J, Ristoff N, Mosavian N and Acosta V M 2020 
+
+Physical review research 2 023394 [13] Wang H, Zugenmaier M, Jensen K, Zheng W and Polzik E S 2024 Physical Review Applied 22 034030 [14] Barry J F, Turner M J, Schloss J M, Glenn D R, Song Y, Lukin M D, Park H and Walsworth R L 2016 Proceedings of the National Academy of Sciences 113 14133–14138 [15] Jiang F Y, Wang N, Jin Y R, Deng H, Tian Y, Lang P L, Li J, Chen Y F and Zheng D N 2013 Chinese Physics B 
+
+22 047401 [16] Savukov I, Seltzer S and Romalis M 2007 Journal of Mag-netic Resonance 185 214–220 [17] Clarke J, Hatridge M and M¨ oßle M 2007 Annu. Rev. Biomed. Eng. 9 389–413 [18] Rameshti B Z, Kusminskiy S V, Haigh J A, Usami K, Lachance-Quirion D, Nakamura Y, Hu C M, Tang H X, Bauer G E and Blanter Y M 2022 Physics Reports 979 
+
+1–61 [19] Yang Y, Wang Y P, Rao J, Gui Y, Yao B, Lu W and Hu C M 2020 Physical Review Letters 125 147202 [20] Wang Y P, Zhang G Q, Zhang D, Li T F, Hu C M and You J 2018 Physical review letters 120 057202 [21] Rao J, Xu P, Gui Y, Wang Y, Yang Y, Yao B, Dietrich J, Bridges G, Fan X, Xue D et al. 2021 Nature commu-nications 12 1933 [22] Wu W J, Xu D, Qian J, Li J, Wang Y P and You J Q 2022 Chinese Physics B 31 127503 [23] Gui Y, Kozyniak G and Hu C M 2025 Journal of Applied Physics 137 
+
+[24] Zhang C, Kim M, Wang J and Hu C M 2024 Physical Review Applied 22 014034 [25] Kim M, Zhang C, Lu C and Hu C M 2024 Applied Physics Letters 124 
+
+[26] Rao J, Wang C, Yao B, Chen Z, Zhao K and Lu W 2023 
+
+Physical Review Letters 131 106702 [27] Yao B, Gui Y, Rao J, Zhang Y, Lu W and Hu C M 2023 
+
+Physical Review Letters 130 146702 [28] Wang Z Q, Wang Z Y, Wang Y P and You J 2025 Physical Review Letters 135 186704 [29] Zhang C, Kim M, Zhang Y H, Wang Y P, Trivedi D, Krasnok A, Wang J, Isleifson D, Roshko R and Hu C M 2025 APL Quantum 2
+
+[30] Wang W, L¨ uu X and Xie H 2021 Chinese Physics B 30 
+
+066701 [31] Xu J, Zhong C, Han X, Jin D, Jiang L and Zhang X 2020 
+
+Physical Review Letters 125 237201 [32] Oka T and Kitamura S 2019 Annual Review of Condensed Matter Physics 10 387–408 [33] Jiang M, Qin Y, Wang X, Wang Y, Su H, Peng X and Budker D 2022 Physical Review Letters 128 233201 [34] Yang Y, Xiao Y and Hu C M 2023 Physical Review B 
+
+107 054413 [35] Mi X, Yan L, Yao B, Yan S, Rao J and Bai L 2025 Chinese Physics B 34 067508 [36] Bai L, Harder M, Chen Y, Fan X, Xiao J and Hu C M 2015 Physical Review Letters 114 227201 [37] Zhang X, Zou C L, Jiang L and Tang H X 2014 Phys. Rev. Lett. 113 (15) 156401 URL https://link.aps.org/ doi/10.1103/PhysRevLett.113.156401 
+
+[38] Wang X, Mi X, Yang F, Wang Q, Bai L, Tian Y, Rao J and Yan S 2025 Advanced Functional Materials 2500782 [39] Yan L, Mi X, Shi Y, Chen Y, Zhao Y, Rao J and Bai L 2026 npj Quantum Materials 
+
+[40] Crescini N, Carugno G and Ruoso G 2021 Physical Re-view Applied 16 034036
