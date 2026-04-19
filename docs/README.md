@@ -6,32 +6,31 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-18
-- 运行时间：2026-04-18 19:59:59 UTC
+- 最新运行日期：2026-04-19
+- 运行时间：2026-04-19 20:09:52 UTC
 - 运行状态：成功
 - 本次总论文数：3
 - 精读区：0
 - 速读区：3
 
 ### 今日简报（AI）
-今日追踪量子精密测量与信号处理前沿，重点探讨金刚石量子成像及弱磁感测技术。
-推荐关注利用金刚石传感器观测超导涡旋重排的宽场成像研究，以及 Floquet 驱动在增强磁感测性能中的应用。
-建议深入了解量子传感在材料物理中的实测表现，并关注鲁棒自适应波束成形的算法优化。
-- 详情：[/202604/18/README](/202604/18/README)
+今日聚焦大型天线阵列仿真、电力系统实时状态估计及材料测量灵敏度提升的最新算法。
+推荐关注针对大规模反射面阵列的
+- 详情：[/202604/19/README](/202604/19/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Wide-field magnetic imaging of shielding-current-driven vortex rearrangement under local heating using diamond quantum sensors](/202604/18/2604.14578v1-wide-field-magnetic-imaging-of-shielding-current-driven-vortex-rearrangement-under-local-heating-using-diamond-quantum-sensors)  
-   标签：评分：7.0/10、query:tmr
-   evidence：使用量子传感器集成进行杂散磁场的宽场磁成像
-2. [Optimal Robust Adaptive Beamforming for a General-Rank Signal Model via Equivalence of Maximin and Minimax SINR Problems](/202604/18/2604.14713v1-optimal-robust-adaptive-beamforming-for-a-general-rank-signal-model-via-equivalence-of-maximin-and-minimax-sinr-problems)  
+1. [A Fast Direct Solver for Mutual Coupling Analysis of Large Arrays of Reflector Antennas](/202604/19/2604.10239v1-a-fast-direct-solver-for-mutual-coupling-analysis-of-large-arrays-of-reflector-antennas)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于传感器阵列干扰抑制的鲁棒自适应波束成形技术
-3. [Weak Magnetic Sensing via Floquet Driving in an Active Cavity Magnon Coupled System](/202604/18/2604.14780v1-weak-magnetic-sensing-via-floquet-driving-in-an-active-cavity-magnon-coupled-system)  
+   evidence：大型阵列中的互耦合分析
+2. [Vectorized Gaussian Belief Propagation for Near Real-Time Fully-Distributed PMU-Based State Estimation](/202604/19/2604.12067v1-vectorized-gaussian-belief-propagation-for-near-real-time-fully-distributed-pmu-based-state-estimation)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用有源微波腔和YIG进行弱磁场传感
+   evidence：利用测量单元进行电力系统分布式状态估计
+3. [Sensitivity Improvement by Sample Vibration Excitation in Resistivity Measurement for Non-Magnetic Material Using MFM](/202604/19/2604.14730v1-sensitivity-improvement-by-sample-vibration-excitation-in-resistivity-measurement-for-non-magnetic-material-using-mfm)  
+   标签：评分：6.0/10、query:tmr
+   evidence：检测涡流产生的磁场以进行电阻率测量
 
 
 <div class="dpr-home-promo-card">

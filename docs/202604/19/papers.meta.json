@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-19",
+  "date": "2026-04-19",
+  "generated_at": "2026-04-19T20:10:01",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/19/2604.10239v1-a-fast-direct-solver-for-mutual-coupling-analysis-of-large-arrays-of-reflector-antennas",
+      "section": "quick",
+      "title_en": "A Fast Direct Solver for Mutual Coupling Analysis of Large Arrays of Reflector Antennas",
+      "authors": "Quentin Gueuning, Eloy de Lera Acedo, Anthony Keith Brown, Nicolas Fagnoni",
+      "date": "2026-04-11",
+      "pdf": "https://arxiv.org/pdf/2604.10239v1",
+      "score": "6.0",
+      "evidence": "大型阵列中的互耦合分析",
+      "tldr": "针对密集反射面天线阵列中互耦效应导致的模拟计算难题，本文提出一种基于矩量法（MoM）和快速直接求解器（FDS）的框架。该方法利用天线旋转对称性压缩自阻抗矩阵，并结合宽带多极子分解处理互耦。通过引入宏基函数（MBF）方案，成功实现了对包含320个单元的HERA射电望远镜核心阵列的嵌入式单元方向图（EEP）的高效仿真，显著提升了大型阵列的全波分析效率。",
+      "tags": "query:tmr",
+      "abstract_en": "Mutual coupling is a dominant systematic effect in dense reflector arrays, imprinting direction-dependent and frequency-dependent structure on embedded element patterns (EEPs) and currently limiting sensitivity in precision radio measurements. Accurate modelling of these effects requires full-wave simulations of structures that are electrically large at both the array and element levels, making conventional approaches computationally prohibitive. We present a Method-of-Moments (MoM) framework accelerated by a fast direct solver (FDS). The rotational symmetry of reflector dishes is exploited to efficiently compress self-interaction blocks of the impedance matrix. Mutual interactions are treated using a broadband multipole decomposition that remains efficient and accurate for closely spaced elements. We demonstrate the method on arrays of tens of reflectors from the Hydrogen Epoch of Reionization Array (HERA) telescope. To scale to larger arrays, the FDS is used to construct macro-basis functions (MBFs) from a smaller representative array and embed them within a conventional MBF scheme. This allows the first computation of EEPs for the 320-element HERA core on a 128-core workstation.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/19/2604.12067v1-vectorized-gaussian-belief-propagation-for-near-real-time-fully-distributed-pmu-based-state-estimation",
+      "section": "quick",
+      "title_en": "Vectorized Gaussian Belief Propagation for Near Real-Time Fully-Distributed PMU-Based State Estimation",
+      "authors": "Mirsad Cosovic, Armin Teskeredzic, Antonello Monti, Dejan Vukobratovic",
+      "date": "2026-04-13",
+      "pdf": "https://arxiv.org/pdf/2604.12067v1",
+      "score": "6.0",
+      "evidence": "利用测量单元进行电力系统分布式状态估计",
+      "tldr": "针对电力系统日益复杂的运行环境，本文提出了一种基于向量化高斯置信传播（GBP）的PMU状态估计框架。该框架通过因子图建模，包含多元和融合两种形式，旨在实现全分布式、近实时的监控。该方法在总线级别运行，能显著降低计算复杂度并提高收敛速度，在万级节点的大规模系统测试中表现出极高的精度和效率，为电网安全运行提供了有力支持。",
+      "tags": "query:tmr",
+      "abstract_en": "Electric power systems require accurate, scalable, distributed, and near real-time state estimation (SE) to support reliable monitoring and control under increasingly complex operating conditions. Limited monitoring capabilities can lead to inefficient operation and, in extreme cases, large-scale disturbances such as blackouts. To address these challenges, this paper proposes a vectorized Gaussian belief propagation (GBP) framework for phasor measurement unit-based SE, formulated over factor graphs and specifically designed to support distributed and near real-time monitoring. The proposed framework includes multivariate and fusion-based GBP formulations. The multivariate formulation jointly models related state variables and their measurement relationships, while the fusion-based formulation reduces factor graph complexity by combining multiple measurements associated with the same set of variables, resulting in a structure that more closely reflects the underlying electrical coupling of the power system. The resulting algorithms operate in a fully distributed manner at the bus level and achieve fast convergence and high estimation accuracy, often within a single iteration, as demonstrated by numerical results on systems with 1354 and 13659 buses.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/19/2604.14730v1-sensitivity-improvement-by-sample-vibration-excitation-in-resistivity-measurement-for-non-magnetic-material-using-mfm",
+      "section": "quick",
+      "title_en": "Sensitivity Improvement by Sample Vibration Excitation in Resistivity Measurement for Non-Magnetic Material Using MFM",
+      "authors": "Kazuma Okamoto, Takumi Imura, Naruto Nakamura, Satoshi Abo, Katsuhisa Murakami, Masayoshi Nagao, Fujio Wakaya",
+      "date": "2026-04-16",
+      "pdf": "https://arxiv.org/pdf/2604.14730v1",
+      "score": "6.0",
+      "evidence": "检测涡流产生的磁场以进行电阻率测量",
+      "tldr": "本研究提出了一种通过引入样品振动激励来提高磁力显微镜（MFM）测量非磁性材料电阻率灵敏度的新方法。传统MFM通过探测探针振荡感应出的涡流磁场来测量电阻率，而该方法通过增加探针与样品间的相对速度，显著增强了涡流强度。理论分析与实验验证一致表明，该策略能有效增大相位偏移，从而实现高灵敏度的电阻率测量。",
+      "tags": "query:tmr",
+      "abstract_en": "A novel approach for measuring the electrical resistivity of non-magnetic materials using magnetic force microscopy (MFM) is discussed. In this method, MFM detects magnetic fields generated by eddy currents induced by the oscillation of a magnetized probe tip. To enhance measurement sensitivity, it is essential to increase the magnitude of these eddy currents. It is discussed that introducing controlled sample vibration amplifies eddy current generation by increasing the relative velocity between the probe tip and the sample surface. Theoretical analysis predicts increase of the phase shift by sample vibration, and experimental validation using a modified MFM system confirms the improvement in sensitivity. The calculated and experimental results exhibit relatively good agreement, establishing that sample vibration excitation is an effective strategy for high-sensitivity resistivity measurements.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

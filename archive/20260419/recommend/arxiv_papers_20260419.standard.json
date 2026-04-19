@@ -1,0 +1,133 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-19T20:09:35.765456+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.10239v1",
+      "title": "A Fast Direct Solver for Mutual Coupling Analysis of Large Arrays of Reflector Antennas",
+      "abstract": "Mutual coupling is a dominant systematic effect in dense reflector arrays, imprinting direction-dependent and frequency-dependent structure on embedded element patterns (EEPs) and currently limiting sensitivity in precision radio measurements. Accurate modelling of these effects requires full-wave simulations of structures that are electrically large at both the array and element levels, making conventional approaches computationally prohibitive. We present a Method-of-Moments (MoM) framework accelerated by a fast direct solver (FDS). The rotational symmetry of reflector dishes is exploited to efficiently compress self-interaction blocks of the impedance matrix. Mutual interactions are treated using a broadband multipole decomposition that remains efficient and accurate for closely spaced elements. We demonstrate the method on arrays of tens of reflectors from the Hydrogen Epoch of Reionization Array (HERA) telescope. To scale to larger arrays, the FDS is used to construct macro-basis functions (MBFs) from a smaller representative array and embed them within a conventional MBF scheme. This allows the first computation of EEPs for the 320-element HERA core on a 128-core workstation.",
+      "authors": [
+        "Quentin Gueuning",
+        "Eloy de Lera Acedo",
+        "Anthony Keith Brown",
+        "Nicolas Fagnoni"
+      ],
+      "primary_category": "astro-ph.IM",
+      "categories": [
+        "astro-ph.IM",
+        "eess.SP"
+      ],
+      "published": "2026-04-11T14:44:19+00:00",
+      "link": "https://arxiv.org/pdf/2604.10239v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "mutual coupling analysis in large arrays",
+      "llm_evidence_cn": "大型阵列中的互耦合分析",
+      "llm_evidence": "大型阵列中的互耦合分析",
+      "canonical_evidence": "大型阵列中的互耦合分析",
+      "llm_tldr_en": "Analyzes mutual coupling in large arrays, a critical factor in the design and optimization of sensor arrays.",
+      "llm_tldr_cn": "分析了大型阵列中的互耦合，这是传感器阵列设计和优化的关键因素。",
+      "llm_tldr": "分析了大型阵列中的互耦合，这是传感器阵列设计和优化的关键因素。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.12067v1",
+      "title": "Vectorized Gaussian Belief Propagation for Near Real-Time Fully-Distributed PMU-Based State Estimation",
+      "abstract": "Electric power systems require accurate, scalable, distributed, and near real-time state estimation (SE) to support reliable monitoring and control under increasingly complex operating conditions. Limited monitoring capabilities can lead to inefficient operation and, in extreme cases, large-scale disturbances such as blackouts. To address these challenges, this paper proposes a vectorized Gaussian belief propagation (GBP) framework for phasor measurement unit-based SE, formulated over factor graphs and specifically designed to support distributed and near real-time monitoring. The proposed framework includes multivariate and fusion-based GBP formulations. The multivariate formulation jointly models related state variables and their measurement relationships, while the fusion-based formulation reduces factor graph complexity by combining multiple measurements associated with the same set of variables, resulting in a structure that more closely reflects the underlying electrical coupling of the power system. The resulting algorithms operate in a fully distributed manner at the bus level and achieve fast convergence and high estimation accuracy, often within a single iteration, as demonstrated by numerical results on systems with 1354 and 13659 buses.",
+      "authors": [
+        "Mirsad Cosovic",
+        "Armin Teskeredzic",
+        "Antonello Monti",
+        "Dejan Vukobratovic"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "eess.SY"
+      ],
+      "published": "2026-04-13T21:11:31+00:00",
+      "link": "https://arxiv.org/pdf/2604.12067v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "distributed state estimation for power systems using measurement units",
+      "llm_evidence_cn": "利用测量单元进行电力系统分布式状态估计",
+      "llm_evidence": "利用测量单元进行电力系统分布式状态估计",
+      "canonical_evidence": "利用测量单元进行电力系统分布式状态估计",
+      "llm_tldr_en": "Presents a Gaussian belief propagation framework for real-time state estimation in power grids.",
+      "llm_tldr_cn": "提出了一种用于电网实时状态估计的高斯置信传播框架。",
+      "llm_tldr": "提出了一种用于电网实时状态估计的高斯置信传播框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.14730v1",
+      "title": "Sensitivity Improvement by Sample Vibration Excitation in Resistivity Measurement for Non-Magnetic Material Using MFM",
+      "abstract": "A novel approach for measuring the electrical resistivity of non-magnetic materials using magnetic force microscopy (MFM) is discussed. In this method, MFM detects magnetic fields generated by eddy currents induced by the oscillation of a magnetized probe tip. To enhance measurement sensitivity, it is essential to increase the magnitude of these eddy currents. It is discussed that introducing controlled sample vibration amplifies eddy current generation by increasing the relative velocity between the probe tip and the sample surface. Theoretical analysis predicts increase of the phase shift by sample vibration, and experimental validation using a modified MFM system confirms the improvement in sensitivity. The calculated and experimental results exhibit relatively good agreement, establishing that sample vibration excitation is an effective strategy for high-sensitivity resistivity measurements.",
+      "authors": [
+        "Kazuma Okamoto",
+        "Takumi Imura",
+        "Naruto Nakamura",
+        "Satoshi Abo",
+        "Katsuhisa Murakami",
+        "Masayoshi Nagao",
+        "Fujio Wakaya"
+      ],
+      "primary_category": "physics.app-ph",
+      "categories": [
+        "physics.app-ph"
+      ],
+      "published": "2026-04-16T07:42:27+00:00",
+      "link": "https://arxiv.org/pdf/2604.14730v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "detects magnetic fields generated by eddy currents for resistivity measurement",
+      "llm_evidence_cn": "检测涡流产生的磁场以进行电阻率测量",
+      "llm_evidence": "检测涡流产生的磁场以进行电阻率测量",
+      "canonical_evidence": "检测涡流产生的磁场以进行电阻率测量",
+      "llm_tldr_en": "Enhances sensitivity in resistivity measurement by detecting magnetic fields from induced eddy currents.",
+      "llm_tldr_cn": "通过检测感应涡流产生的磁场来提高电阻率测量的灵敏度。",
+      "llm_tldr": "通过检测感应涡流产生的磁场来提高电阻率测量的灵敏度。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
