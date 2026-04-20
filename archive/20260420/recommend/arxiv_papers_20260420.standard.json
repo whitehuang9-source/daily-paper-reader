@@ -1,0 +1,138 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-20T20:41:00.300974+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 3,
+    "quick_skim_target": 11,
+    "quick_selected": 3
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.12420v1",
+      "title": "HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming",
+      "abstract": "Write-and-verify (WV) is essential for programming multi-level RRAM weights, yet under scaled-voltage and low-SNR conditions the verify read increasingly limits mapping accuracy, convergence speed and energy. We propose a Hadamard-domain WV framework that improves verify reliability without adding analog hardware. % without introducing additional analog blocks % while leveraging the existing analog front-end \\emph{HD-PV} (Hadamard-Encoded Parallel-Verify) replaces conventional one-hot verify reads with $N$ orthogonal Hadamard patterns for an $N$-cell column. Changing the read basis without increasing the column-level read count, inverse Hadamard decoding reduces uncorrelated read-noise variance by a factor of $N$ and cancels common-mode disturbances. \\emph{HARP} (Hadamard-based ADC-Energy-Reduced Parallel-Verify) further exploits the fact that WV needs only ternary update decisions, not full digital codes, and replaces SAR conversions with lightweight compare-only operations. Across CIFAR-10, CIFAR-100, and keyword spotting under severe read noise, conventional WV loses over 20\\,\\% accuracy on CIFAR-10, while HD-PV and HARP limit the loss to 0.6\\,\\% and 1\\,\\% under the same memory footprint. Compared to conventional multi-read averaging for noise reduction, HD-PV and HARP achieve comparable accuracy with up to $6.1\\times$ and $3.5\\times$ lower latency and $6.2\\times$ and $9.5\\times$ better energy efficiency, respectively. To the best of our knowledge, this is the first application of Hadamard-encoded verification to RRAM WV.",
+      "authors": [
+        "Ilhuan Choi",
+        "Jiwon Yoo",
+        "Yoona Lee",
+        "Yewon Jeong",
+        "Jason Jaesung Lee",
+        "Woo-Seok Choi"
+      ],
+      "primary_category": "cs.AR",
+      "categories": [
+        "cs.AR"
+      ],
+      "published": "2026-04-14T08:11:15+00:00",
+      "link": "https://arxiv.org/pdf/2604.12420v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "cancels common-mode disturbances and reduces read-noise",
+      "llm_evidence_cn": "消除共模干扰并降低读取噪声",
+      "llm_evidence": "消除共模干扰并降低读取噪声",
+      "canonical_evidence": "消除共模干扰并降低读取噪声",
+      "llm_tldr_en": "Introduces a Hadamard-domain framework to suppress noise and disturbances in multi-cell sensor-like arrays.",
+      "llm_tldr_cn": "引入Hadamard域框架，以抑制多单元类传感器阵列中的噪声和干扰。",
+      "llm_tldr": "引入Hadamard域框架，以抑制多单元类传感器阵列中的噪声和干扰。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.15615v1",
+      "title": "Discovery of unobservable parameters via physical embedding",
+      "abstract": "Recovering a source signal from indirect measurements often requires estimating latent parameters, such as wireless channel states or MRI coil sensitivities, that cannot be directly observed. Here, we introduce Physics-Embedded Inverse Learning (PEIL), in which a learned estimator predicts these parameters and a fixed, physics-based inverse operator uses them to reconstruct the signal, so that training requires only the source signal as supervision. In systems where multiple parameter combinations can reconstruct the signal equally well, the estimator exploits this freedom to coordinate parameters that compensate for residual modelling errors rather than match ground-truth parameters. In high-mobility wireless communications, PEIL discovers task-optimal configurations that outperform baselines given access to ground-truth parameters, enabling zero-shot generalisation and over 20-fold reduction in training data relative to supervised baselines. To test whether these properties extend across physical domains, we apply PEIL to parallel MRI, where it discovers physically interpretable coil sensitivity maps without calibration scans, yielding reconstructions grounded purely in acquired measurements. These results demonstrate that non-identifiability, conventionally a liability, becomes a resource when the learning objective targets reconstruction quality rather than parameter accuracy.",
+      "authors": [
+        "Le Cheng",
+        "Xiaoran Liu",
+        "Lingjin Kong",
+        "Haitao Zhao",
+        "Jun Xiong",
+        "Fanglin Gu",
+        "Xiaoying Zhang",
+        "Baoquan Ren",
+        "Jibo Wei",
+        "Hao Yin"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-17T01:43:48+00:00",
+      "link": "https://arxiv.org/pdf/2604.15615v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "physics-based inverse operator for signal reconstruction",
+      "llm_evidence_cn": "基于物理的逆算子用于信号重建",
+      "llm_evidence": "基于物理的逆算子用于信号重建",
+      "canonical_evidence": "基于物理的逆算子用于信号重建",
+      "llm_tldr_en": "Introduces a physics-embedded learning framework for reconstructing source signals from indirect measurements.",
+      "llm_tldr_cn": "引入了一种物理嵌入式学习框架，用于从间接测量中重建源信号。",
+      "llm_tldr": "引入了一种物理嵌入式学习框架，用于从间接测量中重建源信号。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.15793v1",
+      "title": "Persistence of large and gate-tunable anisotropic magnetoresistance in an atomically thin antiferromagnet",
+      "abstract": "Anisotropic magnetoresistance (AMR) offers a robust electrical readout of antiferromagnetic (AFM) states, playing a central role in the rapidly advancing field of AFM spintronics. Despite its great versatility, electrical probing of the Néel vector via AMR remains challenging in the ultrathin limit due to interface disorder and reduced dimensionality. Here, we demonstrate electrical readout of the Néel vector down to 1.3 nm (two layers) in the two-dimensional van der Waals (vdW) AFM semiconductor NiPS3. Leveraging spin-flop-mediated rotation of the Néel vector and using both transistor and tunnel-junction device geometries, we identify two distinct AMR contributions in NiPS3, that dominate at low and high charge densities, respectively. We achieve full gate control over these contributions, enabling tunability of both the magnitude and sign of magnetoresistance. Our results establish semiconducting vdW antiferromagnets as a rich platform for studying AMR in the ultrathin limit, opening new avenues for multifunctional AFM spintronic devices.",
+      "authors": [
+        "Cheol-Yeon Cheon",
+        "Kenji Watanabe",
+        "Takashi Taniguchi",
+        "Alberto F. Morpurgo",
+        "Dmitry Lebedev"
+      ],
+      "primary_category": "cond-mat.mes-hall",
+      "categories": [
+        "cond-mat.mes-hall",
+        "cond-mat.mtrl-sci"
+      ],
+      "published": "2026-04-17T07:55:28+00:00",
+      "link": "https://arxiv.org/pdf/2604.15793v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "anisotropic magnetoresistance for electrical readout of magnetic states",
+      "llm_evidence_cn": "各向异性磁电阻用于磁态的电学读取",
+      "llm_evidence": "各向异性磁电阻用于磁态的电学读取",
+      "canonical_evidence": "各向异性磁电阻用于磁态的电学读取",
+      "llm_tldr_en": "Demonstrates electrical readout of antiferromagnetic states using anisotropic magnetoresistance in thin films.",
+      "llm_tldr_cn": "演示了利用薄膜中的各向异性磁电阻对反铁磁态进行电学读取。",
+      "llm_tldr": "演示了利用薄膜中的各向异性磁电阻对反铁磁态进行电学读取。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "non contact current measurement using TMR magnetic sensor arrays",
+      "matched_requirement_id": "req-4",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

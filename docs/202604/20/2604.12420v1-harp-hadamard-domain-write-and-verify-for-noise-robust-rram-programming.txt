@@ -1,0 +1,372 @@
+Title: HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming
+
+URL Source: https://arxiv.org/pdf/2604.12420v1
+
+Published Time: Wed, 15 Apr 2026 01:11:44 GMT
+
+Number of Pages: 9
+
+Markdown Content:
+# HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming 
+
+# Ilhuan Choi, Jiwon Yoo, Yoona Lee, Yewon Jeong, Jason Jaesung Lee, and Woo-Seok Choi 
+
+Dept. of Electrical and Computer Engineering, ISRC, Seoul National University Seoul, South Korea {idisian,wooseokchoi}@snu.ac.kr 
+
+## Abstract 
+
+Write-and-verify (WV) is essential for programming multi-level RRAM weights, yet under scaled-voltage and low-SNR conditions the verify read increasingly limits mapping accuracy, convergence speed and energy. We propose a Hadamard-domain WV framework that improves verify reliability without adding analog hardware. 
+
+HD-PV (Hadamard-Encoded Parallel-Verify) replaces conventional one-hot verify reads with 𝑁 orthogonal Hadamard patterns for an 𝑁 -cell column. Changing the read basis without increasing the column-level read count, inverse Hadamard decoding reduces un-correlated read-noise variance by a factor of 𝑁 and cancels common-mode disturbances. HARP (Hadamard-based ADC-Energy-Reduced Parallel-Verify) further exploits the fact that WV needs only ternary update decisions, not full digital codes, and replaces SAR conver-sions with lightweight compare-only operations. Across CIFAR-10, CIFAR-100, and keyword spotting under severe read noise, conven-tional WV loses over 20 % accuracy on CIFAR-10, while HD-PV and HARP limit the loss to 0.6 % and 1 % under the same memory footprint. Compared to conventional multi-read averaging for noise reduction, HD-PV and HARP achieve comparable accuracy with up to 6.1× and 3.5× lower latency and 6.2× and 9.5× better energy efficiency, respectively. To the best of our knowledge, this is the first application of Hadamard-encoded verification to RRAM WV. 
+
+## 1 Introduction 
+
+Compute-in-Memory (CiM) architectures alleviate the data move-ment bottleneck between memory and processing units in von Neu-mann systems and offer significant energy and throughput benefits for edge-AI workloads [ 8, 11 , 20 ]. Among embedded non-volatile memories (eNVMs), resistive random-access memory (RRAM) en-ables multi-level conductance storage, high density, and strong CMOS compatibility, making it well suited for analog CiM (ACiM) accelerators [2, 12, 23, 26]. For edge-AI, RRAM cells are required to be reprogrammed across different DNN models or inference workloads, and limited device endurance imposes a strict upper bound on allowable write cycles [ 6,12 , 16 ]. Furthermore, as DNN models scale, the number of synaptic weights increases dramatically, demanding larger RRAM arrays and more frequent weight-programming operations. Reliable inference therefore depends on fast and accurate conductance updates .Achieving such updates requires an iterative write-and-verify (WV) process. Two factors make WV increasingly difficult as tech-nology scales. First, RRAM programming is nonlinear, asymmetric, and stochastic because of device mismatch and cycle-to-cycle varia-tion [ 2, 7, 27 ]. Second, scaling shrinks sensing margins and increases the influence of thermal and mismatch-induced noise in column analog-to-digital converters (ADCs) [ 15 , 22 , 24 ]. As a result, the bottleneck of WV shifts from the write pulse to the verify read: noisy readbacks trigger incorrect update decisions, wasting itera-tions and degrading final mapping quality. Viewed as a sequential estimation-and-decision problem, each WV iteration estimates the current cell state from a noisy observation and decides whether to pulse up, down, or stop—and under scaled conditions, the quality of that estimate, not the write pulse, limits convergence. RRAM-based ACiM systems have widely employed iterative WV schemes that repeatedly program and verify each cell conductance until it matches the target value [ 4, 6, 10 , 12 , 16 , 23 , 26 –28 ]. While ef-fective, this iterative process inevitably incurs considerable latency and energy penalties, motivating extensive research to make WV more efficient. Prior studies reduce iteration count using MSB-first programming [ 4 , 6 ], probabilistic termination [ 16 ], or coarse-to-fine programming strategies [ 27 , 28 ]. However, most prior works do not fully capture the circuit-level behavior of the ADC, even though it dominates actual hardware latency and energy—up to 87.8 % in [26] and 63.4 % in [15]. Moreover, limited signal-to-noise ratio (SNR) under scaled supply voltages further constrains accu-rate WV, motivating approaches that improve verify-read quality without proportionally increasing ADC cost. This work addresses this directly. We start from a simple but powerful insight: in column-wise verification, recovering the states of an 𝑁 -cell column already requires 𝑁 read patterns. Conventional schemes use 𝑁 one-hot patterns, i.e., an identity read matrix. From an estimation-theoretic perspective, this is a valid but suboptimal choice. Replacing the identity basis with the 𝑁 rows of a Hadamard matrix yields the best linear unbiased estimator for the cell states under i.i.d. read noise: after inverse Hadamard decoding, the vari-ance of the uncorrelated noise component is reduced by a factor of 𝑁 without any increase in column-level read count. Moreover, because all but the first Hadamard row are balanced, common-mode disturbances are completely canceled for 𝑁 − 1 out of 𝑁 cells. Building on this idea, we further note that WV does not always require a full digital code: it mainly needs to know whether a cell conductance should move up, move down, or stop. HARP therefore performs Hadamard-domain compare-only verification and elim-inates full SAR conversion from the WV process, reducing each Hadamard measurement to one or two comparisons instead of 𝑛 
+
+sequential bit decisions. The resulting framework improves programming fidelity at the circuit level and translates directly into system-level benefit. Be-cause all methods are evaluated under identical cell precision, slice count, and array dimensions, the reported gains result in higher inference accuracy at the same memory footprint. Conversely, the same programming margin can be traded for lower memory provi-sioning at a fixed accuracy target. 
+
+> arXiv:2604.12420v1 [cs.AR] 14 Apr 2026 Choi et al.
+
+Figure 1: Hierarchical organization of an ACiM chip. This work targets the highlighted CBA macro, where improving WV accuracy and efficiency can scale upward to the PE and tile levels. 
+
+Specifically, this paper makes the following contributions: (1) Hadamard-Encoded Parallel-Verify (HD-PV) : We in-troduce, to the best of our knowledge, the first Hadamard-encoded verification scheme for RRAM WV. For an 𝑁 -cell column, HD-PV replaces 𝑁 one-hot reads with 𝑁 Hadamard reads and reduces the effective variance of the uncorrelated read-noise component by 1/ 𝑁 after inverse decoding. Addi-tionally, common-mode disturbances are canceled for 𝑁 − 1
+
+of the 𝑁 decoded cells. No additional analog hardware is required and the number of column read patterns does not increase. We validate the analog feasibility through transistor-level simulation. (2) Hadamard-based ADC-Energy-Reduced Parallel-Verify (HARP) : We propose HARP, a Hadamard-based WV mode that preserves the denoising benefit of HD-PV while replac-ing full SAR conversions with lightweight compare-only decisions. This approach substantially reduces ADC latency and energy during verification by up to 3.5 × and 9.5 ×, re-spectively, compared to multi-read averaging. (3) Comprehensive cross-layer evaluation : Using device-and circuit-level modeling with system-level inference ex-periments on CIFAR-10, CIFAR-100, and keyword spotting (KWS), we show that the proposed methods improve map-ping accuracy and convergence, maintain high inference accuracy under the same memory footprint, and outper-form multi-read averaging in latency and energy. 
+
+## 2 Background and Motivation 2.1 RRAM-Based ACiM Macro and Write-Verify 
+
+RRAM is a non-volatile device whose conductance is tuned between a high-resistance state (HRS) and a low-resistance state (LRS) via 
+
+SET /RESET voltage pulses. Intermediate levels enable multi-level cell (MLC) operation. Fig. 1 shows the hierarchy of a typical RRAM-based ACiM chip. Each tile contains processing elements (PEs), and each PE integrates one or more RRAM crossbar-array (CBA) macros for parallel vector-matrix multiplication (VMM) [ 1 , 17 ]. The CBA macro includes DACs for input encoding, ADCs for current sensing, and shift-and-add logic for digital post-processing. This work targets the CBA macro 
+
+Figure 2: 1T-1R RRAM CBA used for ACiM. Signed weights are stored by adjacent positive and negative columns, and column currents implement VMM computation. 
+
+because macro-level WV improvement directly propagates to PE and tile-level efficiency. A one-transistor–one-resistor (1T–1R) RRAM CBA [ 3, 6 , 16 , 26 ,28 ] is illustrated in Fig. 2. Applying input vector x to the bitlines (BLs) produces column currents i = Gx , digitized by column ADCs for VMM. Because RRAM stores non-negative conductance only, signed weights use adjacent positive and negative columns with effective current 𝑖 eff = 𝑖 + − 𝑖 − [ 3, 6, 16 ]. Practical systems use bit-slicing [4 , 6, 16 , 21 ], where each weight is stored across multiple cells, and bit-serial input driving [ 3, 26 ]. With weight precision 𝐵 
+
+and 𝐵 𝐶 bits per cell, each weight is partitioned into 𝑘 = 𝐵 /𝐵 𝐶 slices with VMM output i = Í𝑘 𝑙 =1 2(𝑙 −1) · 𝐵 𝐶 i(𝑙 ) , where i(𝑙 ) = G(𝑙 ) x and 
+
+G(𝑙 ) is the conductance matrix of the 𝑙 -th slice. Because every slice must be programmed reliably, WV remains a fundamental primitive even when the inference is heavily parallelized. 
+
+## 2.2 Verify-Read Error in RRAM CBA 
+
+Accurate modeling of the verify-read error is essential for evaluating any WV improvement. We decompose the total verify error into three components. 
+
+Programming noise. RRAM programming exhibits nonlinear and asymmetric SET /RESET behavior (see Fig. 3), along with sto-chastic deviations due to device mismatch (D2D) and cycle-to-cycle variations (C2C) [ 2]. These effects are commonly modeled as Gauss-ian perturbations [7]: 
+
+𝑤 = clip  𝑤 ∗ + 𝑛 map , LRS , HRS  , 𝑛 map ∼ N ( 0, 𝜎 2
+
+> map
+
+), (1) where 𝑤 ∗ is the target, 𝑤 the actual programmed conductance, and 
+
+𝑛 map the stochastic mapping error. The standard deviation is often expressed in a normalized form as 𝜎 map /𝐺 max , where 𝐺 max denotes the maximum conductance corresponding to the LRS state [4, 10]. HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming 
+
+Figure 3: Nonlinear and asymmetric RRAM programming characteristics with (a) device mismatch and (b) cycle-to-cycle variation. Uncorrelated read noise. The dominant uncorrelated noise arises from the thermal noise of peripheral analog circuit (trans-impedance amplifier (TIA) and ADC). As ADC integration density and resolution increase, analog front-end noise becomes more sig-nificant, degrading read SNR. Prior measurement on MLC-RRAM arrays confirms that read noise critically limits the usable ADC resolution [ 19 ]. Since these sources are independent across cells and across read patterns, it can be modeled as 
+
+𝑛 uc ,𝑖 ∼ N ( 0, 𝜎 2
+
+> uc
+
+), i.i.d. for each measurement 𝑖. (2) 
+
+Common-mode read noise. During verification, all 𝑁 mea-surements of a given column share the same TIA and ADC. Any disturbance common to the analog front-end, e.g., TIA/ADC offset, reference voltage drift, or IR drop along the shared column path, appears as an additive offset that is constant across the 𝑁 read patterns within one verification sweep but varies independently across columns (which use separate TIAs and ADCs). We model this as a per-column random variable: 
+
+𝜇 cm ∼ N ( 0, 𝜎 2
+
+> cm
+
+), constant across measurements 𝑖 = 1, ..., 𝑁 . (3) The total observation for the 𝑖 -th read pattern in a column’s verification sweep is therefore: 
+
+ˆ𝑦 𝑖 = a⊺ 
+
+> 𝑖
+
+w + 𝑛 uc ,𝑖 + 𝜇 cm , (4) where a𝑖 is the 𝑖 -th row of the read matrix (identity row for con-ventional one-hot, Hadamard row for HD-PV), 𝑛 uc ,𝑖 is i.i.d. across measurements, and 𝜇 cm is shared across all 𝑁 measurements of that column. Published measurement data from fabricated ACiM macros indicate that uncorrelated TIA and ADC noise is the domi-nant source of verify-read error at scaled supply voltages. In the 40-nm MLC-RRAM macro of [ 15 ], the ADC front-end contributes the majority of the sensing uncertainty, with thermal noise from the TIA and comparator dominating at the sub-LSB level. Similarly, the 28-nm macro of [ 3] reports that thermal noise, rather than sys-tematic offset, limits multi-level cell discrimination. We define the common-mode noise fraction as 𝜌 = 𝜎 2
+
+> cm
+
+/( 𝜎 2 
+
+> uc
+
++ 𝜎 2
+
+> cm
+
+).
+
+## 2.3 Optimal Read Basis for WV 
+
+At each WV iteration 𝑡 , the verifier observes ˆ𝑦 𝑖 from (4) and must make a ternary decision 𝐷 𝑖 ∈ { SET , RESET , STOP }. Conventional element-wise (one-hot) verification uses the identity read matrix, providing a maximum-likelihood estimate from a single noisy ob-servation per cell. This is statistically inefficient: the 𝑁 observations used to read 𝑁 cells contain no redundancy. 
+
+Figure 4: Conventional element-wise (one-hot) verification and Hadamard-encoded verification. For an 𝑁 -cell column, both use 𝑁 read patterns; Hadamard decoding averages the uncorrelated noise across measurements. 
+
+A better approach chooses a read matrix A ∈ {− 1, +1}𝑁 ×𝑁 
+
+(matching the BL driving constraint) that minimizes the estimation error covariance Cov ( ˆx) = 𝜎 2 (A⊺ A)−1.
+
+Proposition 2.1. (Optimality of Hadamard Encoding) . Among all ±1 measurement matrices A ∈ {− 1, +1}𝑁 ×𝑁 , the per-cell estima-tion variance Var ( ˆ𝑥 𝑖 ) due to uncorrelated read noise is minimized when A⊺ A = 𝑁 I, yielding Var ( ˆ𝑥 𝑖 ) = 𝜎 2
+
+> uc
+
+/𝑁 for all 𝑖 . Any Hadamard matrix achieves this bound. The identity matrix yields Var ( ˆ𝑥 𝑖 ) = 𝜎 2
+
+> uc
+
+,which is 𝑁 × larger. 
+
+Proof. Each row of A has ±1 entries, so tr (A⊺ A) = 𝑁 2. Let 
+
+𝜆 1, . . . , 𝜆 𝑁 be the eigenvalues of A⊺ A. Since A⊺ A is positive definite for any invertible A, all 𝜆 𝑖 > 0. By the Cauchy-Schwarz inequality, 
+
+tr (( A⊺ A)−1) = Í𝑖 (1/𝜆 𝑖 ) ≥ 𝑁 2/Í𝑖 𝜆 𝑖 = 1, with equality iff all 
+
+𝜆 𝑖 = 𝑁 , i.e., A⊺ A = 𝑁 I, which is the property of a Hadamard matrix [5, 9, 14, 18]. □
+
+Fig. 4 compares the readout noise between conventional element-wise and Hadamard-encoded verification. The ±1 constraint is not artificial—it matches the physical BL driving constraint exactly in the existing macro (Section 3.2). Under Hadamard encoding, the column is measured as 
+
+ˆy = Hx + n, H⊺ H = 𝑁 I. (5) Inverse Hadamard decoding yields 
+
+ˆxH = 1
+
+𝑁 H⊺ ˆy = x + 1
+
+𝑁 H⊺ n, (6) with decoded noise variance 𝜎 2
+
+> uc
+
+/𝑁 —the optimal bound from Propo-sition 2.1. 
+
+Common-mode cancellation. In addition to uncorrelated noise reduction, Hadamard decoding cancels common-mode disturbances. Since 𝜇 cm is constant across all 𝑁 measurements, the 𝑗 -th decoded cell receives (1/𝑁 ) Í𝑖 𝐻 𝑗𝑖 𝜇 cm = (𝜇 cm /𝑁 ) Í𝑖 𝐻 𝑗𝑖 .For 𝑗 = 1 (all +1 row), Í𝑖 𝐻 𝑗𝑖 = 𝑁 , so the first cell sees the full offset 𝜇 cm . For 𝑗 ≥ 2, the balanced rows satisfy Í𝑖 𝐻 𝑗𝑖 = 0, so: 
+
+(1/𝑁 )H⊺ (𝜇 cm · 1) = 𝜇 cm · e1, (7) Choi et al. 
+
+where e1 is the first standard basis vector, and the remaining 𝑁 − 1
+
+cells are completely free of common-mode noise. Hadamard en-coding thus provides a dual benefit: (i) 1/𝑁 variance reduction for uncorrelated noise across all 𝑁 cells (Proposition 2.1), and (ii) complete cancellation of common-mode disturbances for 𝑁 − 1 out of 𝑁 cells. Conventional multi-read averaging [13, 19, 23] reduces uncorrelated noise (at 𝑀 × the read cost) but passes 𝜇 cm to every cell unchanged, since repeated reads of the same column share the same TIA/ADC and therefore the same 𝜇 cm realization. The important fairness point is that both conventional and Hadamard verification use 𝑁 read patterns—Hadamard encoding changes the read basis, not the column read count. Hadamard verification helps most when (i) uncorrelated noise is significant ( 1/𝑁 variance re-duction), (ii) common-mode disturbances are present (cancellation for 𝑁 − 1 cells), and (iii) the column length 𝑁 is large. All three conditions are increasingly satisfied as technology scales and array sizes grow. 
+
+## 3 HD-PV with Column-Wise Write-and-Verify 
+
+This section introduces: 1) a column-wise WV scheme for parallel cell updates, and 2) the first application of Hadamard encoding within the WV loop, enabled by reusing existing BL/SL drivers and SAR ADCs with no additional analog overhead. We summarize the notations and assumptions: 
+
+• Target, programmed, and read conductance vectors: w∗, w,
+
+ˆw per (1) and (4). 
+
+• TIA common-mode: 𝑉 cm = 12𝑉 DD (see Fig. 2). SL discon-nected from ADC during SET/RESET, and reconnected dur-ing verification in WV or inference. 
+
+• Initial writes from HRS (zero weight) use coarse SET pulses (higher voltage); fine updates use ≈0.25 LSB/step SET/RESET pulses [27, 28]. 
+
+## 3.1 Column-Wise Write-and-Verify Flow 
+
+We adopt a column-wise WV backend so that multiple cells are updated in parallel (see Fig. 5). Each verification sweep classifies every cell as SET, RESET, or STOP based on its deviation from the target using ADC (threshold: 0.5 LSB), i.e., RESET if 𝑤 𝑖 − 𝑤 ∗ 
+
+> 𝑖
+
+>
+
+0.5LSB , SET if 𝑤 𝑖 − 𝑤 ∗ 
+
+> 𝑖
+
+< −0.5LSB , and STOP otherwise. A streak counter freezes a cell only after 𝐾 consecutive within-threshold reads, preventing premature freezing from noisy observations. Fig. 5(a)-(b) shows the column-wise write operation. Once the re-quired pulse counts are determined, SET/RESET updates are applied simultaneously to all target cells by selecting the corresponding WL with 𝑉 sel and biasing the SL. During SET, BLs receive 𝑉 set pulses while SL is grounded; during RESET, BLs receive GND pulses while SL is biased at 𝑉 reset . Unlike sequential cell-by-cell programming, a single write operation updates multiple cells concurrently, pro-viding speedup, and the latency of a column update is determined by the most demanding cell in that phase. Fig. 5(d) illustrates the signed mapping sequence, where each weight is stored by a posi-tive/negative pair and one cell in the pair remains at HRS to encode zero. The update consists of four phases: SET/RESET to the positive column and SET/RESET to the negative column. Frozen cells skip the update. 
+
+Figure 5: Column-wise WV used by all methods: (a), (b) par-allel SET/RESET operations, (c) conventional decision flow, and (d) signed mapping sequence of a weight vector. The hatched cells indicate the cells updated at each step. 
+
+Figure 6: CBA architecture supporting Hadamard-encoded verification: (a) implementing {± 1} Hadamard entries via BL/SL driving during WV; (b) VMM with bit-serial input and signed weights during inference. 
+
+## 3.2 Hadamard-Encoding in RRAM CBA 
+
+HD-PV replaces the conventional one-hot verify reads with Hadamard-encoded sensing using existing macro hardware. 
+
+Bitline encoding. The Hadamard-encoding is performed through controlled BL/SL voltages as shown in Fig. 6(a). When the SL is held at 𝑉 cm = 12𝑉 DD by the TIA, BLs driven to 𝑉 DD encode +1, while BLs driven to GND encode −1. Cells under a +1 entry drive cur-rent from BL to SL, whereas cells under a −1 entry drive current from SL to BL. For the first Hadamard row (all +1), the net current drives the TIA output below 𝑉 cm , so 𝑉 in lies in [0, 𝑉 cm ], which is the same range used for inference. For the remaining Hadamard HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming 
+
+Figure 7: Operation of an 𝑛 -bit SAR ADC: (b) full conversion using SAR logic (requiring 𝑛 sequential comparisons), and (c) lightweight compare logic performing a simple magnitude check against the target (requiring one or two comparisons). 
+
+Figure 8: HD-PV and HARP algorithm. HD-PV reconstructs full-valued cell estimates, whereas HARP decodes ternary Hadamard-domain comparison before generating parallel cell updates. 
+
+rows (balanced +1/− 1), the net current can be either positive or negative, placing 𝑉 in within [ 12𝑉 cm , 32𝑉 cm ]. Since signed weights are stored using adjacent column pairs for positive and negative components, with one cell in each pair kept in HRS to represent zero, simultaneous selection and readout of both columns can be performed, as shown in Fig. 6(a). During bit-serial inference, input ’1’ drives 𝑉 DD to the BL and input ’0’ drives 𝑉 cm (see Fig. 6(b)). 
+
+ADC sampling reference. The same SAR ADC can accom-modate both the first-row and balanced-row ranges by switching the sampling reference as shown in Fig. 7(a). Setting 𝑉 sam = GND allows the ADC to naturally cover the first-row range ( [0, 𝑉 cm ]). Setting 𝑉 sam = 12𝑉 cm enables adjusting the input range around 𝑉 cm 
+
+([ 12𝑉 cm , 32𝑉 cm ]) for the balanced rows. By simply switching 𝑉 sam 
+
+between these two reference levels, the existing SAR ADC can ac-commodate the full dynamic range of Hadamard-encoded readout without increasing resolution or modifying the analog front-end, enabling efficient Hadamard-based verification on the same hard-ware used for inference. 
+
+Digital decoding. Inverse Hadamard decoding is implemented digitally. Since bit-sliced inference already includes shift-and-adder logic to combine partial sums, the periphery naturally provides par-allel adders that can accumulate the Hadamard measurements and reconstruct all 𝑁 decoded cell estimates. Measurements from suc-cessive Hadamard patterns are streamed into these adders, enabling all 𝑁 inverse Hadamard outputs to be reconstructed in parallel. The latency and energy overhead of this digital step is quantified in Section 5. 
+
+## 3.3 HD-PV Algorithm 
+
+The overall HD-PV flow is illustrated in Fig. 8. A column is read through 𝑁 Hadamard patterns to obtain ˆy, which is then decoded via inverse Hadamard transform using digital adders. The decoded estimate ˆw is compared with w∗, and SET/RESET/STOP decisions are generated in parallel for all cells. Column-wise writing is then applied as in Fig. 5. Each cell is frozen once its streak counter exceeds 𝐾 , and HD-PV terminates when all cells are frozen or the maximum iteration count is reached. Compared to conventional one-hot (single-cell) verify reads, HD-PV improves the quality of each verification sweep without increasing the number of column reads per sweep. 
+
+## 4 HARP for Reduced WV Energy 4.1 ADC Costs in HD-PV 
+
+HD-PV improves verify reliability, but it still performs a full-resolution SAR conversion for every Hadamard measurement. This is expen-sive: an 𝑛 -bit SAR ADC executes an 𝑛 -step binary search (see Fig. 7) and incurs 𝑛 -cycle latency and substantial switching energy in both the capacitor array and SAR logic. In practical ACiM macros, where WV must be repeated many times across many columns, this per-read cost dominates latency and energy. The key insight behind HARP is that WV is fundamentally a clas-sification problem, not an estimation problem. The verifier needs to assign each cell to one of three categories {SET, RESET, STOP}—it does not need the full digital code. If the Hadamard-domain mea-surement can be compared directly with the Hadamard-domain target, the verifier can make this classification with far less ADC work. 
+
+## 4.2 HARP with One-Shot Target Comparison 
+
+Fig. 7(c) illustrates a one-shot target-comparison mode that can be incorporated into standard SAR ADCs. In a standard SAR conver-sion, the ADC samples 𝑉 in − 𝑉 sam onto a binary-weighted capacitor array and resolves the output bit-by-bit. In the HARP mode, the Choi et al. 
+
+Table 1: Device and circuit parameters used in evaluation.             
+
+> Device Parameters
+> RRAM conductance 0–13 𝜇 SSET/RESET pulse 2 V / 100 ns 1 step per pulse (50 iterations total) Coarse SET pulse 4 V / 100 ns 5 steps per pulse (10 iterations total)
+> Circuit Parameters
+> Supply voltage 0.9 V Read pulse width 32 ns TIA + ADC latency 45–50 ns (SAR logic) / 30 ns (compare logic) TIA + ADC energy 1.44–2.7 pJ + 1.8–32 pJ Inverse Hadamard adder latency 5 ns Inverse Hadamard adder energy 0.8–1.0 pJ (HD-PV) / 0.2 pJ (HARP)
+
+ADC sets all capacitor-array switches to the target code in a single step and performs one comparison of the input voltage 𝑉 in against the target level. If necessary, the ADC performs one more compari-son against the adjacent code (target+1), yielding a ternary outcome: 
+
+Low , High , or Equal . This reduces each Hadamard measurement to one or two comparisons instead of 𝑛 sequential ones. This one-shot comparison is compatible with one-hot verification but not with multi-read averaging or HD-PV, which rely on high-resolution conversion results. For the 𝑖 -th Hadamard row H⊺ 
+
+> 𝑖
+
+, the noisy measurement is 
+
+ˆ𝑦 𝑖 = H⊺ 
+
+> 𝑖
+
+w + 𝑛 𝑖 , 𝑛 𝑖 ∼ N ( 0, 𝜎 2), (8) where w is the current weight vector, and 𝑛 𝑖 represents analog read noise. Instead of digitizing ˆ𝑦 𝑖 with an 𝑛 -step SAR sequence, HARP compares it directly against the ideal Hadamard-domain target 𝑦 ∗ 
+
+> 𝑖
+
+= H⊺ 
+
+> 𝑖
+
+w∗ and generates a ternary sign value: 
+
+𝑠 𝑦,𝑖 =
+
+(
+
+sign ( ˆ𝑦 𝑖 − 𝑦 ∗ 
+
+> 𝑖
+
+), | ˆ𝑦 𝑖 − 𝑦 ∗ 
+
+> 𝑖
+
+| > 0.5LSB ,
+
+0, otherwise. (9) The resulting Hadamard-domain sign vector sy = [𝑠 𝑦, 1, 𝑠 𝑦, 2, . . . , 𝑠 𝑦,𝑁 ]⊺
+
+is then decoded back to the cell domain by inverse Hadamard trans-form: 
+
+sw = H−1sy = 1 
+
+> 𝑁
+
+H⊺ sy, (10) where each element 𝑠 𝑤,𝑖 serves as an aggregated update indicator for the 𝑖 -th cell. A cell-domain threshold 𝜏 𝑤 determines the update direction: 
+
+𝐷 𝑖 =
+
+
+
+RESET , 𝑠 𝑤,𝑖 > 𝜏 𝑤 ,
+
+SET , 𝑠 𝑤,𝑖 < −𝜏 𝑤 ,
+
+STOP , |𝑠 𝑤,𝑖 | ≤ 𝜏 𝑤 .
+
+(11) These updates are executed in parallel using the column-wise write procedure (Fig. 5), and the same streak-based termination criterion from Section 3.1 is applied to ensure robust convergence. Compared with HD-PV, HARP offers two main advantages. First, replacing full SAR conversions with one-shot comparisons greatly reduces ADC energy, which dominates the WV cost. Second, ap-plying the inverse Hadamard transform on ternary sign data rather than multi-bit ADC outputs reduces digital switching activity and power. Overall, HARP preserves the SNR benefit of Hadamard encoding while delivering fast and more energy-efficient WV con-vergence. 
+
+Figure 9: Convergence comparison of CW-SC, HD-PV, and HARP under noisy verification. Hadamard-domain verifica-tion reduces both mapping error and iteration count. 
+
+## 5 Evaluation 
+
+Table 1 summarizes the device and circuit parameters. RRAM con-ductance characteristics and programming variation are based on the NeuroSim framework [ 2]. RRAM programming and readout conditions follow the measurement and modeling data from prior works [ 3 , 27 ]. Pulse amplitudes and widths are chosen within a typi-cal in-memory operating range for stable programming and reading. Inverse Hadamard decoding latency and energy are obtained from 28-nm synthesized adders. Unless otherwise stated, all methods use the same array size, cell precision, and column-wise write backend. The primary baseline is 
+
+column-wise single-cell (CW-SC) WV with one-shot comparison . This baseline uses one-hot read patterns with the same compare-only ADC mode available to HARP, thereby isolating the effect of the read basis from the ADC mode. Multi-read averaging uses full SAR conversion since multi-read averaging requires high-resolution digitized values to compute the average. For a verification sweep of an 𝑁 -cell column, CW-SC, HD-PV, and HARP all perform 𝑁 read patterns. Multi-read averaging with 
+
+𝑀 reads per cell requires 𝑀 × 𝑁 ADC conversions for the same column—a fundamentally higher cost. 
+
+## 5.1 WV Performance Comparison 
+
+The default setting for the convergence study is 𝐵 =6, 𝐵 𝐶 =3, 𝑁 =32 ,
+
+𝐾 =2, mapping noise 𝜎 map /𝐺 max = 0.10 , and read noise of 0.7 LSB. Update comparisons use a threshold of 0.5 LSB. Fig. 9(a) compares the convergence behavior of CW-SC, HD-PV, and HARP. HD-PV achieves the steepest early error reduction because the inverse Hadamard step suppresses read noise before the cell-domain decisions are made. HARP converges somewhat more slowly than HD-PV because it operates on ternary compari-son outcomes rather than full-valued readbacks, but it still clearly outperforms CW-SC. The final mapping results in Fig. 9(b) show the same trend quan-titatively. HD-PV reduces the RMS mapping error from 4.76 LSB (CW-SC) to 1.30 LSB (a 3.7 × reduction), while cutting the iteration HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming 
+
+Figure 10: Inference accuracy of CW-SC, HD-PV, and HARP on CIFAR-10, CIFAR-100, and KWS under two mapping noise levels ( 𝜎 𝑚𝑎𝑝 /𝐺 max = 0.10 and 0.05 ). All results use the same configurations: 𝐵 =6, 𝐵 𝐶 =3, 𝑁 =32 , 𝐾 =2 and a 9-bit ADC. 
+
+Figure 11: CIFAR-10/100 accuracy for a 64 ×64 array with 
+
+𝐵 =6, 𝐵 𝐶 =3, 𝑁 =64 , 𝐾 =2 and a 10-bit ADC. Hadamard-based verification remains robust even when the array and ADC resolution are scaled up. 
+
+count from 28.9 to 9.0 (a 3.2 × speedup). HARP reduces the RMS er-ror to 2.20 LSB and the iteration count to 18.9. The sensitivity study on 𝜏 𝑤 in HARP shows the expected trade-off: a large threshold freezes cells too early, whereas a small threshold slightly improves error but requires many more iterations. We use 𝜏 𝑤 = 4 for the remaining HARP experiments, which provides a practical balance between mapping accuracy and convergence speed. Fig. 9(c) shows the impact of common-mode noise. The total read noise power is fixed such that √︁ 𝜎 2 
+
+> uc
+
++ 𝜎 2 
+
+> cm
+
+= 0.7 LSB, while 
+
+𝜌 = 𝜎 2
+
+> cm
+
+/( 𝜎 2 
+
+> uc
+
++ 𝜎 2
+
+> cm
+
+) is swept from 0 (purely uncorrelated) to 0.5
+
+(equal correlated and uncorrelated power). Both HD-PV and HARP consistently achieve lower mapping error and fewer iterations than CW-SC across the entire range. Two mechanisms explain this: the uncorrelated component is reduced by 1/𝑁 , while the common-mode component 𝜇 cm is canceled for 𝑁 − 1 cells. As 𝜌 increases, the second mechanism becomes dominant. Multi-read averaging cannot cancel 𝜇 cm because repeated reads share the same TIA/ADC. 
+
+## 5.2 Inference Accuracy under Iso-Memory-Footprint 
+
+We evaluate system-level inference on three edge-AI workloads: CIFAR-10 with ResNet-20, CIFAR-100 with ResNet-56, and KWS 
+
+Figure 12: Accuracy, normalized latency, and normalized en-ergy under identical memory footprint with 𝜎 map /𝐺 max = 0.10 
+
+and read noise of 0.7 LSB with 𝐵 =6, 𝐵 𝐶 =3, 𝑁 =32 , 𝐾 =2 and a 9-bit ADC. HD-PV and HARP match the robustness of multi-read averaging with much lower ADC overhead. 
+
+with a 12-class 10-layer CNN on the Google Speech Commands Dataset. All evaluations use identical bit precision, slice count, and array configuration, so comparisons are iso-memory-footprint: any accuracy improvement comes from more reliable weight program-ming, not from additional memory. Fig. 10 shows the effect of read noise. CW-SC maintains accu-racy only up to 0.2 LSB noise for CIFAR-10/100 and 0.4 LSB for KWS, after which accuracy degrades rapidly—exceeding 20 % loss on CIFAR-10 at 𝜎 ≈ 0.8 LSB and even larger on CIFAR-100. HD-PV and HARP remain robust across the entire range, with less than 3 % degradation on all datasets. Scalability to larger 64 ×64 arrays (Fig. 11) confirms the same trend: the denoising benefit of Hadamard verification grows with column length (both the 1/𝑁 variance re-duction and 𝑁 − 1 common-mode-canceled cells scale favorably), so HD-PV and HARP maintain near-constant accuracy where CW-SC becomes highly vulnerable. Multi-read averaging [ 13 , 19 ] can par-tially recover accuracy (Fig. 12), but at substantial ADC overhead analyzed in Section 5.3. Choi et al. 
+
+Figure 13: WV latency and energy for CIFAR-10 (ResNet-20) versus read noise 𝜎 map /𝐺 max = 0.10 with 𝐵 =6 and 𝐵 𝐶 =3, 𝐾 =2.(a)–(b) for a 32 × 32 array with a 9-bit ADC, and (c)–(d) for a 64 × 64 array with a 10-bit ADC. HARP provides the best latency-energy trade-off under noisy verification. 
+
+## 5.3 Latency and Energy 
+
+Fig. 12 further highlights the efficiency advantage of the proposed methods over multi-read averaging. While 5-read averaging can re-cover the inference accuracy of CW-SC, HD-PV and HARP achieve substantially better efficiency. Compared with 5-read averaging, HD-PV and HARP are 6.1× and 3.5× faster, respectively, while improving energy efficiency by 6.2× and 9.5×. This improvement stems from the large ADC overhead incurred by multi-read averag-ing, which requires repeated full-resolution ADC conversions for each read operation. Fig. 13 reports per-column WV latency and energy for CIFAR-10 (ResNet-20). For the 32 ×32 array, CW-SC is competitive at very low noise ( ≤0.1 LSB) because it avoids Hadamard decoding, but its latency grows rapidly once noisy verify reads trigger incorrect up-date decisions and extra iterations. Above 0.4 LSB, CW-SC becomes the slowest method. HD-PV and HARP exhibit only modest latency growth (16 % and 17 % for the 32 ×32 array, and 9.7 % and 8.9 % for the 64 ×64 array) because they maintain stable decision quality as noise increases. Energy shows a different ordering. HD-PV incurs the highest per-read cost because every Hadamard measurement uses a full SAR conversion. HARP, by contrast, combines Hadamard denoising with compare-only ADC operation and consistently achieves the lowest energy in the high-noise regime. Under severe noise ( ≥0.5 LSB) HARP uses ≈65 % of HD-PV’s energy for the 32 ×32 array and ≈67 % of CW-SC’s energy for the 64 ×64 array. Across the evaluated configurations, ADC activity accounts for more than 70 % of WV latency and more than 90 % of WV en-ergy. This explains why reducing both misdirected iterations (via Hadamard denoising) and per-read ADC work (via compare-only mode) is crucial. 
+
+## 5.4 Comparison with Prior Works 
+
+Table 2 compares the proposed schemes against representative WV studies. The comparison highlights three levels of differentiation. 
+
+Table 2: Comparison with prior works.                                           
+
+> Metric ICCAD’20 [4] DAC’22 [16] DAC’24 [10] HD-PV HARP
+> Weight Precision 2–9 bit 8 bit 8 bit 4–6 bit MLC 1–3 bit 2 bit 2–4 bit 2–3 bit ADC Specification Yes (7–10 bit) No No Yes (8–10 bit) DNN Dataset CIFAR-10 MNIST CIFAR-10/100 CIFAR-10/100 COCO CIFAR-10/100 KWS Network Type LeNet-300/100 8-layer CNN ResNet-18/34 ResNet-50 YOLOv8x ResNet-20/56 10-layer CNN Accuracy Change <1% drop 0.23% gain 0.9% drop 1.08% gain 0.16% drop Energy Change 5–10 ×10.3 ×–6.2 ×9.5 ×
+> Latency Change –––6.1 ×3.5 ×
+> Array Dimension 32 ×32 ––32 ×32/64 ×64
+
+Optimization target. Prior works [ 4 , 10 , 16 , 25 , 28 ] focus on the write policy, and these methods optimize decision-making given a fixed observation quality. HD-PV and HARP instead optimize the observation itself—the verify read—by changing the measurement basis to the Hadamard basis. The two approaches are complemen-tary: better observations enable better decisions regardless of the pulse scheduling strategy. 
+
+Circuit-level cost modeling. Of the prior methods, only [ 4]specifies the ADC and evaluates at specific array dimensions. Refer-ences [ 10 , 16 , 25 , 28 ] do not model ADC latency or energy, making it difficult to assess the true WV overhead. HD-PV and HARP include explicit circuit-level modeling with practical ADC parameters. 
+
+ADC-aware verification. HARP is the only method that re-designs the ADC operating mode for WV. By recognizing that WV requires classification rather than full digitization, HARP avoids most SAR work—a unique contribution not addressed by any prior method. Unlike prior studies that estimate WV energy solely from iteration counts, our energy and latency results are obtained from circuit-level simulations with practical parameters. All improvements in Table 2 are normalized against the CW-SC WV baseline—already superior to conventional cell-by-cell WV— indicating that the actual gains of HD-PV and HARP over conven-tional WV are even larger than the ratios reported. 
+
+## 6 Conclusion 
+
+This work presented HD-PV and HARP, two circuit-aware WV schemes for RRAM-based ACiM that address the verify-read bottle-neck. The central insight is that conventional one-hot verification is a statistically suboptimal use of the 𝑁 read patterns already required for an 𝑁 -cell column: Hadamard encoding achieves the optimal estimator, reducing uncorrelated noise by 1/𝑁 and cancel-ing common-mode disturbances for 𝑁 − 1 cells, with no additional analog hardware. HARP further recognizes that WV is a classifica-tion problem rather than an estimation problem, and replaces full ADC conversion with lightweight compare-only decision. The pro-posed methods carry two practical implications for RRAM-based ACiM systems. First, under the iso-memory-footprint condition, HD-PV and HARP recover inference accuracy that would other-wise be lost to verify-read noise. Second, at a fixed accuracy target, the improved programming margin opens a path toward reduced bit-slice count or smaller arrays, potentially lowering area cost. The framework is transparent to the DNN model and training proce-dure, complementary to existing pulse-scheduling optimizations, and implementable within existing macro architectures—making it a practical and scalable addition to the RRAM ACiM design toolkit. HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming 
+
+## References 
+
+[1] Tanner Andrulis, Joel S Emer, and Vivienne Sze. 2023. Raella: Reforming the arithmetic for efficient, low-resolution, and low-loss analog pim: No retraining required!. In Proceedings of the 50th Annual International Symposium on Computer Architecture . 1–16. [2] Pai-Yu Chen, Xiaochen Peng, and Shimeng Yu. 2018. NeuroSim: A circuit-level macro model for benchmarking neuro-inspired architectures in online learning. 
+
+IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems 
+
+37, 12 (2018), 3067–3080. [3] Justin M Correll, Lu Jie, Seungheun Song, Seungjong Lee, Junkang Zhu, Wei Tang, Luke Wormald, Jack Erhardt, Nicolas Breil, Roger Quon, et al . 2025. An 8-bit 20.7 TOPS/W Multilevel Cell ReRAM Macro With ADC-Assisted Bit-Serial Processing. IEEE Journal of Solid-State Circuits (2025). [4] Sujan K Gonugondla, Ameya D Patil, and Naresh R Shanbhag. 2020. Swipe: En-hancing robustness of reram crossbars for in-memory computing. In Proceedings of the 39th International Conference on Computer-Aided Design . 1–9. [5] Martin Harwit. 2012. Hadamard transform optics . Elsevier. [6] Wangxin He, Jian Meng, Sujan Kumar Gonugondla, Shimeng Yu, Naresh R Shanbhag, and Jae-sun Seo. 2023. Prive: efficient RRAM programming with chip verification for RRAM-based in-memory computing acceleration. In 2023 Design, Automation & Test in Europe Conference & Exhibition (DATE) . IEEE, 1–6. [7] Zhezhi He, Jie Lin, Rickard Ewetz, Jiann-Shiun Yuan, and Deliang Fan. 2019. Noise injection adaption: End-to-end ReRAM crossbar non-ideal effect adaption for neural network mapping. In Proceedings of the 56th Annual Design Automation Conference 2019 . 1–6. [8] Mark Horowitz. 2014. 1.1 computing’s energy problem (and what we can do about it). In 2014 IEEE international solid-state circuits conference digest of technical papers (ISSCC) . IEEE, 10–14. [9] Harold Hotelling. 1944. Some improvements in weighing and other experimental techniques. The Annals of Mathematical Statistics 15, 3 (1944), 297–306. [10] Yucong Huang, Jingyu He, Tim Kwang-Ting Cheng, Chi Ying Tsui, and Terry Tao Ye. 2024. RWriC: A Dynamic Writing Scheme for Variation Compensation for RRAM-based In-Memory Computing. In Proceedings of the 61st ACM/IEEE Design Automation Conference . 1–6. [11] Je-Min Hung, Xueqing Li, Juejian Wu, and Meng-Fan Chang. 2020. Challenges and trends indeveloping nonvolatile memory-enabled computing chips for intel-ligent edge devices. IEEE Transactions on Electron Devices 67, 4 (2020), 1444–1453. [12] Daniele Ielmini and Giacomo Pedretti. 2025. Resistive switching random-access memory (RRAM): Applications and requirements for memory and computing. 
+
+Chemical Reviews (2025). [13] Vinay Joshi, Manuel Le Gallo, Simon Haefeli, Irem Boybat, Sasidharan Rajalek-shmi Nandakumar, Christophe Piveteau, Martino Dazzi, Bipin Rajendran, Abu Sebastian, and Evangelos Eleftheriou. 2020. Accurate deep neural network infer-ence using computational phase-change memory. Nature communications 11, 1 (2020), 2473. [14] Amr Khashaba, Ahmed Elkholy, Karim M Megawer, Mostafa Gamal Ahmed, and Pavan Kumar Hanumolu. 2019. A low-noise frequency synthesizer using multiphase generation and combining techniques. IEEE Journal of Solid-State Circuits 55, 3 (2019), 592–601. [15] Wantong Li, Xiaoyu Sun, Shanshi Huang, Hongwu Jiang, and Shimeng Yu. 2022. A 40-nm MLC-RRAM compute-in-memory macro with sparsity control, on-chip write-verify, and temperature-independent ADC references. IEEE Journal of Solid-State Circuits 57, 9 (2022), 2868–2877. [16] Ziqi Meng, Yanan Sun, and Weikang Qian. 2022. Write or not: Programming scheme optimization for RRAM-based neuromorphic computing. In Proceedings of the 59th ACM/IEEE Design Automation Conference . 985–990. [17] Xiaochen Peng, Shanshi Huang, Hongwu Jiang, Anni Lu, and Shimeng Yu. 2020. DNN+ NeuroSim V2. 0: An end-to-end benchmarking framework for compute-in-memory accelerators for on-chip training. IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems 40, 11 (2020), 2306–2319. [18] Hyeri Roh and Woo-Seok Choi. 2023. A context-aware readout system for sparse touch sensing array using ultra-low-power always-on event detection. IEEE Transactions on Circuits and Systems II: Express Briefs 70, 9 (2023), 3719–3723. [19] Wonbo Shim, Jae-sun Seo, and Shimeng Yu. 2020. Two-step write–verify scheme and impact of the read noise in multilevel RRAM-based inference engine. Semi-conductor Science and Technology 35, 11 (2020), 115026. [20] Joonghyun Song, Jiwon Shin, Hanseok Kim, and Woo-Seok Choi. 2022. Energy-Efficient High-Accuracy Spiking Neural Network Inference Using Time-Domain Neurons. In 2022 IEEE 4th International Conference on Artificial Intelligence Cir-cuits and Systems (AICAS) . 5–8. doi:10.1109/AICAS54282.2022.9870009 [21] Vivienne Sze, Yu-Hsin Chen, Tien-Ju Yang, and Joel S Emer. 2017. Efficient processing of deep neural networks: A tutorial and survey. Proc. IEEE 105, 12 (2017), 2295–2329. [22] Xiyuan Tang, Jiaxin Liu, Yi Shen, Shaolan Li, Linxiao Shen, Arindam Sanyal, Kareem Ragab, and Nan Sun. 2022. Low-power SAR ADC design: Overview and survey of state-of-the-art techniques. IEEE Transactions on Circuits and Systems I: Regular Papers 69, 6 (2022), 2249–2262. [23] Weier Wan, Rajkumar Kubendran, Clemens Schaefer, Sukru Burc Eryilmaz, Wenqiang Zhang, Dabin Wu, Stephen Deiss, Priyanka Raina, He Qian, Bin Gao, et al . 2022. A compute-in-memory chip based on resistive random-access memory. 
+
+Nature 608, 7923 (2022), 504–512. [24] Tian Xie, Shimeng Yu, and Shaolan Li. 2023. A high-parallelism RRAM-based compute-in-memory macro with intrinsic impedance boosting and in-ADC computing. IEEE Journal on Exploratory Solid-State Computational Devices and Circuits 9, 1 (2023), 38–46. [25] Zheyu Yan, Xiaobo Sharon Hu, and Yiyu Shi. 2022. Swim: Selective write-verify for computing-in-memory neural accelerators. In Proceedings of the 59th ACM/IEEE Design Automation Conference . 277–282. [26] Peng Yao, Huaqiang Wu, Bin Gao, Jianshi Tang, Qingtian Zhang, Wenqiang Zhang, J Joshua Yang, and He Qian. 2020. Fully hardware-implemented memristor convolutional neural network. Nature 577, 7792 (2020), 641–646. [27] Shimeng Yu, Wonbo Shim, Xiaochen Peng, and Yandong Luo. 2021. RRAM for compute-in-memory: From inference to training. IEEE Transactions on Circuits and Systems I: Regular Papers 68, 7 (2021), 2753–2765. [28] Grace Li Zhang, Bing Li, Xing Huang, Chen Shen, Shuhang Zhang, Florin Burcea, Helmut Graeb, Tsung-Yi Ho, Hai Li, and Ulf Schlichtmann. 2021. An efficient programming framework for memristor-based neuromorphic computing. In 
+
+2021 Design, Automation & Test in Europe Conference & Exhibition (DATE) . IEEE, 1068–1073.

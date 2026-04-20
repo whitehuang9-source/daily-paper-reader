@@ -6,31 +6,30 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-19
-- 运行时间：2026-04-19 20:09:52 UTC
+- 最新运行日期：2026-04-20
+- 运行时间：2026-04-20 20:41:17 UTC
 - 运行状态：成功
 - 本次总论文数：3
 - 精读区：0
 - 速读区：3
 
 ### 今日简报（AI）
-今日聚焦大型天线阵列仿真、电力系统实时状态估计及材料测量灵敏度提升的最新算法。
-推荐关注针对大规模反射面阵列的
-- 详情：[/202604/19/README](/202604/19/README)
+今日聚焦硬件底层优化与物理参数挖掘，涵盖 RRAM 编程抗噪、物理嵌入发现及原子级反铁磁材料。
+- 详情：[/202604/20/README](/202604/20/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [A Fast Direct Solver for Mutual Coupling Analysis of Large Arrays of Reflector Antennas](/202604/19/2604.10239v1-a-fast-direct-solver-for-mutual-coupling-analysis-of-large-arrays-of-reflector-antennas)  
+1. [HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming](/202604/20/2604.12420v1-harp-hadamard-domain-write-and-verify-for-noise-robust-rram-programming)  
    标签：评分：6.0/10、query:tmr
-   evidence：大型阵列中的互耦合分析
-2. [Vectorized Gaussian Belief Propagation for Near Real-Time Fully-Distributed PMU-Based State Estimation](/202604/19/2604.12067v1-vectorized-gaussian-belief-propagation-for-near-real-time-fully-distributed-pmu-based-state-estimation)  
+   evidence：消除共模干扰并降低读取噪声
+2. [Discovery of unobservable parameters via physical embedding](/202604/20/2604.15615v1-discovery-of-unobservable-parameters-via-physical-embedding)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用测量单元进行电力系统分布式状态估计
-3. [Sensitivity Improvement by Sample Vibration Excitation in Resistivity Measurement for Non-Magnetic Material Using MFM](/202604/19/2604.14730v1-sensitivity-improvement-by-sample-vibration-excitation-in-resistivity-measurement-for-non-magnetic-material-using-mfm)  
+   evidence：基于物理的逆算子用于信号重建
+3. [Persistence of large and gate-tunable anisotropic magnetoresistance in an atomically thin antiferromagnet](/202604/20/2604.15793v1-persistence-of-large-and-gate-tunable-anisotropic-magnetoresistance-in-an-atomically-thin-antiferromagnet)  
    标签：评分：6.0/10、query:tmr
-   evidence：检测涡流产生的磁场以进行电阻率测量
+   evidence：各向异性磁电阻用于磁态的电学读取
 
 
 <div class="dpr-home-promo-card">
