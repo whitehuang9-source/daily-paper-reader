@@ -6,30 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-20
-- 运行时间：2026-04-20 20:41:17 UTC
+- 最新运行日期：2026-04-21
+- 运行时间：2026-04-21 20:24:46 UTC
 - 运行状态：成功
 - 本次总论文数：3
 - 精读区：0
 - 速读区：3
 
 ### 今日简报（AI）
-今日聚焦硬件底层优化与物理参数挖掘，涵盖 RRAM 编程抗噪、物理嵌入发现及原子级反铁磁材料。
-- 详情：[/202604/20/README](/202604/20/README)
+今日聚焦近地轨道电流测量、非线性断层扫描及多流快速变化检测的前沿进展。
+重点关注利用 Swarm 卫星数据对地球电流系统的精确建模，以及通过自监督分区技术提升非线性断层扫描的成像效率。
+建议关注物理模拟与自监督学习在复杂系统监测中的跨界应用。
+- 详情：[/202604/21/README](/202604/21/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [HARP: Hadamard-Domain Write-and-Verify for Noise-Robust RRAM Programming](/202604/20/2604.12420v1-harp-hadamard-domain-write-and-verify-for-noise-robust-rram-programming)  
+1. [On the curlometer measurement of field-aligned and perpendicular currents in low Earth orbit: Swarm observations and whole geospace simulations](/202604/21/2604.18553v1-on-the-curlometer-measurement-of-field-aligned-and-perpendicular-currents-in-low-earth-orbit-swarm-observations-and-whole-geospace-simulations)  
+   标签：评分：7.0/10、query:tmr
+   evidence：利用航天器四面体磁场观测进行电流密度估计
+2. [SPLIT: Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography](/202604/21/2604.15651v1-split-self-supervised-partitioning-for-learned-inversion-in-nonlinear-tomography)  
    标签：评分：6.0/10、query:tmr
-   evidence：消除共模干扰并降低读取噪声
-2. [Discovery of unobservable parameters via physical embedding](/202604/20/2604.15615v1-discovery-of-unobservable-parameters-via-physical-embedding)  
+   evidence：用于重建中非线性逆问题的自监督学习
+3. [Multi-stream Quickest Change Detection: Foundations and Recent Advances](/202604/21/2604.18008v1-multi-stream-quickest-change-detection-foundations-and-recent-advances)  
    标签：评分：6.0/10、query:tmr
-   evidence：基于物理的逆算子用于信号重建
-3. [Persistence of large and gate-tunable anisotropic magnetoresistance in an atomically thin antiferromagnet](/202604/20/2604.15793v1-persistence-of-large-and-gate-tunable-anisotropic-magnetoresistance-in-an-atomically-thin-antiferromagnet)  
-   标签：评分：6.0/10、query:tmr
-   evidence：各向异性磁电阻用于磁态的电学读取
+   evidence：多传感器系统与信号重建
 
 
 <div class="dpr-home-promo-card">

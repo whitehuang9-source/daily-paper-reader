@@ -1,0 +1,742 @@
+Title: SPLIT: Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography
+
+URL Source: https://arxiv.org/pdf/2604.15651v1
+
+Published Time: Mon, 20 Apr 2026 00:27:48 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# SPLIT: Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography 
+
+## Markus Haltmeier, Lukas Neumann, Nadja Gruber, Gyeongha Hwang 
+
+Abstract 
+
+Machine learning has achieved impressive performance in tomographic reconstruction, but supervised train-ing requires paired measurements and ground-truth images that are often unavailable. This has motivated self-supervised approaches, which have primarily addressed denoising and, more recently, linear inverse prob-lems. We address nonlinear inverse problems and introduce SPLIT (Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography), a self-supervised machine-learning framework for reconstructing images from nonlinear, incomplete, and noisy projection data without any samples of ground-truth images. SPLIT enforces cross-partition consistency and measurement-domain fidelity while exploiting complementary informa-tion across multiple partitions. Our main theoretical result shows that, under mild conditions, the proposed self-supervised objective is equivalent to its supervised counterpart in expectation. We regularize training with an automatic stopping rule that halts optimization when a no-reference image-quality surrogate saturates. As a concrete application, we derive SPLIT variants for multispectral computed tomography. Experiments on sparse-view acquisitions demonstrate high reconstruction quality and robustness to noise, surpassing classical iterative reconstruction and recent self-supervised baselines. 
+
+Keywords. Self-supervised learning, nonlinear inverse problems, tomographic reconstruction, multispectral CT, nonlinear imaging, material decomposition, Radon transform, Poisson noise, sparsity 
+
+MSC2020. 65R32, 44A12, 68T07 
+
+# 1 Introduction 
+
+Accurate image reconstruction is a fundamental task in computed tomography (CT) and elsewhere, critical for medical diagnosis and industrial applications. In this paper, we study general tomographic reconstruction problems of the form of a nonlinear inverse problem 
+
+y = A(x) + η, (1) where A : X → Y is the (possibly) nonlinear forward operator between finite-dimensional Hilbert spaces, x ∈ X the unknown image, and y ∈ Y the observed measurement data. The term η ∈ Y models potentially signal-dependent measurement noise; in practice, photon statistics are often Poisson and electronic noise is additive. While this work is motivated by and tested on multispectral CT (MSCT), the proposed reconstruction framework is general, with focus on non-linear tomography. Classical linear tomography relies on inverting the linear Radon transform, which models internal structure as a scalar-valued discrete attenuation map μ ∈ RN recovered from a noisy version of its sinogram Rμ ∈ RP ,where R denotes the discrete Radon transform. While effective in many settings, this linear model neglects crucial physical realities: the polychromatic nature of X-ray sources and the energy-dependent attenuation of materials. Real samples are better described by a family of attenuation maps μ(e) ∈ RN , parameterized by photon energy e ∈ (0 , ∞). Using a single energy bin merges these distinct maps into a single projection, causing non-uniqueness and severe artifacts such as beam hardening. Although iterative and analytic correction methods exist [1, 2, 3, 4, 5, 6], they only partially mitigate these issues for a single X-ray source. Multispectral CT (MSCT) addresses these challenges by acquiring projection data across multiple energy bands, enabling reconstruction of energy-dependent attenuation maps. This yields a fundamentally nonlinear and more complex inverse problem [7, 8, 9, 10, 11, 12, 13, 14, 15]. The MSCT image reconstruction problem can be written in the form (1), where the unknown x = ( x[1] , . . . , x [M ]) ∈
+
+X = RN ×M consists of a stack of material density images and the data y = ( y[1] , . . . , y [B]) ∈ Y = RP ×B are multispectral measurements across B energy channels. The forward map A = Φ ◦ R combines the Radon trans-form R : RN ×M → RP ×M with a pointwise nonlinearity Φ : RM → RB that maps, per ray, M line integrals to B
+
+spectral measurements. Classical analytic and iterative methods, as well as supervised learning, have been applied to (1), but supervised approaches require paired (x, y ), which are difficult to obtain. Self-supervised methods [16, 17, 18, 19, 20, 21, 22, 23] alleviate this by training only from measurements y. In particular, relatives of 1
+
+> arXiv:2604.15651v1 [cs.CV] 17 Apr 2026
+
+our approach have shown success in denoising [16], full-data inverse problems [17], and linear settings with fixed, undersampled operators [18, 20]. However, to the best of our knowledge, no self-supervised approaches exist for nonlinear tomography. In this paper, we propose a self-supervised framework for tomographic inverse problems that addresses non-linear forward models, undersampling, and noise. We introduce SPLIT (Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography), which allows multiple data splits. SPLIT partitions the data domain, tar-gets reconstruction in image space, and employs a loss in the measurement domain. In its single-partition version, similar to Sparse2Inverse [18], SPLIT uses one partition along the angular dimension. To adequately account for noise and undersampling, we also introduce Double-SPLIT variants, which introduce a second partition along the detector (projection) dimension. We consider these methods within the SPLIT formulation for general nonlinear problems, potentially addressing multiple challenges present in the data. To the best of our knowledge, such multi-partition strategies have not been applied in self-supervised reconstruction before. We implement SPLIT for MSCT with a partition size of two in each dimension and demonstrate improvements over the self-supervised baseline. While our primary target is sparse-angle MSCT, these approaches apply to any linear or non-linear forward model that admits multiple data partitions. 
+
+# 2 SPLIT Framework 
+
+In this section we introduce the proposed SPLIT technique. We consider general inverse problems (1), where 
+
+A : RN → RP is a deterministic possibly nonlinear forward map. We assume the unknown x and the noise η are random and follow unknown distributions px and pη . The proposed SPLIT technique is inspired by Sparse2Inverse; however, it is applicable to nonlinear problems. Moreover, opposed to Sparse2Inverse we allow multiple partitions, which, to the best of our knowledge, has not been explored in the literature on self-supervised imaging. 
+
+## 2.1 Self-supervised imaging 
+
+Recently, self-supervised methods have been developed for linear inverse problems: Noise2Self for denoising, Noise2Inverse for full-data inverse problems, and Sparse2Inverse for limited-data inverse problems. Through-out this subsection we assume that x ∈ X = RN and y ∈ Y = RP are random variables with joint distribution 
+
+Px,y . For any z ∈ RP and any Ω ⊆ { 1, . . . , P }, denote 
+
+zΩ = ( zp)p∈Ω, zc 
+
+> Ω
+
+= ( zp)p / ∈Ω.
+
+Self-supervised imaging methods are based on diagonal-free maps with respect to certain partitions of {1, . . . , P }
+
+as outlined in the following. 
+
+• Diagonal-free maps: The crucial concept of self-supervised methods is diagonal-free nonlinear maps. Diagonal-free nonlinear maps, termed J -invariant in the Noise2Self framework [16] for self-supervised de-noising, formalize the idea that each output coordinate must not depend on the corresponding input coordi-nate. Closely related structural constraints on operators appear in functional analysis and numerical analysis through off-diagonal or neighbor-only operators and sparsity patterns [24], as well as in dynamical systems through coupling structures and coordinate-wise dependence restrictions in discrete-time maps [25]. 
+
+Definition 1 (Diagonal free nonlinear maps) . Let g : RP → RP , Λ ⊆ { 1, . . . , P } and P be a partition of 
+
+{1, . . . , P }. The function g is called Λ-self-invariant if g(z)Λ depends only on zc
+
+> Λ
+
+. It is called diagonal-free (with respect to P) if it is Ω-self-invariant for every Ω ∈ P .
+
+As a simple example consider P = 3 and a nonlinear map g : R3 → R3 defined by 
+
+g(z1, z 2, z 3) = 
+
+
+
+sin( z2 + z3)
+
+z1 + exp( z3)cos( z1 − z2)
+
+ .
+
+Then, with the partition P = {{ 1}, {2}, {3}} , g is diagonal-free: each component gi depends only on the other two components with zj with j ∈ { 1, 2, 3} \ { i} and not on zi itself. More generally, for any functions 
+
+f, h Ω : RP → RP and any partition P, a diagonal-free map g : RP → RP with respect to P can be defined by 
+
+∀Ω ∈ P :  g(y) 
+
+> Ω
+
+:=  f  MΩ hΩ(Mc
+
+> Ω
+
+y) + Mc 
+
+> Ω
+
+y  
+
+> Ω
+
+, (2) where MΩ, Mc 
+
+> Ω
+
+∈ { 0, 1}P ×P are diagonal masking matrices that zero out entries outside or inside Ω, respec-tively. Then, by construction, g is diagonal-free with respect to P. In typical applications, MΩ hΩ(Mc 
+
+> Ω
+
+y)
+
+is either the zero function or a classical interpolation (e.g., local averaging) from the complement Ωc to the target region Ω, and f is a neural network whose diagonal-free variant is given by g.2• Noise2Self: Consider first the denoising problem, which is (1) with A = id and P = N . The reconstruction function g is then a denoiser, ideally minimizing the supervised risk E∥g(y)−x∥2. Instead, Noise2Self minimizes the self-supervised loss E∥g(y) − y∥2 over diagonal-free functions. As shown in the seminal work [16], this is justified by the following result. 
+
+Proposition 1 (Noise2Self) . Let η be pairwise independent with zero mean and let g : RN → RN be diagonal-free with respect to P. Then, E∥g(y) − y∥2 = E∥g(y) − x∥2 + E∥η∥2.
+
+Based on Prop. 1, the risk E∥g(y) − x∥2 is minimized by the same P-invariant function as the self-supervised risk E∥g(y) − y∥2. As demonstrated in [16], the performance of these estimators is very close to supervised ones. 
+
+• Noise2Inverse: Next, consider linear inverse problems written in the form (1) with a linear map A.Noise2Self can be applied either in the measurement domain for denoising y followed by image formation, or in the reconstruction domain for denoising an initial reconstruction By. Both approaches suffer from a two-step nature and further drawbacks, such as correlation of the noise in the reconstruction domain X and less informative prior in the measurement domain Y . To address these issues, [17] proposes Noise2Inverse, specifically where A is the full-view Radon transform. Here, a partition P is used in the projection domain where the noise is statistically independent, and a network is trained in the reconstruction domain. For any subset Ω ∈ P , Noise2Inverse considers linear reconstructions BΩ, Bc 
+
+> Ω
+
+using data yΩ, y c
+
+> Ω
+
+. Then a network 
+
+f : RN → RN is constructed by minimizing E∥f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − B ΩyΩ∥2. Noise2Inverse is supported by the following result derived in [17]. 
+
+Proposition 2 (Noise2Inverse) . Suppose η has zero mean and is pairwise independent. Then, for any 
+
+f : RN → RN , we have E∥f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − B ΩyΩ∥2 = E∥f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − B ΩAΩx∥2 + E∥B Ωη∥2.
+
+Based on Prop. 2, the supervised risk E∥f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+)−B ΩAΩx∥2 and the self-supervised risk E∥f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+)−B ΩyΩ∥2
+
+share the same minimizer. After computing the minimizer within a chosen function class, inference is done by B(y) := |P| −1 P 
+
+> Ω∈P
+
+f (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+).
+
+• Sparse2Inverse: Noise2Inverse aims to remove measurement noise but is not designed to remove artifacts resulting from undersampling in the case of sparse data, when A has a large null space. The reason is that the targets in this framework are defined using linear reconstruction methods and thus still fix the null-space component shared by any of the maps BΩAΩ. To overcome this issue, in [18] we presented a method that uses a network in reconstruction domain but with a loss in the measurement domain (also see [20]). More specifically, Sparse2Inverse minimizes E∥A Ωf (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − yΩ∥2 based on the following result. 
+
+Proposition 3 (Sparse2Inverse) . Suppose η is pairwise independent with zero mean. Then for any f : RN →
+
+RN , we have E∥A Ωf (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − yΩ∥2 = E∥A Ωf (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − A Ωx∥2 + E∥η∥2.
+
+Based on Prop. 3, E∥A Ωf (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − A Ωx∥2 and E∥A Ωf (Bc
+
+> Ω
+
+yc
+
+> Ω
+
+) − yΩ∥2 share the same minimizer. After com-puting the minimizer within a chosen function class, inference can be done by B(y) := |P| −1 P 
+
+> Ω∈P
+
+f  Bc
+
+> Ω
+
+yc
+
+> Ω
+
+.The crucial difference compared to the loss in Noise2Inverse is the freedom of the network to operate in the null space of A. This is a prerequisite for the network to effectively remove undersampling artifacts inherent in BΩAΩ. In numerical reconstruction, such a behavior in indeed observed [18, 19]. 
+
+## 2.2 Proposed SPLIT 
+
+The SPLIT technique consists of several elements that we describe below. It is applicable to any linear or nonlinear inverse problem of the form (1). At its core, it uses multiple partitions in the measurement domain with the intention of addressing different challenges in (1), for example, missing data and denoising. We first derive it in a general framework for nonlinear problems with an arbitrary number of partitions and then specialize it to Double-SPLIT for MSCT. 
+
+• Multi-partitioning: In contrast to existing self-supervised approaches that use a single partition, we include multiple partitions of {1, . . . , P } to potentially account for different tasks. The partitions are denoted by Pi
+
+for i = 1 , . . . , K with elements Ωi,j ⊆ { 1, . . . , P } for j = 1 , . . . , |P i|. We denote the data and forward operator restricted to Ωi,j and its complement Ωci,j by 
+
+yi,j := y|Ωi,j ∈ R|Ωi,j | , (3) 
+
+yci,j := y|Ωci,j ∈ R|Ωci,j | , (4) 
+
+Ai,j x := ( Ax)|Ωi,j , (5) 
+
+Aci,j x := ( Ax)|Ωci,j . (6) 3This yields measurement-domain splitting similar to Noise2Inverse and Sparse2Inverse, now generalized to multiple partitions. 
+
+• Partial reconstructions: For each partition Pi and subset Ωi,j ∈ P i, we consider fixed reconstruction operators 
+
+Bi,j : R|Ωi,j | → RN , (7) 
+
+Bci,j : R|Ωci,j | → RN . (8) Reconstruction pairs Bci,j yci,j and Bi,j yi,j then provide data allowing self-supervised training. In the spirit of Noise2Inverse, one would use these for denoising with the norm in the reconstruction space RN , thereby fixing the null space component of the solution selection. In the spirit of Sparse2Inverse, one supervises using a data-space loss, thus allowing more freedom for the network to select solutions with modified null space component. Further note that we do not aim for Bi,j and Bci,j to be denoising. Ideally, they are right inverses with Ai,j Bi,j Ai,j = Ai,j and Aci,j Bci,j Aci,j = Aci,j . Due to the limited-data nature of Ai,j and Aci,j , there are plenty of such maps. 
+
+• Self-supervised loss: A map f : RN → RN , chosen from a certain family, is trained to map the auxiliary input Bci,j yci,j to the auxiliary output Bi,j yi,j . For that purpose we consider 
+
+LKX (f ) = 1
+
+K
+
+> K
+
+X
+
+> i=1
+> |P i|
+
+X
+
+> j=1
+
+f  Bci,j (yci,j ) − B i,j (yi,j ) 2 , (9) 
+
+LKY (f ) = 1
+
+K
+
+> K
+
+X
+
+> i=1
+> |P i|
+
+X
+
+> j=1
+
+Ai,j 
+
+ f  Bci,j (yci,j ) − yi,j  
+
+> 2
+
+. (10) Similar to Sparse2Inverse, (10) is a self-supervised loss in measurement space, whereas (9) is a self-supervised loss in image space. While (10) is our proposal, we will test both loss terms in the context of MSCT. 
+
+• SPLIT-inference: For inference, in both cases we use the reconstruction map 
+
+B(y) := 1
+
+K
+
+> K
+
+X
+
+> i=1
+
+1
+
+|P i|
+
+> |P i|
+
+X
+
+> j=1
+
+fθ
+
+ Bci,j yci,j 
+
+, (11) i.e., the average of all individual reconstructions across partitions and subsets. For linear problems and for a single partition this reduces to the inference used in Sparse2Inverse and Noise2Inverse, respectively. For a single partition ( K = 1 ), we refer to (10), (11) as single-SPLIT, which is the straightforward extension of Sparse2Inverse to nonlinear problems. The use of multiple partitions naturally allows different splits for different tasks, such as denoising and missing-data recovery; the Double-SPLIT employs two complementary partitions, such as angular and detector domains in MSCT. 
+
+## 2.3 Theoretical analysis 
+
+Similar to single-split methods for linear inverse problems, we show that the self-supervised data-space loss coincides with its supervised counterpart. 
+
+Theorem 1 (Multi-SPLIT) . Assume the measurement model (1) with a nonlinear forward map A : RN → RP ,where the noise η has pixel-wise independent mean-zero entries. Let (Pi)Ki=1 be multiple data partitions and let the restricted data yi,j , y ci,j and partial forward and reconstruction maps Ai,j , Aci,j , Bi,j , Bci,j be defined by (3) –(8) .Then, for any f : RN → RN ,
+
+1
+
+K
+
+> K
+
+X
+
+> i=1
+> |P i|
+
+X
+
+> j=1
+
+E
+
+h
+
+Ai,j 
+
+ f  Bci,j (yci,j ) − yi,j 
+
+> 2
+
+i
+
+= 1
+
+K
+
+> K
+
+X
+
+> i=1
+> |P i|
+
+X
+
+> j=1
+
+E
+
+h
+
+Ai,j 
+
+ f  Bci,j (yci,j ) − A i,j x 2i
+
++ E∥η∥2. (12) 
+
+Proof. It suffices to show the identity for a fixed partition and a selected set of the partition. To that end, fix 
+
+i ∈ { 1, . . . , K } and j ∈ { 1, . . . , |P i|} , and consider E∥A i,j (f (Bci,j yci,j )) − yi,j ∥2. Using y = A(x) + η yields 
+
+E
+
+h  Ai,j f (Bci,j yci,j ) − A i,j x − ηi,j 
+
+> 2
+
+i
+
+= E
+
+h
+
+Ai,j f (Bci,j yci,j ) − A i,j x 2i
+
++ 2 E
+
+h
+
+⟨A i,j f (Bci,j yci,j ) − A i,j x, η i,j ⟩
+
+i
+
++ E∥ηi,j ∥2. (13) 4Now Ai,j x is independent of ηi,j and ηi,j has zero mean, thus E⟨A i,j x, η i,j ⟩ = 0 . Moreover, by construc-tion, Ai,j f (Bci,j yci,j ) does not depend on ηi,j , and by the componentwise independence of the noise we have 
+
+E⟨A i,j f (Bci,j yci,j ), η i,j ⟩ = 0 . Combining these with (13) and summing over all i, j gives (12). We do not believe that a similar theorem can be derived for the Noise2Inverse-type loss (9); we conjecture this is due to the necessarily nonlinear nature of the reconstruction maps Bi,j . Noise2Inverse for linear problems does not suffer from this limitation as long as linear reconstruction maps are used. Theorem 1 may be interpreted as follows: For any i ∈ { 1, . . . , N }, the map gi(y) := (( Ai,j ◦ f ◦ B ci,j )( yci,j )) |P i|
+
+> j=1
+
+is diagonal-free with respect to the partition Pi in measurement space, enabling denoising there in the spirit of Noise2Self. The crucial ingredient for image reconstruction, however, is that the maps gi contain learned factors 
+
+f ◦ B ci,j that map from measurement space to image space. The maps f ◦ B ci,j are then used to define a learned self-supervised reconstruction map via (11). 
+
+# 3 Application to MSCT 
+
+In this section we present a concrete realization of SPLIT for MSCT using one and two partitions, referred to as Single-SPLIT and Double-SPLIT, respectively. We present numerical details, experimental results, and comparisons with an iterative one-step algorithm and a self-supervised baseline. 
+
+## 3.1 MSCT forward and inverse model 
+
+We start with a brief derivation of the MSCT forward model, resulting in a nonlinear inverse problem of the form (1). This includes modeling spectral measurements of the energy-dependent attenuation distribution and combining them with a material representation along the energy dimension. Additionally, we present an efficient one-step reconstruction algorithm for MSCT, used in the implementation of SPLIT. 
+
+• Spectral Radon transform: Classical CT seeks to recover a scalar-valued discrete attenuation map 
+
+μ ∈ RN for the patient or sample from observations of its (linear) Radon transform Rμ ∈ RP , obtained by comparing incoming and outgoing X-ray intensity. However, the energy-dependent absorption characteristics of real materials and the broadband nature of X-ray sources necessitate a family of attenuation maps μ(e, ·) ∈
+
+RN , parameterized by photon energy e > 0, for accurate modeling. Moreover, taking into account the source spectrum of emitted X-rays and the detector’s spectral response leads to measurements of the form 
+
+y(ℓ) := 
+
+Z ∞
+
+> 0
+
+s(e) exp  − (Rμ(e, ℓ ))  de , (14) where s(e) is the effective spectrum (the product of the source spectrum and the detector spectral response), 
+
+Rμ(e, ℓ ) is the Radon transform of μ(e, ·) in the spatial variable, and ℓ is a ray of integration. Due to spectral mixing across energies, recovering (μ(e, ·)) e> 0 from a single effective spectrum is severely ill-posed, leading to non-uniqueness and beam-hardening artifacts. Multispectral CT (MSCT) mitigates these issues by acquiring projection data across multiple energy bands using distinct effective spectra (sb(e)) Bb=1 . Assuming a low-dimensional model along the energy axis (e.g., a material basis; see (15) below), these measurements enable accurate reconstruction of energy-dependent attenuation. 
+
+• MSCT forward problem: We consider MSCT within the material decomposition framework in a dis-crete setting. The core assumption is that the energy-dependent spatially varying attenuation distribution decomposes as 
+
+μ(e, ·) = 
+
+> M
+
+X
+
+> m=1
+
+μm(e) x[m], (15) where x[m] ∈ RN are the discrete material density maps, and μm(e) are known tabulated spectral attenuation coefficients for the mth material, m = 1 , . . . , M . Assuming a finite number of rays and a finite number of effective spectra, and discretizing the integral over the spectral variable, yields the MSCT measurements 
+
+y[b]p := Φ b
+
+ (Rx)p
+
+, (16) 
+
+Φb(zp) := 
+
+> E
+
+X
+
+> i=1
+
+sb,i exp 
+
+
+
+−
+
+> M
+
+X
+
+> m=1
+
+μm,i z[m]p
+
+
+
+, (17) for all (p, b ) ∈ { 1, . . . , P } × { 1, . . . , B }. Here (sb,i )Ei=1 are discretized effective spectra, R is applied separately to each channel of x ∈ RN ×M , and Φ : RM → RB is applied independently to each ray measurement, with 
+
+zp = ( Rx)p ∈ RM , along the channel dimension. After spectral normalization, we assume PEi=1 sb,i = 1 for 5all b. Accounting for noise, we obtain the inverse problem (1) with A = Φ ◦ R : RN ×M → RP ×B , resulting in an inherently nonlinear forward model. 
+
+• One-step reconstruction (CP-fast): In [26], we propose a simple yet effective iterative algorithm for MSCT image reconstruction. With M := ( μi,m )i,m ∈ RE×M and S := ( sb,i )b,i ∈ RB×E denoting the matrices of discretized material attenuations and effective spectra, the MSCT forward map is written as 
+
+A(x) = Φ( Rx), with Φ( z) := exp  − z M⊤ S⊤, (18) where exp denotes the pointwise exponential. We further write U‡ for the pseudoinverse of U = SM . The CP-fast algorithm of [26] then reads 
+
+x(k+1) = x(k) − sk R⊤  log A(x(k)) − log y (U‡)⊤, (19) with initialization x(0) = 0 and step sizes sk, where log denotes the pointwise logarithm and R⊤ the adjoint of the (discrete) Radon transform. The strength of (19) is that it neither requires computation of the derivative of A nor inversion related to the full forward map, and it contains a preconditioner (U‡)⊤ ∈ RB×M that is of small size and can be precomputed easily. Despite its simplicity, CP-fast has been demonstrated in [26] to converge rapidly with numerically cheap iteration steps, outperforming tested one-step algorithms compared in [11]. 
+
+• Learned MSCT reconstruction: Let us also comment on existing work on learning for MSCT. Early works focused on supervised methods, including [27, 28, 29, 30]. More closely related to SPLIT are recently proposed self-supervised approaches for MSCT such as [31, 32, 33, 34, 35, 36]. However, all these methods are based on two-step reconstruction pipelines that separate image formation and material decomposition. In contrast, we target joint image formation and material decomposition in a single step, by combining one-step iterative image reconstruction with self-supervised learning. To the best of our knowledge, no self-supervised method in such a joint setting has been proposed. 
+
+## 3.2 Double-SPLIT for MSCT 
+
+The realization of SPLIT for MSCT requires specifying the data partitions, and the choice of reconstruction maps. We focus here on the Double-SPLIT version using two data partitions. The Single-SPLIT version can be derived as a simplification of Double-SPLIT as indicated below. 
+
+• Dual-Partitioning: We split the measurements y into two partitions along the spatial detector index P ,and apply the same partitioning to all energy bins. We reshape data as y ∈ RP1×P2×M where the first index is the angular direction, the second is the offset direction in the sinograms, and the third is the unchanged energy-bin coordinate. We then take partitions P1 = {Ω1,1, Ω1,2} and P2 = {Ω2,1, Ω2,2} with 
+
+Ω1,1 := ((2 Z + 1) ∩ { 1, 2, . . . , P 1}) × { 1, 2, . . . , P 2} × { 1, 2, . . . , M } ,
+
+Ω1,2 := ((2 Z) ∩ { 1, 2, . . . , P 1}) × { 1, 2, . . . , P 2} × { 1, 2, . . . , M } ,
+
+Ω2,1 := {1, 2, . . . , P 1} × ((2 Z + 1) ∩ { 1, 2, . . . , P 2}) × { 1, 2, . . . , M } ,
+
+Ω2,2 := {1, 2, . . . , P 1} × ((2 Z) ∩ { 1, 2, . . . , P 2}) × { 1, 2, . . . , M } ,
+
+which yields data splits in angular and projection direction, respectively 
+
+y1,1(i, j, m ) := y(i, 2j, m ) , (20) 
+
+y1,2(i, j, m ) := y(i, 2j − 1, m ) , (21) 
+
+y2,1(i, j, m ) := y(2 i, j, m ) , (22) 
+
+y2,2(i, j, m ) := y(2 i − 1, j, m ) . (23) 
+
+• Partial reconstructions: Partial initial reconstructions are all defined by K steps of the CP-fast algorithm (19), 
+
+Bi,j yi,j = x(K) . (24) For the angular split data (20), (21) we actually apply (19) with the restricted data (20), (21) and angular-restricted forward maps A1,1 and A1,2, respectively, instead of A. For the offset-direction split data (22), (23) we first apply linear interpolation to y2,1 and y2,2 and then apply (19) with the full forward operator A to the interpolated data. 6• Training and inference: To all Bi,j yi,j we apply f : RN ×B → RN ×M which is defined by a U-net Φ : RN →
+
+RN [37] taken the same in each channel, f (x) =  Φx[m]
+
+> m
+
+. The U-net network is trained jointly in data space by minimizing 
+
+L2 
+
+> Y
+
+(Φ) = 12
+
+> 2
+
+X
+
+> i,j =1
+> M
+
+X
+
+> m=1
+
+Ai,j Φθ
+
+ (Bci,j yci,j )[ m] − yi,j [m] 2 . (25) Inference is done by (11), which in the above situation becomes 
+
+B(y)[ m] := 14
+
+> 2
+
+X
+
+> i,j =1
+
+Φθ
+
+ (Bi,j yi,j )[ m] . (26) 
+
+• Earlystopping: The loss (25) is data-driven and exploits the available samples. Our proposed approach involves comparing Φθ (B(yi, 2)) with Φθ (B(yi, 1)) in terms of the Peak Signal-to-Noise Ratio (PSNR). More precisely, we define an early stopping metric as the average PSNR 
+
+PSNR := 12M
+
+> 2
+
+X
+
+> i=1
+> M
+
+X
+
+> m=1
+
+PSNR  Φθ (( Byi, 2)[ m]) , Φθ (( Byi, 1)[ m]) . (27) We terminate the training when this metric is minimized. The underlying rationale is rooted in the dynamics of model overfitting: as the model begins to overfit, its outputs for different target domains start to diverge. Specifically, since Φθ (B(y1,2)) and Φθ (B(y1,1)) are trained on disjoint targets, their outputs become increas-ingly dissimilar after overfitting; a similar divergence occurs with Φθ (B(y2,1)) and Φθ (B(y2,2)) . By monitoring these cross-domain output differences through the PSNR metric, we can detect the onset of overfitting. 
+
+## 3.3 Implementation details 
+
+We next specify details for the results presented, concerning MSCT specifications, the network training and the used data sets. 
+
+• MSCT specifications: The numerical settings for the MSCT forward map are taken as in [26], which uses the implementation of [11]. We consider M = 3 base materials (water, iodine, gadolinium) and B = 5 
+
+energy bins. The energy variable is discretized on 150 uniform nodes between 0 and 150 keV. Images use 
+
+N = 256 × 256 pixels, and the Radon transform yields P = 262 ,450 line integrals. Noisy measurements y are generated using a more realistic forward model with Poisson photon statistics and electronic noise added. For initial reconstructions with the full forward model we use CP-Fast with full data. 
+
+• Comparison methods: We compare the following reconstruction methods 
+
+▶ CP-Fast: outlined in Section 3.1 (iterative benchmark). 
+
+▶ X-space loss: self-supervised (single partition and reconstruction-space loss). 
+
+▶ Single-SPLIT: self-supervised (single partition and measurement-space loss). 
+
+▶ Double-SPLIT: outlined in Section 3.2 (two partitions and measurement-space loss). Here the X-space loss method and Single-SPLIT use the single angular partition P1 and the reconstructions 
+
+B1,1 and B1,2, with the losses, respectively, 
+
+L1 
+
+> X
+
+(Φ) = 
+
+> 2
+
+X
+
+> j=1
+> M
+
+X
+
+> m=1
+
+Φθ
+
+ (Bc 
+
+> 1,j
+
+yc 
+
+> 1,j
+
+)[ m] − (B1,j y1,j )[ m] 2 ,
+
+L1 
+
+> Y
+
+(Φ) = 
+
+> 2
+
+X
+
+> j=1
+> M
+
+X
+
+> m=1
+
+A1,j Φθ
+
+ (Bc 
+
+> 1,j
+
+yc 
+
+> 1,j
+
+)[ m] − y1,j [m] 2 .
+
+Inference in both cases uses the average 
+
+B(y)[ m] := 12
+
+> 2
+
+X
+
+> j=1
+
+Φθ
+
+ (Bc 
+
+> 1,j
+
+yc 
+
+> 1,j
+
+)[ m].
+
+Note that the X-space loss method can be seen as an adaptation of Noise2Inverse to non-linear tomography, while Single-SPLIT can be seen as an adaptation of Sparse2Inverse to non-linear tomography. 7• Dataset: We generate a synthetic MSCT dataset comprising 100 3 -channel material images x and corre-sponding 5-channel multispectral measurements y = A(x) + η. Each phantom is derived from a randomly deformed, modified Shepp–Logan phantom, with phantom regions assigned to the material channels. To en-sure physically meaningful and numerically stable attenuation modeling, the material coefficients were scaled to reflect realistic concentration levels observed in clinical CT acquisitions. In particular, the iodine and gadolinium channels were normalized to water-equivalent attenuation units and further scaled to represent typical concentrations on the order of a few percent relative to water, while water serves as the reference material and is left unscaled. This choice is practically motivated and ensures that the relative contributions of all channels remain within a realistic and well-conditioned range. We use 60 phantoms for training, 20 for validation, and 20 for testing. The three channels of an example phantom are shown in the left column of Figure 1. 
+
+• Training: For the U-net we use the implementation from https://github.com/milesial/Pytorch-UNet .Training uses Adam with learning rate 10 −4, batch size 1, for up to 15 ,000 epochs. For early stopping we monitor the sum (27) of the estimated PSNRs across materials and halt training when this sum attains its maximum. We used the same U-net model for all learned methods. 
+
+Figure 1: Multispectral CT reconstructions from Nθ = 725 projection angles. Rows: iodine (top), gadolinium (middle), water (bottom). Columns (left to right): ground truth, CP-Fast, N2I, Single-SPLIT, Double-SPLIT. 
+
+## 3.4 Results 
+
+Next, we present reconstruction results across three levels of angular sampling: Nθ ∈ { 725 , 145 , 29 } views. Visual results are shown in Figs. 1, 2, and 3. PSNR and SSIM for each method and view count are reported in Table 1, with values given separately for each material. We observe that Single-SPLIT and Double-SPLIT consistently outperform the iterative CP-Fast baseline and the self-supervised X-space loss method across metrics and materials. Under ultra-sparse sampling ( 29 views), Double-SPLIT performs best overall, whereas for denser sampling ( 725 
+
+or 145 views) Single-SPLIT is slightly superior. 
+
+# 4 Conclusion 
+
+Learned image reconstruction has become state of the art across many imaging modalities. Of particular interest are self-supervised methods that require only measurement samples y = A(x) + η without access to paired data 8Figure 2: Multispectral CT reconstructions from Nθ = 145 projection angles. Rows and columns as in Fig. 1. 
+
+(x, y ) or even ground-truth images x. While such approaches have primarily focused on linear problems, this work addresses the nonlinear, incomplete, and noisy regime relevant to nonlinear inverse problems. We introduced and realized SPLIT (Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography) for one-step MSCT reconstruction and material decomposition. Our framework leverages measurement-domain losses, cross-partition consistency, and complementary information across spectral channels, together with an automatic stopping crite-rion that serves as regularization. SPLIT consistently improves reconstruction quality and robustness compared with iterative reconstruction baseline and a self-supervised baseline using a reconstruction-domain loss. Future work will include evaluation on real MSCT datasets with realistic calibration and model mismatch, systematic studies of noise (e.g., Poisson and electronic noise) and sparsity regimes, and theoretical analysis of identifiability, stability, and convergence under nonlinear forward models. We also plan to integrate recent advances in physics-informed priors, quantify uncertainty, and extend the framework to other nonlinear and ill-posed inverse problems such as quantitative photoacoustic tomography and inverse diffusion (diffuse optical tomography). Table 1: PSNR and SSIM for three materials at different view counts (higher is better). PSNR is reported in dB. Best value per material and view count is in bold.                                                               
+
+> PSNR [dB] SSIM Views Method Iodine Gadolinium Water Iodine Gadolinium Water 725 X-space loss (Reference) 24 .41 25 .69 24 .72 0.94 0.81 0.85
+> Single-SPLIT (Proposed) 35 .33 28 .06 39 .60 0.99 0.98 1.00
+> Double-SPLIT (Proposed) 35 .51 37 .75 37 .83 0.99 0.99 0.99
+> 145 X-space loss (Reference) 20 .13 21 .42 19 .78 0.10 0.02 0.52
+> Single-SPLIT (Proposed) 30 .50 33 .18 36 .23 0.98 0.98 0.99
+> Double-SPLIT (Proposed) 31 .66 32 .96 35 .96 0.97 0.95 0.99
+> 29 X-space loss (Reference) 15 .99 13 .16 17 .31 0.01 0.00 0.33
+> Single-SPLIT (Proposed) 23 .93 29 .30 31 .88 0.95 0.94 0.88
+> Double-SPLIT (Proposed) 25 .81 26 .98 33 .53 0.97 0.93 0.98
+
+9Figure 3: Multispectral CT reconstructions from Nθ = 29 projection angles. Rows and columns as in Fig. 1. 
+
+# References 
+
+[1] William D McDavid, Robert G Waggener, William H Payne, and Michael J Dennis. Spectral effects on three-dimensional reconstruction from x rays. Medical Physics , 2(6):321–324, 1975. [2] Maximilian B Kiss, Francien G Bossema, Paul JC van Laar, Suzan Meijer, Felix Lucka, Tristan van Leeuwen, and K Joost Batenburg. Beam filtration for object-tailored x-ray ct of multi-material cultural heritage objects. 
+
+Heritage Science , 11(1):130, 2023. [3] Xiaochuan Pan, Jeffrey Siewerdsen, Patrick J La Riviere, and Willi A Kalender. Anniversary paper: Devel-opment of x-ray computed tomography: The role of medical physics and aapm from the 1970s to present. 
+
+Medical Physics , 35(8):3728–3739, 2008. [4] Gabor T Herman. Correction for beam hardening in computed tomography. Physics in Medicine & Biology ,24(1):81, 1979. [5] Gert Van Gompel, Katrien Van Slambrouck, Michel Defrise, K Joost Batenburg, Johan De Mey, Jan Sijbers, and Johan Nuyts. Iterative correction of beam hardening artifacts in ct. Medical Physics , 38(S1):S36–S49, 2011. [6] G Rigaud. On analytical solutions to beam-hardening. Sensing and Imaging , 18:1–17, 2017. [7] Daniil Kazantsev, Jakob S Jørgensen, Martin S Andersen, William RB Lionheart, Peter D Lee, and Philip J Withers. Joint image reconstruction method with correlative multi-channel prior for x-ray spectral computed tomography. Inverse Problems , 34(6):064001, 2018. [8] David S Rigie and Patrick J La Riviere. Joint reconstruction of multi-channel, spectral ct data via constrained total nuclear variation minimization. Physics in Medicine & Biology , 60(5):1741, 2015. [9] Yunyi Hu, James G Nagy, Jianjun Zhang, and Martin S Andersen. Nonlinear optimization for mixed attenu-ation polyenergetic image reconstruction. Inverse Problems , 35(6):064004, 2019. [10] Simon R Arridge, Matthias J Ehrhardt, and Kris Thielemans. (an overview of) synergistic reconstruc-tion for multimodality/multichannel imaging methods. Philosophical Transactions of the Royal Society A ,379(2200):20200205, 2021. 10 [11] Cyril Mory, Bruno Sixou, Salim Si-Mohamed, Loïc Boussel, and Simon Rit. Comparison of five one-step reconstruction algorithms for spectral ct. Physics in Medicine & Biology , 63(23):235001, 2018. [12] B Heismann and M Balda. Quantitative image-based spectral reconstruction for computed tomography. 
+
+Medical Physics , 36(10):4471–4485, 2009. [13] Clemens Maaß, Matthias Baer, and Marc Kachelrieß. Image-based dual energy ct using optimized precor-rection functions: A practical new approach of material decomposition in image domain. Medical Physics ,36(8):3818–3829, 2009. [14] Rina Foygel Barber, Emil Y Sidky, Taly Gilat Schmidt, and Xiaochuan Pan. An algorithm for constrained one-step inversion of spectral ct data. Physics in Medicine & Biology , 61(10):3784, 2016. [15] Francesca Bevilacqua, Yiqiu Dong, and Jakob Sauer Jørgensen. Regularized material decomposition for k-edge separation in hyperspectral computed tomography. In International Conference on Scale Space and Variational Methods in Computer Vision , pages 107–119. Springer, 2023. [16] Joshua Batson and Loic Royer. Noise2self: Blind denoising by self-supervision. In International Conference on Machine Learning , pages 524–533. PMLR, 2019. [17] Allard Adriaan Hendriksen, Daniël Maria Pelt, and K Joost Batenburg. Noise2inverse: Self-supervised deep convolutional denoising for tomography. IEEE Transactions on Computational Imaging , 6:1320–1335, 2020. [18] Nadja Gruber, Johannes Schwab, Elke Gizewski, and Markus Haltmeier. Sparse2inverse: Self-supervised inversion of sparse-view ct data. arXiv:2402.16921 , 2024. [19] Dirk Elias Schut, Adriaan Graas, Robert van Liere, and Tristan van Leeuwen. Equivariance2inverse: Apractical self-supervised ct reconstruction method benchmarked on real, limited-angle, and blurred data. 
+
+arXiv preprint arXiv:2510.23317 , 2025. [20] Mehmet Ozan Unal, Metin Ertas, and Isa Yildirim. Proj2proj: self-supervised low-dose ct reconstruction. 
+
+PeerJ Computer Science , 10:e1849, 2024. [21] Burhaneddin Yaman, Seyed Amir Hossein Hosseini, Steen Moeller, Jutta Ellermann, Kâmil Uğurbil, and Mehmet Akçakaya. Self-supervised learning of physics-guided reconstruction neural networks without fully sampled reference data. Magnetic resonance in medicine , 84(6):3172–3191, 2020. [22] Nadja Gruber, Johannes Schwab, Markus Haltmeier, Ander Biguri, Clemens Dlaska, and Gyeongha Hwang. Noisier2inverse: Self-supervised learning for image reconstruction with correlated noise. IEEE Access ,13:139445–139459, 2025. [23] Dongdong Chen, Julián Tachella, and Mike E Davies. Robust equivariant imaging: a fully unsupervised framework for learning to image from noisy and partial measurements. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition , pages 5647–5656, 2022. [24] Timothy A Davis. Direct methods for sparse linear systems . SIAM, 2006. [25] Michael Brin and Garrett Stuck. Introduction to dynamical systems . Cambridge university press, 2002. [26] Thomas Prohaszka, Lukas Neumann, and Markus Haltmeier. Derivative-free iterative one-step reconstruction for multispectral ct. Journal of Imaging , 10(5):98, 2024. [27] Darin P Clark, Matthew Holbrook, and Cristian T Badea. Multi-energy ct decomposition using convolutional neural networks. In Medical Imaging 2018: Physics of Medical Imaging , volume 10573, pages 415–423. SPIE, 2018. [28] Hao Gong, Shengzhen Tao, Kishore Rajendran, Wei Zhou, Cynthia H McCollough, and Shuai Leng. Deep-learning-based direct inversion for material decomposition. Medical physics , 47(12):6294–6309, 2020. [29] Juan FPJ Abascal, Nicolas Ducros, Valeriya Pronina, Simon Rit, Pierre-Antoine Rodesch, Thomas Broussaud, Suzanne Bussod, Philippe C Douek, Andreas Hauptmann, Simon Arridge, et al. Material decomposition in spectral ct using deep learning: a sim2real transfer approach. IEEE Access , 9:25632–25647, 2021. [30] Weiwen Wu, Dianlin Hu, Chuang Niu, Lieza Vanden Broeke, Anthony PH Butler, Peng Cao, James Atlas, Alexander Chernoglazov, Varut Vardhanabhuti, and Ge Wang. Deep learning based spectral ct imaging. 
+
+Neural Networks , 144:342–358, 2021. 11 [31] Wei Fang, Dufan Wu, Kyungsang Kim, Mannudeep K Kalra, Ramandeep Singh, Liang Li, and Quanzheng Li. Iterative material decomposition for spectral ct using self-supervised noise2noise prior. Physics in medicine & biology , 66(15):155013, 2021. [32] Xi Chen, Chaoyang Zhang, Ti Bai, and Shaojie Chang. Improving spectral ct image quality based on channel correlation and self-supervised learning. IEEE Transactions on Computational Imaging , 9:1084–1097, 2023. [33] Satu I Inkinen, Mikael AK Brix, Miika T Nieminen, Simon Arridge, and Andreas Hauptmann. Unsupervised denoising for sparse multi-spectral computed tomography. arXiv preprint arXiv:2211.01159 , 2022. [34] Xu Ji, Yuchen Lu, Yikun Zhang, Xu Zhuo, Shengqi Kan, Weilong Mao, Gouenou Coatrieux, Jean-Louis Coatrieux, Guotao Quan, Yan Xi, et al. Senas-net: Self-supervised noise and artifact suppression network for material decomposition in spectral ct. IEEE Transactions on Computational Imaging , 10:677–689, 2024. [35] Peng He, Peng Feng, Xiaodong Guo, Weiwen Wu, Hengyong Yu, et al. Spectral2spectral: Image-spectral similarity assisted spectral ct deep reconstruction without reference. arXiv:2210.01125 , 2022. [36] Raziye Kubra Kumrular and Thomas Blumensath. Unsupervised denoising in spectral ct: Multi-dimensional u-net for energy channel regularisation. Sensors , 24(20):6654, 2024. [37] Olaf Ronneberger, Philipp Fischer, and Thomas Brox. U-net: Convolutional networks for biomedical im-age segmentation. In Medical Image Computing and Computer-Assisted Intervention–MICCAI 2015: 18th International Conference, Munich, Germany, October 5-9, 2015, Proceedings, Part III 18 , pages 234–241. Springer, 2015. 12

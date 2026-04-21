@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-21",
+  "date": "2026-04-21",
+  "generated_at": "2026-04-21T20:24:54",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/21/2604.18553v1-on-the-curlometer-measurement-of-field-aligned-and-perpendicular-currents-in-low-earth-orbit-swarm-observations-and-whole-geospace-simulations",
+      "section": "quick",
+      "title_en": "On the curlometer measurement of field-aligned and perpendicular currents in low Earth orbit: Swarm observations and whole geospace simulations",
+      "authors": "R Gajewski, RT Desai, B Hnat, D Lin, MW Dunlop, M Fillion, G Hulot, Shreedevi P R, M-T Walach, E Panov, J-M Leger, T Jager, D Fischer, W Magnes, JA Blake, T Etchells",
+      "date": "2026-04-20",
+      "pdf": "https://arxiv.org/pdf/2604.18553v1",
+      "score": "7.0",
+      "evidence": "利用航天器四面体磁场观测进行电流密度估计",
+      "tldr": "本研究利用 Swarm 卫星观测和全地学空间模拟，评估了旋度计技术在测量低地轨道场向电流（FAC）中的表现。研究证实了 FAC 在 100 公里以下尺度具有显著的非平稳性，并揭示了非同步测量在中尺度下也会产生偏差。此外，研究指出不佳的四面体构型会引发虚假的垂直电流，强调了高质量四点同步观测对于准确捕捉动态电流结构的关键作用。",
+      "tags": "query:tmr",
+      "abstract_en": "Measuring field-aligned currents (FACs) using magnetic field observations provides a powerful means to probe the multi-scale interactions between the magnetosphere, ionosphere and thermosphere. In this study, we apply the curlometer technique to Swarm spacecraft observations and to simulations of the coupled magnetosphere-ionosphere system. We begin by correlating current density curlometer estimates derived from Swarm tetrahedra with varying spatial scales and barycentre locations. This confirms an apparent departure from stationarity for FACs at spatio-temporal scales below 100 km where measurements appear highly uncorrelated. We then analyse simulated magnetic perturbations, where true four-point measurements are available. This shows how, even at meso-scales of hundreds of kilometres, time-shifted FAC estimates can diverge significantly from this ground truth. In both observational and simulated data we find poor tetrahedral configurations can produce spurious perpendicular currents due to numerical instability in the inversion process. This can be mitigated using appropriate quality metrics and high-quality FAC reconstructions still achieved with a tetrahedral face well-aligned to the local magnetic field. These results highlight the dynamic nature of FACs at large as well as small scales, and underscore the substantial advantages of true four-point observations for their accurate analysis.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/21/2604.15651v1-split-self-supervised-partitioning-for-learned-inversion-in-nonlinear-tomography",
+      "section": "quick",
+      "title_en": "SPLIT: Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography",
+      "authors": "Markus Haltmeier, Lukas Neumann, Nadja Gruber, Gyeongha Hwang",
+      "date": "2026-04-17",
+      "pdf": "https://arxiv.org/pdf/2604.15651v1",
+      "score": "6.0",
+      "evidence": "用于重建中非线性逆问题的自监督学习",
+      "tldr": "针对非线性断层扫描重建中缺乏配对真值图像的问题，本文提出SPLIT自监督学习框架。该方法通过对测量数据进行划分，利用跨分区一致性和测量域保真度，在无需真值的情况下实现高质量重建。理论证明其目标函数在期望上与监督学习等效，并引入自动停止规则优化训练。在多光谱CT实验中，其性能优于传统迭代法和现有自监督基准。",
+      "tags": "query:tmr",
+      "abstract_en": "Machine learning has achieved impressive performance in tomographic reconstruction, but supervised training requires paired measurements and ground-truth images that are often unavailable. This has motivated self-supervised approaches, which have primarily addressed denoising and, more recently, linear inverse problems. We address nonlinear inverse problems and introduce SPLIT (Self-supervised Partitioning for Learned Inversion in Nonlinear Tomography), a self-supervised machine-learning framework for reconstructing images from nonlinear, incomplete, and noisy projection data without any samples of ground-truth images. SPLIT enforces cross-partition consistency and measurement-domain fidelity while exploiting complementary information across multiple partitions. Our main theoretical result shows that, under mild conditions, the proposed self-supervised objective is equivalent to its supervised counterpart in expectation. We regularize training with an automatic stopping rule that halts optimization when a no-reference image-quality surrogate saturates. As a concrete application, we derive SPLIT variants for multispectral computed tomography. Experiments on sparse-view acquisitions demonstrate high reconstruction quality and robustness to noise, surpassing classical iterative reconstruction and recent self-supervised baselines.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/21/2604.18008v1-multi-stream-quickest-change-detection-foundations-and-recent-advances",
+      "section": "quick",
+      "title_en": "Multi-stream Quickest Change Detection: Foundations and Recent Advances",
+      "authors": "Topi Halme, Visa Koivunen",
+      "date": "2026-04-20",
+      "pdf": "https://arxiv.org/pdf/2604.18008v1",
+      "score": "6.0",
+      "evidence": "多传感器系统与信号重建",
+      "tldr": "本文综述了高维多传感器系统中快速变化检测（QCD）的最新进展。针对现代应用中大规模数据、采样或通信受限以及信号异构性带来的挑战，文章重点讨论了利用稀疏性和结构化约束的处理方法。此外，还探讨了资源受限下的顺序采样策略、多流检测准则及机器学习在未知模型下的应用，为复杂系统中的实时监控提供了全面的理论与技术参考。",
+      "tags": "query:tmr",
+      "abstract_en": "This paper provides an overview of recent developments in quickest change detection (QCD) for high-dimensional multi-sensor systems, with an emphasis on settings involving structural constraints and limited sensing resources. Classical QCD methodologies, while well understood in low-dimensional and fully observed regimes, face significant challenges when extended to modern applications characterized by large-scale data, constrained sampling or communication, and heterogeneous signal structures. We review key approaches for handling high dimensionality, including methods that exploit sparsity, and other forms of signal heterogeneity. Additionally, we discuss sampling constraints, where observations must be selected or acquired sequentially under resource limitations. Multi-stream applications can require making multiple detections, for example when detecting changes separately in different streams. The underlying assumptions on probability models, the types of changes taking place, commonly used decision-making criteria, performance indices, and error types are described. We also briefly discuss the application of machine learning in cases where the underlying probability models are not known or there is a need to select which sensors should monitor the phenomena because of the large scale of the system.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
