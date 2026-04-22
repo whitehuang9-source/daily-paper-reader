@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-04-22 <!--dpr-date:20260422-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/22/2604.19355v1-laser-learning-active-sensing-for-continuum-field-reconstruction" data-sidebar-item="{&quot;title&quot;: &quot;LASER: Learning Active Sensing for Continuum Field Reconstruction&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.19355v1-laser-learning-active-sensing-for-continuum-field-reconstruction&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;利用主动传感和潜世界模型进行连续场重建&quot;}">LASER: Learning Active Sensing for Continuum Field Reconstruction</a>
   * 2026-04-21 <!--dpr-date:20260421-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/21/2604.18553v1-on-the-curlometer-measurement-of-field-aligned-and-perpendicular-currents-in-low-earth-orbit-swarm-observations-and-whole-geospace-simulations" data-sidebar-item="{&quot;title&quot;: &quot;On the curlometer measurement of field-aligned and perpendicular currents in low Earth orbit: Swarm observations and whole geospace simulations&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.18553v1-on-the-curlometer-measurement-of-field-aligned-and-perpendicular-currents-in-low-earth-orbit-swarm-observations-and-whole-geospace-simulations&quot;, &quot;score&quot;: &quot;7.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;利用航天器四面体磁场观测进行电流密度估计&quot;}">On the curlometer measurement of field-aligned and perpendicular currents in low Earth orbit: Swarm observations and whole geospace simulations</a>

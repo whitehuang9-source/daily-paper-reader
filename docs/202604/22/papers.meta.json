@@ -1,0 +1,23 @@
+{
+  "label": "2026-04-22",
+  "date": "2026-04-22",
+  "generated_at": "2026-04-22T19:50:50",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202604/22/2604.19355v1-laser-learning-active-sensing-for-continuum-field-reconstruction",
+      "section": "quick",
+      "title_en": "LASER: Learning Active Sensing for Continuum Field Reconstruction",
+      "authors": "Huayu Deng, Jinghui Zhong, Xiangming Zhu, Yunbo Wang, Xiaokang Yang",
+      "date": "2026-04-21",
+      "pdf": "https://arxiv.org/pdf/2604.19355v1",
+      "score": "6.0",
+      "evidence": "利用主动传感和潜世界模型进行连续场重建",
+      "tldr": "针对连续物理场重建中稀疏采样和固定布局难以适应动态变化的问题，本文提出了LASER框架。该框架将主动感知建模为部分可观测马尔可夫决策过程（POMDP），利用连续场潜世界模型捕捉物理动力学，并通过强化学习在潜空间中模拟感知场景。LASER能根据预测状态引导传感器移动至高信息区域，在多种物理场下实现了优于静态策略的高保真重建。",
+      "tags": "query:tmr",
+      "abstract_en": "High-fidelity measurements of continuum physical fields are essential for scientific discovery and engineering design but remain challenging under sparse and constrained sensing. Conventional reconstruction methods typically rely on fixed sensor layouts, which cannot adapt to evolving physical states. We propose LASER, a unified, closed-loop framework that formulates active sensing as a Partially Observable Markov Decision Process (POMDP). At its core, LASER employs a continuum field latent world model that captures the underlying physical dynamics and provides intrinsic reward feedback. This enables a reinforcement learning policy to simulate ''what-if'' sensing scenarios within a latent imagination space. By conditioning sensor movements on predicted latent states, LASER navigates toward potentially high-information regions beyond current observations. Our experiments demonstrate that LASER consistently outperforms static and offline-optimized strategies, achieving high-fidelity reconstruction under sparsity across diverse continuum fields.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
