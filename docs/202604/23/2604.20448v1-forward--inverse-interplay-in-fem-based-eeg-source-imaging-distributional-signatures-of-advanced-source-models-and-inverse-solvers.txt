@@ -1,0 +1,278 @@
+Title: Forward--Inverse Interplay in FEM-Based EEG Source Imaging: Distributional Signatures of Advanced Source Models and Inverse Solvers
+
+URL Source: https://arxiv.org/pdf/2604.20448v1
+
+Published Time: Thu, 23 Apr 2026 01:11:50 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# Forward–Inverse Interplay in FEM-Based EEG Source Imaging: Distributional Signatures of Advanced Source Models and Inverse Solvers 
+
+Santtu Söderholm, Joonas Lahtinen, and Sampsa Pursiainen 
+
+Mathematics Research Center, Faculty of Information Technology and Communication Sciences Tampere University 
+
+Korkeakoulunkatu 1, 33720 Tampere, Finland 
+
+Abstract —Electroencephalography (EEG) source imaging aims to infer brain activity from electrical potentials measured on the scalp. This is a difficult problem because many different source patterns can explain the same measurements. The result depends strongly on two things: the forward model and the inverse method. In this work, we study how these two parts work together. We focus not only on where the activity is located, but also on how the reconstructed activity is distributed in space. We suggest that different source models create different signatures in the reconstructed activity. We use realistic head models and compute forward solutions with the finite element method using Zeffiro Interface and DUNEuro. We test different source models, including 2 implementations of a divergence-conforming model, and one implementation of Local subtraction approach. For inverse methods, we use advanced methods such as standardized hier-archical adaptive L1 regression (sHAL1R), standardized Kalman filtering (SKF), and classical dipole scanning. To understand the complex interplay between the forward and inverse approaches, we analyze the inverse source localization results using distributional quantitative measures, including Earth Mover’s Distance and depth bias scatter plot, and qualitatively assess the amplitude distribution and focality. The results show that there is a strong dependence between the choice of source model and the success rate of a given inverse method: a source model that corresponds well with a single point-like source is a good match with an inverse method that presupposes such a source. 
+
+Index Terms —electroencephalography, finite element method, inverse problems, source imaging 
+
+I. I NTRODUCTION 
+
+Electroencephalography (EEG) source imaging aims to esti-mate brain activity from signals measured on the scalp. This is a difficult inverse problem because many different source configurations can produce the same measurements, and the solution is sensitive to noise and modelling errors. In practice, the result depends on two main components: the forward model 
+
+L, which describes how brain activity generates signals at the sensors, and the inverse method, which reconstructs the sources from these measurements. A lot of progress has been made in developing inversion methods tailored to source imaging. In recent years, new variations of the standardized method, sLORETA [1], have been introduced [2], [3], [4]. The appeal of standardization stems from its theoretical ability to reconstruct sources without depth bias from noiseless data [5], [6]. Recent studies have also highlighted that modelling choices in the forward problem can significantly affect the reconstruction 
+
+This work was supported by the Research Council of Finland through the Flagship of Advanced Mathematics for Sensing, Imaging and Modelling (FAME), 2024–2031. 
+
+outcome beyond localization accuracy. In particular, the study of Söderholm et al. showed that preprocessing steps such as peeling, which modifies the anatomical modelling of the head, can have a notable effect on FEM-based EEG source reconstruction results [7]. This further emphasizes that forward modelling choices influence not only accuracy but also the spa-tial characteristics of the reconstructed activity. Finite element method (FEM) based forward modelling provides a flexible framework for improving modelling accuracy by incorporating realistic head geometry and tissue conductivity distributions [8], [9]. Within this framework, the choice of source model has a sig-nificant impact on the reconstruction. For example, divergence-conforming H(div) models (a quadratic extension of the linear Whitney basis), partial integration, and St. Venant approaches have been shown to exhibit different trade-offs between focality and numerical accuracy [10]. Importantly, these differences are reflected not only in localization error but also in the spatial distribution of the reconstructed activity. Recent developments, such as the Local subtraction approach, provide a mathematically sound and computationally efficient way to model singular dipolar sources in FEM [11]. Combining those with advanced inverse methods enables reconstructing weakly distinguishable activity [1], [3], [4], e.g., deep subcor-tical sources, while also motivating a comprehensive analysis of EEG source imaging dynamics that goes beyond pointwise localization accuracy. In this paper, we harness the unbiasedness of standardized estimation and dipolar fitting in Dipole Scan to assess differ-ences arising from the H(div) source model implementation of Zeffiro Interface and two alternative implementations provided by DUNEuro: Whitney source model with face-intersecting and edgewise basis function and Local subtraction. The results show that disagreement with the source model and assumptions of the inversion methods can cause deviations from the ideal results. II. B ACKGROUND 
+
+Attempting to determine brain activity from voltage measure-ments is a 100 -year-old endeavour, originating in Germany [12]. Originally, the means of performing the measurements were rather invasive, requiring the use of depth electrodes to make the signals discernible with the technology of the day. While depth electrodes are still in use today when accurate measurements are required [13], typical modern EEG measurements are performed transcranially, with the electrodes placed on the scalp [14], with an example seen in Figure 1. This has been made possible not 
+
+> arXiv:2604.20448v1 [math.NA] 22 Apr 2026
+
+Fig. 1: Electrodes positioned on the scalp of the ICBM152 2009a head model [17], according to the international 10–10 electrode positioning standard. only by the improvements in measurement technology, but by the rise of advanced signal processing methods [15], [16]. Mathematical modelling of the EEG sources also has ahistory of decades [18], [19]. With a computational equivalent current dipole model in place [20], [21], the advent of modern semiconductor-based computers facilitated practical approaches to the source localization problem. With forward modelling, a rough progression has been from the use of simple spherical models [22], [23] towards realistic domains acquired via seg-mentation of MRI images [24], with boundary element methods (BEM) [25], [26] and more recently Finite Element Methods (FEM) [27], [28] working as the computational approaches. Inverse solvers originally relied on a form of dipole fitting, where a semi-analytical forward solution is compared with a measured one and the dipole model parameters were optimized such that the difference between the forward solution and the measured signal were minimized [22]. More recent inverse solvers either rely on the idea of regularizing a linear forward operator L, or using Bayesian modeling with more complicated a priori assumptions and iterative algorithms in the seeking of maximum a posteriori that maximizes the log-posterior density function [14], [29]. III. M ETHODS 
+
+Forward operators from sources to EEG electrodes in the form of lead field matrices L [14] are computed using the FEM-based transfer matrix approach implemented in DUNEuro [9] and Zeffiro Interface [8]. Inverse reconstructions of brain activity are produced with solvers found in Zeffiro Interface. The freely available and realistic population-based ICBM152 2009a multicompartment head model [17], [30], [31] is used to account for anatomical structure and conductivity variations. Our model of the electrodes is the point electrode model (PEM) [32], [33]. When constructing a L ∈ RNe×Ns , we consider different 
+
+source models , which correspond to means of interpolating a transfer matrix T ∈ RNn×Ne from the nodes of a finite element mesh xn to given source positions xs [14], [34]. Chosen source models include the face-intersecting and edge-wise Whitney basis functions, the divergence-conforming H(div) formulation [10], and the Local subtraction approach [11]. Here, we consider the differences, advantages, and disad-vantages of the source models from an inversion perspective. Namely, we focus on the smoothness, spread, and depth bias of inversion estimations with various methods. In our experiment I, we estimate a cortical source under inversion crime to assess how smooth and spread the estimation we get, and compare the difference of the estimation distribution visually to the estimations obtained with Local subtraction. In this experiment, we use an anisotropic model of the brain conductivity. In experiment II, we compute source estimates at different depths from the inner skull layer of the upper scalp (in the vicinity of the sensor surface). Sources were positioned by randomly placing 100 Cartesian sources per 5 mm interval on the S- or 
+
+z-axis of the RAS coordinate system, in relation to the lowest 
+
+z-coordinate of the set of electrodes. The positions were in the range of 0–60 mm relative height, resulting in a total of 1200 
+
+sources. In this experiment, we use an anisotropic lead field to generate the synthetic data and an isotropic model in inversion to avoid inversion crime while keeping the same mesh used in head model creation. The source models are compared using the depth bias scatter plot introduced in [35] and the Earth Mover’s Distance (EMD) to measure the spread of the reconstructions. Earth Mover’s Distance is a measure of similarity between two distributions, and is computed between our sets of original source positions 
+
+Xs, and their reconstructed estimates Xsest [36]: 
+
+EMD  Xs, Xsest  =
+
+P
+
+> i
+
+P 
+
+> j
+
+cost i,j min flow i,j 
+
+P
+
+> i
+
+P 
+
+> j
+
+min flow i,j 
+
+. (1) Here i corresponds to a source position xsi ∈ Xs and j to a reconstructed source position xsest  
+
+> j
+
+∈ Xsest . The quantity 
+
+cost i,j is the cost of moving source i to j, or the distance between them, and min flow i,j ≤ cost i,j is a non-negative flow that minimizes the expression in the numerator of (1). For source reconstruction, we use standardized distributed methods including sLORETA [1], [37], the sparsity-promoting sHAL1R [3], and spatiotemporal SKF [4] with classical Dipole Scanning (DS) [14], [38], [39]. Because DS is observed to be sensitive mainly to the difference between forward and inverse models [40], we omit it in Experiment II. SKF is omitted in Experiment II due to its dependence on the evolution model’s agreement with the dynamics of time-dependent source activity. The motivation to display the depth-bias scatter plot for standardized methods comes from the theoretical result that the estimated source location should be unbiased, meaning that we obtain perfect agreement between the depth of the true source and the depth of the estimation [5]. We assume that greater deviation from the perfect agreement indicates elevated ambiguity among sources, which is not desired. In EMD terms, a lower value indicates a smaller spread. The evolution of EMD, along with the depth of the true source, is also an important indicator. IV. R ESULTS 
+
+Figure 2 displays an example of a Whitney-based column norm of a L computed with DUNEuro. At this scale, the Local subtraction approach produces a visually similar norm and is hence not presented here. We also see the same quantity (a) (b) 0.3473 
+
+> 0.7992
+> 1.2511
+> 1.7030
+> 2.1549
+> 2.6068
+> #10 -3
+
+Fig. 2: A display of the column norms ∥L∥2 of a Whitney lead field L produced with DUNEuro. Subfigure 2a displays a cortical view while 2b shows a deeper cross-section in the RA-plane of the Right-Anterior-Superior (RAS) coordinate system, roughly at the height of the thalamus. The field is strong near the EEG electrodes depicted as black circles, and decays smoothly when moving away from them.  
+
+> (a) (b) 162
+> 233
+> 305
+> 377
+> 448
+> 520
+
+Fig. 3: A display of the column norms ∥L∥2 of a H(div) lead field L produced with Zeffiro Interface, up to the 95 % quantile of the field strenght, with higher values filtered out. The filtering was done due to an unwarranted field maximum occuring behind the yellow eye balls. The viewports in 3a and 3b are the same as in 2a and 2b, respectively. We see a higher irregularity in the field values when compared to DUNEuro, in addition to a scale of values that is 100 000 times stronger. The field decays relatively slower when moving away from the electrodes. produced with the H(div) source model implementation of Zeffiro Interface in Figure 3. The norm of the Whitney-based L behaves as expected in Figure 2: electric potential u falls off with the inverse distance from a point source. The fact that the field described by T
+
+is constructed by first placing sources at the PEM electrode positions xe, then solving for a potential field from them to the mesh nodes xn and finally using Helmholtz reciprocity [14], [41], [42] or the transposition of T to produce a mapping from 
+
+xn to xe. This is then interpolated to the source positions xs to produce L. The H(div) -based field in Figure 3 is more irregular and does not decay as clearly from the vicinity of the electrodes towards the thalamus. Figure 4 displays how a reconstruction of a cortical source behaves when a lead field has been produced by interpolating 
+
+T via Whitney’s face-intersecting and edgewise basis functions, Local subtraction or Zeffiro’s H(div) , and then reconstructed with either sLORETA, SHAL1R, SKF, or DS. We also observe differences between Whitney vs. Local subtraction and H(div)    
+
+> sLORETA
+> Whitney Local subtraction H(div) Whitney difference
+> H(div)
+> difference
+> SHAL1R SKF DS 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+
+Fig. 4: Close up of reconstructions of a synthetic cortical dipole with sLORETA, SHAL1R, SKF and DS using DUNEuro’s Whitney basis function implementation (column 1), DUNEuro’s Local subtraction (column 2) and Zeffiro Interface’s H(div) 
+
+(column 3). Column 4 shows the difference between Whitney and Local subtraction reconstructions, while column 5 does the same for H(div) and Local subtraction. SHAL1R recon-structions show the true source location and do not differ from each other in the Whitney case. A SHAL1R reconstruction of a H(div) source spreads the source across 3 positions near the true source position, resulting in an observable difference between it and a Local subtraction. vs. Local subtraction. It seems that SHAL1R is the most robust inverse method of the 4 presented here: not only is the reconstruction extremely focused around the actual single source position xs, but the cho-sen lead field formulation does not have an effect on the recon-struction, as the difference between the Whitney and Local sub-traction reconstructions is equally zero. sLORETA SKF, and DS produce similar distributed reconstructions around xs. SKF does exhibit slightly greater focality near the actual source position than sLORETA and DS, but at the same time, it is less robust to changes in the chosen lead-field interpolation approach, as exemplified by much larger relative differences between Local subtraction and both Whitney and H(div) reconstructions. Out of these four, the smallest differences near the actual source position are obtained with DS, although after a certain distance from the true source SHAL1R reconstructions coincide better. The results obtained with the H(div) source model and the reconstruction difference against Local subtraction show that 
+
+H(div) yields wider reconstructions for sLORETA, SHAL1R, and DS, as can be seen from the reconstruction differences. SKF, however, exhibits more focal estimation than the ones obtained with Local subtraction and the Whitney basis. In Figure 5 we also observe how well sLORETA and SHAL1R reconstruct the depth or distance from the inner surface of the skull of a given source, when the interpolation schemes implied by Whitney basis functions, Local subtraction, and H(div) are used. It is obvious that SHAL1R agrees better with the optimal localization depth than sLORETA, as the slopes of the regres-sion lines are 1.03 for Whitney and 1.02 for Local subtraction, whereas sLORETA yields 0.85 for both source models. In both Whitney 
+
+sLORETA Depth of the source (mm)       
+
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60
+
+SHAL1R Depth of the source (mm)                          
+
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60
+> H(div) Depth of the source (mm)
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60 Depth of the source (mm)
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60 Local subt. Depth of the source (mm)
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60 Depth of the source (mm)
+> 010 20 30 40 50
+> Depth of the source estimate (mm)
+> 0
+> 10
+> 20
+> 30
+> 40
+> 50
+> 60
+
+Fig. 5: Depth of true source plotted against the depth of estimation done by sLORETA and SHAL1R. The thin black line shows the optimal agreement between the true and estimated depth when the localization error is zero. The dark gray solid line displays the linear regression, and the dashed gray curves are the 95 % confidence intervals. cases, Local subtraction, as a forward interpolation scheme, produces slightly better localization results than Whitney, which again shows a better correspondence to the source–estimate regression line. The best regression lines are obtained with the 
+
+H(div) source model, since the sLORETA slope is 1.00 and the SHAL1R slope is 0.99. For a more concrete display of how well each forward and inverse method combination in Figure 5 performs, Figure 6 shows a set of Earth Mover’s Distances (EMD) between true and estimated sources at different distances from the inner skull surface. Here the observation is similar to what it was before: SHAL1R produces a systematically better estimate than sLORETA, regardless of the chosen forward interpolation method, with the bulk of the Whitney and SHAL1R EMDs being near the 2 mm mark, while with Whitney and sLORETA the distances are mostly spread between approximately 60 –80 mm .In the case of H(div) , the average EMD with SHAL1R is around 5 mm , while majority of the sLORETA’s EMD values are between 50 –60 mm . With Local subtraction and sLORETA, we see no significant change in the EMD distribution when compared to Whitney and sLORETA, but a change to Local subtraction clearly improves the correspondence of true and reconstructed depths, as the EMD drops mostly to 0 mm with this change of the forward interpolation method, with a non-zero few outliers present especially with superficial sources. As depth increases, we observe a decreasing trend in EMD with sLORETA. Whitney sLORETA Depth of the source (mm)        
+
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 60
+> 65
+> 70
+> 75
+> 80
+> 85
+> 90
+
+SHAL1R Depth of the source (mm)                               
+
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 0
+> 5
+> 10
+> 15
+> 20
+> 25
+> 30
+> H(div) Depth of the source (mm)
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 40
+> 45
+> 50
+> 55
+> 60
+> 65 Depth of the source (mm)
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 0
+> 5
+> 10
+> 15
+> 20
+> 25
+> 30 Local subt. Depth of the source (mm)
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 60
+> 65
+> 70
+> 75
+> 80
+> 85
+> 90 Depth of the source (mm)
+> 010 20 30 40 50 60
+> Earth Mover's Distance (mm)
+> 0
+> 5
+> 10
+> 15
+> 20
+> 25
+> 30
+
+Fig. 6: Earth Mover’s Distances for estimated sources. V. D ISCUSSION 
+
+We studied EEG source imaging as a coupled forward– inverse modelling problem and used distributional signatures as a way to analyze reconstruction results. The main focus was on studying the effects of alternative source models and their implementations: DUNEuro’s [9] face-intersecting and edgewise Whitney basis functions, H(div) implemented in Zeffiro Interface [8], and Local subtraction implemented in DUNEuro. The findings show that different modelling choices lead to distinct activity patterns, even when localization accuracy is similar. Namely, we examined the spread and smoothness of cortical source reconstructions with sLORETA, SHAL1R, SKF, and DS; measured the depth-dependency of standardized methodologies, sLORETA, and SHAL1R; and computed Earth Mover’s Distances (EMD) for reconstructions from these two methods. Based on the reconstructions of the cortical source and depth bias plot, Whitney basis and Local subtraction seem fairly simi-lar. However, EMDs for SHAL1R show a significant difference for these two source models. SHAL1R is an alternative to sLORETA that explicitly assumes a sparse activity distribution [3], which is appropriate since the activity originates from a point source. The SHAL1R’s EMD, which is almost zero at every depth with Local subtraction, indicates that there is no other dipole that could produce similar data. Reflecting on studies on reconstructing deep brain activity from human EEG recordings, EEG’s capability to distinguish deep sources is evident, but the main challenge is in recovering those weak signals from noisy data [43], [44], [45]. Therefore, the ambiguity should come from the modelled noise, not from the lead field in a numerical setting. In contrast to the previous case, the worst EMD for SHAL1R is obtained with H(div) . The cortical reconstructions with SHAL1R and DS indicate that this source model yields a region of nearly identical sources at the cortical level; hence, the difficulty of localizing the source is greater than with the Whitney basis and Local subtraction. High EMD value for both sLORETA and SHAL1R indicates high ambiguity about the source location at every depth. Considering the decreasing tendency of EMD with sLORETA for Whitney and Local subtraction, this indicates that the method has an inflated ability to reconstruct sources farther from the sensors than near them. This could indicate an unrealistic model of deep activity, especially patch-like or spread-out activity, since standardized methods offer higher estimation accuracy for cortical sources, besides their unbiasedness [6], [46]. Moreover, SKF provides a more concise estimate of the cortical activity for H(div) than others. This further consolidates the notion that the source model with weaker source separation is better suited to inversion models that assume wider distributions, such as sLORETA and SKF. Overall, due to the high performance of SHAL1R and DS, we conclude that Local subtraction yields the most accurate point-source model; however, a source model designed for patch-like activity needs to be developed to reconstruct and estimate sources with spread, as Local subtraction causes sub-optimal behavior for sLORETA. VI. A UTHOR CONTRIBUTIONS 
+
+Santtu Söderholm produced the EEG lead fields L using DUNEuro and Zeffiro Interface and was one of the main writers of the work. Joonas Lahtinen produced inverse reconstructions of brain activity using the various inverse methods mentioned in this work and also wrote and improved many parts of the text. Sampsa Pursiainen provided the Zeffiro H(div) lead field routines, participated in writing the introduction and abstract, and worked in a supervisory role throughout the writing process. REFERENCES 
+
+[1] R. D. Pascual-Marqui, “Standardized low-resolution brain electromagnetic tomography (sloreta),” Methods and Findings in Experimental and Clinical Pharmacology ,vol. 24, pp. 5–12, 2002. [2] H. Liu, P. Schimpf, G. Dong, X. Gao, F. Yang, and S. Gao, “Standardized shrinking LORETA-FOCUSS (SSLOFO): A new algorithm for spatio-temporal EEG source reconstruction,” eng, IEEE Trans. Biomed. Eng. ,vol. 52, no. 10, pp. 1681–1691, 2005, ISSN : 0018-9294. [3] J. Lahtinen, A. Koulouri, S. Rampp, J. Wellmer, C. Wolters, and S. Pursiainen, “Standardized hierar-chical adaptive lp regression for noise robust focal epilepsy source reconstructions,” Clinical Neurophysiol-ogy , vol. 159, pp. 24–40, 2024. [4] J. Lahtinen, P. Ronni, N. P. Subramaniyam, A. Koulouri, C. Wolters, and S. Pursiainen, “Standardized kalman filtering for dynamical source localization of concurrent subcortical and cortical brain activity,” Clinical Neuro-physiology , vol. 168, pp. 15–24, 2024. [5] R. D. Pascual-Marqui, “Discrete, 3D distributed, linear imaging methods of electric neuronal activity. Part 1: Exact, zero error localization,” eng, arXiv.org , 2007, 
+
+> ISSN
+
+: 2331-8422. [6] J. Lahtinen, “On bias and its reduction via standard-ization in discretized electromagnetic source localization problems,” Inverse Problems , vol. 40, no. 9, p. 095 002, Jul. 2024. DOI : 10 . 1088 / 1361 - 6420 / ad5f53 [Online]. Available: https://doi.org/10.1088/1361-6420/ad5f53 [7] S. Söderholm, J. Lahtinen, C. H. Wolters, and S. Pursi-ainen, “The effects of peeling on finite element method-based eeg source reconstruction,” Biomedical Signal Pro-cessing and Control , vol. 89, p. 105 695, 2024. [8] Q. He, A. Rezaei, and S. Pursiainen, “Zeffiro interface for electromagnetic brain imaging,” Neuroinformatics ,vol. 18, no. 2, pp. 237–250, 2020. [9] S. Schrader, A. Nüßing, C. Engwer, J. Vorwerk, and C. H. Wolters, “Duneuro: A software toolbox for forward modeling in bioelectromagnetism,” PLOS ONE , vol. 16, no. 6, e0252431, 2021. [10] T. Miinalainen et al., “A realistic, accurate and fast source modeling approach for the eeg forward problem,” 
+
+NeuroImage , vol. 184, pp. 56–67, 2019. [11] M. B. Höltershinken et al., “The local subtraction ap-proach for eeg and meg forward modeling,” SIAM Journal on Scientific Computing , vol. 47, no. 1, B160–B189, 2025. [12] A. A. Vergani, “Hans berger (1873–1941): The german psychiatrist who recorded the first electrical brain sig-nal in humans 100 years ago,” Advances in Physiology Education , vol. 48, no. 4, pp. 878–881, 2024, PMID: 39236103. DOI : 10.1152/advan.00119.2024 [13] F. Missey et al., “Non-invasive temporal interference stimulation of the hippocampus suppresses epileptic biomarkers in patients with epilepsy: Biophysical differ-ences between kilohertz and amplitude modulated stim-ulation,” Brain Stimulation , vol. 19, no. 1, p. 102 981, 2026, ISSN : 1935-861X. DOI : 10 . 1016 / j . brs . 2025 . 11 . 008 [Online]. Available: https://www.sciencedirect.com/ science/article/pii/S1935861X25003791 [14] T. R. Knösche and J. Haueisen, EEG/MEG Source Recon-struction, Texbook for Electro- and Magnetoencephalog-raphy . Springer, 2022, ISBN : 978-3-030-74918-7. [15] R. Hari and A. Puce, MEG - EEG Primer . Oxford Uni-versity Press, Sep. 2023, ISBN : 9780197542187. DOI : 10. 1093/med/9780197542187.001.0001 [Online]. Available: https://doi.org/10.1093/med/9780197542187.001.0001 [16] A. Chaddad, Y. Wu, R. Kateb, and A. Bouridane, “Elec-troencephalography signal processing: A comprehensive review and analysis of methods and techniques.,” Sensors (Basel, Switzerland) , vol. 23, no. 14, 2023, ISSN : 1424-8220 (Electronic). DOI : 10.3390/s23146434 [17] NeuroImaging and Surgical Technologies Lab. “Icbm 152 nonlinear atlases,” Accessed: Apr. 16, 2026. [Online]. Available: https://nist.mni.mcgill.ca/icbm-152-nonlinear-atlases-2009/ [18] J. Clark and R. Plonsey, “A mathematical evaluation of the core conductor model,” Biophysical Journal , vol. 6, no. 1, pp. 95–112, 1966, ISSN : 0006-3495. DOI : https: / / doi . org / 10 . 1016 / S0006 - 3495(66 ) 86642 - 0 [Online]. Available: https://www.sciencedirect.com/science/article/ pii/S0006349566866420 [19] D. B. Geselowitz, “On bioelectric potentials in an in-homogeneous volume conductor,” Biophysical Journal ,vol. 7, no. 1, pp. 1–11, 1967, ISSN : 0006-3495. DOI : https: / / doi . org / 10 . 1016 / S0006 - 3495(67 ) 86571 - 8 [Online]. Available: https://www.sciencedirect.com/science/article/ pii/S0006349567865718 [20] M. Scherg and D. Von Cramon, “Two bilateral sources of the late aep as identified by a spatio-temporal dipole model,” Electroencephalography and Clinical Neuro-physiology/Evoked Potentials Section , vol. 62, no. 1, pp. 32–44, 1985, ISSN : 0168-5597. DOI : https://doi.org/ 10 . 1016 / 0168 - 5597(85 ) 90033 - 4 [Online]. Available: https : / / www . sciencedirect . com / science / article / pii / 0168559785900334 [21] M. S. Hämäläinen, R. Hari, R. J. Ilmoniemi, J. Knuu-tila, and O. V. Lounasmaa, “Magnetoencephalography— theory, instrumentation, and applications to noninvasive studies of the working human brain,” Reviews of Modern Physics , vol. 65, no. 2, pp. 413–497, 1993. [22] J. P. Ary, S. A. Klein, and D. H. Fender, “Location of sources of evoked scalp potentials: Corrections for skull and scalp thicknesses,” IEEE Transactions on Biomedical Engineering , vol. BME-28, no. 6, pp. 447–452, 1981. 
+
+> DOI
+
+: 10.1109/TBME.1981.324817 [23] B. N. Cuffin, D. L. Schomer, J. R. Ives, and H. Blume, “Experimental tests of eeg source localization accuracy in spherical head models,” Clinical Neurophysiology ,vol. 112, no. 1, pp. 46–51, 2001. [24] B. N. Cuffin, D. L. Schomer, J. R. Ives, and H. Blume, “Experimental tests of eeg source localization accuracy in realistically shaped head models,” Clinical Neurophys-iology , vol. 112, no. 12, pp. 2288–2292, 2001. [25] J. de Munck, “A linear discretization of the volume con-ductor boundary integral equation using analytically in-tegrated elements (electrophysiology application),” IEEE Transactions on Biomedical Engineering , vol. 39, no. 9, pp. 986–990, 1992. DOI : 10.1109/10.256433 [26] H. Schlitt, L. Heller, R. Aaron, E. Best, and D. Ranken, “Evaluation of boundary element methods for the eeg forward problem: Effect of linear interpolation,” IEEE Transactions on Biomedical Engineering , vol. 42, no. 1, pp. 52–58, 1995. DOI : 10.1109/10.362919 [27] C. Wolters, A. Anwander, X. Tricoche, D. Weinstein, M. Koch, and R. MacLeod, “Influence of tissue con-ductivity anisotropy on eeg/meg field and return current computation in a realistic head model: A simulation and visualization study using high-resolution finite element modeling,” NeuroImage , vol. 30, no. 3, pp. 813–826, 2006, ISSN : 1053-8119. DOI : https : / / doi . org / 10 . 1016 / j . neuroimage . 2005 . 10 . 014 [Online]. Available: https : / / www . sciencedirect . com / science / article / pii / S1053811905007871 [28] C. H. Wolters, H. Köstler, C. Möller, J. Härdtlein, L. Grasedyck, and W. Hackbusch, “Numerical mathematics of the subtraction method for the modeling of a current dipole in eeg source reconstruction using finite element head models,” SIAM Journal on Scientific Computing ,vol. 30, no. 1, pp. 24–45, 2008. DOI : 10.1137/060659053 [29] J. Kaipio and E. Somersalo, Statistical and computational inverse problems . Springer Science & Business Media, 2006, vol. 160. [30] V. Fonov, A. C. Evans, K. Botteron, C. R. Almli, R. C. McKinstry, and D. L. Collins, “Unbiased average age-appropriate atlases for pediatric studies,” NeuroImage ,vol. 54, no. 1, pp. 313–327, 2011, ISSN : 1053-8119. DOI :https : / / doi . org / 10 . 1016 / j . neuroimage . 2010 . 07 . 033 [Online]. Available: https : / / www . sciencedirect . com / science/article/pii/S1053811910010062 [31] V. Fonov, A. Evans, R. McKinstry, C. Almli, and D. Collins, “Unbiased nonlinear average age-appropriate brain templates from birth to adulthood,” NeuroImage ,vol. 47, S102, 2009, Organization for Human Brain Mapping 2009 Annual Meeting, ISSN : 1053-8119. DOI :https : / / doi . org / 10 . 1016 / S1053 - 8119(09 ) 70884 - 5 [Online]. Available: https : / / www . sciencedirect . com / science/article/pii/S1053811909708845 [32] M. Hanke, B. Harrach, and N. Hyvönen, “Justification of point electrode models in electrical impedance tomog-raphy,” Mathematical Models and Methods in Applied Sciences , vol. 21, no. 06, pp. 1395–1413, 2011. DOI :10.1142/S0218202511005362 [33] S. Pursiainen, B. Agsten, S. Wagner, and C. H. Wolters, “Advanced boundary electrode modeling for tes and parallel tes/eeg,” IEEE Transactions on Neural Systems and Rehabilitation Engineering , vol. 26, no. 1, pp. 37–44, 2018. DOI : 10.1109/TNSRE.2017.2748930 [34] C. Wolters, L. Grasedyck, and W. Hackbusch, “Efficient computation of lead field bases and influence matrix for the fem-based eeg and meg inverse problem,” Inverse Problems , vol. 20, pp. 1099–1116, Aug. 2004. DOI : 10. 1088/0266-5611/20/4/007 [35] O. L. Elvetun and N. Sudheer, “Weighted sparsity regular-ization for solving the inverse eeg problem: A case study,” 
+
+Biomedical Signal Processing and Control , vol. 107, p. 107 673, 2025, ISSN : 1746-8094. DOI : https : / / doi . org / 10 . 1016 / j . bspc . 2025 . 107673 [Online]. Available: https : / / www . sciencedirect . com / science / article / pii / S1746809425001843 [36] Y. Rubner, C. Tomasi, and L. Guibas, “A metric for dis-tributions with applications to image databases,” in Sixth International Conference on Computer Vision (IEEE Cat. No.98CH36271) , 1998, pp. 59–66. DOI : 10.1109/ICCV. 1998.710701 [37] K. Sekihara and S. S. Nagarajan, Adaptive Spatial Filters for Electromagnetic Brain Imaging . Springer, 2008, ISBN :978-3-540-79369-4. [38] M. Fuchs et al., “Improving source reconstructions by combining bioelectric and biomagnetic data,” Electroen-cephalography and Clinical Neurophysiology , vol. 107, no. 2, pp. 93–111, 1998, ISSN : 0013-4694. DOI : https: / / doi . org / 10 . 1016 / S0013 - 4694(98 ) 00046 - 7 [Online]. Available: https://www.sciencedirect.com/science/article/ pii/S0013469498000467 [39] F. Neugebauer et al., “Validating eeg, meg and combined meg and eeg beamforming for an estimation of the epileptogenic zone in focal cortical dysplasia,” Brain Sciences , vol. 12, no. 1, 2022, ISSN : 2076-3425. DOI :10.3390/brainsci12010114 [Online]. Available: https:// www.mdpi.com/2076-3425/12/1/114 [40] J. Lahtinen, F. Moura, M. Samavaki, S. Siltanen, and S. Pursiainen, “In silico study of the effects of cerebral circulation on source localization using a dynamical anatomical atlas of the human head,” eng, Journal of neural engineering , vol. 20, no. 2, pp. 26 005–, 2023, 
+
+> ISSN
+
+: 1741-2560. [41] J. Malmivuo and R. Plonsey, Bioelectromagnetism: Principles and Applications of Bioelectric and Bio-magnetic Fields . Oxford University Press, Oct. 1995, 
+
+> ISBN
+
+: 9780195058239. DOI : 10 . 1093 / acprof : oso / 9780195058239 . 001 . 0001 [Online]. Available: https : / / doi.org/10.1093/acprof:oso/9780195058239.001.0001 [42] J. Gross, M. Junghöfer, and C. Wolters, “Bioelectro-magnetism in human brain research: New applications, new questions.,” The Neuroscientist : a review journal bringing neurobiology, neurology and psychiatry , vol. 29, no. 1, pp. 62–77, 2023, ISSN : 1089-4098 (Electronic). 
+
+> DOI
+
+: 10.1177/10738584211054742 [43] P. Krishnaswamy et al., “Sparsity enables estimation of both subcortical and cortical activity from meg and eeg,” eng, PROCEEDINGS OF THE NATIONAL ACADEMY OF SCIENCES OF THE UNITED STATES OF AMER-ICA , vol. 114, no. 48, E10465–E10474, 2017, ISSN :0027-8424. [44] M. Fahimi Hnazaee et al., “Localization of deep brain activity with scalp and subdural eeg,” eng, NeuroImage (Orlando, Fla.) , vol. 223, pp. 117 344–, 2020, ISSN :1053-8119. [45] A. Rezaei et al., “Reconstructing subcortical and corti-cal somatosensory activity via the ramus inverse source analysis technique using median nerve sep data,” eng, 
+
+NeuroImage (Orlando, Fla.) , vol. 245, pp. 118 726–, 2021, ISSN : 1053-8119. [46] A. Giri, L. Hecker, J. C. Mosher, A. Adler, and D. Pan-tazis, “Localization of realistic spatial patches of complex source activity in meg and eeg,” IEEE Transactions on Neural Systems and Rehabilitation Engineering , vol. 33, pp. 4241–4254, 2025. DOI : 10 . 1109 / TNSRE . 2025 . 3622587

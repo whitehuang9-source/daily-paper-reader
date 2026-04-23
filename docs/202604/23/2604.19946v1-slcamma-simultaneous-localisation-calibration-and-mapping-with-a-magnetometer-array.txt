@@ -1,0 +1,1536 @@
+Title: SL(C)AMma: Simultaneous Localisation, (Calibration) and Mapping With a Magnetometer Array
+
+URL Source: https://arxiv.org/pdf/2604.19946v1
+
+Published Time: Thu, 23 Apr 2026 00:13:10 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+# SL(C)AMma: Simultaneous Localisation, (Calibration) and Mapping With a Magnetometer Array 
+
+> Journal Title XX(X):1–10 ©The Author(s) 0000 Reprints and permission: sagepub.co.uk/journalsPermissions.nav DOI: 10.1177/ToBeAssigned www.sagepub.com/
+
+SAGE 
+
+Thomas Edridge 1 and Manon Kok 1
+
+Abstract 
+
+Indoor localisation techniques suffer from attenuated Global Navigation Satellite System (GNSS) signals and from the accumulation of unbounded drift by integration of proprioceptive sensors. Magnetic field-based Simultaneous Localisation and Mapping (SLAM) reduces drift through loop closures by revisiting previously seen locations, but extended exploration of unseen areas remains challenging. Recently, magnetometer arrays have demonstrated significant benefits over single magnetometers, as they can directly estimate the odometry. However, inconsistencies between magnetometer measurements negatively affect odometry estimates and complicate loop closure detection. We propose two filtering algorithms: The first focuses on magnetic field-based SLAM using a magnetometer array (SLAMma). The second extends this to jointly estimate the magnetometer calibration parameters (SLCAMma). We demonstrate, using Monte Carlo simulations, that the calibration parameters can be accurately estimated when there is sufficient orientation excitation, and that magnetometers achieve inter-sensor measurement consistency regardless of the type of motion. Experimental validation on ten datasets confirms these results, and we demonstrate that in cases where single magnetometer SLAM fails, SLAMma and SLCAMma provide good trajectory estimates with, more than 80% drift reduction compared to integration of proprioceptive sensors. 
+
+Keywords 
+
+Simultaneous localisation and mapping, sensor array, magnetometer, magnetic field, Gaussian process. 
+
+1 Introduction 
+
+Indoor localisation is important for applications such as autonomous navigation of mobile agents, for example, in multi-agent robotic logistics in warehouses (Krnjaic et al. 2024), or firefighters responding to emergencies (Nilsson et al. 2014). Building structures attenuate the Global Navigation Satellite System (GNSS) signals, rendering them unreliable or unavailable indoors (Storms et al. 2010). Nowadays, most smart devices are equipped with an Inertial Measurement Unit (IMU) (Kok et al. 2017), consisting of an accelerometer and a gyroscope. Mobile robots are additionally equipped with wheel encoders (Huang et al. 2023). These proprioceptive sensors provide position and orientation information, but this is widely known to drift over time (Kok et al. 2017). Simultaneous Localisation and Mapping (SLAM) offers a promising framework to reduce the amount of drift (Cadena et al. 2017), by utilising proprioceptive sensors in combination with various exteroceptive sensors, such as LiDARs, cameras, and ultrawideband (UWB). However, these sensors each have their drawbacks, which we overcome using an array of magnetometers, see also Figure 1. Unlike LiDARs, which are often bulky and expensive (Lin and Zhang 2022; Hess et al. 2016; Pan et al. 2021; Shan et al. 2021), cameras, that perform poorly in visually feature-poor/low-light environments (Shan et al. 2021; Chung et al. 2022; Yan et al. 2022; Xu et al. 2020), or UWB sensors, which require an infrastructure with a fixed anchor (Xu et al. 2020; Yang et al. 2021; Cao et al. 2020; Nguyen et al. 2020), the 20   
+
+> 22
+> 24
+> 26
+> 28
+> 30
+> 32
+> 34
+> Magnetic field norm [  T]
+> Magnetometer array trajectory Start End
+
+Figure 1. Example of a 30-magnetometer array moving in a square in an indoor environment with a spatially disturbed magnetic field. The background colour corresponds to the norm of the magnetic field, and the transparency is proportional to the uncertainty of the magnetic field predictions. 
+
+magnetometer is low-cost, compact, and does not require line of sight. The magnetometer, which measures a 3D vector of the ambient magnetic field, has recently shown promise for indoor localisation (Siebler et al. 2022; Dammann   
+
+> 1DCSC, Delft University of Technology, the Netherlands.
+> Corresponding author:
+> Thomas Edridge. Email: t.i.edridge@tudelft.nl
+> Prepared using sagej.cls [Version: 2017/01/17 v1.20]
+> arXiv:2604.19946v1 [cs.RO] 21 Apr 2026
+
+2 Journal Title XX(X) 
+
+et al. 2024; Li et al. 2012; Angermann et al. 2012; Solin et al. 2018; Viset et al. 2022). While magnetometers are traditionally used as a compass, these recent methods create a map of the disturbances in the magnetic field of the indoor environment, which can be used for indoor localisation. Ferromagnetic materials cause these disturbances and are generally temporally stable (Ouyang and Abed-Meraim 2022), except for disruptive and moving sources such as elevators. An example of an indoor magnetic field map is illustrated in Figure 1. Recently, it has been demonstrated that a key advantage of a magnetometer array over a single magnetometer is its ability to extract odometry information through spatial variations in the ambient magnetic field (Skog et al. 2018, 2021). The idea is that spatially distributed magnetometers record two consecutive “images” of the magnetic field, one before and one after displacement. By comparing the two images, the change in position and orientation can be estimated. This has great potential for robotics as their platforms can easily carry multiple, low-cost magnetometers. This work extends the single magnetometer SLAM algorithm of Viset et al. (2022), which represents the magnetic field map using a reduced rank Gaussian process (GP) formulation from Kok and Solin (2018), by extending it to allow for the inclusion of measurements from a magnetometer array. A challenge with using multiple magnetometers in mag-netic field-based SLAM is inter-sensor measurement consis-tency (Ouyang and Abed-Meraim 2022), which requires all magnetometers to measure the same magnetic field values when placed in the same location. This is important for two reasons. Firstly, uncalibrated magnetometers negatively affect the exploration phase of the magnetometer array, increasing the error accumulation in the estimated odome-try (Edridge and Kok 2025). Secondly, it complicates loop closure detection. To be more specific, if the magnetometer array revisits a previous location in a different orientation with uncalibrated magnetometers, a loop closure is unlikely to be detected. We therefore extend our magnetometer array filtering algorithm by incorporating online magnetometer calibration of scaling parameters and biases. We validate both algorithms using multiple experimental datasets. The python implementation used for simulation and experimental validation is made publicly available *.
+
+2 Related work 
+
+Magnetometer arrays were first used to estimate the velocity to aid indoor localisation (Vissi` ere et al. 2007; Dorveaux and Petit 2011; Dorveaux et al. 2011; Chesneau et al. 2016; Zmitri et al. 2021, 2020). Inspired by this approach, Skog et al. (2018, 2021) show that the odometry (change in position and orientation) can be estimated directly. Following up prior work, Edridge and Kok (2025) analysed the precision of the odometry estimates. The work in Huang et al. (2024) combines a magnetometer array with an inertial navigation system. Furthermore, Skog et al. (2025) explores a theoretical comparison between magnetic-field odometry and magnetic-field SLAM. Finally, Huang et al. (2025a) uses a magnetometer array to estimate the odometry explicitly and fuses the estimates in a SLAM framework. In contrast, we estimate the pose change implicitly by maximising the posterior and present a closed-form algorithm for magnetic-field SLAM using a magnetometer array. Furthermore, we extend our algorithm to include online magnetometer calibration. Existing magnetometer calibration methods, such as those using ellipsoid fitting (Renaudin et al. 2010) or maximum likelihood estimation (Kok and Sch¨ on 2016), require a disturbance-free magnetic field, necessitating a dataset away from the desired indoor localisation area. Alternatively, the calibration parameters can be estimated online in a known magnetic field map (Siebler et al. 2020, 2021, 2023). The work in Vallivaara et al. (2024) shows it is possible to estimate the magnetometer bias online in a magnetic field SLAM framework. Magnetometer array calibration is addressed in Wang et al. (2017); Mu et al. (2018, 2019); Chesneau et al. (2019); Huang et al. (2025b). In particular, Chesneau et al. (2019) demonstrates that the position, the magnetic field map, and all calibration parameters are identifiable up to an arbitrary scaling factor of the magnetic field strength. However, they assume access to the true orientations of the magnetometer array. This is often unrealistic in practice, as position and orientation estimates are obtained through inertial sensors or wheel encoders, and these estimates, therefore, suffer from integration drift. Recently, Lyu et al. (2026) addressed this limitation by accumulating noisy wheel odometry to jointly localise and calibrate a magnetometer array, though their method requires a known, pre-built magnetic field map. In contrast, our approach simultaneously estimates the magnetic field map online. By assuming access to noisy changes in position and orientation, we solve the non-linear SLAM and calibration problem directly within a filtering framework. 
+
+3 Problem formulation 
+
+To solve the problem of magnetic-field SLAM using a magnetometer array, we maximise the posterior probability density function (pdf) 
+
+p  xk|yb
+
+> 1: k
+
+, ∆pb
+
+> 1: k−1
+
+, ∆R1: k−1
+
+ , (1) where p(a | b) denotes the conditional pdf of a given b and for notational brevity we define yb 
+
+> 1: k
+
+= {{ yb
+
+> i,k
+
+}Nmag  
+
+> i=1
+
+}Nk
+
+> k=1
+
+,with yb 
+
+> i,k
+
+∈ R3×1, the measurement set of all Nmag 
+
+magnetometers on the array for all time-steps NK . We use superscript b to denote the body frame, of which the origin and axes are aligned with the origin and axes of the array as shown in Figure 2. Furthermore, we assume to have access to the change in position ∆pb 
+
+> 1: k−1
+
+and change in orientation 
+
+∆R1: k−1 of the magnetometer array. Moreover, we define the state xk in (1) as 
+
+xk = pn
+
+> k
+
+, Rbn  
+
+> k
+
+, m, db, bb , (2) where pn 
+
+> k
+
+is the location of the magnetometer array at time-step k, with superscript n denoting the navigation frame as depicted in Figure 2. Furthermore, Rbn  
+
+> k
+
+∈ SO(3) is the rotation matrix, from navigation frame to body frame at time-step k. The vector m ∈ RNweights ×1 describes the weights  
+
+> ∗Available online at https://github.com/Tedridge/SL-C-AMma
+> Prepared using sagej.cls
+
+Edridge and Kok: SL(C)AMma 3
+
+used to represent the ambient magnetic field map. We use the shorthand notations db ≜ {db 
+
+> i
+
+}Nmag  
+
+> i=1
+
+and bb ≜ {bb 
+
+> i
+
+}Nmag  
+
+> i=1
+
+,with db 
+
+> i
+
+, bb 
+
+> i
+
+∈ R3×1 to denote the scaling parameters and biases of magnetometer i ∈ { 1, . . . , N mag } on the array. The scaling parameters compensate for effects induced by soft iron materials, and the bias compensates for hard iron effects, disturbing the magnetometer measurements.   
+
+> Figure 2. Magnetometer array of size
+
+345mm × 245mm ,consisting of 30 magnetometers. The body frame is defined in the centre of the sensor board. We illustrate the measurement 
+
+yb  
+
+> 1,k and position
+
+sb 
+
+> 1of the first magnetometer.
+
+The relative positions of the magnetometers sb 
+
+> i
+
+are assumed to be known in the body frame as shown in Figure 2. Hence, the position of a magnetometer on the magnetometer array at time step k can be described in the navigation frame by pn 
+
+> k
+
++ Rnb  
+
+> k
+
+sb 
+
+> i
+
+. We can now write the dynamic pdf in terms of the changes in positions ∆pb 
+
+> k
+
+and change in orientations 
+
+∆Rk as 
+
+p(pn
+
+> k+1
+
+, Rbn 
+
+> k+1
+
+|pn
+
+> k
+
+, Rbn  
+
+> k
+
+, ∆pb
+
+> k
+
+, ∆Rk). (3) We can also write the pdf of our measurements as 
+
+p(yb
+
+> k
+
+|xk) = 
+
+> Nmag
+
+Y
+
+> i=1
+
+p(yb
+
+> i,k
+
+|xk), (4) where we use the assumption that the measurements of the magnetometers on the array are independent. We present two algorithms of magnetic field SLAM with a magnetometer array: SLAMma, which assumes pre-calibrated magnetometers and SLCAMma, which calibrates the magnetometers online. We want to highlight that, whenever we use the term loop-closure, this is not an explicit loop-closure as is common practice in many robotics applications. Contrarily, the loop-closure is done implicitly by maximising the posterior from (1) when re-visiting a previously seen location. Additionally, we highlight that our SL(C)AMma algorithm does not explicitly compute magnetic field odometry, as for instance in Huang et al. (2025a). However, this is also done implicitly by maximising the posterior from (1). 
+
+4 Modelling 
+
+4.1 Dynamic model 
+
+We assume a dynamic model where we have noisy measurements of changes in position and orientation at every time step as 
+
+pn 
+
+> k+1
+
+= pn 
+
+> k
+
++ Rnb 
+
+> k
+
+ ∆pb 
+
+> k
+
++ ϵb
+
+> k
+
+ , ϵb 
+
+> k
+
+∼ N (0 , Σpos ) ,
+
+Rbn  
+
+> k+1
+
+= exp R(νb
+
+> k
+
+)∆ RkRbn  
+
+> k
+
+, νb 
+
+> k
+
+∼ N (0 , Σrot ) ,
+
+(5) where N (·, ·) denotes the Gaussian distribution and where the operator exp R(·) as defined in Kok et al. (2017) maps an orientation deviation to a rotation matrix in 
+
+SO(3) . Furthermore, we assume that the ambient magnetic field is time-invariant (Ouyang and Abed-Meraim 2022) as are the calibration parameters, i.e., the dynamic model of these parameters is: mk+1 = mk, db 
+
+> i,k +1
+
+= db
+
+> i,k
+
+, and 
+
+bb 
+
+> i,k +1
+
+= bb
+
+> i,k
+
+.
+
+4.2 Magnetic field model 
+
+Consistent with Solin et al. (2018), the ambient magnetic field is modeled as the gradient of a scalar potential ∇ϕ(p),using a GP. Modelling the magnetic field as the gradient of a scalar potential ensures a curl-free kernel assumption, which satisfies the Maxwell equations, and, as shown by Solin et al. (2018), it is effective for modelling the magnetic field as a curl-free vector field. The GP prior has a distribution 
+
+ϕ(p) ∼ GP (0 , κ lin (p, p′) + κse (p, p′)) . (6) Where, GP (·, ·) denotes the GP distribution. Furthermore, we have kernel κlin (p, p′) = σ2
+
+> lin
+
+pTp′ and the squared exponential kernel is defined as 
+
+κse (p, p′) = σ2
+
+> se
+
+exp 
+
+ || p − p′|| 2
+
+−2ℓ2
+
+
+
+. (7) which models disturbances caused by ferromagnetic mate-rials present in the structure of buildings. The kernel’s GP hyper-parameters are the length-scale ℓ and the signal variance σ2
+
+> se
+
+. As we are interested in SLAM (and calibration) using a magnetometer array of 30 magnetometers, each collecting magnetic field measurements at high frequen-cies, we approximate the GP in a reduced rank form from Solin et al. (2018) to reduce the computational complex-ity and memory requirements. This reduced rank form is based on a Laplacian eigenvalue decomposition, where the basis functions stretch over a known finite cubical domain 
+
+Ω = [ Ll, 1, L u, 1] × [Ll, 2, L u, 2] × [Ll, 3, L u, 3]. The weights have prior distribution m ∼ N (0 , Λw) with 
+
+Λw = diags 
+
+
+
+σ2
+
+> lin
+
+, σ 2
+
+> lin
+
+, σ 2
+
+> lin
+
+, S se (pλ1), . . . , S se (pλm)
+
+
+
+(8) with the spectral density Sse (. . . ) and λj the jth eigenvalue both defined in Solin et al. (2018). Here, the operator diags (·) places the elements on the diagonal of asquare matrix. By truncating for the highest Nweights 
+
+eigenvalues, we approximate the GP in reduced rank form as ∇ϕ(·) ≈ ∇ Φ(·)m. Here, ∇Φ(·) is defined in Solin et al. (2018) and the weights m are part of the state from (2). 
+
+4.3 Magnetometer array measurement model 
+
+Let us assume that all Nmag magnetometers measure the magnetic field synchronously at each time step k, where each measurement is independent according to (4), the measurement vector of all magnetometers on the array is  
+
+> Prepared using sagej.cls
+
+4 Journal Title XX(X) 
+
+then yb 
+
+> k
+
+≜ (yb
+
+> 1,k
+
+)T · · · (yb
+
+> Nmag ,k
+
+)TT. Let us also assume we know matrix Sb ≜ sb 
+
+> 1
+
+. . . sb
+
+> Nmag
+
+, which describes the relative locations of all magnetometers on the array in the body frame and let us define the matrix Pn 
+
+> k
+
+= pn 
+
+> k
+
+⊗ 1T 
+
+> Nmag
+
+.Here, pn 
+
+> k
+
+is the magnetometer array centre location from (2) and the notation 1Nmag is a vector of ones of length Nmag .This allows us to define the measurement model of the magnetometer array as a reduced rank GP in terms of our state from (2) as 
+
+yb 
+
+> k
+
+≈ Db  Rbn  
+
+> k
+
+∇Φ  Pn 
+
+> k
+
++ Rnb  
+
+> k
+
+Sb m + bb + eb
+
+> k
+
+,
+
+eb 
+
+> k
+
+∼ N (0 , σ 2 
+
+> y
+
+I3Nmag ), (9) with assumed Gaussian measurement noise eb 
+
+> k
+
+and 
+
+Rnb  
+
+> k
+
+≜ (Rbn  
+
+> k
+
+)T. The calibration parameters bb and 
+
+db are defined as bb = (bb
+
+> 1
+
+)T · · · (bb 
+
+> Nmag
+
+)TT and 
+
+Db = diags (d1, . . . , dNmag )−1.
+
+5 Methods 
+
+To maximise our posterior from (1) using the models described in Section 4, we estimate our state xk from (2) in a magnetic field SLAM filter with a magnetometer array. We achieve this using an iterated version (Bell and Cathey 1993) of the error state extended information filter, similar to Viset et al. (2023). To this end, we introduce the error state of (2) as 
+
+δxk =
+
+h
+
+(δpn
+
+> k
+
+)T ,  ηb
+
+> k
+
+T , (δmk)T ,  δdb
+
+> k
+
+T ,  δbb
+
+> k
+
+TiT
+
+.
+
+(10) Here, δpn
+
+> k
+
+, ηb
+
+> k
+
+, δmk, δdb 
+
+> k
+
+and δbb 
+
+> k
+
+respectively denote the estimation errors of the position, orientation, magnetic field weights, scaling and bias. Note that we use the information form to avoid numerical instability that occurs in the standard Kalman filter. As the magnetometer array Jacobians are highly correlated, the innovation covariance becomes ill-conditioned. 
+
+5.1 Dynamic update 
+
+Following the approach in Viset et al. (2022), the state from (2) is updated directly using the dynamic equations from Section 4.1 as 
+
+ˆpn 
+
+> k+1 |k
+
+= ˆ pn 
+
+> k|k
+
++ ˆRnb 
+
+> k|k
+
+∆pb
+
+> k
+
+, (11a) 
+
+ˆRbn  
+
+> k+1 |k
+
+= ∆ Rk ˆRbn 
+
+> k|k
+
+, (11b) 
+
+ˆmk+1 |k = ˆ mk|k, (11c) 
+
+ˆdb 
+
+> k+1 |k
+
+= ˆdb
+
+> k|k
+
+, (11d) 
+
+ˆbb 
+
+> k+1 |k
+
+= ˆbb
+
+> k|k
+
+, (11e) where the hat operator ˆ· denotes an estimate. Note that we present two algorithms, one with pre-calibrated magnetometers and the other with online magnetometer calibration. In the former, (11d) and (11e) are omitted. The information matrix I is defined as the inverse of the state covariance matrix from (10), and is updated in the dynamic update as follows 
+
+Ik+1 |k = ˜Ik|k − ∆ ˜Ik, (12) with ∆ ˜Ik ≜ ˜Ik|kGk(Q−1 
+
+> k
+
++ GT 
+
+> k
+
+˜Ik|kGk)−1GT 
+
+> k
+
+˜Ik|k and 
+
+˜Ik|k ≜ F−T 
+
+> k
+
+Ik|kF−1 
+
+> k
+
+, where we used the Woodbury matrix identity (Petersen and Pedersen 2008), following Thrun et al. (2004). The matrices Fk and Gk and covariance Q are defined as 
+
+Fk =
+
+
+
+I3 ˆRnb 
+
+> k|k
+
+[∆ pb
+
+> k
+
+×] 03×Npar 
+
+03×3 I3 03×Npar 
+
+0Npar ×3 0Npar ×3 INpar 
+
+ ,
+
+Gk =
+
+
+
+ˆRnb  
+
+> k|k
+
+03×3
+
+03×3 I3
+
+0Npar ×3 0Npar ×3
+
+ ,
+
+Q = blockdiag (Σpos , Σrot ) ,
+
+(13) with Npar = Nweights + 6 Nmag , where 6Nmag is omitted for the algorithm with pre-calibrated magnetometers. Note that we only use the error state for the magnetic field measurement update, not the dynamic update. Instead, we update our state from (2) in the dynamic update directly. This effectively means setting the predictive information vector to zero at the start of every magnetic field measurement update. 
+
+5.2 Magnetic field measurement update 
+
+We adapt the measurement model from (9) to update the error state from (10), leading to a residual zk+1 as 
+
+zk+1 = ˆDb−1
+
+> k+1 |k
+
+yb 
+
+> k+1
+
+− ˆRbn 
+
+> k+1 |k
+
+∇ ˆΦk+1 |k ˆmk+1 |k − ˆbb
+
+> k+1 |k
+
+,
+
+zk+1 ∼ N  0, Σzk+1 
+
+ ,
+
+(14) where ˆDb−1
+
+> k+1 |k
+
+yb 
+
+> k+1
+
+and Σzk+1 = ˆDb−1
+
+> k+1 |k
+
+( ˆDb−1
+
+> k+1 |k
+
+)T are the corrected measurement and its noise covariance. We use ∇ ˆΦk+1 |k = ∇Φ( ˆPn 
+
+> k+1 |k
+
++ ˆRnb 
+
+> k+1 |k
+
+Sb), for notational brevity. The motivation for the corrected measurement model is to improve the linearisation properties compared to using (9) directly. Empirically, this yields fewer iterations until convergence. We linearise the measurement equation around the propagated error state δxk+1 |k = 0 . The resulting Jacobian is 
+
+Hi,k +1 =
+
+h
+
+Hδpn 
+
+> i,k +1
+
+Hηb 
+
+> i,k +1
+
+Hδmi,k +1 Hδdb 
+
+> i,k +1
+
+Hδbb
+
+> i,k +1
+
+i
+
+,
+
+Hk+1 =
+
+h
+
+HT 
+
+> 1,k +1
+
+. . . HT
+
+> Nmag ,k +1
+
+iT
+
+,
+
+(15) where the notation Hi,k +1 denotes row i of the Jacobian corresponding to magnetometer index i. We derive the Jacobians per magnetometer as 
+
+Hδpn 
+
+> i,k +1
+
+= − ˆRbn 
+
+> k+1 |k
+
+∇δp∇ ˆΦi,k +1 |k ˆmk+1 |k, (16a) 
+
+Hηb 
+
+> i,k +1
+
+= − ˆRbn 
+
+> k+1 |k
+
+∇η ∇ ˆΦi,k +1 |k ˆmk+1 |k (16b) 
+
++  ˆRbn 
+
+> k+1 |k
+
+∇ ˆΦi,k +1 |k ˆmk+1 |k × ,
+
+Hδmk+1 = − ˆRbn 
+
+> k+1 |k
+
+∇ ˆΦi,k +1 |k, (16c) 
+
+Hδdb 
+
+> i,k +1
+
+= diags (yb
+
+> i,k +1
+
+), (16d) 
+
+Hδbb 
+
+> i,k +1
+
+= −I3, (16e) Where ∇δp∇ ˆΦi,k +1 |k is defined in Viset et al. (2022) and 
+
+∇δη ∇ ˆΦi,k +1 |k is derived using ∇η ϕj ≜ ∇δpϕj
+
+Rnb  
+
+> k
+
+sb 
+
+> i
+
+× 
+
+> Prepared using sagej.cls
+
+Edridge and Kok: SL(C)AMma 5
+
+for basis function j. The operator [·× ] is the skew-symmetric cross-product matrix (Kok et al. 2017). Fur-thermore, for brevity we use the shorthand notation 
+
+∇ ˆΦi,k +1 |k = ∇Φ(ˆ pn 
+
+> k+1 |k
+
++ ˆRnb 
+
+> k+1 |k
+
+sb 
+
+> i
+
+). We now update the information matrix and information vector as 
+
+Ik+1 |k+1 = Ik+1 |k + Hk+1 Σ−1 
+
+> zk+1
+
+HT
+
+> k+1
+
+, (17a) 
+
+ιk+1 |k+1 = HT
+
+> k+1
+
+Σ−1 
+
+> zk+1
+
+zk+1 . (17b) where we used the fact that the predictive information vector is zero. The posterior error state is then found as 
+
+δˆxk+1 |k+1 = I−1
+
+> k+1 |k+1
+
+ιk+1 |k+1 , (18) which we use to update our prior state estimate to the posterior as 
+
+ˆxk+1 |k+1 = ˆ xk+1 |k ⊕ δˆxk+1 |k+1 , (19) where the following operations define ⊕
+
+ˆpn 
+
+> k+1 |k+1
+
+= ˆ pn 
+
+> k+1 |k
+
++ δ ˆpn
+
+> k+1 |k+1
+
+, (20a) 
+
+ˆRbn  
+
+> k+1 |k+1
+
+= exp R
+
+
+
+ˆηb
+
+> k+1 |k+1
+
+ ˆRbn 
+
+> k+1 |k
+
+, (20b) 
+
+ˆmk+1 |k+1 = ˆ mk+1 |k + δ ˆmk+1 |k+1 , (20c) 
+
+ˆdb 
+
+> k+1 |k+1
+
+= ˆdb 
+
+> k+1 |k
+
++ δ ˆdb
+
+> k+1 |k+1
+
+, (20d) 
+
+ˆbb 
+
+> k+1 |k+1
+
+= ˆbb 
+
+> k+1 |k
+
++ δ ˆbb
+
+> k+1 |k+1
+
+. (20e) 
+
+5.3 Vertical position measurement update 
+
+We found that vertical drift negatively affected the ability to perform loop closures, severely degrading the algorithm’s performance. To compensate for this, we introduce a vertical position pseudo-measurement update, based on the ground truth data, between the dynamic update and the magnetic field measurement update. The residual zver ,k +1 for this update is found as 
+
+zver ,k +1 = yver ,k +1 − Hver δˆxk+1 |k,
+
+zver ,k +1 ∼ N (0 , Σver ) , (21) where Σver is the pseudo-measurement covariance, yver ,k +1 
+
+is the (assumed known) ground truth vertical position and 
+
+Hver δˆxk+1 |k ≜ ˆpn 
+
+> 3,k +1 |k
+
+is the predicted vertical position after the dynamic update. This is then used to update the state using (17), (18) and (20) similarly to the magnetic field measurement update. 
+
+5.4 SL(C)AMma algorithm 
+
+As we do SLAM, we assume, without loss of generality (Gustafsson 2010), that the initial position and orientation are known, which leads to the initial information matrix of the error state as 
+
+I0|0 = blockdiag  I310 12 , I310 12 , Λ−1 
+
+> w
+
+, Λ−1 
+
+> d
+
+, Λ−1
+
+> b
+
+ ,
+
+(22) where Λw is defined in (8). Additionally, Λd and Λb are the prior covariances of db and bb and are only added in the SLCAMma framework. We summarise the algorithm for both SLAMma and SLCAMma in Algorithm 1. We define convergence for the iterated magnetic field measurement update as ∥δ ˆpn
+
+> k+1 |k+1
+
+∥ < 0.1 mm and ∥ ˆηb
+
+> k+1 |k+1
+
+∥ < 0.1◦
+
+and allow for a maximum of τmax = 5 iterations. We focus on convergence in terms of the change in position and orientation, as localisation is the main interest. 
+
+Algorithm 1 Simultaneous Localisation (Calibration) and Mapping using a magnetometer array  
+
+> 1:
+
+Input: {yb
+
+> k
+
+, ∆pb
+
+> k
+
+, ∆Rk}NK 
+
+> k=1
+> 2:
+
+Output: {ˆxk|k, Ik|k}NK 
+
+> k=1
+> 3:
+
+Initialise: ˆpn 
+
+> 0|0
+
+= 03, ˆRbn  
+
+> 0|0
+
+= I3, ˆm0|0 = 0Nweights  
+
+> 4:
+
+and I0|0 using (22).  
+
+> 5:
+
+If calibration included: ˆdb 
+
+> 0|0
+
+= 13Nmag , ˆbb 
+
+> 0|0
+
+= 03Nmag . 
+
+> 6:
+
+for k = 0 to NK − 1 do  
+
+> 7:
+
+Dynamic update:  
+
+> 8:
+
+Compute ˆxk+1 |k using (11).  
+
+> 9:
+
+Compute Ik+1 |k using (12).  
+
+> 10:
+
+Vertical position pseudo-measurement update:  
+
+> 11:
+
+Update ˆxk+1 |k and Ik+1 |k using (17)-(21).  
+
+> 12:
+
+Magnetometer array measurement update:  
+
+> 13:
+
+Initialise iteration: ˆx(τ ) 
+
+> k+1
+
+← ˆxk+1 |k, τ ← 0. 
+
+> 14:
+
+repeat  
+
+> 15:
+
+Compute H(τ ) 
+
+> k+1
+
+at ˆx(τ ) 
+
+> k+1
+
+using (15).  
+
+> 16:
+
+Compute δˆx(τ ) 
+
+> k+1
+
+using (18) with  
+
+> 17:
+
+I(τ ) 
+
+> k+1 |k+1
+
+and ι(τ ) 
+
+> k+1 |k+1
+
+by using (17)  
+
+> 18:
+
+with H(τ )
+
+> k+1
+
+, Σ−1 
+
+> zk+1
+
+and Ik+1 |k. 
+
+> 19:
+
+Update ˆx(τ +1)  
+
+> k+1
+
+← ˆx(τ ) 
+
+> k+1
+
+⊕ δˆx(τ ) 
+
+> k+1
+
+using (20).  
+
+> 20:
+
+τ ← τ + 1 . 
+
+> 21:
+
+until convergence or τ = τmax . 
+
+> 22:
+
+Store variables:  
+
+> 23:
+
+ˆxk+1 |k+1 ← ˆx(τ )
+
+> k+1
+
+, Ik+1 |k+1 ← I(τ )
+
+> k+1 |k+1
+
+. 
+
+> 24:
+
+end for 
+
+6 Simulation results on the convergence of the calibration parameter estimates 
+
+To analyse the convergence of the estimated calibration parameters to the true calibration parameters, we simulate a magnetometer array moving in different ways through a dis-turbed magnetic field. We assume a 30-magnetometer array of the same configuration as in Figure 2. We sample scaling factors and biases as {{ dnd,i }Nmag  
+
+> i=1
+
+}3 
+
+> nd=1
+
+∼ U (0 .9, 1.1) and 
+
+{{ bnd,i }Nmag  
+
+> i=1
+
+}3 
+
+> nd=1
+
+∼ U (−1.5, 1.5) respectively, for every dimension nd. Here, U(·, ·) denotes the uniform distribution. We simulate the constant Earth’s magnetic field as a vector 
+
+19 .2 0.8 45 .5T μT, approximately equal to its value in Delft, the Netherlands. On top of this constant field, we simulate magnetic field disturbances by sampling from a GP with the curl-free assumption from Wahlstr¨ om et al. (2013), and hyper-parameters σcf = 1 , ℓ = 1 and σy = 0 .1. We use the same hyper-parameters in our reduced rank GP, with additionally σlin = 15 . The chosen settings for the simulation are reflective of those used in the experiments in Section 7. We impose strong priors of Λd = 0 .001 2I3Nmag on the calibration scaling parameters to prevent filter divergence in the early time-steps. The prior on the bias is set as Λb = 0 .12I3Nmag . We assume a dynamic model as described in (5) with covariances Σ1/2 
+
+> pos
+
+= 0 .01 I3ms−1 and 
+
+Σ1/2 
+
+> rot
+
+= 0 .1I3degs −1, at a frequency of 10Hz .As a metric for analysis, we use the mean absolute error (MAE) and 1 standard deviation (STD) of the bias bb
+
+> i,k
+
+and scaling error db 
+
+> i,k
+
+for different types movement over all magnetometers and Monte Carlo (MC) simulations, which  
+
+> Prepared using sagej.cls
+
+6 Journal Title XX(X) 0 100 200                                     
+
+> 0
+> 1
+> 2
+> 3
+> Bias MAE [  T]  Full rotation in place
+> 0100 200
+> 0
+> 1
+> 2
+> 3
+> Wiggling in place
+> 0100 200
+> 0
+> 1
+> 2
+> 3
+> 4
+> Yaw rotation in place
+> 0100 200
+> 0
+> 1
+> 2
+> 3
+> 4
+> Circle rot + wiggle
+> 0100 200
+> 0
+> 1
+> 2
+> 3
+> 4
+> Circle rotation
+> 0100 200
+> 0
+> 1
+> 2
+> 3
+> Circle no rotation
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> Scaling MAE [-]
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> 0100 200
+> Time step k[-]
+> 0.00
+> 0.05
+> 0.10
+> b1,d1b2,d2b3,d3
+
+Figure 3. MAE and 1 STD of the estimated bias and scaling parameters across 30 MC simulations for six types of motion. 
+
+are calculated as MAE: μθ,k = 1
+
+Nmc Nmag 
+
+> Nmag
+
+X
+
+> i=1
+> Nmc
+
+X
+
+> j=1
+
+ˆθb 
+
+> i,j,k |k
+
+− θb 
+
+> i,j
+
+,
+
+STD: σθ,k =
+
+vuut 1
+
+Nmc Nmag 
+
+> Nmag
+
+X
+
+> i=1
+> Nmc
+
+X
+
+> j=1
+
+ˆθb 
+
+> i,j,k |k
+
+− θb
+
+> i,j
+> 22
+
+.
+
+(23) Here, | · | denotes the absolute value, || · || 2 denotes the Euclidean norm, and we use the placeholder variable 
+
+θ ∈ { d, b} to denote the scaling vector or the bias. Finally, 
+
+Nmc is the number of MC simulations. We analyse the convergence of the calibration parameters across different simulated motion types: The magnetometer array rotates randomly in place to explore as much of the orientation space as possible in Full rotation in place . The magnetometer rotates in place with 5◦
+
+around all angles in Wiggling in place . Next, the magnetometer array rotates back and forth around the yaw axis in Yaw rotation in place . Further, the magnetometer array translates along a planar circle of approximately 0.1m radius, without rotating, in Circle no rotation . Next, the magnetometer array moves along a planar circle, but aligns the heading angle with the direction of movement, in Circle yaw rotation . Finally, the magnetometer array moves the same as in the previous motion, while also wiggling 5◦ around the pitch and roll angle, in Circle wiggle .The first two columns of Figure 3 show that larger ori-entation excitation improves calibration parameter estima-tion, where the estimation errors approach zero even with minimal rotation ( 5◦ for all axes). In contrast, columns 3-5 demonstrate that for planar motion, neither the vertical bias b3 nor the scaling factor d3 converge to the true values. The MAE of b3 remains approximately at 0.9 μT, while the MAE of d3 remains constant around 0.02. This is in line with Vallivaara et al. (2024), where no using only planar motion, they obtain no information on the vertical bias com-ponent. Finally, the last column shows that with translation only, the bias estimates fail to converge to the true values. The MAE grows to approximately [0 .2, 0.4, 0.9] μT as the filter optimises for inter-sensor measurement consistency across the magnetometers. We further analyse this effect in Figure 4. Inter-sensor measurement consistency across the magne-tometers is critical for our SLAM algorithm. Specifically, magnetometers in the same position and orientation should measure the same values. We validate this consistency across the six different motion types by comparing the measure-ments norms of the uncalibrated magnetometers against the calibrated magnetometers using a new planar motion dataset. We generate a new synthetic magnetic field and assume that all magnetometers experience the same reference field for every time-step k. We then apply the bias and scaling factors from the respective simulation to get uncalibrated measure-ments and apply the final online calibration parameters from Figure 3 to get the calibrated measurements. The results, shown in Figure 4, demonstrate that inter-sensor measure-ments converge to consistent values within any given move-ment type, in this case, planar motion. While limited orien-tation excitation (e.g., Circle no rotation ) produces consistent results with a range of 1.5μT, higher orientation excitation (e.g., Full rotation in place ) results in a higher consistency, showing a lower range of 0.1μT.40               
+
+> 45
+> 50
+> 55
+> Full rotation in place
+> 40
+> 45
+> 50
+> 55
+> Wiggling in place
+> 40
+> 45
+> 50
+> 55
+> Yaw rotation in place
+> 0200 400 600 800
+> 40
+> 45
+> 50
+> 55
+> Circle rot + wiggle
+> 0200 400 600 800
+> 40
+> 45
+> 50
+> 55
+> Circle rotation
+> 0200 400 600 800
+> 40
+> 45
+> 50
+> 55
+> Circle no rotation
+> Time step [-]
+> Magnetic field norm [  T]
+> Reference magnetic field Uncalibrated Calibrated
+
+Figure 4. Demonstration of the inter-sensor measurement consistency for all six simulations. Calibrated norms are compared to uncalibrated norms and a reference magnetic field. 
+
+7 Experimental results 
+
+We also study the performance of our algorithms on experimental datasets collected using a 30-magnetometer array †. The magnetometer array has 30 PNI RM3100 magnetometers sampling at 100 Hz, arranged in a planar configuration as shown in Figure 2. Ground truth position and orientations are available, provided by an OptiTrack motion capture system. We use constant hyper-parameters 
+
+> †
+
+Available online at https://hendeby.gitlab-pages.liu.se/research/magdata/  
+
+> Prepared using sagej.cls
+
+Edridge and Kok: SL(C)AMma 7
+
+σy = 0 .1 and σlin = 15 and the additional hyper-parameters 
+
+{ℓ, σ se } per scenario are shown in Table 1. The length-scale ℓ
+
+and signal variance σse for the first two datasets are the same as reported in Edridge and Kok (2025), and are optimised for the rest of the scenarios, according to Solin et al. (2018). The changes in position and orientation used in (5) are calculated from the ground truth data. To simulate drift, we add a constant term to both the change in position and orientation as ∆pn 
+
+> k
+
+= ∆¯ pn 
+
+> k
+
++ opos and 
+
+∆Rk = exp R(orot )∆ ¯Rk, where ¯pn 
+
+> k
+
+and ∆ ¯Rk denote the true change in position and orientation, respectively. The drift parameter values are listed in Table 1, along with the number of basis functions and noise covariances. The prior is (22) with Λd = 0 .001 I3Nmag and Λb = 0 .1I3Nmag , the same values as used in the simulations from Section 6. Similar to the simulations, it was found that the strong prior on the scaling parameters helps prevent filter divergence in the early time-steps. We run both versions Algorithm 1 and compare this against single magnetometer SLAM from Viset et al. (2022), using the same settings and with a vertical position update, but restricting the measurements to only one magnetometer on the array. We also compare the results to dead reckoning, which uses the dynamic model from (5), without corrections from the measurement updates. Figure 5 (top) shows the Tiny no rot (only trans-lation) and tiny yaw rot (90 ◦ corner turns) datasets. Both were recorded in a tiny square in close proximity to magnetic field disturbances, causing a high magnetic field norm range of [20 , 50] μT. The estimated trajectories for 
+
+Tiny no rot demonstrate that the magnetometer array (SLAMma/SLCAMma), reduces positional and rotational drift significantly by approximately 7.0 cm s −1 and 1.0◦ s−1,respectively, compared to dead reckoning and 4.2 cm s −1 and 
+
+1.6◦ s−1 compared to single magnetometer SLAM. While an uncalibrated array produces similar estimates for only translation, it fails to enable a loop-closure after the array has rotated. This is a result of a mismatch between the created magnetic field map and the measurements after rotating, such that when maximising the posterior (1), the array is repelled rather than attracted to the area of the loop-closure. These results highlight the strong potential of using using a magnetometer array and demonstrate the importance of (online) magnetometer calibration for SLAM. The wide snake trajectories at the bottom of Figure 5 demonstrate a more realistic scenario, with a significantly larger domain and lower signal-to-noise ratio (SNR), resulting in a longer and more difficult exploration phase before loop closures. Both trajectories follow a snake-like pattern without overlap before they loop back to the starting location. Both have a magnetic field norm range of approximately [24 , 30] μT. In contrast to the tiny squares, SLAMma with uncalibrated magnetometers diverges after the second corner, as shown on the right, where both SLAMma (with calibrated magnetomters) and SLCAMma follow the ground-truth trajectory. This again demonstrates the importance of magnetometer calibration for navigation purposes. We also demonstrate in both Tiny scenarios the single magnetometer SLAM from Viset et al. (2022) fails to correct for the amount of drift present and largely follows the dead reckoning trajectory in both Tiny scenarios. This is shown 25  
+
+> 30
+> 35
+> 40
+> 45
+> Magnetic field norm [  T]
+> Ground truth
+> Dead reckoning
+> SLAMma
+> SLCAMma
+> Uncalibrated
+> Single Mag
+> Start
+> End 25
+> 26
+> 27
+> 28
+> 29
+> 30 Magnetic field norm [  T]
+
+Figure 5. Estimated trajectories for the (top) tiny square 
+
+and (bottom) small snakes experiments, using a 30-magnetometer array. The background shows the predicted magnetic field norm based on the ground truth positions, and the transparency is proportional to the prediction uncertainty. 
+
+in more detail in the error plots in Figure 6, where, initially, the single magnetometer SLAM closely follows the dead reckoning position and rotation error, resulting in errors too large to successfully perform a loop-closure. These results clearly highlight the benefit of using multiple magnetometers over a single magnetometer in the presence of magnetic fields with high disturbances and small length-scales, as it benefits from the odometric properties as shown in (Skog et al. 2018, 2021; Edridge and Kok 2025; Skog et al. 2025). 0 50          
+
+> 0.0
+> 2.0
+> 4.0
+> 6.0
+> Pos error  1 [m]
+> 050
+> -1.0
+> -0.5
+> 0.0
+> 0.5
+> Pos error  2 [m]
+> Tiny yaw rot - pos errors
+> 050
+> -0.1
+> -0.1
+> 0.0
+> 0.0
+> 0.1
+> Pos error  3 [m]
+> 050
+> Time [s]
+> -20.0
+> -10.0
+> 0.0
+> Roll error  1 [ ]
+> 050
+> Time [s]
+> -10.0
+> 0.0
+> 10.0
+> Pitch error  2 [ ]
+> Tiny yaw rot - rot errors
+> 050
+> Time [s]
+> -100.0
+> -50.0
+> 0.0
+> Yaw error  3 [ ]
+> Dead Reckoning SLAMma SLCAMma Uncalibrated Single Mag
+
+Figure 6. Position and rotation errors for the Tiny square yaw rot experiment, using a 30-magnetometer array. The estimation uncertainties of three standard deviations are too small to be shown, except for dead reckoning. 
+
+To verify whether the online calibration is successful and the magnetometers in the SLCAMma algorithm reach inter-sensor measurement consistency, similar to the results in Figure 4, we compare the magnetometer measurements on two new datasets collected outdoors. This is far  
+
+> Prepared using sagej.cls
+
+8 Journal Title XX(X) 
+
+Table 1. Settings used in the experiments. 
+
+Scenario Time [s] Length [m] ℓ [m] σse /ℓ [μTm−1] Σ1/2pos [mm s −1] Σ1/2rot [deg s −1] opos [mm s −1] orot [deg s −1]
+
+Tiny no rot 40.5 6.15 0.15 5 10 I3 diag(0 .1, 0.1, 1) [50 − 50 0] T [0 0 − 1] T
+
+Tiny yaw rot 96.6 6.23 0.15 5 10 I3 diag(0 .1, 0.1, 1) [50 − 50 0] T [0 0 − 1] T
+
+Snake wide 1 82.3 52 0.5 1.25 10 I3 diag(0 .1, 0.1, 1) [−50 50 0] T [0 0 1] T
+
+Snake wide 2 70.7 50.5 0.85 1.78 10 I3 diag(0 .1, 0.1, 1) [−25 25 0] T [0 0 0 .5] T
+
+Squares short 67.1 45.4 0.912 1.88 10 I3 diag(0 .1, 0.1, 1) [−50 50 0] T [0 0 1] T
+
+Squares long 98.2 63.8 0.975 2.19 10 I3 diag(0 .1, 0.1, 1) [25 − 25 0] T [0 0 − 0.5] T
+
+Snake long 164 133 0.712 2.4 10 I3 diag(0 .1, 0.1, 1) [−50 50 0] T [0 0 1] T
+
+Snake thin 1 88.5 62.4 0.9 0.9 10 I3 diag(0 .1, 0.1, 1) [25 − 25 0] T [0 0 − 0.5] T
+
+Snake thin 2 82.1 63.4 0.9 0.9 10 I3 diag(0 .1, 0.1, 1) [−25 25 0] T [0 0 0 .5] T
+
+Infinity symbol 57.2 68.2 1.07 3.36 10 I3 diag(0 .1, 0.1, 1) [50 − 50 0] T [0 0 − 1] T
+
+away from any magnetic field disturbances, resulting in approximately only the Earth’s magnetic field. The first dataset considers only yaw rotations, while the second dataset rotates around all axes. Instead of comparing to the ground truth, we compare to Earth’s magnetic field of pre-calibrated magnetometers. We take the calibration parameters from SLCAMma at the end of the Small snake high trajectory. We compare three different cases, first is uncalibrated magnetometers, second, is with pre-calibrated magnetometers and third, using the online calibrated magnetometers from the SLCAMma Small snake high experiment, as shown in Figure 5. We show the results in Figure 7. The measurements of online calibration with only yaw rotations congregate around 34 μT,with approximately 0.5μT more deviation compared to the pre-calibrated magnetometers, showing similar performance results to the simulations from Section 6. The results also show no consensus between calibration parameters for non-yaw rotations. This is because, as shown in Section 6, the vertical calibration parameters errors don’t converge to zero when only yaw rotations are used. 0 50 100 150 200 250        
+
+> Time step [-]
+> 32
+> 34
+> 36
+> 38
+> Magnetic Field Norm [  T]
+> Yaw rotation outside
+> 0500 1000 1500 2000 2500
+> Time step [-]
+> 32
+> 34
+> 36
+> 38
+> Magnetic Field Norm [  T]
+> Full rotation outside
+> Uncalibrated Online calibration Pre-calibrated
+
+Figure 7. Magnetometer measurements of validation experiments using the final calibration parameters from the 
+
+Small snake high experiment (Figure 5). Left: yaw rotation outdoors. Right: rotation around all axes, outdoors. 
+
+For the remainder of the experiments, we consider scenarios with longer trajectories and more complicated loop closures, i.e., loop closures after longer time periods and at different angles. The datasets are Squares short 
+
+and Squares long , where the trajectories follow 4overlapping squares, which come in from different sides. Furthermore, Snake thin 1 and Snake thin 2 both follow a snake-like trajectory without overlap, which then loops back to the start. Additionally, Snake long first follows a snake-like pattern without crossing its own path, after which it follows a snake-like pattern at an angle of 
+
+90 ◦ continuously crossing its own path. Lastly, Infinity symbol follows the shape of infinity crossing itself in the middle with a 180 ◦ angle. All six datasets are collected at approximately hip height (except for snake thin 1 at knee height). The results are plotted in Figure 8. For clarity of visualisation, we do not show the single magnetome-ter SLAM and uncalibrated SLAMma as these gave poor performances, except for single magnetometer SLAM in Squares long and Snake thin 1 . Overall, the results again highlight the efficacy of using a magnetome-ter array for SLAM, even in mildly disturbed magnetic field areas. For instance in Squares short , the algo-rithms {SLAMma , SLCAMma } reduce up to approximately 
+
+{84 , 87 }% positional drift and {92 , 72 }% rotational drift compared to dead reckoning, respectively. However, in the case of longer exploratory phases and significant drift, in 
+
+Snake long and Snake thin 2 , SLCAMma is unable to perform a loop closure, and the filter diverges. This high-lights the limitations of online magnetometer calibration, as it can reduce the robustness for longer time periods between loop closures or for lower quality dynamic models. 
+
+8 Conclusion and future work 
+
+This paper demonstrates the effectiveness of magnetometer array SLAM using both pre-calibrated and online magne-tometer calibration. Both algorithms produce similar trajec-tories and significantly reduce drift, particularly in areas with highly disturbed magnetic fields. This shows the superiority of using magnetometer arrays over single magnetometers, which robots can easily carry on their platforms. While due to inter-sensor measurement inconsistency the online calibration filter can diverge during an extensive exploration before visiting a previously seen location, we demonstrate that sufficient orientation excitation reduces this issue. Inter-esting ideas for future work include extending the pro-posed algorithms with an accelerometer and gyroscope or selectively applying online magnetometer calibration only in highly disturbed areas. 
+
+Declaration of conflicting interests 
+
+The author(s) declare no potential conflicts of interest with respect to the research, authorship, and/or publication of this article.  
+
+> Prepared using sagej.cls
+
+Edridge and Kok: SL(C)AMma 924 26 28 30 32 34       
+
+> Magnetic field norm [ T]
+> Ground truth Dead reckoning SLAMma SLCAMma Start End
+
+Figure 8. Estimated trajectories for six longer experiments, using a 30-magnetometer array. The background colour shows the predicted magnetic field norm, and the transparency is proportional to the prediction uncertainty. 
+
+Acknowledgements 
+
+This work is funded by the Sensor AI Lab, under the AI Labs program of Delft University of Technology. We thank Gustaf Hendeby from Link¨ oping University, and Isaac Skog and Chuan Huang from KTH Royal Institute of Technology for the collaboration to collect the experimental data used in this paper as part of the funded Swedish Research Council project 2020-04253 
+
+Tensor-field based localization . We also acknowledge the ELLIIT project Visionen 2.0 for partially funding of the experimental facilities used for the data collection. 
+
+References 
+
+Angermann M, Frassl M, Doniec M, Julian BJ and Robertson P (2012) Characterization of the indoor magnetic field for applications in localization and mapping. In: Proc. Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE, pp. 1–9. Bell BM and Cathey FW (1993) The iterated Kalman filter update as a Gauss-Newton method. IEEE Transactions on Automatic Control 38(2): 294–297. DOI:10.1109/9.250476. Cadena C, Carlone L, Carrillo H, Latif Y, Scaramuzza D, Neira J, Reid I and Leonard JJ (2017) Past, present, and future of simultaneous localization and mapping: Toward the robust-perception age. IEEE Trans. Robot. 32(6): 1309–1332. Cao Y, Yang C, Li R, Knoll A and Beltrame G (2020) Accurate position tracking with a single UWB anchor. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 2344–2350. Chesneau CI, Hillion M and Prieur C (2016) Motion estimation of a rigid body with an EKF using magneto-inertial measurements. In: Proc. Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE, pp. 1–6. Chesneau CI, Robin R, Meier H, Hillion M and Prieur C (2019) Calibration of a magnetometer array using motion capture equipment. Asian J. Control 21(4): 1459–1469. Chung CM, Tseng YC, Hsu YC, Shi XQ, Hua YH, Yeh JF, Chen WC, Chen YT and Hsu WH (2022) Orbeez-SLAM: A real-time monocular visual SLAM with ORB features and NeRF-realized mapping. arXiv preprint arXiv:2209.13274 .Dammann A, Siebler B and Sand S (2024) Cram´ er–Rao lower bound for magnetic field localization around elementary structures. Sensors 24(8): 2402. Dorveaux E, Boudot T, Hillion M and Petit N (2011) Combining inertial measurements and distributed magnetometry for motion estimation. In: Proc. Amer. Control Conf. (ACC) . IEEE, pp. 4249–4256. Dorveaux E and Petit N (2011) Presentation of a magneto-inertial positioning system: Navigating through magnetic disturbances. In: Proc. Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE. Edridge T and Kok M (2025) Position and orientation estimation uncertainty using magnetometer arrays for indoor localization. 
+
+IEEE J. Indoor Seamless Positioning Navig. .Gustafsson F (2010) Statistical Sensor Fusion . Lund, Sweden: Studentlitteratur. Hess W, Kohler D, Rapp H and Andor D (2016) Real-time loop closure in 2D LiDAR SLAM. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 1271–1278. Huang C, Hendeby G, Prieur C, Fourati H and Skog I (2024) MAINS: A magnetic field aided inertial navigation system for indoor positioning. IEEE Sensors J. 24(9): 15156–15166. Huang C, Hendeby G and Skog I (2025a) Inertial magnetic SLAM systems using low-cost sensors. arXiv preprint arXiv:2512.10128 .Huang C, Hendeby G and Skog I (2025b) Joint magnetometer-IMU calibration via maximum a posteriori estimation. arXiv preprint arXiv:2505.16662 .Huang J, Junginger S, Liu H and Thurow K (2023) Indoor positioning systems of mobile robots: A review. Robotics 
+
+12(2): 47. Kok M, Hol J and Sch¨ on TB (2017) Using inertial sensors for position and orientation estimation. Found. Trends Signal Process. 11(1-2): 1–153. Kok M and Sch¨ on TB (2016) Magnetometer calibration using inertial sensors. IEEE Sensors J. 16(14): 5679–5689. Kok M and Solin A (2018) Scalable magnetic field SLAM in 3D using Gaussian process maps. In: Proc. 21st Int. Conf. Inf. Fusion (FUSION) . IEEE, pp. 1353–1360. Krnjaic A, Steleac RD, Thomas JD, Papoudakis G, Sch¨ afer L, Wing Keung To A, Lao KH, Cubuktepe M, Haley M, B¨ orsting P and Albrecht SV (2024) Scalable multi-agent reinforcement learning for warehouse logistics with robotic and human co-workers. In: Proc. IEEE/RSJ Int. Conf. Intell. Robots Syst. (IROS) . IEEE, pp. 677–684. Li B, Gallagher T, Dempster AG and Rizos C (2012) How feasible is the use of magnetic field alone for indoor positioning? In: 
+
+Proc. Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) .IEEE, pp. 1–9. Lin J and Zhang F (2022) R3LIVE: A robust, real-time, RGB-colored, LiDAR-inertial-visual tightly-coupled state estimation  
+
+> Prepared using sagej.cls
+
+10 Journal Title XX(X) 
+
+and mapping package. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 10672–10678. Lyu Q, Wu Z, Wang W, Shen H and Wang D (2026) ROSLAC: Robust simultaneous localization and calibration of multiple magnetometers. arXiv preprint arXiv:2604.14353 .Mu Y, Wang C, Zhang X and Xie W (2018) A novel calibration method for magnetometer array in nonuniform background field. IEEE Trans. Instrum. Meas. 68(10): 3677–3685. Mu Y, Zhang X and Xie W (2019) Calibration of magnetometer arrays in magnetic field gradients. IEEE Magn. Lett. 10: 1–5. Nguyen TH, Nguyen TM and Xie L (2020) Tightly-coupled single-anchor ultra-wideband-aided monocular visual odometry system. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 665–671. Nilsson JO, Rantakokko J, H¨ andel P, Skog I, Ohlsson M and Hari KVS (2014) Accurate indoor positioning of firefighters using dual foot-mounted inertial sensors and inter-agent ranging. In: 
+
+Proc. IEEE/ION Position, Location Navig. Symp. (PLANS) .IEEE, pp. 631–636. Ouyang G and Abed-Meraim K (2022) A survey of magnetic-field-based indoor localization. Electronics 11(6): 864. Pan Y, Xiao P, He Y, Shao Z and Li Z (2021) MULLS: Versatile LiDAR SLAM via multi-metric linear least square. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 11633– 11640. Petersen KB and Pedersen MS (2008) The matrix cookbook. Technical Report 15, Technical University of Denmark. Renaudin V, Afzal MH and Lachapelle G (2010) Complete triaxis magnetometer calibration in the magnetic domain. J. Sensors 
+
+2010(1): 967245. Shan T, Englot B, Ratti C and Rus D (2021) LVI-SAM: Tightly-coupled lidar-visual-inertial odometry via smoothing and mapping. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) .IEEE, pp. 5692–5698. Siebler B, Gerstewitz T, Sand S and Hanebeck UD (2023) Magnetic field-based indoor localization of a tracked robot with simultaneous calibration. In: Proc. 13th Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE, pp. 1–6. Siebler B, Heirich O, Sand S and Hanebeck U (2020) Joint train localization and track identification based on earth magnetic field distortions. In: Proc. IEEE/ION Position, Location Navig. Symp. (PLANS) . IEEE, pp. 941–948. Siebler B, Lehner A, Sand S and Hanebeck UD (2021) Evaluation of simultaneous localization and calibration of a train mounted magnetometer. In: Proc. 34th Int. Tech. Meeting Satell. Div. Inst. Navig. (ION GNSS+) . pp. 2285–2293. Siebler B, Sand S and Hanebeck UD (2022) Bayesian Cram´ er-Rao lower bound for magnetic field-based localization. IEEE Access 10: 123080–123093. Skog I, Hendeby G and Gustafsson F (2018) Magnetic odometry: A model-based approach using a sensor array. In: Proc. 21st Int. Conf. Inf. Fusion (FUSION) . IEEE, pp. 794–798. Skog I, Hendeby G and Trulsson F (2021) Magnetic-field based odometry: An optical flow inspired approach. In: Proc. Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE, pp. 1–8. Skog I, Kok M, Hendeby G, Huang C and Edridge T (2025) On the connection between magnetic-field odometry aided inertial navigation and magnetic-field SLAM. In: Proc. IEEE/ION Position, Location Navig. Symp. (PLANS) . IEEE. Solin A, Kok M, Wahlstr¨ om N, Sch¨ on TB and S¨ arkk¨ a S (2018) Modeling and interpolation of the ambient magnetic field by Gaussian processes. IEEE Trans. Robot. 34(4): 1112–1127. Storms W, Shockley J and Raquet J (2010) Magnetic field navigation in an indoor environment. In: Proc. Ubiquitous Positioning Indoor Navig. Locat. Based Service (UPINLBS) .IEEE, pp. 1–10. Thrun S, Liu Y, Koller D, Ng AY, Ghahramani Z and Durrant-Whyte H (2004) Simultaneous localization and mapping with sparse extended information filters. The International Journal of Robotics Research 23(7–8): 693–716. Vallivaara I, Dong Y and Arslan T (2024) Saying goodbyes to rotating your phone: Magnetometer calibration during SLAM. In: Proc. 14th Int. Conf. Indoor Positioning and Indoor Navig. (IPIN) . IEEE, pp. 1–7. Viset F, Helmons R and Kok M (2022) An extended Kalman filter for magnetic field SLAM using Gaussian process regression. 
+
+Sensors 22(8): 2833. Viset F, Helmons R and Kok M (2023) Distributed multi-agent magnetic field norm SLAM with Gaussian processes. In: Proc. 26th Int. Conf. Inf. Fusion (FUSION) . IEEE, pp. 1–8. Vissi` ere D, Martin A and Petit N (2007) Using distributed magnetometers to increase IMU-based velocity estimation into perturbed area. In: Proc. 46th IEEE Conf. Decis. Control (CDC) . IEEE, pp. 4924–4931. Wahlstr¨ om N, Kok M, Sch¨ on TB and Gustafsson F (2013) Modeling magnetic fields using Gaussian processes. In: Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP) . pp. 3522–3526. Wang C, Qu X, Zhang X, Zhu W and Fang G (2017) A fast calibration method for magnetometer array and the application of ferromagnetic target localization. IEEE Trans. Instrum. Meas. 66(7): 1743–1750. Xu H, Wang L, Zhang Y, Qiu K and Shen S (2020) Decentralized visual-inertial-UWB fusion for relative state estimation of aerial swarm. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) .IEEE, pp. 8776–8782. Yan G, He F, Shi C, Cai X and Li Y (2022) Joint camera intrinsic and lidar-camera extrinsic calibration. arXiv preprint arXiv:2202.13708 .Yang B, Li J and Zhang H (2021) UVIP: Robust UWB aided visual-inertial positioning system for complex indoor environments. In: Proc. IEEE Int. Conf. Robot. Autom. (ICRA) . IEEE, pp. 5454–5460. Zmitri M, Fourati H and Prieur C (2020) Magnetic field gradient-based EKF for velocity estimation in indoor navigation. 
+
+Sensors 20(20): 5726. Zmitri M, Fourati H and Prieur C (2021) BiLSTM network-based extended Kalman filter for magnetic field gradient aided indoor navigation. IEEE Sensors J. 22(6): 4781–4789.

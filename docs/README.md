@@ -6,26 +6,35 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-22
-- 运行时间：2026-04-22 19:50:41 UTC
+- 最新运行日期：2026-04-23
+- 运行时间：2026-04-23 20:42:45 UTC
 - 运行状态：成功
-- 本次总论文数：1
+- 本次总论文数：4
 - 精读区：0
-- 速读区：1
+- 速读区：4
 
 ### 今日简报（AI）
-今日聚焦连续场重建技术，深入探索主动感知新框架 LASER。
-该研究通过学习主动采样策略，旨在实现对复杂连续物理场的高效重构。
-建议关注机器人环境建模与智能感知的读者快速查阅其核心算法思路。
-- 详情：[/202604/22/README](/202604/22/README)
+今日聚焦神经科学启发的边缘感知技术与磁力计阵列定位新方案。
+重点关注图算子在不规则几何体虚拟传感中的应用，以及磁力计 SLAM 在定位与建图上的突破。
+建议关注边缘计算与非线性信号恢复在复杂物理环境下的落地潜力。
+- 详情：[/202604/23/README](/202604/23/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [LASER: Learning Active Sensing for Continuum Field Reconstruction](/202604/22/2604.19355v1-laser-learning-active-sensing-for-continuum-field-reconstruction)  
+1. [Neuroscience Inspired Graph Operators Towards Edge-Deployable Virtual Sensing for Irregular Geometries](/202604/23/2604.16722v1-neuroscience-inspired-graph-operators-towards-edge-deployable-virtual-sensing-for-irregular-geometries)  
    标签：评分：6.0/10、query:tmr
-   evidence：利用主动传感和潜世界模型进行连续场重建
+   evidence：用于稀疏到稠密重建的虚拟传感
+2. [SL(C)AMma: Simultaneous Localisation, (Calibration) and Mapping With a Magnetometer Array](/202604/23/2604.19946v1-slcamma-simultaneous-localisation-calibration-and-mapping-with-a-magnetometer-array)  
+   标签：评分：6.0/10、query:tmr
+   evidence：用于磁场传感的磁力计阵列及滤波算法
+3. [Robust Uniform Recovery of Structured Signals from Nonlinear Observations](/202604/23/2604.20075v1-robust-uniform-recovery-of-structured-signals-from-nonlinear-observations)  
+   标签：评分：6.0/10、query:tmr
+   evidence：利用投影梯度下降从非线性观测中恢复信号
+4. [Forward--Inverse Interplay in FEM-Based EEG Source Imaging: Distributional Signatures of Advanced Source Models and Inverse Solvers](/202604/23/2604.20448v1-forward--inverse-interplay-in-fem-based-eeg-source-imaging-distributional-signatures-of-advanced-source-models-and-inverse-solvers)  
+   标签：评分：6.0/10、query:tmr
+   evidence：基于传感器测量值的源重建反演算法
 
 
 <div class="dpr-home-promo-card">
