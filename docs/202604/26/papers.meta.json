@@ -1,0 +1,51 @@
+{
+  "label": "2026-04-26",
+  "date": "2026-04-26",
+  "generated_at": "2026-04-26T19:40:56",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202604/26/2604.21500v1-design-optimization-of-flux-concentrators-for-magnetic-tunnel-junctions-based-sensors",
+      "section": "deep",
+      "title_en": "Design optimization of flux concentrators for magnetic tunnel junctions-based sensors",
+      "authors": "Thomas Brun, Javier Rial, Lucia Risoli, Johanna Fischer, Philippe Sabon, Guillaume Jannet, Matthieu Kretzschmar, Helene Bea, Claire Baraduc",
+      "date": "2026-04-23",
+      "pdf": "https://arxiv.org/pdf/2604.21500v1",
+      "score": "9.0",
+      "evidence": "磁隧道结（MTJ）传感器和磁通集中器的设计优化",
+      "tldr": "本研究针对空间探测和健康监测对微型高灵敏度磁强计的需求，探讨了基于磁隧道结（MTJ）和坡莫合金磁通集中器（FC）的传感器设计优化。研究通过有限元模拟和磁阻等效电路分析，解决了增加MTJ数量以降低噪声与气隙变大导致增益下降之间的权衡问题，提出了一种优化方案，使传感器探测性能比单结器件提升了三个数量级。",
+      "tags": "query:tmr",
+      "abstract_en": "Miniaturized, ultra-sensitive and easily integrable magnetometers are needed for many applications, like space exploration or health monitoring. Achieving this goal requires a magnetic sensor with high sensitivity and low noise. High sensitivity (>1000 %/mT) can be obtained by integrating high gain permalloy flux concentrators (FC). And reducing the magnetic 1/f noise can be realized by increasing the number of magnetic tunnel junctions (MTJs) in the air-gap of the FC. However, this is obtained at the expense of a wider air-gap and consequently a decrease of the magnetic gain and thus of the sensitivity. In this paper, we explore a design optimization scheme in order to find the best trade-off between high FC gain and low magnetic noise. To model the gain of the flux concentrator, we propose two complementary approaches; one is based on finite elements simulations of the FC gain where the influence of geometrical parameters of the air-gap is investigated. Then, in a second step, we propose an analytical formula consistent with all our simulations results and based on magnetic reluctance. Finally, we derive an analytical model of the sensor detectivity from which we can extract the optimal sensor design which allows an improvement by three orders of magnitude of the performances compared to a single junction.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/26/2604.21342v1-scalable-surface-ion-trap-design-for-magnetic-quantum-sensing-and-gradiometry",
+      "section": "quick",
+      "title_en": "Scalable surface ion trap design for magnetic quantum sensing and gradiometry",
+      "authors": "Qirat Iqbal, Altaf Hussain Nizamani",
+      "date": "2026-04-23",
+      "pdf": "https://arxiv.org/pdf/2604.21342v1",
+      "score": "6.0",
+      "evidence": "磁量子传感与梯度测量",
+      "tldr": "本研究提出了一种用于高精度磁量子传感的可扩展表面保罗阱设计。利用离子阱在宽频率范围内具有极高灵敏度（pT量级）的特性，该设计通过创新的多陷区芯片架构，实现了亚毫米空间分辨率的磁场及磁场梯度测量，为量子传感器技术提供了突破性的离子操纵与约束方案。",
+      "tags": "query:tmr",
+      "abstract_en": "Magnetic quantum sensors based on trapped ions utilize properties of quantum mechanics which have optimized precision and beat current limits in sensor technology. Trapped ions are highly sensitive in a large span of signal ranging from DC or static B-field to the radiofrequency range in 100s of MHz and can attain the sensitivity in the range of pT to sub pT . They are tuneable to frequencies of interest and can be used as a lock-in frequency detector. This modelling and simulation based study presents an innovative design of Surface Paul Traps, enabling the use of trapped ions as ultra-sensitive sensors for magnetic field detection and precise measurement of magnetic field gradients at a sub-millimeter spatial resolution. The novel design features multiple trapping regions, allowing for the mapping of magnetic fields across various ion-trapping zones. The study demonstrates groundbreaking advancements in ion manipulation and confinement through innovative chip architecture.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/26/2604.21651v1-dilated-cnns-for-periodic-signal-processing-a-low-complexity-approach",
+      "section": "quick",
+      "title_en": "Dilated CNNs for Periodic Signal Processing: A Low-Complexity Approach",
+      "authors": "Eli Gildish, Michael Grebshtein, Igor Makienko",
+      "date": "2026-04-23",
+      "pdf": "https://arxiv.org/pdf/2604.21651v1",
+      "score": "6.0",
+      "evidence": "资源受限系统下的周期信号去噪与波形估计",
+      "tldr": "针对语音、医疗等领域的周期信号去噪和波形估计，本文提出了一种低复杂度的R-DCNN方法。该方法结合空洞卷积神经网络与重采样技术，仅需单次观测即可训练，并通过重采样对齐不同频率信号的时间尺度，实现模型权重的复用。在保持与AR等经典方法及传统DCNN相当性能的同时，显著降低了计算资源需求，特别适用于资源受限的部署环境。",
+      "tags": "query:tmr",
+      "abstract_en": "Denoising of periodic signals and accurate waveform estimation are core tasks across many signal processing domains, including speech, music, medical diagnostics, radio, and sonar. Although deep learning methods have recently shown performance improvements over classical approaches, they require substantial computational resources and are usually trained separately for each signal observation. This study proposes a computationally efficient method based on DCNN and Re-sampling, termed R-DCNN, designed for operation under strict power and resource constraints. The approach targets signals with varying fundamental frequencies and requires only a single observation for training. It generalizes to additional signals via a lightweight resampling step that aligns time scales in signals with different frequencies to re-use the same network weights. Despite its low computational complexity, R-DCNN achieves performance comparable to state-of-the-art classical methods, such as autoregressive (AR)-based techniques, as well as conventional DCNNs trained individually for each observation. This combination of efficiency and performance makes the proposed method particularly well suited for deployment in resource-constrained environments without sacrificing denoising or estimation accuracy.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

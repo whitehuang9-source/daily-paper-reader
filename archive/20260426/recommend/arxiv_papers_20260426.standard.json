@@ -1,0 +1,135 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-26T19:40:02.280080+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 1,
+    "deep_cap": 6,
+    "deep_selected": 1,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [
+    {
+      "id": "2604.21500v1",
+      "title": "Design optimization of flux concentrators for magnetic tunnel junctions-based sensors",
+      "abstract": "Miniaturized, ultra-sensitive and easily integrable magnetometers are needed for many applications, like space exploration or health monitoring. Achieving this goal requires a magnetic sensor with high sensitivity and low noise. High sensitivity (>1000 %/mT) can be obtained by integrating high gain permalloy flux concentrators (FC). And reducing the magnetic 1/f noise can be realized by increasing the number of magnetic tunnel junctions (MTJs) in the air-gap of the FC. However, this is obtained at the expense of a wider air-gap and consequently a decrease of the magnetic gain and thus of the sensitivity. In this paper, we explore a design optimization scheme in order to find the best trade-off between high FC gain and low magnetic noise. To model the gain of the flux concentrator, we propose two complementary approaches; one is based on finite elements simulations of the FC gain where the influence of geometrical parameters of the air-gap is investigated. Then, in a second step, we propose an analytical formula consistent with all our simulations results and based on magnetic reluctance. Finally, we derive an analytical model of the sensor detectivity from which we can extract the optimal sensor design which allows an improvement by three orders of magnitude of the performances compared to a single junction.",
+      "authors": [
+        "Thomas Brun",
+        "Javier Rial",
+        "Lucia Risoli",
+        "Johanna Fischer",
+        "Philippe Sabon",
+        "Guillaume Jannet",
+        "Matthieu Kretzschmar",
+        "Helene Bea",
+        "Claire Baraduc"
+      ],
+      "primary_category": "cond-mat.mes-hall",
+      "categories": [
+        "cond-mat.mes-hall",
+        "cond-mat.mtrl-sci"
+      ],
+      "published": "2026-04-23T10:02:35+00:00",
+      "link": "https://arxiv.org/pdf/2604.21500v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 9.0,
+      "llm_evidence_en": "Design optimization of magnetic tunnel junction (MTJ) sensors and flux concentrators",
+      "llm_evidence_cn": "磁隧道结（MTJ）传感器和磁通集中器的设计优化",
+      "llm_evidence": "磁隧道结（MTJ）传感器和磁通集中器的设计优化",
+      "canonical_evidence": "磁隧道结（MTJ）传感器和磁通集中器的设计优化",
+      "llm_tldr_en": "Optimizes MTJ-based sensor design to balance sensitivity and noise, directly relevant to TMR sensor performance.",
+      "llm_tldr_cn": "优化基于MTJ的传感器设计以平衡灵敏度和噪声，与TMR传感器性能直接相关。",
+      "llm_tldr": "优化基于MTJ的传感器设计以平衡灵敏度和噪声，与TMR传感器性能直接相关。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "quick_skim": [
+    {
+      "id": "2604.21342v1",
+      "title": "Scalable surface ion trap design for magnetic quantum sensing and gradiometry",
+      "abstract": "Magnetic quantum sensors based on trapped ions utilize properties of quantum mechanics which have optimized precision and beat current limits in sensor technology. Trapped ions are highly sensitive in a large span of signal ranging from DC or static B-field to the radiofrequency range in 100s of MHz and can attain the sensitivity in the range of pT to sub pT . They are tuneable to frequencies of interest and can be used as a lock-in frequency detector. This modelling and simulation based study presents an innovative design of Surface Paul Traps, enabling the use of trapped ions as ultra-sensitive sensors for magnetic field detection and precise measurement of magnetic field gradients at a sub-millimeter spatial resolution. The novel design features multiple trapping regions, allowing for the mapping of magnetic fields across various ion-trapping zones. The study demonstrates groundbreaking advancements in ion manipulation and confinement through innovative chip architecture.",
+      "authors": [
+        "Qirat Iqbal",
+        "Altaf Hussain Nizamani"
+      ],
+      "primary_category": "quant-ph",
+      "categories": [
+        "quant-ph",
+        "physics.atm-clus"
+      ],
+      "published": "2026-04-23T06:57:23+00:00",
+      "link": "https://arxiv.org/pdf/2604.21342v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magnetic quantum sensing and gradiometry",
+      "llm_evidence_cn": "磁量子传感与梯度测量",
+      "llm_evidence": "磁量子传感与梯度测量",
+      "canonical_evidence": "磁量子传感与梯度测量",
+      "llm_tldr_en": "Presents a surface ion trap design for ultra-sensitive magnetic field detection and gradient measurement.",
+      "llm_tldr_cn": "提出了一种用于超灵敏磁场检测和梯度测量的表面离子阱设计。",
+      "llm_tldr": "提出了一种用于超灵敏磁场检测和梯度测量的表面离子阱设计。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.21651v1",
+      "title": "Dilated CNNs for Periodic Signal Processing: A Low-Complexity Approach",
+      "abstract": "Denoising of periodic signals and accurate waveform estimation are core tasks across many signal processing domains, including speech, music, medical diagnostics, radio, and sonar. Although deep learning methods have recently shown performance improvements over classical approaches, they require substantial computational resources and are usually trained separately for each signal observation. This study proposes a computationally efficient method based on DCNN and Re-sampling, termed R-DCNN, designed for operation under strict power and resource constraints. The approach targets signals with varying fundamental frequencies and requires only a single observation for training. It generalizes to additional signals via a lightweight resampling step that aligns time scales in signals with different frequencies to re-use the same network weights. Despite its low computational complexity, R-DCNN achieves performance comparable to state-of-the-art classical methods, such as autoregressive (AR)-based techniques, as well as conventional DCNNs trained individually for each observation. This combination of efficiency and performance makes the proposed method particularly well suited for deployment in resource-constrained environments without sacrificing denoising or estimation accuracy.",
+      "authors": [
+        "Eli Gildish",
+        "Michael Grebshtein",
+        "Igor Makienko"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "cs.AI",
+        "eess.AS",
+        "eess.SP"
+      ],
+      "published": "2026-04-23T13:16:27+00:00",
+      "link": "https://arxiv.org/pdf/2604.21651v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "denoising of periodic signals and waveform estimation for resource-constrained systems",
+      "llm_evidence_cn": "资源受限系统下的周期信号去噪与波形估计",
+      "llm_evidence": "资源受限系统下的周期信号去噪与波形估计",
+      "canonical_evidence": "资源受限系统下的周期信号去噪与波形估计",
+      "llm_tldr_en": "A low-complexity DCNN method for periodic signal denoising, applicable to sensor signal processing.",
+      "llm_tldr_cn": "一种低复杂度的DCNN方法，用于周期信号去噪，可应用于传感器信号处理。",
+      "llm_tldr": "一种低复杂度的DCNN方法，用于周期信号去噪，可应用于传感器信号处理。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
