@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-04-27 <!--dpr-date:20260427-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/27/2604.22526v1-information-theoretic-geometry-optimization-and-physics-aware-learning-for-calibration-free-magnetic-localization" data-sidebar-item="{&quot;title&quot;: &quot;Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.22526v1-information-theoretic-geometry-optimization-and-physics-aware-learning-for-calibration-free-magnetic-localization&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;磁传感器阵列的几何结构优化&quot;}">Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization</a>
   * 2026-04-26 <!--dpr-date:20260426-->
     * 精读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202604/26/2604.21500v1-design-optimization-of-flux-concentrators-for-magnetic-tunnel-junctions-based-sensors" data-sidebar-item="{&quot;title&quot;: &quot;Design optimization of flux concentrators for magnetic tunnel junctions-based sensors&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2604.21500v1-design-optimization-of-flux-concentrators-for-magnetic-tunnel-junctions-based-sensors&quot;, &quot;score&quot;: &quot;9.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;磁隧道结（MTJ）传感器和磁通集中器的设计优化&quot;}">Design optimization of flux concentrators for magnetic tunnel junctions-based sensors</a>

@@ -1,0 +1,23 @@
+{
+  "label": "2026-04-27",
+  "date": "2026-04-27",
+  "generated_at": "2026-04-27T20:39:07",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202604/27/2604.22526v1-information-theoretic-geometry-optimization-and-physics-aware-learning-for-calibration-free-magnetic-localization",
+      "section": "quick",
+      "title_en": "Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization",
+      "authors": "Wenxuan Xie, Yuelin Zhang, Qingpeng Ding, Jianghua Chen, Jiewen Tan, Jiwei Shan, Shing Shin Cheng",
+      "date": "2026-04-24",
+      "pdf": "https://arxiv.org/pdf/2604.22526v1",
+      "score": "6.0",
+      "evidence": "磁传感器阵列的几何结构优化",
+      "tldr": "针对医疗介入中永磁体定位存在的观测性差和虚实迁移难的问题，本文提出了一种结合信息论几何优化与物理感知深度学习的统一框架。首先通过费舍尔信息矩阵优化传感器布局，采用交错分裂阵列增强观测性；随后开发了Phy-GAANet网络，利用物理特征建模和几何注意力机制，在无需实测标定的情况下实现了高精度、高频率的定位，显著提升了系统的鲁棒性。",
+      "tags": "query:tmr",
+      "abstract_en": "Wireless localization of permanent magnets enables occlusion-free guidance for medical interventions, yet its practical accuracy is fundamentally limited by two coupled challenges: the poor observability of conventional planar sensor arrays and the simulation-to-reality (Sim-to-Real) gap of learning-based estimators. To address these issues, this article presents a unified framework that combines information-theoretic sensor geometry optimization with physics-aware deep learning. First, a rigorous Fisher Information Matrix (FIM)-based evaluation framework is established to quantify geometry-induced observability limitations. The results show that a staggered split-array topology provides a substantially stronger observability foundation for localization while remaining compatible with practical external deployment. Second, building on this optimized sensing configuration, we propose Phy-GAANet, a calibration-free estimator trained entirely on hardware-aware synthetic data. By incorporating Physics-Informed Features (PIF) for saturation modeling and Geometry-Aware Attention (GAA) for preserving cross-layer vector structure, the network effectively bridges the Sim-to-Real gap. Extensive real-world experiments demonstrate state-of-the-art performance, achieving a position error of 1.84 mm and an orientation error of 3.18 degrees at a refresh rate exceeding 270 Hz. The proposed method consistently outperforms classical Levenberg--Marquardt solvers and generic convolutional baselines, particularly in suppressing catastrophic outliers and maintaining robustness in challenging near-field boundary regions. Beyond the proposed network, the FIM-guided analysis also provides a framework for sensor geometry design in magnetic localization systems under practical deployment constraints.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

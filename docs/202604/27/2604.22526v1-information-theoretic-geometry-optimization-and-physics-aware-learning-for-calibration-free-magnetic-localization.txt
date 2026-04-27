@@ -1,0 +1,486 @@
+Title: Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization
+
+URL Source: https://arxiv.org/pdf/2604.22526v1
+
+Published Time: Mon, 27 Apr 2026 00:45:07 GMT
+
+Number of Pages: 10
+
+Markdown Content:
+> IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS
+
+# Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization 
+
+Wenxuan Xie 1, Yuelin Zhang 1, Qingpeng Ding 1, Jianghua Chen 1, Jiewen Tan 1, Jiwei Shan 1 and Shing Shin Cheng 1,∗
+
+Abstract —Wireless localization of permanent magnets enables occlusion-free guidance for medical interventions, yet its practical accuracy is fundamentally limited by two coupled challenges: the poor observability of conventional planar sensor arrays and the simulation-to-reality (Sim-to-Real) gap of learning-based estimators. To address these issues, this article presents a unified framework that com-bines information-theoretic sensor geometry optimization with physics-aware deep learning. First, a rigorous Fisher Information Matrix (FIM)-based evaluation framework is es-tablished to quantify geometry-induced observability lim-itations. The results show that a staggered split-array topology provides a substantially stronger observability foundation for localization while remaining compatible with practical external deployment. Second, building on this optimized sensing configuration, we propose Phy-GAANet, a calibration-free estimator trained entirely on hardware-aware synthetic data. By incorporating Physics-Informed Features (PIF) for saturation modeling and Geometry-Aware Attention (GAA) for preserving cross-layer vec-tor structure, the network effectively bridges the Sim-to-Real gap. Extensive real-world experiments demonstrate state-of-the-art performance, achieving a position error of 1.84 mm and an orientation error of 3.18 ◦ at a refresh rate exceeding 270 Hz. The proposed method consistently outperforms classical Levenberg–Marquardt solvers and generic convolutional baselines, particularly in suppress-ing catastrophic outliers and maintaining robustness in challenging near-field boundary regions. Beyond the pro-posed network, the FIM-guided analysis also provides a framework for sensor geometry design in magnetic local-ization systems under practical deployment constraints. 
+
+Index Terms —Deep learning, permanent magnet localiza-tion, pose estimation, sensor array, wireless tracking. 
+
+I. I NTRODUCTION 
+
+# WIRELESS tracking of permanent magnets has emerged as a pivotal enabling technology for medical robotics and healthcare due to its ability to provide real-time, pre-cise localization in an inherently occlusion- and radiation-free manner. This capability has enabled applications ranging 
+
+Research reported in this work was supported in part by Re-search Grants Council (RGC) of Hong Kong (CUHK 14217822, CUHK 14207823, CUHK 14211425, and AoE/E-407/24-N) and in part by Innovation and Technology Commission of Hong Kong (MHP/096/22, ITS/235/22, ITS/224/23, ITS/225/23, and Multi-scale Medical Robotics Center (InnoHK initiative)). 
+
+> 1
+
+Department of Mechanical and Automation Engineering and T Stone Robotics Institute, The Chinese University of Hong Kong, Hong Kong. 
+
+> ∗
+
+Corresponding author: Shing Shin Cheng (sscheng@cuhk.edu.hk). 
+
+from monitoring muscle dynamics [1], to localizing magnetic catheter tips [2], and navigating wireless capsule endoscopes (WCEs) for gastrointestinal examinations [3]. Despite their di-verse operational environments, the core functionality of these systems relies on establishing a reliable mapping between magnetic field measurements and the magnet’s spatial pose. In the realm of wireless localization, the magnetic dipole model formulates tracking as an inverse problem, typically solved using the Levenberg–Marquardt (LM) algorithm be-cause of its balance between convergence speed and preci-sion [4]–[6]. However, as a local optimizer, LM is inher-ently dependent on initialization quality, making it prone to stagnation in local minima under environmental noise or interference [7]. To improve convergence robustness, hybrid strategies integrating metaheuristics (e.g., Particle Swarm Op-timization (PSO), Whale Optimization Algorithm (WOA)) or neural-network-based initialization have been explored [8]– [10]. Nevertheless, these paradigms impose a prohibitive trade-off: global search mechanisms incur computational latency that is ill-suited for real-time control while still failing to guarantee optimality, with failure rates reaching 14.9% in complex sce-narios [10]. Consequently, despite analytical accelerations [5], [11], the dependence on robust initialization remains an unre-solved bottleneck in optimization-based frameworks. To overcome the initialization sensitivity and iterative la-tency of classical optimization, recent studies have increas-ingly turned to deep learning, establishing end-to-end frame-works capable of inverting the magnetic model in a single inference pass [2], [12]–[18]. This evolution—from simple regressions to more sophisticated architectures integrating co-ordinate attention [15] or symmetry-aware convolutions [16]— has improved spatial feature extraction. However, the imprac-ticality of acquiring large-scale clinical datasets [17] neces-sitates training on synthetic data, inevitably introducing a simulation-to-reality (Sim-to-Real) gap. Recent efforts have therefore incorporated physical priors directly into network design. Representative strategies include physics-informed residual networks (PIRN) for model correction [14], few-shot transfer learning [2], [12], and noise injection for calibration-free localization [13]. Despite recent algorithmic advances, localization accuracy remains fundamentally constrained by the physical measure-ment setup and often degrades sharply as vertical distance in-creases [6], [13]. This highlights the central role of sensor ge-
+
+> arXiv:2604.22526v1 [cs.RO] 24 Apr 2026 IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS
+
+ometry in determining system observability. Prior studies have explored planar placement optimization [19], reconfigurable curvature-conforming arrays [20], [21], and fully enclosed cubic arrays [4]. However, planar analyses neglect the observ-ability loss induced by vertical displacement, reconfigurable arrays introduce additional sensing and modeling complexity, and enclosed cubic designs interfere with external magnetic actuation. More importantly, most existing studies focus on idealized workspaces where the dipole model remains reliable, leaving limited understanding of how three-dimensional spatial diversity can improve localization when the target approaches workspace boundaries and the underlying physical model begins to deteriorate. At the same time, geometry optimization alone is insuffi-cient for practical deployment. Theoretical observability gains are often weakened by unavoidable hardware imperfections, such as sensor manufacturing tolerances and installation errors, which degrade data quality and widen the Sim-to-Real gap. Al-though calibration methods can partially compensate for these effects [6], [22], they typically rely on system-specific tuning and therefore remain difficult to scale for widespread clinical adoption [13]. Consequently, a practical solution must jointly address geometric observability and real-world robustness. To bridge the gap between theoretical observability and practical utility, we present a comprehensive framework that synergizes information-theoretic geometric optimization with physics-guided deep learning. By jointly addressing geometric degradation and the Sim-to-Real gap, the proposed framework enables robust calibration-free localization. The main contri-butions are summarized as follows: 1) A rigorous evaluation framework utilizing the Fisher Information Matrix (FIM) is established to quantitatively screen sensor topologies. This analysis identifies the inherent information deficiency of conventional planar arrays and demonstrates the effectiveness of a novel stag-gered split-array topology. The optimized configuration increases the intrinsic information density by an order of magnitude and significantly lowers the theoretical lower bound of tracking error, thereby providing a superior physical foundation for high-precision localization. 2) A novel physics-aware learning architecture, Phy-GAANet, is proposed to asymptotically approach the theoretical precision limits enabled by the optimized geometry. By integrating Physics-Informed Features and Geometry-Aware Attention to bridge the Sim-to-Real gap, the network achieves state-of-the-art accuracy without re-quiring real-world data collection or hardware calibration. 
+
+II. M ETHOD 
+
+A. Magnetic Dipole Field Modeling 
+
+As illustrated in Fig. 1, we consider the localization of a cylindrical permanent magnet using a stationary sensor array. The external magnetic field is approximated using the magnetic dipole model, which remains accurate when the magnet-to-sensor distance exceeds the magnet’s characteristic dimensions (typically more than eight times the radius [23]).          
+
+> Fig. 1. Schematic representation of the 5-DOF localization system based on the magnetic dipole model. The state of the permanent magnet is defined by its center position pand orientation vector n.The displacement vector dioriginates from the magnet towards the i-th sensor located at riin the dual-layer sensor array. The staggered height configuration of the sensors (indicated by green and grey colors) is designed to improve the gradient information in the vertical direction.
+
+The field intensity is governed by the magnet’s physical properties, specifically radius r, length l, surface magnetization 
+
+M, and the permeability of the surrounding medium. These intrinsic parameters are encapsulated in the magnetic strength coefficient, defined as BT = ( μr μ0πr2lM )/4π, where μ0 and 
+
+μr denote the vacuum permeability and relative permeability, respectively. Accordingly, the magnetic flux density Bi ∈ R3
+
+measured at the i-th sensor position ri is expressed as 
+
+Bi(p, n) = BT
+
+ 3(n · di)di
+
+∥di∥5 − n
+
+∥di∥3
+
+
+
+, (1) where di = ri − p denotes the displacement vector from the magnet center to the i-th sensor, and n is the unit orientation vector ( ∥n∥2 = 1). To facilitate the subsequent gradient-based observability analysis, we adopt a minimal parameterization of the orienta-tion n using yaw ( ψ ∈ [0, 2π)) and pitch ( θ ∈ [0, π]): 
+
+n(ψ, θ ) = cos ψ sin θ , sin ψ sin θ , cos θ ⊤ . (2) This formulation yields the minimal state vector x =[p⊤, ψ, θ ]⊤ ∈ R5, which inherently satisfies the unit-norm constraint and simplifies the subsequent optimization and observability analysis. 
+
+B. Geometry-Induced Observability Analysis 
+
+The localization fidelity of magnetic dipole tracking is fundamentally governed by the spatial configuration of the sensor array. Conventional planar arrays confine sensors to a single plane, inherently limiting the observability of magnetic field gradient variations along the normal axis (Z). This geometric constraint leads to an ill-conditioned FIM and, in practice, to a significant attenuation of observable information along the normal direction. While volumetric configurations, such as cubic arrays [4], can significantly improve localization accuracy, they inevitably obstruct the workspace and therefore hinder external magnetic actuation. To address this trade-off, we propose a “minimal intrusion” design strategy, namely the staggered split-array configuration. By strategically alternating sensor elevations between two distinct levels ( ZBOT and ZTOP ), this topology enhances the IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS             
+
+> Fig. 2. Overall architecture of the proposed Phy-GAANet. (A) The overall network pipeline. The model accepts a physics-augmented input tensor (4×4×9), processes it through the MagPhyResNet backbone, and outputs position ( p) and orientation ( n) estimates via decoupled MLP heads. (B)
+> Physics-augmented input stage. To handle the unique characteristics of magnetic signals, three feature maps are concatenated: Log Transform (for compressing the high dynamic range), Saturation Mask (indicating clipped sensor readings), and Sensor Geometry (providing spatial coordinates).
+> (C) Detailed structure of the MagPhysBlock. This residual building block integrates a three-stage attention mechanism to recalibrate features: Step 1 groups axes to suppress directional noise (Axis-Group Attention); Step 2 employs depth-wise convolutions to capture spatial field variations (Gradient Attention); and Step 3 applies a Squeeze-and-Excitation (SE) block for global feature weighting (Channel Attention). Symbols ⊗and ⊕
+> denote element-wise multiplication and element-wise addition, respectively.
+
+observable information content without obstructing the lateral workspace required for clinical manipulation. To evaluate this design quantitatively and to establish the theoretical precision limits of candidate geometries, we employ an analysis frame-work based on the Cram´ er–Rao Lower Bound (CRLB). Given the minimal state vector x = [ p⊤, ψ, θ ]⊤ ∈ R5 de-fined in Section II-A, and an array comprising N triaxial magnetometers, the complete observation vector is denoted as 
+
+y(x) = [ B⊤ 
+
+> 1
+
+, . . . , B⊤ 
+
+> N
+
+]⊤ ∈ R3N . Assuming that the measurements are corrupted by independent and identically distributed (i.i.d.) additive white Gaussian noise with standard deviation σ , the FIM is given by 
+
+F(x) = 1
+
+σ 2 J(x)⊤J(x), (3) where J(x) ∈ R3N×5 is the Jacobian matrix containing the partial derivatives of the magnetic field model with respect to the state variables, i.e., ∂ B/∂ x. This matrix captures the local sensitivity of the sensor array to state perturbations. According to the CRLB, the error covariance of any un-biased estimator bx is lower bounded by the inverse FIM, i.e., Cov (bx) ⪰ F−1(x). To rigorously benchmark candidate geometries, we define four scalar metrics that characterize both the estimation bound and the information geometry of the sensing system:  
+
+> •
+
+Position RMSE Bound : Computed as 
+
+q
+
+Tr (F−11:3 ,1:3 ),representing the theoretical lower bound of the position root-mean-square error (RMSE).  
+
+> •
+
+Orientation RMSE Bound : Computed as 
+
+q
+
+Tr (F−14:5 ,4:5 ),representing the theoretical lower bound of the orientation RMSE (converted to degrees).  
+
+> •
+
+Minimum Eigenvalue ( λmin ): Characterizes the infor-mation density in the least observable direction, i.e., the worst-case sensitivity. A vanishing λmin indicates geometric degeneracy.  
+
+> •
+
+Condition Number ( κ): Defined as λmax /λmin , quanti-fying the numerical stability and isotropy of the sensing system. These metrics constitute a theoretical screening mechanism. By evaluating them in silico , we identify geometries with superior information density and more favorable precision bounds, thereby ensuring that the subsequent hardware integra-tion and neural network training are grounded on an optimized geometric foundation. 
+
+C. Network Architecture: Phy-GAANet 
+
+To address real-time magnetic localization under sensor noise and calibration errors, we propose the Physics-Guided Geometry-Aware Attention Network (Phy-GAANet). As illus-trated in Fig. 2, the architecture is designed to learn robust magnetic field representations directly from raw, uncalibrated sensor array data. Unlike generic convolutional neural net-works (CNNs), Phy-GAANet incorporates domain-specific physical priors—specifically magnetic-field decay and sensor-array geometry—into both the input representation and the at-IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS                                                                             
+
+> TABLE I DETAILED ARCHITECTURE CONFIGURATION OF PHY -GAAN ET
+> Stage Output Size Layer Configuration Stride
+> Input 4×4×9[Xlog ;Xsat ;Xgeo ]-Stem 4×4×63 Conv3 ×3, BN, GELU 1Stage 1 4×4×63 MagPhysBlock ×21Stage 2 4×4×126 MagPhysBlock ×21Stage 3 2×2×252 MagPhysBlock ×22Stage 4 2×2×504 MagPhysBlock ×21Heads 1×1×3Pos: MLP (504 →128 →3)
+> Ori: MLP (504 →128 →3)-
+
+tention mechanisms. The network consists of three key stages: a physics-augmented input, a residual backbone enhanced with magnetic gradient attention, and decoupled regression heads. To handle the high dynamic range of magnetic flux density (B ∝ r−3) and hardware saturation, we construct a multi-channel input tensor Xin ∈ RH×W ×Cin , where H = W = 4and Cin = 9, comprising three physical components. First, to compress the dynamic range and enhance sensitivity to weak signals, we apply a signed logarithmic transformation to the raw magnetometer readings Braw , denoted as Xlog =
+
+sgn (Braw ) · ln (1 + |Braw |). Simultaneously, we address sensor saturation by introducing a binary mask Xsat = I(|Braw | ≥ 
+
+Bclip ), where Bclip is set to 1900 μT, explicitly informing the network of invalid or clipped readings. Furthermore, the physical coordinates (px, py, pz) of each sensor are embed-ded as Xgeo to provide an absolute spatial reference frame. These components are concatenated and projected into a latent feature space via a “Physics Stem” consisting of a 3 × 3convolution, Batch Normalization (BN), and Gaussian Error Linear Unit (GELU) activation. A key component of the backbone is the MagPhysBlock module (detailed in Fig. 2), which replaces standard spatial attention mechanisms. Inspired by analytical dipole models that rely on magnetic gradients and vector components, Mag-PhysBlock utilizes its internal Geometry-Aware Attention to sequentially recalibrate features across three dimensions. It begins by grouping feature channels into orthogonal triplets 
+
+(x, y, z) and reweighting them via an axis-specific Multi-Layer Perceptron (MLP) to suppress noise-dominated axes. This is followed by a gradient-aware spatial attention mechanism that employs a 3 × 3 depth-wise convolution to aggregate neighboring information and highlight regions with steep field gradients. Finally, a Squeeze-and-Excitation (SE) block recalibrates channel weights. Formally, for an input feature map F, the recalibrated feature map is written as 
+
+F′ = F ⊗ Maxis (F) ⊗ Mgrad (F) ⊗ Mchannel (F), (4) where ⊗ denotes element-wise multiplication and M(·) de-notes the corresponding attention map. For feature extraction, we employ a modified ResNet-18 architecture tailored to the low spatial resolution (4 × 4) of the sensor array, as detailed in Table I. The network com-prises four residual stages, with downsampling strategically delayed until the third stage to preserve spatial information. The network ends with two decoupled task-specific heads to prevent negative transfer: one for position estimation, which relies primarily on field magnitude and gradients, and one for orientation estimation, which depends on vector directionality. Each head consists of a global average pooling layer followed by a two-layer MLP (hidden dimension: 128) with GELU activation, outputting the position vector p ∈ R3 and the orientation unit vector n ∈ R3, respectively. 
+
+D. Loss Function 
+
+To jointly optimize position and orientation estimation, we employ a weighted multi-task objective. Let ˆ p, ˆn denote the predicted position and orientation, and let p, n denote the corresponding ground truth. The total loss is defined as 
+
+Ltotal = λpos ∥ ˆp − p∥1 + λori ∥ ˆn − n∥1, (5) where ∥ · ∥ 1 denotes the L1 norm. We empirically set the balancing weights to λpos = 1000 and λori = 10 to balance the gradient scales of the two tasks, since position is measured in meters and typically has a much smaller numerical range than the normalized orientation vector. 
+
+III. EXPERIMENTS 
+
+A. Geometry-Induced Observability Evaluation 
+
+To validate the theoretical framework established in Sec-tion II-B and to quantify the impact of sensor topology on lo-calization limits, we performed a rigorous in silico evaluation. The primary objective was to determine whether a “minimal intrusion” strategy, i.e., redistributing sensors solely along the vertical axis, provides sufficient geometric diversity to improve observability along the normal direction. We benchmarked three representative geometries ( N = 16) within the target clinical workspace defined by x, y ∈ [−50 , 50 ] mm and z ∈
+
+[50 , 150 ] mm. The evaluation used 200,000 samples generated via Latin Hypercube Sampling (LHS) under a realistic noise floor of σ = 10 μT. All configurations share an identical 4 × 4 grid footprint uniformly distributed over a 100 ×100 mm 2 aperture, differing only in their vertical distributions to reflect specific clinical integration constraints: a baseline Planar Array (all sensors at Z = 20 mm), representing a standard under-bed setup; a Single-Split Array (outer columns at Z = 20 mm and inner columns at Z = 0 mm), which attempts to introduce parallax while remaining single-sided; and the proposed Staggered Split Array (outer columns at Z = 20 mm and inner columns at Z = 180 mm), which employs a dual-plate architecture to increase the observable information content. The theoretical lower bounds on estimation error, visualized in Fig. 3(a)–(b), reveal a decisive performance hierarchy. The proposed Staggered Split Array demonstrates superior observability, achieving a median position RMSE bound of 1.05 mm and an orientation bound of 1.72 ◦. This corresponds to improvements of 2 .7× and 2 .2×, respectively, over the Planar baseline (2.85 mm and 3.76 ◦), confirming that ex-tending the sensing aperture vertically effectively improves the information geometry. Crucially, however, the Single-Split Array yields an instructive negative result: despite intro-ducing vertical offsets, its median position RMSE increases to 3.86 mm, which is even worse than the Planar baseline. This counterintuitive finding highlights a fundamental physical IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS 
+
+constraint: achieving parallax by moving the inner sensors farther away (to Z = 0 mm) incurs a severe penalty due to the cubic decay of the magnetic field ( B ∝ r−3). The resulting loss in signal-to-noise ratio (SNR) overwhelms the marginal gain in geometric observability, indicating that for single-sided arrays, sensor proximity to the target remains the dominant factor governing localization accuracy. The underlying mechanism is further elucidated by the spectral properties of the FIM. As shown in Fig. 3(d), the Staggered Array exhibits a median minimum eigenvalue ( λmin )of 1 .61 × 10 3, nearly an order of magnitude higher than those of the Planar (3 .62 × 10 2) and Single-Split (2 .27 × 10 2) arrays. Since λmin quantifies the information density in the least observable direction, this confirms that the staggered topology effectively removes the dominant geometric blind spot. It is noteworthy that the condition number κ of the proposed array (9 .60 × 10 3) is slightly higher than that of the Planar baseline (8 .48 × 10 3). While a larger κ is often associated with reduced numerical stability, in this case it mainly reflects an expanded signal dynamic range: by placing the inner columns at ZTOP =
+
+180 mm, the array captures stronger near-field responses from the upper workspace, causing the dominant eigenvalue λmax 
+
+to increase disproportionately. Although this leads to greater anisotropy, the overall uncertainty volume ( ∝ det (F−1)) is still drastically reduced. Overall, these results show that the proposed Staggered Split Array breaks the geometry-induced information bottleneck and lowers the theoretical error floor to the millimeter level, whereas the Single-Split configuration provides no net benefit due to severe SNR attenuation; ac-cordingly, the subsequent real-world experiments focus on the Proposed and Planar arrays only. 
+
+B. Hardware Platform Setup 
+
+Guided by the observability analysis in Section III-A, we constructed a high-precision magnetic localization platform to acquire real-world validation data for both the Planar baseline and the proposed Staggered Split array. As illustrated in Fig. 4, the system comprises four primary subsystems: a custom-designed magnetometer array, a magnetic tracking target, a manual ground-truth positioning system, and a data acquisition unit. 
+
+1) Sensing Array Topology and Configuration: The core sensing component is a custom-designed magnetometer array based on LIS3MDL (STMicroelectronics) triaxial sensors. The platform adopts a dual-layer architecture consisting of two complete 4 × 4 sensor arrays (32 sensors in total) positioned at vertical heights of Z = 20 mm and Z = 180 mm, respec-tively. Within each layer, the sensors are uniformly distributed over a 100 × 100 mm planar region, spanning the horizontal coordinate range x, y ∈ [−50 , 50 ] mm. The localization algorithm, however, does not use data from all 32 sensors simultaneously. Instead, the redundant hardware design allows us to selectively activate a subset of 16 sensors at a time while keeping the sensor count fixed and varying only the spatial topology. This enables a rigorous comparison between the proposed staggered-layer arrangement (using sensors from both layers) and a conventional planar 10 4 10 3 10 2                        
+
+> RMSE_POS (m)
+> 0.00
+> 0.25
+> 0.50
+> 0.75
+> 1.00
+> 1.25
+> 1.50
+> 1.75
+> 2.00
+> Probability Density
+> (a) Position Precision Bound
+> 10 110 010 110 210 3
+> RMSE_ORI (deg)
+> 0.0
+> 0.5
+> 1.0
+> 1.5
+> 2.0
+> Probability Density
+> (b) Orientation Precision Bound
+> 10 310 410 510 610 710 810 9
+> Condition Number
+> 0.0
+> 0.1
+> 0.2
+> 0.3
+> 0.4
+> 0.5
+> 0.6
+> Probability Density
+> (c) Numerical System Stability
+> 10 210 010 210 410 6
+> Min Eigenvalue min
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> Probability Density
+> (d) Information Content Density
+> Planar Array Single-Split Array Split Array (Proposed) Median Value
+
+Fig. 3. Comparative evaluation of Fisher Information-based observabil-ity metrics for three distinct sensor array configurations over a 200,000-sample validation set with σ = 10 μT noise. (a) and (b) show the theoretical lower bounds for position and orientation RMSE (CRLB); lower values indicate higher achievable precision. (c) displays the condition number κ, representing numerical stability. (d) illustrates the minimum eigenvalue λmin , quantifying the information density in the least observable direction. While the “Single-Split” array (green) at-tempts to introduce depth parallax within a single-sided constraint, the proposed “Staggered Split Array” (red) significantly outperforms both benchmarks by providing stronger information density and improved precision bounds. 
+
+arrangement (using sensors from a single layer), thereby isolating geometric topology as the sole variable affecting localization performance. 
+
+2) Tracking Target and Physical Model: The tracking target is an N35-grade cylindrical Neodymium (NdFeB) permanent magnet with dimensions of φ 10 × 10 mm. In the theoretical magnetic dipole model used for synthetic data generation, the magnet is characterized by the strength coefficient BT , which is set to 7 .9666 × 10 −2. This value ensures that the synthetic training data closely matches the physical properties of the N35 magnet used in the real-world experiments. 
+
+3) Ground Truth and Data Processing: To obtain rigorous ground truth, we employed a high-precision manual position-ing system. Planar (XY) alignment was determined using a 100 × 100 mm calibration plate positioned at Z = 40 mm, featuring a 7 ×7 grid of positioning holes spaced 15 mm apart, while vertical (Z-axis) displacement was controlled using a set of custom-fabricated resin calibration pillars with precisely controlled heights. Data acquisition is orchestrated by an STM32F103RCT6 microcontroller (MCU), which synchronously samples the active sensors at 100 Hz. The collected data is transmitted to a workstation running Ubuntu 22.04, equipped with an Intel(R) Xeon(R) Platinum 8488C CPU and an NVIDIA GeForce RTX PRO 6000 GPU for subsequent data processing and model training. No explicit post-fabrication calibration was performed for the sensor coordinates or sensitivities. Instead, the system directly uses the nominal array geometry and manufacturer-specified sensor characteristics. Accordingly, all IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS                
+
+> Fig. 4. The custom-designed hardware validation platform. The system features a dual-layer 4×4sensor array positioned at Z=20 mm and
+> Z=180 mm, a calibration board located at Z=40 mm, a set of calibration pillars with varying heights, and an MCU-based acquisition unit. This configuration enables selective activation of 16-sensor subsets for a controlled comparison between planar and staggered spatial layouts under identical environmental conditions.
+
+real-world experiments are conducted in a calibration-free setting. 
+
+C. Datasets 
+
+To enable robust Sim-to-Real learning without manual cal-ibration, we constructed two distinct datasets: a large-scale synthetic dataset for training and a real-world dataset used exclusively for evaluation. Both datasets share the same coor-dinate system and sensor geometry defined in Section III-B. We generated the training data using a physics-based sim-ulation based on Eq. (1). To reduce the Sim-to-Real gap, we adopted a hardware-aware strategy by clipping the sim-ulated magnetic flux density at the sensor saturation threshold (±1900 μT). This enables the network to learn how to handle saturated signals commonly encountered in near-field tracking. We used Latin Hypercube Sampling (LHS) [24] to gener-ate uniformly distributed pose samples across the workspace (x, y ∈ [−50 , 50 ] mm, z ∈ [45 , 155 ] mm). Using this sampling strategy, we created two datasets with 1 × 10 7 samples each: the Staggered Split Dataset , constructed from the dual-layer coordinates ( Z ∈ { 20 , 180 } mm), and the Planar Dataset ,constructed from the lower layer only. For physical validation, we collected a real-world dataset using the high-precision platform. We adopted a grid sampling strategy by placing the magnet at 49 uniformly distributed positions on the XY plane (a 7 × 7 grid with 15 mm spacing). At each position, data were recorded at 11 discrete heights from Z = 50 mm to Z = 150 mm in steps of 10 mm. We also rotated the magnet to six fixed orientations (Fig. 5) at each point, yielding a total of 3,234 real-world samples. To ensure a fair comparison under identical environmental conditions, we extracted sensor readings for both topologies from the same 32-sensor hardware recordings. For the Stag-gered configuration, we selected data from the outer columns of the lower layer and the inner columns of the upper layer. For the Planar baseline, we used only the lower layer data.                    
+
+> Fig. 5. The six magnet orientations used for data acquisition. The corresponding unit orientation vectors are Front (0,1,0), Back (0,−1,0),Up (0,0,1), Down (0,0,−1), Left (−1,0,0), and Right (1,0,0).
+
+This real-world dataset is fully separated from training and used only for testing. 
+
+D. Training and Evaluation Criteria 
+
+1) Training and Implementation Details: The proposed Phy-GAANet was implemented in PyTorch 2.9.1 with CUDA 12.8 and cuDNN 9.1 acceleration. All training and evaluation experiments were conducted on a high-performance worksta-tion equipped with an Intel(R) Xeon(R) Platinum 8488C CPU and an NVIDIA RTX PRO 6000 GPU. We trained the network using the AdamW optimizer for 150 epochs with a batch size of 2,048. The initial learning rate was set to 1 × 10 −3 with a weight decay of 1 × 10 −5, and a Cosine Annealing scheduler was employed to gradually reduce the learning rate throughout training for improved convergence stability. To enhance robustness against real-world sensor fluctuations, Gaussian noise with a standard deviation of 2% of the signal magnitude ( σ = 0.02) was injected into the input data online during training. The checkpoint with the lowest validation position error was selected for final testing. Notably, the entire training pipeline was based exclusively on synthetic data generated from the theoretical physics model, and the validation set was also drawn from the synthetic domain. This fully synthetic training paradigm eliminates the need for labor-intensive real-world data collection during train-ing. Details of the dataset generation procedure are provided in Section III-C. 
+
+2) Evaluation Metrics: To comprehensively assess localiza-tion performance, we use two primary metrics: Position Error (Epos ) and Orientation Error ( Eori ). 
+
+Position Error ( Epos ): Defined as the Euclidean distance between the estimated position ˆ p ∈ R3 and the ground truth 
+
+p ∈ R3:
+
+Epos = ∥ ˆp − p∥2 × 1000 (mm) (6) 
+
+Orientation Error ( Eori ): Defined as the angular deviation between the estimated unit orientation vector ˆ n and the ground truth n:
+
+Eori = arccos 
+
+ ˆn · n
+
+∥ ˆn∥2∥n∥2
+
+
+
+× 180 
+
+π (deg) (7) where · denotes the dot product. Although the model oper-ates on unit vectors (implying ∥ ˆn∥2 ≈ 1 and ∥n∥2 = 1), the denominator is retained to ensure numerical robustness. IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS                                                                           
+
+> TABLE II GLOBAL LOCALIZATION PERFORMANCE COMPARISON
+> Method Pos. Error (mm) Ori. Error ( ◦)Time Mean ±STD RMSE Max Mean ±STD RMSE Max (ms)
+> LM (Planar) 5.12 ±4.62 6.90 50.90 5.49 ±7.10 8.98 132.41 2.31 LM (Split) 2.95 ±4.67 5.52 75.08 4.79 ±10.28 11.34 162.80 2.12 Phy-GAANet (Planar) 3.10 ±2.97 4.30 24.29 4.55 ±4.18 6.18 29.87 3.38
+> Phy-GAANet (Split) 1.84 ±1.34 2.27 10.10 3.18 ±2.02 3.84 17.94 3.64 60 80 100 120 140
+> Sensing Height (mm)
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> Mean Position Error (mm)
+> Core Range Near Far
+> 60 80 100 120 140
+> Sensing Height (mm)
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> Mean Angular Error (deg)
+> Core Range Near Far
+> LM-Planar LM-Split Phy-GAANet (Planar) Phy-GAANet (Split)
+> Fig. 6. Layer-wise localization error distribution along the Zaxis. The shaded regions indicate the boundary-sensitive regimes around Z=
+> 50 mm and Z=150 mm. The proposed Phy-GAANet with the Staggered Split Array (red curve) maintains consistently lower position and orien-tation errors across the workspace, whereas the LM-based optimization exhibits pronounced degradation near the workspace boundaries.
+
+E. Evaluation of Localization Performance 
+
+To thoroughly validate the proposed framework, we bench-mark Phy-GAANet against the classical Levenberg–Marquardt (LM) iterative optimization algorithm on the real-world dataset. For a rigorous comparison, the LM solver was initial-ized with a fixed perturbation from the ground truth (position: 
+
++20 mm; orientation vector components: +0.3), consistent with the protocol in prior work [13]. This comparison allows us to decouple the contributions of algorithmic learning and geometric optimization. As summarized in Table II, the results demonstrate a clear advantage of our approach across multiple performance dimensions. The global performance metrics reveal a clear hierarchy driven by both algorithmic and geometric improvements. Algorithmically, Phy-GAANet consistently outperforms the classical LM solver regardless of the sensor topology. On the conventional Planar array, Phy-GAANet reduces the po-sition RMSE from 6.90 mm (LM) to 4.30 mm. Similarly, on the Split array, it further lowers the error from 5.52 mm (LM) to 2.27 mm, demonstrating that the data-driven model handles real-world noise more effectively than iterative opti-mization. Geometrically, the Staggered Split topology provides intrinsic advantages over the Planar baseline, independent of the estimator used. Both LM and Phy-GAANet achieve substantially lower errors when transitioning from Planar to Split configurations. Consequently, by combining the best-performing algorithm with the best-performing geometry, the Phy-GAANet (Split) configuration achieves the best overall performance across all metrics (position RMSE: 2.27 mm; orientation RMSE: 3.84 ◦). Crucially, the maximum-error statistics reveal a strong ro-bustness advantage of the proposed learning-based approach. While the LM algorithm benefits on average from the Split geometry, its dependence on initialization makes it prone to catastrophic divergence in ill-conditioned regions. This results in unacceptable worst-case outliers, with maximum position errors reaching 75.08 mm, essentially indicating tracking fail-ure. In contrast, Phy-GAANet behaves as a much more stable estimator. By embedding physical constraints, it effectively suppresses extreme outliers, limiting the maximum position error to 10.10 mm even in the most challenging scenarios. This robustness is particularly important for clinical applications, where reliability matters as much as average accuracy. The system’s robustness is further illustrated by the bound-ary regions of the workspace ( Z = 50 mm and Z = 150 mm), as shown in Fig. 6. At the lower boundary ( Z = 50 mm), the magnet is only 30 mm above the bottom sensors, where high magnetic flux density frequently causes sensor saturation and deviation from the point-dipole assumption. In this regime, the LM algorithm exhibits pronounced error spikes (Planar mean: 8.23 mm), whereas Phy-GAANet maintains a low mean position error of 1.72 mm, indicating that the network ef-fectively compensates for near-field distortions and saturation artifacts. At the upper boundary ( Z = 150 mm), the Planar topology suffers from severe far-field signal attenuation. In contrast, under the Split topology, the magnet enters a new near-field regime relative to the top sensors ( ZTOP = 180 mm). Leveraging this symmetric proximity, Phy-GAANet reduces the mean error to 3.18 mm, effectively bridging the accuracy gap typically observed at the workspace boundary. Regarding computational efficiency, although the proposed network incurs a marginal increase in inference time (3.64 ms) compared with the LM algorithm (2.12 ms), this trade-off is negligible in practice. The inference speed corresponds to a theoretical update rate exceeding 270 Hz, which is more than sufficient for real-time medical guidance. Furthermore, unlike the iterative LM solver, which suffers from variable conver-gence times, Phy-GAANet provides deterministic constant-time inference, thereby ensuring temporal stability for real-time control loops. 
+
+F. Comparison With Existing Approaches 
+
+It is important to note that permanent-magnet localization is a highly specialized problem. Beyond algorithmic design, localization performance is strongly influenced by hardware variations, including magnet dimensions, magnetization in-tensity, array geometry, and manufacturing tolerances. Con-sequently, directly comparing error metrics across different studies without reproducing the underlying hardware setup is of limited significance. To provide a fairer comparison, we compiled Table III under a standardized benchmark in which the hardware platform was unified, state-of-the-art algorithms were re-implemented, and identical training settings were applied without prior calibration. This benchmark is intended to evaluate the relative merits of the proposed architecture under controlled conditions. The quantitative results in Table III show that Phy-GAANet 
+
+achieves state-of-the-art performance. Our method attains the IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS 
+
+TABLE III COMPARISON WITH STATE -OF -THE -A RT APPROACHES 
+
+Method Pos. Error (mm) Ori. Error ( ◦) Time Mean RMSE Max Mean RMSE Max (ms) 
+
+FCN-Indep [16] 3.03 3.91 26.41 4.10 5.83 67.73 0.87 
+
+PIRNet [14] 2.14 2.86 20.98 3.54 4.63 26.32 1.03 AMagPosenet [12] 1.98 2.60 16.91 3.94 5.37 36.71 1.09 MobilePoseNet [13] 2.28 2.85 14.88 3.47 4.08 14.88 2.54 ResNet-18 [25] 1.91 2.49 24.02 3.52 4.49 25.72 1.94 
+
+Phy-GAANet 1.84 2.27 10.10 3.18 3.84 17.94 3.64 MobilePoseNet  
+
+> AMagPosenet
+> ResNet-18
+> PIRNet
+> FCN-Indep
+> Phy-GAANet
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> Mean Position Error (mm)
+> (a) Position Accuracy Comparison
+> MobilePoseNet
+> AMagPosenet
+> ResNet-18
+> PIRNet
+> FCN-Indep
+> Phy-GAANet
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> Mean Orientation Error (deg)
+> (b) Orientation Accuracy Comparison
+> Height = 50mm Height = 150mm
+
+Fig. 7. Performance comparison at the critical boundary heights Z =
+
+50 mm and Z = 150 mm. Under the Staggered Split Array topology, both heights correspond to near-field regimes where partial sensor saturation occurs and the dipole model begins to break down. Panels (a) and (b) compare the mean position and orientation errors, respectively, across representative baseline methods and the proposed Phy-GAANet. 
+
+lowest mean position error among all competing architec-tures. More importantly, its most significant advantage lies in stability, as reflected by the maximum-error metric. While strong backbones such as ResNet-18 achieve competitive mean errors, they still suffer from substantial outliers (Max: 24.02 mm) due to the lack of explicit physical constraints. In contrast, Phy-GAANet behaves as a much more stable estimator. By explicitly encoding geometric priors, it limits the maximum position error to 10.10 mm, corresponding to a 58% reduction relative to ResNet-18. This indicates that the proposed architecture effectively suppresses catastrophic divergence in challenging signal regimes. To further assess robustness under extreme physical con-straints, we analyzed performance at the two workspace boundaries ( Z = 50 mm and Z = 150 mm). In the Staggered Split configuration, both correspond to near-field conditions in which the magnet is only 30 mm from the nearest sensor layer. These cases are particularly challenging because they combine partial sensor saturation with deviation from the point-dipole assumption. As shown in Fig. 7, existing methods degrade no-ticeably in this regime; for example, MobilePoseNet exhibits position errors of nearly 4.0 mm at Z = 150 mm, indicating limited ability to separate informative high-gradient measure-ments from saturation artifacts. By contrast, Phy-GAANet maintains strong robustness through its GAA module, which adaptively emphasizes features from the non-saturated layer, thereby achieving lower mean position and orientation errors at the workspace boundaries. 
+
+G. Ablation Study 
+
+To investigate the contributions of the proposed components within Phy-GAANet , we conducted a comprehensive ablation 
+
+TABLE IV ABLATION STUDY ON MODEL COMPONENTS 
+
+Configuration Pos. Error (mm) Ori. Error ( ◦)Mean ± STD RMSE Max Mean ± STD RMSE Max 
+
+Phy-GAANet (Full) 1.84 ± 1.34 2.27 10.10 3.18 ± 2.02 3.84 17.94 
+
+w/o PIF 1.85 ± 1.33 2.28 10.92 3.45 ± 2.54 4.28 24.94 
+
+w/o Attn 1.97 ± 1.38 2.41 10.33 3.28 ± 1.96 3.82 17.36 
+
+w/ SE-Block 2.01 ± 1.47 2.49 11.13 3.37 ± 2.21 4.03 22.26 
+
+GAA w/o Group 2.02 ± 1.48 2.50 11.51 3.33 ± 2.06 3.91 18.87 
+
+GAA w/o Gradient 1.95 ± 1.39 2.40 10.01 3.24 ± 1.95 3.78 16.44 
+
+GAA w/o Channel 1.97 ± 1.43 2.44 11.28 3.25 ± 1.99 3.81 20.05 
+
+study on the same real dataset. We systematically removed or replaced key modules to evaluate their effects on localization accuracy and robustness. The evaluated variants are defined as follows: (1) w/o PIF : removes the Physics-Informed Features (logarithmic magnitude and saturation mask), relying solely on raw magnetic flux density; (2) w/o Attn : removes all attention mechanisms from the backbone; (3) w/ SE-Block : replaces the proposed physics-aware GAA module with the standard SE block [26] to benchmark against generic channel attention; and (4) GAA Variants : investigates the internal mechanism of the GAA module by selectively disabling its Group (axis-wise), 
+
+Gradient (local spatial), or Channel (global) branches. The quantitative results are summarized in Table IV. First, the Physics-Informed Features (PIF) play an important role in orientation stability. While removing PIF ( w/o PIF) causes only a marginal change in position accuracy, it leads to noticeably degraded orientation robustness: the angular RMSE increases to 4.28 ◦, and the maximum orientation error reaches 24.94 ◦, compared with 17.94 ◦ for the full model. This suggests that the explicit inclusion of saturation masks and logarithmic scaling is particularly beneficial for suppressing extreme out-liers in rotation estimation. Second, the comparison of attention mechanisms highlights the importance of the proposed GAA module. The full Phy-GAANet achieves the best overall balance between position accuracy and robustness, with the lowest mean position error (1.84 mm) and the smallest position uncertainty ( ±1.34 mm). In contrast, replacing GAA with a standard SE block ( w/ 
+
+SE-Block) degrades the mean position error to 2.01 mm and increases the maximum position error to 11.13 mm, even performing worse than the backbone without attention. This indicates that generic channel attention is insufficient to capture the inherent information of the magnetic field, whereas GAA is better aligned with the underlying sensing physics. Finally, the internal decomposition of GAA clarifies the contribution of each branch. Disabling the Group branch ( GAA w/o Group) yields the worst position performance among all ablation variants (RMSE 2.50 mm, Max 11.51 mm), showing that modeling the correlation within sensor triads ( Bx, By, Bz) is crucial for robust localization. Removing the Channel branch also degrades stability, particularly in the maximum orientation error. Although removing the Gradient branch leads to slightly lower max-error statistics in a few cases, the full model remains the most balanced configuration overall. 
+
+H. Discussion 
+
+In practical deployment, rigid sensor carriers are generally preferred to flexible or bendable structures because they are IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS 
+
+easier to fabricate, calibrate, and maintain. Within this rigid external-placement setting, possible sensor layouts range from a single planar array to vertically separated planar layers, and even to a cubic shell that fully surrounds the workspace. Although cubic arrays can generally provide superior sens-ing performance, they are not a practical primary hardware solution for our system, because external magnetic actuation typically requires access from multiple directions around the workspace; installing sensors on all six exterior faces would directly restrict the placement and operation of the external magnetic driving apparatus. Accordingly, this study focused on low-complexity geometric modifications along a single structural degree of freedom, namely the vertical redistribu-tion of sensor layers, and confirmed that the staggered split arrangement substantially outperforms a planar baseline. Nevertheless, the cubic shell-constrained optimum remains valuable as a theoretical reference, because it reveals how much geometric headroom still exists under rigid external placement. To examine this, we extended the same 5-DOF Fisher-information framework and performed a free-placement optimization over the six outer faces of a cubic shell with side length 0.16 m, using a two-stage strategy consisting of greedy initialization followed by local continuous refinement. As shown in Fig. 8, the resulting optimum is not a uniform dis-tribution, but a structured multi-face arrangement, indicating that informative sensor placement is governed by observability complementarity across different viewing directions. Quantita-tively, the staggered split baseline already achieves a substan-tial improvement over the planar layout, showing that even a limited vertical redistribution of sensors can recover much of the information gain enabled by three-dimensional sensing diversity. Building on this, the shell-constrained optimum further improves the geometry by increasing the overall infor-mation content, strengthening the weakest observable mode, and reducing the mean position and orientation CRLBs from 1.057 mm and 2.401 ◦ to 0.398 mm and 1.022 ◦, respectively. These results indicate that the proposed theoretical framework is capable of identifying substantially more accurate geometric configurations under higher degrees of placement freedom, highlighting its potential as a tool for sensor layout design in applications requiring high localization precision. Such configurations, however, should be interpreted as constrained theoretical references rather than practical hardware targets. In contrast, the proposed staggered split array already provides a substantial geometric advantage over the planar baseline while preserving workspace openness and maintaining compatibility with external magnetic actuation. 
+
+IV. C ONCLUSION 
+
+This work presents a unified framework for high-precision magnetic localization that combines information-theoretic ge-ometry optimization with physics-aware deep learning. FIM-based analysis shows that the proposed staggered split-array topology provides a substantially stronger observability foundation than a planar baseline. Built on this geometry, Phy-GAANet bridges the Sim-to-Real gap through physics-informed input design and Geometry-Aware Attention, en-abling robust calibration-free localization from raw sensor -0.08           
+
+> 0.00
+> 0.08
+> x (m) -0.08
+> 0.00
+> 0.08
+> y (m)
+> 0.02
+> 0.10
+> 0.18
+> z (m)
+> (a)
+> Planar baseline
+> -0.08
+> 0.00
+> 0.08
+> x (m) -0.08
+> 0.00
+> 0.08
+> y (m)
+> 0.02
+> 0.10
+> 0.18
+> z (m)
+> (b)
+> Staggered split baseline
+> -0.08
+> 0.00
+> 0.08
+> x (m) -0.08
+> 0.00
+> 0.08
+> y (m)
+> 0.02
+> 0.10
+> 0.18
+> z (m)
+> (c)
+> Free shell optimum
+> Mean
+> logdet
+> Median
+> min
+> Pos.
+> precision
+> Ori.
+> precision
+> 10 0
+> 10 1
+> Relative gain
+> (Planar = 1, log scale)
+> (d)
+> 1.00× 1.00× 1.00× 1.00×
+> logdet = 56.76
+> min = 226.6
+> pos = 5.186 mm
+> ori = 8.461°
+> Planar profile
+> Mean
+> logdet
+> Median
+> min
+> Pos.
+> precision
+> Ori.
+> precision
+> (e)
+> 1.12×
+> 5.60× 4.91×
+> 3.52×
+> logdet = 63.61
+> min = 1269.3
+> pos = 1.057 mm
+> ori = 2.401°
+> Staggered split profile
+> Mean
+> logdet
+> Median
+> min
+> Pos.
+> precision
+> Ori.
+> precision
+> (f)
+> 1.25×
+> 27.21×
+> 13.04×
+> 8.28×
+> logdet = 70.90
+> min = 6167.2
+> pos = 0.398 mm
+> ori = 1.022°
+> Free shell profile
+
+Fig. 8. Top row: comparison of three rigid external sensor layouts, including the planar baseline, the staggered split baseline, and the shell-constrained free optimum. Bottom row: corresponding normalized performance profiles under a shared logarithmic y-axis, where larger values indicate better performance. The four metrics are mean log-determinant, median minimum eigenvalue, position precision, and orien-tation precision, with the latter two defined relative to the planar baseline through the inverse CRLB. 
+
+measurements. Real-world experiments demonstrate state-of-the-art performance, achieving 1.84 mm position error and 3.18 ◦ orientation error at over 270 Hz, while maintaining robustness in challenging near-field regions. Future work will improve interference robustness and integrate the framework with external magnetic actuation for clinical deployment. 
+
+REFERENCES 
+
+[1] C. R. Taylor, S. S. Srinivasan, S. H. Yeon, M. K. O. Donnell, T. J. Roberts, and H. M. Herr, “Magnetomicrometry,” Science Robotics ,vol. 6, DOI 10.1126/scirobotics.abg0656, no. 57, p. eabg0656, 2021. [Online]. Available: https://www.science.org/doi/abs/10.1126/ scirobotics.abg0656 [2] Y. Wang, G. Pittiglio, X. Lin, and P. E. Dupont, “Few-shot magnet localization using sim-to-real transfer learning,” IEEE Robotics and Automation Letters , vol. 10, DOI 10.1109/LRA.2025.3623010, no. 12, pp. 12 660–12 667, 2025. [3] T. D. Than, G. Alici, H. Zhou, and W. Li, “A review of localization sys-tems for robotic endoscopic capsules,” IEEE transactions on biomedical engineering , vol. 59, no. 9, pp. 2387–2399, 2012. [4] C. Hu, M. Li, S. Song, R. Zhang, M. Q.-H. Meng et al. , “A cubic 3-axis magnetic sensor array for wirelessly tracking magnet position and orientation,” IEEE Sensors Journal , vol. 10, no. 5, pp. 903–913, 2010. [5] C. R. Taylor, H. G. Abramson, and H. M. Herr, “Low-latency tracking of multiple permanent magnets,” IEEE Sensors Journal , vol. 19, no. 23, pp. 11 458–11 468, 2019. [6] S. Su, W. Yang, H. Dai, X. Xia, M. Lin, B. Sun, and C. Hu, “Investiga-tion of the relationship between tracking accuracy and tracking distance of a novel magnetic tracking system,” IEEE Sensors Journal , vol. 17, no. 15, pp. 4928–4937, 2017. [7] Z. Teng, J. Ren, H. Sun, Q. Liu, J. Liu, and Q. Wang, “Study on real-time tracking of wireless capsule endoscope based on lm-em algorithm,” 
+
+IEEE Transactions on Instrumentation and Measurement , vol. 74, DOI 10.1109/TIM.2025.3579842, pp. 1–10, 2025. [8] S. Mirjalili and A. Lewis, “The whale optimization algorithm,” Advances in Engineering Software , vol. 95, DOI https://doi.org/10.1016/j.advengsoft.2016.01.008, pp. 51–67, 2016. [Online]. Available: https://www.sciencedirect.com/science/article/pii/ S0965997816300163 [9] Y. Qin, B. Lv, H. Dai, and J. Han, “An hffnn-lm based real-time and high precision magnet localization method,” IEEE Transactions on Instrumentation and Measurement , vol. 71, pp. 1–9, 2022. [10] B. Lv, Y. Qin, H. Dai, and S. Su, “Improving localization success rate of three magnetic targets using individual memory-based wo-lm algorithm,” 
+
+IEEE Sensors Journal , vol. 21, DOI 10.1109/JSEN.2021.3101299, no. 19, pp. 21 750–21 758, 2021. [11] H. Ge, S. Song, J. Wang, and M. Q.-H. Meng, “Multi-magnet tracking method using extended kalman filter,” in 2021 IEEE Sensors , DOI 10.1109/SENSORS47087.2021.9639620, pp. 1–4, 2021. IEEE TRANSACTIONS ON INDUSTRIAL ELECTRONICS 
+
+[12] S. Su, S. Yuan, M. Xu, H. Gao, X. Yang, and H. Ren, “Amagposenet: Real-time 6-dof magnet pose estimation by dual-domain few-shot learn-ing from prior model,” IEEE Transactions on Industrial Informatics ,2023. [13] W. Xie, Y. Zhang, J. Shan, H. Sun, J. Tan, and S. S. Cheng, “Theoretical data-driven mobileposenet: Lightweight neural net-work for accurate calibration-free 5-dof magnet localization,” IEEE Transactions on Instrumentation and Measurement , vol. 74, DOI 10.1109/TIM.2025.3575965, pp. 1–11, 2025. [14] M. Shen, S. Guo, C. Li, and Z. Wang, “Physics-informed residual network for magnetic dipole model correction and high-accuracy lo-calization,” in 2025 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS) , DOI 10.1109/IROS60139.2025.11246085, pp. 2171–2176, 2025. [15] K. Yang, X. Yin, C. Qi, S. Ai, S. Yan, W. Mu, Y. Xiong, and L. Xue, “Pr-posnet: A cnn-transformer model with coordinate attention for precision and robust magnetic pose estimation,” IEEE Sensors Journal , vol. 25, DOI 10.1109/JSEN.2025.3571599, no. 13, pp. 24 017–24 029, 2025. [16] M. R. Z. Khameneh, M. Jamali, and H. Nejat Pishkenari, “Symmetry-based independent fully convolutional neural networks for magnetic localization using sensor array,” IEEE Sensors Journal , vol. 25, DOI 10.1109/JSEN.2025.3603679, no. 19, pp. 36 873–36 880, 2025. [17] N. Sebkhi, N. Sahadat, S. Hersek, A. Bhavsar, S. Siahpoushan, M. Ghoovanloo, and O. T. Inan, “A deep neural network-based perma-nent magnet localization for tongue tracking,” IEEE Sensors Journal ,vol. 19, no. 20, pp. 9324–9331, 2019. [18] H. Liu, H. Yu, W. Yuan, and Z. Du, “A novel approach for 5-d magnet position estimation via model-free algorithms and unsuper-vised deep learning,” IEEE Transactions on Industrial Electronics , DOI 10.1109/TIE.2025.3647893, pp. 1–12, 2026. [19] S. Song, X. Qiu, J. Wang, and M. Q.-H. Meng, “Design and optimization strategy of sensor array layout for magnetic localization system,” IEEE Sensors Journal , vol. 17, DOI 10.1109/JSEN.2017.2652470, no. 6, pp. 1849–1857, 2017. [20] S. Su, X. Yang, Z. Li, and H. Ren, “A real-time self-sensing approach to sensor array configuration fusing prior knowledge for reconfigurable magnetic tracking systems,” IEEE/ASME Transactions on Mechatronics ,vol. 30, DOI 10.1109/TMECH.2024.3435456, no. 3, pp. 2084–2095, 2025. [21] S. Su, S. Yuan, Z. Li, Y. Ma, M. Ma, and H. Ren, “A wearable, reconfigurable, and modular magnetic tracking system for wireless capsule robots,” IEEE Transactions on Industrial Informatics , vol. 20, DOI 10.1109/TII.2024.3423458, no. 12, pp. 13 600–13 611, 2024. [22] C. Hu, M. Q.-H. Meng, and M. Mandal, “The calibration of 3-axis magnetic sensor array system for tracking wireless capsule endoscope,” in 2006 IEEE/RSJ International Conference on Intelligent Robots and Systems , pp. 162–167. IEEE, 2006. [23] C. Hu, “Localization and orientation system for robotic wireless cap-sule endoscope,” Ph.D. dissertation, Dept. Elect. Comput. Eng., Univ. Alberta, 2006. [24] V. V. Garg and R. H. Stogner, “Hierarchical latin hypercube sampling,” Journal of the American Statistical Association , vol. 112, DOI 10.1080/01621459.2016.1158717, no. 518, pp. 673–682, 2017. [Online]. Available: https://doi.org/10.1080/01621459.2016.1158717 [25] P. Guo, H. Dai, Q. Yang, Q. Huang, and H. Yao, “An improved magnetic tracking approach based on resnet-lm fusion algorithm,” IEEE Transactions on Instrumentation and Measurement , vol. 71, pp. 1–10, 2022. [26] J. Hu, L. Shen, and G. Sun, “Squeeze-and-excitation networks,” in 
+
+Proceedings of the IEEE conference on computer vision and pattern recognition , pp. 7132–7141, 2018.

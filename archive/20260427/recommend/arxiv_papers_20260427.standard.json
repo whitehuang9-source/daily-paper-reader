@@ -1,0 +1,57 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-27T20:37:38.586973+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 1,
+    "quick_skim_target": 11,
+    "quick_selected": 1
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.22526v1",
+      "title": "Information-Theoretic Geometry Optimization and Physics-Aware Learning for Calibration-Free Magnetic Localization",
+      "abstract": "Wireless localization of permanent magnets enables occlusion-free guidance for medical interventions, yet its practical accuracy is fundamentally limited by two coupled challenges: the poor observability of conventional planar sensor arrays and the simulation-to-reality (Sim-to-Real) gap of learning-based estimators. To address these issues, this article presents a unified framework that combines information-theoretic sensor geometry optimization with physics-aware deep learning. First, a rigorous Fisher Information Matrix (FIM)-based evaluation framework is established to quantify geometry-induced observability limitations. The results show that a staggered split-array topology provides a substantially stronger observability foundation for localization while remaining compatible with practical external deployment. Second, building on this optimized sensing configuration, we propose Phy-GAANet, a calibration-free estimator trained entirely on hardware-aware synthetic data. By incorporating Physics-Informed Features (PIF) for saturation modeling and Geometry-Aware Attention (GAA) for preserving cross-layer vector structure, the network effectively bridges the Sim-to-Real gap. Extensive real-world experiments demonstrate state-of-the-art performance, achieving a position error of 1.84 mm and an orientation error of 3.18 degrees at a refresh rate exceeding 270 Hz. The proposed method consistently outperforms classical Levenberg--Marquardt solvers and generic convolutional baselines, particularly in suppressing catastrophic outliers and maintaining robustness in challenging near-field boundary regions. Beyond the proposed network, the FIM-guided analysis also provides a framework for sensor geometry design in magnetic localization systems under practical deployment constraints.",
+      "authors": [
+        "Wenxuan Xie",
+        "Yuelin Zhang",
+        "Qingpeng Ding",
+        "Jianghua Chen",
+        "Jiewen Tan",
+        "Jiwei Shan",
+        "Shing Shin Cheng"
+      ],
+      "primary_category": "cs.RO",
+      "categories": [
+        "cs.RO"
+      ],
+      "published": "2026-04-24T13:12:14+00:00",
+      "link": "https://arxiv.org/pdf/2604.22526v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "geometry optimization for magnetic sensor arrays",
+      "llm_evidence_cn": "磁传感器阵列的几何结构优化",
+      "llm_evidence": "磁传感器阵列的几何结构优化",
+      "canonical_evidence": "磁传感器阵列的几何结构优化",
+      "llm_tldr_en": "Proposes geometry optimization and physics-aware learning for magnetic sensor array localization.",
+      "llm_tldr_cn": "提出磁传感器阵列定位的几何优化和物理感知学习框架。",
+      "llm_tldr": "提出磁传感器阵列定位的几何优化和物理感知学习框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
