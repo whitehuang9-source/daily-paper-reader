@@ -1,0 +1,93 @@
+{
+  "label": "2026-04-28",
+  "date": "2026-04-28",
+  "generated_at": "2026-04-28T20:09:57",
+  "count": 6,
+  "papers": [
+    {
+      "paper_id": "202604/28/2604.18732v1-stiffness-aware-decentralized-dynamic-state-estimation-for-inverter-dominated-power-systems",
+      "section": "quick",
+      "title_en": "Stiffness-Aware Decentralized Dynamic State Estimation for Inverter-Dominated Power Systems",
+      "authors": "Xingyu Zhao, Marcos Netto, Junbo Zhao",
+      "date": "2026-04-20",
+      "pdf": "https://arxiv.org/pdf/2604.18732v1",
+      "score": "6.0",
+      "evidence": "电力系统的动态状态估计",
+      "tldr": "针对逆变器主导电力系统中多尺度动力学导致的刚性模型挑战，本文提出一种刚性感知分布式动态状态估计（DSE）方法。该方法通过统计线性化构建局部线性代理模型，并利用矩阵指数离散化实现解析不确定性传播，有效解决了传统显式离散化方案在粗采样下容易失稳的问题，显著降低了系统的计算与通信负担。",
+      "tags": "query:tmr",
+      "abstract_en": "Dynamic state estimation (DSE) is becoming increasingly important for monitoring inverter-dominated power systems. Due to their cascading control structures, inverter-based resources (IBRs) exhibit multi-timescale dynamics, leading to stiff system models that pose significant challenges for conventional DSE methods. In particular, explicit discretization schemes often require impractically small sampling intervals to maintain numerical stability, increasing computational and communication burdens. To address this issue, this paper proposes a stiffness-aware decentralized DSE method for inverter-dominated power systems. The statistical linearization is used to construct a local linear surrogate model for the nonlinear dynamics, which allows matrix-exponential discretization to enable analytical uncertainty propagation in discrete time, rather than relying on explicit integration schemes. This enables stable DSE at lower sampling rates. Numerical results reveal the mechanism by which stiff dynamics destabilize conventional DSE and demonstrate that the proposed method achieves efficient and accurate estimation under coarse sampling conditions.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/28/2604.18748v1-hybrid-smi-realization-via-matrix-completion-and-riemannian-manifold-optimization-on-narrowband-sub-array-based-architectures",
+      "section": "quick",
+      "title_en": "Hybrid SMI Realization via Matrix Completion and Riemannian Manifold Optimization on Narrowband Sub-Array Based Architectures",
+      "authors": "Tarun Suman Cousik, Rohit Rangaraj, Nishith Tripathi, Jeffrey H Reed, Daniel Jakubisin, Jon Kraft",
+      "date": "2026-04-20",
+      "pdf": "https://arxiv.org/pdf/2604.18748v1",
+      "score": "6.0",
+      "evidence": "基于子阵列架构的协方差补全框架",
+      "tldr": "针对混合波束成形架构中无法直接获取全阵列观测数据导致传统SMI算法失效的问题，本文提出了一种名为RR2D的结构化协方差补全框架。该框架利用信号平稳性，通过Dykstra交替投影算法在正定、Toeplitz及块约束下从部分观测的样本协方差矩阵中重构出完整的解析协方差矩阵。基于此重构矩阵实现的混合SMI（HSMI）方案在32元阵列实验中表现优异，性能接近理论最优的HMVDR，有效弥补了理论算法与实际硬件限制之间的差距。",
+      "tags": "query:tmr",
+      "abstract_en": "Hybrid beamforming architectures reduce hardware complexity but restrict access to full array observations, rendering direct implementation of classical covariance based methods such as minimum variance distortionless response (MVDR) and sample matrix inversion (SMI) infeasible. This work introduces a structured covariance completion framework, termed Rock Road to Dublin (RR2D), which estimates the unobservable analytical covariance matrix (ACM) from a partially observed sample covariance matrix (SCM). RR2D exploits signal stationarity across the array and enforces physical measurement consistency using Dykstra's alternating projection algorithm with positive semidefinite, Toeplitz, and block constraints. The reconstructed virtual ACM enables a realizable hybrid SMI (HSMI) formulation that remains fully compatible with existing hybrid MVDR optimization frameworks. Empirical results for a 32 element hybrid array demonstrate both the expected degradation of HSMI implemented directly under prior HMVDR formulations and the performance gains achieved through RR2D. The proposed HSMI consistently outperforms previous hybrid SMI and partial digital baselines, achieving performance close to the HMVDR reference. Overall, RR2D bridges the gap between theoretical HMVDR formulations and practical hybrid hardware by enabling structured covariance reconstruction from incomplete observations.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/28/2604.23217v1-secure-estimator-design-for-lure-type-systems-with-nonuniformly-and-synchronously-sampled-measurements-under-attacks-extended-version",
+      "section": "quick",
+      "title_en": "Secure estimator design for Lur'e-type systems with nonuniformly and synchronously sampled measurements under attacks [extended version]",
+      "authors": "Julian Gootzen, Michelle S. Chong",
+      "date": "2026-04-25",
+      "pdf": "https://arxiv.org/pdf/2604.23217v1",
+      "score": "6.0",
+      "evidence": "利用采样测量值对配电网进行安全状态估计",
+      "tldr": "针对配电网实时健康监测需求，本文研究了在传感器受到恶意攻击且采样非均匀同步的情况下，连续时间Lur'e型系统的安全状态估计问题。提出了一种安全状态估计器，在少于一半传感器受攻击且采样间隔有界时，能提供与攻击信号无关的估计精度。通过脉冲系统框架证明了误差收敛性，并利用线性矩阵不等式（LMI）设计观测器参数，最后在低压配电网中验证了其有效性。",
+      "tags": "query:tmr",
+      "abstract_en": "Motivated by the need for real-time health monitoring of power distribution grids, we propose a secure state estimator design for continuous time Lur'e type systems with non-uniformly and synchronously sampled outputs which have potentially been maliciously corrupted. The secure state estimator provides state estimates with accuracy independent of the sensor attack, when less than half of the sensors are under attack and when all inter-sample times are upper bounded. We show convergence of the state estimation error under an impulsive system framework and provide an upper bound on the estimation error that is independent of the attack signals. The stability conditions are formulated as linear matrix inequalities, which can be used to design the observer parameters. We demonstrate the capabilities of the proposed secure state estimator on a low-voltage power distribution grid.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/28/2604.23431v1-physics-informed-deep-image-prior-reconstruction-of-in-plane-magnetization-from-scanning-nv-magnetometry",
+      "section": "quick",
+      "title_en": "Physics-Informed Deep Image Prior Reconstruction of In-Plane Magnetization from Scanning NV Magnetometry",
+      "authors": "Zander Scholl, Justin Woods, Charudatta Phatak, Hanu Arava",
+      "date": "2026-04-25",
+      "pdf": "https://arxiv.org/pdf/2604.23431v1",
+      "score": "6.0",
+      "evidence": "基于物理信息的磁场测量磁化强度重建",
+      "tldr": "本研究针对纳米级磁性薄膜磁化强度重建中的病态逆问题，提出了一种基于物理信息的深度图像先验（DIP）框架。该方法利用卷积自编码器，在无需预训练数据集的情况下，从扫描NV磁力计测得的杂散场中实现了面内磁化模式的定性和定量重建。研究发现，通过优化用户定义的空间约束掩码，可显著提升重建信噪比（最高达3dB），为自旋电子学器件的表征提供了一种高效且计算量低的诊断工具。",
+      "tags": "query:tmr",
+      "abstract_en": "Reconstructing magnetization in nanoscale magnetic thin films is essential for developing next-generation memory, sensors, and various spintronic technologies. However, this remains challenging due to the ill-posed nature of the stray field inverse problem, i.e., there are infinitely many magnetization solutions to a given stray field distribution. Here, we demonstrate that a physics-informed deep image prior (DIP) framework, using a simple convolutional autoencoder conditionally achieves a reasonable qualitative and quantitative reconstruction of complex in-plane magnetization patterns from scanning NV magnetometry. We find that the orientation of user-defined masks implemented to restrict the reconstruction solution space dramatically affects convergence. The optimal alignment of the mask improves the reconstruction signal-to-noise ratio by up to $\\SI{3}{\\decibel}$, thereby also serving as a diagnostic tool. The DIP approach requires no pre-trained datasets and is considered computationally less intensive as compared to supervised learning approaches. We analyze both Landau and dipole domain structures in lithographically patterned Permalloy nanostructures by incorporating experimentally-guided spatial constraints. Complementary magnetic force microscopy measurements were carried out to support the Scanning NV measurements.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/28/2604.24561v1-remotely-programming-the-weights-of-a-spintronic-neural-network-by-a-radiofrequency-broadcast-signal",
+      "section": "quick",
+      "title_en": "Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal",
+      "authors": "M. Menshawy, D. Sanz-Hernández, L. Mazza, V. Puliafito, G. Finocchio, A. Jenkins, R. Ferreira, L. Benetti, J. Grollier, F. A. Mizrahi",
+      "date": "2026-04-27",
+      "pdf": "https://arxiv.org/pdf/2604.24561v1",
+      "score": "6.0",
+      "evidence": "基于磁隧道结（MTJ）的自旋电子网络",
+      "tldr": "本研究针对存内计算中大规模非易失性突触权重编程的扩展性难题，提出了一种利用广播射频信号远程编程自旋电子神经网络权重的方法。通过共享带状线对串联的涡旋磁隧道结进行频率选择性极性翻转，实现了无需独立寻址线的紧凑型架构。实验展示了一个包含22个突触的网络，能快速重构以执行手写数字识别和无人机射频特征鉴定任务，为可重构自旋电子神经形态硬件提供了高效扩展路径。",
+      "tags": "query:tmr",
+      "abstract_en": "Selectively programming large number of non-volatile synaptic weights without compromising scalability is a key challenge for in-memory computing. Here, we demonstrate remote programming of synaptic weights in series-connected chains of 11 vortex-based magnetic tunnel junctions using broadcast radiofrequency signals applied through a shared strip line. The programming relies on frequency-selective reversal of the vortex-core polarity and therefore does not require individual access lines or selector devices. By reconfiguring the binary states of these chains, we reshape the weighted sums they perform on frequency-multiplexed RF inputs. Using a 22-synapse network composed of two such chains, we remotely reconfigure the same hardware to perform two distinct tasks: handwritten-digit classification and drone RF-signature identification. The digit-optimized configuration reaches 94.91 +/- 0.26% accuracy on handwritten digits but only 13.17 +/- 0.47% on drone RF signatures, whereas the drone-optimized configuration reaches 97.33 +/- 0.62% on drones but only 47.59 +/- 1.5% on digits. Broadcast RF programming thus provides a compact and scalable route to rapidly reconfigurable spintronic neuromorphic hardware.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/28/2604.24701v1-profiling-resilient-to-change-in-probe-position",
+      "section": "quick",
+      "title_en": "Profiling Resilient to Change in Probe Position",
+      "authors": "Elie Bursztein, Michael Gruber, Karel Král, Jean-Michel Picod, Matthias Probst, Georg Sigl",
+      "date": "2026-04-27",
+      "pdf": "https://arxiv.org/pdf/2604.24701v1",
+      "score": "6.0",
+      "evidence": "对电磁发射探头位置变化具有鲁棒性",
+      "tldr": "本研究针对侧信道分析（SCA）中电磁（EM）探头位置敏感的问题，提出了一种增强模型鲁棒性的方法。通过在多个不同探头位置采集的轨迹上训练单个神经网络，使模型能够覆盖被攻击设备的更大区域并识别泄露。研究还通过两个独立实验室的数据进行了交叉验证，证明了该方法在跨实验室、跨位置场景下的有效性，提升了剖析攻击的实用性和可移植性。",
+      "tags": "query:tmr",
+      "abstract_en": "Side Channel Analysis (SCA) relaxes the black-box assumption of conventional cryptanalysis by incorporating physical measurements acquired during cryptographic operations. Electro-magnetic (EM) emissions of a chip during computations often provide a very valuable source of side channel leakage. During the evaluation of a chip for electro-magnetic side channel emissions one needs to position an electro-magnetic probe in an advantageous position relative to the chip. Previous literature focused on hot-spot finding and to a lower extend repositioning. Trace augmentations have been considered to aid portability of profiling using one physical device and attacking another device. This paper focuses on training a single neural network using traces from multiple EM probe positions to detect leakage from a larger area over the attacked device. We provide dual evaluation of EM traces - from two completely independent labs - profiling on data from one lab and attacking traces from the other lab.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

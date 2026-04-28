@@ -1,0 +1,249 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-28T20:08:53.427125+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 6,
+    "quick_skim_target": 11,
+    "quick_selected": 6
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.18732v1",
+      "title": "Stiffness-Aware Decentralized Dynamic State Estimation for Inverter-Dominated Power Systems",
+      "abstract": "Dynamic state estimation (DSE) is becoming increasingly important for monitoring inverter-dominated power systems. Due to their cascading control structures, inverter-based resources (IBRs) exhibit multi-timescale dynamics, leading to stiff system models that pose significant challenges for conventional DSE methods. In particular, explicit discretization schemes often require impractically small sampling intervals to maintain numerical stability, increasing computational and communication burdens. To address this issue, this paper proposes a stiffness-aware decentralized DSE method for inverter-dominated power systems. The statistical linearization is used to construct a local linear surrogate model for the nonlinear dynamics, which allows matrix-exponential discretization to enable analytical uncertainty propagation in discrete time, rather than relying on explicit integration schemes. This enables stable DSE at lower sampling rates. Numerical results reveal the mechanism by which stiff dynamics destabilize conventional DSE and demonstrate that the proposed method achieves efficient and accurate estimation under coarse sampling conditions.",
+      "authors": [
+        "Xingyu Zhao",
+        "Marcos Netto",
+        "Junbo Zhao"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-04-20T18:29:46+00:00",
+      "link": "https://arxiv.org/pdf/2604.18732v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "dynamic state estimation for power systems",
+      "llm_evidence_cn": "电力系统的动态状态估计",
+      "llm_evidence": "电力系统的动态状态估计",
+      "canonical_evidence": "电力系统的动态状态估计",
+      "llm_tldr_en": "Proposes a stiffness-aware decentralized dynamic state estimation method for inverter-dominated power systems.",
+      "llm_tldr_cn": "针对逆变器主导的电力系统提出了一种刚度感知的分布式动态状态估计方法。",
+      "llm_tldr": "针对逆变器主导的电力系统提出了一种刚度感知的分布式动态状态估计方法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.18748v1",
+      "title": "Hybrid SMI Realization via Matrix Completion and Riemannian Manifold Optimization on Narrowband Sub-Array Based Architectures",
+      "abstract": "Hybrid beamforming architectures reduce hardware complexity but restrict access to full array observations, rendering direct implementation of classical covariance based methods such as minimum variance distortionless response (MVDR) and sample matrix inversion (SMI) infeasible. This work introduces a structured covariance completion framework, termed Rock Road to Dublin (RR2D), which estimates the unobservable analytical covariance matrix (ACM) from a partially observed sample covariance matrix (SCM). RR2D exploits signal stationarity across the array and enforces physical measurement consistency using Dykstra's alternating projection algorithm with positive semidefinite, Toeplitz, and block constraints. The reconstructed virtual ACM enables a realizable hybrid SMI (HSMI) formulation that remains fully compatible with existing hybrid MVDR optimization frameworks. Empirical results for a 32 element hybrid array demonstrate both the expected degradation of HSMI implemented directly under prior HMVDR formulations and the performance gains achieved through RR2D. The proposed HSMI consistently outperforms previous hybrid SMI and partial digital baselines, achieving performance close to the HMVDR reference. Overall, RR2D bridges the gap between theoretical HMVDR formulations and practical hybrid hardware by enabling structured covariance reconstruction from incomplete observations.",
+      "authors": [
+        "Tarun Suman Cousik",
+        "Rohit Rangaraj",
+        "Nishith Tripathi",
+        "Jeffrey H Reed",
+        "Daniel Jakubisin",
+        "Jon Kraft"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "eess.AS"
+      ],
+      "published": "2026-04-20T18:53:19+00:00",
+      "link": "https://arxiv.org/pdf/2604.18748v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "covariance completion framework for sub-array based architectures",
+      "llm_evidence_cn": "基于子阵列架构的协方差补全框架",
+      "llm_evidence": "基于子阵列架构的协方差补全框架",
+      "canonical_evidence": "基于子阵列架构的协方差补全框架",
+      "llm_tldr_en": "Estimates unobservable covariance in sub-arrays, useful for sensor array signal reconstruction and optimization.",
+      "llm_tldr_cn": "估计子阵列中不可观测的协方差，对传感器阵列信号重建和优化有用。",
+      "llm_tldr": "估计子阵列中不可观测的协方差，对传感器阵列信号重建和优化有用。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.23217v1",
+      "title": "Secure estimator design for Lur'e-type systems with nonuniformly and synchronously sampled measurements under attacks [extended version]",
+      "abstract": "Motivated by the need for real-time health monitoring of power distribution grids, we propose a secure state estimator design for continuous time Lur'e type systems with non-uniformly and synchronously sampled outputs which have potentially been maliciously corrupted. The secure state estimator provides state estimates with accuracy independent of the sensor attack, when less than half of the sensors are under attack and when all inter-sample times are upper bounded. We show convergence of the state estimation error under an impulsive system framework and provide an upper bound on the estimation error that is independent of the attack signals. The stability conditions are formulated as linear matrix inequalities, which can be used to design the observer parameters. We demonstrate the capabilities of the proposed secure state estimator on a low-voltage power distribution grid.",
+      "authors": [
+        "Julian Gootzen",
+        "Michelle S. Chong"
+      ],
+      "primary_category": "math.OC",
+      "categories": [
+        "math.OC"
+      ],
+      "published": "2026-04-25T08:57:04+00:00",
+      "link": "https://arxiv.org/pdf/2604.23217v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "secure state estimator for power distribution grids using sampled measurements",
+      "llm_evidence_cn": "利用采样测量值对配电网进行安全状态估计",
+      "llm_evidence": "利用采样测量值对配电网进行安全状态估计",
+      "canonical_evidence": "利用采样测量值对配电网进行安全状态估计",
+      "llm_tldr_en": "Designs a secure state estimator for power grids to maintain accuracy under sensor attacks.",
+      "llm_tldr_cn": "为电网设计了一种安全状态估计器，以在传感器受到攻击时保持准确性。",
+      "llm_tldr": "为电网设计了一种安全状态估计器，以在传感器受到攻击时保持准确性。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.23431v1",
+      "title": "Physics-Informed Deep Image Prior Reconstruction of In-Plane Magnetization from Scanning NV Magnetometry",
+      "abstract": "Reconstructing magnetization in nanoscale magnetic thin films is essential for developing next-generation memory, sensors, and various spintronic technologies. However, this remains challenging due to the ill-posed nature of the stray field inverse problem, i.e., there are infinitely many magnetization solutions to a given stray field distribution. Here, we demonstrate that a physics-informed deep image prior (DIP) framework, using a simple convolutional autoencoder conditionally achieves a reasonable qualitative and quantitative reconstruction of complex in-plane magnetization patterns from scanning NV magnetometry. We find that the orientation of user-defined masks implemented to restrict the reconstruction solution space dramatically affects convergence. The optimal alignment of the mask improves the reconstruction signal-to-noise ratio by up to $\\SI{3}{\\decibel}$, thereby also serving as a diagnostic tool. The DIP approach requires no pre-trained datasets and is considered computationally less intensive as compared to supervised learning approaches. We analyze both Landau and dipole domain structures in lithographically patterned Permalloy nanostructures by incorporating experimentally-guided spatial constraints. Complementary magnetic force microscopy measurements were carried out to support the Scanning NV measurements.",
+      "authors": [
+        "Zander Scholl",
+        "Justin Woods",
+        "Charudatta Phatak",
+        "Hanu Arava"
+      ],
+      "primary_category": "cond-mat.dis-nn",
+      "categories": [
+        "cond-mat.dis-nn",
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-25T20:00:13+00:00",
+      "link": "https://arxiv.org/pdf/2604.23431v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Physics-informed reconstruction of magnetization from magnetic field measurements",
+      "llm_evidence_cn": "基于物理信息的磁场测量磁化强度重建",
+      "llm_evidence": "基于物理信息的磁场测量磁化强度重建",
+      "canonical_evidence": "基于物理信息的磁场测量磁化强度重建",
+      "llm_tldr_en": "Uses a deep image prior framework to reconstruct magnetization patterns from magnetic stray field data.",
+      "llm_tldr_cn": "利用深度图像先验框架从磁杂散场数据中重建磁化模式。",
+      "llm_tldr": "利用深度图像先验框架从磁杂散场数据中重建磁化模式。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using TMR sensor arrays",
+      "matched_requirement_id": "req-7",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.24561v1",
+      "title": "Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal",
+      "abstract": "Selectively programming large number of non-volatile synaptic weights without compromising scalability is a key challenge for in-memory computing. Here, we demonstrate remote programming of synaptic weights in series-connected chains of 11 vortex-based magnetic tunnel junctions using broadcast radiofrequency signals applied through a shared strip line. The programming relies on frequency-selective reversal of the vortex-core polarity and therefore does not require individual access lines or selector devices. By reconfiguring the binary states of these chains, we reshape the weighted sums they perform on frequency-multiplexed RF inputs. Using a 22-synapse network composed of two such chains, we remotely reconfigure the same hardware to perform two distinct tasks: handwritten-digit classification and drone RF-signature identification. The digit-optimized configuration reaches 94.91 +/- 0.26% accuracy on handwritten digits but only 13.17 +/- 0.47% on drone RF signatures, whereas the drone-optimized configuration reaches 97.33 +/- 0.62% on drones but only 47.59 +/- 1.5% on digits. Broadcast RF programming thus provides a compact and scalable route to rapidly reconfigurable spintronic neuromorphic hardware.",
+      "authors": [
+        "M. Menshawy",
+        "D. Sanz-Hernández",
+        "L. Mazza",
+        "V. Puliafito",
+        "G. Finocchio",
+        "A. Jenkins",
+        "R. Ferreira",
+        "L. Benetti",
+        "J. Grollier",
+        "F. A. Mizrahi"
+      ],
+      "primary_category": "cs.ET",
+      "categories": [
+        "cs.ET",
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-27T14:49:18+00:00",
+      "link": "https://arxiv.org/pdf/2604.24561v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Magnetic tunnel junction (MTJ) based spintronic network",
+      "llm_evidence_cn": "基于磁隧道结（MTJ）的自旋电子网络",
+      "llm_evidence": "基于磁隧道结（MTJ）的自旋电子网络",
+      "canonical_evidence": "基于磁隧道结（MTJ）的自旋电子网络",
+      "llm_tldr_en": "Demonstrates remote programming of magnetic tunnel junction chains for spintronic neural networks.",
+      "llm_tldr_cn": "演示了用于自旋电子神经网络的磁隧道结链的远程编程。",
+      "llm_tldr": "演示了用于自旋电子神经网络的磁隧道结链的远程编程。",
+      "llm_tags": [
+        "query:tmr:composite"
+      ],
+      "matched_query_tag": "query:tmr:composite",
+      "matched_query_text": "Papers central to 请帮我查找与TMR电流传感器阵列有关的论文, especially work that connects or combines: multi-sensor array for current measurement; magnetic field sensor array for current sensing; algorithms for current reconstruction using sensor arrays; non contact current measurement using TMR magnetic sensor arrays; interference suppression techniques for TMR current sensor arrays; TMR current sensor array design and optimization; algorithms for current reconstruction using TMR sensor arrays.",
+      "matched_requirement_id": "req-composite-tmr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.24701v1",
+      "title": "Profiling Resilient to Change in Probe Position",
+      "abstract": "Side Channel Analysis (SCA) relaxes the black-box assumption of conventional cryptanalysis by incorporating physical measurements acquired during cryptographic operations. Electro-magnetic (EM) emissions of a chip during computations often provide a very valuable source of side channel leakage. During the evaluation of a chip for electro-magnetic side channel emissions one needs to position an electro-magnetic probe in an advantageous position relative to the chip. Previous literature focused on hot-spot finding and to a lower extend repositioning. Trace augmentations have been considered to aid portability of profiling using one physical device and attacking another device. This paper focuses on training a single neural network using traces from multiple EM probe positions to detect leakage from a larger area over the attacked device. We provide dual evaluation of EM traces - from two completely independent labs - profiling on data from one lab and attacking traces from the other lab.",
+      "authors": [
+        "Elie Bursztein",
+        "Michael Gruber",
+        "Karel Král",
+        "Jean-Michel Picod",
+        "Matthias Probst",
+        "Georg Sigl"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR"
+      ],
+      "published": "2026-04-27T17:05:08+00:00",
+      "link": "https://arxiv.org/pdf/2604.24701v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "resilient to change in probe position for EM emissions",
+      "llm_evidence_cn": "对电磁发射探头位置变化具有鲁棒性",
+      "llm_evidence": "对电磁发射探头位置变化具有鲁棒性",
+      "canonical_evidence": "对电磁发射探头位置变化具有鲁棒性",
+      "llm_tldr_en": "Develops neural networks resilient to EM probe positioning, relevant to sensor array placement and interference.",
+      "llm_tldr_cn": "开发对电磁探头位置具有鲁棒性的神经网络，与传感器阵列布局和干扰抑制相关。",
+      "llm_tldr": "开发对电磁探头位置具有鲁棒性的神经网络，与传感器阵列布局和干扰抑制相关。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
