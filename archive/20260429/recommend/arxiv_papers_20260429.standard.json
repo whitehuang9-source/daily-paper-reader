@@ -1,0 +1,102 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-29T20:40:10.511982+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.25193v1",
+      "title": "Adaptive Sensing beyond Non-Adaptive Information Limits: End-to-End Co-Design of Geometry, Policy, and Inference",
+      "abstract": "Inverse design has made vast physical parameter spaces a substrate for emergent behavior. In sensing, the stakes of this principle are sharpest at the analog-to-digital boundary, where any information the hardware fails to capture is information no downstream algorithm can recover; hardware optimization alone is therefore not enough, and the geometry must be co-designed with a rule for what to measure next. We formulate this co-design as \\emph{joint dynamic programming} (joint-DP): a single optimization over the continuous hardware geometry and a Bellman-optimal adaptive measurement policy. The outer hardware gradient is computed by differentiable dynamic programming with a sharp Bellman maximum, which the envelope theorem makes exact and bias-free, and a relaxation hierarchy carries the common framework from small discrete POMDPs to $10^5$-pixel photonic topologies. Across three case studies, joint-DP beats the natural baseline of its community by a large factor: on a radar beam-search POMDP, classical information-bound-guided geometry selection loses $2.8\\times$ in attainable adaptive value; on a superconducting-qubit flux sensor, joint-DP reduces deployed mean-squared error by $11.3\\times$ over the joint Bayesian Cramér--Rao baseline, with both geometries numerically co-optimized under their respective objectives; and on a $90{,}000$-pixel photonic metasensor, joint-DP via the Bayesian Fisher-information-matrix surrogate reduces deployed mean-squared error by $123\\times$ relative to a randomized baseline. For any sensor whose hardware is designed once but whose policy runs for the device's lifetime, joint optimization of hardware and policy is the minimum principled procedure.",
+      "authors": [
+        "Arvin Keshvari",
+        "William Tuxbury",
+        "Zin Lin"
+      ],
+      "primary_category": "physics.optics",
+      "categories": [
+        "physics.optics",
+        "math.OC",
+        "physics.comp-ph",
+        "physics.data-an",
+        "quant-ph"
+      ],
+      "published": "2026-04-28T04:02:17+00:00",
+      "link": "https://arxiv.org/pdf/2604.25193v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Co-design of sensor geometry and inference algorithms for physical parameter sensing",
+      "llm_evidence_cn": "传感器几何结构与推理算法的协同设计，适用于物理参数感知",
+      "llm_evidence": "传感器几何结构与推理算法的协同设计，适用于物理参数感知",
+      "canonical_evidence": "传感器几何结构与推理算法的协同设计，适用于物理参数感知",
+      "llm_tldr_en": "Proposes a joint optimization of sensor hardware geometry and measurement policies for improved sensing performance.",
+      "llm_tldr_cn": "提出了一种传感器硬件几何与测量策略的联合优化方法，以提升感知性能。",
+      "llm_tldr": "提出了一种传感器硬件几何与测量策略的联合优化方法，以提升感知性能。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.25592v1",
+      "title": "A geometry aware framework enhances noninvasive mapping of whole human brain dynamics",
+      "abstract": "Non-invasive electrophysiology lacks methods that accurately reconstruct whole-brain spatiotemporal dynamics while incorporating individual cortical geometry, leaving current electroencephalography and magnetoencephalography source imaging limited by simplistic or biologically implausible priors. Here, we show that embedding participant-specific Geometric Basis Functions (GBFs), eigenmodes derived from each individual's cortical surface, provides a powerful anatomic constraint that resolves the inverse problem and improves reconstruction fidelity. The method reconstructs neural sources as linear combinations of geometric basis functions, thereby aligning source estimates with the geometric organization of neural dynamics. We validate GBF across the Meta-Source Benchmark, task-evoked data, resting-state networks, intracranial stimulation, and epilepsy data. The results demonstrate that GBF yields high localization accuracy and captures fast spatiotemporal dynamics consistent with anatomical pathways. These findings suggest that both spontaneous and evoked whole-brain activity can be described by hundreds of geometric modes, providing a compact yet accurate representation of neural sources. By linking cortical geometry to electrophysiological dynamics, GBF offers a versatile source imaging tool for both scientific and clinical applications.",
+      "authors": [
+        "Song Wang",
+        "Kexin Lou",
+        "Chen Wei",
+        "Zhiyuan Sheng",
+        "Jiahao Tang",
+        "Kaining Peng",
+        "Xinke Shen",
+        "Shuhao Mei",
+        "Liang Chen",
+        "Dongfeng Gu",
+        "Quanying Liu"
+      ],
+      "primary_category": "q-bio.NC",
+      "categories": [
+        "q-bio.NC",
+        "eess.SP"
+      ],
+      "published": "2026-04-28T12:58:56+00:00",
+      "link": "https://arxiv.org/pdf/2604.25592v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Methodological bridge for inverse problem and source reconstruction using magnetic field sensors",
+      "llm_evidence_cn": "利用磁场传感器解决逆问题和源重建的方法论桥梁",
+      "llm_evidence": "利用磁场传感器解决逆问题和源重建的方法论桥梁",
+      "canonical_evidence": "利用磁场传感器解决逆问题和源重建的方法论桥梁",
+      "llm_tldr_en": "A framework using geometric basis functions to solve inverse problems in magnetic source imaging.",
+      "llm_tldr_cn": "一种利用几何基函数解决磁源成像逆问题的框架，可为电流重建算法提供参考。",
+      "llm_tldr": "一种利用几何基函数解决磁源成像逆问题的框架，可为电流重建算法提供参考。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

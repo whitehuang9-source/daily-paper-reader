@@ -6,41 +6,29 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-04-28
-- 运行时间：2026-04-28 20:09:44 UTC
+- 最新运行日期：2026-04-29
+- 运行时间：2026-04-29 20:40:45 UTC
 - 运行状态：成功
-- 本次总论文数：6
+- 本次总论文数：2
 - 精读区：0
-- 速读区：6
+- 速读区：2
 
 ### 今日简报（AI）
-今日速览 6 篇前沿论文，聚焦逆变器主导电网的动态估计、矩阵补全优化及受攻击系统的安全防御。
-重点关注逆变器电网的刚性感知估计技术，以及针对非均匀采样下 Lur'e 型系统的抗攻击安全设计。
-建议电力系统与控制安全领域的读者深入探索复杂采样环境下的鲁棒估计策略。
-- 详情：[/202604/28/README](/202604/28/README)
+- 今日共生成 2 篇推荐（精读 0 篇，速读 2 篇）
+- 速读：《Adaptive Sensing beyond Non-Adaptive Information Limits: End-to-End Co-Design of Geometry, Policy, and Inference》（6.0/10）, 《A geometry aware framework enhances noninvasive mapping of whole human brain dynamics》（6.0/10）
+- 这些结果覆盖了当下较热的方向，建议先看精读区论文的关键问题与方法。
+- 详情：[/202604/29/README](/202604/29/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Stiffness-Aware Decentralized Dynamic State Estimation for Inverter-Dominated Power Systems](/202604/28/2604.18732v1-stiffness-aware-decentralized-dynamic-state-estimation-for-inverter-dominated-power-systems)  
+1. [Adaptive Sensing beyond Non-Adaptive Information Limits: End-to-End Co-Design of Geometry, Policy, and Inference](/202604/29/2604.25193v1-adaptive-sensing-beyond-non-adaptive-information-limits-end-to-end-co-design-of-geometry-policy-and-inference)  
    标签：评分：6.0/10、query:tmr
-   evidence：电力系统的动态状态估计
-2. [Hybrid SMI Realization via Matrix Completion and Riemannian Manifold Optimization on Narrowband Sub-Array Based Architectures](/202604/28/2604.18748v1-hybrid-smi-realization-via-matrix-completion-and-riemannian-manifold-optimization-on-narrowband-sub-array-based-architectures)  
+   evidence：传感器几何结构与推理算法的协同设计，适用于物理参数感知
+2. [A geometry aware framework enhances noninvasive mapping of whole human brain dynamics](/202604/29/2604.25592v1-a-geometry-aware-framework-enhances-noninvasive-mapping-of-whole-human-brain-dynamics)  
    标签：评分：6.0/10、query:tmr
-   evidence：基于子阵列架构的协方差补全框架
-3. [Secure estimator design for Lur'e-type systems with nonuniformly and synchronously sampled measurements under attacks [extended version]](/202604/28/2604.23217v1-secure-estimator-design-for-lure-type-systems-with-nonuniformly-and-synchronously-sampled-measurements-under-attacks-extended-version)  
-   标签：评分：6.0/10、query:tmr
-   evidence：利用采样测量值对配电网进行安全状态估计
-4. [Physics-Informed Deep Image Prior Reconstruction of In-Plane Magnetization from Scanning NV Magnetometry](/202604/28/2604.23431v1-physics-informed-deep-image-prior-reconstruction-of-in-plane-magnetization-from-scanning-nv-magnetometry)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于物理信息的磁场测量磁化强度重建
-5. [Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal](/202604/28/2604.24561v1-remotely-programming-the-weights-of-a-spintronic-neural-network-by-a-radiofrequency-broadcast-signal)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于磁隧道结（MTJ）的自旋电子网络
-6. [Profiling Resilient to Change in Probe Position](/202604/28/2604.24701v1-profiling-resilient-to-change-in-probe-position)  
-   标签：评分：6.0/10、query:tmr
-   evidence：对电磁发射探头位置变化具有鲁棒性
+   evidence：利用磁场传感器解决逆问题和源重建的方法论桥梁
 
 
 <div class="dpr-home-promo-card">

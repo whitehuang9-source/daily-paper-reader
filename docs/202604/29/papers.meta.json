@@ -1,0 +1,37 @@
+{
+  "label": "2026-04-29",
+  "date": "2026-04-29",
+  "generated_at": "2026-04-29T20:40:55",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202604/29/2604.25193v1-adaptive-sensing-beyond-non-adaptive-information-limits-end-to-end-co-design-of-geometry-policy-and-inference",
+      "section": "quick",
+      "title_en": "Adaptive Sensing beyond Non-Adaptive Information Limits: End-to-End Co-Design of Geometry, Policy, and Inference",
+      "authors": "Arvin Keshvari, William Tuxbury, Zin Lin",
+      "date": "2026-04-28",
+      "pdf": "https://arxiv.org/pdf/2604.25193v1",
+      "score": "6.0",
+      "evidence": "传感器几何结构与推理算法的协同设计，适用于物理参数感知",
+      "tldr": "提出了一种传感器硬件几何与测量策略的联合优化方法，以提升感知性能。",
+      "tags": "query:tmr",
+      "abstract_en": "Inverse design has made vast physical parameter spaces a substrate for emergent behavior. In sensing, the stakes of this principle are sharpest at the analog-to-digital boundary, where any information the hardware fails to capture is information no downstream algorithm can recover; hardware optimization alone is therefore not enough, and the geometry must be co-designed with a rule for what to measure next. We formulate this co-design as \\emph{joint dynamic programming} (joint-DP): a single optimization over the continuous hardware geometry and a Bellman-optimal adaptive measurement policy. The outer hardware gradient is computed by differentiable dynamic programming with a sharp Bellman maximum, which the envelope theorem makes exact and bias-free, and a relaxation hierarchy carries the common framework from small discrete POMDPs to $10^5$-pixel photonic topologies. Across three case studies, joint-DP beats the natural baseline of its community by a large factor: on a radar beam-search POMDP, classical information-bound-guided geometry selection loses $2.8\\times$ in attainable adaptive value; on a superconducting-qubit flux sensor, joint-DP reduces deployed mean-squared error by $11.3\\times$ over the joint Bayesian Cramér--Rao baseline, with both geometries numerically co-optimized under their respective objectives; and on a $90{,}000$-pixel photonic metasensor, joint-DP via the Bayesian Fisher-information-matrix surrogate reduces deployed mean-squared error by $123\\times$ relative to a randomized baseline. For any sensor whose hardware is designed once but whose policy runs for the device's lifetime, joint optimization of hardware and policy is the minimum principled procedure.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202604/29/2604.25592v1-a-geometry-aware-framework-enhances-noninvasive-mapping-of-whole-human-brain-dynamics",
+      "section": "quick",
+      "title_en": "A geometry aware framework enhances noninvasive mapping of whole human brain dynamics",
+      "authors": "Song Wang, Kexin Lou, Chen Wei, Zhiyuan Sheng, Jiahao Tang, Kaining Peng, Xinke Shen, Shuhao Mei, Liang Chen, Dongfeng Gu, Quanying Liu",
+      "date": "2026-04-28",
+      "pdf": "https://arxiv.org/pdf/2604.25592v1",
+      "score": "6.0",
+      "evidence": "利用磁场传感器解决逆问题和源重建的方法论桥梁",
+      "tldr": "一种利用几何基函数解决磁源成像逆问题的框架，可为电流重建算法提供参考。",
+      "tags": "query:tmr",
+      "abstract_en": "Non-invasive electrophysiology lacks methods that accurately reconstruct whole-brain spatiotemporal dynamics while incorporating individual cortical geometry, leaving current electroencephalography and magnetoencephalography source imaging limited by simplistic or biologically implausible priors. Here, we show that embedding participant-specific Geometric Basis Functions (GBFs), eigenmodes derived from each individual's cortical surface, provides a powerful anatomic constraint that resolves the inverse problem and improves reconstruction fidelity. The method reconstructs neural sources as linear combinations of geometric basis functions, thereby aligning source estimates with the geometric organization of neural dynamics. We validate GBF across the Meta-Source Benchmark, task-evoked data, resting-state networks, intracranial stimulation, and epilepsy data. The results demonstrate that GBF yields high localization accuracy and captures fast spatiotemporal dynamics consistent with anatomical pathways. These findings suggest that both spontaneous and evoked whole-brain activity can be described by hundreds of geometric modes, providing a compact yet accurate representation of neural sources. By linking cortical geometry to electrophysiological dynamics, GBF offers a versatile source imaging tool for both scientific and clinical applications.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
