@@ -1,0 +1,1259 @@
+Title: Accelerating Regularized Attention Kernel Regression for Spectrum Cartography
+
+URL Source: https://arxiv.org/pdf/2604.25138v1
+
+Published Time: Wed, 29 Apr 2026 00:24:10 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+> JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 1
+
+# Accelerating Regularized Attention Kernel Regression for Spectrum Cartography 
+
+Liping Tao and Chee Wei Tan, Senior Member, IEEE 
+
+Abstract —Spectrum cartography reconstructs spatial radio fields from sparse and heterogeneous wireless measurements, underpinning many sensing and optimization tasks in wireless networks. Attention mechanisms have recently enabled adaptive measurement aggregation via attention kernel-based formula-tions. However, the resulting exponential kernels exhibit severe spectral imbalance, inducing large condition numbers that render standard iterative solvers ineffective for regularized attention ker-nel regression. This paper proposes a Learning-based Attention Kernel Regression (LAKER) algorithm for accelerating regular-ized attention kernel regression in spectrum cartography. The key idea is to learn a data-dependent preconditioner that captures the inverse spectral structure of the attention kernel system, directly reducing the condition number bottleneck. The preconditioner is obtained by solving a regularized maximum-likelihood estimation problem via a shrinkage-regularized convex–concave procedure, and is integrated with a preconditioned conjugate gradient solver for efficient optimization, whose solution is used for radio map reconstruction. Extensive experiments demonstrate that LAKER significantly reduces condition numbers by up to three orders of magnitude, accelerates convergence by over twenty-fold com-pared to baselines, and maintains high reconstruction accuracy, establishing learning-based preconditioning as an effective ap-proach for attention kernel regression in spectrum cartography. 
+
+Index Terms —Spectrum cartography, Radio map reconstruc-tion, Kernel learning, Attention kernel regression, Difference-of-convex programming. 
+
+I. I NTRODUCTION 
+
+Spectrum cartography offers a principled framework for constructing spatially continuous radio environment represen-tations from sparse measurements [1]. By estimating radio quantities across space, frequency, and time, it enables a broad range of applications including spectrum monitoring, interference management, localization, and resource allocation [2]. As wireless networks evolve toward Sixth-Generation (6G) systems with global coverage, integrated sensing, and AI-native designs, exemplified by simulation platforms such as NVIDIA Sionna [3], spectrum cartography is increasingly recognized as a measurement-driven inference problem in-volving sparse, heterogeneous observations rather than simple interpolation [4]. A central task within this framework is radio map reconstruction [1], [5], which recovers spatial radio fields such as received signal strength, path loss, and power spectral density, from limited measurements [2], [6]. These maps serve as the foundational representation for downstream sensing, 
+
+Liping Tao (liping.tao@ntu.edu.sg) is with the College of Computing and Data Science, Nanyang Technological University, Singapore 639798. Chee Wei Tan (cheewei.tan@ntu.edu.sg) is with the College of Computing and Data Science, Nanyang Technological University, Singapore 639798. 
+
+planning, and optimization, underscoring the need for accurate and computationally efficient reconstruction methods [4]. A large body of work has investigated radio map reconstruc-tion using model-based, interpolation-based, and learning-based approaches [2], [7]. Model-based methods rely on propagation assumptions, while interpolation-based techniques such as kernel smoothing estimate the field from nearby observations. Both categories often degrade under sparse mea-surements, model mismatch, or complex environments [2]. Learning-based approaches instead aim to infer the spatial field directly from data, for example via neural networks that map locations or environmental features to radio signals [8]– [10]. Among these, kernel-based learning methods stand out for their principled formulation, casting spectrum cartography as regularized regression in reproducing kernel Hilbert spaces [7], [11]. Specifically, Fig. 1 illustrates this pipeline. Sparse received signal strength measurements in Fig. 1 (a), simulated using NVIDIA Sionna RT over an urban scene, are used to reconstruct the radio map in Fig. 1 (b). The radio field is modeled as f (x) = Pni=1 αik(x, xi), where k(·, ·) captures spatial similarity between locations, as illustrated in Fig. 1 (c). This formulation leads to the standard regularized kernel learning problem [1], [7], [8] (cf. Problem (1)). More recently, attention mechanisms [12] have emerged as a data-adaptive framework for aggregating heterogeneous measurements, where interactions are governed by learned em-beddings rather than fixed kernels [13]. Representative exam-ples include transformer-based spectrum cartography models such as STORM [13] and related attention-driven approaches [14]–[17], which demonstrate the effectiveness of embedding-based adaptive attention weighting. This naturally leads to attention kernels by replacing k(·, ·) with an attention-induced similarity measure, yielding attention kernel regression as an extension of kernel-based learning. Despite their expressive power, attention-induced kernels introduce significant compu-tational challenges. In scaled dot-product attention, pairwise affinities are computed as inner products in a learned embed-ding space followed by exponential or softmax normalization [12], which amplifies similarities and typically produces highly imbalanced spectra with a few dominant eigenvalues and many near-zero ones. This results in large condition numbers and numerical instability [18], as illustrated in Fig. 1 (d). More broadly, the behavior of attention kernel regression is governed by spectral properties: learning progresses unevenly across eigenmodes, and components associated with small eigenvalues are harder to recover [19]. This effect depends on spectral decay, regularization, feature structure [20], and alignment with the target function [21], ultimately leading to                             
+
+> arXiv:2604.25138v1 [math.OC] 28 Apr 2026 JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 2(a) Spectrum Cartography
+> Base station
+> Samples ( n= 40)
+> Buildings
+> NVIDIA Sionna RT
+> Munich, 3.5 GHz
+> (b) Radio Map Reconstruction
+> Continuous field
+> from sparse samples
+> −600 −500 −400 −300 −200 −100 0100 200
+> Location x(m)
+> −75
+> −70
+> −65
+> −60
+> −55
+> −50
+> RSS (dBm)
+> f(x) = ∑
+> i
+> αik(x,xi)
+> (c) Kernel Regression
+> True f(x)
+> Estimate ̂ f(x)
+> Samples ( n= 12)
+> 10 20 30 40 50 60
+> Eigenvalue index
+> 10 −12
+> 10 −10
+> 10 −8
+> 10 −6
+> 10 −4
+> 10 −2
+> 10 0
+> Eigenvalue
+> κ= 21376472
+> κ≈ 6.2 e+ 07
+> Attention kernel: large
+> condition number κ
+> ⇒ ill-conditioned system
+> (d) Attention Kernel
+> RBF kernel krbf
+> Attention kernel katt
+> −80
+> −75
+> −70
+> −65
+> −60
+> −55
+> −50
+> RSS (dBm)
+> −80
+> −75
+> −70
+> −65
+> −60
+> −55
+> −50
+> RSS (dBm)
+
+Fig. 1. Spectrum cartography and kernel-based radio map reconstruction, simulated using NVIDIA Sionna RT [3] over the Munich urban scene at fc = 3 .5 GHz. 
+
+(a) Sparse received signal strength measurements at n = 40 sensor locations. (b) Reconstructed continuous radio map from sparse observations. (c) Kernel regression view: the radio field f (x) = Pni=1 αik(x, xi) estimated from n = 12 samples along a cross-section, where k(xi, xj ) captures spatial similarity. 
+
+(d) Eigenvalue spectra of a Radial Basis Function (RBF) kernel krbf , a standard stationary kernel with smoothly decaying spectrum, and an attention-induced kernel katt : the exponential attention transformation yields a severely imbalanced spectrum with κ ≫ 1.
+
+severely ill-conditioned systems that challenge accurate and scalable optimization. To reduce the computational cost of large-scale kernel regression problems, particularly those involving complex kernels such as attention-induced ones, prior work has devel-oped various approximation and preconditioning techniques. One line of work employs low-rank approximations, such as Nystr¨ om methods and random feature mappings, to replace the kernel matrix and reduce complexity [22], [23]. Another fo-cuses on preconditioned iterative solvers, leveraging sketching or structured decompositions to accelerate conjugate-gradient-type methods [24], [25]. More recent studies further explore data-aware and robust preconditioning strategies to improve stability under heterogeneous conditions [26]. However, these approaches are primarily developed for classical kernels and standard kernel ridge regression. They typically rely on fixed kernel structures, low-rank approximations, or favorable spec-tral decay, and are not directly tailored to the non-stationary, data-adaptive kernels encountered in spectrum cartography, such as learnable attention-induced kernels, nor do they ex-plicitly exploit the structure of attention kernel regression. 
+
+Contributions. To address the above challenge, we study at-tention kernel regression in spectrum cartography and propose a learning-based method that adapts to the inverse spectral structure of the attention kernel system to directly mitigate the condition number bottleneck induced by exponential attention kernels. The main contributions are as follows:  
+
+> •
+
+We formulate regularized attention kernel regression as a core computational problem for kernel learning-based radio map reconstruction, and characterize the severe spectral ill-conditioning induced by attention kernels.  
+
+> •
+
+We develop the Learning-based Attention Kernel Regres-sion (LAKER) algorithm, which learns a Difference-of-Convex (DC) programming–based preconditioner for the regularized attention kernel regression problem. LAKER constructs a regularized Maximum-Likelihood Estimation (MLE) formulation solved via the Convex–Concave Pro-cedure (CCCP) with shrinkage, and integrates it with a Preconditioned Conjugate Gradient (PCG) solver, whose solution is directly used for radio map reconstruction.  
+
+> •
+
+Extensive numerical example experiments on spectrum cartography tasks demonstrate that LAKER signifi-cantly improves spectral conditioning and solver effi-ciency across problem sizes. Against first-order methods, preconditioner methods, and convex solvers, LAKER achieves faster convergence and substantial speedup while maintaining high reconstruction accuracy. The source code is publicly available. 1
+
+II. R ELATED WORK 
+
+A. Kernel Regression Learning in Spectrum Cartography 
+
+A fundamental formulation of spectrum cartography arises from kernel-based learning [1], [27], where the radio field is modeled as a function in a reproducing kernel Hilbert space. Given sparse measurements, estimation is cast as a regularized empirical risk minimization problem, whose solution admits a finite kernel expansion over training samples via the represen-ter theorem [28]. The infinite-dimensional estimation problem thus reduces to solving a regularized linear system defined by a kernel matrix, exposing a common operator-inversion structure shared by a broad class of spectrum cartography methods. This formulation extends naturally to more structured settings. In semiparametric reproducing kernel Hilbert space regression [11], the radio field is decomposed into parametric and non-parametric components to incorporate prior knowledge while preserving flexibility. Location-free spectrum cartography [8] replaces spatial coordinates with signal-derived features while retaining the same kernel regression structure. Kernel-based methods have further been generalized to practical scenarios such as learning power spectral density maps from quantized measurements [7], employing vector-valued reproducing ker-nel Hilbert space formulations and support-vector-regression-type estimators. Despite these variations, the resulting solu-tions consistently reduce to solving regularized linear systems, revealing a unified computational structure underlying many spectrum cartography methods. This perspective exposes the central role of the kernel matrix in jointly determining statis-tical performance and computational complexity. 
+
+B. Transformer Attention in Spectrum Cartography 
+
+Transformer attention-based approaches have recently emerged as a powerful paradigm for spectrum cartography, 
+
+> 1
+
+Source code is available at https://github.com/convexsoft/kernelSC. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 3
+
+where attention mechanisms play diverse functional roles beyond conventional representation learning. In particular, each spatial measurement or grid feature is first mapped to a latent embedding vector, which is further projected into query, key, and value representations to compute attention weights based on pairwise similarity [12], [29]. This embedding-based formulation induces a data-dependent similarity structure over the input samples, effectively defining an adaptive kernel in the learned feature space. Early works such as RadioTrans [15] and subsequent CNN–Transformer hybrids [14], [30] primarily employ self-attention to capture long-range spatial dependencies and enhance global context modeling in grid-based radio map reconstruction. Extending this line, STORM [13] adopts a point-based formulation, where attention acts as a permutation-invariant measurement fusion operator, ef-fectively serving as a learned, input-dependent spatial kernel for adaptive estimation. Beyond reconstruction, attention has also been utilized for higher-level interaction and decision-making tasks; for example, TxSTrans [16] integrates self- and cross-attention to model environment–candidate interactions and enables efficient base station site selection. Furthermore, generative formulations have been explored, where attention functions as a spatial interpolation operator: [17] employs self-attention to aggregate neighboring received signal strength samples and synthesize realistic radio fingerprints at unseen locations. These works collectively demonstrate that trans-former attention in spectrum cartography can act as a unifying operator for estimation, representation, fusion, interpolation, and decision-making across different problem settings. 
+
+C. Kernel Ridge Regression 
+
+Kernel Ridge Regression (KRR) combines kernel methods with ℓ2 regularization and provides a fundamental framework for nonlinear function estimation. Recent advances show that its generalization behavior such as bias–variance trade-offs, benign overfitting, and multiple-descent is governed by the spectral properties of the kernel operator [20], [21]. On the computational side, scalable techniques, including divide-and-conquer and random-feature-based preconditioning, signifi-cantly improve efficiency while maintaining accuracy [24]. KRR has also been extended to applications such as dynamical system forecasting and structured learning [31]. However, attention-induced kernels introduce non-stationary and data-adaptive structures that challenge existing methods. This work addresses this issue by developing a learning-based precondi-tioning framework for attention kernel regression. III. R EGULARIZED ATTENTION KERNEL REGRESSION 
+
+Spectrum cartography aims to reconstruct a spatial radio field r(x) from sparse measurements {(xi, y i)}ni=1 , where 
+
+xi ∈ Rdx denotes the measurement location and yi denotes the noisy observation at xi. A principled approach represents 
+
+r(x) by a function f ∈ H k in a reproducing kernel Hilbert space Hk, leading to the regularized minimization problem [1], [7], [8]: 
+
+min  
+
+> f∈H k
+> n
+
+X
+
+> i=1
+
+ yi − f (xi)2 + λ∥f ∥2 
+
+> Hk
+
+, λ > 0, (1) 0 100 200 300 400 500                                      
+
+> Eigenvalue index
+> 10 0
+> 10 1
+> 10 2
+> Eigenvalue (log scale)  ≈2.9e+ 03
+> Spectrum at n= 500
+> 0500 1000 1500 2000
+> Eigenvalue index
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> 10 3≈2.1e+ 04
+> Spectrum at n= 2000
+> 02000 4000 6000 8000
+> Eigenvalue index
+> 10 1
+> 10 0
+> 10 1
+> 10 2
+> 10 3
+> 10 4
+> ≈1.5e+ 05
+> Spectrum at n= 8000
+> Fig. 2. Spectrum of (λI +G)as nincreases from 500 to 8000 (λ= 0 .01 ). The rapidly growing condition number κconfirms that attention kernel regres-sion remains increasingly ill-conditioned with scale, even after regularization.
+
+which is also known as the kernel ridge regression problem [27]. By the representer theorem [28], its solution admits a finite expansion over the training samples: 
+
+f (x) = 
+
+> n
+
+X
+
+> i=1
+
+αi k(xi, x), (2) where k(·, ·) is a positive semidefinite kernel function. Substi-tuting into (1) yields the finite-dimensional problem: 
+
+min  
+
+> α∈Rn
+
+∥y − Kα∥22 + λα⊤Kα, (3) whose first-order optimality condition gives the regularized linear system: 
+
+(K + λI )α = y, (4) where K + λI is symmetric positive definite for any λ > 0,since K is positive semidefinite. 
+
+A. Regularized Attention Kernel Regression 
+
+In modern data-driven spectrum cartography, each measure-ment location xi ∈ Rdx is associated with a learned feature embedding ei ∈ Rde , obtained via a parametric mapping such as neural encoders or attention-based feature extraction. For example, transformer-based estimators such as STORM [13] compute predictions via attention-weighted aggregation, where weights are defined through exponential similarities in a learned embedding space, effectively inducing a data-dependent similarity measure. Collecting the embeddings into the matrix E = [e⊤ 
+
+> 1
+
+; . . . ; e⊤ 
+
+> n
+
+] ∈ Rn×de , this perspective naturally leads to an exponential attention kernel [13], [18]: 
+
+Gij = exp( ⟨ei, ej ⟩), G = exp( EE ⊤), (5) where the exponential is applied element-wise. Replacing K with G in (3) directly yields the regularized attention kernel regression problem: 
+
+min  
+
+> α∈Rn
+
+∥Gα − y∥22 + λα⊤Gα, (6) where y ∈ Rn collects the sparse noisy measurements. Its first-order optimality condition yields: 
+
+(G + λI )α = y, (7) where G + λI is symmetric positive definite for any λ > 0,and α are the kernel expansion coefficients at the training JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 4CCCP   
+
+> Embedding
+> Sparse
+> Measurements
+> Learning-based Attention Kernel Regression (LAKER)
+> Reconstruct
+> Inferred
+> Radio Map Attention
+> Kernel Regression
+> Regularized MLE
+> PCG
+> 12
+> 3
+> 4
+> Fig. 3. Overview of the Learning-based Attention Kernel Regression (LAKER) algorithm for radio map reconstruction in spectrum cartography. Sparse measurements are encoded via attention kernels to form the regression system. A regularized Maximum Likelihood Estimation (MLE) problem with a Difference-of-Convex (DC) structure is solved via Convex–Concave Procedure (CCCP) to learn a data-dependent preconditioner. The learned preconditioner is then used in a Preconditioned Conjugate Gradient (PCG) method to recover the coefficients, which are finally used for radio map reconstruction.
+
+locations. Once α is obtained by solving (7), the radio field is reconstructed at any query location x via: 
+
+ˆr(x) = 
+
+> n
+
+X
+
+> i=1
+
+G(x, xi) αi, (8) where G(x, xi) = exp( ⟨e(x), ei⟩) denotes the attention kernel evaluated between the query location x and training location 
+
+xi, with e(x) the embedding of x.
+
+B. Spectral Ill-Conditioning of Attention Kernels 
+
+Regularized attention kernel regression leads to the linear system (λI +G)α = y, whose numerical behavior is governed by the spectrum of G. While adding λI ensures positive definiteness, it does not reduce the spectral imbalance induced by the exponential kernel. To illustrate this, consider an ideal-ized clustered setting where n samples form Q well-separated groups of equal size q = n/Q . In this case, G is approxi-mately block-diagonal, with each block approximately rank-one. Consequently, each cluster contributes a single dominant eigenvalue of order O(n/Q ), while the remaining eigenvalues are near zero before regularization and near λ after. The condition number of the regularized system scales as: 
+
+κ(λI + G) ≈ 1 + nQλ , (9) which grows linearly with the problem size n. Thus, even for fixed λ > 0, the system remains severely ill-conditioned as n increases. This spectral imbalance significantly affects iterative solvers: components associated with dominant eigen-values converge rapidly, whereas those associated with small eigenvalues converge slowly, leading to stagnation. As shown in Fig. 2, the condition number grows rapidly with n, con-firming that attention kernel regression remains increasingly ill-conditioned with scale. 
+
+Preconditioning Objective. The ill-conditioning of attention kernel regression is intrinsic to the exponential kernel: the sim-ilarity amplification creates a few dominant eigenmodes and many near-zero ones, leading to severe eigenvalue imbalance even after adding λI . To solve (λI + G)α = y efficiently, a preconditioner P is needed to reduce the condition number of the preconditioned system. The preconditioning objective is: 
+
+min  
+
+> P
+
+κ P (λI + G) = λmax 
+
+ P (λI + G)
+
+λmin 
+
+ P (λI + G) . (10) IV. L EARNING -B ASED ATTENTION KERNEL REGRESSION 
+
+This section presents the Learning-based Attention Kernel Regression (LAKER) algorithm for solving regularized atten-tion kernel regression in spectrum cartography, with the overall procedure illustrated in Fig. 3 and Algorithm 1. LAKER proceeds in three stages. In the first stage, the exponential attention kernel matrix G is constructed from learned feature embeddings via Gij = exp( ⟨ei, ej ⟩). In the second stage, motivated by Tyler’s estimator [32]–[34], LAKER formulates a regularized MLE problem whose objective admits a DC structure [35], [36]. This DC problem is solved via the CCCP iteration [37], [38] to learn a symmetric positive definite matrix 
+
+Σ⋆ ∈ Rn×n, from which the preconditioner is constructed as 
+
+P = Σ −1/2 
+
+> ⋆
+
+. The matrix P is designed so that P (λI +G) ≈ I,directly reducing the condition number of the preconditioned system. The learned P is used within the PCG method to efficiently solve: 
+
+P (λI + G)α = P y. (11) In the final stage, the recovered coefficients α are finally used to reconstruct the radio map via (8). 
+
+A. Tyler’s Estimator 
+
+Tyler’s estimator [39] is derived from the Angular Central Gaussian (ACG) model, which represents observations as scaled Gaussian vectors si = √τi ξi, where ξi ∼ N (0 , Σ) 
+
+and τi > 0. The corresponding ACG negative log-likelihood is: 
+
+ℓ(Σ) = log det(Σ) + nNrNrX
+
+> i=1
+
+log( s⊤ 
+
+> i
+
+Σ−1si). (12) JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 5
+
+Note that ℓ(Σ) is scale-invariant, satisfying ℓ(cΣ) = ℓ(Σ) 
+
+for any c > 0. Setting its gradient to zero yields the fixed-point equation [32]: 
+
+Σ = nNrNrX
+
+> i=1
+
+sis⊤
+
+> i
+
+s⊤ 
+
+> i
+
+Σ−1si
+
+. (13) Since the fixed-point equation determines Σ only up to a positive scalar, the constraint tr(Σ) = n is imposed to ensure a unique solution. 
+
+B. Regularized Maximum-Likelihood Estimation 
+
+Given the attention kernel operator λI + G ≻ 0 and 
+
+(λI + G) ∈ Rn×n, for k = {1, . . . , N r }, we generate random directions by: 
+
+zk ∼ N (0 , I n), uk = ( λI + G)zk, ¯uk = uk
+
+∥uk∥2
+
+, (14) where k indexes the random directions. Since uk ∼ N (0 , (λI + G)2), the normalized vectors ¯uk
+
+follow an angular distribution whose shape is governed by 
+
+(λI + G)2. Based on these samples, we estimate a positive definite matrix Σ via the regularized MLE problem: 
+
+min 
+
+> Σ≻0
+
+ 1 + γn
+
+ log det(Σ) + nNrNrX
+
+> k=1
+
+log  ¯u⊤ 
+
+> k
+
+Σ−1 ¯uk
+
+ + γ∥Σ−1∥∗,
+
+(15) where ∥ · ∥ ∗ denotes the nuclear norm. Since Σ−1 ≻ 0, there exists ∥Σ−1∥∗ = tr(Σ −1).
+
+Remark 1. Since Σ ≻ 0, the inverse Σ−1 is symmetric positive definite. Therefore, its singular values are exactly its positive eigenvalues, and one has: 
+
+∥Σ−1∥∗ =
+
+> n
+
+X
+
+> i=1
+
+σi(Σ −1) = 
+
+> n
+
+X
+
+> i=1
+
+q
+
+λi((Σ −1)⊤(Σ −1)) =
+
+> n
+
+X
+
+> i=1
+
+λi(Σ −1) = tr(Σ −1). (16) Thus, ∥Σ−1∥∗ = tr(Σ −1).Obviously, the estimated matrix Σ captures the spectral structure of (λI +G) and satisfies Σ ∝ (λI +G)2. This implies that Σ shares the same eigenvectors as (λI + G), while its eigenvalues scale quadratically with those of (λI + G). Thus, we construct the preconditioner as: 
+
+P = Σ −1/2 
+
+> ⋆
+
+, (17) where Σ⋆ is the solution of (15). (17) effectively approximates 
+
+(λI + G)−1 up to a scaling factor. Since such scaling does not affect the condition number, the resulting preconditioner is spectrally aligned with the inverse operator and significantly improves the condition number of (λI + G)α = y.
+
+C. Convex–Concave Procedure Iteration 
+
+Let Θ = Σ −1 ≻ 0, then the problem (15) becomes: 
+
+min  
+
+> Θ≻0
+
+− 1 + γn
+
+ log det(Θ) + nNrNrX
+
+> k=1
+
+log  ¯u⊤ 
+
+> k
+
+Θ¯ uk
+
+ + γ∥Θ∥∗,
+
+(18) 
+
+Algorithm 1 Learning-based Attention Kernel Regression (LAKER) 
+
+Require: {xi}ni=1 , y, λ, Nr , γ.
+
+Ensure: α and ˆr(x). 
+
+> 1:
+
+Kernel Construction  
+
+> 2:
+
+Construct embeddings {ei}ni=1 from {xi}ni=1 ; 
+
+> 3:
+
+Compute Gij = exp( ⟨ei, ej ⟩); 
+
+> 4:
+
+Attention Kernel Regression Learning  
+
+> 5:
+
+Sample zk ∼ N (0 , I n) for k = 1 , . . . , N r ; 
+
+> 6:
+
+uk ← (λI + G)zk, ¯uk ← uk/∥uk∥2; 
+
+> 7:
+
+Initialize Σ0 ← I; 
+
+> 8:
+
+for t = 0 , 1, . . . until convergence do  
+
+> 9:
+
+Compute Fγ (Σ t) via (35);  
+
+> 10:
+
+eΣt+1 ← (1 − ρ)Fγ (Σ t) + ρI ; 
+
+> 11:
+
+Σt+1 ← eΣt+1 / tr( eΣt+1 )/n ; 
+
+> 12:
+
+end for  
+
+> 13:
+
+P ← Σ−1/2 
+
+> ⋆
+
+; 
+
+> 14:
+
+Preconditioned Conjugate Gradient  
+
+> 15:
+
+Initialize α0 ← 0, r0 ← y, ϑ0 ← P r0, p0 ← ϑ0; 
+
+> 16:
+
+for k = 0 , 1, . . . until convergence do  
+
+> 17:
+
+δk ← (rk )⊤ϑk  
+
+> (pk)⊤(λI +G)pk
+
+; 
+
+> 18:
+
+αk+1 ← αk + δkpk; 
+
+> 19:
+
+rk+1 ← rk − δk(λI + G)pk; 
+
+> 20:
+
+if ∥rk+1 ∥2/∥y∥2 ≤ εtol then  
+
+> 21:
+
+break  
+
+> 22:
+
+end if  
+
+> 23:
+
+ϑk+1 ← P rk+1 ; 
+
+> 24:
+
+βk ← (rk+1 )⊤ϑk+1   
+
+> (rk)⊤ϑk
+
+; 
+
+> 25:
+
+pk+1 ← ϑk+1 + βkpk; 
+
+> 26:
+
+end for  
+
+> 27:
+
+Radio Map Reconstruction  
+
+> 28:
+
+Reconstruct ˆr(x) via ˆr(x) = Pni=1 G(x, xi) αi; 
+
+> 29:
+
+return α and ˆr(x).which is obviously a non-convex problem. We further define: 
+
+l(Θ) = −
+
+
+
+1 + γn
+
+
+
+log det(Θ) , (19) 
+
+g(Θ) = nNrNrX
+
+> k=1
+
+log  ¯u⊤ 
+
+> k
+
+Θ¯ uk
+
+ + γ tr(Θ) . (20) Here, l(Θ) is convex and g(Θ) is concave. Then (18) can be written as: 
+
+min  
+
+> Θ≻0
+
+L(Θ) = l(Θ) + g(Θ) . (21) Defining h(Θ) := −g(Θ) , we obtain the DC program [35], [36]: 
+
+min  
+
+> Θ≻0
+
+L(Θ) = l(Θ) − h(Θ) , (22) where both l and h are convex. By Toland duality [40], h(Θ) 
+
+admits: 
+
+h(Θ) = sup 
+
+> Φ
+
+⟨Θ, Φ⟩ − h∗(Φ) . (23) Substituting it into (22) yields: 
+
+L(Θ) = inf 
+
+> Φ
+
+l(Θ) − ⟨ Θ, Φ⟩ + h∗(Φ) , (24) JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 6
+
+which leads to the associated DC dual problem: 
+
+min  
+
+> Φ
+
+h∗(Φ) − l∗(Φ) . (25) At an optimal solution Θ⋆ of (22), the DC optimality condition requires ∂h (Θ ⋆) ⊂ ∂l (Θ ⋆), which reduces to: 
+
+∇l(Θ ⋆) = ∇h(Θ ⋆), (26) when l and h are differentiable. The CCCP method [37], [38], [41] solves (21) iteratively by linearizing the concave part g(Θ) at Θt to achieve (26), yielding the convex subproblem: 
+
+Θt+1 ∈ arg min  
+
+> Θ≻0
+
+l(Θ) + ⟨∇ g(Θ t), Θ⟩. (27) Its optimality condition shows: 
+
+∇l(Θ t+1 ) = −∇ g(Θ t). (28) The gradients of l and g are given by: 
+
+∇l(Θ) = −
+
+
+
+1 + γn
+
+
+
+Θ−1, (29) 
+
+∇g(Θ) = nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Θ¯ uk
+
++ γI. (30) Therefore: 
+
+
+
+1 + γn
+
+
+
+Θ−1 
+
+> t+1
+
+= nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Θt ¯uk
+
++ γI, (31) which leads to the closed-form update: 
+
+Θ−1 
+
+> t+1
+
+= 11 + γ/n 
+
+nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Θt ¯uk
+
++ γI 
+
+!
+
+. (32) Equivalently, in the Σ-domain we obtain the CCCP iteration: 
+
+Σt+1 = 11 + γ/n 
+
+nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Σ−1 
+
+> t
+
+¯uk
+
++ γI 
+
+!
+
+. (33) Note that the objective in (15) is no longer scale-invariant due to the nuclear term. As a result, the optimization may exhibit scale drift, leading to uncontrolled growth or shrinkage of the eigenvalues of Σ. To improve numerical stability, we normalize Σt+1 after each update as: 
+
+Σt+1 ← Σt+1 
+
+tr(Σ t+1 )/n . (34) The resulting preconditioner is defined as P = Σ −1/2 
+
+> ⋆
+
+.
+
+Remark 2. The CCCP update admits an equivalent Frank– Wolfe (FW) interpretation [42]. Consider the DC objective 
+
+min Θ≻0 L(Θ) = l(Θ) − h(Θ) and it can form min Θ,ˆl ˆl −
+
+h(Θ) s.t. l(Θ) ≤ ˆl. Linearizing h at Θt yields the FW subproblem min Θ,ˆl ˆl − ⟨∇ h(Θ t), Θ⟩ s.t. l(Θ) ≤ ˆl, whose optimality condition is ∇l(Θ t+1 ) = ∇h(Θ t). Substituting the gradients recovers exactly (33), showing that the CCCP iteration is equivalent to applying FW to the DC formulation. 
+
+D. Shrinkage-Regularized CCCP Iteration 
+
+To improve numerical robustness when Nr < n , especially under limited samples or severe spectral imbalance [43], we introduce a stabilized shrinkage-regularized CCCP update inspired by [44]. Firstly, we define: 
+
+Fγ (Σ t) = 11 + γ/n 
+
+nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Σ−1 
+
+> t
+
+¯uk + ε + γI 
+
+!
+
+, (35) where ε > 0 is a small safeguard parameter to prevent numerical instability. Secondly, we apply isotropic shrinkage regularization: 
+
+eΣt+1 = (1 − ρ) Fγ (Σ t) + ρI, (36) where ρ ∈ [0 , 1] controls the strength of shrinkage. In practice, 
+
+ρ is increased when the smallest eigenvalue becomes too small, and set to zero otherwise. Finally, we normalize: 
+
+Σt+1 = eΣt+1 
+
+tr( eΣt+1 )/n . (37) 
+
+Remark 3. The method only requires matrix–vector products of the form uk = ( λI + G)zk = λz k + Gz k, and does not require forming or storing the full kernel matrix G. This makes it suitable for large-scale settings, where (λI + G) can be accessed through efficient operator evaluations. 
+
+Theorem 1. Let ε > 0, ρ ∈ (0 , 1] , and γ ≥ 0. Assume that PNr 
+
+> k=1
+
+¯uk ¯u⊤ 
+
+> k
+
+≻ 0. Define: 
+
+Fγ,ε (Σ) = 11 + γ/n 
+
+nNrNrX
+
+> k=1
+
+¯uk ¯u⊤
+
+> k
+
+¯u⊤ 
+
+> k
+
+Σ−1 ¯uk + ε + γI 
+
+!
+
+, (38) 
+
+eFγ,ε,ρ (Σ) = (1 − ρ) Fγ,ε (Σ) + ρI, (39) 
+
+T (Σ) = n eFγ,ε,ρ (Σ) tr( eFγ,ε,ρ (Σ)) . (40) 
+
+Then there exists at least one matrix Σ⋆ ≻ 0 such that: 
+
+T (Σ ⋆) = Σ ⋆, tr(Σ ⋆) = n. (41) 
+
+Proof. Consider the set S = {Σ ⪰ 0 | tr(Σ) = n}, which is convex and closed. For any Σ ≻ 0, all denominators are strictly positive, so Fγ,ε (Σ) is well-defined. Moreover, since 
+
+ρ ∈ (0 , 1] :
+
+eFγ,ε,ρ (Σ) = (1 − ρ)Fγ,ε (Σ) + ρI ⪰ ρI, (42) which guarantees eFγ,ε,ρ (Σ) ≻ 0.After normalization, we have: 
+
+T (Σ) ≻ 0, tr( T (Σ)) = n, (43) so T maps S into itself. The mapping T is continuous, and its outputs remain bounded due to the uniform lower bound ρI . Therefore, T
+
+operates on a compact convex subset of S. By Brouwer’s fixed-point theorem [45], there exists at least one Σ⋆ ∈ S 
+
+such that T (Σ ⋆) = Σ ⋆.JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 7
+
+E. Preconditioned Conjugate Gradient 
+
+After obtaining the covariance estimate Σ via the shrinkage-regularized CCCP, the preconditioner is constructed as P =Σ−1/2 
+
+> ⋆
+
+. We aim to solve the linear system: 
+
+(λI + G)α = y, (44) where α ∈ Rn denotes the coefficient vector and y ∈ Rn is the observation vector. To improve numerical condition number, we consider the left-preconditioned system: 
+
+P (λI + G)α = P y, (45) where the preconditioner P is designed to reduce the condition number from κ(λI + G) to κ(P (λI + G)) .We adopt the PCG method to iteratively compute the solution. Starting from an initial estimate: 
+
+α0 = 0, r0 = y − (λI + G)α0, ϑ0 = P r0, p0 = ϑ0,
+
+(46) the residual and preconditioned residual at iteration k are given by: 
+
+rk = y − (λI + G)αk, ϑk = P rk. (47) The step size is computed as: 
+
+δk = (rk)⊤ϑk
+
+(pk)⊤(λI + G)pk , (48) and the solution is updated via: 
+
+αk+1 = αk + δkpk. (49) The residual and the preconditioned residual are updated as: 
+
+rk+1 = rk − δk(λI + G)pk, ϑk+1 = P rk+1 . (50) The conjugate direction is updated as: 
+
+βk = (rk+1 )⊤ϑk+1 
+
+(rk)⊤ϑk , pk+1 = ϑk+1 + βkpk. (51) The iteration terminates when the relative residual satisfies: 
+
+∥rk∥2/∥y∥2 ≤ εtol . (52) or when a target objective accuracy is reached. 
+
+Example 1. Consider n = 3 measurement locations extracted from an NVIDIA Sionna RT simulation of the Munich urban scene at fc = 3 .5 GHz [3]. The locations x1, x2, x3 yield two-dimensional feature embeddings ei ∈ R2 and observed received signal strength values: 
+
+e1 = (0 .241 , 0.444) , e2 = ( −0.336 , 0.112) ,
+
+e3 = ( −0.220 , 0.353) ,
+
+y = [ −66 .14 , −65 .77 , −77 .30] ⊤ dBm . (53) 
+
+The exponential attention kernel Gij = exp( ⟨ei, ej ⟩) gives: 
+
+G =
+
+1.291 0.969 1.109 0.969 1.133 1.120 1.109 1.120 1.189 
+
+ , (54) 
+
+and with λ = 0 .1:
+
+λI + G =
+
+1.391 0.969 1.109 0.969 1.233 1.120 1.109 1.120 1.289 
+
+ . (55) 
+
+Solving (λI + G)α = y yields: 
+
+α = [0 .815 , 5.438 , −65 .406] ⊤, (56) 
+
+which can be verified by direct substitution. For a query location x⋆ with embedding e⋆ = (0 .051 , 0.452) , the kernel values are: 
+
+G(x⋆, xi) = [1 .237 , 1.034 , 1.160] , (57) 
+
+and the predicted received signal strength at x⋆ is: 
+
+ˆr(x⋆) = 
+
+> 3
+
+X
+
+> i=1
+
+G(x⋆, xi) αi ≈ − 69 .2 dBm , (58) 
+
+close to the Sionna ground truth of −67 .3 dBm. This ex-ample illustrates the end-to-end computation of (8) : solving 
+
+(λI + G)α = y recovers the kernel coefficients α, which are then used to predict the radio field at arbitrary locations via kernel expansion. Large-scale evaluations of this procedure are presented in Section V. 
+
+V. N UMERICAL EXAMPLE 
+
+A. Evaluation Setup 1) Problem Setup: We consider a two-dimensional spa-tial region Ω = [0 , 100] × [0 , 100] m2, i.e., dx = 2.The ground-truth radio field r(x) is generated by super-posing multiple transmitters with spatially decaying power profiles and log-normal shadowing. For each realization, n ∈{50 , 200 , 500 , 1000 , 2000 } measurement locations {xi}ni=1 are drawn uniformly from Ω, and noisy observations are collected as: 
+
+yi = r(xi) + εi, εi ∼ N (0 , σ 2 
+
+> ε
+
+), σε = 1 .5, (59) where the noise is modeled in the logarithmic (dBm) domain. Each location xi ∈ Rdx is mapped to a de-dimensional feature embedding ei ∈ Rde with de = 10 via a deterministic position-driven mapping, and the attention kernel is formed as 
+
+Gij = exp( ⟨ei, ej ⟩) per (5). The reconstruction is formulated as the regularized attention kernel regression problem (6) with 
+
+λ = 10 −2:
+
+min  
+
+> α∈Rn
+
+R(α) := ∥Gα − y∥22 + λα⊤Gα, (60) and the radio field at any location is reconstructed via kernel expansion (8). Reconstruction performance is evaluated on a dense 45 × 45 grid over Ω.
+
+2) Preconditioner Construction: As shown in Algorithm LAKER, the preconditioner is learned from random directions as defined in (14). The number of random vectors Nr follows a hybrid schedule that scales as O(√n) for small n and linearly for large n, balancing estimation quality and computational cost. To improve robustness under undersampling (i.e., when 
+
+Nr < n ), an adaptive shrinkage parameter ρ is employed within the CCCP iteration (36): when Nr ≥ n, a small JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 8                                                     
+
+> TABLE I KEY SIMULATION PARAMETERS .
+> Parameter Value Description
+> n{50 ,200 ,500 ,1000 ,2000 }Number of measurements
+> Ω[0 ,100] ×[0 ,100] m2Spatial region
+> dx2Input spatial dimension
+> σ1.5dB Measurement noise std
+> de10 Embedding dimension
+> λ10 −2Regularization parameter
+> Gexp( EE ⊤)Attention kernel Grid size 45 ×45 Evaluation grid
+> NrAdaptive Number of random directions
+> γ10 −1CCCP regularization
+> ρAdaptive Shrinkage parameter
+> η(GD) Tuned Gradient descent step size
+> PJ(Jacobi) diag( λI +G)−1Jacobi preconditioner Kernel (GPRT) Rational quadratic Gaussian process kernel type
+> σ2(GPRT) Tuned Gaussian process noise variance PCG.TOL 10 −10 –10 −11 Residual tolerance TAR.TOL 10 −3Target objective gap
+
+fixed regularization ρ = ϵρ suffices for numerical stability; otherwise, ρ increases with the undersampling ratio Nr /n and is further modulated by γ. The final preconditioner is given by P = Σ −1/2 
+
+> ⋆
+
+.
+
+3) Baselines: We consider baselines at both the numerical layer and the reconstruction layer, with the convex solver CVXPY [46] providing high-accuracy reference solutions. 
+
+Numerical Layer. We consider two representative methods for the linear system (λI + G)α = y: 
+
+> •
+
+Gradient Descent (GD) [47]: a first-order method that iteratively updates α via α(k+1) = α(k) − η∇R(α(k)),where R(α) is defined in (60) and η > 0 is the step size selected by grid search.  
+
+> •
+
+Jacobi Preconditioned Conjugate Gradient (Jacobi PCG) [48], [49]: a Krylov subspace method equipped with the diagonal preconditioner PJ = diag( λI + G)−1, which captures only the local diagonal structure of the system. 
+
+Reconstruction Layer. We compare against a Gaussian process regression-based radio map reconstruction method (GPRT) [50], which models spatial correlations via kernel-based probabilistic inference. The prediction at a query loca-tion x takes the form: 
+
+ˆr(x) = k(x, X ) ( K + σ2I)−1y, (61) where X = [ x1, . . . , xn]⊤ collects the n training locations, 
+
+K ∈ Rn×n is the kernel matrix with entries Kij = k(xi, xj ),and k(x, X ) ∈ R1×n denotes the cross-kernel vector at the query point. This shares the same kernel regression structure as (8), with K and k(x, X ) playing the roles of G and G(x, X ),respectively. In GPRT, the kernel is a hand-crafted composite incorporating both spatial proximity and terrain (elevation) ef-fects [50], implemented via an anisotropic Rational Quadratic (RQ) kernel over spatial and elevation dimensions. The two methods thus differ primarily in kernel design: GPRT employs a fixed composite kernel, whereas the algorithm LAKER uses a learned attention kernel. 
+
+4) Evaluation Metrics: Performance is evaluated at both the numerical layer and the reconstruction layer. 
+
+Numerical Layer. We assess solution accuracy and compu-tational efficiency via the following metrics:  
+
+> •
+
+Condition number: κ(λI + G) for the unpreconditioned system, κ(P (λI + G)) for the algorithm LAKER, and 
+
+κ(PJ(λI + G)) for Jacobi PCG.  
+
+> •
+
+Iterations: the number of iterations required to reach a target objective gap of TAR.TOL = 10 −3, i.e., 
+
+|R(α) − R(αCVX )||R(αCVX )| ≤ 10 −3. (62)  
+
+> •
+
+Residual (Res.): the normalized linear system residual: Res. = ∥(λI + G)α − y∥2
+
+∥y∥2
+
+. (63)  
+
+> •
+
+Objective gap (Obj. Gap): the relative gap between the achieved objective value and the convex solver reference: Obj. Gap = |R(α) − R(αCVX )||R(αCVX )| . (64) 
+
+Reconstruction Layer. Let {xj }Mj=1 denote a dense 45 × 45 
+
+evaluation grid over Ω, distinct from the measurement loca-tions {xi}ni=1 . We evaluate reconstruction quality via:  
+
+> •
+
+Prediction discrepancy (Pred. Disc.): the relative differ-ence in predicted outputs with respect to the convex solver reference: Pred. Disc. = ∥Gα − GαCVX ∥2
+
+∥GαCVX ∥2
+
+. (65)  
+
+> •
+
+Root Mean Square Error (RMSE), and Normalized Mean Square Error (NMSE): standard metrics for reconstruc-tion accuracy against the ground-truth radio field: RMSE =
+
+vuut 1
+
+M
+
+> M
+
+X
+
+> j=1
+
+ ˆr(xj ) − r(xj )2, (66) NMSE =
+
+PMj=1 
+
+ ˆr(xj ) − r(xj )2
+
+PMj=1 r(xj )2 . (67) 
+
+B. Evaluation Results 
+
+This section reports evaluation results from two aspects. On the numerical side, we analyze condition number, con-vergence, and runtime efficiency, showing that the algorithm LAKER significantly improves spectral condition number and accelerates iterative solving. On the reconstruction side, we evaluate radio map reconstruction performance, showing that the algorithm LAKER achieves near-identical accuracy to the convex solver reference and slightly better large-scale perfor-mance than the Gaussian process regression-based method, while being significantly more efficient. 
+
+1) Condition Number: Figure 4a compares the condition numbers of the original system λI +G and the preconditioned systems across problem sizes. As n increases from 50 to 
+
+2000 , κ(λI + G) grows from 5.05 × 10 3 to 2.02 × 10 5,a roughly 40 × increase, confirming the severe spectral ill-conditioning of the exponential attention kernel. The Jacobi preconditioner provides negligible improvement: κ(PJ(λI +
+
+G)) remains essentially identical to the original system at all scales, since the diagonal Jacobi structure fails to capture the dominant off-diagonal interactions of the attention kernel. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 950 200 500 1000 2000              
+
+> Problem size n
+> 10 2
+> 10 3
+> 10 4
+> 10 5
+> Condition number
+> Condition number comparison
+> Original: (I+G)
+> LAKER: (P(I+G))
+> Jacobi PCG: (PJ(I+G))
+
+(a) Condition number. 50 200 500 1000 2000     
+
+> Problem size n
+> 20
+> 30
+> 40
+> 50
+> 60
+> Iteration count
+> Iterations to objective-gap target (vs CVXPY, 1e03 )
+> LAKER
+> Jacobi PCG
+
+(b) Iterations. 50 200 500 1000 2000        
+
+> Problem size n
+> 10 10
+> 10 8
+> 10 6
+> 10 4
+> 10 2
+> Residual  ( I + G) y 2/(  y 2 + )
+> Linear-system residual
+> LAKER
+> GD
+> Jacobi PCG
+
+(c) Residual. 50 200 500 1000 2000        
+
+> Problem size n
+> 10 10
+> 10 8
+> 10 6
+> 10 4
+> 10 2
+> 10 0
+> Objective gap vs CVXPY
+> Objective value gap
+> LAKER
+> GD
+> Jacobi PCG
+
+(d) Objective value gap. 
+
+Fig. 4. Comparison between the algorithm LAKER, first-order method (GD), preconditioner method (Jocabi PCG) across different problem sizes, including condition number, iterations to target objective gap (cf. (62)), and final solution accuracy in terms of residual (cf. (63)) and objective value gap (cf. (64)). 0 1000 2000 3000 4000               
+
+> Iteration
+> 10 6
+> 10 4
+> 10 2
+> 10 0
+> 10 2
+> 10 4
+> Relative objective gap
+> Objective-gap convergence ( n= 1000 )
+> LAKER
+> GD
+> Jacobi PCG
+> Target 1e-03
+> 01000 2000 3000 4000
+> Iteration
+> 10 5
+> 10 4
+> 10 3
+> 10 2
+> 10 1
+> 10 0
+> Prediction discrepancy
+> Prediction discrepancy ( n= 1000 )
+
+Fig. 5. Convergence behavior for n = 1000 including objective gap (cf. (64)) and prediction discrepancy (cf. (65)). The learned preconditioner in the algorithm LAKER leads to significantly faster time-to-accuracy and stable, scale-invariant convergence of the iterative solver. 
+
+In contrast, the algorithm LAKER significantly reduces the condition number and keeps it nearly constant across all scales. Specifically, κ(P (λI + G)) stays within the narrow range 
+
+[1 .33 ×10 2, 2.09 ×10 2] for n ∈ { 50 , . . . , 2000 }. At n = 2000 ,the algorithm LAKER reduces the condition number from 
+
+2.02 ×10 5 to 2.09 ×10 2, an improvement of nearly three orders of magnitude. This confirms that the learned preconditioner in the algorithm LAKER effectively reshapes the spectrum of the attention kernel system, which directly explains the faster convergence reported in the following experiments. 
+
+2) Iterations: Figure 4b evaluates the number of iterations required to reach a target objective gap of 10 −3 with respect to the convex solver reference solution. The algorithm LAKER consistently requires significantly fewer iterations than Jacobi-preconditioned PCG across all problem sizes. Specifically, the algorithm LAKER converges in 16 , 21 , 25 , 28 , and 30 
+
+iterations for n = 50 , 200 , 500 , 1000 , and 2000 , respectively, whereas Jacobi PCG requires 21 , 32 , 42 , 47 , and 59 iterations. This corresponds to a reduction of approximately 20% − 50% 
+
+in iteration count. Moreover, the algorithm LAKER exhibits much slower growth in iteration complexity as the problem size increases, indicating improved efficiency. In contrast, the iteration count of Jacobi PCG grows more rapidly with n,reflecting its inability to effectively mitigate the severe ill-conditioning of the system. These results demonstrate that the learned preconditioner in the algorithm LAKER substantially improves the spectral properties of the system, leading to faster convergence to high-accuracy solutions. 
+
+3) Solution Accuracy: Figures 4c and 4d compare the final linear-system residual and objective value gap achieved by different methods. The algorithm LAKER and Jacobi PCG both attain high-accuracy solutions across all problem sizes. The first-order method GD, by contrast, fails to converge under the iteration budget and yields residuals consistently near 10 −2 and objective gaps exceeding 1 at all problem sizes. From Figure 4c, the relative residuals of the algorithm LAKER and Jacobi PCG remain at the level of 10 −11 –
+
+10 −12 for all tested scales. For example, at n = 1000 ,the residuals are 5.81 × 10 −12 for the algorithm LAKER and 1.72 × 10 −11 for Jacobi PCG, while GD remains at 
+
+4.74 × 10 −2. A similar trend is observed at n = 2000 , where the algorithm LAKER and Jacobi PCG achieve residuals of 
+
+9.41 × 10 −12 and 9.97 × 10 −12 , respectively, compared to 
+
+6.36 × 10 −2 for GD. Figure 4d further shows that the algorithm LAKER and Jacobi PCG both maintain very small objective gaps relative to the convex solver, while GD remains far from the reference solution. Specifically, the algorithm LAKER achieves an objective gap of 9.90 × 10 −7 at n = 200 ,
+
+1.04 × 10 −5 at n = 1000 , and 1.74 × 10 −7 at n = 2000 , with Jacobi PCG giving nearly identical values. In contrast, GD yields objective gaps larger than 1, reaching 6.83 at n = 1000 
+
+and 1.14 × 10 1 at n = 2000 . These results indicate that both PCG-based methods can recover solutions highly consistent with the convex solver reference, whereas first-order GD is inadequate for the severely ill-conditioned attention kernel systems considered here. 
+
+4) Convergence Behavior: Figure 5 illustrates the per-iteration convergence of the objective gap (left) and prediction discrepancy (right) at n = 1000 . The results clearly demon-strate that the algorithm LAKER achieves both the fastest convergence and the highest final accuracy among all methods. Specifically, the objective gap of algorithm LAKER de-creases from above 10 0 to below the target threshold of 10 −3
+
+within 28 iterations, and further converges to 1.04 × 10 −5
+
+upon termination at 76 iterations. The prediction discrepancy follows a similar trajectory, dropping from O(1) to below 
+
+10 −5 within approximately 40 iterations and remaining stable thereafter. Jacobi PCG also converges to a high-accuracy solution, but at a slower rate: it requires 47 iterations to cross the target threshold and exhibits a more gradual decay in both metrics. This slower convergence is consistent with the condition number results, where the Jacobi preconditioner leaves κ(PJ(λI + G)) essentially unchanged from the orig-inal system. In contrast, the first-order method GD fails to converge meaningfully: the objective gap quickly stagnates near 6.83 and the prediction discrepancy plateaus at approx-JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 10 True field ( = training sensors) CVXPY GPRT LAKER  
+
+> -110.0
+> -100.0
+> -90.0
+> -80.0
+> -70.0
+> -110.0
+> -100.0
+> -90.0
+> -80.0
+> -70.0
+> -110.0
+> -100.0
+> -90.0
+> -80.0
+> -70.0
+> -110.0
+> -100.0
+> -90.0
+> -80.0
+> -70.0
+> Radio-map reconstruction panorama ( n= 1000 )
+
+Fig. 6. Radio map reconstruction panorama for n = 1000 . From left to right: ground-truth field (with training sensor locations), the convex solver reference (CVXPY), the Gaussian process regression-based radio map reconstruction method (GPRT), and the algorithm LAKER. Algorithm LAKER produces spatial estimates that are visually indistinguishable from the the convex solver reference, accurately capturing both the dominant high-power region and the global propagation pattern. In contrast, the GPRT baseline exhibits noticeable deviations in both peak intensity and spatial smoothness. 
+
+imately 4 × 10 −2, confirming that first-order methods are fundamentally inadequate for the severely ill-conditioned at-tention kernel system. The rapid and monotone convergence of algorithm LAKER, by contrast, is a direct consequence of the learned preconditioner compressing the spectrum of (λI + G)
+
+and enabling more uniform error reduction across spectral modes. Combined with the condition number results, these observations confirm that the algorithm LAKER significantly improves convergence efficiency while maintaining numerical stability across all tested scales. 
+
+5) Spatial Reconstruction: Figure 6 presents a qualitative comparison of radio map reconstruction at n = 1000 , showing the ground-truth field alongside the outputs of the convex solver, the Gaussian process regression-based radio map recon-struction method GPRT, and the algorithm LAKER. Both the convex solver and the algorithm LAKER faithfully recover the dominant spatial structure, including the high-power region in the upper left and the low-power region in the lower right, with consistent spatial structure throughout the domain. Visually, the two reconstructions are nearly indistinguishable, a finding supported by their RMSE values of 0.5240 (LAKER) and 
+
+0.5242 (the convex solver), differing by less than 2 × 10 −4.GPRT captures the overall spatial trend but exhibits noticeable discrepancies in peak intensity and produces an overly smooth field that misses finer spatial variations. This over-smoothing is a consequence of the fixed composite kernel in GPRT, whose built-in spatial prior imposes stronger regularity than the attention kernel. Quantitatively, GPRT achieves an RMSE of 0.6921 at n = 1000 , approximately 32% higher than LAKER. These results demonstrate that the algorithm LAKER matches the spatial fidelity of the convex solver reference solution while outperforming the model-driven GPRT baseline at this scale. We note that GPRT achieves lower RMSE at smaller problem sizes such as n ≤ 500 , consistent with the well-known advantage of Gaussian process regression under limited observations; the advantage of the attention kernel formulation becomes apparent as n grows. 
+
+6) Discrepancy Analysis: Figure 7 examines the recon-struction discrepancy at n = 1000 from both a global (spatial map) and a local (cross-section) perspective. Specifically, the discrepancy map (left) shows the pointwise absolute difference 
+
+|ˆrlaker − ˆrcvx | between the algorithm LAKER and the convex |rlaker rcvxpy |      
+
+> 0.0 0.2 0.4 0.6 0.8 1.0
+> Normalized column coordinate
+> 105
+> 100
+> 95
+> 90
+> 85
+> 80
+> Signal value
+> Mid-row slice (row 22)
+> True
+> CVXPY
+> GPRT
+> LAKER
+> 0.001
+> 0.001
+> 0.002
+> 0.002
+> 0.003
+> |discrepancy|
+> Radio-map discrepancy and slice comparison ( n= 1000 )
+
+Fig. 7. Discrepancy and slice comparison for n = 1000 . Left: absolute difference between the algorithm LAKER and the convex solver reference solution. Right: mid-row slice comparing the ground truth, the convex solver, the Gaussian process regression-based method (GPRT), and the algorithm LAKER. The discrepancy remains very small across the domain, and LAKER closely aligns with both the convex solver and the ground truth, while GPRT exhibits visible deviations near peak and valley regions. 
+
+solver across the domain. The values remain uniformly below 
+
+3 × 10 −3 throughout, with no systematic bias, confirming that the algorithm LAKER closely reproduces the convex solver reference at a global level. The spatially distributed pattern of the discrepancy reflects local variations in the attention kernel regression solution rather than solver error, consistent with the near-zero residuals. The mid-row cross-section (right) provides a finer comparison of local reconstruction behavior. The curves of the ground truth, the convex solver, and the algorithm LAKER are nearly perfectly aligned across the entire cross-section, including both the peak region and the low-signal tail. GPRT, by contrast, underestimates the signal intensity near the peak and produces a smoother curve that deviates noticeably in the right portion of the domain (normalized coordinate 
+
+x > 0.7). These observations confirm that LAKER faithfully captures both large-scale spatial trends and fine-grained local variations of the radio field, while GPRT’s fixed kernel prior leads to over-smoothing at this problem scale. 
+
+7) Summary of Results: Tables II and III summarize nu-merical layer and reconstruction layer performance across all problem sizes. 
+
+Numerical Performance. As shown in Table II, the algo-rithm LAKER achieves solutions that are numerically consis-tent with the convex solver reference across all scales. The objective gap ranges from 3.71 × 10 −11 to 1.74 × 10 −7,JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 11         
+
+> TABLE II NUMERICAL PERFORMANCE ACROSS PROBLEM SIZES (λ= 10 −2,γ= 10 −1). B OLD INDICATES THE BEST RESULT IN EACH COLUMN . T HE FIRST -ORDER METHOD GD DOES NOT REACH THE TARGET ACCURACY WITHIN THE ITERATION BUDGET .
+
+Numerical Accuracy Solver Time (seconds) Condition Number PCG Iterations 
+
+n Obj. Gap Residual Pred. Disc. Convex Solver LAKER Jacobi GD κ(λI + G) κ(P (λI + G)) LAKER Jacobi 50 3.71e-11 5.30e-11 3.42e-09 0.062 0.009 0.011 0.204 5.05e+03 1.33e+02 16 21 200 9.90e-07 8.88e-11 1.38e-07 0.078 0.043 0.071 3.324 2.02e+04 1.95e+02 21 32 500 1.24e-05 2.34e-11 2.06e-06 0.463 0.162 0.198 7.499 5.04e+04 2.07e+02 25 42 1000 1.04e-05 5.81e-12 1.98e-06 2.875 0.411 1.010 25.394 1.01e+05 1.79e+02 28 47 2000 1.74e-07 9.41e-12 4.13e-08 37.678 1.699 19.348 102.657 2.02e+05 2.09e+02 30 59 
+
+> TABLE III RADIO MAP RECONSTRUCTION PERFORMANCE . B OLD INDICATES THE BEST RESULT IN EACH METRIC COLUMN .
+
+RMSE NMSE 
+
+n LAKER GPRT LAKER GPRT 50 1.6946 1.3785 3.31e-04 2.19e-04 
+
+200 1.1610 0.6956 1.53e-04 5.48e-05 
+
+500 0.7841 0.7483 6.63e-05 6.04e-05 
+
+1000 0.5240 0.6921 3.04e-05 5.31e-05 2000 0.6212 0.7585 4.87e-05 7.26e-05 
+
+while the linear system residual and prediction discrepancy reach 10 −12 and 10 −9. In contrast, the first-order method GD fails to reach the target accuracy at all problem sizes, with objective gaps exceeding 1, indicating its limitation for ill-conditioned attention kernel systems. From a spectral perspective, the condition number of λI + G increases from 
+
+5.05 × 10 3 to 2.02 × 10 5 as n grows from 50 to 2000 ,whereas the preconditioned system remains stable in the range 
+
+1.33 × 10 2 to 2.09 × 10 2. This stabilization leads to nearly size-independent convergence. The algorithm LAKER requires only 16 to 30 iterations to reach the target accuracy, while Jacobi PCG requires 21 to 59 iterations and exhibits clear growth with problem size. In terms of solver time measured at the PCG tolerance, LAKER and Jacobi PCG solve the original problem using preconditioned PCG, while the convex solver and GD report their original runtimes. LAKER consistently outperforms all baselines. Compared with the convex solver, it achieves over 22 × speedup at n = 2000 , and the advantage increases with problem size. LAKER also outperforms Jacobi PCG, whose runtime grows rapidly with n, and GD, which remains inefficient due to slow convergence. 
+
+Reconstruction Performance. Table III compares the ra-dio map reconstruction accuracy of algorithm LAKER and algorithm GPRT across different problem sizes. At small scales, GPRT achieves lower RMSE and NMSE, with clear advantages at n = 50 and n = 200 . At n = 500 , the two meth-ods exhibit nearly identical performance, with GPRT slightly outperforming LAKER in both metrics. As the problem size increases, LAKER becomes more competitive and eventually surpasses GPRT. At n = 1000 and n = 2000 , LAKER achieves lower RMSE and NMSE, indicating improved re-construction accuracy in larger-scale settings. In particular, the RMSE of LAKER decreases from 1.6946 at n = 50 to 0.5240 
+
+at n = 1000 , and remains stable at larger scales, while GPRT exhibits higher error at n ≥ 1000 . A similar trend is observed for NMSE. Overall, the algorithm GPRT performs better in low-data regimes, while the algorithm LAKER demonstrates superior accuracy at moderate to large scales, highlighting its effectiveness for large-scale radio map reconstruction. VI. C ONCLUSION 
+
+This paper addressed the computational challenges of reg-ularized attention kernel regression in spectrum cartogra-phy, where exponential attention kernels induce severely ill-conditioned linear systems whose condition numbers grow lin-early with problem size, rendering standard iterative solvers in-effective. To overcome this bottleneck, we developed LAKER, a learning-based algorithm that acquires a data-dependent preconditioner via a difference-of-convex formulation and integrates it with a preconditioned conjugate gradient solver. The learned preconditioner directly targets the inverse spec-tral structure of the attention kernel system, reducing con-dition numbers by up to three orders of magnitude and enabling nearly size-independent preconditioned conjugate gradient convergence across all tested scales. Extensive ex-periments on spectrum-cartography-inspired radio map re-construction demonstrated that LAKER achieves numerical accuracy matching the convex solver reference solution across all problem sizes, with negligible objective gaps and near-zero residuals, while attaining speedups of over twenty-fold compared to the convex solver at the largest tested scale. LAKER also outperforms the Gaussian process regression baseline in reconstruction accuracy at larger problem sizes while maintaining a more predictable computational cost. These results establish that learning-based spectral precondi-tioning provides an effective and scalable approach to atten-tion kernel regression in wireless sensing applications. Future work includes extending the algorithm LAKER to online and dynamic spectrum cartography settings where measurements arrive sequentially. REFERENCES [1] D. Romero and S.-J. Kim, “Radio map estimation: A data-driven approach to spectrum cartography,” IEEE Signal Processing Magazine ,vol. 39, no. 6, pp. 53–72, 2022. JOURNAL OF L ATEX CLASS FILES, VOL. 14, NO. 8, AUGUST 2021 12 
+
+[2] R. Shrestha, D. Romero, and S. P. Chepuri, “Spectrum surveying: Active radio map estimation with autonomous UAVs,” IEEE Transactions on Wireless Communications , vol. 22, no. 1, pp. 627–641, 2023. [3] G. Chander and S. Singh. Powering AI-native 6G research with the NVIDIA Sionna research kit. NVIDIA. [Online]. Available: https://developer.nvidia.com/blog/ powering-ai-native-6g-research-with-the-nvidia-sionna-research-kit/ [4] X. Chen, J. Wang, and Q. Huang, “Dynamic spectrum cartography: Reconstructing spatial-spectral-temporal radio frequency map via tensor completion,” IEEE Transactions on Signal Processing , vol. 73, pp. 1184–1199, 2025. [5] R. Levie, C ¸ . Yapar, G. Kutyniok, and G. Caire, “RadioUNet: Fast radio map estimation with convolutional neural networks,” IEEE Transactions on Wireless Communications , vol. 20, no. 6, pp. 4001–4015, 2021. [6] D. Romero, T. N. Ha, R. Shrestha, and M. Franceschetti, “Theoretical analysis of the radio map estimation problem,” IEEE Transactions on Wireless Communications , vol. 23, no. 10, pp. 13 722–13 737, 2024. [7] D. Romero, S.-J. Kim, G. B. Giannakis, and R. Lopez-Valcarce, “Learn-ing power spectrum maps from quantized power measurements,” IEEE Transactions on Signal Processing , vol. 65, no. 10, pp. 2547–2560, 2017. [8] Y. Teganya, D. Romero, L. M. L. Ramos, and B. Beferull-Lozano, “Location-free spectrum cartography,” IEEE Transactions on Signal Processing , vol. 67, no. 15, pp. 4013–4026, 2019. [9] F. Jaensch, C ¸ . Yapar, G. Caire, and B. Demir, “Radio map prediction from noisy environment information and sparse observations,” arXiv preprint arXiv:2602.11950 , 2026. [10] F. Jaensch, G. Caire, and B. Demir, “Radio map prediction from aerial images and application to coverage optimization,” IEEE Transactions on Wireless Communications , vol. 25, pp. 308–320, 2026. [11] D. Romero, S.-J. Kim, and G. B. Giannakis, “Stochastic semiparametric regression for spectrum cartography,” in 2015 IEEE 6th International Workshop on Computational Advances in Multi-Sensor Adaptive Pro-cessing (CAMSAP) . IEEE, 2015, pp. 513–516. [12] A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, and I. Polosukhin, “Attention is all you need,” Advances in Neural Information Processing Systems , vol. 30, 2017. [13] P. Q. Viet and D. Romero, “Spatial transformers for radio map estima-tion,” in ICC 2025-IEEE International Conference on Communications .IEEE, 2025, pp. 6155–6160. [14] Z. Chen, D. Guo, N. Yang, X. Wang, H. Wang, and J. Xie, “Radio map reconstruction based on transformer from sparse measurement,” in 2024 IEEE 24th International Conference on Communication Technology (ICCT) . IEEE, 2024, pp. 917–923. [15] Y. Tian, S. Yuan, W. Chen, and N. Liu, “Transformer based radio map prediction model for dense urban environments,” in 2021 13th International Symposium on Antennas, Propagation and EM Theory (ISAPE) . IEEE, 2021, pp. 1–3. [16] C. Liaq, Y. Zheng, J. Wang, and S. Liu, “Visual transformer based unified framework for radio map estimation and optimized site selection,” IEICE Transactions on Communications , vol. E109-B, no. 1, pp. 50–64, 2026. [17] A. Pandey, R. Sequeira, and S. Kumar, “Joint localization and radio map generation using transformer networks with limited RSS samples,” in 2021 IEEE International Conference on Communications Workshops (ICC Workshops) . IEEE, 2021, pp. 1–6. [18] Z. Song, J. Yin, and L. Zhang, “Solving attention kernel regression problem via pre-conditioner,” in International Conference on Artificial Intelligence and Statistics . PMLR, 2024, pp. 208–216. [19] B. Bordelon, A. Canatar, and C. Pehlevan, “Spectrum dependent learning curves in kernel regression and wide neural networks,” in International Conference on Machine Learning . PMLR, 2020, pp. 1024–1034. [20] T. S. Cheng, A. Lucchi, A. Kratsios, and D. Belius, “A comprehensive analysis on the learning curve in kernel ridge regression,” Advances in Neural Information Processing Systems , vol. 37, pp. 24 659–24 723, 2024. [21] G. Gavrilopoulos, G. Lecu´ e, and Z. Shang, “A geometrical analysis of kernel ridge regression and its applications,” The Annals of Statistics ,vol. 53, no. 6, pp. 2592–2616, 2025. [22] P. Drineas, M. W. Mahoney, and N. Cristianini, “On the Nystr¨ om method for approximating a gram matrix for improved kernel-based learning,” 
+
+Journal of Machine Learning Research , vol. 6, no. 12, 2005. [23] A. Rahimi and B. Recht, “Random features for large-scale kernel machines,” Advances in Neural Information Processing Systems , vol. 20, 2007. [24] H. Avron, K. L. Clarkson, and D. P. Woodruff, “Faster kernel ridge regression using sketching and preconditioning,” SIAM Journal on Matrix Analysis and Applications , vol. 38, no. 4, pp. 1116–1138, 2017. [25] G. Shabat, E. Choshen, D. B. Or, and N. Carmel, “Fast and accu-rate Gaussian kernel ridge regression using matrix decompositions for preconditioning,” SIAM Journal on Matrix Analysis and Applications ,vol. 42, no. 3, pp. 1073–1095, 2021. [26] M. D´ ıaz, E. N. Epperly, Z. Frangella, J. A. Tropp, and R. J. Webber, “Robust, randomized preconditioning for kernel ridge regression,” arXiv preprint arXiv:2304.12465 , 2023. [27] B. Sch¨ olkopf and A. J. Smola, Learning with kernels: support vector machines, regularization, optimization, and beyond . MIT press, 2002. [28] B. Sch¨ olkopf, R. Herbrich, and A. J. Smola, “A generalized represen-ter theorem,” in International Conference on Computational Learning Theory . Springer, 2001, pp. 416–426. [29] J. Su, M. Ahmed, Y. Lu, S. Pan, W. Bo, and Y. Liu, “Roformer: En-hanced transformer with rotary position embedding,” Neurocomputing ,vol. 568, p. 127063, 2024. [30] Y. Li, C. Zhang, W. Wang, and Y. Huang, “RMTransformer: Accurate radio map construction and coverage prediction,” in 2025 IEEE 101st Vehicular Technology Conference (VTC2025-Spring) . IEEE, 2025, pp. 1–5. [31] E. Bollt, “Regularized kernel machine learning for data driven fore-casting of chaos,” Annual Review of Chaos Theory, Bifurcations and Dynamical Systems , vol. 9, pp. 1–26, 2020. [32] Y. Sun, P. Babu, and D. P. Palomar, “Regularized Tyler’s scatter estimator: Existence, uniqueness, and algorithms,” IEEE Transactions on Signal Processing , vol. 62, no. 19, pp. 5143–5156, 2014. [33] I. Soloveychik and A. Wiesel, “Tyler’s estimator performance analysis,” in 2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) . IEEE, 2015, pp. 5688–5692. [34] D. P. Palomar, Portfolio optimization: Theory and application . Cam-bridge, United Kingdom: Cambridge University Press, 2025. [35] P. D. Tao and E. B. Souad, “Duality in DC (difference of convex functions) optimization. subgradient methods,” in Trends in Mathe-matical Optimization: 4th French-German Conference on Optimization .Springer, 1988, pp. 277–293. [36] X. Shen, S. Diamond, Y. Gu, and S. Boyd, “Disciplined convex-concave programming,” in 2016 IEEE 55th Conference on Decision and Control (CDC) . IEEE, 2016, pp. 1009–1014. [37] T. Lipp and S. Boyd, “Variations and extension of the convex–concave procedure,” Optimization and Engineering , vol. 17, no. 2, pp. 263–287, 2016. [38] A. L. Yuille and A. Rangarajan, “The concave-convex procedure,” 
+
+Neural Computation , vol. 15, no. 4, pp. 915–936, 2003. [39] D. E. Tyler, “Statistical analysis for the angular central Gaussian distribution on the sphere,” Biometrika , vol. 74, no. 3, pp. 579–589, 1987. [40] J. F. Toland, “Duality in nonconvex optimization,” Journal of Mathe-matical Analysis and Applications , vol. 66, no. 2, pp. 399–415, 1978. [41] A. L. Yuille and A. Rangarajan, “The concave-convex procedure (CCCP),” Advances in Neural Information Processing Systems , vol. 14, 2001. [42] M. Frank and P. Wolfe, “An algorithm for quadratic programming,” 
+
+Naval Research Logistics Quarterly , vol. 3, no. 1-2, pp. 95–110, 1956. [43] A. Wiesel, “Unified framework to regularized covariance estimation in scaled Gaussian models,” IEEE Transactions on Signal Processing ,vol. 60, no. 1, pp. 29–38, 2011. [44] Y. Chen, A. Wiesel, and A. O. Hero, “Robust shrinkage estimation of high-dimensional covariance matrices,” IEEE Transactions on Signal Processing , vol. 59, no. 9, pp. 4097–4107, 2011. [45] A. Granas, J. Dugundji et al. , Fixed point theory . Springer, 2003, vol. 14. [46] S. Diamond and S. Boyd, “CVXPY: A Python-embedded modeling lan-guage for convex optimization,” Journal of Machine Learning Research ,vol. 17, no. 83, pp. 1–5, 2016. [47] L. Bottou, F. E. Curtis, and J. Nocedal, “Optimization methods for large-scale machine learning,” SIAM Review , vol. 60, no. 2, pp. 223–311, 2018. [48] Y. Saad, Iterative methods for sparse linear systems . SIAM, 2003. [49] K. Cutajar, M. Osborne, J. Cunningham, and M. Filippone, “Precon-ditioning kernel matrices,” in International Conference on Machine Learning . PMLR, 2016, pp. 2529–2538. [50] G. Chen, Y. Liu, J. Zhang, T. Zhang, K. Liu, and J. Yang, “GPRT: A Gaussian process regression based radio map construction method for rugged terrain,” IEEE Internet of Things Journal , vol. 12, no. 13, pp. 23 905–23 920, 2025.

@@ -1,0 +1,202 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-04-30T20:10:31.187370+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 5,
+    "quick_skim_target": 11,
+    "quick_selected": 5
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.25138v1",
+      "title": "Accelerating Regularized Attention Kernel Regression for Spectrum Cartography",
+      "abstract": "Spectrum cartography reconstructs spatial radio fields from sparse and heterogeneous wireless measurements, underpinning many sensing and optimization tasks in wireless networks. Attention mechanisms have recently enabled adaptive measurement aggregation via attention kernel-based formulations. However, the resulting exponential kernels exhibit severe spectral imbalance, inducing large condition numbers that render standard iterative solvers ineffective for regularized attention kernel regression. This paper proposes a Learning-based Attention Kernel Regression (LAKER) algorithm for accelerating regularized attention kernel regression in spectrum cartography. The key idea is to learn a data-dependent preconditioner that captures the inverse spectral structure of the attention kernel system, directly reducing the condition number bottleneck. The preconditioner is obtained by solving a regularized maximum-likelihood estimation problem via a shrinkage-regularized convex--concave procedure, and is integrated with a preconditioned conjugate gradient solver for efficient optimization, whose solution is used for radio map reconstruction. Extensive experiments demonstrate that LAKER significantly reduces condition numbers by up to three orders of magnitude, accelerates convergence by over twenty-fold compared to baselines, and maintains high reconstruction accuracy, establishing learning-based preconditioning as an effective approach for attention kernel regression in spectrum cartography.",
+      "authors": [
+        "Liping Tao",
+        "Chee Wei Tan"
+      ],
+      "primary_category": "math.OC",
+      "categories": [
+        "math.OC",
+        "cs.LG"
+      ],
+      "published": "2026-04-28T02:27:40+00:00",
+      "link": "https://arxiv.org/pdf/2604.25138v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "reconstructs spatial fields from sparse and heterogeneous measurements",
+      "llm_evidence_cn": "从稀疏和异构测量中重建空间场",
+      "llm_evidence": "从稀疏和异构测量中重建空间场",
+      "canonical_evidence": "从稀疏和异构测量中重建空间场",
+      "llm_tldr_en": "Accelerates spatial field reconstruction from sparse sensor data using attention kernel regression.",
+      "llm_tldr_cn": "利用注意力核回归加速从稀疏传感器数据中进行空间场重建。",
+      "llm_tldr": "利用注意力核回归加速从稀疏传感器数据中进行空间场重建。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.23262v1",
+      "title": "An Interactive Graphical Tool to Check the Coarray Continuity of Two-Fold Redundant Sparse Arrays (TFRSAs) Under Single Sensor Failures",
+      "abstract": "Two-fold redundant sparse arrays possess inbuilt redundancy to tackle single-element failures. This property enables them to perform accurate direction of arrival (DOA) estimation even during single sensor faults. However, recent literature suggests that some TFRSAs suffer from hidden dependencies whereby a single sensor fault at peculiar positions within the array cause discontinuities (holes) in the difference coarray (DCA). This violates the very idea of providing two-fold redundancy. Such hidden dependencies could prove catastrophic in many critical applications such as defense, autonomous driving, and biomedical imaging. Despite this issue, no formal tools or techniques exist to ascertain whether a given array configuration is truly twofold redundant or not. To address this gap, we provide a comprehensive framework and a first-ever graphical user interface (GUI). The GUI has been built using the features in MATLAB app designer and tested with known examples available in sparse array literature. Several numerical examples have been discussed to check the tool's response in each scenario. We conclude that the GUI is functionally accurate and can be an indispensable tool for sparse array designers in making informed choices about array configurations prior to real deployment.",
+      "authors": [
+        "Namya Malik",
+        "Ashish Patwari",
+        "Sangeetha N"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-25T12:09:16+00:00",
+      "link": "https://arxiv.org/pdf/2604.23262v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "analysis of sparse array continuity and sensor failure redundancy",
+      "llm_evidence_cn": "稀疏阵列连续性与传感器故障冗余分析",
+      "llm_evidence": "稀疏阵列连续性与传感器故障冗余分析",
+      "canonical_evidence": "稀疏阵列连续性与传感器故障冗余分析",
+      "llm_tldr_en": "Introduces a tool to check coarray continuity in redundant sparse arrays under sensor failures.",
+      "llm_tldr_cn": "介绍了一种用于检查冗余稀疏阵列在传感器失效下共阵列连续性的工具。",
+      "llm_tldr": "介绍了一种用于检查冗余稀疏阵列在传感器失效下共阵列连续性的工具。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.26095v1",
+      "title": "Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields",
+      "abstract": "{Closed-loop inverse source localization and characterization (ISLC) requires a mobile agent to select measurements that localize sources and infer latent field parameters under strict time constraints.} {The core challenge lies in the belief-space objective: valid uncertainty estimation requires expensive Bayesian inference, whereas using fast learned belief model leads to reward hacking, in which the policy exploits approximation errors rather than actually reducing uncertainty.} {We propose \\textbf{Distill-Belief}, a teacher--student framework that decouples correctness from efficiency. A Bayes-correct particle-filter teacher maintains the posterior and supplies a dense information-gain signal, while a compact student distills the posterior into belief statistics for control and an uncertainty certificate for stopping. At deployment, only the student is used, yielding constant per-step cost.} {Experiments on seven field modalities and two stress tests show that Distill-Belief consistently reduces sensing cost and improves success, posterior contraction, and estimation accuracy over baselines, while mitigating reward hacking.}",
+      "authors": [
+        "Yiwei Shi",
+        "Zixing Song",
+        "Mengyue Yang",
+        "Cunjia Liu",
+        "Weiru Liu"
+      ],
+      "primary_category": "cs.AI",
+      "categories": [
+        "cs.AI"
+      ],
+      "published": "2026-04-28T20:18:29+00:00",
+      "link": "https://arxiv.org/pdf/2604.26095v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "inverse source localization and characterization in physical fields",
+      "llm_evidence_cn": "物理场中的逆源定位与表征",
+      "llm_evidence": "物理场中的逆源定位与表征",
+      "canonical_evidence": "物理场中的逆源定位与表征",
+      "llm_tldr_en": "A teacher-student framework for efficient and accurate inverse source localization in physical fields.",
+      "llm_tldr_cn": "一种用于物理场中高效准确逆源定位的教师-学生框架。",
+      "llm_tldr": "一种用于物理场中高效准确逆源定位的教师-学生框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.26745v1",
+      "title": "Robust Model-Based Iteration for Passive Gamma Emission Tomography",
+      "abstract": "Passive Gamma Emission Tomography (PGET) is an IAEA-approved technique for verifying spent nuclear fuel assemblies prior to geological disposal. Reconstructing the emission and attenuation maps from PGET measurements is a nonlinear ill-posed inverse problem, currently solved with a Levenberg-Marquardt (LM) scheme that requires 10-20 iterations to achieve sufficient accuracy. We propose an accelerated iterative solver that combines the LM algorithm with a Deep Gauss-Newton step, in which a learned operator refines the update proposed by the deterministic algorithm at each iteration. A safeguard condition based on the trust-region model ensures that the accelerated iterates perform no worse than LM and retain convergence to a critical point of the regularized objective. Within this framework we compare three architectures for the learned component: an encoder-decoder-style convolutional neural network, Fourier Neural Operators, and Wavelet Neural Operators. Each is trained on a small set of coarsely simulated 9x9 assemblies. Experiments on simulated and real measurements from Finnish nuclear power plants show that the proposed scheme reaches LM-quality reconstructions in roughly one third of the iterations, while revealing architecture-dependent trade-offs in robustness against out-of-distribution inputs.",
+      "authors": [
+        "Tommi Heikkilä",
+        "Sara Heikkinen",
+        "Riina Rimppi",
+        "Tapio Helin"
+      ],
+      "primary_category": "math.NA",
+      "categories": [
+        "math.NA"
+      ],
+      "published": "2026-04-29T14:43:21+00:00",
+      "link": "https://arxiv.org/pdf/2604.26745v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "reconstructing emission maps from measurements as a nonlinear inverse problem",
+      "llm_evidence_cn": "将测量重建为发射图的非线性反问题",
+      "llm_evidence": "将测量重建为发射图的非线性反问题",
+      "canonical_evidence": "将测量重建为发射图的非线性反问题",
+      "llm_tldr_en": "An accelerated iterative solver for nonlinear reconstruction problems in emission tomography.",
+      "llm_tldr_cn": "一种用于发射断层扫描中非线性重建问题的加速迭代求解器。",
+      "llm_tldr": "一种用于发射断层扫描中非线性重建问题的加速迭代求解器。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.26793v1",
+      "title": "Super-resolution Multi-signal Direction-of-Arrival Estimation by Hankel-structured Sensing and Decomposition",
+      "abstract": "Motivated by sensing modalities in modern autonomous systems that involve hardware-constrained spatial sampling over large arrays with limited coherence time, we develop a novel framework for rapid super-resolution multi-signal direction-of-arrival (DoA) estimation based on Hankel-structured sensing and data matrix decomposition of arbitrary rank, under both the $L_2$ and $L_1$-norm formulation. The resulting $L_2$-norm estimator is shown to be maximum-likelihood optimal in white Gaussian noise. The $L_1$-norm estimator is shown to be maximum-likelihood optimal in independent, identically distributed (i.i.d.) isotropic Laplace noise, offering broad robustness to impulsive interference and corrupted measurements commonly encountered in practice. Extensive simulations demonstrate that the proposed methods exhibit powerful super-resolution capabilities, requiring significantly lower SNR and achieving substantially higher resolution probability than recent competing approaches.",
+      "authors": [
+        "Georgios I. Orfanidis",
+        "Dimitris A. Pados",
+        "George Sklivanitis",
+        "Elizabeth Serena Bentley"
+      ],
+      "primary_category": "cs.LG",
+      "categories": [
+        "cs.LG",
+        "eess.SP"
+      ],
+      "published": "2026-04-29T15:25:10+00:00",
+      "link": "https://arxiv.org/pdf/2604.26793v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "robustness to impulsive interference and corrupted measurements in large arrays",
+      "llm_evidence_cn": "大阵列中对脉冲干扰和损坏测量的鲁棒性",
+      "llm_evidence": "大阵列中对脉冲干扰和损坏测量的鲁棒性",
+      "canonical_evidence": "大阵列中对脉冲干扰和损坏测量的鲁棒性",
+      "llm_tldr_en": "A framework for super-resolution DoA estimation robust to interference in large sensor arrays.",
+      "llm_tldr_cn": "一种在大传感器阵列中具有抗干扰能力的超分辨率波达方向估计框架。",
+      "llm_tldr": "一种在大传感器阵列中具有抗干扰能力的超分辨率波达方向估计框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

@@ -1,0 +1,891 @@
+Title: Robust Model-Based Iteration for Passive Gamma Emission Tomography
+
+URL Source: https://arxiv.org/pdf/2604.26745v1
+
+Published Time: Thu, 30 Apr 2026 01:06:36 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Robust Model-Based Iteration for Passive Gamma Emission Tomography 
+
+# Tommi Heikkil¨ a, Sara Heikkinen, Riina Rimppi, Tapio Helin ∗† 
+
+# Abstract 
+
+Passive Gamma Emission Tomography (PGET) is an IAEA-approved technique for verifying spent nuclear fuel assemblies prior to geological disposal. Reconstructing the emission and attenuation maps from PGET measurements is a nonlinear ill-posed inverse problem, currently solved with a Levenberg–Marquardt (LM) scheme that requires 10–20 iterations to achieve sufficient accuracy. We pro-pose an accelerated iterative solver that combines the LM algorithm with a Deep Gauss-Newton step, in which a learned operator refines the update proposed by the de-terministic algorithm at each iteration. A safeguard con-dition based on the trust-region model ensures that the accelerated iterates perform no worse than LM and retain convergence to a critical point of the regularized objective. Within this framework we compare three architectures for the learned component: an encoder–decoder-style convo-lutional neural network, Fourier Neural Operators, and Wavelet Neural Operators. Each is trained on a small set of coarsely simulated 9x9 assemblies. Experiments on simulated and real measurements from Finnish nuclear power plants show that the proposed scheme reaches LM-quality reconstructions in roughly one third of the itera-tions, while revealing architecture-dependent trade-offs in robustness against out-of-distribution inputs. 
+
+Keywords: Passive gamma emission tomography, inverse problems, model-based learning, iterative reconstruction, deep learning. 
+
+# 1 Introduction 
+
+In 2026, Finland is expected to begin the long-term dis-posal of spent nuclear fuel in the world’s first deep geo-logical repository, Onkalo, located at Olkiluoto in Eura-joki [46]. As a key nuclear safeguards verification mea-sure, each nuclear fuel assembly will be examined with respect to its emission characteristics. Since late 2017, Passive Gamma Emission Tomography (PGET) has been approved by the International Atomic Energy Agency (IAEA) for the verification of spent nuclear fuel to make sure that all nuclear material remains in peaceful use [60]. Mathematically, PGET is a nonlinear inverse problem in which the spatial distributions of gamma-ray emission and attenuation within a spent nuclear fuel assembly are reconstructed from external radiation measurements. Col-limated detectors record projection data that depend on the unknown emission and attenuation values of the tar-get. The process can be formulated in to a ray-tracing         
+
+> ∗T. Heikkil¨ a, S. Heikkinen and T. Helin are with the Depart-ment of Computational engineering, LUT University, Lappeen-ranta, Finland (emails: tommi.heikkila@lut.fi, sara.heikkinen@lut.fi, tapio.helin@lut.fi ).
+> †R. Rimppi is with the Radiation and Nuclear Safety Authority (STUK), Vantaa, Finland (email: riina.rimppi@stuk.fi ).
+
+forward model which also includes the measurement ge-ometry and detector response. Recovering these quantities from noisy and incomplete data is an ill-posed problem, necessitating sophisticated reconstruction algorithms and appropriate regularization to obtain stable and physically meaningful solutions. The first PGET reconstructions of real nuclear fuel as-semblies were published in 2018 [5, 59]. The reconstruc-tion method currently used by the Finnish Radiation and Nuclear Safety Authority (STUK) is based on an itera-tive imaging algorithm developed in a series of subsequent publications [3, 57, 58, 56]. This algorithm forms the basis of the method proposed here and is described in more de-tail in section 2. Although robust and accurate, the algo-rithm is computationally demanding and usually requires at least 10-20 iterations to achieve sufficiently accurate reconstructions. The aim of this work is to accelerate the reconstruc-tion process, thereby facilitating the large-scale measure-ment and verification cycle required at the disposal fa-cility. Also, the resulting computational efficiency makes the approach well suited for integration into future statis-tical inference and uncertainty quantification frameworks. In recent years, data and learning-based approaches have shown excellent qualitative results in almost every field of science, including solving difficult linear and nonlinear in-verse problems [36, 52]. An inherent downside of many neural networks and other machine learning architectures is their limited explainability, i.e., the method typically provides limited rigorous guarantees for the proposed so-lution or the output behavior. In nuclear safeguards ap-plications, such as the verification of spent nuclear fuel assemblies prior to geological disposal, this is a notable downside. The performance of data-driven methods is also of-ten strongly dependent on the quality and quantity of the training data, especially when it comes to robustness against out-of-distribution inputs. Varied and high quality training data for PGET is limited, since real data mostly come from operating nuclear power plants (NPPs), where a variety of different fuel assembly geometries is used, but rarely contain outliers such as missing or replaced rods. On the other hand, high fidelity simulations which ac-count for scattering, spectrum of energies and varying de-tector sensitivity are often based on Monte Carlo simula-tions which makes them computationally very demanding [13, 8]. However, the rigid and simple geometry of the nuclear fuel assemblies and physical uniformity of individ-ual fuel rods also makes PGET a tempting testbed for low-fidelity synthetic data experiments. Compared to, for example positron or single photon emission tomography used in medical diagnostics, it is much easier to approx-imate the potential solution space of missing or replaced fuel rods, than the interior structure of human body. In this paper, we propose a novel iterative solver 1
+
+> arXiv:2604.26745v1 [math.NA] 29 Apr 2026
+
+for PGET, which combines the recently proposed Deep Gauss-Newton method [24, 42, 20] to improve and acceler-ate the iterates of the traditional PGET solver introduced in [3]. We also propose a safeguard condition to the it-erates to further improve the robustness, even when the training data consist of a relatively small batch of syn-thetic data of just single fuel assembly geometry. In our implementation, we compare recently proposed neural op-erator architectures in the nonlinear imaging task, namely the Fourier Neural Operators (FNO) [36] and Wavelet Neural Operators (WNO) [53]. As a baseline we have a more traditional but still effective encoder-decoder style Convolutional Neural Network (CNN), inspired by the im-plementation in [20]. The paper is organized as follows: in section 2 we give a more detailed explanation of the PGET imaging, in partic-ular the mathematical model for the measurement process, which explains design choices and results obtained. In addition, a brief description of the traditional Levenberg-Marquardt-type minimization algorithm is also given in section 2.2 as it is still needed for the model-based ap-proaches. In section 3 we discuss the model-based acceleration and introduce the safeguard procedure for the iterative scheme. Our training setup is specified in section 3.3 and the neural network and neural operator architectures are introduced in sections 3.4 to 3.6. Finally, in section 4 the results from both simulated and real data from operating nuclear power plants are illustrated and analyzed. Conclusions are given in section 5. 
+
+# 2 Passive Gamma Emission To-mography 
+
+The PGET device is a donut-shaped measurement instru-ment which houses two deeply collimated CZT gamma ray detector banks (each with 91 3.5mm × 3.5mm × 1.75mm detector elements) in a water-tight enclosure (see figure 1). Due to a small offset between the opposing detectors, mea-surements from a full rotation can be interleaved to achieve an effective detector spacing of 2 mm. Along the measure-ment plane the collimators are narrow and rectangular to limit the incoming photon angles, whereas vertically the collimators are trapezoidal for taller field-of-view and bet-ter photon statistics from farther away where the incoming signal is weaker. Each measurement records the detector counts above four energy thresholds over a set time, both pre-defined by the user. The energy thresholds can be used to limit the signal contribution to specific gamma emitting iso-topes such as 137 Cs and 154 Eu, and to rule out some of the scattered gamma rays, for example. More details on the PGET device and its development can be found in [5, 25, 59]. 
+
+# 2.1 Forward model 
+
+Given the set of noisy measurements yδ , the mathemat-ical problem is to determine both the emission values 
+
+λ : Ω 7 → R+ and attenuation values μ : Ω 7 → R+ within a bounded region Ω ⊂ R2 containing the given fuel assem-bly. The assembly can contain dozens or even hundreds of 
+
+Figure 1: Dummy fuel assembly and the PGET measure-ment device without the cover. Photo credit: Dean Calma / IAEA. highly attenuating fuel rods (spent fuel is highly emitting, whereas fresh fuel is not), possible absorber rods meant to slow down the fissile reaction at initial stages of the reactor cycle and water which is used both as coolant and neutron moderator. In the vertical direction, the materials are assumed to be uniform in emission and attenuation, but as the measurement device has a conical field of view in that direction, possible partial length rods will show as lower attenuation and emission values in the images. Therefore, we must be able to reconstruct a continuous range of values. As in [3, 57, 58], our forward operator F is the attenu-ated Radon transform [43] which models ray-tracing from every emitting location x ∈ Ω ⊂ R2 with λ(x) > 0 along a straight path to the detector at location ( s, θ ) ∼ sθ⊥+rΩθ,where θ is the unit vector corresponding to angle θ and 
+
+rΩ is a radius large enough such that Ω ⊂ B(0 , r Ω). The intensity of the emission decays exponentially according to the Beer-Lambert law, based on the linear attenuation coefficients μ(z), z ∈ Ω along the ray: 
+
+F : L2(Ω) × L2(Ω) → L2(R × S1), where 
+
+F (λ, μ )( s, θ ) = y(s, θ )=
+
+Z
+
+> R
+
+λ(sθ⊥ + tθ)e−Bμ (sθ⊥+tθ,θ )dt, (1) and Bμ (x, θ ) = R ∞ 
+
+> 0
+
+μ(x + τ θ)dτ denotes the beam trans-form . The operator F is linear in emission λ but nonlinear in attenuation μ, and is well-known to be Fr´ echet differ-entiable. The corresponding Fr´ echet derivatives are given by 
+
+DλF (λ, μ )[ δλ ] = F (δλ, μ )
+
+DμF (λ, μ )[ δμ ] = −F  λ B (δμ ), μ , (2) as shown in [11, 50], for example. In particular [11] pro-vides a detailed analysis of the smoothness properties of the attenuated Radon transform. For convenience, we show a much simplified result: 
+
+Lemma 2.1. Assume all emission and attenuation maps 
+
+λi, μ i ∈ L2(R2) are non-negative, bounded and supported in Ω ⊂ BΩ := B(0 , r Ω) for some rΩ > 0, then the Fr´ echet derivative of F is Lipschitz continuous with 
+
+∥DF (λ1, μ 1) − DF (λ2, μ 2)∥op 
+
+≤2√πr Ω(1 + Cλ) ( ∥λ1 − λ2∥L2 + ∥μ1 − μ2∥L2 ) ,
+
+where Cλ is the upper bound on √2rΩλ(x).
+
+2Proof. We can write 
+
+∥DF (λ1, μ 1)[ δλ, δμ ] − DF (λ2, μ 2)[ δλ, δμ ]∥2
+
+≤ ∥F (δλ, μ 1) − F (δλ, μ 2)∥2
+
+| {z }
+
+> I1
+
++ ∥F (λ2B(δμ ), μ 2) − F (λ1B(δμ ), μ 1)∥2
+
+| {z }
+
+> I2
+
+.
+
+First we need an estimate for the exponential. For any 
+
+t ∈ R, e t ≥ 1 + t. Without loss of generality assume u > v ≥ 0, then 
+
+|e−u − e−v | = e−v − e−u = e−v (1 − ev−u)
+
+≤ 1 − ev−u ≤ v − u. (3) We also need an estimate for the beam transform which is based on the bounded support of the functions. For any 
+
+θ ∈ [0 , 2π) and s, denote γ(t) = γs,θ (t) = sθ⊥ + tθ. Then 
+
+Z rΩ
+
+> −rΩ
+
+|Bf (γ(t), θ )|2dt ≤
+
+Z rΩ
+
+> −rΩ
+
+Z 2rΩ
+
+> 0
+
+|f (γ(t) + τ θ )|2dτ dt 
+
+≤ 2rΩ
+
+Z rΩ
+
+> −rΩ
+
+|f (γ(t)) |2dt, (4) because no matter the angle θ, the functions are always supported on a strip of width at most 2 rΩ.In what follows, we abbreviate δλ = δλ (γs,θ (t)), μi =
+
+μi(γs,θ (t)) and Bμ i = Bμ i(γs,θ (t), θ ) for convenience. Given μi are non-negative, Bμ i ≥ 0 anywhere and we can use (3), Cauchy-Schwarz and (4) to estimate 
+
+I21 ≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+Z 
+
+> R
+
+δλ  e−Bμ 1 − e−Bμ 2  dt 
+
+2
+
+ds dθ 
+
+≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+Z rΩ
+
+> −rΩ
+
+δλ B (μ1 − μ2) dt 
+
+2
+
+ds dθ 
+
+≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+2rΩ
+
+Z rΩ
+
+> −rΩ
+
+δλ 2dt 
+
+Z rΩ
+
+> −rΩ
+
+μ2 − μ1
+
+> 2
+
+dt ds dθ 
+
+= 4 πr Ω∥δλ ∥22 ∥μ2 − μ1∥22.
+
+Similarly we can use Cauchy-Schwarz, (3) and (4) to estimate 
+
+I22 ≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+Z rΩ
+
+> −rΩ
+
+Bδμ  λ2e−Bμ 2 − λ1e−Bμ 1  dt 
+
+2
+
+ds dθ 
+
+≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+Z rΩ
+
+> −rΩ
+
+|Bδμ |2 dt 
+
+Z rΩ
+
+> −rΩ
+
+λ2e−Bμ 2 − λ1e−Bμ 1 2dt ds dθ 
+
+≤
+
+Z 2π
+
+> 0
+
+Z
+
+> R
+
+2rΩ
+
+Z rΩ
+
+> −rΩ
+
+|δμ |2 dt ×
+
+Z rΩ
+
+> −rΩ
+
+λ2
+
+ e−Bμ 2 − e−Bμ 1  2 + e−Bμ 1  λ2 − λ1
+
+ 2dt ds dθ. 
+
+Then apply again equations (3), (4) and the boundedness of λ2 to estimate 
+
+Z rΩ
+
+> −rΩ
+
+λ2
+
+ e−Bμ 2 − e−Bμ 1  2 + e−Bμ 1  λ2 − λ1
+
+ 2dt 
+
+≤
+
+Z rΩ
+
+> −rΩ
+
+∥λ2∥2 
+
+> ∞
+
+Bμ 2 − Bμ 1
+
+> 2
+
++ λ2 − λ1
+
+> 2
+
+dt 
+
+≤ 2rΩ∥λ2∥2
+
+> ∞
+
+Z rΩ
+
+> −rΩ
+
+μ2 − μ1
+
+> 2
+
+dt +
+
+Z rΩ
+
+> −rΩ
+
+λ2 − λ1
+
+> 2
+
+dt. 
+
+Therefore 
+
+I22 ≤ 2rΩ
+
+Z 2π
+
+> 0
+
+∥δμ ∥22
+
+ 2rΩ∥λ2∥2
+
+> ∞
+
+∥μ2 − μ1∥22 + ∥λ2 − λ1∥22
+
+ dθ 
+
+= 4 πr Ω∥δμ ∥22
+
+ 2rΩ∥λ2∥2
+
+> ∞
+
+∥μ2 − μ1∥22 + ∥λ2 − λ1∥22
+
+
+
+≤ 4πr Ω∥δμ ∥22
+
+ √2rΩ∥λ2∥∞∥μ2 − μ1∥2 + ∥λ2 − λ1∥2
+
+2 .
+
+Although we formulate the model and the neural op-erator architectures in the continuous setting, i.e. using functions and operators, discretization is required in prac-tical computations. The forward model is discretized as 
+
+λ, μ ∈ RNpx and 
+
+yn =
+
+> Npx
+
+X
+
+> m=1
+
+λ[m]rm,n exp 
+
+−cm,n Npx 
+
+X
+
+> k=1
+
+dm,n,k μ[k]
+
+ . (5) Here the values 0 ≤ rm,n ≤ 1 give the probability that a photon emitted randomly from pixel m reaches the col-limated detector at angle θn and offset sn; cm,n ≥ 1 are correction factors due to the vertical opening angle since the detector catches far-away emissions further above and below the central imaging plane and those rays have to travel diagonally through the attenuating medium; and 
+
+dm,n,k are the distances a ray from m to n covers within pixel k on the plane. Values for r, c and d can be pre-computed, and the emission and attenuation maps λ, μ 
+
+are rotated by the given angle θn when each projection is computed. The Jacobians wrt. discrete λ and μ would follow in similar fashion from equation (2). The forward model in equation (1) leads to the nonlinear least squares problem which we enhance with constrains 
+
+C and regularization terms P1 and P2 [12]: arg min 
+
+> (λ,μ )∈C
+
+12 F (λ, μ ) − yδ 22 + α1 P1λ 22 + α2 P2μ 22. (6) We use the same priors as in [3], namely the combination of linear and box bounds (e.g. low attenuation but highly emitting materials are not allowed, since those do not nat-urally appear in any part of the fuel assembly) and projec-tions P1 and P2 which penalize emission and attenuation values which are outside the approximate potential loca-tions of the fuel rods given the known or predetermined fuel geometry. However, we do not assume that any rod location is filled a priori. The regularization parameters 
+
+α1, α 2 > 0 balance the strength of the geometry priors. 
+
+# 2.2 Levenberg-Marquardt Algorithm 
+
+The Levenberg-Marquardt (LM) trust region algorithm [28] is a well known method for minimizing nonlinear least-squares problems. Here we give a brief explanation follow-ing the earlier notation of the continuous setting. At k’th iterate we can stack the unknown emis-sion and attenuation by uk = (λk, μ k), the For-ward operator and regularization operators by ˜F (u) =  F (λ, μ ), α 1P1(λ), α 2P2(μ), the data terms by ˜y =(yδ , 0, 0) and denote the derivative of ˜F at uk by 
+
+D ˜F (uk) = ˜F ′ 
+
+> k
+
+(which now contains both the data mis-match and regularization terms). We linearize the prob-lem at uk and recover the update step sk from 
+
+−  ˜F (uk) − ˜y =: −rk ≈ ˜F ′
+
+> k
+
+[uk+1 − uk] = ˜F ′
+
+> k
+
+[sk]. (7) 3In consequence, for every iterate k, the update minimizes an objective function 
+
+mk(s) = 12 ∥rk∥2 + ⟨ ˜F ′
+
+> k
+
+s, r k⟩ + 12 ∥ ˜F ′
+
+> k
+
+s∥2, (8) which we assume to provide a good approximation inside 
+
+a trust region ∥s∥ ≤ ∆k. The linearized problem (7) in-herits the regularization from the projections α1P1, α 2P2,which can have a non-trivial null space and do not neces-sarily stabilize F ′ for arbitrary search direction s. There-fore, instead of minimizing (8) with a constraint on s, the objective function is further regularized using a Tikhonov-type penalty with a step-dependent weight (called the LM parameter) βk ≥ 0. Hence, the update step is 
+
+sk = arg min  
+
+> s∈˜C
+
+˜F ′
+
+> k
+
+[s] +   ˜F (uk) − ˜y 22
+
++ βk s 22 (9) = arg min  
+
+> s∈˜C
+
+ ˜F ′
+
+> k
+
+√βkI
+
+
+
+s +
+
+rk
+
+0
+
+ 22
+
+.
+
+Here the constrained set ˜C is set up such that uk+1 =
+
+uk + sk ∈ C is still satisfied. For every iterate a line search for good descent step is performed and the parameter βk
+
+is tuned accordingly [28]. For βk = 0 it corresponds to the Newton’s method. This constrained optimization task is done using the scaled gradient projection [6]. More details on the formulation can be found in [22] and from now on we simply write LMA( uk) = sk
+
+for the update step proposed by the deterministic algo-rithm. Using the current iterate uk and corresponding sk
+
+we want to learn a better update step ˜ sk to speed up the iteration. The LM method can be considered a regulariza-tion scheme, but its convergence (as noise level decreases) for general ill-posed inverse problems is not automatic, see [19] and references therein. Here we only use the standard trust region approach and do not consider this validation. 
+
+# 3 Acceleration with Deep Gauss-Newton 
+
+The Deep Gauss-Newton method, introduced in [20, 42] and inspired by [1], uses a learned update func-tion Gθk at each iteration to improve the traditional gradient or Gauss-Newton step coming from the min-imization of model-based term such as data mismatch 
+
+f (uk) = ∥F (uk) − yδ ∥2. Then instead of updating 
+
+uk+1 = uk + γ∇f (uk) at every iterate k, we do uk+1 =
+
+Gθk (uk, ∇f (uk)). A separate network is needed for every iterate, but the architecture is usually kept fixed. The purpose of this approach is to achieve high-quality reconstruction with fewer iterations. In our case we com-pute the proposed step sk with a deterministic algorithm, such as LMA in Section 2.2. Both the current point and proposed step are fed as input ak = ( uk, s k) to a deep learning algorithm of choice. Output of the deep learn-ing algorithm should be a better update than sk since it is trained to produce an output that approximates the ground truth of the sample u†. The new iterate uk+1 
+
+is then fed to the deterministic algorithm to get sk+1 to 
+
+Algorithm 1 LMA + Deep Gauss-Newton Given initial guesses and ground truths  u(n); u†
+
+> (n)
+
+Nsamples 
+
+> n=1
+
+in the training data. 
+
+k = 0 Iterate while (k < k max ): 
+
+• Compute traditional update steps 
+
+s(n) = LMA( u(n)), for n = 1 , . . . , N samples 
+
+with the deterministic algorithm and initialize the training data: Dk =  (u(n), s (n); u†
+
+> (n)
+
+)Nsamples  
+
+> n=1
+
+.
+
+• Given ϕn ∼ U [−5◦,5◦], for n = 1 , . . . , N samples , pre-pare random rotation matrices Rϕn for perturbing the inputs and ground truths. 
+
+• train Gθk : (u, s ) 7 → ˜u by minimizing the Mean Squared Error loss: 
+
+> Nsamples
+
+X 
+
+> n=1 1
+> Nsamples
+
+Gθ (Rϕn u(n), R ϕn s(n)) − Rϕn u†
+
+> (n)
+> 22
+
+.
+
+• Obtain parameters θk for the kth network. 
+
+• Evaluate test data and update training data (without random rotations Rϕ): 
+
+u(n) = Gθk (u(n), s (n)) for n = 1 , . . . , N samples .
+
+• Next iteration: k = k + 1. obtain new input ak+1 = ( uk+1 , s k+1 ) and so on. An overview of the training process is seen in Algorithm 1. The network steers the reconstruction toward the ground truth, as these values are used as targets during training. While this may override the update step of the standard LMA method, it can also help correct modeling errors introduced, for example, by regularization. How-ever, we note that the training data is simulated using the same approximate forward operator and lacks the effect of scattering, for example. The deep learning network, defined as Gθk : ( u, s ) 7 →
+
+˜u can be based on different architectural choices. The different neural network or operator architectures applied in this study are CNNs, FNOs and WNOs, which will be explained in detail in sections 3.4, 3.5 and 3.6, respectively. The deep Gauss-Newton partly overlaps with the re-lated and popular Plug-and-Play (PnP) framework [55, 27], which is inspired by forward-backward splitting and proximal gradient algorithms which minimize problems of form f (u)+ g(u) by iterating uk+1 ← prox g (uk −∇ f (uk)). If g is a (nonsmooth) regularizer, its proximal operator looks like a denoiser and replacing it with a learned de-noiser or operator leads to the PnP formulation uk+1 ←
+
+Gθ (uk − ∇ f (uk)). The PnP formulation more explicitly replaces the regularization term g with a learned compo-nent, whereas the deep Gauss-Newton can include the reg-ularizer in the gradient sk = ∇f (uk) + ∇g(uk) as long as it is smooth. Unlike our method, the convergence of PnP schemes are often based on fixed point iteration theory 4and building nonexpansive architectures [49, 45, 7]. Let us also mention other related methods, such as Learning to Optimize (L2O) [9] and algorithm unrolling [41] and in particular, their safeguarded variants [21, 47, 14] which we will closely touch upon in the next section. 
+
+# 3.1 Convergence 
+
+In general, we can no longer guarantee convergence of the Deep Gauss–Newton iterates. However, by theorem 2.1, the Fr´ echet derivatives (and hence the Jacobians) are well behaved, and the LM algorithm retains certain prov-able convergence properties even with approximate update steps [28, 44]. In particular, the following statement holds. 
+
+Theorem 3.1 (Thm. 10.3, [44]) . Let η ∈ (0 , 14 ) in Al-gorithm 4.1 in [44, Chapter 4], and suppose that the level set L = {u | f (u) ≤ f (u0)} is bounded and that the resid-ual functions rj (·), j = 1 , . . . , m are Lipschitz continuously differentiable in a neighborhood of L. Assume that for each 
+
+k, the approximate solution sk of equation (9) satisfies the inequality 
+
+mk(0) − mk(sk) ≥ c1 ˜F ′∗ [rk] min 
+
+(
+
+∆k, ∥ ˜F ′∗ [rk]∥∥ ˜F ′∗ ˜F ′∥
+
+)
+
+,
+
+(10) 
+
+for some constant c1 > 0, and in addition ∥sk∥ ≤ γ∆k for some constant γ ≥ 1. We then have that 
+
+lim 
+
+> k→∞
+
+˜F ′∗ [rk] = 0 . (11) Hence, we propose the following convergence condition which guarantees that the accelerated iterates converge to a critical point. 
+
+Proposition 3.2. Assume LMA : uk 7 → sk computes the Levenberg-Marquardt trust region algorithm update steps to minimize the objective functional f : X → ˙R, with the LM parameter βk and trust region update scheme similar to [44, Algorithm 4.1] which follows the assumptions of theorem 3.1. For an operator G : ( u, s ) 7 → u + L(s) ⊙ g(u, s ) with bounded and linear L : X → X and bounded g : X × X →
+
+X, let 
+
+sk = LMA( uk), ˜uk = G(uk, s k),
+
+˜sk = G(uk, s k) − uk and 
+
+ρk(s) = f (uk) − f (uk + s)
+
+mk(0) − mk(s) . (12) 
+
+Then for fixed κ > 0 the iterates 
+
+uk+1 =
+
+(
+
+˜uk, if mk( ˜ sk) ≤ mk(sk) and ρk(˜ sk) > κ uk + sk, otherwise , (13) 
+
+converge to a critical point of f .Proof. The condition in equation (13) guarantees that the updates to uk always satisfy the inequality (10), and there is a meaningful decrease in f .The LM-trust region algorithm [28] is based on sufficient agreement between f and mk such that 
+
+f (uk) − f (uk + sk)
+
+mk(0) − mk(sk) = ρk(sk) > η, 
+
+⇒ f (uk) − f (uk + sk) > η (mk(0) − mk(sk)) for the step sk and parameter βk to be accepted in the first place. And if ρk(˜ s) > κ , then 
+
+f (uk) − f (uk + ˜ sk) ≥ κ (mk(0) − mk(˜ sk)) .
+
+Therefore 
+
+f (uk) − f (uk+1 ) ≥ min {κ, η } (mk(0) − mk(sk)) .
+
+This means that the objective function values should de-crease monotonically and not stall, unless sk → 0. Given the assumptions and theorem 2.1, we can apply theorem 3.1 which implies that the gradients ∇f (uk) = 
+
+F ′∗ 
+
+> k
+
+[rk] → 0, where we denote the derivative ˜F ′ 
+
+> k
+
+= D ˜F (uk)and the residual rk = ˜F (uk) − ˜y. By equation (9) 
+
+sk = arg min  
+
+> s∈˜C
+
+˜F ′
+
+> k
+
+[s] + rk
+
+> 22
+
++ βk s 22
+
+= arg min  
+
+> s∈˜C
+
+∥ ˜F ′
+
+> k
+
+[s]∥22 + 2 ⟨s, ˜F ′∗  
+
+> k
+
+[rk]⟩
+
+| {z }
+
+> →0
+
++∥rk∥22 + βk∥s∥22,
+
+which implies that the LMA updates sk, evaluated at uk
+
+tend to zero as k → ∞ . Since G(uk, s k) = uk + L(sk) ⊙
+
+g(uk, s k), where ⊙ denotes the elementwise product and L
+
+and g are bounded, then L(sk) ⊙ g(uk, s k) → 0 as well and 
+
+uk+1 converge to a critical point where ∇f (u∗) = 0. We note that the proposition only assumes that the op-erator g (i.e. the neural network or operator architecture) is bounded. Yet, if Gθ does not map the iterates towards a sufficient decrease in mk and f , the accelerator is skipped completely and the original LMA iterate is used as a safe-guard to retain convergence. In such a case we may choose to pass the traditional iterate uk+1 = uk + sk to either the next network Gθk+1 or retry the previous one Gθk . In practice, as g is trained using ground truth data u† while the LMA drives towards the regularized solution u∗ (with fixed α), a mismatch in objectives arises. In consequence, one should terminate the iteration early according to e.g. the discrepancy principle. In our implementation, we opted to decreasing the reg-ularization parameter values by a factor of 5 after every iterate: α(k) = ( α1, α 2)/5k and assumed the accelerator 
+
+Gθk would act as an implicit regularizer on the iterates. We did halt the decrease for some k onward to keep f
+
+fixed, as the convergence of this kind of fixed-point contin-uation method does not follow automatically for the LM-algorithm and hence theorem 3.2 only applies after fixed 
+
+α. Extending the convergence of LMA to changing val-ues of αk along the lines of [15, 16, 18] or other means of tailoring u∗ towards u† would be interesting in the future. The whole scheme is summarized in algorithm 2. We can think of the pointwise multiplication with L(sk)as a mask, which limits the potential updates of the neural network or operator to points updated by the determinis-tic algorithm. Alternatively, since sk is a descent direction, the diagonal matrix Dk = diag( gθ (ak)) could be consid-ered a learned preconditioner or adaptive method [30, 37, 35, 14]. In particular [14] considers general learned ma-trix preconditioners which are not necessarily symmetric positive definite, similar to our case. Compared to many safeguarded L2O methods such as [21, 14, 47], our method requires monotonicity in objective function values due to (12). However, the trust-region framework should offer adaptivity at iterates where the Jacobian is especially ill-conditioned. 5Algorithm 2 Accelerated iteration scheme with checks. Given initial input u0, trained neural networks or opera-tors Gθk for k = 1 , . . . , k max and discrepancy parameter 
+
+κ > 0. Iterate while (k < k max ): 
+
+• Compute traditional update step 
+
+sk = LMA( uk)with the deterministic algorithm, given regularization parameters αk, 1, α k, 2.
+
+• Compute model-based update ˜u = Gθk (uk, s k),
+
+˜s = ˜ u − uk.
+
+• Compute ρ(˜ s) as in equation (12) and mk(·) as in equation (8). 
+
+if ρ(˜ s) > η and mk(˜ s) ≤ mk(sk), then 
+
+uk+1 = ˜ u, 
+
+else , skip the accelerator 
+
+uk+1 = uk + sk.
+
+• Next iteration: k = k + 1. 
+
+# 3.2 Common structure 
+
+In this study we compare recent neural operator archi-tectures in a regime where training data are scarce and synthetic. Accordingly, all models were constructed with comparable architectures and trained and evaluated on identical datasets. The input to each model was always 4 images of size 165 × 165 pixels, containing the concate-nated emission and attenuation maps and the proposed iterate: a = ( λ, μ, s λ, s μ). The model output was always 2 images (emission and attenuation) of size 165 × 165. How-ever, since the forward model in (5) only considers the central disk within the images, all values outside the disk were always masked to zero in order to have reliable error and loss metrics. By design, the deterministic algorithm solves a con-strained optimization problem and hence the values of the proposed LMA iterate uk + sk are always within pre-determined physical bounds (i.e. [0 , λ max ] and [0 , μ max ]) for emission and attenuation. When experimenting with training the models, we found it beneficial to normalize the inputs using the respective upper bounds. The model out-put was always rescaled back, but nothing in the structure of the networks explicitly forces the values to be within those bounds. 
+
+# 3.3 Training setup 
+
+All neural networks and operators were trained with the same simulated data. We initialized 1200 samples of emis-sion and attenuation data where the rods are in a rectan-gular 9 ×9 pattern (mimicking the real 9x9 geometry [56]). The exact rod locations were slightly perturbed by a ran-dom amount to simulate the deformations seen in the real fuel due to the extreme environment inside an operating nuclear reactor. To avoid inverse crime, the emission and attenuation images were generated at twice the spatial res-olution and downsampled during the forward projection step. Each individual fuel rod has a random emission value chosen from a uniform distribution in the interval [6 .5 ·
+
+10 5, 7·10 5] and an attenuation value in [0 .12 , 0.14] (1 /mm). Water always has an attenuation value of 0 .0085 and no emission. Of the 1200 ’standard’ samples, 200 samples have all 81 rods present, 500 samples have 1 to 6 random rods missing (replaced by water) and 500 samples have 5 to 6 random rods replaced by non-emitting rods (simulating fresh fuel). The projection data were corrupted with 2% Gaussian noise. From these 1200 samples, 1000 were used for training and 200 for validation. During the experiments, we added 200 samples of ’medium’ difficulty to the training data. It contains a mix of 1 to 20 missing and replaced rods, where the at-tenuation value of a replaced rod (no emission) and the emission value of a present rod can be as low as 70% of the maximum value. However, the attenuation value of an emitting rod was always within the original interval to re-main consistent with the physical bounds expected of the rods. Finally, since the real data are not oriented exactly in the image domain (although the data preprocessing tries to do so), we randomly rotate both input and ground truth emission and attenuation image pairs (by up to ±5◦) dur-ing training of the networks. This way the final network should be more tolerant to imperfectly aligned input im-ages. All models were built using PyTorch [2], had roughly the same number of parameters, and an Adam optimizer [29, 61] with weight, decay i.e. Tikhonov regularization, was employed for the training. 
+
+# 3.4 Convolutional Neural Network 
+
+CNNs are deep learning models that automatically ex-tract hierarchical features from structured data, especially images [34]. They effectively capture spatial dependen-cies while significantly reducing the number of trainable parameters compared to fully connected networks [61]. Through layers of convolution, nonlinear activation, and pooling, CNNs progressively translate low-level patterns into high-level semantic representations. A single convolutional operation [61] for a two-dimensional matrix input v and output u is given as 
+
+u[i] = σ (b + ( w ∗ v)[ i]) , i = 1 , 2, . . . , N (14) where v[i] := v(xi) are the pixels of discretized sample at xi, σ is the ReLU [29] activation function following the two-dimensional convolution ∗ with 5 × 5 convolution kernels. The network’s trainable parameters are denoted by θ, including kernel parameters w and bias vectors b.The linear operator L from theorem 3.2 was also set to 5 ×5convolution layer without any bias or activation function. In total, the CNN model had 28 104 trainable parameters. All the subsequent CNNs for other iterates have their own trainable parameters θk.6The neural network approach employs an en-coder–decoder architecture [4, 61], a paradigm that con-verts input data into a compact latent representation and reconstructs the target output from it. The encoder cap-tures the most relevant features through successive con-volutional layers, while the decoder restores spatial reso-lution or produces structured predictions from the latent representation. The simplified structure of the CNN used is shown in figure 2. The number on each block indi-cates the number of data channels which first increase as the spatial resolution decreases (encoding phase) and af-ter combining the latent forms, this process is reversed (decoding phase). 
+
+u
+
+s         
+
+> 2816 32
+> 2816 32
+> +
+> 32 16 82
+
+⊙
+
+> 2
+> +
+
+˜u
+
+> ReLU(conv2d)
+> conv2d
+> ReLU
+> skip connection
+
+Figure 2: Visualization of the convolutional neural net-work architechture. The dark solid arrows represents a convolutional layer followed by ReLU activation function, the light solid arrow represents a convolutional layer fol-lowed by an element-wise multiplication. The skip connec-tion update (dark dashed arrow) is projected to the pos-itive numbers by ReLu activation function (light dashed arrow). 
+
+# 3.5 Fourier Neural Operators 
+
+FNOs are recently introduced neural networks [36] which aim at approximating the point samples of infinite di-mensional mappings, i.e. operators, in a resolution or mesh free way. They have shown great numerical accuracy in solving extremely difficult partial differential equations (PDEs) such as turbulent regime Navier-Stokes equations [52]. An FNO is a parametrized mapping of the form 
+
+Gθ = Q ◦ FL ◦ · · · ◦ F1 ◦ P : a(x) 7 → u(x), (15) where the key component are the FNO layers Fl, which are special convolution layers defined as 
+
+Fl : vl 7 → σ
+
+
+
+A(vl) + F−1
+
+R ⊙ F vl
+
+ 
+
+= vl+1 , (16) via the convolution theorem: convolution corresponds to pointwise multiplication ⊙ on the Fourier domain. Here 
+
+R = Rθ,l ∈ Cr are the learnable convolution filter coeffi-cients on the Fourier domain (alternatively we can think of R as a diagonal matrix in Cr×r), A = Aθ,l ∈ Rw is a linear operator (matrix) acting on the channels of the input vl and σ is the nonlinear activation function. The P and Q operators are known as lifting and projection operators, respectively. These are simple,   
+
+> Layer ℓQ
+
+# . . . Layer 1 P(u, s )
+
+⊙localFNO +    
+
+> ˜u
+> vF−1(R⊙ F (v)) ( x)
+> Av (x)+
+> σ
+> FNO layer
+
+Figure 3: Illustration of the FNO architecture with initial lifting layer P , ℓ FNO layers and final projection layer 
+
+Q. Each FNO layer performs spatial convolutions on the Fourier domain at a fixed bandwith and the linear operator 
+
+A mixes the spatial points channel-wise. parametrized multilayer perceptrons (MLPs) which in-crease and decrease the channel dimension of any input to a predefined width, whereas the FNO layers Fl are able to operate in parallel on those channels. The general form of applied FNO architecture is shown in figure 3. Since 
+
+P, Q and each Al only operate along channels, indepen-dent of length of the input vector, the sampling resolution does not matter. And by computing the convolution on the Fourier domain, the (discrete) Fourier transform of fixed bandwidth r and its inverse automatically upsample and downsample the input as needed. It is worth noting that by construction, the convolutions favor low-pass structure and frequency components higher than r can only carry from previous layer via Al or be introduced by the nonlinearity σ. While FNOs have seen a lot of activity in the PDE domain [36, 52], their use in imaging tasks has been more limited, c.f. [38, 10, 26]. Historically, the Fourier transform has been a key tool for solving various differential equations, whereas many image classes are characterized by local features and sharp edges and therefore better handled by local convolution filters, wavelets and CNNs, c.f. [17, 40, 62]. This has motivated a variety of other neural operator architectures [38, 53, 48]. We used the NeuralOperator library [32, 31] to imple-ment our FNO model. We chose GELU activation func-tions [23], 3 FNO layers, each with 12 hidden channels, 20 × 20 frequency bands restricted to rank of at most 15% and 8 lifting and projection channels, respectively. The linear operator L from theorem 3.2 was set to a single local FNO layer [39] with no bias or activation, 5 × 5 con-volution kernel and a linear skip connection. In total, the model had 30 532 tunable parameters. The FNO had noticeably more trouble with the real data, so during training we added small amounts of (0 .1% relative) white Gaussian noise to every input image, which seemed to improve the results. We assume that by con-struction the FNO layers are challenged by the task of sep-arating measurement noise and scattering from the high frequency structures in the images, since such errors are not present in the simulated data. An example can be seen in the FNO images of the ATRIUM-10 data in figure 8. 73.6 Wavelet Neural Operators 
+
+WNOs are a recently introduced [53] family of neural oper-ators, which have a general structure similar to FNOs (see equation (15)), but the Fourier-based convolution layers in equation (16) are replaced with a learned wavelet-based integral operators or WNO layers of form 
+
+vl(x) 7 → σ
+
+
+
+A(vl) + W−1
+
+R(Wvl)
+
+ 
+
+(x) = vl+1 (x), (17) where R ∈ Rr×r is a learned linear operator, in general ei-ther a diagonal matrix or a convolution matrix and the size 
+
+r is given by the number of retained wavelet coefficients in Wvl. By restricting the (discrete) wavelet transform only to the detail and approximation coefficients at some coarse resolution scale, the integral operator acts on an intermediate scale between the original pointwise samples in vl and the global sinosoids of the Fourier transform Fvl.Since the wavelet transform is not shift invariant and can not have a convolution theorem [51], the operation 
+
+W−1 R(Wvl) does not correspond to a convolution of 
+
+vl. However, as shown in [33], as long as the underlying transform can represent the constant function, a universal approximation is possible. Similarly, because the discrete wavelet transform is sensitive to shifting and uses dyadic scaling (where the next coarser resolution scale always contains half as many coefficients along each dimension), resolution invariance should only hold (even approximately) if the input resolu-tions are multiples of a power of two: Ni = N 2i and the depth of the wavelet transform is set adaptively to match 
+
+i such that the same wavelet scale is always used indepen-dent of the original input resolution. At least the WNO implementation [53, 54] used in this study is not adaptive and hence technically not resolution invariant. However, for this study it does not matter as we only consider fixed input resolution. We chose GELU activation functions [23], 2 WNO lay-ers, each with 12 hidden channels, 3 level Daubechies-3 discrete wavelet transform and 5 × 5 convolution kernels applied separately to the approximation coefficients and the three different directional detail coefficient subbands. The linear operator L from theorem 3.2 was set to be the identity. In total, the model had 29 330 tunable parame-ters. 
+
+# 4 Results 
+
+In this section we briefly cover the resulting reconstruc-tions from the CNN and different neural operators. We tested the network performance on simulated data, which were generated in a similar manner to the training data (see section 3.3), but which vary in difficulty. We expected some of the very unusual simulated data to indicate how well the neural network has generalized, but as the real data examples show, this is not always enough to guaran-tee robust output. The relative errors of the different emission and atten-uation images are shown in figure 4 corresponding to the simulated data shown also in figures 5 to 7. For com-parison, the plot also includes errors for running the LM-algorithm for 7 iterations without acceleration, and the 
+
+Figure 4: Relative errors of the emission and attenuation images for 5 iterates with different methods and simulated datasets. The errors of the LM-algorithm after 15 itera-tions are also shown in dark gray for comparison. resulting error after 15 iterations to indicate the quality of the traditional algorithm after a sufficiently long run. The ground truth images and accepted iterates for two samples of two simulated datasets are shown in figure 5 for the CNN, in figure 6 for the FNO and in figure 7 for the WNO. In each figure, if the accelerated iterate ˜ uk did not satisfy the condition of equation (13), the image is framed with red dashes. The figures show only the central section of the image with the fuel rods, but the relative ℓ2-errors in figure 4 are computed from the whole image. 
+
+# 4.1 Simulated test data 
+
+The simulated data is split into following categories. 
+
+• ’Standard’: 200 samples used for evaluation during training. Randomly picked from the 1200 samples (remaining 1000 used for training). 
+
+• ’Hard’: 10 samples generated similar to the ’medium’ difficulty but with more rods missing and replaced and larger variations in emission and attenuation val-ues. 
+
+• ’Extreme’: 4 handcrafted samples with very few rods in particularly difficult arrangements. The simulated sinograms were corrupted with 2% white Gaussian noise. But unlike the training data, the test data was not affected by additional noise between iterations or random rotations. All methods greatly accelerated the initial iterate of the ’hard’ data which closely matches the training data. This first step already noticeably helps both the LMA and the accelerated step that follow. Still, the attenuation images often correlate too strongly with the emission images and rods simulating fresh fuel (non-emitting but still attenuat-ing) are often still missing, c.f. the top- and bottom-right corner rods in figures 5 to 7. 8’Hard’ data      
+
+> Ground truth Iter 1 Iter 2 Iter 3 Iter 4 Iter 5
+> λ
+> μ
+> ’Extreme’ data
+> λ
+> μ
+
+Figure 5: CNN iterates on one sample from ’Hard’ and ’Extreme’ test data sets. If the LMA iterate is accepted in place of the model’s proposition, the image is framed with red dashes. The handmade ’extreme’ sample was more troublesome, the initial iterates were closer to those of the LMA and especially the non-emitting rods in the middle were par-ticularly difficult to reconstruct. Even though the relative 
+
+ℓ2-errors are similar between emission and attenuation im-ages, visually the attenuation images are of lower quality and some rods would likely be misclassified. 
+
+# 4.2 Real data 
+
+Thanks to the Finnish Radiation and Nuclear Safety Au-thority (STUK), we had access to an ample amount of real measurements from Finnish NPPs, in a variety of in-teresting configurations and assembly geometries. In fig-ure 8 the final (i.e. 5th) iterate obtained with the different methods is shown for two rectangular (9x9 and ATRIUM-10) and one hexagonal (VVER-440) fuel assemblies. For comparison, the LM-algorithm results after 15 and 5 iter-     
+
+> ’Hard’ data
+> Ground truth Iter 1 Iter 2 Iter 3 Iter 4 Iter 5
+> λ
+> μ
+> ’Extreme’ data
+> λ
+> μ
+
+Figure 6: FNO iterates on one sample from ’Hard’ and ’Extreme’ test data sets. If the LMA iterate is accepted in place of the model’s proposition, the image is framed with red dashes.      
+
+> ’Hard’ data
+> Ground truth Iter 1 Iter 2 Iter 3 Iter 4 Iter 5
+> λ
+> μ
+> ’Extreme’ data
+> λ
+> μ
+
+Figure 7: WNO iterates on one sample from ’Hard’ and ’Extreme’ test data sets. If the LMA iterate is accepted in place of the model’s proposition, the image is framed with red dashes. ations are also shown. All data are from the 650-700 keV range, which in general has good photon statistics and a low amount of noise.    
+
+> 9x9
+> LMA (15 iters.)
+> LMA (5 iters.) CNN FNO WNO
+> λ
+> μ
+> ATRIUM-10  λ
+> μ
+> VVER-440  λ
+> μ
+
+Figure 8: Reconstructions using real data and 5 iterations. First two columns show the fully LMA-based reconstruc-tions after 15 and 5 iterations, for comparison. Rows 1-2: final emission and attenuation images of a 9x9 assembly. Rows 3-4: final emission and attenuation images of an ATRIUM-10 assembly. Rows 5-6: final emission and at-tenuation images of a VVER-440 assembly. If the LMA iterate is accepted in place of the model’s proposition, the image is framed with red dashes. 9The 9x9 data is very unassuming as no rods are missing or replaced. However, compared to the 15 iteration LMA reconstructions, all of the accelerated results are closer to the real emission and attenuation levels, whereas after 5 iterations the results from LMA are still very dim. The ATRIUM-10 data has a large 3 × 3 water channel and a missing rod on the second row. The CNN does a good job of separating missing and present rods and the qual-ity is similar to the LMA after 15 iterations. Both FNO and WNO have some trouble and artefacts can be seen near the water channel. Finally the hexagonal VVER-440 assembly is reconstructed surprisingly well by all meth-ods even though all of the training data matched only the rectangular 9x9 assembly. The level of emission and atten-uation values is closer to true values than with LMA after 5 iterations but none of the methods can clearly distin-guish the central water channel and WNO in particular is showing high emission and attenuation values where none should be present. 
+
+# 5 Conclusions 
+
+We proposed an iterative solver for Passive Gamma Emission Tomography that accelerates the Leven-berg–Marquardt trust-region algorithm with a learned Deep Gauss-Newton update step. The scheme is hybrid by design: at each iteration the deterministic algorithm pro-poses an update step, a learned operator refines it, and a trust-region acceptance criterion decides which of the two is kept. Thanks to this acceptance check, we can guar-antee that the iterates do not diverge and we can make informed choices about how and if to proceed with the iterations. Within this framework we compared three architectures of similar parameter count: an encoder–decoder-style con-volutional neural network, Fourier Neural Operators, and Wavelet Neural Operators. We used only simulated data of the 9x9 fuel assembly geometry for training, and with similar test data all three architectures improved the qual-ity of the 15 iteration LMA baseline within five acceler-ated iterations, the first one or two iterates in particular. On the harder handcrafted sample, the acceptance check failed more often and the tested architectures produced some visual artefacts, but still remained robust against out-of-distribution inputs or hallucinations. The real data experiments revealed some architecture-specific trade-offs. The CNN and WNO generalized rea-sonably well even to unseen geometries, while the FNO was more sensitive to the real measurements and produced distinct smearing. However, this is unlikely to occur in practice since the general shape of the fuel assembly is visible from the outside and the regularization term of the LM-algorithm requires knowledge of the geometry any-way. None of the architectures dominated across the test cases, although the CNN architecture remains surprisingly effective and easy to tune in imaging applications. Both neural operator architectures are noticeably more abstract and implicit with many of the parameter choices such as rank, width and depth of the layers. Finally, the lack of real data or realistic noise and scattering in the training data likely impaired the performance of all three methods. Several development directions remain open. The con-vergence analysis could be extended to the fixed-point con-tinuation scheme and changing regularization parameters, along the lines of [15, 16, 18]. The computational effi-ciency of the proposed method also makes it well suited for integration into statistical inference and uncertainty quantification frameworks, which are increasingly relevant as PGET moves toward routine use at the disposal facil-ity. However, the deep Gauss-Newton scheme still requires computing traditional iterates. Finally, training on higher-fidelity Monte Carlo simulations or on curated real mea-surements should improve robustness and reconstruction quality. 
+
+# Acknowledgments 
+
+TH, SH and TH are supported by the Research Council of Finland (Flagship of Advanced Mathematics for Sensing, Imaging and Modelling, grant no. 359183). SH is also supported by the Finnish Ministry of Educa-tion and Culture’s Pilot for Doctoral Programmes (Doc-toral Education Pilot for Mathematics of Sensing, Imaging and Modelling (DREAM)). The authors wish to thank P. Dendooven and H. Li for useful discussions and collaborative development of the PGET codebase, and both LUT Department of Compu-tational Engineering and CSC – IT Center for Science, Finland, for computational assistance. 
+
+# References 
+
+[1] Marcin Andrychowicz et al. “Learning to learn by gradient descent by gradient descent”. In: Advances in neural information processing systems 29 (2016). [2] Jason Ansel et al. “PyTorch 2: Faster Ma-chine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation”. In: Pro-ceedings of the 29th ACM International Confer-ence on Architectural Support for Programming Lan-guages and Operating Systems, Volume 2 . ASPLOS ’24. La Jolla, CA, USA: Association for Computing Machinery, 2024, pp. 929–947. isbn : 9798400703850. 
+
+doi : 10.1145/3620665.3640366 .[3] Rasmus Backholm et al. “Simultaneous reconstruc-tion of emission and attenuation in passive gamma emission tomography of spent nuclear fuel”. In: In-verse Problems & Imaging 14.2 (2020). [4] Vijay Badrinarayanan, Alex Kendall, and Roberto Cipolla. “SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation”. In: 
+
+IEEE Transactions on Pattern Analysis and Ma-chine Intelligence 39.12 (2017), pp. 2481–2495. doi :
+
+10.1109/TPAMI.2016.2644615 .[5] Camille B´ elanger-Champagne et al. “Effect of gamma-ray energy on image quality in passive gamma emission tomography of spent nuclear fuel”. In: IEEE transactions on nuclear science 66.1 (2018), pp. 487–496. [6] Silvia Bonettini, Riccardo Zanella, and Luca Zanni. “A scaled gradient projection method for con-strained image deblurring”. In: Inverse problems 
+
+25.1 (2008), p. 015002. 10 [7] Kristian Bredies, Jonathan Chirinos-Rodriguez, and Emanuele Naldi. “Learning firmly nonexpansive operators”. In: arXiv preprint arXiv:2407.14156 
+
+(2024). [8] Nicola Cavallini et al. “Vanquishing the compu-tational cost of passive gamma emission tomogra-phy simulations leveraging physics-aware reduced order modeling”. In: Scientific Reports 13.1 (2023), p. 15034. [9] Tianlong Chen et al. “Learning to optimize: Aprimer and a benchmark”. In: Journal of Machine Learning Research 23.189 (2022), pp. 1–59. [10] Haocheng Dai et al. “Neural operator learning for ul-trasound tomography inversion”. In: arXiv preprint arXiv:2304.03297 (2023). [11] Volker Dicken. “A new approach towards simultane-ous activity and attenuation reconstruction in emis-sion tomography”. In: Inverse Problems 15.4 (1999), pp. 931–960. [12] Heinz Werner Engl, Martin Hanke, and A. Neubauer. Regularization of Inverse Problems .1st ed. Mathematics and Its Applications. 3300 AA Dordrecht, The Netherlands: Kluwer Academic Pub-lisher, 1996. isbn : 978-0-7923-4157-4. [13] Miller Erin et al. “Assessing instrument performance for passive gamma emission tomography of spent fuel”. In: INMM 59th Annual Meeting Paper Ad-vanced Nondestructive Assay Techniques for Fuel Assemblies . 2018. [14] Patrick Fahy, Mohammad Golbabaee, and Matthias J. Ehrhardt. “Greedy Learning to Optimize with Convergence Guarantees”. In: arXiv preprint arXiv:2406.00260 (2024). [15] Jean-Baptiste Fest et al. “On a fixed-point con-tinuation method for a convex optimization prob-lem”. In: INdAM Workshop: Advanced Techniques in Optimization for Machine learning and Imaging .Springer. 2022, pp. 15–30. [16] Donald Goldfarb and Shiqian Ma. “Convergence of Fixed-Point Continuation Algorithms for Matrix Rank Minimization”. In: Foundations of Computa-tional Mathematics 11.2 (Feb. 2011), pp. 183–210. 
+
+doi : 10.1007/s10208-011-9084-6 .[17] Rafael C. Gonzalez and Richard E. Woods. Digi-tal image processing. Fourth Edition . 330 Hudson Street, NY 10013, USA: Pearson Education, 2018. 
+
+isbn : 978-0-13-335672-4. [18] Elaine Hale, Wotao Yin, and Yin Zhang. “Fixed-Point Continuation for ℓ1-Minimization: Methodol-ogy and Convergence”. In: SIAM Journal on Opti-mization 19.3 (Jan. 2008), pp. 1107–1130. doi : 10. 1137/070698920 .[19] Martin Hanke. “The regularizing Levenberg-Marquardt scheme is of optimal order”. In: The journal of integral equations and applications 
+
+(2010), pp. 259–283. [20] Andreas Hauptmann et al. “Model-based learning for accelerated, limited-view 3-D photoacoustic to-mography”. In: IEEE transactions on medical imag-ing 37.6 (2018), pp. 1382–1393. [21] Howard Heaton et al. “Safeguarded learned convex optimization”. In: Proceedings of the AAAI Con-ference on Artificial Intelligence . Vol. 37. 6. 2023, pp. 7848–7855. [22] Sara Heikkinen. “Model-based imaging of spent nu-clear fuel with passive gamma emission tomog-raphy”. https : / / urn . fi / URN : NBN : fi -fe2024112797098 . Master’s thesis. LUT University, 2024. [23] Dan Hendrycks and Kevin Gimpel. “Gaussian error linear units (gelus)”. In: arXiv preprint arXiv:1606.08415 (2016). [24] William Herzberg et al. “Graph convolutional net-works for model-based learning in nonlinear inverse problems”. In: IEEE transactions on computational imaging 7 (2021), pp. 1341–1353. [25] Tapani Honkamaa et al. “A prototype for passive gamma emission tomography”. In: Proceedings of Symposium on International Safeguards . 2014. [26] Samira Kabri et al. “Resolution-invariant image classification based on Fourier neural operators”. In: 
+
+International Conference on Scale Space and Varia-tional Methods in Computer Vision . Springer. 2023, pp. 236–249. [27] Ulugbek S. Kamilov et al. “Plug-and-play methods for integrating physical and learned models in com-putational imaging: Theory, algorithms, and appli-cations”. In: IEEE Signal Processing Magazine 40.1 (2023), pp. 85–97. [28] Carl T. Kelley. Iterative methods for optimization .3600 Market Street, PA 19104, USA: SIAM, 1999. [29] Nikhil Ketkar and Jojo Moolayil. Deep Learning with Python. Learn Best Practices of Deep Learn-ing Models with PyTorch . 2nd ed. One New York Plaza, NY 10004-1562, USA: Apress Media, 2021. 
+
+isbn : 978-1-4842-5364-9. [30] Kirsten Koolstra and Rob Remis. “Learning a pre-conditioner to accelerate compressed sensing re-constructions in MRI”. In: Magnetic Resonance in Medicine 87.4 (2022), pp. 2063–2073. [31] Jean Kossaifi et al. A Library for Learning Neural Operators . 2024. [32] Nikola Kovachki et al. “Neural operator: learning maps between function spaces with applications to PDEs”. In: J. Mach. Learn. Res. 24.1 (Jan. 2023). 
+
+issn : 1532-4435. [33] Samuel Lanthaler, Zongyi Li, and Andrew M. Stu-art. “Nonlocality and nonlinearity implies universal-ity in operator learning”. In: Constructive Approxi-mation (2025), pp. 1–43. [34] Y. LeCun et al. “Backpropagation Applied to Hand-written Zip Code Recognition”. In: Neural Compu-tation 1 (4 1989), pp. 541–551. issn : 0899-7667. [35] Yichen Li et al. “Learning preconditioners for con-jugate gradient PDE solvers”. In: International Conference on Machine Learning . PMLR. 2023, pp. 19425–19439. 11 [36] Zongyi Li et al. “Fourier neural operator for para-metric partial differential equations”. In: arXiv preprint arXiv:2010.08895 (2020). Published as a conference paper at ICLR 2021. [37] Isaac Liao et al. “Learning to optimize quasi-Newton methods”. In: arXiv preprint arXiv:2210.06171 
+
+(2022). [38] Chaoyu Liu et al. “Enhancing fourier neural opera-tors with local spatial features”. In: arXiv preprint arXiv:2503.17797 (2025). [39] Miguel Liu-Schiaffini et al. “Neural operators with localized integral and differential kernels”. In: arXiv preprint arXiv:2402.16845 (2024). [40] Stephane Mallat. A wavelet tour of signal processing .Burlington, MA 01803, USA: Academic Press, 1999. [41] Vishal Monga, Yuelong Li, and Yonina C. Eldar. “Algorithm unrolling: interpretable, efficient deep learning for signal and image processing”. In: arXiv preprint arXiv:1912.10557 (2019). [42] Meghdoot Mozumder et al. “A model-based itera-tive learning approach for diffuse optical tomogra-phy”. In: IEEE Transactions on Medical Imaging 
+
+41.5 (2021), pp. 1289–1299. [43] Frank Natterer and Frank W¨ ubbeling. Mathemati-cal methods in image reconstruction . 3600 Market Street, PA 19104, USA: SIAM, 2001. [44] Jorge Nocedal and Stephen J. Wright. Numerical op-timization . 2nd ed. 233 Spring Street, NY 10013, USA: Springer, 2006. isbn : 978-0387-30303-1. [45] Jean-Christophe Pesquet et al. “Learning maximally monotone operators for image recovery”. In: SIAM Journal on Imaging Sciences 14.3 (2021), pp. 1206– 1237. [46] Posiva Oy. YJH 2024 Olkiluodon ja Loviisan ydin-laitosten ydinj¨ atehuollon ohjelma vuosille 2025-2027 . Posiva public reports and publications: 
+
+https : / / www . posiva . fi / material / sites / posivaraportit / 20240210 - 1210 - H4n8OESC1 / yvbmsegfm / YJH - 2024 - ohjelma _ web . pdf . (In Finnish), referenced 5.9.2025. 2024. [47] Isabeau Pr´ emont-Schwarz, Jaroslav V´ ıtk˚ u, and Jan Feyereisl. “A simple guard for learned optimizers”. In: arXiv preprint arXiv:2201.12426 (2022). [48] Bogdan Raonic et al. “Convolutional neural opera-tors for robust and accurate learning of PDEs”. In: 
+
+Advances in Neural Information Processing Systems 
+
+36 (2023), pp. 77187–77200. [49] Ernest Ryu et al. “Plug-and-play methods provably converge with properly trained denoisers”. In: Inter-national Conference on Machine Learning . PMLR. 2019, pp. 5546–5557. [50] Plamen Stefanov. “The identification problem for the attenuated X-ray transform”. In: American Journal of Mathematics 136.5 (2014), pp. 1215– 1247. [51] Harold S. Stone. “Convolution theorems for linear transforms”. In: IEEE transactions on signal pro-cessing 46.10 (1998), pp. 2819–2821. [52] Makoto Takamoto et al. “PDEBench: An extensive benchmark for scientific machine learning”. In: Ad-vances in Neural Information Processing Systems 35 (2022), pp. 1596–1611. [53] Tapas Tripura and Souvik Chakraborty. “Wavelet neural operator for solving parametric partial differ-ential equations in computational mechanics prob-lems”. In: Computer Methods in Applied Mechanics and Engineering 404 (2023), p. 115783. [54] Tapas Tripura and Souvik Chakraborty. Wavelet-Neural-Operator (WNO) . Github repository: https: //github.com/TapasTripura/WNO . (v2.0.0) Refer-enced in 22.10.2025. [55] Singanallur V. Venkatakrishnan, Charles A. Bouman, and Brendt Wohlberg. “Plug-and-play priors for model based reconstruction”. In: 2013 IEEE global conference on signal and information processing . IEEE. 2013, pp. 945–948. [56] Riina Virta. “Gamma tomography of spent nuclear fuel for geological repository safeguards”. http:// hdl.handle.net/10138/575149 . PhD thesis. Uni-versity of Helsinki, 2024, p. 60. [57] Riina Virta et al. “Fuel rod classification from passive gamma emission tomography (PGET) of spent nuclear fuel assemblies”. In: ESARDA Bul-letin 2020.61 (2020), pp. 10–21. [58] Riina Virta et al. “Improved Passive Gamma Emis-sion Tomography image quality in the central region of spent nuclear fuel”. In: Scientific Reports 12.1 (2022), p. 12473. [59] Timothy White et al. “Application of passive gamma emission tomography (PGET) for the verification of spent nuclear fuel”. In: INMM 59th Annual Meeting, Baltimore, Maryland, USA . 2018. [60] Timothy White et al. “Verification of spent nu-clear fuel using passive gamma emission tomography (PGET)”. In: IAEA Symposium on International Safeguards. Book of Abstracts . IAEA-CN–267. 2019, pp. 198–198. [61] Aston Zhang et al. Dive into Deep Learning . https: //D2L.ai . Shaftesbury Road, CB2 8EA, England: Cambridge University Press, 2023. [62] Xia Zhao et al. “A review of convolutional neural networks in computer vision”. In: Artificial Intelli-gence Review 57.4 (2024), p. 99. 12

@@ -1,0 +1,2529 @@
+Title: Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields
+
+URL Source: https://arxiv.org/pdf/2604.26095v1
+
+Published Time: Thu, 30 Apr 2026 00:09:23 GMT
+
+Number of Pages: 26
+
+Markdown Content:
+# Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields 
+
+# Yiwei Shi 1, Zixing Song 1, Mengyue Yang 1, Cunjia Liu 2, Weiru Liu 1 
+
+> 1
+
+SEMT, University of Bristol, Bristol, UK, 2 LUCAS, Loughborough University, Loughborough, UK 
+
+## Abstract 
+
+Closed-loop inverse source localization and characterization (ISLC) requires a mobile agent to select measurements that localize sources and infer latent field parameters under strict time constraints. The core challenge lies in the belief-space objective: valid uncertainty estimation requires expensive Bayesian inference, whereas using fast learned belief model leads to reward hacking, in which the policy exploits approximation errors rather than actually reducing uncertainty. We propose Distill-Belief , a teacher–student frame-work that decouples correctness from efficiency. A Bayes-correct particle-filter teacher maintains the posterior and supplies a dense information-gain signal, while a compact student distills the poste-rior into belief statistics for control and an uncertainty certificate for stopping. At deployment, only the student is used, yielding con-stant per-step cost. Experiments on seven field modalities and two stress tests show that Distill-Belief consistently reduces sensing cost and improves success, posterior contraction, and estimation accuracy over baselines, while mitigating reward hacking. 
+
+## CCS Concepts 
+
+• Do Not Use This Code → Generate the Correct Terms for Your Paper ; Generate the Correct Terms for Your Paper ; Generate the Correct Terms for Your Paper; Generate the Correct Terms for Your Paper. 
+
+## Keywords 
+
+Do, Not, Use, This, Code, Put, the, Correct, Terms, for, Your, Paper 
+
+ACM Reference Format: 
+
+Yiwei Shi 1, Zixing Song 1, Mengyue Yang 1, Cunjia Liu 2, Weiru Liu 1. 2026. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields. In Proceedings of The 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD ’26). ACM, New York, NY, USA, 26 pages. https://doi.org/10.1145/nnnnnnn.nnnnnnn 
+
+## 1 Introduction 
+
+Autonomous scientific sensing missions increasingly operate in the wild: a drone or ground robot is dispatched after a suspected gas [ 15 , 17 ], pollutant [ 44 , 77 ], or radiation event [ 42 , 69 ] , and must decide where to measure next under strict time and energy budgets. Each measurement is noisy and expensive, and there is often no dense task reward-what matters is whether the system can localize and characterize the source with calibrated uncertainty [14 , 25 , 52 ]quickly enough to enable downstream intervention [18, 19, 38]. We study this setting through closed-loop inverse source lo-calization and characterization (ISLC), also known as the Source Term Estimation problem [ 13 , 37 , 50 ] in physical fields [ 33 ]. An 
+
+> KDD ’26, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea
+> 2026. ACM ISBN 978-1-4503-XXXX-X/2018/06 https://doi.org/10.1145/nnnnnnn.nnnnnnn
+
+agent sequentially samples a field governed by a transport model with the unknown parameters vector 𝚯 [ 20 , 46 ] (e.g., source loca-tion/strength and environmental factors), and updates a Bayesian posterior 𝑝 (𝚯 | 𝑜 1: 𝑡 , 𝒑 1: 𝑡 ) from noisy observations. The scientific objective is not merely to reach a high-signal region, but to actively choose measurements [ 58 , 71 , 71 ] that contract the posterior and yield calibrated uncertainty so that the episode can terminate when un-certainty falls below an application-specified tolerance[ 20 , 67 , 70 ]. Closed-loop ISLC exposes a fundamental tension between scientific correctness and operational deployment. First, the objective lives in belief space : we seek posterior contraction and uncertainty cali-bration, not a heuristic proxy in observation space (otherwise the agent can chase transient peaks without reliably reducing epistemic uncertainty). Second, scientific field tasks rarely provide reliable 
+
+dense task rewards [ 45 , 54 , 64 ]: success is often sparse, late, or even undefined, and the episode should terminate when uncertainty is sufficiently low. Meanwhile, real deployments require real-time de-cision making: per-step computation cannot scale with expensive Bayesian inference. Third, if a learned belief surrogate is used simul-taneously as the policy input and as the basis for intrinsic rewards or stopping, the agent can exploit approximation artifacts-inflating reward or triggering premature stopping without genuinely con-tracting the true posterior. These considerations impose a coupled set of requirements that any deployable ISLC algorithm must satisfy. Formally, closed-loop ISLC must satisfy four coupled require-ments : (R1) optimize in belief space to directly reduce epistemic uncertainty; (R2) learn under no reliable dense task reward (i.e., to address success is sparse/late or undefined); (R3) remain deployable ,i.e., to address per-step computation cannot scale with expensive Bayesian inference; (R4) be robust to reward hacking , the policy must not be able to manipulate approximation errors in a learned belief surrogate (e.g., under-estimated posterior spread) to obtain high intrinsic reward or to satisfy the stopping rule without genuine posterior contraction. Table 1 summarizes requirement coverage for representative design families; none satisfies (R1)-(R4) simulta-neously. To satisfy (R1)-(R4) simultaneously, we argue that Bayes correctness must be decoupled from deployment-time computation. The learning signal should be derived from a Bayes-consistent be-lief update, yet the deployed controller cannot afford to run such updates online. This leaves a narrow set of practical designs: a 
+
+Bayes-correct teacher computes an information-theoretic objective in belief space, while a fast-learning student compresses the teacher posterior over Θ into belief statistics (e.g., mean and diagonal co-variance) that can be updated in O(1) time per step with respect to the particle budget . Notably, only the actor-critic updates the policy parameters; the PF teacher is not a planner and provides only Bayes belief updates for reward computation and distillation targets. A key question is why we distill beliefs rather than directly learn-ing in an end-to-end manner. If we remove the teacher and define  
+
+> arXiv:2604.26095v1 [cs.AI] 28 Apr 2026 KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al.
+
+Table 1: Requirement coverage.                     
+
+> Method (R1) belief-space (R2) no dense reward (R3) test-time (R4) no hacking PF info planner [30, 53, 63] ✓✓×✓
+> Obs-reward RL [40, 79] ××✓✓
+> Learned belief [29, 47, 71] ✓✓✓×
+> Distill-Belief (ours) ✓✓✓✓
+
+intrinsic rewards using the same learned belief that conditions the policy, the policy may exploit modeling errors to artificially increase the reward or reduce the spread certificate without genuinely reduc-ing posterior uncertainty. Conversely, if we keep Bayes-consistent belief updates to prevent such artifacts, then inference remains in the deployment loop with cost scaling linearly in the particle bud-get, violating real-time constraints. Belief distillation resolves this tension: it transfers the teacher posterior into a parametric student, yielding constant-time, uncertainty-calibrated belief statistics for both control and stopping while keeping the reward Bayes-aligned and computed exclusively from the teacher during training . Without distillation, one must trade off deployability (PF at test time) against 
+
+statistical alignment and robustness (learned belief defining both reward and control), and cannot satisfy (R1)–(R4) at once. To bridge these gaps, we propose a teacher-student belief-optimization framework for closed-loop ISLC. A particle-filter (PF) teacher maintains a Bayes-consistent posterior over the pa-rameter vector 𝚯 . This teacher provides a dense intrinsic reward defined as the discrete KL divergence between consecutive beliefs, serving as a high-fidelity proxy for one-step information gain. A fast student distills the teacher posterior into a compact diagonal-Gaussian belief. The distilled belief yields constant-time features for a belief-conditioned actor-critic, and provides a spread-based uncer-tainty certificate for principled stopping. At test time, we discard the PF entirely and rely only on the student’s belief statistics, mak-ing inference and cessation independent of particle budget. This separation keeps intrinsic rewards Bayes-aligned while keeping deployment free of PF inference. Our main contributions are: (1) We cast ISLC as belief-space con-trol and introduce a coupled inference–execution architecture that decouples Bayes-correct objectives from deployment-time compu-tation via PF teaching and student belief approximation. (2) We propose a dense information-gain intrinsic reward based on the one-step KL divergence between consecutive teacher posteriors, directly aligning RL optimization with posterior contraction while preventing reward hacking by construction : intrinsic rewards are computed only from the PF teacher posterior, while the learned student belief is used solely to condition the policy (which outputs the next sensing action) and to compute a deployment-time stop-ping certificate. (3) We enable deployable and reliable closed-loop inference via student beliefs and a spread-based stopping certificate that explicitly controls the accuracy–budget trade-off, with the PF teacher entirely removed at test/deployment time. 
+
+## 2 Related Work 2.1 Information-Theoretic Planning for ISLC 
+
+Closed-loop ISLC, also referred to as source term estimation, is a recurring primitive in field sensing: a mobile agent must adap-tively decide where to measure next to localize hidden emitters and estimate physical parameters with calibrated uncertainty. Represen-tative deployments include source-term estimation for atmospheric releases with mobile robots/UAVs [ 7, 24 ], radioactive source localiza-tion for safety monitoring [ 27 , 32 ], and broader contaminant/source reconstruction settings in setting sensing [ 5, 34 ]. Methodologically, these problems are closely related to sequential Bayesian experimen-tal design [ 64 , 65 ], where actions are chosen to maximally reduce uncertainty about unknown parameters value Θ. A route to closed-loop ISLC [ 65 ] couples Bayesian sequential inference [ 3 , 35 , 76 ]with information-theoretic action selection : the agent [ 16 , 75 ] main-tains a posterior over unknown source/transport parameters Θ and chooses the next sensing action to maximally contract this belief. Representative information-based search frameworks instantiate this idea with sequential Monte Carlo [ 3, 76 ] / particle [ 1, 36 ] to approximate 𝑝 (Θ | 𝑜 1: 𝑡 , p1: 𝑡 ), and evaluate candidate actions using information utilities such as expected information gain [ 10 ], mutual information [ 66 ], or KL divergence [ 57 ] between beliefs. Alongside these explicit information-gain planners, many non-learning / static 
+
+strategies adopt a similar two-block structure—(i) an estimation module (Bayes/PF update) and (ii) a greedy controller that optimizes an uncertainty-related surrogate. Typical examples include Info-taxis [ 29 , 47 , 71 ] and Entrotaxis [31 , 59 , 78 ], which drive exploration by reducing belief uncertainty (e.g., variance/entropy), and dual-control-based approaches (DCEE) [ 11 , 41 ] explicitly trade off exploita-tion and exploration through composite objectives that combine progress-to-estimate and uncertainty-reduction terms. However, the online control loop typically requires repeated belief updates and (often) lookahead evaluation of candidate actions, so the per-step cost grows with the particle budget and planning horizon, which is a key obstacle for real-time deployment and large-scale evaluation (violating deployability requirement (R3) in Sec. 1). 
+
+## 2.2 RL for Active Sensing and Localization 
+
+A complementary direction amortizes decision making with RL [43 , 49 , 62 ], learning a policy that maps observations (and possibly belief features) to sensing actions. In ISLC and related active sens-ing tasks [ 60 ], actor-critic [ 43 , 48 ] methods are frequently adopted, where the state representation augments raw observations with compact belief summaries from PF, e.g., posterior moments or para-metric compressions such as Gaussian mixture models [ 39 , 54 ]. This replaces explicit online planning with a single policy forward pass, improving deployment-time efficiency. To further improve deploy-ability, many works [ 26 , 73 , 74 ] compress particle-based posteriors into low-dimensional belief representations (moments, mixture fits, or learned set encoders) and, more broadly, use amortized in-ference to predict posterior statistics in (approximate) constant time, avoiding iterative Bayesian updates during control [ 6]. Nev-ertheless, RL-based approaches often rely on observation-space reward shaping [ 51 , 55 ](e.g., concentration improvement) or sparse terminal success, which can be misaligned with posterior contrac-tion and encourage shortcut behaviors. Moreover, in many scien-tific field tasks, success [64 ] is not explicitly labeled and should instead be determined implicitly by sufficiently low uncertainty; self-cessation and goal-detection mechanisms address this by us-ing belief dispersion as a stopping trigger [ 64 ]. Overall, RL-based methods tend to satisfy deployability (R3), but may struggle with Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+belief-space objectives (R1) and sparse/implicit supervision (R2) unless the learning signal is carefully designed. Using approximate beliefs inside the control loop can also break scientific semantics. If the same learned belief surrogate both conditions the policy and defines intrinsic rewards or stopping [ 9], the agent may exploit surrogate artifacts, earning reward or stopping early without gen-uine Bayes-posterior contraction (violating (R4)). This motivates teacher-student [ 4, 21 , 61 , 72 ] designs that decouple Bayesian objec-tives from deployment-time computation: a Bayes-correct inference module can serve as a source of supervision, while a fast amortized model provides belief statistics for real-time control.   
+
+> (a) Steady-state concentration field generated by a point source
+> (b) Noisy observations available to the agent
+
+Figure 1: Gaussian Plume Model for source localization. 
+
+## 3 Preliminaries 3.1 Unified Framework for Field Modeling 
+
+A wide range of natural phenomena, including pollutant disper-sion , gas diffusion , and electric field distributions , can be described within a unified physical framework. Despite their apparent differ-ences, these processes are governed by three fundamental terms: 
+
+diffusion , convection , and external sources . Such terms are commonly captured by the general convection-diffusion equation 
+
+(CDE) [23], which provides a versatile mathematical abstraction: 
+
+𝛼 ∇2𝜙 (𝑥, 𝑦 ) − ® 𝑣 · ∇ 𝜙 (𝑥, 𝑦 ) + 𝛾𝜙 (𝑥, 𝑦 ) + 𝐿 (𝑥, 𝑦 ) = 0, (1) where 𝜙 (𝑥, 𝑦 ) denotes the field variable (e.g., concentration, temper-ature, or potential). The terms 𝛼 ∇2𝜙 , −® 𝑣 · ∇ 𝜙 , and 𝐿 (𝑥, 𝑦 ) capture diffusion, transport (advection), and external sources, respectively, while 𝛾 accounts for linear decay or reaction effects. In this work, we adopt the steady-state linear CDE as an effective field model that provides a unified abstraction of diffusion–transport–source 
+
+mechanisms. Different field modalities correspond to different phys-ical interpretations/units of 𝜙 and different parameterizations of 
+
+(𝛼, ®𝑣, 𝛾, 𝐿 ), potentially together with modality-specific boundary conditions and observation/noise models. With appropriate param-eter choices, this formulation covers a broad class of spatial fields, from heat conduction and pollutant dispersion to other source-driven diffusion–transport phenomena. 
+
+## 3.2 Gaussian Plume Model 
+
+As a classical analytical instantiation of the convection–diffusion framework, the Gaussian Plume Model (GPM), illustrated in Fig. 1, provides a steady-state solution that balances modeling fidelity and computational efficiency. Under suitable assumptions, the resulting field distribution is given by 
+
+𝜙 (𝑥, 𝑦 ) = 𝑞 𝑠 
+
+4𝜋𝛼 ∥𝒑 − 𝒑 𝑠 ∥ exp 
+
+
+
+− ∥𝒑 − 𝒑 𝑠 ∥
+
+𝜆 − (𝑥 − 𝑥 𝑠 )𝑢 𝑥 + ( 𝑦 − 𝑦 𝑠 )𝑢 𝑦 
+
+2𝛼 
+
+
+
+,
+
+where 𝑞 𝑠 denotes the source strength, 𝒑 = (𝑥, 𝑦 ) and 𝒑 𝑠 = (𝑥 𝑠 , 𝑦 𝑠 )
+
+represent the observation point and source location, respectively, and (𝑢 𝑥 , 𝑢 𝑦 ) are the components of the convection velocity ®𝑣 . The parameter 𝜆 controls the exponential decay, and 𝛼 is the diffusion coefficient, consistent with the notation in the general CDE. Owing to its analytical form, the GPM is widely used for efficient modeling of steady-state dispersion phenomena. 
+
+## 3.3 Partially Observable MDP 
+
+In practical field modeling scenarios, uncertainties arise due to incomplete state information, sensor noise, and unknown environ-mental parameters. These challenges naturally motivate a proba-bilistic sequential decision-making formulation based on the Par-tially Observable Markov Decision Process (POMDP) . A POMDP is defined by the tuple (𝑆, Ω, 𝐴,𝑇 , 𝑂, 𝑅, 𝛾 ), where 𝑆 denotes the state space, 𝐴 the action space, Ω the observation space, 𝑇 the state transition model, 𝑂 the observation model, 𝑅 the reward function, and 𝛾 ∈ ( 0, 1] the discount factor. At each time step 𝑡 , the agent receives an observation 𝑜 𝑡 ∈ Ω conditioned on the current state 
+
+𝑠 𝑡 and the previous action 𝑎 𝑡 −1, according to 𝑂 (𝑜 𝑡 | 𝑠 𝑡 , 𝑎 𝑡 −1). After executing action 𝑎 𝑡 , the environment transitions to a new state 
+
+𝑠 𝑡 +1 ∼ 𝑇 (𝑠 𝑡 +1 | 𝑠 𝑡 , 𝑎 𝑡 ). Due to partial observability, policies are typically conditioned on belief states or histories of actions and observations. We define the belief over field-model parameters as 
+
+𝑏 𝑡 (𝚯 ) ≜ 𝑝 (𝚯 | 𝑜 1: 𝑡 ), where 𝚯 denotes the unknown parameters vector of the field model (e.g., source location, strength, and setting factors). In many ISLC settings, the environment does not provide a dense task reward. Instead, we optimize an intrinsic reward that ex-plicitly measures posterior contraction :𝑟 𝐼𝐺 𝑡 ≜ 𝐷 KL (𝑏 𝑡 (𝚯 ) ∥ 𝑏 𝑡 −1 (𝚯 )) ,which serves as a one-step information-gain proxy. The overall objective is to learn a policy 𝜋 (𝑎 𝑡 | 𝜓 𝑡 ) that maximizes the expected discounted cumulative information gain, max 𝜋 E𝜋 
+
+Í 𝑇 𝑡 =1 𝛾 𝑡 −1𝑟 𝐼𝐺 𝑡 
+
+,where 𝜓 𝑡 (belief state) is a belief policy input (e.g., concatenating the observation, agent position, and belief features). Finally, we al-low early termination using an uncertainty certificate to realize an explicit accuracy–budget trade-off. Accordingly, our objective is to infer the posterior distribution 𝑝 (𝚯 | 𝑜 1: 𝑡 ) over the field-model pa-rameters 𝚯 = [𝑥 𝑠 , 𝑦 𝑠 , 𝑞 𝑠 , 𝑢 𝑠 , 𝜙 𝑠 , 𝛼, 𝜆 ]⊤ from sequential observations 
+
+𝑜 1: 𝑡 and belief state 𝜓 𝑡 at time step 𝑡 within the POMDP. 
+
+## 4 Methodology 
+
+We formulate closed-loop ISLC as a belief-space control problem whose objective is posterior contraction. Subsec. 4.1 defines the belief state used by the policy. Subsec. 4.2-4.3 describe how the belief is maintained and amortized. Subsec. 4.4 specifies the KL-based intrinsic reward used for training. Subsec. 4.5-4.6 present the belief-conditioned actor-critic and the stopping criterion. KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+Figure 2: Teacher–Student Belief Distillation 
+
+## 4.1 Problem Setup and Belief-State Interface 
+
+Building on the POMDP formulation in Sec. 3, we maintain a Bayesian belief 𝑏 𝑡 (𝚯 ) ≈ 𝑝 (𝚯 | 𝑜 1: 𝑡 , 𝒑 1: 𝑡 ) over the full parameter vector 𝚯 ∈ R𝑑 (e.g., source location/strength and environmental factors) and use it for closed-loop control. At time 𝑡 we form a belief state 𝝍 𝑡 = 𝑜 ⊤ 
+
+> 𝑡
+
+, 𝒑 ⊤ 
+
+> 𝑡
+
+, 𝑓 bel (𝑏 𝑡 )⊤ ⊤, where 𝑓 bel (𝑏 𝑡 ) is the belief distribution (Sec. 4.5), and act via 𝜋 𝜃 (𝑎 𝑡 | 𝝍 𝑡 ). We realize this with two coupled layers. Inference layer: a Bayes-consistent PF teacher updates 𝑏 𝑡 and defines a KL-based intrinsic reward in belief space, while a student amortizes the teacher posterior via distillation. Exe-cution layer: an actor–critic learns 𝜋 𝜃 conditioned on the student belief features and terminates when a spread-based uncertainty certificate falls below 𝜁 . The PF teacher has no trainable parameters and never optimizes a policy; intrinsic rewards are computed only 
+
+from the teacher during training to prevent reward hacking. At test time (deployment), we discard the teacher and run only the stu-dent and policy, yielding constant-cost belief features and stopping statistics independent of the particle budget (Framework in Fig 2). 
+
+## 4.2 Teacher Belief via Particle Filtering 
+
+The PF teacher is the only component where we require Bayes-correct updates. It maintains a weighted particle approximation to the posterior 𝑏 𝑡 (𝚯 ) = Í𝑁 𝑖 =1 𝑤 (𝑖 ) 
+
+> 𝑡
+
+𝛿 𝚯 (𝑖 )
+
+> 𝑡
+
+(𝚯 ), where 𝛿 denotes the Dirac mass and each particle carries a parameter vector 𝚯 (𝑖 ) 
+
+> 𝑡
+
+∈ R𝑑 . Let 
+
+ℓ (𝑜 𝑡 | 𝒑 𝑡 , 𝚯 ) be the likelihood induced by the Gaussian plume model in Sec. 3. In ISLC we treat 𝚯 as static during an episode and adopt the bootstrap choice 𝑞 ≈ 𝑇 in sequential importance sampling, so the weights are updated by simple reweighting: ˜𝑤 (𝑖 ) 
+
+> 𝑡
+
+∝ 𝑤 (𝑖 )  
+
+> 𝑡 −1
+
+ℓ 𝑜 𝑡 |
+
+𝒑 𝑡 , 𝚯 (𝑖 ) 
+
+> 𝑡 −1
+
+, 𝑤 (𝑖 ) 
+
+> 𝑡
+
+= ˜𝑤 (𝑖 )    
+
+> 𝑡
+> Í𝑗 ˜𝑤 (𝑗 )
+> 𝑡
+
+. We monitor the effective sample size 
+
+ESS = 1/Í𝑖 (𝑤 (𝑖 ) 
+
+> 𝑡
+
+)2 and apply systematic resampling when ESS <
+
+𝜌𝑁 . To mitigate sample impoverishment after resampling without biasing the posterior 𝜋 𝑡 (𝚯 ) ∝ 𝑝 (𝚯 | 𝑜 1: 𝑡 , 𝒑 1: 𝑡 ), we apply a short Metropolis-Hastings (MH) move with a Gaussian random-walk proposal: 𝚯 new = 𝚯 +ℎ𝑡 𝚺 1/2 
+
+> Θ,𝑡
+
+𝝃 , 𝝃 ∼ N ( 0, I), where 𝚺 Θ,𝑡 is the current weighted covariance of the particles (in the full 𝚯 -space) and ℎ𝑡 is a step size. The proposal is accepted with the usual MH ratio; this leaves 𝜋 𝑡 invariant. The PF teacher is where Bayes correctness lives: it yields a statistically consistent posterior increment under mild assumptions, supports standard SMC diagnostics (ESS, resampling, MH moves), and never learns in weight space, so the target posterior remains unaffected by adaptation. 
+
+## 4.3 Student Posterior via PF Distillation 
+
+While the PF teacher is Bayes-correct, its per-step cost scales with the number of particles 𝑁 , which is undesirable at test time. We therefore introduce a student that serves as a compressed, amortized surrogate of the teacher belief for real-time control. Importantly, the student models the posterior over the parameter vector 
+
+𝚯 ∈ R𝑑 . We model the student posterior as a factorized Gauss-ian: 𝑞 𝜑 (𝚯 | 𝑜 𝑡 , 𝒑 𝑡 ) = N  𝚯 ; 𝝁 𝑡 , diag (𝝈 2 
+
+> 𝑡
+
+), [𝝁 𝑡 , log 𝝈 2 
+
+> 𝑡
+
+] = 𝑓 𝜑 (𝑜 𝑡 , 𝒑 𝑡 ),where 𝑓 𝜑 is a small MLP (two hidden layers with ReLU activations). (For notational simplicity we write (𝑜 𝑡 , 𝒑 𝑡 ); in implementation these inputs may include a history embedding or recurrent state.) Each dimension of 𝚯 thus has a learned mean and variance. During training, after the PF update (including resampling/MH), we obtain a discrete teacher posterior { ˜𝚯 (𝑖 ) , ˜𝑤 (𝑖 ) }𝑁 𝑖 =1. We fit the stu-dent by minimizing the weighted negative log-likelihood over full 
+
+parameter vectors: Lbel (𝜑 ) = − Í𝑁 𝑖 =1 ˜𝑤 (𝑖 ) log N  ˜𝚯 (𝑖 ) ; 𝝁 𝑡 , diag (𝝈 2 
+
+> 𝑡
+
+).We use three stabilizers: (i) clipping log 𝝈 2 
+
+> 𝑡
+
+∈ [ log 𝜎 2min , log 𝜎 2max ]
+
+with 𝜎 min ≈ 10 −3, 𝜎 max ≈ 10 ; (ii) 𝜀 -stabilized normalized weights 
+
+˜𝑤 (𝑖 ) = 𝑤 (𝑖 ) /( Í𝑗 𝑤 ( 𝑗 ) +𝜀 ) and stopping gradients through 𝑤 (𝑖 ) ; (iii) online standardization of inputs (𝑜 𝑡 , 𝒑 𝑡 ). At test time the teacher is dropped and only the student is used: given (𝑜 𝑡 , 𝒑 𝑡 ) we com-pute [𝝁 𝑡 , log 𝝈 2 
+
+> 𝑡
+
+] = 𝑓 𝜑 (𝑜 𝑡 , 𝒑 𝑡 ) in O( 1) time. We treat 𝑞 𝜑 (𝚯 | ·) 
+
+as an approximate belief and extract task-aligned features from its moments (Sec. 4.5). The full posterior surrogate provides an uncertainty-aware estimate for downstream reporting.The full pos-terior surrogate provides an uncertainty-aware estimate for down-stream reporting, while the policy consumes only a compact, belief summary for control. 
+
+## 4.4 KL-based Intrinsic Reward 
+
+We define an intrinsic reward that measures how much a newly acquired observation changes the teacher belief over 𝚯 . Let w𝑡 ∈
+
+Δ𝑁 −1 be the PF weight vector after observing (𝑜 𝑡 , 𝒑 𝑡 ). We define the one-step information-gain associated with action 𝑎 𝑡 −1 as 
+
+𝑟 IG  
+
+> 𝑡
+
+= 𝐷 KL 
+
+ w𝑡 ∥ w𝑡 −1
+
+ =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) 
+
+> 𝑡
+
+log 𝑤 (𝑖 )
+
+> 𝑡
+
+𝑤 (𝑖 )  
+
+> 𝑡 −1
+
++ 𝜀 , (2) with a small 𝜀 for numerical stability. Under Sequential Importance Sampling (SIS) assumptions and before resampling , 𝑟 IG  
+
+> 𝑡
+
+is a single-sample Monte Carlo estimator of the Bayes posterior-prior KL, i.e., the conditional mutual information between 𝚯 and 𝑜 𝑡 given 𝑜 1: 𝑡 −1.We compute 𝑟 IG  
+
+> 𝑡
+
+exclusively from the teacher weights and clip rare large values at a high empirical percentile to off-policy updates. 
+
+## 4.5 Belief Features and Policy Learning 
+
+The Bayes belief 𝑏 𝑡 (𝚯 ) = 𝑝 (𝚯 | 𝑜 1: 𝑡 , 𝒑 1: 𝑡 ) is a sufficient statis-tic for optimal control. However, the belief over 𝚯 ∈ R𝑑 is high-dimensional and expensive to represent. Our design therefore sep-arates scientific correctness from deployment-time computation : (i) we maintain and distill a belief over the full physical parameter Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+Algorithm 1 Distill-Belief Training (Inference vs. Execution) 
+
+Require: Particle budget 𝑁 , student params 𝜑 , policy params 𝜃 ,stop threshold 𝜁 , horizon 𝐻  
+
+> 1:
+
+Initialize student posterior 𝑞 𝜑 and policy 𝜋 𝜃  
+
+> 2:
+
+for each training episode do  
+
+> 3:
+
+Initialize PF particles {𝚯 (𝑖 ) }𝑁 𝑖 =1 
+
+> 4:
+
+Initialize weights 𝑤 (𝑖 ) 
+
+> 0
+
+← 1 
+
+> 𝑁
+
+for all 𝑖  
+
+> 5:
+
+for 𝑡 = 1 to 𝐻 do  
+
+> 6:
+
+Observe (𝑜 𝑡 , 𝒑 𝑡 ) /*Inference layer /  
+
+> 7:
+
+for 𝑖 = 1 to 𝑁 do  
+
+> 8:
+
+𝑤 (𝑖 ) 
+
+> 𝑡
+
+← 𝑤 (𝑖 )  
+
+> 𝑡 −1
+
+· ℓ (𝑜 𝑡 | 𝒑 𝑡 , 𝚯 (𝑖 ) ) 
+
+> 9:
+
+end for  
+
+> 10:
+
+Normalize {𝑤 (𝑖 ) 
+
+> 𝑡
+
+}𝑁 𝑖 =1 
+
+> 11:
+
+𝑟 𝐼𝐺 𝑡 ← 𝐷 KL (𝑤 𝑡 ∥ 𝑤 𝑡 −1) /* before resampling /  
+
+> 12:
+
+Optionally resample / MH-move  
+
+> 13:
+
+Update 𝜑 by minimizing L𝑏𝑒𝑙 on {( 𝚯 (𝑖 ) , 𝑤 (𝑖 ) 
+
+> 𝑡
+
+)} 𝑁 𝑖 =1 
+
+> 14:
+
+Compute 𝑞 𝜑 (𝚯 | 𝑜 𝑡 , 𝒑 𝑡 ) and features 𝑓 𝑏𝑒𝑙 (𝑏 𝑡 ) 
+
+> 15:
+
+if Spread (𝑏 𝑡 ) < 𝜁 then  
+
+> 16:
+
+break /*Execution layer*/  
+
+> 17:
+
+end if  
+
+> 18:
+
+Sample 𝑎 𝑡 ∼ 𝜋 𝜃 (· | 𝝍 𝑡 = {𝑜 𝑡 , 𝒑 𝑡 , 𝑓 𝑏𝑒𝑙 (𝑏 𝑡 ))} and execute  
+
+> 19:
+
+end for  
+
+> 20:
+
+Update 𝜃 with PPO using rewards {𝑟 𝐼𝐺 𝑡 }𝐻 𝑡 =1 
+
+> 21:
+
+end for 
+
+vector 𝚯 so that training is driven by posterior contraction over 
+
+all unknown field parameters; (ii) we expose to the policy only a compact, task-relevant marginal (source location) to stabilize learning and keep the policy state and efficient. Crucially, intrin-sic rewards are computed from the PF teacher belief, while the student belief is used only as a policy input and a stopping sig-nal, preventing reward hacking by design. We partition the pa-rameter vector as 𝚯 = [( 𝑥 𝑠 , 𝑦 𝑠 )⊤, 𝚯 ⊤ 
+
+> 𝑅
+
+]⊤), 𝑤ℎ𝑒𝑟𝑒 (𝚯 𝑅 ∈ R𝑑 −2 de-notes the subvector of the remaining unknown physical parame-ters (e.g., 𝑞 𝑠 , 𝑢 𝑠 , 𝜙 𝑠 , 𝛼, 𝜆 ). The location marginal belief is 𝑏 𝐿 𝑡 (ℓ) ≜∫ 𝑏 𝑡 (ℓ, 𝚯 𝑅 ) 𝑑 𝚯 𝑅 . We summarize 𝑏 𝐿 𝑡 by its mean and covariance: 
+
+𝝁 𝐿 (𝑏 𝑡 ) = E𝑏 𝐿 𝑡 [ℓ] ∈ R2, 𝚺 𝐿 (𝑏 𝑡 ) = Cov 𝑏 𝐿 𝑡 [ℓ] ∈ R2×2. We restrict to (𝑥 𝑠 , 𝑦 𝑠 ) not because other parameters are unobserved, but be-cause localization is the task objective; the remaining parameters are inferred jointly and marginalized out in 𝑏 𝐿 𝑡 . For the PF teacher, 
+
+𝝁 𝐿 , 𝚺 𝐿 are computed from weighted particles in the full 𝚯 -space and then restricted to the (𝑥 𝑠 , 𝑦 𝑠 ) coordinates. For the student Gaussian 𝑞 𝜑 (𝚯 | 𝑜 𝑡 , 𝒑 𝑡 ) = N ( 𝝁 𝑡 , diag (𝝈 2 
+
+> 𝑡
+
+)) , we have 𝚺 𝐿 (𝑏 𝑡 ) =
+
+diag (𝜎 2  
+
+> 𝑥 𝑠 ,𝑡
+
+, 𝜎 2  
+
+> 𝑦 𝑠 ,𝑡
+
+). We define a scalar dispersion certificate over lo-cation: Spread (𝑏 𝑡 ) ≜√︁ tr (𝚺 𝐿 (𝑏 𝑡 )) = √𝜆 1 + 𝜆 2, where 𝜆 1, 𝜆 2 are the eigenvalues of 𝚺 𝐿 (𝑏 𝑡 ). This choice has two useful properties. First, it is rotation-invariant and consistent across teacher and student (even if the teacher covariance has off-diagonal terms). Second, it admits a direct statistical interpretation: Spread (𝑏 𝑡 )2 =
+
+tr  𝚺 𝐿 (𝑏 𝑡 ) = E[∥ ℓ − 𝝁 𝐿 (𝑏 𝑡 )∥ 22], i.e., Spread (𝑏 𝑡 ) is the root-mean-square (RMS) posterior uncertainty of the location. Moreover, by applying Markov’s inequality to ∥ℓ−𝝁 𝐿 ∥22, we obtain a simple certifi-cate: P(∥ ℓ − 𝝁 𝐿 (𝑏 𝑡 )∥ 2 ≥ 𝛿 ) ≤ Spread (𝑏 𝑡 )2 
+
+> 𝛿 2
+
+, so enforcing Spread (𝑏 𝑡 ) <
+
+𝜁 directly upper-bounds the probability of large localization error at a chosen scale 𝛿 . This makes Spread-based stopping a princi-pled accuracy–budget control mechanism rather than a heuris-tic termination rule. We expose to the policy from 𝑏 𝐿 𝑡 : 𝑔 (𝑏 𝑡 ) ∈ {𝝁 𝐿 (𝑏 𝑡 ); [𝝁 𝐿 (𝑏 𝑡 ), diag (𝚺 𝐿 (𝑏 𝑡 )) 1/2, Spread (𝑏 𝑡 )]} . Intuitively, 𝝁 𝐿 
+
+supports exploitation (move toward the current best estimate), while diag (𝚺 𝐿 )1/2 and Spread quantify remaining uncertainty to guide exploration and enable self-cessation. The belief features consumed by the policy are 𝑓 bel (𝑏 𝑡 ) = 𝑔 (𝑏 𝑡 ) and the full policy input is 𝝍 𝑡 = [𝑜 𝑡 , 𝒑 𝑡 , 𝑓 bel (𝑏 𝑡 )] . Our control objective is to maxi-mize the expected discounted cumulative information gain, 𝐽 (𝜃 ) =
+
+E𝜋 𝜃 
+
+Í 𝑇 𝑡 =1 𝛾 𝑡 −1𝑟 IG 
+
+> 𝑡
+
+, where 𝑟 IG  
+
+> 𝑡
+
+is computed exclusively from the PF teacher belief (Eq. (2) ). Because 𝑟 IG  
+
+> 𝑡
+
+is a dense but noisy one-step Monte Carlo estimator of posterior contraction, we adopt an on-policy actor–critic with generalized advantage estimation (GAE) to reduce variance and stabilize learning. We learn a continuous-control policy 𝜋 𝜃 (𝑎 𝑡 | 𝝍 𝑡 ) using Proximal Policy Optimization (PPO). We parameterize 𝜋 𝜃 as a diagonal Gauss-ian, 𝜋 𝜃 (𝑎 𝑡 | 𝝍 𝑡 ) = N 𝑎 𝑡 ; 𝝁 𝜃 (𝝍 𝑡 ), diag (𝝈 𝜃 (𝝍 𝑡 )2), and learn a value function 𝑉 𝜙 (𝝍 𝑡 ). Using on-policy rollouts, we compute GAE: 𝛿 𝑡 =
+
+𝑟 IG  
+
+> 𝑡 +1
+
++ 𝛾𝑉 𝜙 (𝝍 𝑡 +1)( 1 − done 𝑡 +1) − 𝑉 𝜙 (𝝍 𝑡 ), ˆ𝐴 𝑡 = Í∞ 
+
+> 𝑙 =0
+
+(𝛾𝜆 )𝑙 𝛿 𝑡 +𝑙 , with 
+
+𝜆 ∈ [ 0, 1]. Let 𝜋 𝜃 old denote the behavior policy and define the ratio 
+
+𝑟 𝑡 (𝜃 ) = 𝜋 𝜃 (𝑎 𝑡 |𝝍 𝑡 )    
+
+> 𝜋 𝜃 old (𝑎 𝑡 |𝝍 𝑡 )
+
+. PPO maximizes the clipped surrogate objective 
+
+LPPO (𝜃 ) = E𝑡 
+
+min (𝑟 𝑡 (𝜃 ) ˆ𝐴 𝑡 , clip (𝑟 𝑡 (𝜃 ), 1 − 𝜖, 1 + 𝜖 ) ˆ𝐴 𝑡 ), and we optimize max 𝜃,𝜙 LPPO (𝜃 )− 𝑐 𝑣 E𝑡 
+
+
+
+𝑉 𝜙 (𝝍 𝑡 ) − ˆ𝑅 𝑡 
+
+2
+
++𝑐 ent E𝑡 
+
+H 𝜋 𝜃 (· | 𝝍 𝑡 ) ,where ˆ𝑅 𝑡 is the bootstrapped return and H (·) is entropy. During data collection, exploration is achieved by sampling 𝑎 𝑡 ∼ 𝜋 𝜃 (· | 𝝍 𝑡 );at evaluation time, we use the mean action. Training is summarized in Algorithm 1; deployment removes the PF teacher, yielding a constant-time loop (Algorithm 2). 
+
+## 4.6 Stopping Rule and Complexity 
+
+We terminate an episode once the posterior over the source loca-tion is sufficiently concentrated or a maximum horizon is reached. Formally, our stopping rule is Spread (𝑏 𝑡 ) =√︁ tr (𝚺 (𝑏 𝑡 )) < 𝜁 , for a user-chosen threshold 𝜁 > 0, which ensures the expected local-ization error is below a user-specified tolerance (Appendix A). Per time step during training, the PF teacher costs O( 𝑁 ), while the student forward pass and policy inference are O( 1). At test time, the teacher is completely absent: we run only the student posterior 
+
+𝑞 𝜑 (𝚯 | 𝑜 𝑡 , 𝒑 𝑡 ) and the policy 𝜋 𝜃 . Let 𝑁 be the particle budget and 
+
+𝑑 = dim (𝚯 ). During training, the PF teacher performs (i) likelihood evaluation and reweighting 𝑂 (𝑁 · 𝐶 lik ), (ii) occasional resampling 
+
+𝑂 (𝑁 ), and (iii) optional MH rejuvenation whose dominant cost is also 𝑂 (𝑁 · 𝐶 lik ) plus computing particle moments (up to 𝑂 (𝑁𝑑 2) if a full covariance is used). Computing the KL-based intrinsic reward from PF weights is 𝑂 (𝑁 ). The student and policy forward passes are 𝑂 (1) w.r.t. 𝑁 (dependent on network size). At deployment, we discard the PF entirely and run only the student posterior and policy networks, yielding 𝑂 (1) per-step time and 𝑂 (1) memory w.r.t. 𝑁 .
+
+## 5 Experiments 
+
+We evaluate on ISLCenv (App. C , [ 11 ]), a suite of physics-grounded closed-loop field-sensing environments for inverse source lo-calization and characterization. Each episode instantiates a latent KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+scalar field 𝜙 (· ; Θ) using the steady-state convection–diffusion for-ward model (Gaussian plume instantiation in Sec. 3 or C), and the agent observes a noisy intensity reading 𝑜 𝑡 at its pose p𝑡 . The agent controls its motion via actions 𝑎 𝑡 and must actively collect informa-tive measurements to infer the unknown field parameters 𝚯 and localize the source. We consider multiple field types (Temp. [ 22 ], Conc.[ 68 ], Mag.[ 8 ], Elec.[ 12 ], Gas [ 11 ], En.[ 2], and Noise [ 56 ]) to cover diverse signal characteristics and dynamics. At the begin-ning of each episode, we sample the source and environmental parameters from predefined distributions (Table 6), including the source location (𝑥 𝑠 , 𝑦 𝑠 ), release strength 𝑞 𝑠 , wind-related parame-ters, decay, and diffusivity. The agent starts from a random initial position in a designated region and moves with a fixed step size. Each episode terminates when either (i) a maximum horizon 𝐻 is reached, or (ii) the uncertainty certificate falls below a threshold 𝜁 .
+
+Baselines and Metrics: We compare our method against a di-verse set of baselines covering RL, planning, and Bayesian-inference-driven strategies: AGDC [ 64 ], Infotaxis [ 71 ], DCEE [ 11 ], Entrotaxis [31 ], PCDQN [ 79 ], GMM-PFRL [ 54 ], and GMM-IG [ 40 ]. These base-lines are grouped into: (i) RL-based approaches that learn a policy from interaction, possibly augmented with belief/inference mod-ules; and (ii) planning-based approaches that explicitly optimize information-related objectives using a Bayesian belief update. All methods are evaluated under the same environment settings and episode budgets. We evaluate both task performance and infer-ence quality using five metrics: (1) Success Rate (SR) , the fraction of episodes that satisfy the stopping criterion (e.g., Spread 𝑡 < 𝜁 )within the maximum horizon; (2) Trajectory Efficiency (TE) ,measured by the number of steps 𝑇 𝑘 until termination (lower is better); (3) Source Localization Error (SLE) , the Euclidean error between the posterior-mean location estimate and the ground-truth source location at termination; and (4) Full-Parameter Estima-tion Error (FPE) , which measures estimation accuracy of the full physical parameter vector 𝚯 ∈ R𝑑 at termination and (5) Uncer-tainty Quality (UQ) , measured by the negative log-likelihood (NLL) of the ground-truth parameters under the predicted posterior, 
+
+NLL = − log 𝑞 𝜑 (𝚯 ) (see Appendix C.1). 
+
+Research Questions (RQ): Our experiments are organized to answer the following research questions: (1) (RQ1. in Sec. 5.1) Does Distill-Belief outperform consis-tently strong RL- and planning-based baselines on standard single-source ISLC across diverse physical field modalities in practice, while jointly improving task performance and inference/uncertainty quality? (2) (RQ2. in Sec. 5.2) How well does the method scale in realis-tic scenarios as the number of simultaneous sources increases (i.e., increasingly multi-modal posteriors)? (3) (RQ3. in Sec. 5.3) Can Distill-Belief maintain high success and efficiency in obstacle-constrained (non-convex) environ-ments where reachability limits informative sensing? (4) (RQ4. in Sec. 5.4) What are the contributions of key de-sign choices , and how do these choices affect robustness to shortcut/reward-hacking behaviors in realistic settings? (5) (RQ5. in Sec. 5.5) What is the deployment-time inference cost in terms of particle budget of the distilled student com-pared with PF-based inference? (6) (RQ6). in Sec. 5.6 How sensitive are results to PF hyper-parameters, and where is the practical performance-cost frontier as particle budgets vary in practice? 
+
+## 5.1 Single-Source Cross-Field Results 
+
+We evaluate in-distribution (ID) performance on a held-out set of randomly generated scenarios. Unless stated otherwise, all meth-ods share the same environment configurations, training budgets, and network architectures (when applicable), and we report mean and standard deviation over multiple random seeds. We use the metrics defined in Sec. 5 to jointly assess task performance and belief/uncertainty quality, and follow each baseline’s recommended hyperparameters unless explicitly stated otherwise. Additional im-plementation details are provided in the appendix D.4. 
+
+Table 2: Comparison of Baselines Under Different Scenarios Method Temp. Conc. Mag. Elec. Gas En. Noise SR (Success Rate) ↑                                                                                                                                                                                                                                                                                                  
+
+> Distill-Belief 0.95 ±0.05 0.94 ±0.05 0.94 ±0.05 0.82 ±0.04 0.96 ±0.05 0.63 ±0.03 0.94 ±0.05 GMM-IG 0.90 ±0.05 0.91 ±0.05 0.89 ±0.04 0.77 ±0.04 0.92 ±0.05 0.61 ±0.03 0.91 ±0.05 GMM-PFRL 0.80 ±0.04 0.81 ±0.04 0.81 ±0.04 0.68 ±0.03 0.79 ±0.04 0.51 ±0.03 0.80 ±0.04 PCDQN 0.87 ±0.04 0.88 ±0.04 0.86 ±0.04 0.74 ±0.04 0.86 ±0.04 0.57 ±0.03 0.86 ±0.04 AGDC 0.90 ±0.05 0.91 ±0.05 0.89 ±0.04 0.73 ±0.04 0.89 ±0.04 0.57 ±0.03 0.89 ±0.04 Infotaxis 0.85 ±0.04 0.86 ±0.04 0.85 ±0.04 0.75 ±0.04 0.84 ±0.04 0.55 ±0.03 0.80 ±0.04 Entrotaxis 0.24 ±0.01 0.23 ±0.01 0.25 ±0.01 0.15 ±0.01 0.22 ±0.01 0.14 ±0.01 0.23 ±0.01 DCEE 0.58 ±0.03 0.59 ±0.03 0.58 ±0.03 0.43 ±0.02 0.56 ±0.03 0.36 ±0.02 0.57 ±0.03
+> TE (Trajectory Efficiency) ↓
+> Distill-Belief 20 ±1.0 19 ±1.0 18 ±0.9 19 ±0.8 17 ±0.9 19 ±0.5 19 ±1.0 GMM -IG 23 ±1.2 22 ±1.1 22 ±1.1 23 ±0.9 20 ±1.0 22 ±0.6 21 ±1.1 GMM-PFRL 25 ±1.3 24 ±1.2 25 ±1.2 20 ±1.0 22 ±1.1 24 ±0.7 23 ±1.2 PCDQN 25 ±1.3 24 ±1.2 24 ±1.2 19 ±1.0 21 ±1.1 23 ±0.7 22 ±1.1 AGDC 45 ±2.3 43 ±2.2 42 ±2.1 44 ±1.8 40 ±2.0 45 ±1.3 42 ±2.1 Infotaxis 50 ±2.5 48 ±2.4 51 ±2.4 58 ±1.9 43 ±2.2 47 ±1.4 45 ±2.3 Entrotaxis 62 ±3.1 60 ±3.0 59 ±3.0 61 ±2.5 56 ±2.8 55 ±1.8 58 ±2.9 DCEE 57 ±2.9 55 ±2.8 54 ±2.7 55 ±2.3 51 ±2.6 57 ±1.6 53 ±2.7
+> REV (Robustness and Error Variation) ↓
+> Distill-Belief 0.15 ±0.08 0.14 ±0.07 0.14 ±0.07 0.12 ±0.06 0.14 ±0.07 0.09 ±0.05 0.13 ±0.07 GMM-IG 0.1 ±0.05 0.1 ±0.05 0.1 ±0.05 0.09 ±0.05 0.1 ±0.05 0.07 ±0.04 0.1 ±0.05 GMM-PFRL 0.1 ±0.05 0.1 ±0.05 0.1 ±0.05 0.09 ±0.05 0.1 ±0.05 0.07 ±0.04 0.1 ±0.05 PCDQN 0.1 ±0.05 0.1 ±0.05 0.1 ±0.05 0.09 ±0.05 0.1 ±0.05 0.07 ±0.04 0.1 ±0.05 AGDC 1.6 ±0.08 1.5 ±0.08 1.5 ±0.08 1.2 ±0.06 1.3 ±0.07 0.8 ±0.04 1.4 ±0.07 Infotaxis 1.5 ±0.08 1.4 ±0.07 1.4 ±0.07 1.2 ±0.06 1.3 ±0.07 0.8 ±0.04 1.3 ±0.07 Entrotaxis 1.4 ±0.07 1.3 ±0.07 1.3 ±0.07 1.1 ±0.06 1.2 ±0.06 0.7 ±0.04 1.2 ±0.06 DCEE 1.4 ±0.07 1.3 ±0.07 1.3 ±0.07 1.1 ±0.06 1.2 ±0.06 0.7 ±0.04 1.2 ±0.06
+> LPS (Local Posterior Spread) ↓
+> Distill-Belief 0.08 ±0.01 0.05 ±0.01 0.06 ±0.01 0.05 ±0.01 0.06 ±0.01 0.05 ±0.01 0.06 ±0.01 GMM-IG 0.2 ±0.01 0.2 ±0.01 0.2 ±0.01 0.17 ±0.01 0.2 ±0.01 0.13 ±0.01 0.2 ±0.01 GMM-PFRL 0.25 ±0.01 0.24 ±0.01 0.24 ±0.01 0.20 ±0.01 0.22 ±0.01 0.14 ±0.01 0.23 ±0.01 PCDQN 0.23 ±0.01 0.22 ±0.01 0.22 ±0.01 0.18 ±0.01 0.20 ±0.01 0.12 ±0.01 0.21 ±0.01 AGDC 0.25 ±0.01 0.24 ±0.01 0.23 ±0.01 0.19 ±0.01 0.21 ±0.01 0.13 ±0.01 0.22 ±0.01 Infotaxis 0.6 ±0.03 0.6 ±0.03 0.6 ±0.03 0.51 ±0.02 0.6 ±0.03 0.39 ±0.02 0.6 ±0.03 Entrotaxis 0.7 ±0.04 0.7 ±0.04 0.7 ±0.04 0.60 ±0.03 0.7 ±0.04 0.46 ±0.02 0.7 ±0.04 DCEE 0.6 ±0.03 0.6 ±0.03 0.6 ±0.03 0.51 ±0.02 0.6 ±0.03 0.39 ±0.02 0.6 ±0.03
+
+Table 2 summarizes the core single-source results across seven field types. Overall, Distill-Belief achieves the strongest task success and efficiency : it consistently attains the highest (or near-highest) SR while requiring markedly fewer steps (TE) to reach the stopping criterion. The gains are most pronounced on challenging modalities such as Elec. and En. , where planning-based baselines degrade substantially, while our method maintains a substantially higher success rate with shorter trajectories. A key observation is that high SR is not obtained by “early stopping” alone. Our method also yields substantially lower LPS across all field types, indicating that the policy is indeed driving 
+
+belief contraction rather than terminating prematurely. In contrast, Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+planning baselines (Infotaxis / Entrotaxis / DCEE) tend to suffer from either myopic information seeking or overly conservative exploration under noisy observations, leading to long trajectories and low SR. Among RL-based competitors, we observe a clear trade-off between exploration efficiency and inference quality. While some RL baselines can achieve competitive REV in easier modalities, they typically require longer trajectories and/or exhibit inferior LPS, suggesting that they do not reduce posterior dispersion as reliably. By explicitly coupling a Bayes-correct teacher reward with amortized belief features, Distill-Belief attains both high success and fast termination, demonstrating that belief-space objectives provide a stronger training signal than sparse or heuristic rewards. 
+
+## 5.2 Multi-Source Localization 
+
+Table 3 reports multi-source localization performance in the Tem-perature field with 2/3/4 sources. While single-source localization is a standard benchmark, many real scenarios involve multiple emitters (e.g., multiple leaks or hotspots), leading to observation superposition and a multi-modal posterior. This setting is therefore substantially more challenging: the agent must both disambiguate multiple peaks in the belief space and allocate sensing trajectories to reduce uncertainty across sources. By increasing the number of sources, we explicitly test whether methods that perform well under near-unimodal posteriors can scale to multi-modal beliefs without collapsing into local sensing patterns. We summarize per-formance using ASLE, WCSE, and BCR to capture both average accuracy and worst-case reliability across sources. 
+
+Table 3: Multi-source performance in the Temperature field. Method 2 Sources (SR ↑ / TE ↓) 3 Sources (SR ↑ / TE ↓) 4 Sources (SR ↑ / TE ↓)                      
+
+> Distill-Belief 0.77 ±0.03 / 28 ±30.70 ±0.03 / 34 ±40.61 ±0.04 / 40 ±5AGDC 0.71 ±0.03 / 34 ±40.63 ±0.04 / 42 ±50.53 ±0.05 / 50 ±6GMM-IG 0.66 ±0.04 / 39 ±50.58 ±0.05 / 48 ±60.47 ±0.05 / 58 ±7PCDQN 0.63 ±0.04 / 42 ±60.53 ±0.05 / 52 ±70.41 ±0.06 / 62 ±8GMM-PFRL 0.68 ±0.03 / 55 ±60.56 ±0.05 / 65 ±80.43 ±0.06 / 78 ±10 Infotaxis 0.65 ±0.04 / 60 ±70.51 ±0.06 / 72 ±90.36 ±0.07 / 85 ±12 DCEE 0.40 ±0.02 / 72 ±60.33 ±0.03 / 86 ±70.26 ±0.04 / 100 ±9
+
+As shown in Table 3, performance degrades as the number of sources increases, which is expected due to observation superposi-tion and multi-modality. Nevertheless, Distill-Belief remains the best-performing method in both SR and TE across 2/3/4 sources. This indicates that the learned policy does not collapse to a single local sensing pattern; instead, it continues to gather informative measurements that reduce global ambiguity. Planning baselines exhibit a sharper drop in SR and a rapid increase in TE, consis-tent with their difficulty in handling multi-modal posteriors and long-horizon disambiguation under motion constraints. 
+
+## 5.3 Obstacle-Constrained Environments 
+
+Table 4 evaluates performance under obstacle-constrained environ-ments with varying obstacle densities. Obstacles induce non-convex feasible regions and often prevent the agent from taking a direct path to the most informative areas, which can expose brittleness in greedy information-seeking baselines and in policies that do not properly account for reachability. This suite is included to assess 
+
+(a) Ablation Reward. Full  
+
+> (Student only)
+> PF-only
+> at test
+> Reward-from-
+> Student
+> 0
+> 2
+> 4
+> 6
+> 8
+> Relative Latency
+> 1.0×
+> 6.5×
+> 1.1×
+> Deployment Cost: Test-Time Inference
+
+(b) Test-time inference latency. 
+
+(c) Ablation on Belief-optimization pipeline. 
+
+Figure 3: Ablation study and deployment analysis. 
+
+practical deployability: the agent must maintain localization qual-ity while producing efficient and feasible trajectories under sparse, moderate, and dense obstacle layouts. We report SR, TE, and LPS to jointly reflect localization performance, sensing efficiency, and path-level behavior in constrained navigation. 
+
+Table 4: Performance under obstacle-rich environments.                            
+
+> Method Sparse (SR ↑/ TE ↓)Moderate (SR ↑/ TE ↓)Dense (SR ↑/ TE ↓)
+> Distill-Belief (ours) 0.90 ±0.04 / 21 ±10.86 ±0.05 / 25 ±10.80 ±0.06 / 31 ±2GMM-IG 0.85 ±0.05 / 24 ±10.81 ±0.05 / 28 ±20.74 ±0.06 / 35 ±2AGDC 0.85 ±0.05 / 46 ±20.80 ±0.05 / 52 ±30.72 ±0.06 / 61 ±3PCDQN 0.82 ±0.05 / 26 ±10.77 ±0.06 / 31 ±20.69 ±0.06 / 38 ±2GMM-PFRL 0.75 ±0.05 / 26 ±10.70 ±0.06 / 31 ±20.62 ±0.07 / 38 ±2Infotaxis 0.80 ±0.06 / 52 ±30.74 ±0.06 / 60 ±30.65 ±0.07 / 71 ±4DCEE 0.55 ±0.07 / 59 ±30.48 ±0.08 / 68 ±40.38 ±0.09 / 80 ±4
+
+Table 4 shows that obstacles reduce SR and increase TE for all methods as density grows from sparse to dense, since non-convex reachability limits access to maximally informative regions. Across all densities, Distill-Belief remains the strongest method, achiev-ing the highest success rates (SR: 0.90 /0.86 /0.80 under sparse/mod-erate/dense) while terminating with the fewest steps (TE: 21 /25 /31 ), indicating belief-driven yet constraint-aware exploration. Among RL baselines, GMM-IG is the closest competitor but still trails in suc-cess and efficiency (SR: 0.85 /0.81 /0.74 , TE: 24 /28 /35 ), while AGDC 
+
+suffers especially poor efficiency under obstacles (TE: 46 /52 /61 ), suggesting difficulty coordinating informative sensing with feasible navigation. Planning-based approaches degrade more sharply in dense layouts ( Infotaxis TE 71 ; DCEE SR 0.38 with TE 80 ), con-sistent with over-committing to locally informative but globally inefficient routes and failing the certificate within the horizon. 
+
+## 5.4 Ablation Studies 
+
+We conduct two complementary ablations to isolate the contribu-tions of our belief-optimization pipeline and reward shaping. Table 7 ablates key components in the teacher-student belief pipeline. Ta-ble 8 further isolates reward design by comparing dense KL-based KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+information gain with sparse hard-success feedback. Unless other-wise noted, we report SR, TE, SLE, FPE and UQ(NLL) for reward design we additionally report Steps@70% SR to quantify sample efficiency. Belief-optimization pipeline. Table 7 and Figure 3c shows that the gains are not due to a single heuristic. Removing the KL-based IG reward substantially reduces SR and increases TE, indicating that dense belief-space shaping is important for sample-efficient exploration. Computing the KL objective from the student belief degrades both performance and UQ, consistent with short-cutting when the same approximation is used for both reward and policy input. Distillation is critical for efficient deployment: PF-only testing remains competitive but forfeits amortized inference, while student-only training without PF supervision significantly harms SR/SLE/FPE/UQ, highlighting the need for Bayes-correct teacher guidance. Finally, removing Spread features or Spread-based stop-ping mainly hurts efficiency and calibration, and disabling MH reju-venation degrades stability and posterior quality, suggesting that PF diversity improves supervision. Reward design. Table 8 and Fig-ure 3a confirms that sparse hard-success feedback is substantially less learnable, leading to lower SR, worse UQ, and markedly poorer sample efficiency. In contrast, the dense KL-based information-gain reward provides shaped, belief-aligned feedback throughout an episode, accelerating learning and improving both trajectory effi-ciency and posterior quality. The mixed and curriculum variants suggest that once reliable exploration emerges, task-success signals can be added without sacrificing the benefits of KL shaping. 
+
+## 5.5 Deployment Cost and Amortized Inference 
+
+Table 9 focuses on test-time cost. PF-based belief updates scale lin-early with the number of particles, which can become a bottleneck for real-time decision making or deployment across large numbers of scenarios. Our teacher–student design is motivated precisely to amortize Bayesian inference: the student predicts belief features in constant time while preserving the benefits of Bayes-correct train-ing signals. This table explicitly disentangles performance from 
+
+deployability by contrasting student-only inference against PF-only testing, and by showing how methods that rely on PF at test time incur O( 𝑁 ) per-step overhead. Table 9 and Figure 3b highlights the practical motivation of our teacher–student design. A PF up-date scales as O( 𝑁 ) per step and quickly becomes a deployment bottleneck, whereas the distilled student predicts belief features in O( 1) time. Importantly, the constant-time deployment does not come from weakening the training objective: Bayes correctness is enforced during training via the PF teacher, while the student inherits this behavior through distillation. 
+
+## 5.6 Sensitivity to Budget and Thresholds 
+
+Figure 4 and Table 4a evaluates sensitivity to PF hyperparameters. Because particle count and resampling/stopping thresholds are com-mon sources of confounding, we include this study to demonstrate that our gains are not due to a narrowly tuned setting. We vary the particle budget 𝑁 , the ESS resampling threshold 𝜏 ESS , and the stopping threshold 𝜏 stop , and report both performance metrics (SR, TE, SLE, UQ) and per-step latency. This analysis clarifies the practi-cal trade-off between computational cost and uncertainty quality, and verifies that our default configuration lies in a stable operating regime rather than a brittle optimum. 50 100 200 500              
+
+> Particle Budget N
+> 0.82
+> 0.84
+> 0.86
+> 0.88
+> 0.90
+> 0.92
+> 0.94
+> 0.96
+> SR
+> default
+> 50 100 200 500
+> Particle Budget N
+> 18
+> 20
+> 22
+> 24
+> TE
+> default
+> 50 100 200 500
+> Particle Budget N
+> 0.25
+> 0.30
+> 0.35
+> 0.40
+> 0.45
+> 0.50
+> SLE
+> default
+> 50 100 200 500
+> Particle Budget N
+> 1.0
+> 1.1
+> 1.2
+> 1.3
+> 1.4
+> 1.5
+> 1.6
+> UQ (NLL)
+> default
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> 16
+> ms/step
+
+(a) Sensitivity to particle budget 𝑁 (𝜏 ESS = 0.5). 0.3 0.5 0.7                   
+
+> ESS
+> 50
+> 100
+> 200
+> 500
+> Particle Budget  N
+> 0.84 0.85 0.84
+> 0.88 0.89 0.88
+> 0.91 0.92 0.91
+> 0.93 0.94 0.93
+> (a) Success Rate (SR)
+> 0.3 0.5 0.7
+> ESS
+> 50
+> 100
+> 200
+> 500
+> Particle Budget  N
+> 1.55 1.51 1.53
+> 1.36 1.34 1.35
+> 1.13 1.12 1.13
+> 1.07 1.06 1.07
+> (b) Uncertainty Quality (UQ)
+> 0.825
+> 0.850
+> 0.875
+> 0.900
+> 0.925
+> 0.950
+> 1.0
+> 1.2
+> 1.4
+> 1.6
+
+(b) Sensitivity heatmap over the 𝑁 × 𝜏 ESS grid for SR and UQ. 
+
+Figure 4: Hyperparameter sensitivity analysis. 
+
+Table 10 and Figure 4b shows a clear performance-cost trade-off with the particle budget. Increasing 𝑁 improves SR, reduces TE/SLE, and yields better UQ, but with diminishing returns beyond 𝑁 = 200 
+
+while training cost grows rapidly. Varying 𝜏 ESS has a comparatively smaller impact, indicating that our method operates in a stable regime rather than relying on a narrowly tuned resampling thresh-old. These results justify our default configuration as a balanced operating point that provides strong belief supervision without excessive training-time overhead. 
+
+## 6 Limitations and Ethical Considerations 
+
+Experiments use physics-grounded simulators with stochastic sens-ing; real deployments may add complexities. Two limitations re-main. 1) training depends on a Bayes-consistent particle-filter teacher for information-gain rewards and targets, which can be costly as the parameter space grows. 2) the compact test-time belief may be less effective in multi-source cases with multi-modal posteriors. This study uses no human-subject or personally identifiable data; real deployments should follow institutional policies and consent requirements. Finally, we emphasize that we have already validated the overall sensing-and-localization pipeline in real-world/physical experiments [ 28 , 30 ] with non-AI methods, and this paper extends that validated setting with a distillation-based policy. 
+
+## 7 Conclusion 
+
+We propose Distill-Belief, a teacher–student framework for closed-loop ISLC, where a particle-filter teacher supplies Bayes-consistent KL information-gain rewards during training and a compact student belief enables constant-cost control with uncertainty-based stop-ping at test time. Across seven physics-grounded modalities and stress tests, it improves success, sample efficiency, and uncertainty quality over strong baselines while mitigating reward hacking. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+## References 
+
+[1] Christophe Andrieu, Arnaud Doucet, and Roman Holenstein. 2010. Particle markov chain monte carlo methods. Journal of the Royal Statistical Society Series B: Statistical Methodology 72, 3 (2010), 269–342. [2] Simon R Arridge. 1999. Optical tomography in medical imaging. Inverse problems 
+
+15, 2 (1999), R41. [3] M Sanjeev Arulampalam, Simon Maskell, Neil Gordon, and Tim Clapp. 2002. A tutorial on particle filters for online nonlinear/non-Gaussian Bayesian tracking. 
+
+IEEE Transactions on signal processing 50, 2 (2002), 174–188. [4] Pierre-Luc Bacon, Jean Harb, and Doina Precup. 2017. The option-critic architec-ture. In Proceedings of the AAAI conference on artificial intelligence , Vol. 31. [5] Amvrossios C Bagtzoglou and Juliana Atmadja. 2005. Mathematical methods for hydrologic inversion: The case of pollution source identification. In Water Pollution: Environmental Impact Assessment of Recycled Wastes on Surface and Ground Waters; Engineering Modeling and Sustainability . Springer, 65–96. [6] Andrew G. Barto, Richard S. Sutton, and Charles W. Anderson. 1983. Neu-ronlike adaptive elements that can solve difficult learning control problems. 
+
+IEEE Transactions on Systems, Man, and Cybernetics SMC-13 (1983), 834–846. https://api.semanticscholar.org/CorpusID:1522994 [7] Frederic Bourgault, Alexei A Makarenko, Stefan B Williams, Ben Grocholsky, and Hugh F Durrant-Whyte. 2002. Information based adaptive robotic exploration. In IEEE/RSJ international conference on intelligent robots and systems , Vol. 1. IEEE, 540–545. [8] Axel Brandenburg and Kandaswamy Subramanian. 2005. Astrophysical magnetic fields and nonlinear dynamo theory. Physics Reports 417, 1-4 (2005), 1–209. [9] Yuri Burda, Harrison Edwards, Amos J. Storkey, and Oleg Klimov. 2018. Explo-ration by Random Network Distillation. ArXiv abs/1810.12894 (2018). https: //api.semanticscholar.org/CorpusID:53115163 [10] Kathryn Chaloner and Isabella Verdinelli. 1995. Bayesian experimental design: A review. Statistical science (1995), 273–304. [11] Wen-Hua Chen, Callum Rhodes, and Cunjia Liu. 2021. Dual control for exploita-tion and exploration (DCEE) in autonomous search. Automatica 133 (2021), 109851. [12] Margaret Cheney, David Isaacson, and Jonathan C Newell. 1999. Electrical impedance tomography. SIAM review 41, 1 (1999), 85–101. [13] Fotini Katopodes Chow, Branko Kosović, and Stevens T. Chan. 2005. Source Inversion for Contaminant Plume Dispersion in Urban Environments Using Building-Resolving Simulations. Journal of Applied Meteorology and Climatology 
+
+47 (2005), 1553–1572. https://api.semanticscholar.org/CorpusID:76658133 [14] Hyungjin Chung, Jeongsol Kim, Michael T. McCann, Marc Louis Klasky, and J. C. Ye. 2022. Diffusion Posterior Sampling for General Noisy Inverse Problems. ArXiv 
+
+abs/2209.14687 (2022). https://api.semanticscholar.org/CorpusID:252596252 [15] Daniel H Cusworth, Riley M Duren, Alana K Ayasse, Ralph Jiorle, Katherine Howell, Andrew Aubrey, Robert O Green, Michael L Eastwood, John W Chapman, Andrew K Thorpe, et al . 2024. Quantifying methane emissions from United States landfills. Science 383, 6690 (2024), 1499–1504. [16] Daniel Rodrigues Da Costa, Maxime Robic, Pascal Vasseur, and Fabio Morbidi. 2025. A New Stereo Fisheye Event Camera for Fast Drone Detection and Tracking. In IEEE International Conference on Robotics and Automation .[17] Matthieu Dogniaux, Joannes D Maasakkers, Marianne Girard, Dylan Jervis, Jason McKeever, Berend J Schuit, Shubham Sharma, Ana Lopez-Noreña, Daniel J Varon, and Ilse Aben. 2025. Global satellite survey reveals uncertainty in landfill methane emissions. Nature (2025), 1–6. [18] Adam Foster, Desi R. Ivanova, Ilyas Malik, and Tom Rainforth. 2021. Deep Adap-tive Design: Amortizing Sequential Bayesian Experimental Design. In Interna-tional Conference on Machine Learning . https://api.semanticscholar.org/CorpusID: 232104961 [19] Adam Foster, Martin Jankowiak, Eli Bingham, Paul Horsfall, Yee Whye Teh, Tom Rainforth, and Noah D. Goodman. 2019. Variational Bayesian Optimal Experimental Design. In Neural Information Processing Systems . https://api. semanticscholar.org/CorpusID:173990692 [20] Steven Hanna, Gary Allen Briggs, Rayford P. Hosker, and Jean S. Smith. 1982. Handbook on atmospheric diffusion. https://api.semanticscholar.org/CorpusID: 128993711 [21] Geoffrey E. Hinton, Oriol Vinyals, and Jeffrey Dean. 2015. Distilling the Knowledge in a Neural Network. ArXiv abs/1503.02531 (2015). https://api. semanticscholar.org/CorpusID:7200347 [22] Jason Hite, John Mattingly, Dan Archer, Michael Willis, Andrew Rowe, Kayleigh Bray, Jake Carter, and James Ghawaly. 2019. Localization of a radioactive source in an urban environment using Bayesian Metropolis methods. Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment 915 (2019), 82–93. [23] Edward R Holley. 1969. Unified view of diffusion and dispersion. Journal of the Hydraulics division 95, 2 (1969), 621–632. [24] Geoffrey A Hollinger and Gaurav S Sukhatme. 2014. Sampling-based robotic information gathering algorithms. The International Journal of Robotics Research 
+
+33, 9 (2014), 1271–1287. [25] Benjamin J. Holzschuh, S. Vegetti, and Nils Thuerey. 2023. Solving Inverse Physics Problems with Score Matching. In Neural Information Processing Systems .https://api.semanticscholar.org/CorpusID:256231499 [26] Hangkai Hu, Shiji Song, and C. L. Phillip Chen. 2019. Plume Tracing via Model-Free Reinforcement Learning Method. IEEE Transactions on Neural Networks and Learning Systems 30 (2019), 2515–2527. https://api.semanticscholar.org/CorpusID: 58623810 [27] Jianwen Huo, Manlu Liu, Konstantin A Neusypin, Haojie Liu, Mingming Guo, and Yufeng Xiao. 2020. Autonomous search of radioactive sources through mobile robots. Sensors 20, 12 (2020), 3461. [28] Michael Hutchinson, Pawel Ladosz, Cunjia Liu, and Wen-Hua Chen. 2019. Experi-mental assessment of plume mapping using point measurements from unmanned vehicles. In 2019 International Conference on Robotics and Automation (ICRA) .IEEE, 7720–7726. [29] Michael Hutchinson, Cunjia Liu, and Wen-Hua Chen. 2018. Information-based search for an atmospheric release using a mobile robot: Algorithm and experi-ments. IEEE Transactions on Control Systems Technology 27, 6 (2018), 2388–2402. [30] Michael Hutchinson, Cunjia Liu, and Wen-Hua Chen. 2019. Source term estima-tion of a hazardous airborne release using an unmanned aerial vehicle. Journal of Field Robotics 36, 4 (2019), 797–817. [31] Michael Hutchinson, Hyondong Oh, and Wen-Hua Chen. 2018. Entrotaxis as a strategy for autonomous search and source reconstruction in turbulent conditions. 
+
+Information Fusion 42 (2018), 179–189. [32] Kenneth D Jarman, Erin A Miller, Richard S Wittman, and Christopher J Gesh. 2011. Bayesian radiation source localization. Nuclear technology 175, 1 (2011), 326–334. [33] Dylan Jervis, Marianne Girard, Jean-Philippe W. Maclean, David Marshall, Jason McKeever, Mathias Strupler, Antoine Ramier, Ewan R. M. Tarrant, David Young, Joannes D. Maasakkers, Ilse Aben, and Tia R. Scarpelli. 2025. Global energy sector methane emissions estimated by using facility-level satellite observations. Science 
+
+390 6778 (2025), 1151–1155. https://api.semanticscholar.org/CorpusID:283745284 [34] Xue Jiang, Rui Ma, Yanxin Wang, Wenlong Gu, Wenxi Lu, and Jin Na. 2021. Two-stage surrogate model-assisted Bayesian framework for groundwater con-taminant source identification. Journal of Hydrology 594 (2021), 125955. [35] Adam Johansen. 2009. A tutorial on particle filtering and smoothing: Fifteen years later. (2009). [36] Nikolas Kantas, Arnaud Doucet, Sumeetpal S Singh, Jan Maciejowski, and Nicolas Chopin. 2015. On particle methods for parameter estimation in state-space models. (2015). [37] A. Keats, Eugene Yee, and F. S. Lien. 2007. Bayesian inference for source determina-tion with applications to a complex urban environment. Atmospheric Environment 
+
+41 (2007), 465–479. https://api.semanticscholar.org/CorpusID:95480737 [38] Steven Kleinegesse and Michael U Gutmann. 2020. Bayesian Experimental Design for Implicit Models by Mutual Information Neural Estimation. In International Conference on Machine Learning . https://api.semanticscholar.org/CorpusID: 211171409 [39] Pawel Ladosz, Hyondong Oh, Gan Zheng, and Wen-Hua Chen. 2020. Gaussian Process Based Channel Prediction for Communication-Relay UAV in Urban Environments. IEEE Trans. Aerospace Electron. Systems 56 (2020), 313–325. https: //api.semanticscholar.org/CorpusID:182548627 [40] Junhee Lee, Hongro Jang, Minkyu Park, and Hyondong Oh. 2025. Enhanced Re-ward Function Design for Source Term Estimation Based on Deep Reinforcement Learning. IEEE Access (2025). [41] Zhongguo Li, Wen-Hua Chen, Jun Yang, and Cunjia Liu. 2024. Cooperative active learning-based dual control for exploration and exploitation in autonomous search. IEEE Transactions on Neural Networks and Learning Systems (2024). [42] Jiaming Liang, Yichuan Wu, Justin K Yim, Huimin Chen, Zicong Miao, Hanxiao Liu, Ying Liu, Yixin Liu, Dongkai Wang, Wenying Qiu, et al . 2021. Electrostatic footpads enable agile insect-scale soft robots with trajectory control. Science Robotics 6, 55 (2021), eabe7906. [43] Timothy P. Lillicrap, Jonathan J. Hunt, Alexander Pritzel, Nicolas Manfred Otto Heess, Tom Erez, Yuval Tassa, David Silver, and Daan Wierstra. 2015. Continuous control with deep reinforcement learning. arXiv: Learning (2015). https://api. semanticscholar.org/CorpusID:16326763 [44] E. J. Liu, A. Aiuppa, A. Alan, S. Arellano, M. Bitetto, N. Bobrowski, S. Carn, R. Clarke, E. Corrales, J. M. de Moor, J. A. Diaz, M. Edmonds, T. P. Fis-cher, J. Freer, G. M. Fricke, B. Galle, G. Gerdes, G. Giudice, A. Gutmann, C. Hayer, I. Itikarai, J. Jones, E. Mason, B. T. McCormick Kilbride, K. Mulina, S. Nowicki, K. Rahilly, T. Richardson, J. Rüdiger, C. I. Schipper, I. M. Wat-son, and K. Wood. 2020. Aerial strategies advance volcanic gas measure-ments at inaccessible, strongly degassing volcanoes. Science Advances 6, 44 (2020), eabb9103. arXiv:https://www.science.org/doi/pdf/10.1126/sciadv.abb9103 doi:10.1126/sciadv.abb9103 [45] Runze Liu, Fengshuo Bai, Yali Du, and Yaodong Yang. 2022. Meta-Reward-Net: Implicitly Differentiable Reward Learning for Preference-based Reinforcement Learning. In Neural Information Processing Systems . https://api.semanticscholar. org/CorpusID:258509334 KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+[46] Enkeleida Lushi and John M. Stockie. 2009. An inverse Gaussian plume approach for estimating atmospheric pollutant emissions from multiple point sources. 
+
+Atmospheric Environment 44 (2009), 1097–1107. https://api.semanticscholar.org/ CorpusID:14414679 [47] JB Masson, M Bailly Bechet, and Massimo Vergassola. 2009. Chasing information to search in random environments. Journal of Physics A: Mathematical and Theoretical 42, 43 (2009), 434009. [48] Volodymyr Mnih, Adrià Puigdomènech Badia, Mehdi Mirza, Alex Graves, Timo-thy P. Lillicrap, Tim Harley, David Silver, and Koray Kavukcuoglu. 2016. Asyn-chronous Methods for Deep Reinforcement Learning. ArXiv abs/1602.01783 (2016). https://api.semanticscholar.org/CorpusID:6875312 [49] Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Andrei A. Rusu, Joel Veness, Marc G. Bellemare, Alex Graves, Martin A. Riedmiller, Andreas Kirkeby Fidjeland, Georg Ostrovski, Stig Petersen, Charlie Beattie, Amir Sadik, Ioannis Antonoglou, Helen King, Dharshan Kumaran, Daan Wierstra, Shane Legg, and Demis Hassabis. 2015. Human-level control through deep reinforcement learning. Nature 518 (2015), 529–533. https://api.semanticscholar.org/CorpusID:205242740 [50] Luca Delle Monache, Julie K. Lundquist, Branko Kosović, Gardar Jóhannesson, Kathleen M. Dyer, Roger D. Aines, Fotini Katopodes Chow, Rich D. Belles, William G. Hanley, Shawn Larsen, Gwendolen A. Loosmore, John J. Nitao, Gayle A. Sugiyama, and Phil Vogt. 2008. Bayesian Inference and Markov Chain Monte Carlo Sampling to Reconstruct a Contaminant Source on a Continental Scale. Journal of Applied Meteorology and Climatology 47 (2008), 2600–2613. https://api.semanticscholar.org/CorpusID:122705461 [51] A. Ng, Daishi Harada, and Stuart J. Russell. 1999. Policy Invariance Under Reward Transformations: Theory and Application to Reward Shaping. In International Conference on Machine Learning . https://api.semanticscholar.org/CorpusID: 5730166 [52] George Papamakarios, David C. Sterratt, and Iain Murray. 2018. Sequential Neural Likelihood: Fast Likelihood-free Inference with Autoregressive Flows. In International Conference on Artificial Intelligence and Statistics . https://api. semanticscholar.org/CorpusID:29166658 [53] Minkyu Park, Seulbi An, Jaemin Seo, and Hyondong Oh. 2021. Autonomous source search for UAVs using Gaussian mixture model-based infotaxis: Algorithm and flight experiments. IEEE Trans. Aerospace Electron. Systems 57, 6 (2021), 4238– 4254. [54] Minkyu Park, Pawel Ladosz, and Hyondong Oh. 2022. Source Term Estimation Using Deep Reinforcement Learning With Gaussian Mixture Model Feature Extraction for Mobile Sensors. IEEE Robotics and Automation Letters 7 (2022), 8323–8330. https://api.semanticscholar.org/CorpusID:249940756 [55] Deepak Pathak, Pulkit Agrawal, Alexei A. Efros, and Trevor Darrell. 2017. Curiosity-Driven Exploration by Self-Supervised Prediction. 2017 IEEE Con-ference on Computer Vision and Pattern Recognition Workshops (CVPRW) (2017), 488–489. https://api.semanticscholar.org/CorpusID:20045336 [56] J Picaut. 2002. Numerical modeling of urban sound fields by a diffusion process. 
+
+Applied Acoustics 63, 9 (2002), 965–991. [57] Faezeh Rahbar, Ali Marjovi, and Alcherio Martinoli. 2019. An algorithm for odor source localization based on source term estimation. In 2019 International Conference on Robotics and Automation (ICRA) . IEEE, 973–979. [58] Nicola Rigolli, Nicodemo Magnoli, Lorenzo Rosasco, and Agnese Seminara. 2021. Learning to predict target location with turbulent odor plumes. eLife 11 (2021). https://api.semanticscholar.org/CorpusID:235446309 [59] Branko Ristic, Alex Skvortsov, and Ajith Gunatilaka. 2016. A study of cognitive strategies for an autonomous search. Information Fusion 28 (2016), 1–9. [60] Branko Ristic, Alexei T. Skvortsov, and Ajith H. Gunatilaka. 2016. A study of cognitive strategies for an autonomous search. Inf. Fusion 28 (2016), 1–9. https://api.semanticscholar.org/CorpusID:1519176 [61] Adriana Romero, Nicolas Ballas, Samira Ebrahimi Kahou, Antoine Chassang, Carlo Gatta, and Yoshua Bengio. 2014. FitNets: Hints for Thin Deep Nets. CoRR 
+
+abs/1412.6550 (2014). https://api.semanticscholar.org/CorpusID:2723173 [62] John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, and Oleg Klimov. 2017. Proximal Policy Optimization Algorithms. ArXiv abs/1707.06347 (2017). https://api.semanticscholar.org/CorpusID:28695052 [63] Jaemin Seo, Geunsik Bae, and Hyondong Oh. 2025. Kalman filter-based distributed Gaussian process for unknown scalar field estimation in wireless sensor networks. 
+
+Expert Systems with Applications (2025), 127822. [64] Yiwei Shi, Muning Wen, Qi Zhang, Weinan Zhang, Cunjia Liu, and Weiru Liu. 2024. Autonomous Goal Detection and Cessation in Reinforcement Learning: A Case Study on Source Term Estimation. ArXiv abs/2409.09541 (2024). https: //api.semanticscholar.org/CorpusID:272689285 [65] Yiwei Shi, Mengyue Yang, Qi Zhang, Weinan Zhang, Cunjia Liu, and Weiru Liu. 2025. Attention-Driven Hierarchical Reinforcement Learning with Particle Fil-tering for Source Localization in Dynamic Fields. arXiv preprint arXiv:2501.13084 
+
+(2025). [66] Amarjeet Singh, Andreas Krause, Carlos Guestrin, William Kaiser, and Maxim Batalin. 2007. Efficient planning of informative paths for multiple robots. In 
+
+Proceedings of the 20th International Joint Conference on Artifical Intelligence 
+
+(Hyderabad, India) (IJCAI’07) . Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 2204–2211. [67] John M. Stockie. 2011. The Mathematics of Atmospheric Dispersion Modeling. 
+
+SIAM Rev. 53 (2011), 349–372. https://api.semanticscholar.org/CorpusID:8186270 [68] John M Stockie. 2011. The mathematics of atmospheric dispersion modeling. 
+
+Siam Review 53, 2 (2011), 349–372. [69] Vinh Tran-Quang and Hung Dao-Viet. 2022. An internet of radiation sensor system (IoRSS) to detect radioactive sources out of regulatory control. Scientific Reports 12, 1 (2022), 7195. [70] D B Turner. 1994. Workbook of atmospheric dispersion estimates : an introduction to dispersion modeling. https://api.semanticscholar.org/CorpusID:93715563 [71] Massimo Vergassola, Emmanuel Villermaux, and Boris I Shraiman. 2007. ‘In-fotaxis’ as a strategy for searching without gradients. Nature 445, 7126 (2007), 406–409. [72] Alexander Sasha Vezhnevets, Simon Osindero, Tom Schaul, Nicolas Heess, Max Jaderberg, David Silver, and Koray Kavukcuoglu. 2017. Feudal networks for hier-archical reinforcement learning. In International conference on machine learning .PMLR, 3540–3549. [73] Lingxiao Wang and Shuo Pang. 2023. Robotic Odor Source Localization via End-to-End Recurrent Deep Reinforcement Learning. 2023 Seventh IEEE International Conference on Robotic Computing (IRC) (2023), 43–50. https://api.semanticscholar. org/CorpusID:268707007 [74] Lingxiao Wang, Shuo Pang, and Jinlong Li. 2021. Olfactory-Based Navigation via Model-Based Reinforcement Learning and Fuzzy Inference Methods. IEEE Transactions on Fuzzy Systems 29 (2021), 3014–3027. https://api.semanticscholar. org/CorpusID:226425926 [75] Mengyu Yan, Zhengqiu Zhu, Yong Zhao, Bin Chen, Yatai Ji, Kai Xu, and Shuohao Li. 2025. Goal-oriented multi-robot collaborative source search with dynamic exploration-exploitation balance in large-scale constrained areas. Information Fusion (2025), 103539. [76] Qinsheng Zhang, Amirhossein Taghvaei, and Yongxin Chen. 2023. An optimal control approach to particle filtering. Automatica 151 (2023), 110894. [77] Yanwu Zhang, John P Ryan, Brett W Hobson, Brian Kieft, Anna Romano, Benedetto Barone, Christina M Preston, Brent Roman, Ben-Yair Raanan, Douglas Pargett, et al . 2021. A system of coordinated autonomous robots for Lagrangian studies of microbes in the oceanic deep chlorophyll maximum. Science Robotics 
+
+6, 50 (2021), eabb9138. [78] Xiangyu Zhao, Wang Zhou, Kuang Cheng, Yi Cao, and Shuang-Hua Yang. 2024. Regression-enhanced Entrotaxis as an autonomous search algorithm for seeking an unknown gas leakage source. Expert Systems with Applications 242 (2024), 122569. [79] Yong Zhao, Bin Chen, XiangHan Wang, Zhengqiu Zhu, Yiduo Wang, Guangquan Cheng, Rui Wang, Rongxiao Wang, Ming He, and Yu Liu. 2022. A deep rein-forcement learning based searching method for source localization. Information Sciences 588 (2022), 67–81. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+## A Justification of the Spread-Based Stopping Certificate 
+
+Purpose and connection to the main text. In Sec. 4.5-4.6, we stop an episode once the location posterior is sufficiently concen-trated, quantified by Spread (𝑏 𝑡 ) =√︁ tr (Σ𝐿 (𝑏 𝑡 )) . This appendix ex-plains why √︁ tr (·) is an interpretable and principled uncertainty certificate: it (i) is a rotation-invariant scalar summary of posterior dispersion, (ii) equals the Bayes mean-squared error (MSE) of the posterior-mean estimator under squared loss, and (iii) yields simple expectation and tail bounds for Euclidean localization error. For notational simplicity, we write the location posterior covariance as 
+
+Σ𝑡 in this appendix; it corresponds exactly to Σ𝐿 (𝑏 𝑡 ) in the main text. 
+
+Setup and notation. Let the unknown source location be 𝜃 𝐿 ∈
+
+R2 (e.g., 𝜃 𝐿 = (𝑥 𝑠 , 𝑦 𝑠 )). Let 𝐷 𝑡 denote the information available up to time 𝑡 (e.g., observations and agent poses). Let the (location) posterior be 
+
+𝑏 𝐿 𝑡 (𝜃 𝐿 ) := 𝑝 (𝜃 𝐿 | 𝐷 𝑡 ).
+
+Define its mean and covariance 
+
+𝜇 𝑡 := E[𝜃 𝐿 | 𝐷 𝑡 ], Σ𝑡 := Cov (𝜃 𝐿 | 𝐷 𝑡 ).
+
+We define the scalar spread certificate 
+
+Spread (𝑏 𝑡 ) :=√︁ tr (Σ𝑡 ).
+
+Stopping requires a one-dimensional criterion that is easy to compute online and easy to interpret. The trace summarizes the total marginal uncertainty across coordinates (sum of variances), is invariant to rotations of the coordinate system, and √︁ tr (Σ𝑡 ) has the same units as distance, making it directly comparable to localization error thresholds. We stop when Spread (𝑏 𝑡 ) < 𝜁 for a user-chosen tolerance 𝜁 > 0.
+
+## A.1 Why √︁ tr (Σ𝑡 ) measures posterior concentration 
+
+Intuition. In 2D, tr (Σ𝑡 ) equals the sum of the two principal vari-ances (eigenvalues) 𝜆 1 + 𝜆 2. Thus Spread (𝑏 𝑡 ) = √𝜆 1 + 𝜆 2 can be viewed as the root-sum-of-variances across the two spatial coordi-nates: it is small only when the posterior mass concentrates tightly around its mean in all directions, not merely along one axis. This makes it a conservative “how concentrated is the belief?” scalar. 
+
+Proposition A.1 (Trace–MSE identity). Assume 𝑏 𝐿 𝑡 has finite second moment. Then 
+
+E∥𝜃 𝐿 − 𝜇 𝑡 ∥22 | 𝐷 𝑡 
+
+ = tr (Σ𝑡 ).
+
+Equivalently, 
+
+Spread (𝑏 𝑡 ) =√︃ E∥𝜃 𝐿 − 𝜇 𝑡 ∥22 | 𝐷 𝑡 
+
+,
+
+i.e., Spread (𝑏 𝑡 ) is the posterior root-mean-square (RMS) Euclidean deviation from the posterior mean. 
+
+Remark. Proposition A.1 is purely algebraic and does not as-sume Gaussianity. It shows that Spread (𝑏 𝑡 ) is an exact posterior RMS deviation from the mean—hence a direct, model-agnostic mea-sure of posterior concentration. 
+
+Proof. Using ∥𝑥 ∥22 = 𝑥 ⊤𝑥 and tr (𝑎 ) = 𝑎 for scalars, 
+
+E[∥ 𝜃 𝐿 − 𝜇 𝑡 ∥22 | 𝐷 𝑡 ] = E[tr (( 𝜃 𝐿 − 𝜇 𝑡 )( 𝜃 𝐿 − 𝜇 𝑡 )⊤) | 𝐷 𝑡 ].
+
+Swap trace and expectation (linearity): 
+
+= tr  E[( 𝜃 𝐿 − 𝜇 𝑡 )( 𝜃 𝐿 − 𝜇 𝑡 )⊤ | 𝐷 𝑡 ] = tr (Σ𝑡 ).
+
+□
+
+## A.2 Decision-theoretic justification: Spread is the Bayes MSE of the reported estimate 
+
+A stopping rule should certify the quality of the reported estimate at termination . In our setting, the reported location is the posterior mean (consistent with the SLE metric in the main text). Under squared Euclidean loss, the posterior mean is Bayes-optimal, and its Bayes risk is exactly the posterior variance. Therefore, controlling 
+
+Spread (𝑏 𝑡 ) directly controls the best achievable posterior-expected squared error among all point estimators at that time step. 
+
+Proposition A.2 (Posterior mean is Bayes-optimal under sqared Euclidean loss). For any point estimate 𝑎 ∈ R2, define the conditional squared risk 
+
+R𝑡 (𝑎 ) := E∥𝜃 𝐿 − 𝑎 ∥22 | 𝐷 𝑡 
+
+ .
+
+Then 
+
+R𝑡 (𝑎 ) = tr (Σ𝑡 ) + ∥ 𝜇 𝑡 − 𝑎 ∥22,
+
+so R𝑡 (𝑎 ) is minimized at 𝑎 = 𝜇 𝑡 , and the minimum value is 
+
+min  
+
+> 𝑎 ∈R2
+
+R𝑡 (𝑎 ) = R𝑡 (𝜇 𝑡 ) = tr (Σ𝑡 ) = Spread (𝑏 𝑡 )2.
+
+Remark. Proposition A.2 shows that Spread (𝑏 𝑡 )2 is not an ar-bitrary statistic: it is precisely the Bayes MSE of the estimator we actually output at termination. 
+
+Proof. Decompose 𝜃 𝐿 − 𝑎 = (𝜃 𝐿 − 𝜇 𝑡 ) + ( 𝜇 𝑡 − 𝑎 ) and expand: 
+
+∥𝜃 𝐿 − 𝑎 ∥22 = ∥𝜃 𝐿 − 𝜇 𝑡 ∥22 + ∥ 𝜇 𝑡 − 𝑎 ∥22 + 2(𝜃 𝐿 − 𝜇 𝑡 )⊤ (𝜇 𝑡 − 𝑎 ).
+
+Take E[· | 𝐷 𝑡 ]. The cross term vanishes because E[𝜃 𝐿 − 𝜇 𝑡 | 𝐷 𝑡 ] = 0.Thus 
+
+R𝑡 (𝑎 ) = E[∥ 𝜃 𝐿 − 𝜇 𝑡 ∥22 | 𝐷 𝑡 ] + ∥ 𝜇 𝑡 − 𝑎 ∥22 = tr (Σ𝑡 ) + ∥ 𝜇 𝑡 − 𝑎 ∥22,
+
+where the last equality uses Proposition A.1. □
+
+Theorem A.3 (Stopping rule as a Bayes-MSE certificate). 
+
+Suppose the reported source location estimate at termination is the posterior mean ˆ𝜃 𝑡 := 𝜇 𝑡 . Then the condition 
+
+Spread (𝑏 𝑡 ) < 𝜁 
+
+is equivalent to requiring that the conditional Bayes mean-squared localization error is below 𝜁 2:
+
+E
+
+h
+
+∥𝜃 𝐿 − ˆ𝜃 𝑡 ∥22 | 𝐷 𝑡 
+
+i
+
+< 𝜁 2.
+
+Remark. Theorem A.3 provides the key semantics used in the main text: 𝜁 is an accuracy tolerance in RMS sense. This is exactly the kind of interpretable certificate needed to realize an explicit accuracy–budget trade-off. 
+
+Proof. By Proposition A.2, with ˆ𝜃 𝑡 = 𝜇 𝑡 ,
+
+E[∥ 𝜃 𝐿 − ˆ𝜃 𝑡 ∥22 | 𝐷 𝑡 ] = tr (Σ𝑡 ) = Spread (𝑏 𝑡 )2.
+
+Thus Spread (𝑏 𝑡 ) < 𝜁 ⇐⇒ Spread (𝑏 𝑡 )2 < 𝜁 2. □KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+## A.3 From squared error to Euclidean error and high-probability bounds 
+
+In experiments, localization quality is typically reported in Eu-clidean distance (e.g., SLE). The certificate above controls a squared-error quantity. This subsection translates the squared-error con-trol into (i) an expected Euclidean error bound and (ii) a simple tail bound on large Euclidean errors. These results justify using 
+
+Spread (𝑏 𝑡 ) as a stopping trigger even when the evaluation metric is Euclidean. 
+
+Corollary A.4 (Expected Euclidean error bound). Let ˆ𝜃 𝑡 =
+
+𝜇 𝑡 . Then 
+
+E
+
+h
+
+∥𝜃 𝐿 − ˆ𝜃 𝑡 ∥2 | 𝐷 𝑡 
+
+i
+
+≤ Spread (𝑏 𝑡 ).
+
+Consequently, Spread (𝑏 𝑡 ) < 𝜁 implies E[∥ 𝜃 𝐿 − ˆ𝜃 𝑡 ∥2 | 𝐷 𝑡 ] < 𝜁 .
+
+Takeaway. Corollary A.4 explains why Spread (𝑏 𝑡 ) is often read as an “RMS distance scale”: it upper-bounds the posterior-expected Euclidean localization error. 
+
+Proof. Apply Jensen to the concave function √· with 𝑋 = ∥𝜃 𝐿 −
+
+𝜇 𝑡 ∥22:
+
+E[∥ 𝜃 𝐿 − 𝜇 𝑡 ∥2 | 𝐷 𝑡 ] = E[√𝑋 | 𝐷 𝑡 ] ≤ √︁ E[𝑋 | 𝐷 𝑡 ] =√︁ tr (Σ𝑡 ).
+
+□
+
+Proposition A.5 (Distribution-free tail bound (Markov)). 
+
+For any 𝜀 > 0,
+
+P(∥ 𝜃 𝐿 − 𝜇 𝑡 ∥2 ≥ 𝜀 | 𝐷 𝑡 ) ≤ Spread (𝑏 𝑡 )2
+
+𝜀 2 .
+
+Remark. Proposition A.5 is conservative but assumption-light: it gives a distribution-free bound on the probability of a large lo-calization error event. In particular, if Spread (𝑏 𝑡 ) ≪ 𝜀 , then the posterior mass outside radius 𝜀 around the mean must be small. When additional distributional assumptions (e.g., near-Gaussian posteriors) are appropriate, stronger credible-radius statements are available. 
+
+Proof. Let 𝑍 = ∥𝜃 𝐿 − 𝜇 𝑡 ∥22 ≥ 0. Then P(∥ 𝜃 𝐿 − 𝜇 𝑡 ∥2 ≥ 𝜀 | 𝐷 𝑡 ) =
+
+P(𝑍 ≥ 𝜀 2 | 𝐷 𝑡 ). By Markov, 
+
+P(𝑍 ≥ 𝜀 2 | 𝐷 𝑡 ) ≤ E[𝑍 | 𝐷 𝑡 ]
+
+𝜀 2 = tr (Σ𝑡 )
+
+𝜀 2 = Spread (𝑏 𝑡 )2
+
+𝜀 2 .
+
+□
+
+## A.4 Why additional measurements help 
+
+A sequential information-gathering policy is expected to reduce uncertainty as new data arrive. However, due to noise and par-tial observability, a single realized measurement can occasionally increase posterior variance. This subsection clarifies the correct no-tion of monotonicity: while variance need not decrease pointwise for every measurement outcome, it does decrease in expectation 
+
+over the next observation. This supports the use of Spread 2 as a progress measure for termination and explains why early stopping will typically be reached under informative sensing. 
+
+Proposition A.6 (Law of total variance (conditioning re-duces variance in expectation)). Let 𝐷 𝑡 = (𝐷 𝑡 −1, new data at 𝑡 ).Then 
+
+Cov (𝜃 𝐿 | 𝐷 𝑡 −1) = E[Cov (𝜃 𝐿 | 𝐷 𝑡 ) | 𝐷 𝑡 −1]+ Cov (E[𝜃 𝐿 | 𝐷 𝑡 ] | 𝐷 𝑡 −1) .
+
+The second term is positive semidefinite, hence 
+
+E[Cov (𝜃 𝐿 | 𝐷 𝑡 ) | 𝐷 𝑡 −1] ⪯ Cov (𝜃 𝐿 | 𝐷 𝑡 −1).
+
+Taking trace yields 
+
+ESpread (𝑏 𝑡 )2 | 𝐷 𝑡 −1
+
+ ≤ Spread (𝑏 𝑡 −1)2.
+
+Remark. In expectation over the next measurement, posterior uncertainty contracts. Equivalently, Spread 2 forms a supermartingale-like progress statistic for sequential data acquisition. This justifies using Spread as a termination signal: while it may fluctuate lo-cally, it is biased toward decreasing as informative measurements accumulate. 
+
+## A.5 Gaussian interpretation as a credible-radius bound 
+
+The preceding results are distribution-free and thus conservative. If the posterior is approximately Gaussian (e.g., after sufficient data or under a Gaussian-belief approximation), one can map Spread (𝑏 𝑡 )
+
+to an explicit (1 − 𝛿 ) credible radius. This can be useful when users want to pick 𝜁 to match a target confidence level. 
+
+Proposition A.7 (2D Gaussian credible radius). Assume 𝜃 𝐿 |
+
+𝐷 𝑡 ∼ N ( 𝜇 𝑡 , Σ𝑡 ) in R2 and Σ𝑡 ≻ 0 (symmetric positive definite). Let 
+
+𝛿 ∈ ( 0, 1) and define 𝑐 𝛿 := −2 ln 𝛿 . Then 
+
+P
+
+
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥2 ≤ √𝑐 𝛿 √︁ tr (Σ𝑡 ) 𝐷 𝑡 
+
+
+
+≥ 1 − 𝛿. 
+
+Proof. Step 1: Whiten the Gaussian and obtain a 𝜒 2 vari-able. Since Σ𝑡 ≻ 0, it admits a symmetric square root Σ1/2 
+
+> 𝑡
+
+and in-verse square root Σ−1/2 
+
+> 𝑡
+
+satisfying Σ1/2 
+
+> 𝑡
+
+Σ1/2 
+
+> 𝑡
+
+= Σ𝑡 and Σ−1/2 
+
+> 𝑡
+
+Σ−1/2 
+
+> 𝑡
+
+=
+
+Σ−1 
+
+> 𝑡
+
+. Define the whitened variable 
+
+𝑧 := Σ−1/2 
+
+> 𝑡
+
+(𝜃 𝐿 − 𝜇 𝑡 ).
+
+Because 𝜃 𝐿 | 𝐷 𝑡 is Gaussian and 𝑧 is an affine transform of 𝜃 𝐿 , 𝑧 | 𝐷 𝑡 
+
+is also Gaussian. Its conditional mean and covariance are 
+
+E[𝑧 | 𝐷 𝑡 ] = Σ−1/2
+
+> 𝑡
+
+ E[𝜃 𝐿 | 𝐷 𝑡 ] − 𝜇 𝑡 
+
+ = 0,
+
+and 
+
+Cov (𝑧 | 𝐷 𝑡 ) = Σ−1/2 
+
+> 𝑡
+
+Cov (𝜃 𝐿 | 𝐷 𝑡 ) Σ−1/2 
+
+> 𝑡
+
+= Σ−1/2 
+
+> 𝑡
+
+Σ𝑡 Σ−1/2 
+
+> 𝑡
+
+= 𝐼 2.
+
+Hence 
+
+𝑧 | 𝐷 𝑡 ∼ N ( 0, 𝐼 2).
+
+In particular, the coordinates (𝑧 1, 𝑧 2) are i.i.d. N ( 0, 1), and therefore 
+
+∥𝑧 ∥22 = 𝑧 21 + 𝑧 22 ∼ 𝜒 22 .
+
+Moreover, 
+
+∥𝑧 ∥22 = 𝑧 ⊤𝑧 = (𝜃 𝐿 −𝜇 𝑡 )⊤ Σ−1/2 
+
+> 𝑡
+
+Σ−1/2 
+
+> 𝑡
+
+(𝜃 𝐿 −𝜇 𝑡 ) = (𝜃 𝐿 −𝜇 𝑡 )⊤ Σ−1 
+
+> 𝑡
+
+(𝜃 𝐿 −𝜇 𝑡 ).
+
+Step 2: Choose 𝑐 𝛿 so that P(𝜒 22 ≤ 𝑐 𝛿 ) = 1 − 𝛿 . For a 𝜒 22 random variable, the CDF has the closed form 
+
+P(𝜒 22 ≤ 𝑥 ) = 1 − 𝑒 −𝑥 /2, 𝑥 ≥ 0.
+
+Setting 𝑥 = 𝑐 𝛿 and choosing 𝑐 𝛿 = −2 ln 𝛿 gives 
+
+P(𝜒 22 ≤ 𝑐 𝛿 ) = 1 − 𝑒 −𝑐 𝛿 /2 = 1 − 𝑒 ln 𝛿 = 1 − 𝛿. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+Thus, 
+
+P ∥𝑧 ∥22 ≤ 𝑐 𝛿 𝐷 𝑡 
+
+ = 1 − 𝛿. 
+
+Step 3: Convert the 𝜒 2 ellipsoid to a Euclidean ball using 
+
+𝜆 max (Σ𝑡 ). We relate ∥𝜃 𝐿 − 𝜇 𝑡 ∥2 to ∥𝑧 ∥2 by writing 𝜃 𝐿 − 𝜇 𝑡 = Σ1/2 
+
+> 𝑡
+
+𝑧 :
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥22 = ∥Σ1/2 
+
+> 𝑡
+
+𝑧 ∥22 = 𝑧 ⊤ (Σ1/2 
+
+> 𝑡
+
+)⊤ Σ1/2 
+
+> 𝑡
+
+𝑧 = 𝑧 ⊤ Σ𝑡 𝑧, 
+
+where we used symmetry of Σ1/2 
+
+> 𝑡
+
+. Since Σ𝑡 is symmetric PSD, for any vector 𝑢 we have the Rayleigh-quotient bound 
+
+𝑢 ⊤ Σ𝑡 𝑢 ≤ 𝜆 max (Σ𝑡 ) 𝑢 ⊤𝑢 = 𝜆 max (Σ𝑡 ) ∥ 𝑢 ∥22.
+
+Applying this with 𝑢 = 𝑧 yields 
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥22 = 𝑧 ⊤ Σ𝑡 𝑧 ≤ 𝜆 max (Σ𝑡 ) ∥ 𝑧 ∥22.
+
+Therefore, on the event {∥ 𝑧 ∥22 ≤ 𝑐 𝛿 } we obtain 
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥22 ≤ 𝜆 max (Σ𝑡 ) 𝑐 𝛿 =⇒ ∥𝜃 𝐿 − 𝜇 𝑡 ∥2 ≤√︁ 𝜆 max (Σ𝑡 ) √𝑐 𝛿 .
+
+Step 4: Upper bound 𝜆 max (Σ𝑡 ) by tr (Σ𝑡 ) to match the Spread certificate. Let the eigenvalues of Σ𝑡 be 𝜆 1, 𝜆 2 ≥ 0. Then 
+
+𝜆 max (Σ𝑡 ) = max {𝜆 1, 𝜆 2 } ≤ 𝜆 1 + 𝜆 2 = tr (Σ𝑡 ).
+
+Hence, √︁ 
+
+𝜆 max (Σ𝑡 ) ≤ √︁ tr (Σ𝑡 ).
+
+Combining with Step 3, on {∥ 𝑧 ∥22 ≤ 𝑐 𝛿 } we have 
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥2 ≤ √𝑐 𝛿 √︁ tr (Σ𝑡 ).
+
+Step 5: Take probabilities. Because the event {∥ 𝑧 ∥22 ≤ 𝑐 𝛿 } implies the event {∥ 𝜃 𝐿 − 𝜇 𝑡 ∥2 ≤ √𝑐 𝛿 √︁ tr (Σ𝑡 )} , we get 
+
+P
+
+
+
+∥𝜃 𝐿 − 𝜇 𝑡 ∥2 ≤ √𝑐 𝛿 √︁ tr (Σ𝑡 ) 𝐷 𝑡 
+
+
+
+≥ P ∥𝑧 ∥22 ≤ 𝑐 𝛿 𝐷 𝑡 
+
+ = 1 − 𝛿, 
+
+where the last equality is Step 2. This proves the claim. □
+
+Remark. This bound says that, under Gaussianity, Spread (𝑏 𝑡 )
+
+controls a high-probability Euclidean error radius up to a factor √𝑐 𝛿 .The use of 𝜆 max (Σ𝑡 ) ≤ tr (Σ𝑡 ) makes the Euclidean-ball statement conservative (it upper-bounds the covariance ellipsoid by a ball). 
+
+## A.6 Practical computation under PF and diagonal-Gaussian student 
+
+The stopping rule must be computable both (i) from the PF teacher during training and (ii) from the distilled student at deployment. This subsection provides the explicit estimators used in both cases and makes the complexity claim transparent: PF computation is 
+
+O( 𝑁 ) in the number of particles, whereas the student computation is constant-time. 
+
+Weighted particles (PF teacher). Given location particles 𝜃 (𝑖 )
+
+> 𝐿
+
+with normalized weights 𝑤 (𝑖 ) :
+
+ˆ𝜇 𝑡 =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 )𝜃 (𝑖 ) 
+
+> 𝐿
+
+, ˆΣ𝑡 =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) (𝜃 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝜇 𝑡 )( 𝜃 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝜇 𝑡 )⊤,
+
+and 
+
+Spread (𝑏 𝑡 )2 = tr ( ˆΣ𝑡 ) =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) ∥𝜃 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝜇 𝑡 ∥22.
+
+Diagonal-Gaussian student. If Σ𝑡 = diag (𝜎 2 
+
+> 𝑥,𝑡
+
+, 𝜎 2 
+
+> 𝑦,𝑡
+
+), then 
+
+Spread (𝑏 𝑡 ) =√︃ 𝜎 2 
+
+> 𝑥,𝑡
+
++ 𝜎 2 
+
+> 𝑦,𝑡
+
+.
+
+Note on calibration. All guarantees above are posterior-conditional :they certify error under the inferred belief. In practice, this is mean-ingful when the belief is reasonably calibrated; in the main paper we therefore also report uncertainty-quality metrics (e.g., NLL) to empirically validate calibration. 
+
+## B Extension to 3D Space B.1 Motivation and overview 
+
+The main paper instantiates closed-loop inverse source localiza-tion and characterization (ISLC) in a 2D workspace, where the agent pose is p𝑡 = (𝑥 𝑡 , 𝑦 𝑡 ) ∈ R2 and the (single) source location is (𝑥 𝑠 , 𝑦 𝑠 ). Many practical deployments, however, are inherently three-dimensional: e.g., gas leakage localization in buildings, under-water plume tracing, and aerial sensing in atmospheric boundary layers. This appendix extends the entire Distill-Belief pipeline— field model, Bayes-consistent PF teacher, student posterior distil-lation, KL-based intrinsic reward, and the spread-based stopping certificate—to 3D physical space . Importantly, the teacher–student belief-optimization design is dimension-agnostic: only the forward model and the location-belief geometry change. 
+
+## B.2 3D POMDP and parameterization 
+
+3D workspace. Let the agent pose be p𝑡 = (𝑥 𝑡 , 𝑦 𝑡 , 𝑧 𝑡 ) ∈ R3. At each step the agent chooses an action a𝑡 ∈ A (e.g., a velocity command or displacement in R3), and receives a scalar observation 𝑜 𝑡 ∈ Ω
+
+(e.g., concentration, temperature). 
+
+unknown parameters value. We extend the physical param-eter vector from 2D to 3D by including the source altitude and vertical transport: 
+
+𝚯 3𝐷 = 𝑥 𝑠 , 𝑦 𝑠 , 𝑧 𝑠 , 𝑞 𝑠 , v, 𝛼, 𝜆 ⊤ ∈ R𝑑 , (3) where p𝑠 = (𝑥 𝑠 , 𝑦 𝑠 , 𝑧 𝑠 ) is the source location, 𝑞 𝑠 > 0 is source strength, v ∈ R3 is the (constant) convection velocity, 𝛼 > 0 is the (isotropic) diffusivity, and 𝜆 > 0 is an effective decay length-scale. If one prefers a directional parameterization, we can write 
+
+v = 𝑢 [cos 𝜙 cos 𝜗, sin 𝜙 cos 𝜗, sin 𝜗 ]⊤ with speed 𝑢 ≥ 0, azimuth 
+
+𝜙 ∈ [ 0, 2𝜋 ), and elevation 𝜗 ∈ [− 𝜋 /2, 𝜋 /2]. All results below hold for either representation. 
+
+3D belief. Let 𝐷 𝑡 denote the information up to time 𝑡 (e.g., 
+
+(𝑜 1: 𝑡 , p1: 𝑡 )). The Bayesian belief is 
+
+𝑏 𝑡 (𝚯 ) := 𝑝 (𝚯 | 𝐷 𝑡 ). (4) The control objective remains belief-space contraction via infor-mation gain, and the policy conditions on observations, pose, and distilled belief features. 
+
+## B.3 3D field: convection-diffusion-reaction 
+
+B.3.1 3D steady-state PDE. We adopt the same diffusion–transport– source abstraction as the main text, now in 3D. A common steady-state advection–diffusion–reaction model in R3 is 
+
+−𝛼 ∇2𝜙 (p) + v · ∇ 𝜙 (p) + 𝜅 𝜙 (p) = 𝑞 𝑠 𝛿 (p − p𝑠 ), (5) where 𝜙 (p) is the scalar field, 𝜅 ≥ 0 is an effective linear “reac-tion/decay” coefficient, and 𝛿 (·) is the Dirac delta. This PDE is translation-invariant under constant coefficients, so it is natural to KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+derive the Green’s function in coordinates r = p − p𝑠 and then shift back. 
+
+Connection to the main paper’s 𝜆 . In the main text, 𝜆 is used as an exponential decay parameter. In 3D, it is convenient to define the effective decay rate 
+
+𝑚 :=√︄ 𝜅 𝛼 + ∥v∥22
+
+4𝛼 2 (> 0), (6) and then set 
+
+𝜆 := 1
+
+𝑚 . (7) Equivalently, 𝜅 = 𝛼 /𝜆 2 − ∥ v∥22/( 4𝛼 ). This mapping ensures that the closed-form solution can be written with a clean exp (−∥ r∥/ 𝜆 )
+
+factor, matching the “decay length” interpretation. 
+
+B.3.2 Derivation of the 3D Green’s function (detailed). For clarity, set p𝑠 = 0 (source at the origin) and solve 
+
+−𝛼 ∇2𝜙 (p) + v · ∇ 𝜙 (p) + 𝜅 𝜙 (p) = 𝑞 𝑠 𝛿 (p). (8) 
+
+Step 1: remove the first-order (advection) term. Let 𝜷 :=
+
+v/( 2𝛼 ) and define the exponential transform 
+
+𝜙 (p) = exp (𝜷 ⊤p) 𝑢 (p). (9) Compute the gradient and Laplacian: 
+
+∇𝜙 = exp (𝜷 ⊤p)  ∇𝑢 + 𝜷 𝑢 , (10) 
+
+∇2𝜙 = exp (𝜷 ⊤p)  ∇2𝑢 + 2𝜷 ⊤∇𝑢 + ∥ 𝜷 ∥22𝑢 . (11) Substitute into (8): 
+
+− 𝛼 exp (𝜷 ⊤p)  ∇2𝑢 + 2𝜷 ⊤∇𝑢 + ∥ 𝜷 ∥22𝑢  + v⊤ exp (𝜷 ⊤p)  ∇𝑢 + 𝜷 𝑢 
+
+(12) 
+
++ 𝜅 exp (𝜷 ⊤p)𝑢 = 𝑞 𝑠 𝛿 (p).
+
+Factor out exp (𝜷 ⊤p) and use v = 2𝛼 𝜷 :
+
+exp (𝜷 ⊤p)
+
+
+
+term 1 − term 2
+
+
+
+= 𝑞 𝑠 𝛿 (p)
+
+exp (𝜷 ⊤p)
+
+
+
+− 𝛼 ∇2𝑢 + ( 𝜅 + 𝛼 ∥𝜷 ∥22)𝑢 
+
+
+
+= 𝑞 𝑠 𝛿 (p). (13) where term 1 = 2𝛼 𝜷 ⊤∇𝑢 +2𝛼 ∥𝜷 ∥22𝑢 +𝜅𝑢 , term 2 = −𝛼 ∇2𝑢 −2𝛼 𝜷 ⊤∇𝑢 −
+
+𝛼 ∥𝜷 ∥22𝑢 Because 𝛿 (p) concentrates at p = 0 and exp (𝜷 ⊤0) = 1, we obtain the transformed PDE: 
+
+−𝛼 ∇2𝑢 (p) + ( 𝜅 + 𝛼 ∥𝜷 ∥22) 𝑢 (p) = 𝑞 𝑠 𝛿 (p). (14) Define 
+
+𝑚 2 := 𝜅 𝛼 + ∥ 𝜷 ∥22 = 𝜅 𝛼 + ∥v∥22
+
+4𝛼 2 . (15) Then (14) becomes the 3D modified Helmholtz equation 
+
+−∇ 2𝑢 (p) + 𝑚 2𝑢 (p) = 𝑞 𝑠 
+
+𝛼 𝛿 (p). (16) 
+
+Step 2: solve the modified Helmholtz equation in 3D. The fundamental solution of (16) in R3 is well-known and can be verified by standard distributional calculus: 
+
+𝑢 (p) = 𝑞 𝑠 
+
+4𝜋𝛼 
+
+exp (− 𝑚 ∥p∥2)∥p∥2
+
+. (17) One can directly check that for p ≠ 0 it satisfies the homogeneous PDE −∇ 2𝑢 +𝑚 2𝑢 = 0, and that the singularity at the origin produces the correct delta mass. 
+
+Step 3: transform back and shift the source. Combining (9) and (17) gives, for a source at the origin, 
+
+𝜙 (p) = 𝑞 𝑠 
+
+4𝜋𝛼 
+
+1
+
+∥p∥2
+
+exp 
+
+
+
+𝜷 ⊤p − 𝑚 ∥p∥2
+
+
+
+. (18) For a source at p𝑠 , replace p by r = p − p𝑠 :
+
+𝜙 (p; 𝚯 3𝐷 ) = 𝑞 𝑠 
+
+4𝜋𝛼 
+
+1
+
+∥p − p𝑠 ∥2
+
+exp 
+
+
+
+𝜷 ⊤ (p−p𝑠 )− 𝑚 ∥p−p𝑠 ∥2
+
+
+
+, 𝜷 = v
+
+2𝛼 .
+
+(19) Using 𝜆 = 1/𝑚 yields the “decay length” form: 
+
+𝜙 (p; 𝚯 3𝐷 ) = 𝑞 𝑠 
+
+4𝜋𝛼 ∥p − p𝑠 ∥2
+
+exp 
+
+ v⊤ (p − p𝑠 )
+
+2𝛼 − ∥p − p𝑠 ∥2
+
+𝜆 
+
+
+
+. (20) 
+
+Remark (sign convention to match a wind “blowing away”). 
+
+If one prefers the exponent to be −v⊤ (p − p𝑠 )/( 2𝛼 ) (as in the main paper’s 2D plume expression), simply redefine the convection pa-rameter as ˜v := −v, i.e., store and infer the wind vector with the opposite sign. The rest of the framework is unchanged. 
+
+B.3.3 ground plane boundary via method of images (Neumann re-flection). In atmospheric or indoor settings, the field is often re-stricted to a half-space 𝑧 ≥ 0 with no-flux boundary at the ground (Neumann condition) 𝜕𝜙 /𝜕𝑧 = 0 at 𝑧 = 0. A simple analytic approxi-mation is obtained by adding an “image source” at p′ 
+
+> 𝑠
+
+= (𝑥 𝑠 , 𝑦 𝑠 , −𝑧 𝑠 ):
+
+𝜙 half (p) = 𝜙 (p; p𝑠 ) + 𝜙 (p; p′ 
+
+> 𝑠
+
+), (21) where 𝜙 (· ; p𝑠 ) is given by (19) . This preserves the closed form and can be dropped-in as the forward model used by the PF likelihood. 
+
+## B.4 3D observation model and likelihood 
+
+We keep the same sensor abstraction: the observation is a noisy measurement of the field. A standard choice is additive Gaussian noise: 
+
+𝑜 𝑡 = 𝜙 (p𝑡 ; 𝚯 3𝐷 ) + 𝜖 𝑡 , 𝜖 𝑡 ∼ N ( 0, 𝜎 2
+
+> obs
+
+). (22) The likelihood needed by the PF teacher is then 
+
+ℓ (𝑜 𝑡 | p𝑡 , 𝚯 3𝐷 ) = N  𝑜 𝑡 ; 𝜙 (p𝑡 ; 𝚯 3𝐷 ), 𝜎 2
+
+> obs
+
+. (23) All other noise models (e.g., log-normal for strictly positive sensors, censoring, saturation) can be incorporated similarly; the only re-quirement for the teacher PF is the ability to evaluate ℓ (𝑜 𝑡 | p𝑡 , Θ)
+
+up to a constant factor. 
+
+## B.5 Teacher PF in 3D 
+
+Particle representation. The PF teacher maintains a weighted particle approximation of the full posterior over 𝚯 3𝐷 ∈ R𝑑 :
+
+𝑏 𝑡 (𝚯 ) ≈ 
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) 
+
+> 𝑡
+
+𝛿 𝚯 (𝑖 )
+
+> 𝑡
+
+(𝚯 ). (24) 
+
+Weight update. Under the bootstrap (static-parameter) SIS choice, the reweighting step is identical: 
+
+˜𝑤 (𝑖 ) 
+
+> 𝑡
+
+∝ 𝑤 (𝑖 )  
+
+> 𝑡 −1
+
+ℓ (𝑜 𝑡 | p𝑡 , 𝚯 (𝑖 ) 
+
+> 𝑡 −1
+
+), 𝑤 (𝑖 ) 
+
+> 𝑡
+
+= ˜𝑤 (𝑖 )
+
+> 𝑡
+
+Í𝑗 ˜𝑤 ( 𝑗 )
+
+> 𝑡
+
+. (25) Resampling (via ESS) and MH rejuvenation apply without change; only the dimensionality of 𝚯 increases (e.g., the location subvector is now 3D). Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+## B.6 KL-based intrinsic reward remains valid in 3D 
+
+The intrinsic reward in the main text is the one-step KL divergence between consecutive PF beliefs. This construction does not depend on the spatial dimension; it only depends on the Bayes update over the parameter vector 𝚯 .Population identity (dimension-free). Let 𝐷 𝑡 −1 denote past data and let 𝑜 𝑡 be the next observation. Then the conditional mutual information satisfies the identity 
+
+𝐼 (𝚯 ; 𝑜 𝑡 | 𝐷 𝑡 −1) = E𝑜 𝑡 ∼𝑝 (· | 𝐷 𝑡 −1 )
+
+𝐷 KL (𝑝 (𝚯 | 𝐷 𝑡 ) ∥ 𝑝 (𝚯 | 𝐷 𝑡 −1)) ,
+
+(26) which is purely probabilistic and holds for any 𝚯 (including the 3D case). Therefore, using a Monte Carlo approximation of the posterior–prior KL remains a principled information-gain proxy in 3D. 
+
+PF approximation via weight KL. Before resampling, the PF posterior is represented by the same particle support with updated weights. Thus a natural discrete approximation is 
+
+𝑟 𝐼𝐺 𝑡 = 𝐷 KL (w𝑡 ∥w𝑡 −1) =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) 
+
+> 𝑡
+
+log 𝑤 (𝑖 )
+
+> 𝑡
+
+𝑤 (𝑖 )  
+
+> 𝑡 −1
+
++ 𝜀 , (27) where w𝑡 ∈ Δ𝑁 −1 is the normalized weight vector and 𝜀 > 0
+
+stabilizes rare zeros. This is the same quantity as in the main paper, and its interpretation as a one-step information-gain estimator is unaffected by moving from 2D to 3D. 
+
+## B.7 Student posterior distillation in 3D 
+
+The student remains a constant-time amortized posterior over the parameter vector: 
+
+𝑞 𝜑 (𝚯 3𝐷 | 𝑜 𝑡 , p𝑡 ) = N
+
+
+
+𝚯 3𝐷 ; 𝝁 𝑡 , diag (𝝈 2 
+
+> 𝑡
+
+)
+
+
+
+, [𝝁 𝑡 , log 𝝈 2 
+
+> 𝑡
+
+] = 𝑓 𝜑 (𝑜 𝑡 , p𝑡 ).
+
+(28) The distillation loss remains the weighted negative log-likelihood (NLL) on teacher particles: 
+
+L𝑏𝑒𝑙 (𝜑 ) = −
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+˜𝑤 (𝑖 ) 
+
+> 𝑡
+
+log N
+
+ ˜𝚯 (𝑖 ) 
+
+> 𝑡
+
+; 𝝁 𝑡 , diag (𝝈 2 
+
+> 𝑡
+
+)
+
+
+
+. (29) No algorithmic changes are required; only the dimensionality of 𝚯 
+
+changes. 
+
+## B.8 3D belief features and 3D spread-based stopping certificate 
+
+The policy typically needs only the source-location marginal (and its uncertainty) for control. Let the 3D location parameter be 𝜽 𝐿 =
+
+(𝑥 𝑠 , 𝑦 𝑠 , 𝑧 𝑠 ) ∈ R3. Let the location posterior be 𝑏 𝐿,𝑡 (𝜽 𝐿 ) := 𝑝 (𝜽 𝐿 | 𝐷 𝑡 ).Define its mean and covariance: 
+
+𝝁 𝑡 := E[𝜽 𝐿 | 𝐷 𝑡 ] ∈ R3, 𝚺 𝑡 := Cov (𝜽 𝐿 | 𝐷 𝑡 ) ∈ R3×3. (30) 
+
+3D Spread. We generalize the spread certificate to 3D as 
+
+Spread (𝑏 𝑡 ) :=√︁ tr (𝚺 𝑡 ). (31) This is rotation-invariant, has units of distance, and summarizes total marginal uncertainty across all three spatial coordinates. 
+
+Stopping rule. The 3D stopping rule mirrors the main text: 
+
+Spread (𝑏 𝑡 ) < 𝜁 , (32) for a user-chosen tolerance 𝜁 > 0.
+
+B.8.1 Theory: why √︁ tr (Σ𝑡 ) is a principled 3D certificate. The ar-guments in Appendix A of the main paper extend verbatim to 3D (indeed, to any dimension). We restate the key results with 𝜽 𝐿 ∈ R3
+
+for completeness. 
+
+Proposition B.1 (Trace–MSE identity in R3). Assume 𝑏 𝐿,𝑡 has finite second moment. Then 
+
+E∥𝜽 𝐿 − 𝝁 𝑡 ∥22 | 𝐷 𝑡 
+
+ = tr (𝚺 𝑡 ), (33) 
+
+and therefore 
+
+Spread (𝑏 𝑡 ) =√︃ E∥𝜽 𝐿 − 𝝁 𝑡 ∥22 | 𝐷 𝑡 
+
+ . (34) 
+
+Proof. Use ∥x∥22 = tr (xx ⊤) and linearity of trace/expectation: 
+
+E∥𝜽 𝐿 − 𝝁 𝑡 ∥22 | 𝐷 𝑡 
+
+ = Etr  (𝜽 𝐿 − 𝝁 𝑡 )( 𝜽 𝐿 − 𝝁 𝑡 )⊤  | 𝐷 𝑡 
+
+ (35) 
+
+= tr  E(𝜽 𝐿 − 𝝁 𝑡 )( 𝜽 𝐿 − 𝝁 𝑡 )⊤ | 𝐷 𝑡 
+
+  = tr (𝚺 𝑡 ).
+
+(36) 
+
+□
+
+Proposition B.2 (Posterior mean is Bayes-optimal under sqared loss in R3)). For any estimate a ∈ R3, define the conditional risk 𝑅 𝑡 (a) = E[∥ 𝜽 𝐿 − a∥22 | 𝐷 𝑡 ]. Then 
+
+𝑅 𝑡 (a) = tr (𝚺 𝑡 ) + ∥ 𝝁 𝑡 − a∥22, (37) 
+
+so the minimizer is a★ = 𝝁 𝑡 and min a 𝑅 𝑡 (a) = tr (𝚺 𝑡 ) = Spread (𝑏 𝑡 )2.Proof. Decompose 𝜽 𝐿 − a = (𝜽 𝐿 − 𝝁 𝑡 ) + ( 𝝁 𝑡 − a), expand the square, and note the cross term vanishes since E[𝜽 𝐿 − 𝝁 𝑡 | 𝐷 𝑡 ] = 0.Then apply Proposition B.1. □
+
+Theorem B.3 (Stopping is a Bayes-MSE certificate in 3D). 
+
+Let the reported location estimate be the posterior mean ˆ𝜽 𝑡 := 𝝁 𝑡 .Then the stopping condition Spread (𝑏 𝑡 ) < 𝜁 is equivalent to 
+
+E
+
+h
+
+∥𝜽 𝐿 − ˆ𝜽 𝑡 ∥22 | 𝐷 𝑡 
+
+i
+
+< 𝜁 2. (38) 
+
+Proof. By Proposition B.2, the conditional MSE of the posterior mean equals tr (𝚺 𝑡 ) = Spread (𝑏 𝑡 )2. □
+
+Corollary B.4 (Expected Euclidean error bound.). 
+
+E
+
+h
+
+∥𝜽 𝐿 − ˆ𝜽 𝑡 ∥2 | 𝐷 𝑡 
+
+i
+
+≤ Spread (𝑏 𝑡 ). (39) 
+
+Proof. Apply Jensen to √· with 𝑋 = ∥𝜽 𝐿 − 𝝁 𝑡 ∥22: E[∥ · ∥ 2] ≤ √︃ 
+
+E[∥ · ∥ 22] =√︁ tr (Σ𝑡 ). □
+
+Proposition B.5 (Distribution-free tail bound.). For any 
+
+𝜀 > 0,
+
+P(∥ 𝜽 𝐿 − 𝝁 𝑡 ∥2 ≥ 𝜀 | 𝐷 𝑡 ) ≤ Spread (𝑏 𝑡 )2
+
+𝜀 2 . (40) 
+
+Proof. Let 𝑍 = ∥𝜽 𝐿 − 𝝁 𝑡 ∥22 ≥ 0 and use Markov: P(𝑍 ≥ 𝜀 2) ≤ 
+
+E[𝑍 ]/ 𝜀 2 = tr (Σ𝑡 )/ 𝜀 2. □
+
+Proposition B.6 (Conditioning reduces variance in expec-tation). Let 𝐷 𝑡 = (𝐷 𝑡 −1, 𝑜 𝑡 , p𝑡 ). Then 
+
+E [𝚺 𝑡 | 𝐷 𝑡 −1] ⪯ 𝚺 𝑡 −1 =⇒ E Spread (𝑏 𝑡 )2 | 𝐷 𝑡 −1
+
+ ≤ Spread (𝑏 𝑡 −1)2.
+
+(41) 
+
+Proof. Apply the law of total variance in R3: Cov (𝜃 | 𝐷 𝑡 −1) =
+
+E[Cov (𝜃 | 𝐷 𝑡 ) | 𝐷 𝑡 −1] + Cov (E[𝜃 | 𝐷 𝑡 ] | 𝐷 𝑡 −1). The second term is PSD, hence the inequality; take trace. □KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+B.8.2 Gaussian credible radius in 3D. If the location posterior is approximately Gaussian, 𝜽 𝐿 | 𝐷 𝑡 ∼ N ( 𝝁 𝑡 , 𝚺 𝑡 ), then the whitened variable z = 𝚺 −1/2 
+
+> 𝑡
+
+(𝜽 𝐿 − 𝝁 𝑡 ) satisfies ∥z∥22 ∼ 𝜒 23 . Let 𝑐 3,𝛿 denote the 
+
+(1 − 𝛿 )-quantile of 𝜒 23 . Then 
+
+P
+
+
+
+∥𝜽 𝐿 − 𝝁 𝑡 ∥2 ≤ √𝑐 3,𝛿 √︁ tr (𝚺 𝑡 ) 𝐷 𝑡 
+
+
+
+≥ 1 − 𝛿, (42) where we used 𝜆 max (Σ𝑡 ) ≤ tr (Σ𝑡 ) to upper-bound the ellipsoidal credible region by a Euclidean ball. If one wants an explicit closed-form constant, a standard Laurent–Massart bound gives (for z ∼N ( 0, 𝐼 3))
+
+P
+
+
+
+∥z∥22 ≤ 3 + 2√︁ 3 ln (1/𝛿 ) + 2 ln (1/𝛿 )
+
+
+
+≥ 1 − 𝛿, (43) which can be plugged into the same conversion step. 
+
+## B.9 Practical estimators under PF and diagonal-Gaussian student in 3D 
+
+PF teacher. Given weighted location particles {𝜽 (𝑖 ) 
+
+> 𝐿
+
+, 𝑤 (𝑖 ) }𝑁 𝑖 =1,
+
+ˆ𝝁 𝑡 =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) 𝜽 (𝑖 ) 
+
+> 𝐿
+
+, (44) 
+
+ˆ𝚺 𝑡 =
+
+> 𝑁
+
+∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) (𝜽 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝝁 𝑡 )( 𝜽 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝝁 𝑡 )⊤, (45) 
+
+Spread (𝑏 𝑡 ) =√︃ tr ( ˆ𝚺 𝑡 ) =
+
+vut 𝑁 ∑︁ 
+
+> 𝑖 =1
+
+𝑤 (𝑖 ) ∥𝜽 (𝑖 ) 
+
+> 𝐿
+
+− ˆ𝝁 𝑡 ∥22. (46) This is 𝑂 (𝑁 ) per step. 
+
+Diagonal-Gaussian student. If the student location marginal is diagonal, 𝚺 𝑡 = diag (𝜎 2 
+
+> 𝑥,𝑡
+
+, 𝜎 2 
+
+> 𝑦,𝑡
+
+, 𝜎 2 
+
+> 𝑧,𝑡
+
+), then 
+
+Spread (𝑏 𝑡 ) =√︃ 𝜎 2 
+
+> 𝑥,𝑡
+
++ 𝜎 2 
+
+> 𝑦,𝑡
+
++ 𝜎 2 
+
+> 𝑧,𝑡
+
+, (47) which is 𝑂 (1) per step. 
+
+## B.10 ISLC from 2D to 3D 
+
+We emphasize that the Distill-Belief architecture is unchanged; only the following elements need updates: 
+
+• Forward model: replace the 2D plume 𝜙 (𝑥, 𝑦 ) with the 3D closed-form 𝜙 (𝑥, 𝑦, 𝑧 ) in (19) (or the half-space variant (21) if desired). 
+
+• Parameter vector: include 𝑧 𝑠 and 𝑣 𝑧 (or a 3D direction parameterization). 
+
+• Belief features: use the 3D location mean 𝝁 𝑡 ∈ R3 and covariance 𝚺 𝑡 ∈ R3×3 (or its diagonal) instead of 2D. 
+
+• Stopping: use Spread (𝑏 𝑡 ) =√︁ tr (𝚺 𝑡 ) with the same seman-tics: it certifies Bayes MSE and controls expected Euclidean error in 3D. 
+
+• Policy/action: if the agent moves in 3D, increase the action dimension accordingly. The intrinsic reward, teacher PF, and student distillation remain identical. 
+
+Remark. With these changes, the method supports 3D ISLC while preserving: (i) Bayes-aligned learning signals computed solely from the PF teacher, (ii) constant-time deployment via the distilled student posterior, and (iii) an uncertainty-aware stopping certificate with a direct Bayes-risk meaning in 3D. 
+
+## C Environment and Metric Details 
+
+Building on the open-source AutoSTE codebase hosted on GitHub https://github.com/Cunjia-Liu/AutoSTE, we take its information-theoretic framework for mobile sensing, covering closed-loop path planning and source term estimation for atmospheric releases, as a concrete and reproducible starting point. In particular, AutoSTE and the associated line of work (e.g., information-based search and dual control for exploration–exploitation developed by collaborators) provide a clear reference implementation of how belief updates and information measures can drive autonomous sensing policies. Motivated by this foundation, our paper extends the setting from a single atmospheric-dispersion task to a broader, physics-grounded AI4Science formulation: we construct procedural, multi-field sim-ulators (different governing equations and parameterizations) un-der a unified stochastic sensor model, and develop a belief-centric inference-and-control pipeline that remains unchanged across do-mains while only the physics backend (the forward operator) varies. This shift enables systematic evaluation under higher-dimensional parameters and prior misspecification, and targets robust belief contraction and accurate source characterization across diverse physical field modalities. 
+
+Procedural, physics-based tasks (not dataset-based). Our evaluation does not rely on a fixed offline dataset. Instead, each episode is generated on the fly by a physics-based field simulator: (i) sample a field modality F and a latent parameter vector ΘF (source parameters and physical coefficients); (ii) instantiate a continuous field realization 𝜙 F (x) by solving the field-specific governing equa-tion (or an equivalent surrogate); (iii) interactively render agent observations through a shared stochastic sensor model. Changing 
+
+ΘF produces qualitatively different field geometries (e.g., plume shapes, potential contours, attenuation patterns), yielding effec-tively unbounded scenario diversity while remaining grounded in physical mechanisms. 
+
+Episode generator and prior misspecification. At the begin-ning of each episode, ΘF is sampled from a training prior 𝑝 train (ΘF ).To stress-test robustness to prior misspecification, we additionally evaluate a Moderate error setting where 50% of test episodes are generated from parameters inside the prior support and 50% from outside. 
+
+Unified simulator interface (forward-query API). Across all modalities, the environment exposes the same forward-query interface 
+
+ℎF (p; ΘF ) := 𝜙 F (p), (48) i.e., the simulator returns the noise-free scalar field value at a queried location p. Thus, domain differences enter only through the simula-tor backend that implements ℎF .
+
+Shared observation likelihood across fields. To ensure a fair cross-domain comparison, we keep the same stochastic sensor model across all fields and change only ℎF . At step 𝑡 , the agent at 
+
+p𝑡 receives a scalar observation 
+
+𝑧 𝑡 = 𝐷 𝑡 
+
+ ℎF (p𝑡 ; ΘF ) + ¯𝑣 𝑡 
+
+ + ( 1 − 𝐷 𝑡 ) 𝑣 𝑡 , 𝐷 𝑡 ∼ Bernoulli (𝑃 𝑑 ), (49) where ¯𝑣 𝑡 ∼ N ( 0, ¯𝜎 2 
+
+> 𝑡
+
+) denotes measurement noise and 𝑣 𝑡 ∼ N ( 0, 𝜎 2 
+
+> 𝑡
+
+)
+
+denotes background noise. Equivalently, 
+
+𝑝 (𝑧 𝑡 | ΘF ) = (1−𝑃 𝑑 ) N ( 𝑧 𝑡 ; 0 , 𝜎 2 
+
+> 𝑡
+
+) + 𝑃 𝑑 N 𝑧 𝑡 ; ℎF (p𝑡 ; ΘF ), ¯𝜎 2
+
+> 𝑡
+
+. (50) Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+Table 5: ISLCenv multi-field simulator backends (procedural task generator). Each episode samples ΘF and instantiates a physics simulator that provides point queries via ℎF (p; ΘF ). All modalities share the same Bernoulli-gated Gaussian-mixture sensor model ; domain differences enter only through the backend that implements ℎF .                                                                                                                                     
+
+> Field FEpisode parameters ΘF(examples) Backend instantiation + forward-query API ℎF(p;ΘF)Shared sensor model Temperature (Temp.) Source parameters in 𝑆 (𝜙, 𝑥, 𝑦 ); airflow ®𝑣 ; ther-mal diffusivity 𝛼 (𝜙 )
+> 𝜙 𝑇 ←Solve (G 𝑇 ,Θ𝑇 );ℎ𝑇 (p;Θ𝑇 )=𝜙 𝑇 (p)
+> 𝑧 ∼ ( 1−𝑃 𝑑 )N ( 0, 𝜎 2)+𝑃 𝑑 N ( ℎF(p;ΘF),¯𝜎 2)
+> Concentration (Conc.) Source 𝑆 (𝑥, 𝑦 ); diffusion 𝛼 ; flow ®𝑣 ; degradation
+> 𝑘 𝑟 ; turbulence ®𝜏 𝜙 𝐶 ←Solve (G 𝐶 ,Θ𝐶 );ℎ𝐶 (p;Θ𝐶 )=𝜙 𝐶 (p)
+> Magnetic (Mag.) Source 𝑆 (𝑥, 𝑦 );𝛼 ; effective flow ®𝑣 ; external field
+> ®𝐵 𝜙 𝑀 ←Solve (G 𝑀 ,Θ𝑀 );ℎ𝑀 (p;Θ𝑀 )=𝜙 𝑀 (p)
+> Electric (Elec.) Conductivity 𝜎 (𝑥, 𝑦 ); charge density 𝜌 (𝑥, 𝑦 )𝜙 𝐸 ←Solve (G 𝐸 ,Θ𝐸 );ℎ𝐸 (p;Θ𝐸 )=𝜙 𝐸 (p)
+> Energy (En.) Source 𝑆 (𝑥, 𝑦 );𝛼 ; transport ®𝑣 ; absorption 𝜎 𝑎 ;scattering 𝜎 𝑠
+> 𝜙 𝐸𝑛 ←Solve (G 𝐸𝑛 ,Θ𝐸𝑛 );ℎ𝐸𝑛 (p;Θ𝐸𝑛 )=𝜙 𝐸𝑛 (p)
+> Noise (Noise) Source 𝑆 (𝑥, 𝑦, 𝑓 );𝛼 ; flow ®𝑣 ; attenuation 𝛾 (𝑓 )𝜙 𝑁 ←Solve (G 𝑁 ,Θ𝑁 );ℎ𝑁 (p;Θ𝑁 )=𝜙 𝑁 (p, 𝑓 0)(or band-aggregated)
+
+Key point (what changes vs. what stays the same). Across modalities, the ISLC task interface is identical: the agent selects sensing actions, receives noisy scalar observations, and maintains a belief over ΘF . Therefore, our belief-update and policy-learning pipeline is unchanged across domains; only the physics-driven sim-ulator backend (the implementation of ℎF ) changes. 
+
+Table 5 summarizes the simulator backends for all field families. We next briefly summarize each field family and its main physical effects, highlighting how different choices of ΘF and the corresponding solver backend shape the resulting field geometry and the induced inverse problem difficulty. 
+
+• Temperature (Temp.) [22 ] The temperature field is driven by localized heat sources and shaped by thermal diffusion and advective airflow, typically forming elongated heat plumes aligned with the flow direction. When the thermal diffusivity depends on temperature, the field becomes nonlinear and spatially heterogeneous, producing non-uniform gradients that complicate source localization. 
+
+• Concentration (Conc.) [ 68 ] The concentration field models the transport of pollutants or gases under diffusion, advec-tion, and chemical degradation. The resulting plume often exhibits long-tailed decay and turbulence-induced variability, causing weak and noisy signals in the far field and increasing the difficulty of robust inverse inference. 
+
+• Magnetic (Mag.) [8] The magnetic field is represented through a scalar potential influenced by internal sources and exter-nal magnetic components. External field terms can signif-icantly distort the potential contours, introducing strong directional bias and coupling between source parameters and background effects, which increases ambiguity in local-ization. 
+
+• Electric (Elec.) [ 12 ] The electric potential field arises from spatially varying conductivity and charge distributions and is governed by a variable-coefficient elliptic equation. Het-erogeneous conductivity can bend and concentrate equipo-tential lines, leading to regions with sharply different sensi-tivities and making source parameters harder to disentangle from medium properties. 
+
+• Energy (En.) [2] The energy density field captures radiative or energy transport with diffusion, advection, absorption, and scattering effects. These processes cause rapid attenua-tion and spatial smoothing, resulting in blurred field struc-tures and reduced long-range observability, which places higher demands on adaptive sensing strategies. 
+
+• Noise (Noise) [56 ] The noise intensity field models acous-tic propagation with frequency-dependent attenuation and source spectra. Different frequencies decay at different rates and interact with the medium anisotropically, producing multi-scale spatial patterns and increasing the dimensional-ity and complexity of the underlying inference problem. 
+
+## C.1 Detailed Definitions of Evaluation Metrics 
+
+We evaluate both task performance and inference quality using the following metrics. (1) Success Rate (SR) measures the fraction of episodes that terminate successfully under the predefined stopping criterion. An episode is considered successful if the stopping con-dition (e.g., Spread 𝑡 < 𝜁 ) is satisfied within the maximum horizon. Formally, SR = 1
+
+> 𝑁 epi
+
+Í𝑁 epi  
+
+> 𝑘 =1
+
+I {episode k terminates successfully }. (2) Trajectory Efficiency (TE) quantifies the control cost required to complete a task. We report either the total traveled distance 
+
+TE dist = Í𝑇 𝑘  
+
+> 𝑡 =1
+
+∥𝒑 𝑡 +1 − 𝒑 𝑡 ∥, or equivalently the number of steps 𝑇 𝑘 
+
+until termination. Lower values indicate more efficient exploration and planning. (3) Source Localization Error (SLE) measures the Euclidean distance between the estimated and true source loca-tions at termination: SLE = ˆ𝒑 𝑠 − 𝒑 𝑠 2, where ˆ𝒑 𝑠 is obtained from the posterior mean of (𝑥 𝑠 , 𝑦 𝑠 ). We report the mean and standard deviation over test episodes. (4) Full-Parameter Estimation Er-ror (FPE) measures the estimation accuracy of the full physical parameter vector 𝚯 ∈ R𝑑 at termination, beyond source local-ization (e.g., source strength, wind parameters, diffusion coeffi-cients). Let ˆ𝚯 denote the posterior mean estimate given by the belief. We define the aggregate estimation error using RMSE (or MAE): FPE RMSE =√︃ 1
+
+> 𝑑
+
+Í𝑑 𝑗 =1
+
+  ˆΘ𝑗 − Θ𝑗 
+
+2,FPE MAE = 1
+
+> 𝑑
+
+Í𝑑 𝑗 =1 ˆΘ𝑗 −Θ𝑗 .
+
+This metric captures whether the method accurately recovers non-location parameters such as source strength, wind, and diffusion. (5) Uncertainty Quality (UQ). When applicable, we evaluate the quality of the predicted posterior uncertainty. Specifically, we re-port the negative log-likelihood (NLL) of ground-truth parameters under the predicted posterior, 𝑁 𝐿𝐿 = − log 𝑞 𝜑 (Θ), and calibration KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+metrics that compare empirical estimation errors against predicted posterior variances. These metrics assess whether the learned belief is not only accurate but also well-calibrated. 
+
+Algorithm 2 Deployment (PF teacher removed) 
+
+Require: Trained student 𝑞 𝜑 , policy 𝜋 𝜃 , stop threshold 𝜁 , horizon 
+
+𝐻  
+
+> 1:
+
+for 𝑡 = 1 to 𝐻 do  
+
+> 2:
+
+Observe (𝑜 𝑡 , 𝒑 𝑡 ) 
+
+> 3:
+
+Compute 𝑞 𝜑 (𝚯 | 𝑜 1: 𝑡 , 𝒑 1: 𝑡 ) and Spread (𝑏 𝑡 ) 
+
+> 4:
+
+if Spread (𝑏 𝑡 ) < 𝜁 then  
+
+> 5:
+
+stop  
+
+> 6:
+
+end if  
+
+> 7:
+
+Select 𝑎 𝑡 ← E𝜋 𝜃 [𝑎 | 𝑜 𝑡 , 𝒑 𝑡 , 𝑓 𝑏𝑒𝑙 (𝑏 𝑡 )] and execute  
+
+> 8:
+
+end for Table 6: Scenario parameter distributions for training. Parameter Distribution 
+
+Source location 𝑥 𝑠 U ( 5, 20 )
+
+Source location 𝑦 𝑠 U ( 10 , 20 )
+
+Release strength 𝑞 𝑠 U ( 10 , 3000 )
+
+Wind components (𝑢 𝑥 , 𝑢 𝑦 ) U ( 0, 6) × U ( 0, 6)
+
+Decay parameter 𝜆 U ( 0, 8)
+
+Diffusivity 𝛼 U ( 1, 5)
+
+## D Additional Experimental Results D.1 Additional Experimental Context 
+
+Building on the POMDP formulation in Sec. 3, we describe how to maintain and exploit a Bayesian belief over the unknown field parameters. Our focus is on (i) approximating the posterior 𝑝 (𝚯 |
+
+𝑜 1: 𝑡 , 𝒑 1: 𝑡 ) in a Bayes-consistent yet tractable way, and (ii) turning this belief into a control signal that tells the agent where to mea-sure next. At each step 𝑡 we maintain a belief distribution 𝑏 𝑡 (𝚯 )
+
+and construct a belief state 𝝍 𝑡 = 𝑜 ⊤ 
+
+> 𝑡
+
+, 𝒑 ⊤ 
+
+> 𝑡
+
+, 𝑓 bel (𝑏 𝑡 )⊤ ⊤, where [· , ·, ·] 
+
+denotes vector concatenation. This state 𝝍 𝑡 is fed into a parametric policy 𝜋 𝜃 (𝑎 𝑡 | 𝝍 𝑡 ). The map 𝑓 bel (𝑏 𝑡 ) does not output the (unknown) parameter vector itself, but the distribution induced by the belief (details in Sec. 4.5). We maintain a posterior over the full parameter vector 𝚯 ∈ R𝑑 (e.g., source location/strength and environmental factors). Our architecture realizes this through two coupled layers: • an 
+
+inference layer whose teacher is a statistically consistent particle filter (PF) that performs Bayes-correct updates over the full 𝚯 , and whose student is an amortized posterior approximator trained by distillation to match the teacher posterior; • an execution layer 
+
+that learns a policy from a KL-based intrinsic reward defined in belief space, uses belief features from the student, and terminates when the spread-based certificate falls below a threshold. Crucially, only the actor-critic updates the sensing policy. The PF teacher has no trainable parameters: it performs Bayes-consistent filtering updates to produce posterior beliefs and intrinsic rewards, but it never optimizes a policy. Moreover, the intrinsic reward is com-puted exclusively from the PF teacher during training, while at test time we discard the teacher and rely solely on the student to supply belief features and stopping statistics at constant cost. This sepa-ration preserves Bayes semantics during learning while keeping deployment overhead independent of the particle budget. 
+
+## D.2 Additional Ablation Details 
+
+This appendix provides a more detailed discussion of the ablation studies summarized in Table 7 and Table 8. Our goal is to clarify the role of each component in the belief-optimization pipeline and to explain how different reward designs affect learning dynamics and posterior quality. Unless otherwise stated, all ablations use the same environments, interaction budgets, network architectures, and optimization hyperparameters as the full method. 
+
+D.2.1 Belief-Optimization Pipeline Ablations. Table 7 ablates key components of the proposed teacher–student belief-optimization framework. Each variant removes or modifies a single ingredient while keeping all others fixed. 
+
+Removing the KL-based information-gain reward. In this variant, the dense KL-based intrinsic reward is replaced with a surrogate signal that is not explicitly aligned with belief contraction. As shown in Table 7, this change leads to a substantial drop in success rate (SR) and a marked increase in trajectory efficiency (TE), together with degraded SLE, FPE, and uncertainty quality (UQ). These results indicate that dense, belief-space shaping is critical for efficient exploration: without it, the agent receives weak or delayed learning signals and struggles to acquire informative sensing policies within a limited budget. 
+
+Reward-from-Student (KL computed from the student be-lief). Here we compute the information-gain objective using the stu-dent’s approximate belief instead of the particle-filter (PF) teacher. Although this variant retains a dense reward, it consistently de-grades both task performance and uncertainty quality, with the largest deterioration observed in UQ (NLL). This supports the con-cern that using the same approximation for both reward computa-tion and policy input introduces exploitable shortcuts: the policy can increase its own reward by manipulating the student belief without necessarily improving posterior accuracy. Using a Bayes-correct PF teacher to compute the reward mitigates this failure mode. 
+
+Removing distillation (PF-only at test time). In this ablation, the PF teacher is used both during training and at test time, and the student belief is not used for deployment. While SR and estimation accuracy remain competitive, this variant forfeits the computational benefits of amortized inference and incurs significantly higher test-time cost. This result highlights the role of distillation in achieving practical deployability, rather than merely improving raw perfor-mance. 
+
+Student-only training without PF supervision. This variant removes the PF teacher entirely and trains the student belief and policy without Bayes-correct supervision. Performance degrades sharply across all metrics, including SR, SLE, FPE, and UQ. The result confirms that the student alone does not provide sufficiently accurate or stable belief targets early in training, and that PF-based supervision is essential for guiding belief learning and exploration. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+Removing Spread features and Spread-based stopping. To disentangle the role of uncertainty information, we separately re-move (i) the Spread feature from the policy input and (ii) the Spread-based stopping rule. Both variants mainly affect efficiency and cal-ibration rather than raw success rate. Dropping Spread features reduces the policy’s ability to adapt actions to uncertainty levels, while disabling Spread-based stopping leads to longer trajectories with diminishing returns. Together, these results support the in-terpretation of Spread as an uncertainty certificate that enables effective accuracy–budget control. 
+
+Removing MH rejuvenation in the PF teacher. In this variant, the PF teacher operates without MH rejuvenation moves, increasing the risk of particle impoverishment. The resulting degradation in performance and UQ suggests that maintaining particle diversity is important for providing stable and informative supervision signals during training. 
+
+D.2.2 Reward Design Ablations. Table 8 focuses on reward design and compares the proposed dense KL-based information-gain re-ward with several alternatives. 
+
+Hard-success reward only. The hard-success reward provides non-zero feedback only when the task is successfully completed. While intuitive, this formulation is extremely sparse for active sens-ing. As shown in Table 8, it leads to lower SR, worse uncertainty quality, and more than a threefold increase in Steps@70% SR, indi-cating slow and unstable learning. 
+
+Dense KL-based information gain. In contrast, the KL-based reward provides shaped feedback throughout an episode, directly encouraging belief contraction. This results in substantially better sample efficiency, improved trajectory efficiency, and higher-quality posteriors, demonstrating the advantage of belief-aligned intrinsic rewards for active sensing. 
+
+Mixed and curriculum rewards. The mixed reward combines KL-based shaping with a hard-success signal, while the curriculum variant transitions from pure KL shaping to a mixed objective later in training. Both variants achieve performance close to the full method, suggesting that task-level rewards can complement belief-based shaping once effective exploration has been learned, without sacrificing sample efficiency or posterior quality. 
+
+Overall , these ablations confirm that (i) dense, Bayes-aligned information-gain rewards are crucial for efficient learning, and (ii) computing such rewards from a Bayes-correct teacher is key to avoiding shortcut solutions and preserving uncertainty calibration. 
+
+## D.3 Supplementary Figures for Experimental Results 
+
+Figure 5 provides a compact ranking summary across the appendix experiments. Its main role is to show that Distill-Belief is not only strong in one setting, but consistently occupies the top rank across the single-source, multi-source, and obstacle suites summarized later in this supplement. Single     
+
+> (Temp.)
+> Multi-2 Multi-3 Multi-4 Obst.
+> Sparse
+> Obst.
+> Moderate
+> Obst.
+> Dense
+> 1
+> 2
+> 3
+> 4
+> 5
+> 6
+> 7
+> Rank (1 = best)
+> Distill-Belief
+> AGDC
+> GMM-IG
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+> Multi-Source Obstacle
+> Method Ranking Across All Experimental Settings (SR)
+
+Figure 5: Method ranking across all experimental set-tings based on Success Rate (SR). Distill-Belief consistently achieves Rank 1 across single-source, multi-source (2–4), and obstacle (sparse/moderate/dense) settings. KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+## D.4 Main Experimental Results 
+
+D.4.1 Table 2: Single-Source Baseline Comparison Across Seven Field Modalities. Table 2 constitutes the most critical experimental result in the paper, presenting a comprehensive comparison of eight methods— Distill-Belief , GMM-IG, AGDC, PCDQN, GMM-PFRL, Infotaxis, DCEE, and Entrotaxis—across seven distinct physical field modalities: Temperature (Temp.), Concentration (Conc.), Magnetic (Mag.), Electric (Elec.), Gas Dispersion (Gas), Energy Attenuation (En.), and Acoustic Noise (Noise). Performance is assessed along four complementary metrics: Success Rate ( SR ), Trajectory Effi-ciency ( TE ), Robustness Variance ( REV ), and Local Posterior Spread (LPS ). We analyze each metric dimension in turn. 
+
+Success Rate ( SR ). Distill-Belief achieves the highest SR across all seven fields, ranging from 0.63 (Energy Attenuation) to 0.96 (Gas Dispersion). This consistency is particularly compelling on the more challenging modalities: on Electric fields ( SR = 0.82 ) and Energy Attenuation ( SR = 0.63 ), planning-based baselines suffer severe degradation—Entrotaxis collapses to SR ∈ [ 0.14 , 0.25 ] across all fields, while Infotaxis and DCEE fall below 0.50 on at least three modalities. The closest competitor, GMM-IG, maintains SR ∈[0.89 , 0.92 ] on the easier fields but consistently trails Distill-Belief 
+
+by 4–5 percentage points. This gap, while numerically modest, represents a statistically significant improvement as confirmed by the critical difference analysis in Figure 16 (see section E.0.4). 
+
+Trajectory Efficiency ( TE ). Distill-Belief requires the fewest steps to termination across all fields ( TE ∈ [ 17 , 20 ]), compared to 40–62 steps for planning methods—a 2–3 × improvement. This result is crucial because it demonstrates that the superior SR is not 
+
+achieved by running longer episodes; rather, the learned policy is intrinsically more efficient at information acquisition. Among RL baselines, GMM-IG and PCDQN achieve intermediate TE values (≈20–25 steps) but at the cost of substantially lower SR , indicating that these methods terminate quickly but inaccurately. 
+
+Robustness Variance ( REV ). The REV metric reveals an order-of-magnitude separation between method families. RL-based methods (Distill-Belief , GMM-IG, PCDQN) exhibit REV ∈ [ 0.09 , 0.15 ],while planning-based methods (AGDC, Infotaxis, Entrotaxis) dis-play REV ∈ [ 0.7, 1.6]. This indicates that planning methods are not only slower but also exhibit dramatically higher variance in their localization error, rendering them unreliable for safety-critical deployment scenarios. 
+
+Local Posterior Spread ( LPS ). Distill-Belief achieves LPS ∈[0.05 , 0.08 ], substantially lower than all competitors ( LPS ∈ [ 0.1, 0.7]). This metric is the most informative diagnostic in the table: a low LPS 
+
+at termination proves that the high SR is not an artifact of premature stopping with a diffuse belief state, but instead reflects genuine pos-terior contraction around the true source parameters. By contrast, Infotaxis, Entrotaxis, and DCEE terminate with LPS ∈ [ 0.39 , 0.70 ],confirming that their posteriors have not truly converged even when they declare success. 
+
+Cross-Metric Synthesis. The joint examination of all four metrics reveals that Distill-Belief is the only method that simultaneously achieves the best performance on every dimension. Other methods exhibit characteristic trade-off patterns: GMM-IG sacrifices SR for 
+
+TE ; Infotaxis achieves moderate SR at the cost of extreme TE and 
+
+REV ; Entrotaxis fails comprehensively across all metrics. This “no-compromise” property of Distill-Belief is also consistent with the cross-field and robustness visualizations collected later in the appendix. 
+
+## D.5 Multi-Source and Obstacle-Constrained Extensions 
+
+D.5.1 Table 3: Multi-Source Localization (2/3/4 Sources, Tempera-ture Field). Table 3 evaluates scalability under multi-modal posterior distributions induced by 2, 3, and 4 simultaneous sources in the Temperature field. This setting is substantially more challenging because the posterior landscape becomes multi-peaked, requiring the agent to disambiguate between plausible source hypotheses through strategic exploration. 
+
+Degradation Rates. All methods exhibit performance degrada-tion as source count increases, but the rate of degradation varies dramatically. Distill-Belief experiences a 20.8% decrease in SR 
+
+from 2 sources ( SR = 0.77 ) to 4 sources ( SR = 0.61 ), which is the most graceful degradation among all tested methods. By contrast, Infotaxis suffers a 44.6% decline ( 0.65 → 0.36 ) and DCEE a 35.0% decline ( 0.40 → 0.26 ). These degradation rates are visualized in Figure 14a (section E.0.3) and are strongly correlated with method type: RL-based approaches are systematically more robust than planning-based ones. 
+
+Trajectory Efficiency Under Multi-Source Conditions. TE increases from 28 to 40 steps for Distill-Belief (a 42.9% increase), whereas DCEE surges from 72 to 100 steps (38.9% increase on an already-high baseline). The absolute gap widens: at 4 sources, Distill-Belief 
+
+requires 2.5 × fewer steps than DCEE. This demonstrates that the learned policy maintains its ability to perform global disambigua-tion rather than collapsing into local sensing patterns a failure mode that is particularly evident in greedy planning methods. 
+
+Variance Analysis. As shown in the shaded regions of Figure 19 (section E.0.5), Distill-Belief also exhibits the smallest inter-run variance across all source counts, indicating that its performance is consistently reproducible rather than being driven by occasional lucky initializations. 
+
+D.5.2 Table 4: Obstacle-Constrained Environments (Sparse/Moder-ate/Dense). Table 4 tests practical deployment feasibility in non-convex feasible regions with varying obstacle densities. 
+
+Performance Across Densities. Distill-Belief maintains the high-est SR (0.90/0.86/0.80) and lowest TE (21/25/31 steps) across sparse, moderate, and dense configurations, respectively. GMM-IG is the closest RL competitor ( SR : 0.85/0.81/0.74; TE : 24/28/35), trailing by 4–6 percentage points in SR and 3 steps in TE at each density level. The gap is stable across densities, indicating that the advantage of Distill-Belief is structural rather than an artifact of specific obstacle configurations. 
+
+Failure Modes of Baselines. The obstacle setting exposes distinct failure modes. AGDC suffers from severe efficiency degradation (TE : 46/52/61), suggesting that its information-gathering strategy conflicts with path-planning constraints in non-convex domains. Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+Planning methods degrade most dramatically in dense obstacles: Infotaxis reaches TE = 71 , while DCEE collapses to SR = 0.38 
+
+with TE = 80 —effectively failing to localize the source within the episode budget in most trials. These results highlight that classical planning methods, which compute locally optimal next-step actions, are fundamentally ill-suited for obstacle-rich environments where myopic information gain may lead to dead-end trajectories. 
+
+Degradation Analysis. As quantified in Figure 14b (section E.0.3), 
+
+Distill-Belief degrades by only 11.1% from sparse to dense obsta-cles, compared to 12.9% for GMM-IG and 30.9% for DCEE. The RL methods’ natural adaptability in non-convex environments stems from their ability to learn implicit path-planning strategies dur-ing training, whereas planning methods rely on one-step-ahead optimization that cannot anticipate the long-term consequences of obstacle avoidance. 
+
+## D.6 Ablation Studies 
+
+Table 7: Ablation study on belief-optimization components.                                                       
+
+> Variant SR ↑TE ↓SLE ↓FPE ↓UQ ↓
+> Full (Teacher KL + Distill + 𝜇, 𝜎, Spread + Spread-stop) 0.95 ±0.02 18.7 ±0.9 0.31 ±0.03 0.18 ±0.02 1.12 ±0.06 w/o KL reward (replace 𝑟 𝐼𝐺 with surrogate reward) 0.87 ±0.03 23.1 ±1.2 0.44 ±0.05 0.26 ±0.03 1.47 ±0.08 Reward-from-Student (compute KL using student belief) 0.89 ±0.03 21.8 ±1.1 0.43 ±0.04 0.24 ±0.03 1.58 ±0.10 w/o Distillation (PF-only at test) 0.88 ±0.03 21.2 ±1.1 0.38 ±0.04 0.22 ±0.03 1.28 ±0.07 Student-only training (no PF teacher supervision) 0.82 ±0.04 24.8 ±1.5 0.52 ±0.06 0.32 ±0.04 1.74 ±0.12 w/o Spread feature (policy input drops Spread) 0.90 ±0.03 20.4 ±1.0 0.37 ±0.04 0.21 ±0.03 1.26 ±0.08 w/o Spread-stop (fixed horizon or heuristic stopping) 0.92 ±0.02 22.5 ±1.2 0.35 ±0.03 0.20 ±0.02 1.20 ±0.07 w/o MH move (PF teacher without MH rejuvenation) 0.88 ±0.03 22.5 ±1.2 0.40 ±0.04 0.24 ±0.03 1.39 ±0.09
+
+D.6.1 Table D.6.1: Belief-Optimization Pipeline Ablation. Table D.6.1 presents the most comprehensive ablation in the paper, systemati-cally removing individual components to quantify their marginal contributions. We analyze each variant and its implications. 
+
+Full Model (Baseline). The complete Distill-Belief pipeline achieves SR = 0.95 , TE = 18 .7 steps, and UQ = 1.12 , establish-ing the reference point for all ablations. 
+
+Without KL Reward ( ΔSR = −0.08 ). Removing the dense KL-divergence-based reward causes the single largest SR drop ( 0.95 →
+
+0.87 ), accompanied by TE degradation from 18.7 to 23.1 steps and 
+
+UQ worsening from 1.12 to 1.47. This confirms that belief-space reward shaping is critical for efficient exploration: without it, the agent lacks a dense gradient signal to guide its information-seeking behavior, leading to undirected trajectories and poorly calibrated uncertainty estimates. 
+
+Reward-from-Student ( ΔSR = −0.06 ). Computing the KL reward from the student’s own belief (rather than the teacher particle filter) produces SR = 0.89 but the worst UQ degradation ( 1.58 ) among all variants. This result provides direct empirical evidence for the “reward hacking” concern central to the paper’s motivation: when the same approximate posterior simultaneously defines the reward signal and the policy input, the agent can exploit systematic bi-ases in the approximation to inflate apparent information gain without achieving genuine posterior contraction. The decoupled teacher-student architecture is thus essential for maintaining re-ward integrity. 
+
+Without Distillation ( ΔSR = −0.07 ). Retaining the full particle filter at test time yields SR = 0.88 , demonstrating that the distil-lation step does not degrade raw task performance. Instead, its primary value lies in deployment efficiency: as shown in Table 9 (section D.6.4), removing distillation incurs a 6.5 × latency increase at test time. This variant confirms that distillation is an engineering innovation for practical deployment rather than a performance-enhancing modification. 
+
+Student-Only ( ΔSR = −0.13 ). This is the most severely degraded variant ( SR = 0.82 , UQ = 1.74 ), demonstrating that the particle filter teacher supervision is essential for training. Without a Bayes-correct reference signal, the student network cannot provide suf-ficiently accurate belief targets, and both exploration quality and learning stability suffer substantially. 
+
+Without Spread Feature ( ΔSR = −0.05 ). Removing the posterior spread from the policy’s observation vector primarily affects effi-ciency and calibration rather than raw SR . This indicates that the spread feature enables the policy to modulate its behavior based on current uncertainty magnitude— e.g. , switching from broad ex-ploration to local refinement as the posterior contracts. 
+
+Without Spread-Based Stopping ( ΔSR = −0.03 ). Disabling the adaptive stopping criterion increases TE from 18.7 to 22.5 without commensurate SR improvement, confirming that the spread-based termination condition successfully identifies the point of diminish-ing returns, avoiding wasteful additional steps after the posterior has sufficiently converged. 
+
+Without Metropolis–Hastings Rejuvenation ( ΔSR = −0.07 ). Re-moving the MH move step from the particle filter causes signifi-cant degradation, underscoring the importance of particle diversity maintenance for providing stable and informative teacher signals throughout training. Student-only        
+
+> (baseline)
+> + KL reward + Teacher PF
+> (not student)
+> + Distillation + Spread feat. + Spread-stop + MH rejuv.
+> 0.0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> Success Rate (SR)
+> 0.82
+> +0.05 +0.02
+> +0.01 +0.02
+> +0.01 +0.02 Full = 0.95
+> Waterfall: Cumulative Contribution of Each Component to SR
+
+Figure 6: Waterfall diagram showing the cumulative contribu-tion of each component to SR. Starting from the student-only baseline (0.82), each added module incrementally improves performance to the full model (0.95). 
+
+D.6.2 Figure 15: Waterfall Chart of Incremental Contributions. Fig-ure 15 provides a complementary visualization to Table 11, pre-senting the cumulative effect of progressively adding components to the Student-only baseline ( SR = 0.82 ). The increments are: KL reward ( +0.05 ), teacher particle filter ( +0.02 ), distillation ( +0.01 ), KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+spread features ( +0.02 ), spread-based stopping ( +0.01 ), and MH rejuvenation ( +0.02 ), culminating at SR = 0.95 .The key insight from this visualization is that no single component dominates : the largest individual contribution (KL reward, +0.05 )accounts for only 38% of the total improvement, while the remaining five components collectively contribute 62%. This synergistic design implies that the system cannot be trivially simplified by removing “minor” components without incurring meaningful performance loss—a hallmark of a well-engineered modular architecture. 
+
+Table 8: Ablation on reward design (mean ±std). We compare dense information-gain (KL) reward with sparse hard success reward. Steps@70% SR denotes training steps needed to reach 70% success rate.                                 
+
+> Reward design SR ↑TE ↓SLE ↓UQ ↓Steps@70% SR ↓
+> KL / IG reward (ours) 0.95 ±0.02 18.7 ±0.9 0.31 ±0.03 1.12 ±0.06 0.32 ±0.04M Hard success reward only 0.79 ±0.05 24.5 ±1.8 0.55 ±0.07 1.69 ±0.14 1.10 ±0.20M KL + hard (mixed) 0.93 ±0.02 19.8 ±1.0 0.32 ±0.03 1.14 ±0.06 0.35 ±0.05M Curriculum: KL →KL+hard 0.94 ±0.02 19.2 ±0.9 0.30 ±0.03 1.11 ±0.06 0.30 ±0.04M
+
+D.6.3 Table 8: Reward Design Ablation. Table 8 isolates the effect of reward function design on both asymptotic performance and sample efficiency. 
+
+KL/IG Reward (Proposed). The proposed dense KL-divergence re-ward achieves SR = 0.95 and reaches 70% SR at 0.32 M environment steps, establishing the best performance–efficiency combination. 
+
+Hard Success Reward Only. Using only a sparse binary task-completion reward yields SR = 0.79 —the lowest among all variants— and requires 1.10 M steps to reach 70% SR , a 3.4× sample efficiency degradation. This result validates the paper’s central claim that sparse rewards are fundamentally insufficient for active sensing tasks, where the agent must learn to gather information incremen-tally rather than relying on a single success/failure signal at episode termination. 
+
+KL + Hard (Mixed). Combining both reward signals produces 
+
+SR = 0.93 at 0.35 M steps, demonstrating that the task reward provides complementary but not essential guidance when the dense KL signal is present. 
+
+Curriculum: KL → KL + Hard. A curriculum strategy that begins with pure KL reward and gradually introduces the hard reward achieves SR = 0.94 with the fastest convergence ( 0.30 M steps to 70% SR ). This suggests that establishing reliable exploration behav-ior first, then fine-tuning with task-specific feedback, is an effective training protocol—though the marginal improvement over the pure KL reward ( +0.02 M efficiency gain) may not justify the added com-plexity. 
+
+D.6.4 Table 9 and Figure 3b: Deployment Cost Analysis. Table 9 and Figure 3b quantify the computational cost of inference at de-ployment. 
+
+Full Model (Student Only at Test). The proposed distilled deploy-ment achieves 𝑂 (1) per-step complexity with a reference latency of 1.0×, requiring only a single forward pass through the student network. 
+
+Table 9: Deployment cost ablation. PF teacher scales with particle count 𝑁 during inference, while the distilled student is constant-time.              
+
+> Method Test-time inference Per-step complexity Relative latency Full (Student only at test) Student forward + policy O( 1)1.0 ×
+> PF-only at test PF update + policy O( 𝑁 )6.5 ×
+> Reward-from-Student (test) Student + policy O( 1)1.1 ×
+
+Particle Filter at Test Time. Retaining the particle filter incurs 
+
+𝑂 (𝑁 ) per-step complexity and a 6.5× latency increase. Figure 3b visually contrasts this bottleneck, demonstrating that the particle filter dominates computational cost and renders real-time deploy-ment infeasible for resource-constrained platforms ( e.g. , embedded systems on mobile robots). 
+
+Reward-from-Student Variant. This variant maintains 𝑂 (1) com-plexity ( 1.1× latency) but, as discussed in section D.6.1, suffers from the reward hacking problem. Thus, the full teacher-student archi-tecture with test-time distillation represents the only configuration that simultaneously achieves Bayes-correct training signals and 
+
+constant-time deployment inference. 
+
+## D.7 Hyperparameter Sensitivity Analysis 
+
+Table 10: Sensitivity to training-time particle budget and thresholds (mean ±std). We vary particle count 𝑁 , ESS re-sampling threshold 𝜏 ESS , and stopping threshold 𝜏 stop during training. Note: ms/step reflects training cost; test-time infer-ence uses student-only at constant O(1) cost ( ∼3ms/step).                                                                                                 
+
+> 𝑁 𝜏 ESS 𝜏 stop SR ↑TE ↓SLE ↓UQ ↓Training ms/step ↓
+> 50 0.3 0.05 0.84 ±0.03 23.6 ±1.3 0.45 ±0.05 1.55 ±0.10 1.8 ±0.1 50 0.5 0.05 0.85 ±0.03 24.1 ±1.4 0.44 ±0.05 1.51 ±0.09 2.0 ±0.1 50 0.7 0.05 0.84 ±0.03 24.8 ±1.5 0.44 ±0.05 1.53 ±0.10 2.3 ±0.1 100 0.3 0.05 0.88 ±0.03 21.6 ±1.1 0.39 ±0.04 1.36 ±0.08 2.9 ±0.2 100 0.5 0.05 0.89 ±0.02 22.0 ±1.1 0.38 ±0.04 1.34 ±0.08 3.2 ±0.2 100 0.7 0.05 0.88 ±0.03 22.6 ±1.2 0.38 ±0.04 1.35 ±0.09 3.6 ±0.2 200 0.3 0.05 0.91 ±0.02 18.2 ±0.9 0.32 ±0.03 1.13 ±0.06 5.8 ±0.3 200 0.5 0.05 0.92 ±0.02 18.7 ±0.9 0.31 ±0.03 1.12 ±0.06 6.5 ±0.4 200 0.7 0.05 0.91 ±0.02 19.3 ±1.0 0.31 ±0.03 1.13 ±0.06 7.4 ±0.4 500 0.3 0.05 0.93 ±0.02 17.7 ±0.9 0.29 ±0.03 1.07 ±0.05 13.6 ±0.8 500 0.5 0.05 0.94 ±0.02 18.1 ±0.9 0.28 ±0.03 1.06 ±0.05 15.8 ±0.9 500 0.7 0.05 0.93 ±0.02 18.6 ±1.0 0.28 ±0.03 1.07 ±0.05 18.1 ±1.0
+
+D.7.1 Table 10 and Figure 4: Particle Budget and ESS Threshold. 
+
+Figure 4a: Line Plots of Performance vs. Particle Count 𝑁 . As 𝑁 
+
+increases from 50 to 500, SR improves monotonically from 0.84 to 0.94, TE decreases from 24 to 18 steps, and both SLE and UQ 
+
+improve accordingly. However, training cost (measured in ms/step) increases superlinearly from 2.0 to 15.8, creating a diminishing-returns regime. The configuration 𝑁 = 200 (SR = 0.92 , UQ = 1.12 ,
+
+6.5 ms/step) emerges as the optimal cost–performance trade-off, providing 97.9% of the maximum SR at 41.1% of the maximum training cost. 
+
+Figure 4b: Heatmap of 𝑁 × 𝜏 ESS Grid. The heatmap reveals a crit-ical asymmetry in sensitivity: SR and UQ are highly sensitive to Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea 
+
+𝑁 (vertical axis) but remarkably insensitive to the ESS resampling threshold 𝜏 ESS (horizontal axis), with intra-𝑁 variation below 0.02 across all tested 𝜏 ESS values. This insensitivity is practically impor-tant because it indicates that the method operates in a stable regime 
+
+with respect to the resampling hyperparameter, eliminating the need for careful threshold tuning. The value 𝜏 ESS = 0.5 provides optimal or near-optimal performance across all particle budgets and is therefore recommended as the default. 1.1 1.2 1.3 1.4 1.5 
+
+Uncertainty Quality (UQ / NLL)  
+
+> 0.84
+> 0.86
+> 0.88
+> 0.90
+> 0.92
+> 0.94
+> Success Rate (SR)
+> N=100
+> N=200
+> Default
+> (N=200, =0.5)
+
+Performance Cost Tradeoff 
+
+(bubble size training cost) 
+
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> 16
+> 18
+> Training Cost (ms/step)
+
+Figure 7: Performance–cost tradeoff across hyperparameter configurations. The 𝑥 -axis is uncertainty quality (lower is better), the 𝑦 -axis is SR (higher is better), bubble size and color encode training cost. 𝑁 =200 offers the best cost-performance balance. 
+
+D.7.2 Figure 18: Bubble Chart (SR × UQ × Training Cost). Fig-ure 18 provides a three-dimensional visualization by encoding 
+
+SR and UQ on the axes while representing training cost via bub-ble diameter. The 𝑁 = 200 configuration occupies the efficiency frontier—achieving high SR , low UQ , and moderate bubble size— while 𝑁 = 500 offers only marginal performance improvement (less than 0.02 in SR ) at a disproportionately larger computational cost (bubble area approximately 2.4× larger). This visualization confirms that the default configuration is Pareto-optimal: no al-ternative achieves superior performance on all three dimensions simultaneously. 
+
+## E Supplementary Visualizations 
+
+E.0.1 Figure 12: Cross-Field Performance Heatmap. Figure 12 presents a method × field heatmap where cell intensity encodes the gap-to-best for each (method, field) combination. Distill-Belief ’s entire row is uniformly light (gap = 0 across all fields), visually estab-lishing its consistent cross-domain leadership. By contrast, En-trotaxis and DCEE display the darkest rows (gap ∈ [ 0.20 , 0.30 ]), indicating a persistent performance deficit regardless of field modal-ity. This visualization effectively communicates a key strength of Temp. Conc. Mag. Elec. Gas En. Noise                                           
+
+> Field Modality
+> Distill-Belief
+> GMM-IG
+> AGDC
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+> 0.95 0.94 0.94 0.82 0.96 0.63 0.94
+> 0.90 0.91 0.89 0.77 0.92 0.61 0.91
+> 0.90 0.91 0.89 0.73 0.89 0.57 0.89
+> 0.87 0.88 0.86 0.74 0.86 0.57 0.86
+> 0.80 0.81 0.81 0.68 0.79 0.51 0.80
+> 0.85 0.86 0.85 0.75 0.84 0.55 0.80
+> 0.58 0.59 0.58 0.43 0.56 0.36 0.57
+> Cross-Field Performance: SR with Gap-to-Best Shading
+> 0.00
+> 0.05
+> 0.10
+> 0.15
+> 0.20
+> 0.25
+> 0.30
+> Gap to Best SR
+
+Figure 8: Cross-field SR performance with gap-to-best shad-ing. Lighter color indicates smaller gap to the best method. Distill-Belief achieves the highest SR across all seven field modalities. 
+
+Distill-Belief : its performance advantage is not specific to partic-ular physics but generalizes across the full spectrum of field types encoded in the ISLCenv benchmark. 20 40 60 80 100       
+
+> Trajectory Efficiency (TE)
+> 0.3
+> 0.4
+> 0.5
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> 1.0
+> Success Rate (SR)
+> Ideal
+> region
+> (a) Multi-Source
+> 20 30 40 50 60 70 80
+> Trajectory Efficiency (TE)
+> 0.4
+> 0.5
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> 1.0
+> Success Rate (SR)
+> Ideal
+> region
+> (b) Obstacle-Constrained
+> SR TE Pareto Landscape: Higher-Left Is Better
+> Distill-Belief
+> AGDC
+> GMM-IG
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+> 2 src / Sparse
+> 3 src / Moderate
+> 4 src / Dense
+
+Figure 9: SR–TE Pareto landscape under (a) multi-source and (b) obstacle-constrained settings. Points closer to the upper-left ideal region indicate better joint performance. Marker shapes denote difficulty levels. 
+
+E.0.2 Figure 13: Pareto Front of SR–TE Trade-off. Figure 13 plots each method as a scatter point in the SR –TE plane under multi-source and obstacle-constrained conditions, with marker shape encoding difficulty level (circle → triangle as difficulty increases). 
+
+Distill-Belief points consistently reside in the upper-left “ideal region” of high SR and low TE , forming the Pareto frontier. As difficulty increases, all methods shift rightward and downward, but the magnitude of this shift is smallest for Distill-Belief , confirm-ing its robustness to environmental complexity. Planning meth-ods (AGDC, Infotaxis, DCEE) cluster in the right half of the plane (TE > 50 ), revealing a fundamental efficiency disadvantage that no amount of information-theoretic sophistication can overcome: my-opic one-step planning is inherently suboptimal for long-horizon active sensing under navigational constraints. KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 0 10 20 30 40 50      
+
+> SR Degradation (%)
+> Distill-Belief
+> AGDC
+> GMM-IG
+> PCDQN
+> DCEE
+> GMM-PFRL
+> Infotaxis
+> 20.8%
+> 25.4%
+> 28.8%
+> 34.9%
+> 35.0%
+> 36.8%
+> 44.6%
+> More Robust
+> (a) Multi-Source
+> (2 4 sources)
+> 010 20 30
+> SR Degradation (%)
+> Distill-Belief
+> GMM-IG
+> AGDC
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+> 11.1%
+> 12.9%
+> 15.3%
+> 15.9%
+> 17.3%
+> 18.8%
+> 30.9%
+> More Robust
+> (b) Obstacle
+> (Sparse Dense)
+> Robustness: SR Degradation Under Increasing Difficulty
+
+Figure 10: SR degradation (%) under increasing difficulty: (a) multi-source ( 2 → 4 sources) and (b) obstacle density (sparse → dense). Lower degradation indicates higher robust-ness. 
+
+E.0.3 Figure 14: Degradation Analysis (Multi-Source and Obstacles). 
+
+(a) Multi-Source Degradation. The bar chart in Figure 14a ranks methods by SR degradation rate from 2 to 4 sources. Distill-Belief 
+
+exhibits the lowest rate (20.8%), followed by GMM-IG (24.3%) and PCDQN (27.1%). Planning methods cluster at significantly higher degradation rates: Infotaxis (44.6%), DCEE (35.0%). The degradation ordering is highly correlated with method family—RL methods are systematically more robust than planning methods—suggesting that end-to-end policy learning implicitly acquires multi-modal disambiguation strategies that are unavailable to greedy planners. 
+
+(b) Obstacle Degradation. A parallel analysis for obstacle density (sparse → dense) yields qualitatively identical conclusions: Distill-Belief (11.1%) and GMM-IG (12.9%) degrade minimally, while DCEE (30.9%) and Infotaxis (26.4%) suffer substantially. The RL methods’ implicit path-planning capabilities, acquired through environment interaction during training, provide a natural advantage in non-convex domains. 1 2 3 4 5 6 7        
+
+> Average Rank (SR across 7 field modalities)
+> Distill-Belief (1.0)
+> GMM-IG (2.0)
+> AGDC (3.4)
+> PCDQN (3.9)
+> Infotaxis (4.7)
+> GMM-PFRL (6.0)
+> DCEE (7.0)
+> CD 3.0
+> Critical Difference Diagram: SR Ranking
+
+Figure 11: Critical Difference diagram for SR ranking across seven field modalities. Methods connected by a bar are not statistically significantly different (CD ≈ 3.0). 
+
+E.0.4 Figure 16: Critical Difference Diagram. Figure 16 applies the Nemenyi post-hoc test to the rank distributions across all experi-mental settings, yielding a critical difference (CD) of approximately 3.0. Distill-Belief achieves an average rank of 1.0 and is not con-nected by a significance bar to GMM-IG (average rank 2.0), con-firming that the performance difference between these two leading 2 3 4  
+
+> Number of Sources
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> Success Rate (SR)
+> (a) Success Rate
+> 234
+> Number of Sources
+> 20
+> 40
+> 60
+> 80
+> 100
+> Trajectory Efficiency (TE)  (b) Trajectory Efficiency
+> Multi-Source Localization (Temperature Field)
+> Distill-Belief
+> AGDC
+> GMM-IG
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+
+Figure 12: Multi-source localization performance in the Tem-perature field. (a) SR decreases as the number of sources grows from 2 to 4; Distill-Belief exhibits the shallowest de-cline. (b) TE increases with more sources; Distill-Belief main-tains the lowest trajectory cost. Shaded regions indicate stan-dard deviation. 
+
+methods is statistically significant at the standard 𝛼 = 0.05 confi-dence level. At the opposite end, DCEE (rank 7.0) and GMM-PFRL (rank 6.0) are statistically indistinguishable from each other but significantly worse than all top-tier methods. This rigorous statisti-cal analysis elevates the comparison beyond mere point estimates, providing formal evidence that Distill-Belief ’s superiority is not attributable to random variation. 
+
+E.0.5 Figure 19: Multi-Source Trend Lines. 
+
+(a) SR vs. Source Count. All curves decline monotonically with increasing source count, but the slope of decline differs markedly. 
+
+Distill-Belief exhibits the shallowest slope, maintaining SR >
+
+0.60 even at 4 sources, while DCEE and Infotaxis exhibit the steepest declines, falling below SR = 0.40 and SR = 0.36 , respectively. The shaded confidence bands (representing standard deviation across runs) confirm that Distill-Belief also has the smallest variance ,indicating highly reproducible performance. 
+
+(b) TE vs. Source Count. Distill-Belief ’s trajectory cost grows from 28 to 40 steps (43% increase), compared to DCEE’s surge from 72 to 100 steps (39% increase on a much higher baseline). The absolute gap widens with difficulty, confirming that the efficiency advantage of Distill-Belief becomes more pronounced in harder settings. 
+
+E.0.6 Figure 20: Obstacle Environment Bar Chart. Figure 20 presents a grouped bar chart comparing SR and TE across three obstacle densities. Distill-Belief ’s bars are consistently the tallest (for SR )or shortest (for TE ), with the smallest degradation from sparse to dense configurations. The visual contrast is most striking for DCEE in the dense setting, where SR drops to 0.38—effectively a failure state where the majority of episodes fail to localize the source within the allocated step budget. This bar chart serves as an accessible summary of Table 4 (section D.5.2), enabling rapid visual comparison without consulting numerical values. 
+
+E.0.7 Figure 21: Ablation Radar Chart. Figure 21 maps the ablation results from Table 11 onto a five-axis radar chart with axes SR , TE ,Distill-Belief: Closed-Loop Inverse Source Localization and Characterization in Physical Fields KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Sparse Moderate Dense   
+
+> 0.3
+> 0.4
+> 0.5
+> 0.6
+> 0.7
+> 0.8
+> 0.9
+> 1.0
+> Success Rate (SR)
+> (a) Success Rate
+> Sparse Moderate Dense
+> 0
+> 20
+> 40
+> 60
+> 80
+> Trajectory Efficiency (TE)
+> (b) Trajectory Efficiency
+> Obstacle-Constrained Environments
+> Distill-Belief
+> GMM-IG
+> AGDC
+> PCDQN
+> GMM-PFRL
+> Infotaxis
+> DCEE
+
+Figure 13: Performance under obstacle-constrained environ-ments with sparse, moderate, and dense obstacle densities. (a) SR comparison shows Distill-Belief leads across all densi-ties. (b) TE comparison confirms the lowest navigation cost for Distill-Belief. SR  
+
+> TE
+> (inverted)
+> SLE
+> (inverted)
+> FPE
+> (inverted)
+> UQ
+> (inverted)
+> 0.25
+> 0.50
+> 0.75
+> 1.00
+> Ablation: Belief-Optimization Components
+> (normalized, higher = better) Full
+> w/o KL reward
+> Reward-from-Student
+> w/o Distillation
+> Student-only
+> w/o Spread feat.
+> w/o Spread-stop
+> w/o MH move
+
+Figure 14: Radar chart of ablation study results (normalized, higher is better). The full model (solid blue) occupies the outermost contour on all five dimensions (SR, TE, SLE, FPE, UQ), while Student-only collapses most severely. 
+
+SLE , FPE , and UQ . The full model (solid blue contour) occupies the outermost ring on all five axes, while the Student-only variant (dashed contour) collapses most severely—particularly on the UQ 
+
+and FPE axes, where it nearly reaches the center of the chart. The variants “w/o KL reward” and “Reward-from-Student” produce contours with significantly reduced area, further validating the irreplaceability of the teacher KL reward mechanism. This radar visualization is particularly effective for communicat-ing the holistic nature of the ablation: it shows at a glance that every component contributes to expanding the performance envelope, and that removing any single component causes the contour to contract along at least two axes simultaneously. 
+
+## F Supplementary Case Study: Single-Episode Trajectory Analysis 
+
+Appendix B of the manuscript provides a detailed single-episode case study that cross-references six figures (Figures 5–10) to illus-trate the tightly coupled observation →inference →action feedback loop. We analyze each figure in the sequence. 
+
+F.0.1 Figure 5: Particle Filter Convergence Snapshots. Figure 5 presents eight sequential snapshots of the particle filter’s spatial distribution at episode steps 0, 10, 20, 30, 40, 50, 60, and 80. Green dots represent individual particles (each encoding a full parameter hypothesis Θ), the black star marks the ground-truth source location, and the red trajectory traces the agent’s path. At step 0, particles are uniformly distributed across the 30 × 30 
+
+domain, reflecting the uninformative prior. By step 20, the particle cloud has begun to elongate along the downwind axis, reflecting the directional information extracted from initial observations. Be-tween steps 40 and 60, a dramatic contraction occurs, coinciding with the agent’s entry into the high-signal region near the source. By step 80, particles form a tight cluster around the true source location, with the posterior having contracted from approximately 900 to roughly 2 square units—a reduction exceeding 99.7%. This sequence visually demonstrates the information-driven nav-igation strategy : the agent’s trajectory is not random but systemati-cally designed to maximize the rate of posterior contraction, visiting positions that provide the most discriminative observations. 
+
+F.0.2 Figure 6: Agent Trajectory in the Spatial Domain. Figure 6 displays the complete spatial path of the agent in the 30 ×30 domain, with a blue square marking the start position (0, 0), a cyan diamond marking the terminal position (≈ 13 , 17 ), and a black star indicating the true source at (15 .7, 16 .3).The trajectory reveals a multi-phase strategy: (1) Horizontal sweep (steps 0–15): rapid eastward traversal to establish an initial bearing. (2) Lateral excursion (steps 15–30): a deliberate detour provid-ing angular diversity for triangulation. (3) Southeastern detour (steps 30–40): a counterintuitive move 
+
+away from the source that increases observation diversity. (4) Major northward ascent (steps 40–60): a sustained ap-proach phase driven by increasing signal strength. (5) Lateral refinement (steps 60–75): oscillatory motion near the source for multi-directional observations. (6) Final convergence (steps 75–82): terminal approach to within 0.9 units of the true source. The characteristic “L-shape followed by spiral refinement” pat-tern is consistent with information-theoretic optimal strategies documented in the active sensing literature, but here it emerges 
+
+automatically from end-to-end reinforcement learning without ex-plicit trajectory design. 
+
+F.0.3 Figure 7: Sensor Reading Time Series. Figure 7 plots the raw scalar observations received by the agent over the episode duration, revealing three distinct regimes: (1) Silent regime (steps 0–45): readings ≈ 0, corresponding to the agent’s position far from the source where the signal is below the sensor’s detection threshold. KDD ’26, August 9–13, 2026, International Convention Center Jeju (ICC Jeju), Jeju, Republic of Korea Trovato et al. 
+
+(2) Rising regime (steps 45–60): progressive increase to ≈ 0.056 ,as the agent enters the detectable field region. (3) Near-source regime (steps 60–82): complex oscillations with a dramatic spike to ≈ 0.167 at step 80, reflecting the steep field gradient near the source. The sensor reading profile underscores the position-dependent signal-to-noise ratio challenge: for the first 45 steps (55% of the episode), the agent operates in a near-zero-information regime and must rely on the absence of signal as inferential evidence. The ability to extract useful information from null observations is a hallmark of the Bayesian inference framework. 
+
+F.0.4 Figure 8: Distance to Source Over Time. Figure 8 tracks the Eu-clidean distance between the agent and the true source throughout the episode, revealing a non-monotonic approach profile: (1) Initial rapid decrease (steps 0–20): 22 .5 → 14 .5 units. (2) Exploratory plateau/reversal (steps 20–30): 14 .5 → 16 .5 →
+
+16 .0 units—a deliberate detour for angular observation di-versity. (3) Sustained approach (steps 30–55): 16 .0 → 3.5 units, repre-senting the steepest descent into the plume. (4) Near-source oscillation (steps 55–75): 3.5 ↔ 5.0 units— circling for multi-directional observations. (5) Final convergence (steps 75–82): 5.0 → 0.9 units. The non-monotonicity in phase 2 is particularly noteworthy: a naive “approach the source” strategy would yield monotonically de-creasing distance, but the learned policy recognizes that temporarily moving away provides superior observation diversity that accel-erates long-term posterior contraction. This information-versus-proximity trade-off is a defining characteristic of optimal active sensing. 
+
+F.0.5 Figure 9: Joint Posterior Distribution at Termination. Figure 9 presents the terminal 2D histogram of the marginal posterior over source location (𝑥 𝑠 , 𝑦 𝑠 ). The axes span only [15 .0, 16 .8]×[ 15 .4, 17 .6]—a 1.8 × 2.2 region from the full 30 × 30 domain—representing a con-traction from ∼900 to ∼4 square units (greater than 99.5% reduction in posterior support). The densest bin ( >6000 particles) is located at approximately 
+
+(15 .85 , 17 .2), while the true source at (15 .7, 16 .3) falls within the pos-terior support, approximately 0.8 units below the mode. Critically, the 95% credible region encompasses the ground truth, confirm-ing that the posterior is well-calibrated : the uncertainty estimate honestly reflects the remaining localization ambiguity rather than being artificially narrow. 
+
+F.0.6 Figure 10: Marginal Posterior Histograms for All Parameters. 
+
+Figure 10 presents marginal posterior histograms for all eight esti-mated parameters, revealing a spectrum of identifiability: 
+
+Highly Identifiable Parameters. Wind direction 𝜑 (true = 0.79 ,estimated = 0.81 , error = 0.02 ) exhibits the sharpest posterior peak (density ∼60), confirming that directional information is most read-ily extracted from field observations. Source 𝑥 -coordinate (error 
+
+= 0.01 ) and downwind diffusion coefficient 𝑐 𝑖𝑖 (error = 1.12 ) are also well-recovered. 
+
+Moderately Identifiable Parameters. Source 𝑦 -coordinate (error 
+
+= 0.80 , upward bias), crosswind diffusion 𝑐 𝑖 (error = 0.41 ), and source height 𝑧 (error = 0.83 , the weakest spatial coordinate) show broader posteriors but substantial contraction from the prior. 
+
+Coupled Parameters. Emission strength 𝑄 (error = 2.11 , broadest posterior) and wind speed 𝑢 (error = 1.67 , multimodal structure) exhibit the widest posteriors, consistent with the well-known 𝑄 –
+
+𝑐 𝑖𝑖 –𝑢 degeneracy in dispersion models: increased emission rate can be compensated by increased diffusion or wind speed, creating a manifold of observationally equivalent parameter combinations. Despite these coupling effects, all eight parameters show dra-matically narrower posteriors than their priors, confirming that the ISLC framework extracts meaningful information about every 
+
+component of Θ, including those that are only weakly identifiable from individual observations. 
+
+## G Implementation Details G.1 Neural Network Architectures and Hyperparameters 
+
+Student belief network. We parameterize the student posterior as a factorized Gaussian 𝑞 𝜙 (Θ | 𝑜 𝑡 , 𝑝 𝑡 ) = N ( 𝜇 𝑡 , diag (𝜎 2 
+
+> 𝑡
+
+)) , with 
+
+[𝜇 𝑡 , log 𝜎 2 
+
+> 𝑡
+
+] = 𝑓 𝜙 (𝑜 𝑡 , 𝑝 𝑡 ), where 𝑓 𝜙 is a small MLP (two hidden lay-ers with ReLU activations, each hidden layer has 128 units). We apply three stabilizers: (i) clipping log 𝜎 2 
+
+> 𝑡
+
+∈ [ log 𝜎 2min , log 𝜎 2max ] with 
+
+𝜎 min ≈ 10 −3 and 𝜎 max ≈ 10 ; (ii) 𝜖 -stabilized normalized PF weights with stopped gradients through weights; (iii) online standardization of inputs (𝑜 𝑡 , 𝑝 𝑡 ).
+
+Actor-critic and PPO. We learn a continuous-control policy us-ing PPO with a diagonal-Gaussian policy 𝜋 𝜃 (𝑎 𝑡 | 𝜓 𝑡 ) =N ( 𝑎 𝑡 ; 𝜇 𝜃 (𝜓 𝑡 ),
+
+diag (𝜎 𝜃 (𝜓 𝑡 )2)) and a value function 𝑉 𝜑 (𝜓 𝑡 ). We use on-policy roll-outs and generalized advantage estimation (GAE), and optimize the standard clipped PPO objective with an entropy regularizer. 
+
+Numeric hyperparameters. Unless otherwise stated, all ex-periments use the same network architectures and optimization hyperparameters as the full method.
