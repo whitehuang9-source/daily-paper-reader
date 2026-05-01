@@ -1,0 +1,65 @@
+{
+  "label": "2026-05-01",
+  "date": "2026-05-01",
+  "generated_at": "2026-05-01T20:49:58",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202605/01/2604.21115v1-complex-approximate-message-passing-with-non-separable-denoising",
+      "section": "quick",
+      "title_en": "Complex Approximate Message Passing with Non-separable Denoising",
+      "authors": "Vishnu Teja Kunde, Alessandro Mirri, Jean-Francois Chamberland, Enrico Paolini",
+      "date": "2026-04-22",
+      "pdf": "https://arxiv.org/pdf/2604.21115v1",
+      "score": "6.0",
+      "evidence": "用于压缩感知和推理的迭代算法",
+      "tldr": "本文针对高维推理中的复数近似消息传递（AMP）算法，填补了非可分去噪函数下状态演化（SE）理论的空白。研究通过构建增强实值系统并利用Wirtinger导数进行Onsager校正，将非可分结构简化为标量复数递归。该框架支持矩阵值设置，能有效处理复数恢复中的联合结构约束（如稀疏组LASSO），在OTFS随机接入等场景中表现优异。",
+      "tags": "query:tmr",
+      "abstract_en": "Approximate Message Passing (AMP) is a general framework for iterative algorithms, originally developed for compressed sensing and later extended to a wide range of high-dimensional inference problems. Although recent work has advanced matrix AMP, complex AMP, and AMP for non-separable functions independently, a unified state evolution theory for complex AMP with non-separable denoisers has been lacking. This article fills that gap by establishing state evolution in the setting of complex, non-separable denoising functions. The proposed approach constructs an augmented real-valued system that lifts the problem to a higher-dimensional space, then recovers the complex domain through a many-to-one canonical transformation. Under this construction, the Onsager correction naturally involves Wirtinger derivatives, and the resulting state evolution reduces to scalar complex recursions despite the non-separable structure of the denoisers. The framework extends to the matrix-valued setting, accommodating multiple feature vectors simultaneously. This generalization enables AMP to exploit joint structural constraints, such as simultaneous group and element sparsity, in complex-valued recovery problems. The complex sparse group least absolute shrinkage and selection operator (LASSO) serves as a key instantiation, motivated by preamble detection in Orthogonal Time-Frequency Space (OTFS)-based unsourced random access. Numerical experiments confirm that state evolution accurately predicts performance and show that complex non-separable denoising can produce significant gains over separable and real-valued alternatives.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/01/2604.23666v1-an-ai-based-supervisory-measurement-integrity-validation-layer-for-cyber-resilient-acdc-protection-in-inverter-based-microgrids",
+      "section": "quick",
+      "title_en": "An AI-Based Supervisory Measurement Integrity Validation Layer for Cyber-Resilient AC/DC Protection in Inverter-Based Microgrids",
+      "authors": "Ahmad Mohammad Saber, Ahmed Saber Refae, Davor Svetinovic, Hatem Zeineldin, Amr Youssef, Ehab F. El-Saadany, Deepa Kundur",
+      "date": "2026-04-26",
+      "pdf": "https://arxiv.org/pdf/2604.23666v1",
+      "score": "6.0",
+      "evidence": "电流继电器的测量完整性与验证",
+      "tldr": "针对逆变器微电网中线路电流差动继电器（LCDR）易受虚假数据注入攻击（FDIA）的问题，本文提出一种基于人工智能的测量完整性验证层。该方案利用循环神经网络（RNN）分析瞬时电流测量值的时域特征，以区分真实的故障轨迹与人为操纵的攻击流。该方法无需额外传感器或拓扑信息，适用于AC和DC系统，在不影响保护可靠性的前提下显著提升了微电网的抗攻击能力。",
+      "tags": "query:tmr",
+      "abstract_en": "Line current differential relays (LCDRs) are measurement-driven relays that rely on time-synchronized multi-phase current waveforms to infer internal faults in AC and DC power networks. In inverter-based microgrids, however, the increasing reliance on digitally communicated measurements exposes LCDRs to false-data injection attacks (FDIAs), in which adversaries manipulate remote measurement streams to create protection-triggering yet physically inconsistent current trajectories. This paper addresses this emerging measurement integrity problem by introducing a measurement integrity validation scheme that operates as a supervisory instrumentation layer for modern LCDRs. The proposed scheme interprets short windows of synchronized instantaneous current measurements recorded during relay operation and assesses their physical consistency to distinguish genuine fault-induced trajectories from cyber-manipulated measurement streams. A recurrent neural network is trained offline using only relay-available current measurements and exploits the temporal structure of differential current waveforms, which remains informative in inverter-dominated systems where current magnitude is no longer a reliable observable. The method requires no additional sensors, auxiliary protection elements, or prior knowledge of network topology, and is applicable to both AC and DC LCDRs without structural modification. The proposed measurement validation scheme is evaluated on an islanded inverter-based microgrid under a comprehensive set of fault and FDIA scenarios, demonstrating high detection accuracy while preserving relay dependability. Hardware-in-the-loop validation using an OPAL-RT real-time simulator confirms that the scheme satisfies protection timing constraints and can operate in real time under realistic operating conditions.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/01/2604.24561v2-remotely-programming-the-weights-of-a-spintronic-neural-network-by-a-radiofrequency-broadcast-signal",
+      "section": "quick",
+      "title_en": "Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal",
+      "authors": "M. Menshawy, D. Sanz-Hernández, L. Mazza, V. Puliafito, G. Finocchio, A. Jenkins, R. Ferreira, L. Benetti, J. Grollier, F. A. Mizrahi",
+      "date": "2026-04-27",
+      "pdf": "https://arxiv.org/pdf/2604.24561v2",
+      "score": "6.0",
+      "evidence": "使用磁隧道结（MTJ）的自旋电子神经网络",
+      "tldr": "本研究针对存内计算中大规模突触权重编程的扩展性难题，提出了一种利用广播射频信号远程编程自旋电子神经网络权重的方法。通过在共享带状线上应用频率选择性的涡旋核极性翻转，实现了对11个串联磁隧道结权重的独立控制，无需额外选择器。实验展示了一个22突触网络可快速重构以执行手写数字识别和无人机射频特征鉴定任务，为构建紧凑且可扩展的神经形态硬件提供了新途径。",
+      "tags": "query:tmr",
+      "abstract_en": "Selectively programming large number of non-volatile synaptic weights without compromising scalability is a key challenge for in-memory computing. Here, we demonstrate remote programming of synaptic weights in series-connected chains of 11 vortex-based magnetic tunnel junctions using broadcast radiofrequency signals applied through a shared strip line. The programming relies on frequency-selective reversal of the vortex-core polarity and therefore does not require individual access lines or selector devices. By reconfiguring the binary states of these chains, we reshape the weighted sums they perform on frequency-multiplexed RF inputs. Using a 22-synapse network composed of two such chains, we remotely reconfigure the same hardware to perform two distinct tasks: handwritten-digit classification and drone RF-signature identification. The digit-optimized configuration reaches 94.91 +/- 0.26% accuracy on handwritten digits but only 13.17 +/- 0.47% on drone RF signatures, whereas the drone-optimized configuration reaches 97.33 +/- 0.62% on drones but only 47.59 +/- 1.5% on digits. Broadcast RF programming thus provides a compact and scalable route to rapidly reconfigurable spintronic neuromorphic hardware.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/01/2604.25274v1-high-field-magneto-optical-imaging-of-superconducting-critical-states-beyond-10-t-using-a-paramagnetic-garnet-sensor",
+      "section": "quick",
+      "title_en": "High-field magneto-optical imaging of superconducting critical states beyond 10 T using a paramagnetic garnet sensor",
+      "authors": "Yuto Kinoshita, Masayuki Toyoda, Yoshiaki Kobayashi, Masayuki Itoh, Masashi Tokunaga",
+      "date": "2026-04-28",
+      "pdf": "https://arxiv.org/pdf/2604.25274v1",
+      "score": "6.0",
+      "evidence": "使用磁传感器对电流密度进行磁光成像",
+      "tldr": "本研究针对超导体在高磁场下临界电流密度（Jc）局部变化难以表征的问题，开发了一种基于顺磁性钕石榴石指示剂的磁光成像（MOI）技术，实现了在高达13 T的稳态磁场下对超导临界态的可视化。通过对铁基超导体Ba(Fe1-xCox)2As2的实验，成功重建了Jc的空间分布和电流矢量图，其结果与传统磁化测量一致，为研究高场下超导体的非均匀电流输运提供了强有力的空间分辨评估手段。",
+      "tags": "query:tmr",
+      "abstract_en": "Spatially resolved characterization of the critical current density Jc in superconductors under high magnetic fields is crucial for both fundamental understanding and practical applications. However, conventional techniques primarily provide bulk-averaged values, making it difficult to resolve local variations of Jc, especially in high magnetic fields. In this work, we develop a magneto-optical imaging (MOI) technique that enables visualization of superconducting critical states in steady magnetic fields up to 13 T. This is achieved by employing a paramagnetic Nd-garnet indicator combined with a polarizing microscope system. Using this method, we directly image the magnetic flux distribution in a bulk single crystal of an iron-based superconductor Ba(Fe1-xCox)2As2 (x = 0.075) at 12 K and 20 K across the entire sample area (approximately 1 mm). From the measured magnetic field distributions, we quantitatively reconstruct the spatial distribution of the critical current density. The extracted field dependence of Jc is in good agreement with that obtained from conventional magnetization measurements. Furthermore, we demonstrate vector mapping of current flow within the sample by converting the magnetic field distribution into local current-density distributions. Our results establish high-field MOI as a powerful approach for spatially resolved evaluation of superconducting critical states and provide a new pathway for investigating inhomogeneous current transport in superconductors under high magnetic fields.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

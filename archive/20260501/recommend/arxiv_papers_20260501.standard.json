@@ -1,0 +1,181 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-01T20:40:39.480645+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2604.21115v1",
+      "title": "Complex Approximate Message Passing with Non-separable Denoising",
+      "abstract": "Approximate Message Passing (AMP) is a general framework for iterative algorithms, originally developed for compressed sensing and later extended to a wide range of high-dimensional inference problems. Although recent work has advanced matrix AMP, complex AMP, and AMP for non-separable functions independently, a unified state evolution theory for complex AMP with non-separable denoisers has been lacking. This article fills that gap by establishing state evolution in the setting of complex, non-separable denoising functions. The proposed approach constructs an augmented real-valued system that lifts the problem to a higher-dimensional space, then recovers the complex domain through a many-to-one canonical transformation. Under this construction, the Onsager correction naturally involves Wirtinger derivatives, and the resulting state evolution reduces to scalar complex recursions despite the non-separable structure of the denoisers. The framework extends to the matrix-valued setting, accommodating multiple feature vectors simultaneously. This generalization enables AMP to exploit joint structural constraints, such as simultaneous group and element sparsity, in complex-valued recovery problems. The complex sparse group least absolute shrinkage and selection operator (LASSO) serves as a key instantiation, motivated by preamble detection in Orthogonal Time-Frequency Space (OTFS)-based unsourced random access. Numerical experiments confirm that state evolution accurately predicts performance and show that complex non-separable denoising can produce significant gains over separable and real-valued alternatives.",
+      "authors": [
+        "Vishnu Teja Kunde",
+        "Alessandro Mirri",
+        "Jean-Francois Chamberland",
+        "Enrico Paolini"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "stat.AP"
+      ],
+      "published": "2026-04-22T21:58:28+00:00",
+      "link": "https://arxiv.org/pdf/2604.21115v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "iterative algorithms for compressed sensing and inference",
+      "llm_evidence_cn": "用于压缩感知和推理的迭代算法",
+      "llm_evidence": "用于压缩感知和推理的迭代算法",
+      "canonical_evidence": "用于压缩感知和推理的迭代算法",
+      "llm_tldr_en": "Advances Approximate Message Passing for high-dimensional inference, useful for current reconstruction algorithms.",
+      "llm_tldr_cn": "改进了用于高维推理的近似消息传递算法，可用于电流重建算法。",
+      "llm_tldr": "改进了用于高维推理的近似消息传递算法，可用于电流重建算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.23666v1",
+      "title": "An AI-Based Supervisory Measurement Integrity Validation Layer for Cyber-Resilient AC/DC Protection in Inverter-Based Microgrids",
+      "abstract": "Line current differential relays (LCDRs) are measurement-driven relays that rely on time-synchronized multi-phase current waveforms to infer internal faults in AC and DC power networks. In inverter-based microgrids, however, the increasing reliance on digitally communicated measurements exposes LCDRs to false-data injection attacks (FDIAs), in which adversaries manipulate remote measurement streams to create protection-triggering yet physically inconsistent current trajectories. This paper addresses this emerging measurement integrity problem by introducing a measurement integrity validation scheme that operates as a supervisory instrumentation layer for modern LCDRs. The proposed scheme interprets short windows of synchronized instantaneous current measurements recorded during relay operation and assesses their physical consistency to distinguish genuine fault-induced trajectories from cyber-manipulated measurement streams. A recurrent neural network is trained offline using only relay-available current measurements and exploits the temporal structure of differential current waveforms, which remains informative in inverter-dominated systems where current magnitude is no longer a reliable observable. The method requires no additional sensors, auxiliary protection elements, or prior knowledge of network topology, and is applicable to both AC and DC LCDRs without structural modification. The proposed measurement validation scheme is evaluated on an islanded inverter-based microgrid under a comprehensive set of fault and FDIA scenarios, demonstrating high detection accuracy while preserving relay dependability. Hardware-in-the-loop validation using an OPAL-RT real-time simulator confirms that the scheme satisfies protection timing constraints and can operate in real time under realistic operating conditions.",
+      "authors": [
+        "Ahmad Mohammad Saber",
+        "Ahmed Saber Refae",
+        "Davor Svetinovic",
+        "Hatem Zeineldin",
+        "Amr Youssef",
+        "Ehab F. El-Saadany",
+        "Deepa Kundur"
+      ],
+      "primary_category": "cs.CR",
+      "categories": [
+        "cs.CR",
+        "cs.AI",
+        "eess.SP",
+        "eess.SY"
+      ],
+      "published": "2026-04-26T11:46:23+00:00",
+      "link": "https://arxiv.org/pdf/2604.23666v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "measurement integrity and validation for current relays",
+      "llm_evidence_cn": "电流继电器的测量完整性与验证",
+      "llm_evidence": "电流继电器的测量完整性与验证",
+      "canonical_evidence": "电流继电器的测量完整性与验证",
+      "llm_tldr_en": "Introduces a validation layer for current measurements in microgrids to suppress false-data interference.",
+      "llm_tldr_cn": "为微网电流测量引入验证层，以抑制虚假数据干扰。",
+      "llm_tldr": "为微网电流测量引入验证层，以抑制虚假数据干扰。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.24561v2",
+      "title": "Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal",
+      "abstract": "Selectively programming large number of non-volatile synaptic weights without compromising scalability is a key challenge for in-memory computing. Here, we demonstrate remote programming of synaptic weights in series-connected chains of 11 vortex-based magnetic tunnel junctions using broadcast radiofrequency signals applied through a shared strip line. The programming relies on frequency-selective reversal of the vortex-core polarity and therefore does not require individual access lines or selector devices. By reconfiguring the binary states of these chains, we reshape the weighted sums they perform on frequency-multiplexed RF inputs. Using a 22-synapse network composed of two such chains, we remotely reconfigure the same hardware to perform two distinct tasks: handwritten-digit classification and drone RF-signature identification. The digit-optimized configuration reaches 94.91 +/- 0.26% accuracy on handwritten digits but only 13.17 +/- 0.47% on drone RF signatures, whereas the drone-optimized configuration reaches 97.33 +/- 0.62% on drones but only 47.59 +/- 1.5% on digits. Broadcast RF programming thus provides a compact and scalable route to rapidly reconfigurable spintronic neuromorphic hardware.",
+      "authors": [
+        "M. Menshawy",
+        "D. Sanz-Hernández",
+        "L. Mazza",
+        "V. Puliafito",
+        "G. Finocchio",
+        "A. Jenkins",
+        "R. Ferreira",
+        "L. Benetti",
+        "J. Grollier",
+        "F. A. Mizrahi"
+      ],
+      "primary_category": "cs.ET",
+      "categories": [
+        "cs.ET",
+        "cond-mat.mes-hall"
+      ],
+      "published": "2026-04-27T14:49:18+00:00",
+      "link": "https://arxiv.org/pdf/2604.24561v2",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "spintronic neural network using magnetic tunnel junctions",
+      "llm_evidence_cn": "使用磁隧道结（MTJ）的自旋电子神经网络",
+      "llm_evidence": "使用磁隧道结（MTJ）的自旋电子神经网络",
+      "canonical_evidence": "使用磁隧道结（MTJ）的自旋电子神经网络",
+      "llm_tldr_en": "Demonstrates remote programming of synaptic weights in chains of magnetic tunnel junctions for in-memory computing.",
+      "llm_tldr_cn": "展示了用于存内计算的磁隧道结链中突触权重的远程编程。",
+      "llm_tldr": "展示了用于存内计算的磁隧道结链中突触权重的远程编程。",
+      "llm_tags": [
+        "query:tmr:composite"
+      ],
+      "matched_query_tag": "query:tmr:composite",
+      "matched_query_text": "Papers central to 请帮我查找与TMR电流传感器阵列有关的论文, especially work that connects or combines: multi-sensor array for current measurement; magnetic field sensor array for current sensing; algorithms for current reconstruction using sensor arrays; non contact current measurement using TMR magnetic sensor arrays; interference suppression techniques for TMR current sensor arrays; TMR current sensor array design and optimization; algorithms for current reconstruction using TMR sensor arrays.",
+      "matched_requirement_id": "req-composite-tmr",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2604.25274v1",
+      "title": "High-field magneto-optical imaging of superconducting critical states beyond 10 T using a paramagnetic garnet sensor",
+      "abstract": "Spatially resolved characterization of the critical current density Jc in superconductors under high magnetic fields is crucial for both fundamental understanding and practical applications. However, conventional techniques primarily provide bulk-averaged values, making it difficult to resolve local variations of Jc, especially in high magnetic fields. In this work, we develop a magneto-optical imaging (MOI) technique that enables visualization of superconducting critical states in steady magnetic fields up to 13 T. This is achieved by employing a paramagnetic Nd-garnet indicator combined with a polarizing microscope system. Using this method, we directly image the magnetic flux distribution in a bulk single crystal of an iron-based superconductor Ba(Fe1-xCox)2As2 (x = 0.075) at 12 K and 20 K across the entire sample area (approximately 1 mm). From the measured magnetic field distributions, we quantitatively reconstruct the spatial distribution of the critical current density. The extracted field dependence of Jc is in good agreement with that obtained from conventional magnetization measurements. Furthermore, we demonstrate vector mapping of current flow within the sample by converting the magnetic field distribution into local current-density distributions. Our results establish high-field MOI as a powerful approach for spatially resolved evaluation of superconducting critical states and provide a new pathway for investigating inhomogeneous current transport in superconductors under high magnetic fields.",
+      "authors": [
+        "Yuto Kinoshita",
+        "Masayuki Toyoda",
+        "Yoshiaki Kobayashi",
+        "Masayuki Itoh",
+        "Masashi Tokunaga"
+      ],
+      "primary_category": "cond-mat.supr-con",
+      "categories": [
+        "cond-mat.supr-con",
+        "physics.ins-det"
+      ],
+      "published": "2026-04-28T06:31:51+00:00",
+      "link": "https://arxiv.org/pdf/2604.25274v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "magneto-optical imaging of current density using magnetic sensors",
+      "llm_evidence_cn": "使用磁传感器对电流密度进行磁光成像",
+      "llm_evidence": "使用磁传感器对电流密度进行磁光成像",
+      "canonical_evidence": "使用磁传感器对电流密度进行磁光成像",
+      "llm_tldr_en": "Develops a magneto-optical imaging technique to visualize superconducting critical current density.",
+      "llm_tldr_cn": "开发了一种磁光成像技术，用于可视化超导临界电流密度。",
+      "llm_tldr": "开发了一种磁光成像技术，用于可视化超导临界电流密度。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

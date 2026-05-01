@@ -1,0 +1,1121 @@
+Title: 2604.24561v2.pdf
+
+URL Source: https://arxiv.org/pdf/2604.24561v2
+
+Published Time: Thu, 30 Apr 2026 00:59:08 GMT
+
+Number of Pages: 19
+
+Markdown Content:
+Remotely programming the weights of a spintronic neural network 
+
+# by a radiofrequency broadcast signal 
+
+M. Menshawy 1, D. Sanz -Hernández 1, L. Mazza 2, V. Puliafito 2, G. Finocchio 3, A. Jenkins 4, R. 
+
+Ferreira 4, L. Benetti 4, J. Grollier 1*, and F.A. Mizrahi 1*
+
+1- Laboratoire Albert Fert, CNRS, Thales, Université Paris -Saclay, Palaiseau, France 
+
+2- Department of Electrical and Information Engineering, Politecnico di Bari, 70126, Bari, Italy 
+
+3- Department of Mathematical and Computer Sciences, Physical Sciences and Earth Sciences, 
+
+University of Messina, Messina, Italy 
+
+4- International Iberian Nanotechnology Laboratory, Braga, Portugal 
+
+* Corresponding authors: julie.grollier @cnrs -thales.fr, frank.mizrahi@cnrs -thales.fr 
+
+Selectively programming large number of non -volatile synaptic weights without 
+
+compromising scalability is a key challenge for in -memory computing. Here, we 
+
+demonstrate remote programming of synaptic weights in series -connected chains of 11 
+
+vortex -based magnetic tunnel junctions using broadcast radiofrequency signals applied 
+
+through a shared strip line. The programming relies on frequency -selective reversal of the 
+
+vortex -core polarity and therefore does not require individual access lines or selector 
+
+devices. By reconfiguring the binary states of these chains, we reshape the weighted sums 
+
+they perform on frequency -multiplexed RF inputs. Using a 22 -syna pse network composed 
+
+of two such chains, we remotely reconfigure the same hardware to perform two distinct 
+
+tasks: handwritten -digit classification and drone RF -signature identification. The digit -
+
+optimized configuration reaches 94.91 ± 0.26% accuracy on handwritten digits but only 
+
+13.17 ± 0.47% on drone RF signatures, whereas the drone -optimized configuration 
+
+reaches 97.33 ± 0.62% on drones but only 47.59 ± 1.5% on digits.  Broadcast RF 
+
+programming thus provides a compact and scalable route to rapidly reconf igurable 
+
+spintronic neuromorphic hardware. 
+
+In -memory computing constitutes a promising route toward more energy -efficient artificial -
+
+intelligence hardware as it reduces data transfer between memory and processing units and 
+
+allows physical devices to directly perform vector -matrix operations 1–4. A central challenge, 
+
+however, is to program the individual non -volatile memory components storing the weights in 
+
+these dense networks without sacrificing compactness, energy efficiency, or scalability. 
+
+Existing approaches face important trade -offs. Passive crossbar arrays require complex biasing 
+
+schemes across rows and columns, which increases circuit overhead and programming 
+
+energy 5,6 . A s illustrated in Fig ure 1a, a dding selector devices or transistors improves control, 
+
+but increases footprint, complicates 3D integration, and reduces architectural flexibility 7–9.
+
+More generally, approaches that rely on individual access lines preserve programmability at the 
+
+cost of large -scale integration. 
+
+Among neuromorphic hardware platforms, architectures that exploit frequency multiplexing 
+
+are especially attractive because many input channels can be routed and processed on shared 
+
+physical interconnects. This opportunity has been explored in photonic systems based on 
+
+wavelength -selective microring resonators, microring weight banks and phase -change photonic 
+
+memories 4,10 –15 , as well as in spintronic systems including radio -frequency (RF) networks based 
+
+on magnetic tunnel junctions 16 –22 . Yet the scalable programming of stored synaptic weights in dense frequency -multiplexed networks without individual electrical access to each synapse is 
+
+still missing .
+
+Here we demonstrate a different programming paradigm, in which individual binary synaptic 
+
+weights are remotely written by broadcast RF signals . Our approach , illustrated in Fig ure 1b, 
+
+exploits the frequency selectivity of magnetic tunnel junctions and the microwave -induced 
+
+reversal of their magnetic state , here, the polarity of a magnetic vortex core. Because each 
+
+junction is engineered with a distinct resonance frequency, a global RF pulse can selectively 
+
+address a single synapse and switch its stored state without per -synapse selector devices or 
+
+dedicated access lines. 
+
+Using this principle, we independently and deterministically program all binary weights of 11 -
+
+junction synaptic chains. Remote RF programming gives access to the full 2048 -state 
+
+configuration space of a chain, and traversing this space strongly reshapes its spectral transfer 
+
+function, thereby reconfiguring the weighted sum performed on the frequency -multiplexed RF 
+
+inputs. Using two such chains, we implement a 22 -synapse network that can be remotely 
+
+reassigned on the fly between two distinct tasks: classific ation of RF -encoded handwritten 
+
+digits and classification of drone RF signatures. In their respective optimal configurations, the 
+
+network reaches 94.91 ± 0.26% and 97.33 ± 0.62% accuracy, whereas mismatched 
+
+configurations degrade performance to 47.59 ± 1.5% and 13.17 ± 0.47%, respectively . These 
+
+results identify broadcast RF programming as a scalable route toward compact and rapidly 
+
+reconfigurable neuromorphic hardware based on spintronic devices. 
+
+Figure 1. (a) Schematic of a perceptron and equivalent circuit of a row of selector -controlled 
+
+memory devices. (b) Schematic of a chain of spintronic synapses programmed by a broadcast 
+
+RF signal. ( c) Reading the synaptic state of a single MTJ : dc voltage Vdc across an MTJ versus 
+
+RF input frequency, at a power of -20 dBm and at zero field . ( d) Programming the synapse: 
+
+switching probability versus RF input frequency, at a power of 0 dBm. The red and blue curves 
+
+respectively represent switching from down to up and up to down. The red , grey and blue shaded 
+
+zones respectively represent a final state that is up , random or down. Probabilities are evaluated 
+
+over 10 independent trials. (f) Response of the chain ∆V (voltage difference compared to the reference fully -down state) versus programming frequency and read frequency. The experiment 
+
+is performed under a -20 mT perpendicular magnetic field . The color scale indicates the voltage 
+
+difference ΔV between the chain response after the write attempt and that of the reference state .
+
+The respective switching zones for each of the 11 junctions are highlighted through dotted lines 
+
+of different colors. 
+
+RF readout and programming of frequency -selective synapses 
+
+We implement each synapse with a magnetic tunnel junction whose free layer hosts a magnetic 
+
+vortex ground state (Fig ure 1b and Methods). In this configuration, the magnetization curls in 
+
+the device plane around a small (about 20 nm wide) out -of -plane vortex core. The synaptic 
+
+weight is encoded in the polarity of this core, which points either up or down and thus defines 
+
+a binary state. 
+
+Both readout and programming rely on radio -frequency excitation delivered by a metallic strip 
+
+line placed above the junction and capacitively coupled to it (Fig ure 1b). An RF signal sent 
+
+through this strip line excites the gyrotropic motion of the vortex core, in which the core orbits 
+
+in the device plane. Depending on the RF power, this excitation can be used either to read the 
+
+stored state non -destructively or to swit ch it. 
+
+For readout, we inject a low -power RF signal ( -20 dBm) at a frequency close to the gyrotropic 
+
+resonance. This excitation also induces an RF current through the device , b ecause the strip line 
+
+is capacitively coupled to the junction . The resulting resistance oscillations associated with the 
+
+vortex motion mix with this current and generate a dc voltage through the spin -diode effect 23,24 .
+
+Due to internal inhomogeneities in the junction creating an effective magnetic field, t he two 
+
+vortex -core polarities have different resonance frequencies 25,26 . In consequence the measured 
+
+spin -diode spectrum provides a direct readout of the stored synaptic state, as illustrated by the 
+
+blue and red curves in Fig ure 1d for a single MTJ .
+
+For programming, we increase the RF power (between 0 and 1 3 dBm depending on the 
+
+frequency, see Methods ) and excite the junction close to the gyrotropic resonance. At this larger 
+
+oscillation amplitude, the vortex core reaches its critical velocity and reverses polarity 27 . This 
+
+reversal occurs only within a well -defined resonant frequency window . In consequence, the 
+
+programming process is frequency selective. Figure 1 e shows the experimentally measured 
+
+probability of switching from the up to the down state (green) and from the down to the up state 
+
+(black) as a function of the write frequency. Away from resonance, the RF signal leaves the 
+
+synaptic state unchanged. In the frequency range where the switching windows of both 
+
+polarities overlap, repeated reversals lead to a rand om final state. By contrast, when the write 
+
+frequency falls within the switching window of only one polarity, the junction is programmed 
+
+reproducibly into either the up state (red region) or the down state (blue region) .
+
+We then exploit this frequency selectivity to program chains of 11 serially connected MTJs 
+
+using a single strip line per chain to read and write the devices . Within each chain, the junction 
+
+diameters are chosen so as to span distinct gyrotropic resonance frequencies (Methods), 
+
+allowing the same broadcast RF signal to address different synapses depending on its frequency. 
+
+Figure 1 f maps how the state of a chain changes with programming frequency, starting from the 
+
+fully down reference state. For each column, we attempt programming at a different frequency 
+
+as follows. First, we first initialize all 11 MTJs in the down state under a perpendicular field of 
+
+-300 mT . Then, under a -20 mT field, we apply a high -power RF pulse to the strip -line at the 
+
+selected write frequency . Finally , we read the response by measuring the dc voltage across the chain as a function of read frequency. The write power is adjusted to the selected frequency, as 
+
+detailed in Methods. The color scale indicates the voltage difference ΔV between the chain 
+
+response after the write attempt and that of the reference state. The dashed rectangles highlight 
+
+the frequency regions programming each MTJ. Using these measurements, we determine the 
+
+powers and frequencies to program each MTJ and confirm the reliability of our programming 
+
+scheme over 10 trials (Methods). 
+
+Spectral reconfiguration of synaptic chains 
+
+Figure 2. (a-f) Response of the chain versus input frequency. The response is the voltage 
+
+difference between the measured configuration and the reference (fully down) state. Each panel 
+
+corresponds to a different configuration. “1” and “ 0” respectively refer to up and down states. 
+
+(g) Density map of the chain response over all 2048 configurations. For each input frequency, 
+
+the color scale indicates how many configurations produce a given output voltage. 
+
+By applying sequences of RF write pulses selected from the programming bands identified in 
+
+Fig ure 1f, we can set each 11 -junction chain into any of its 2 11 = 2048 binary configurations 
+
+(Methods). Starting from a fully down or fully up reference state, the pulses are applied in a 
+
+prescribed frequency order to avoid unintended switching events between neighboring write 
+
+bands. This enables deterministic program ming of arbitrary chain states using only a single 
+
+broadcast RF line per chain. In a series -connected chain, the individual spin -diode responses of the MTJs add up into a single 
+
+dc output, so that the chain realizes a weighted sum on frequency -multiplexed RF inputs  16,18,19 .
+
+Changing the binary configuration of the chain therefore reshapes its spectral transfer function, 
+
+providing a reconfigurable continuous response rather than a fixed set of discrete coefficients. 
+
+Figures 2a –f show six representative programmed configurations of the chain. In each panel, 
+
+the plotted voltage is the difference between the response of the programmed configuration and 
+
+that of the fully down reference state. Figures 2a –c correspond to co nfigurations in which a 
+
+single junction is switched to the up state, denoted as “1”. In these cases, the chain response is 
+
+dominated by a single spin -diode feature whose resonance frequency depends on which 
+
+junction has been reversed. As the up -state junct ion is moved toward the right end of the chain, 
+
+this feature shifts to higher frequency, consistent with the smaller junction diameters and 
+
+therefore higher resonance frequencies of the MTJs at that end. Figure 2d shows a configuration 
+
+in which one additio nal junction is switched to the up state compared with Fig. 2a, resulting in 
+
+an additional spectral contribution to the overall response. Figures 2e and 2f show 
+
+configurations with several MTJs in the up state, for which the chain response becomes 
+
+markedly more structured. Together, these examples show that changing the binary magnetic 
+
+configuration of the chain reshapes its spectral transfer function in a controlled manner, from 
+
+simple single -resonance responses to complex multi -feature spectra. 
+
+We then evaluate the full functional space accessible to a chain by measuring its response for 
+
+all 2048 binary configurations. Figure 2g shows the resulting density map: for each input 
+
+frequency, the blue color scale indicates how many configurations produ ce a given output 
+
+voltage. This representation reveals not only the number of accessible responses, but also their 
+
+span and distribution. At some frequencies, such as around 550 MHz, the output is concentrated 
+
+onto a few discrete voltage levels, each reach ed by many configurations. At other frequencies, 
+
+such as around 400 MHz, the chain covers a much broader range of voltages, with many finely 
+
+spaced response levels. Such frequencies are especially valuable for computation, because they 
+
+provide a large and densely populated output span that can be exploited to shape the weighted 
+
+sum performed on RF inputs. More generally, the map shows that programming the binary 
+
+magnetic state of the chain gives access to a broad reconfigurable family of transfer functions, 
+
+including both positive and negative outputs and markedly different spectral profiles. This rich 
+
+response landscape constitutes the computational resource that we exploit below for 
+
+classification. 
+
+Task -level reconfiguration of a remotely programmed RF neural network 
+
+We combine two 11 -junction chains into a perceptron neural network with 22 synapses and two 
+
+output neurons. As illustrated in Fig. 3a, t he network is programmed chain by chain through an 
+
+RF switch that selects which chain receives the write signal. For each input waveform, 
+
+classification is performed from the dc voltages across the two chains after subtraction of the 
+
+response measured in a reference magnetic configuration (Methods). The predicted class is then 
+
+given by the chain with the highest corrected voltage. 
+
+We use this platform to test whether the same hardware can be reassigned by remote RF 
+
+programming to two qualitatively different classification tasks: distinguishing handwritten 
+
+digits 28  (“0” versus “1”) and identifying drones from their Wi -Fi RF signatures 29 . In both cases, 
+
+the inputs are encoded as RF waveforms and synthesized by an arbitrary waveform generator before being injected into the network. For the digit task, each 8 × 8 image is converted into a 
+
+64 -tone waveform whose amplitudes encode the pixel intensities. For the drone task , the inputs 
+
+are reconstructed from measured RF spectra comprising 256 frequency bins (Methods). 
+
+This encoding allows high -dimensional inputs to be processed through the same compact RF 
+
+interface. Rather than assigning one physical input line to each pixel or spectral bin, as in 
+
+conventional crossbar -style implementations, the information is multiplex ed in frequency and 
+
+processed by the continuous spectral responses of the synaptic chains , as shown in  16 –22 . As a 
+
+result, a small network with binary programmable states can nevertheless implement a rich, 
+
+continuously reconfigurable mapping of the input spectrum. 
+
+Figure 3. (a) Schematic of an image sent to the network as an RF signal. (b) Examples of 
+
+spectra for images of the digits dataset. (c) Examples of spectra of the drones signatures. (d )
+
+Schematic of programming pulses to reconfigure the network (e -f) Histograms of the voltage 
+
+difference between the response of chains 0 and 1, for the different datasets and network 
+
+configurations. The dashed vertical line corresponds to a difference of 0, which separates the 
+
+histograms when classification is perfect. 
+
+Here t he network comprises only 22 binary synapses . Thus, we can evaluate, for all possible 
+
+network configurations, the classification accuracy over the whole dataset, defined as the 
+
+proportion of correctly classified examples. This allows us to identify, for each task, the 
+
+configuration that maximizes performan ce. Figure 3b summarizes the two resulting optimal 
+
+configurations. For each task, it shows the corresponding optimal configuration together with 
+
+the distributions of ΔV = ∆V0 − ∆V1, which reveal the separation between the two classes. 
+
+When programmed for handwritten -digit classification, the network reaches 94.91 ± 0.26% 
+
+accuracy on the digit task (Methods) . The corresponding ΔV distributions for the “0” and “1” 
+
+classes are well separated on correct sides of the decision boundary , shown by the dashed 
+
+vertical line . However, applying this same configuration to the drone task yields only 13.17 ± 0.47% accuracy : the ∆V distributions are mostly separated but on the incorrect sides of the 
+
+decision boundary. 
+
+Conversely, when programmed for drone classification, the network reaches 97.33 ± 0.62% 
+
+accuracy on the drone task (distributions well separated on the correct sides of the decision 
+
+boundary) , while its performance on the digit task drops to 47.59 ± 1.5% (distributions not 
+
+separated) . The strong performance gain obtained after reprogramming for each task shows that 
+
+remote RF writing does not merely fine -tune the network, but switches the same hardware 
+
+between distinct functional regimes. 
+
+Discussion 
+
+Compared with conventional in -memory approaches based on resistive or phase -change 
+
+crossbars 1,2,5,7,9,30,31 , our method removes individual electrical access from the programming 
+
+path . Photonic and optoelectronic alternatives offer remote or parallel weight control through 
+
+microring weight banks, all -optically controlled memristors, or spatial light modulators 4,10 –15 ,32 –
+
+> 34
+
+. However, t hese approaches typically rely either on individual spectral calibration of 
+
+resonators 32  or on spatial addressing with slow refresh rates, tight alignment and field -of -view 
+
+constraints 34 . By contrast, the present platform combines non -volatile storage, broadcast 
+
+electrical programming, frequency -selective addressing and electrical readout in the same 
+
+device layer. To our knowledge, this combination is presently unique among integrated 
+
+neuro morphic hardware platforms. 
+
+This architecture can be scaled by increasing both the number of chains and the number of 
+
+junctions within each chain. The latter is set mainly by the accessible frequency range and by 
+
+the width of the individual switching windows.  For magnetic vortices, analytical theory and 
+
+experiments show that eigenfrequencies can be engineered from about 10 MHz to beyond 1
+
+GHz depending on geometry and bias conditions 35 . In the present devices, the switching 
+
+window is about several tens of MHz and arises from the effective magnetic field acting on the 
+
+vortex, including both the applied field and internal inhomogeneities in the junction, such as 
+
+stack imbalances and grain -induced disorder. With further optimization of materials and 
+
+geometries, this window could be narrowed enough to accommodate 50 –100 independently 
+
+switchable devices per chain, and series connection of multiple chains can extend the total 
+
+number of synapse s to several hundreds. 
+
+Energy and speed can also be further improved . Here, programming is performed with 
+
+continuous -wave microwave signals and sequential switching of the junctions. Resonant 
+
+nanosecond pulses are a n attractive route for scaled programming. By optimizing materials and 
+
+field line geometry, Pigeau et al. switch a vortex core (dot diameter 500 nm, frequency close to 
+
+250 MHz) back and forth with −11 dBm pulses of 50 ns . This corresponds to a switching energy 
+
+of the order of 5 pJ 25 . Experiments and analytical simulations indicate that this switching energy 
+
+scales linearly with the vortex frequency (Methods), giving guidelines for optimizing both 
+
+diameters and strip lines 36 . Finally, w ith better engineering of the switching bands to suppress 
+
+overlaps, several junctions could also be written in parallel rather than one after another. 
+
+The binary character of the present synapses is also not a fundamental limit. Elliptical 
+
+nanomagnets can host metastable double -vortex configurations, and different double -vortex 
+
+states exhibit distinct resonance modes 37,38 . This points to a natural route toward multistate 
+
+resonant synapses based on richer non -uniform magnetic textures. At the other end of the design 
+
+space, if footprint become s the dominant constraints, the same resonant -switching concept could be transposed to sub -100 -nm perpendicular junctions with more uniform magnetic states. 
+
+Microwave -assisted switching has already been demonstrated in perpendicular nanodots, 
+
+including layer -selective switching in coupled perpendicular structures 39 .
+
+The concept is also not restricted to tunnel junctions. Replacing MTJs by all -metallic stacks 
+
+with GMR readout would open a route toward three -dimensional implementations based on 
+
+electrodeposited multilayer nanowires 40 . Equipping the chip with a broadband antenna, w hether 
+
+discrete or integrated such as shown in  41  would enable over -the -air network reconfiguration. 
+
+Finally, the present proof of concept uses exhaustive exploration of the configuration space to 
+
+find the optimal weights for each classification task . Larger systems will require learning rules 
+
+tailored to continuous spectral transfer functions controlled by discrete magnetic -state flips ,
+
+such as h ardware -in -the -loop perturbative strategies and binary -network optimizers 42,43 . In that 
+
+perspective, the most compelling application space for this architecture are native spectral tasks, 
+
+such as wireless -signal identification, spectrum sensing, communication monitoring and edge 
+
+RF intelligence. 
+
+Conclusion 
+
+We have shown that RF spintronic networks can be reprogrammed remotely at the synapse level 
+
+by broadcast microwave signals, without individual electrical access to each weight. In our 
+
+prototype, this selective programming opens the configuration space of a n 11 -junction chain 
+
+and is sufficient to retarget the same 22 -synapse network between two distinct classification 
+
+tasks. More broadly, the work establishes a new type of neuromorphic hardware in which non -
+
+volatile magnetic states reconfigure continuous spe ctral transfer functions. This makes resonant 
+
+spintronic networks a distinctive route toward dense, reconfigurable processors for RF -native 
+
+edge intelligence. 
+
+# Acknowledgments 
+
+The authors thank A.F. Vincent  for insightful comments.  This work was supported by the 
+
+European Union’s Horizon 2020 Research and Innovation Programme under Grant RadioSpin 
+
+No. 101017098. 
+
+# Methods 
+
+# Magnetic tunnel junction sample preparation 
+
+The magnetic tunnel junction (MTJ) stack composition is: 
+
+Buffer [[5 Ta / 25 CuN]x6 / 5 Ta / 5 Ru] / Antiferromagnet [6 IrMn] / Synthetic Antiferromagnet 
+
+[2 CoFe30 / 0.825 Ru / 2.6 CoFe40B20] / Tunnel barrier [MgO [8 Ohm um2]]/  Free layer [2.0 
+
+CoFe40B20 / 0.21 Ta / 40 nm CoFeSiB] / 10 Ta / 7 Ru (with the thickness in nm). 
+
+The MTJ stack is deposited by magnetron sputtering using the Singulus  Timaris MTM tool. 
+
+After electron -beam lithography with a negative AR -N 7520.18 resist, the pillars are defined 
+
+by ion beam milling.  The Tunnel Magneto -Resistance is about 184 %. 
+
+Chains.  We use two chains of eleven serially -connected synaptic junctions, where diameters 
+
+vary from 300nm to 800nm by step of 50 nm. The MTJs are connected head -to -tail by 
+
+optical  lithography , as see in  Figure S  1.Field line for RF transmission.  The field line is a 500 nm thick and 3μm wide AlSiCu strip 
+
+line deposited on a 600 nm thick layer of AlOx above the free layer of the chain of MTJs. The 
+
+resistance is 7 Ohms, and a 50 Ohms resistance is connected in series with the field line to 
+
+improve th e matching with the 50 Ohms impedance instruments and cables. 
+
+Connections to the setup.  Chains and strip lines are connected to SMA ports by aluminum 
+
+wire -bonding.     
+
+> Figure S 1: SEM image of a chain of 11 MTJs (positions are rougly indicated by the dashed rectangles) with the common strip
+> line above the devices.
+
+# Experimental setup for the RF classification .
+
+The complete experimental setup , described in  Figure S  2, consists of two main blocks: the 
+
+Arbitrary Waveform Generator (AWG) block in order to generate the signals for classification 
+
+and the rest of the setup for programming and measuring the spintronic network .AWG block. The AWG block is composed of an arbitrary waveform generator a protection 
+
+circuit and an RF amplifier . The AWG output is first divided using a power splitter. Each output 
+
+is sent to a circulator covering 240 –400 MHz and 400 –600 MHz, respectively. The two signals 
+
+are then recombined using a second power splitter. The combined output passes through a 10 
+
+dBm a ttenuator followed by a +40 dBm RF amplifier. 
+
+A directional coupler is connected at the amplifier output: the main port provides the AWG 
+
+block output, while the coupled port is connected to a power spectrum analyzer for monitoring. 
+
+The RF amplifier is powered by a 12 V DC source. The attenuator minimi zes reflections from 
+
+the amplifier and prevents the formation of an RF cavity between the amplifier and the 
+
+circulators. The circulators protect the AWG from reflections originating from the amplifier by 
+
+allowing RF signals to propagate in only one directi on and blocking the return path. 
+
+Complete setup. The output of the AWG block is connected to port 2 of RF switch A, while a 
+
+separate RF signal generator is connected to port 1. The common (COM) port of switch A is 
+
+connected to the COM port of switch B. Port 1 of switch B feeds the strip line of the firs t MTJ 
+
+chain, and port 2 feeds the strip line of the second MTJ chain. 
+
+For electrical measurements, channel 1 of the DC current source and a nanovoltmeter are 
+
+connected in parallel to the DC port of a bias -tee using a T -connector. The RF+DC port of the 
+
+bias -tee is connected to the first MTJ chain via an SMA cable, while a 50 Ω load is connected 
+
+to the RF port. 
+
+The same configuration is used for the second MTJ chain, employing a second nanovoltmeter, 
+
+a second bias -tee, and channel 2 of the DC current source.    
+
+> Figure S 2:Experimental setup
+
+# Characterization of the magnetic tunnel junction chains 
+
+Power dissipation correction. 
+
+Wire -bonding leads to a frequency -dependent power loss in the strip line. We apply a RF power 
+
+correction to the nominal inputs to correct for this loss, measured through the transmission 
+
+factor S 21 .Measurement of S 21 parameter. The input and output of the strip line are connected to a Vector 
+
+Network Analyzer (VNA) via SMA ports. The VNA compares the emitted signal, which goes 
+
+through the wire -bonding and the antenna, to the received signal to estimate the transmission 
+
+factor. Eac h chain’s strip line has its own transmission factor , as shown in Figure S  3.
+
+For the characterization of the chains, each power is corrected according to the S 21 of the 
+
+measured device. However, for signal classification, the dataset generation (Digits 0 and 1, 
+
+Drones) is done with the mean value of the two S 21 .
+
+Figure S  3 : Transmission factor S21 versus frequency for chain 0 (red), chain 1 (blue) and 
+
+their average (black). Left: full frequency range. Right: the 240 -600 MHz range used for 
+
+classification. 
+
+Magnetic field characterization. Circulators in the setup limit the usable frequency range to 
+
+240 -600 MHz. Therefore, an out -of -plane magnetic field, perpendicular to the magnetic layers 
+
+of the MTJs, is applied through an electro -magnet to shift the resonance frequencies into this 
+
+range. In Figure S  4, we show the responses of the two chains to a sweep of magnetic field and 
+
+frequency -swept RF signal. A field of -20mT satisfies the frequency limit condition for both 
+
+chains. Chain 0  Chain 1 
+
+Figure S  4 : Rectified spin diode voltage versus magnetic field and input frequency for the chains 
+
+0 and 1. For each chain, the left plot corresponds to a sweep from negative to positive field 
+
+while the right plot corresponds to a sweep from positive to negative field. 
+
+Determination of programming frequencies and powers. 
+
+The chains are composed of synaptic devices of different diameters. The diameter defines the 
+
+resonance frequency of the device. Thus, each device of the chain has a different resonance 
+
+frequency. To reverse the vortex core on each device, the power and fre quency to apply must 
+
+be determined. These parameters can be predicted through micro -magnetic simulations, but the 
+
+intrinsic dispersion of our devices requires experimental determination. Each device has a 
+
+different sensitivity, and core reversal occurs at different powers and frequencies. 
+
+The procedure below describes the obtention of the map of Figure 1 f.
+
+We attempt programming at frequencies from 240 MHz to 600 MHz with a 1 MHz step . For 
+
+each programming frequency, we: 
+
+1)  Reset the chain in the fully down stat e with a – 300 mT perpendicular magnetic field. 
+
+2)  Apply a 0.5 s RF pulse at the selected frequency. 
+
+3)  Measure the spin -diode voltage response of the chain for the 200 MHz to 700 MHz 
+
+range , at the reading power of -8 dBm. 
+
+This procedure provides a map of the spin -diode response versus programming and reading 
+
+frequencies. We repeat the procedure for programming powers of 2, 3, 5, 7, 10 and 13 dBm .
+
+We then stitch the maps obtained at different powers into the map of Figure 1f, which provides 
+
+distinct frequencies to program each MTJ from the down state to the up state. 
+
+We repeat this process starting from the fully up state in order to obtain the powers and 
+
+frequencies to program each MTJ from the up state to the down state, resulting in  Table  1 below. 
+
+In order to evaluate the reliability of programming, we attempt programming 10 times for each 
+
+{power, frequency} couple. We obtain 100 % success for each couple.   
+
+> Table 1: Programming powers and frequencies.
+
+MTJ  Frequency up 
+
+to down 
+
+(MHz) 
+
+Frequency 
+
+down to up 
+
+(MHz) 
+
+Power 
+
+(dBm) 
+
+1 260  275  22 278  298  2
+
+3 292  311  2
+
+4 305  325  2
+
+5 327  347  5
+
+6 346  365  5
+
+7 376  400  5
+
+8 410  442  7
+
+9 433  465  7
+
+10  485  512  10 
+
+11  522  560  10 
+
+We perform the same determination procedure for the second chain. Once th is determination is 
+
+complete, programming is done exclusively by RF pulses, w ith a constant magnetic field of -
+
+20mT. 
+
+Programming any configuration with RF pulses. 
+
+The programming frequency regions of some MTJs overlap. In order to reliably program the 
+
+chain into any chosen configuration, we use the following procedure: 
+
+1)  We set the chain in the fully down configuration by applying a series of RF pulses, i.e. 
+
+the {power, frequency} couples of  Table  1 from highest to lowers frequency. 
+
+2)  Following  Table  1, we apply a series of RF pulses to program the required MTJs in the 
+
+up state. 
+
+# RF classification 
+
+Handwritten digits recognition. The task is distinguishing between images of “0” and “1”. 
+
+The 360 images of 8 -by -8 pixels each are from the dataset “Digits”. We send the inputs to the 
+
+network as RF waveforms as schematized in Fig 3a (as shown in similar Leroux et al.  19 ). The 
+
+waveform for each image is constructed by assigning a frequency to each pixel: 
+
+S(t) = ∑ Si × cos (2π × fi × t + φi)
+
+> 63
+> i=0
+
+(𝐸𝑞 1)
+
+With  Si = Ai + S21 (fi)
+
+The frequencies  fi are linearly spaced over the operating range of the synaptic chains (240 -600 
+
+MHz).  Ai is proportional to the intensity of pixel i, with a scaling factor of -14 dBm.  S21 (fi) is 
+
+a corrective parameter corresponding to mean value of  𝑆 21  parameters of both chains.  φi is a 
+
+random phase. The waveform is synthetized by the arbitrary waveform generator and sent to 
+
+each chain through its strip -line. The whole image is sent as a single waveform, which differs 
+
+from crossbar arrays implementations where an image of 64 pixels would require 64 input lines. 
+
+Drones RF signatures. The task is distinguishing between two types of drones (“Tello” and 
+
+“Parrot”) from their RF signature. The 200 rf signatures are spectra with 256 frequency bins, 
+
+adapted from  29 . As for the image classification task , for each we use the arbitrary waveform 
+
+generator to synthetize each waveform according to Eq. 1 and set the frequencies  fi between 
+
+240 and 600 MHz. Here  Ai corresponds to the spectrum power at the i -th frequency, with a 
+
+scaling factor of -20 dBm. Classification read -out and accuracy . The two outputs of the network are the voltages across 
+
+chains 0 and 1. For each chain we consider the voltage difference between the measured 
+
+configuration and a reference state. The reference states for chains 0 and 1 are respectively 
+
+10101010101 and 01010101010 . These states with alternating up and down MTJs were chosen 
+
+to maximize the expressivity of the chains. The prediction of the network corresponds to the 
+
+index of the chain with the highest voltage difference, i.e. one -hot encoding. For each task, t he 
+
+accuracy is given as the percentage of correctly classified signals over the whole dataset. The 
+
+error is computer over three independent measurements for each network configuration. 
+
+# Programming p ower and energy as a function of vortex frequency and device 
+
+# diameter 
+
+To explore the dependence of the write conditions on junction frequency, we combine the 
+
+analytical scaling of the vortex gyrotropic mode with the universal criterion for resonant core 
+
+reversal. For thin circular dots, the gyrotropic angular frequency is we ll approximated by 44 :
+
+𝜔 𝐺 ≃ 𝐶 × 𝛾 × 𝑀 𝑠 × 𝐿 
+
+𝑅 
+
+Where C is material depend ent,  𝛾  is the gyromagnetic ratio, Ms is the saturation magnetization, 
+
+L is the thickness of the layer and R the diameter of the dot. In consequence, at fixed material 
+
+and thickness :
+
+𝑓 𝐺 = 𝜔 𝐺 × 2𝜋 ∝ 1
+
+𝑅 
+
+Vortex -core reversal occurs when the core velocity reaches a critical value  𝑣 𝑐  , which is 
+
+approximately independent of dot size. In the resonant limit, the minimum switching field 
+
+obeys 45 :
+
+𝐻 𝑠𝑤  
+
+> 𝑚𝑖𝑛
+
+≃ 𝑑 × 𝑣 𝑐 
+
+3𝛾 × 𝑅 
+
+with  𝑑 ≃ 𝛼 (1 + 𝑙𝑛 (𝑅 𝑅 𝑐   
+
+> ⁄)
+> 2
+
+) where  𝛼 is the damping parameter and  𝑅 𝑐  is the vortex -core radius. 
+
+Neglecting the logarithmic term, t his gives :
+
+𝐻 𝑠𝑤  
+
+> 𝑚𝑖𝑛
+
+∝ 1
+
+𝑅 
+
+Assuming that the microwave field generated by the strip line is proportional to the RF current 
+
+amplitu de, the threshold write power then scales with the square of the frequency :
+
+𝑃 𝑠𝑤 ∝ (𝐻 𝑠𝑤 
+
+> 𝑚𝑖𝑛
+
+)2 ∝ (𝑓 𝐺 )2For resonant pulses, the characteristic duration of switching is set by the build -up and relaxation 
+
+time of the gyrotropic motion, which corresponds to a few gyration cycles 46  and thus scales as 
+
+𝜏 ∝ 1
+
+> 𝑓 𝐺
+
+.
+
+The corresponding pulse energy therefore scales with the frequency :
+
+𝐸 𝑠𝑤 ≃ 𝑃 𝑠𝑤 × 𝜏 ∝ 𝑓 𝐺 
+
+This scaling explains why higher -frequency junctions require larger write power in the present 
+
+experiments, while lower -frequency junctions are expected to require longer but energetically 
+
+more favorable resonant pulses 45,47 –50 .
+
+# References 
+
+1.  Sebastian, A., Le Gallo, M., Khaddam -Aljameh, R. & Eleftheriou, E. Memory devices 
+
+and applications for in -memory computing.  Nat. Nanotechnol.  15 , 529 –544 (2020). 
+
+2.  Lanza, M.  et al.  The growing memristor industry.  Nature  640 , 613 –622 (2025). 
+
+3.  Hua, S.  et al.  An integrated large -scale photonic accelerator with ultralow latency.  Nature 
+
+640 , 361 –367 (2025). 
+
+4.  Farmakidis, N., Dong, B. & Bhaskaran, H. Integrated photonic neuromorphic computing: 
+
+opportunities and challenges.  Nat. Rev. Electr. Eng.  1, 358 –373 (2024). 
+
+5.  Choi, S., Bezugam, S. S., Bhattacharya, T., Kwon, D. & Strukov, D. B. Wafer -scale 
+
+fabrication of memristive passive crossbar circuits for brain -scale neuromorphic 
+
+computing.  Nat. Commun.  16 , 8757 (2025). 
+
+6.  Kim, H., Mahmoodi, M. R., Nili, H. & Strukov, D. B. 4K -memristor analog -grade passive 
+
+crossbar circuit.  Nat. Commun.  12 , 5198 (2021). 
+
+7.  Jung, S.  et al.  A crossbar array of magnetoresistive memory devices for in -memory 
+
+computing.  Nature  601 , 211 –216 (2022). 
+
+8.  Wen, T. -H.  et al.  Fusion of memristor and digital compute -in -memory processing for 
+
+energy -efficient edge computing.  Science  384 , 325 –332 (2024). 9.  Li, H.  et al.  A lossless and fully parallel spintronic compute -in -memory macro for 
+
+artificial intelligence chips.  Nat. Electron.  8, 1046 –1058 (2025). 
+
+10.  Marquez, B. A.  et al.  Fully -integrated photonic tensor core for image convolutions. 
+
+Nanotechnology  34 , 395201 (2023). 
+
+11.  Bai, B.  et al.  Microcomb -based integrated photonic processing unit.  Nat. Commun.  14 , 66 
+
+(2023). 
+
+12.  Tait, A. N.  et al.  Neuromorphic photonic networks using silicon photonic weight banks. 
+
+Sci. Rep.  7, 7430 (2017). 
+
+13.  Luan, E.  et al.  Towards a high -density photonic tensor core enabled by intensity -
+
+modulated microrings and photonic wire bonding.  Sci. Rep.  13 , 1260 (2023). 
+
+14.  Feldmann, J., Youngblood, N., Wright, C. D., Bhaskaran, H. & Pernice, W. H. P. All -
+
+optical spiking neurosynaptic networks with self -learning capabilities.  Nature  569 , 208 –
+
+214 (2019). 
+
+15.  Bandyopadhyay, S.  et al.  Single -chip photonic deep neural network with forward -only 
+
+training.  Nat. Photonics  18 , 1335 –1343 (2024). 
+
+16.  Ross, A.  et al.  Multilayer spintronic neural networks with  radiofrequency connections. 
+
+Nat. Nanotechnol.  18 , 1273 –1280 (2023). 
+
+17.  Zeng, K.  et al.  Radio -frequency -modulated artificial synapses based on magnetic tunnel 
+
+junctions with perpendicular magnetic anisotropy.  Phys. Rev. Appl.  21 , 014020 (2024). 
+
+18.  Leroux, N.  et al.  Hardware realization of the multiply and accumulate operation on radio -
+
+frequency signals with magnetic tunnel junctions.  Neuromorphic Comput. Eng.  1, 011001 
+
+(2021). 
+
+19.  Leroux, N.  et al.  Radio -Frequency Multiply -and -Accumulate Operations with Spintronic 
+
+Synapses.  Phys. Rev. Appl.  15 , 034067 (2021). 20.  Wang, Z.  et al.  Radiofrequency Spintronic Neural Network Enabled by Electrically 
+
+Modulated Magnetic Tunnel Junctions.  Adv. Mater.  38 , e10319 (2026). 
+
+21.  Leroux, N.  et al.  Classification of multi -frequency RF signals by extreme learning, using 
+
+magnetic tunnel junctions as neurons and synapses.  APL Mach. Learn.  1, 036109 (2023). 
+
+22.  Leroux, N.  et al.  Convolutional neural networks with radio -frequency spintronic nano -
+
+devices.  Neuromorphic Comput. Eng.  2, 034002 (2022). 
+
+23.  Tulapurkar, A. A.  et al.  Spin -torque diode effect in magnetic tunnel junctions.  Nature  438 ,
+
+339 –342 (2005). 
+
+24.  Finocchio, G.  et al.  Perspectives on spintronic diodes.  Appl. Phys. Lett.  118 , 160502 
+
+(2021). 
+
+25.  Pigeau, B.  et al.  A frequency -controlled magnetic vortex memory.  Appl. Phys. Lett.  96 ,
+
+132506 (2010). 
+
+26.  Jenkins, A. S.  et al.  Controlling the chirality and polarity of vortices in magnetic tunnel 
+
+junctions.  Appl. Phys. Lett.  105 , 172403 (2014). 
+
+27.  Pigeau, B.  et al.  Optimal control of vortex -core polarity by resonant microwave pulses. 
+
+Nat. Phys.  7, 26 –31 (2011). 
+
+28.  E. Alpaydin, Fevzi. A. Pen -Based Recognition of Handwritten Digits. UCI Machine 
+
+Learning Repository https://doi.org/10.24432/C5MG6K (1996). 
+
+29.  Basak, S., Rajendran, S., Pollin, S. & Scheers, B. Drone classification from RF 
+
+fingerprints using deep residual nets. in  2021 International Conference on 
+
+COMmunication Systems NETworkS (COMSNETS)  548 –555 (2021). 
+
+doi:10.1109/COMSNETS51098.2021.9352891. 
+
+30.  Ambrogio, S.  et al.  An analog -AI chip for energy -efficient speech recognition and 
+
+transcription.  Nature  620 , 768 –775 (2023). 31.  Shi, L., Zheng, G., Tian, B., Dkhil, B. & Duan, C. Research progress on solutions to the 
+
+sneak path issue in memristor crossbar arrays.  Nanoscale Adv.  2, 1811 –1827 (2020). 
+
+32.  Huang, C.  et al.  Demonstration of scalable microring weight bank control for large -scale 
+
+photonic integrated circuits.  APL Photonics  5, 040803 (2020). 
+
+33.  Lu, C.  et al.  Self -Rectifying  All -Optical Modulated Optoelectronic Multistates Memristor 
+
+Crossbar Array for Neuromorphic Computing.  Nano Lett.  24 , 1667 –1672 (2024). 
+
+34.  Argyris, A. Photonic neuromorphic technologies in optical communications. 
+
+Nanophotonics  11 , 897 –916 (2022). 
+
+35.  Guslienko, K. Yu., Scholz, W., Chantrell, R. W. & Novosad, V. Vortex -state oscillations in 
+
+soft magnetic cylindrical dots.  Phys. Rev. B  71 , 144407 (2005). 
+
+36.  Khvalkovskiy, A. V., Slavin, A. N., Grollier, J., Zvezdin, K. A. & Guslienko, K. Yu. 
+
+Critical velocity for the vortex core reversal in perpendicular bias magnetic field.  Appl. 
+
+Phys. Lett.  96 , 022504 (2010). 
+
+37.  Buchanan, K. S.  et al.  Soliton -pair dynamics in patterned ferromagnetic ellipses.  Nat. 
+
+Phys.  1, 172 –176 (2005). 
+
+38.  Hata, H.  et al.  Coupled oscillations of vortex cores confined in a ferromagnetic elliptical 
+
+disk.  Phys. Rev. B  90 , 104418 (2014). 
+
+39.  Suto, H.  et al.  Layer -Selective Switching of a Double -Layer Perpendicular Magnetic 
+
+Nanodot Using Microwave Assistance.  Phys. Rev. Appl.  5, 014003 (2016). 
+
+40.  Piraux, L.  et al.  Giant magnetoresistance in magnetic multilayered nanowires.  Appl. Phys. 
+
+Lett.  65 , 2484 –2486 (1994). 
+
+41.  Liu, S.  et al.  A CMOS -compatible, scalable and compact magnetoelectric spin -torque 
+
+microwave detector.  Nat. Nanotechnol.  21 , 546 –553 (2026). 
+
+42.  Skalli, A.  et al.  Annealing -inspired training of an optical neural network with ternary 
+
+weights.  Commun. Phys.  8, 68 (2025). 43.  Suarez -Ramirez, C. D., Gonzalez -Mendoza, M., Chang, L., Ochoa -Ruiz, G. & Duran -
+
+Vega, M. A. A Bop and Beyond: A Second Order Optimizer for Binarized Neural 
+
+Networks. in 1273 –1281 (2021). 
+
+44.  Guslienko, K. Yu.  et al.  Eigenfrequencies of vortex state excitations in magnetic 
+
+submicron -size disks.  J. Appl. Phys.  91 , 8037 –8039 (2002). 
+
+45.  Lee, K. -S.  et al.  Universal Criterion and Phase Diagram for Switching a Magnetic Vortex 
+
+Core in Soft Magnetic Nanodots.  Phys. Rev. Lett.  101 , 267206 (2008). 
+
+46.  Petit -Watelot, S.  et al.  Commensurability and chaos in magnetic vortex oscillations.  Nat. 
+
+Phys.  8, 682 –687 (2012). 
+
+47.  Guslienko, K. Yu.  et al.  Eigenfrequencies of vortex state excitations in magnetic 
+
+submicron -size disks.  J. Appl. Phys.  91 , 8037 –8039 (2002). 
+
+48.  Novosad, V.  et al.  Magnetic vortex resonance in patterned ferromagnetic dots.  Phys. Rev. 
+
+B 72 , 024455 (2005). 
+
+49.  Khvalkovskiy, A. V., Slavin, A. N., Grollier, J., Zvezdin, K. A. & Guslienko, K. Yu. 
+
+Critical velocity for the vortex core reversal in perpendicular bias magnetic field.  Appl. 
+
+Phys. Lett.  96 , 022504 (2010). 
+
+50.  Guslienko , K. Yu. Low -frequency vortex dynamic susceptibility and relaxation in 
+
+mesoscopic ferromagnetic dots.  Appl. Phys. Lett.  89 , 022510 (2006).
