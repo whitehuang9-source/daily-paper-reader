@@ -6,35 +6,29 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-01
-- 运行时间：2026-05-01 20:49:49 UTC
+- 最新运行日期：2026-05-02
+- 运行时间：2026-05-02 20:09:40 UTC
 - 运行状态：成功
-- 本次总论文数：4
+- 本次总论文数：2
 - 精读区：0
-- 速读区：4
+- 速读区：2
 
 ### 今日简报（AI）
-今日速读 4 篇前沿论文，聚焦复杂信号处理算法、微电网安全防御及新型硬件神经网络。
-最值得关注通过射频信号远程编程自旋电子神经网络权重，以及利用 AI 校验层提升微电网的抗攻击韧性。
-建议深入了解 AI 与物理系统融合的底层硬件创新，探索能源互联网的安全加固方案。
-- 详情：[/202605/01/README](/202605/01/README)
+今日聚焦 AI 在室内定位与车载电力系统优化中的前沿应用。
+重点关注利用 CNN 实现旋转不变的地磁定位，以及通过强化学习提升电动汽车 EMI 滤波器的自整定性能。
+建议关注深度学习如何解决复杂物理环境下的硬件干扰与精准感知难题。
+- 详情：[/202605/02/README](/202605/02/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Complex Approximate Message Passing with Non-separable Denoising](/202605/01/2604.21115v1-complex-approximate-message-passing-with-non-separable-denoising)  
+1. [Magnetic Indoor Localization through CNN Regression and Rotation Invariance](/202605/02/2604.22896v1-magnetic-indoor-localization-through-cnn-regression-and-rotation-invariance)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于压缩感知和推理的迭代算法
-2. [An AI-Based Supervisory Measurement Integrity Validation Layer for Cyber-Resilient AC/DC Protection in Inverter-Based Microgrids](/202605/01/2604.23666v1-an-ai-based-supervisory-measurement-integrity-validation-layer-for-cyber-resilient-acdc-protection-in-inverter-based-microgrids)  
+   evidence：基于磁场特征和3D磁力计数据处理
+2. [Intelligent Self-tuning Active EMI Filtering for Electrified Automotive Power Systems Using Reinforcement Learning](/202605/02/2604.28084v1-intelligent-self-tuning-active-emi-filtering-for-electrified-automotive-power-systems-using-reinforcement-learning)  
    标签：评分：6.0/10、query:tmr
-   evidence：电流继电器的测量完整性与验证
-3. [Remotely programming the weights of a spintronic neural network by a radiofrequency broadcast signal](/202605/01/2604.24561v2-remotely-programming-the-weights-of-a-spintronic-neural-network-by-a-radiofrequency-broadcast-signal)  
-   标签：评分：6.0/10、query:tmr
-   evidence：使用磁隧道结（MTJ）的自旋电子神经网络
-4. [High-field magneto-optical imaging of superconducting critical states beyond 10 T using a paramagnetic garnet sensor](/202605/01/2604.25274v1-high-field-magneto-optical-imaging-of-superconducting-critical-states-beyond-10-t-using-a-paramagnetic-garnet-sensor)  
-   标签：评分：6.0/10、query:tmr
-   evidence：使用磁传感器对电流密度进行磁光成像
+   evidence：电力电子有源电磁干扰滤波与干扰抑制
 
 
 <div class="dpr-home-promo-card">

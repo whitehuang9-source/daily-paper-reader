@@ -1,0 +1,261 @@
+Title: Magnetic Indoor Localization through CNN Regression and Rotation Invariance
+
+URL Source: https://arxiv.org/pdf/2604.22896v1
+
+Published Time: Tue, 28 Apr 2026 00:05:25 GMT
+
+Number of Pages: 7
+
+Markdown Content:
+# Magnetic Indoor Localization through CNN Regression and Rotation Invariance 
+
+Helge Ros´ e, Konstantin Klipp, Tom Koubek 
+
+Fraunhofer Institute for Open Communication Systems (FOKUS) 
+
+Berlin, Germany 
+
+{helge.rose, konstantin.klipp, tom.koubek }@fokus.fraunhofer.de 
+
+Bernd Sch¨ aufele, Ilja Radusch 
+
+Daimler Center for Automotive Information Technology Innovations (DCAITI) Technical University Berlin 
+
+Berlin, Germany 
+
+{bernd.schaeufele, ilja.radusch }@dcaiti.com 
+
+Abstract —Indoor positioning is an essential technology for a wide range of applications in GNSS-denied environments, includ-ing indoor navigation and IoT systems. Combining convolutional neural networks (CNNs) and magnetic field-based features offers a low-cost, infrastructure-free solution for precise positioning. While magnetic fingerprints are a promising approach for indoor positioning, models trained on raw 3D magnetometer data are highly sensitive to device orientation. We address this by using two rotation invariant features derived from the 3D magnetic field: the norm ( Mn) and the projection onto the gravity axis (Mg ). We train a lightweight 7-layer dilated CNN (MagNetS/XL) on magnetic sequences to directly regress (x, y ) positions. Using the MagPie dataset (three buildings, handheld trajectories), we systematically evaluate fixed and random rotations of test and/or train data. Raw 3D inputs (Mx, M y , M z ) exhibit isotropic error increases under fixed 90 ◦ rotations and further degrade with growing random rotations. In contrast, 2D (Mn, M g )
+
+inputs maintain rotation invariant accuracy and surpass the 3D inputs once rotation exceeds building-specific thresholds for three reference buildings: 0◦ for Loomis (large), 5◦ for Talbot (medium), and 6◦ for CSL (small). MagNetXL achieves or exceeds state-of-the-art accuracy on the MagPie dataset, and MagNetS delivers similar performance with roughly one third of the parameters, favoring mobile deployment. These results show that the robustness gained from rotation invariant inputs outweighs the loss of input dimensionality in realistic usage, allowing mapping and localization without orientation alignment or added infrastructure. 
+
+Index Terms —indoor positioning, neural network, CNN, mag-netic indoor localization, IoT, magnetic field, rotation invariance, rotation invariant features 
+
+I. I NTRODUCTION 
+
+The emergence of Global Navigation Satellite Systems (GNSS), such as the Global Positioning System (GPS), has facilitated widespread and widely accessible positioning solu-tions in outdoor environments. Navigation systems for vehicles and pedestrians are ubiquitous and readily accessible through various smartphone applications. In contrast, navigation applications are not universally avail-able in indoor environments. A significant challenge lies in accurate localization within buildings, as GNSS typically requires a direct line-of-sight between the receiver device and the satellites. Since GNSS signals cannot penetrate walls, their availability indoors is limited. However, in the context of high-precision localization, ensuring a seamless transition between outdoor and indoor environments can be very benefi-cial, particularly for blind individuals [1]. In addition, indoor localization also enables other location-based services like the tracking of Internet of Things (IoT) assets or patients in hospitals [2]. To address this limitation, multiple technologies have been explored for indoor localization. Most existing systems rely on technologies such as radio, optical, acoustic, or magnetic information, or a combination of them [3]. Most of these technologies face challenges related to infrastructure costs and maintenance efforts. For instance, radio-based systems such as Bluetooth Low Energy (BLE) and WiFi require the installation of multiple access points or beacons. Besides installation costs, constant maintenance is necessary to keep the system operational. Other approaches exploiting optical features, which have lower infrastructure requirements, are prone to degradation under different illumination levels and require line of sight. Thus, in our previous research, we examined the magnetic characteristics of buildings [4]. Magnetic-based solutions rely solely on the Earth’s magnetic field, which is essentially available everywhere. The vast majority of buildings contain large metal parts like steel beams or radiators. These structures affect the magnetic field forming a specific magnetic pattern while moving through the object. To this end, in [4] we employed different neural networks and demonstrated that they can estimate a highly accurate position based on three-dimensional magnetic patterns. For better comparison, we used a common public dataset for this problem called MagPie [5]. However, we have determined that the dataset is not realistic in its raw format for all our focused applications. This limitation arises from the assumption of a more or less constant phone orientation depending on the walking direction. In real-world scenarios, such as indoor navi-gation, these tasks are predominantly executed on smartphones or other handheld devices. Given that users typically hold their devices while walking or have them in their pocket, a constant orientation of the magnetometer cannot be expected. Users are likely to rotate the device about its yaw, pitch, and roll axes, thereby affecting the vector direction of the magnetic field. The same issue arises if IoT devices are tracked using this 
+
+> arXiv:2604.22896v1 [cs.RO] 24 Apr 2026
+
+approach, as the orientation of the tracker or the device it is attached to may vary while in motion. To enhance the robustness of the magnetic localization framework, this paper introduces a neural network-based lo-calization system that only uses rotation invariant features of the magnetic vector. These features consist of the norm of the magnetic field strength and the projection of the magnetic field components in the sensor reference frame to the vertical axis of the Earth’s gravity field. We also introduce two new Convolutional Neural Network (CNN)-based localization models, MagNetXL and MagNetS. We use the models to show the influence of sensor rotations on the results with the raw sensor values in comparison to the rotation invariant features. This paper is structured as follows. In section II, we review related work in this field. The concept of rotation invariant magnetic features is introduced in section III. The prepara-tion of the dataset and the architecture of our networks are explained in section IV. In section V, the evaluation metrics and our results are presented. Finally, section VI provides a conclusion and outlines future research directions. II. R ELATED WORK 
+
+In addition to the infrastructure-based localization tech-niques using Bluetooth, WiFi, or Ultrawideband anchors in the building, there are infrastructure-free approaches as well. [6] and [7] use inertial sensors with existing map data to reduce drift characteristics by particle or Kalman filters. [8], [9] and [10] utilize camera images to detect natural features and structures in the scene and perform image retrieval or end-to-end pose regression to find the best match in a prerecorded image or feature map. However, these approaches require more or less robust features and line of sight. Approaches using the Earth’s magnetic patterns mostly rely on a prerecorded fingerprinting map to localize a measured pattern as well. For this purpose, a wide range of traditional algorithms are used, such as k-nearest neighbors [11], Support Vector Machine (SVM) [12], [13] and decision trees [14] even if some of them actually focus on WiFi fingerprints [15]. In recent years, neural network-based solutions like [15], [16], [17] proposed CNNs and Recurrent Neural Network (RNN)s, especially Long Short-Term Memory (LSTM) architectures for localization. [18], [19], [20], and [21] all employed vari-ations of RNN respectively LSTM models in their work. The complexity of these models ranges from basic RNNs ([18]) to more sophisticated architectures like the hierarchical LSTM proposed by [21]. The approaches in [15], [16], and [17] utilize CNN-based architectures in their work. Recent research has also explored the combination of different neural network architectures to exploit their respective strengths. Both [22] and [23] use more advanced hybrid approaches that integrate CNNs with RNNs or LSTMs to build and process multichannel visual representations of magnetic data. These approaches combine the spatial processing capabilities of CNNs with the sequential learning of RNNs. However, these architectures sometimes come with the drawback that a spatial starting point is needed. Thus, the combination of CNN and RNN, e.g., in [22], cannot solve the lost robot problem. In our latest work [4], we evaluated different CNN-and LSTM-based solutions for a classification-based and a regression-based location estimation. A Bayesian optimizer was used to tune the model on a subset of the data per building. Thus, for each building a specific model structure is generated. As with most state-of-the-art solutions, the magnetic input pattern consists of the three-dimensional magnetic vector over a certain time period gathered by a sliding window approach. For a comparable evaluation the public MagPie dataset [5] was used, as it includes all necessary data at a suitable and realistic measuring frequency of 50 Hz in differently sized buildings. The best networks in [4] achieve average mean errors between 
+
+0.2 m and 2 m depending on the building size, outperforming state of the art networks on the same dataset. Although the MagPie dataset was collected using two handheld devices, a smartphone and a tango tablet respectively for the ground truth, the data do not show much variance in rotation and only limited influence from phone movements. As each path typically has two walking directions, the training, validation, and test data only contain these two rotations. Thus, the work presented in this paper addresses the gap to a more realistic scenario regarding rotations. In an earlier work [24], we implemented a grid-based prob-abilistic Bayesian filter to match invariant magnetic features against a map. The present study now employs a CNN that incorporates rotation invariant magnetic features to derive an absolute position through regression analysis. III. M AGNETIC INDOOR LOCALIZATION AND ROTATION 
+
+INVARIANCE 
+
+If indoor localization is to be based solely on data from the Earth’s magnetic field, the orientation of the device has a major influence on the accuracy of the localization [25]. The values of the magnetic field components depend on this orientation in relation to the direction of the Earth’s magnetic field. The more local magnetic fields disturb the Earth’s globally north directed magnetic pattern, the more accurate magnetic localization becomes [25]. However, the more disturbance they cause, the more difficult it becomes to determine the absolute orientation of the device using the Earth’s magnetic field. In magnetic localization, the magnetic field is recorded twice: first, when the magnetic map of the building is created, and then during the actual localization. It is very likely that the recorded values of the map differ from the measurements taken during the localization phase, because the orientation of the sensor device changes between map recording and localization mode. Therefore, the direct use of magnetic field components causes significant challenges in mitigating orientation depen-dence [24], [25], leading to poor localization results. One approach to address this challenge is to use rotation in-variant quantities of the magnetic field. The magnetic field has three components (Mx, M y , M z ), and of course the number of rotation invariant quantities is smaller, namely two quantities (see subsection IV-A). The central aim of this work is to quantify how much the expected accuracy gain from input rotation invariance can compensate for the loss in accuracy caused by reducing the input dimensionality. 
+
+A. Options for random rotation 
+
+To test the above-mentioned hypothesis, we rotated the input data in two different ways. First, we rotated the data by a constant angle, (see item 1). Then, we rotated the data in a varying manner (see item 2 and item 3). 1) Rotate the test data by a fixed angle, representing a device in localization mode, with a permanently different device orientation than during recording, e.g., the user carries the device in their pocket. 2) Randomly rotate the test data only, representing a def-inite map recording by a robot or a specific trained person and a randomly directed localization mode. This localization mode roughly simulates e.g. a user holding the phone in the hand while varying its orientation during a walk. 3) Randomly rotate both the test and training data to simulate a randomly directed device at map recording and a randomly directed device in localization mode. This scenario is the most likely one if the map data are gathered during normal smartphone use in a crowd-based mapping approach. The randomly varying rotations are applied, following the normal distribution N (0 , σ ). This simulates the natural be-havior of a user who performs many small wobbles and a few larger turns. Note that the probability of 2σ movements is already very small. The time interval between two random rotations is T . In most cases, we choose T = 1 s . Linear inter-polation is used between random rotations, i.e., at time steps 
+
+t = nT, n = 0 ..K the random rotation angle ϕ(t) ∈ N (0 , σ ) is sampled, and the intermediate values of ϕ(τ ), τ ∈ (t, t 1), t =
+
+nT, t 1 = ( n + 1) T are linearly interpolated between ϕ(t) and 
+
+ϕ(t1). Additionally, fixed rotations are applied over the entire time period. IV. D ATA PREPARATION AND NEURAL NETWORKS 
+
+Here we follow the approach presented in [4] and focus on data sequences, because the same magnetic field value can occur for different positions, and thus the localization based on a single magnetic data point is ambiguous. The sequence length remains as a parameter for evaluation, as its effect is of high relevance for the performance and for the possible applications as well. The tests in [4] show that an overlapping sliding window of W = 200 is suitable in most cases. In contrast to consecutive, non-overlapping ones, this avoids losing information between windows, as the target position always corresponds to the last data point in the sequence. In the mentioned work, we used the 3D raw magnetic field vector 
+
+M = ( Mx, M y , M z ) as input data. Both in [4] and in this work we use all floors in the MagPie dataset from three buildings of different sizes (CSL - small, Talbot - medium, Loomis -large). To eliminate effects that are not related to this study, we only use the data recordings for handheld devices without obvious outliers. We removed a few trials from training and evaluation (namely trials 8 to 11 in the Loomis building) due to time-sync issues in the given MagPie dataset. 
+
+A. Rotation invariant features 
+
+We are testing our hypothesis by using rotation invariant magnetic features instead of the raw magnetic components. The magnetometers of the mobile devices used for the MagPie dataset measure the magnetic field strength M (r) at the position r = ( lon, lat, alt ) w.r.t. the world reference frame (longitude, latitude, altitude) or in UTM coordinates r =(X, Y, Z ). The field strength M (r) = ( Mx, M y , M z ) ∈ R3 is expressed in the sensor’s coordinate frame, with components measured along the device’s local x-, y- and z-axes. To estab-lish rotation invariance, it is necessary to consider the group of 3-dimensional rotations O(3) given by all transformations of the vector space R3 leaving the inner product invariant. Thus, the norm of a vector is also invariant of rotations. This means that the first O(3) rotation invariant feature of the magnetic field strength is its norm Mn := |M |.The subgroup O(2) of 2-dimensional rotations about a local vertical axis of the world reference frame leaves the vertical component of the magnetic field strength invariant. The local vertical axis of the UTM world reference frame is parallel to the unit vector g of the Earth’s gravity field detectable by the accelerometer of the sensor device. The projection Mg := M ·g
+
+of the magnetic field components in the sensor reference frame to the vertical axis g of the Earth’s gravity field is the second rotation invariant feature. Accordingly, we use (Mn, M g ) as the rotation invariant 2D input data of the neuronal networks. 
+
+B. Networks by hyperparameter search 
+
+In [4] the neural networks are kept as flexible as pos-sible, and the best model architecture and optimal training parameters were identified by conducting a hyperparameter search using Bayesian optimization on an undersampled train-ing set. The basic model structures are CNN and LSTM architectures. Both types are applied to a classification and regression problem with the 3D raw magnetic field vector 
+
+M = (Mx, M y , M z ) as non-rotation invariant input data. The regression directly predicts the position vector r =(x, y, z = 0) . The regression approach generally outperforms the classification method in terms of positioning accuracy and precision. The regression approach offers a more straight-forward implementation, as it does not require dividing the building into distinct grid cells. Thus, in this paper we consider the regression approach only. In [4], the hyperparameter search of LSTM networks per-formed better than the CNN approach, resulting in different optimal network architectures for each building and configu-ration. Since our goal is to investigate the rotational invari-ance of the networks, it is advantageous to consider only a fixed network architecture for the various input data rotation approaches mentioned in subsection III-A. Therefore, we man-ually optimized the 7-layer CNN architecture MagNet, which outperforms both [4] and most reference networks considered therein in terms of the Mean Absolute Error (MAE). We consider both network types, from [4] and MagNet, and also use the MAE between the ground truth and the predicted positional coordinates to assess and compare the performance of the networks. The MAE is given by MAE = 1
+
+n
+
+> n
+
+X
+
+> i=1
+
+|yi − ˆyi| (1) where yi are the ground truth coordinates and ˆyi are the predicted coordinates of the networks. 
+
+C. MagNet - a 7-layer CNN for magnetic indoor localization 
+
+To optimize the CNN from [4], we designed a customized 7-layer CNN. The design is based on the following consider-ation: A suitable Conv1D design for a time series of W = 200 
+
+should use small kernels and increasing dilation rates so that early layers learn local patterns while deeper layers achieve a receptive field covering the full sequence. For 
+
+n layers, kernel size k and exponentially increasing dilation rates (i.e., 1, 2, 4, 8, 16 , etc.), the receptive field length can be approximated by R ≈ 1 + ( k − 1)(2 n − 1) , thus to get a length of R > 200 , in our approach we have to select 
+
+n = 7 , k = 3 yielding R ≈ 255 . Filters typically increase with depth to capture progressively more complex features. Using a global pooling layer at the end efficiently summarizes all learned features. Thus, the number of features increases from 32 to 128 (MagNetS) or 256 (MagNetXL). The CNN layers are im-plemented with dilation ranging from 1 to 64 in order to achieve a receptive field corresponding to the input sequence length of 200. In test runs we found that kernel sizes k > 3
+
+result in higher precision; thus, we increase k = 5 ... 20 in each successive layer to mitigate gridding artifacts, especially when small kernels are combined with high dilation rates. To implement nonlinear regression to the output (x, y ), the CNN layers are followed by a nonlinear fully connected layer of size 64 and a linear fully connected layer of size 2. The smaller network – MagNetS – has 360k parameters, while the larger one – MagNetXL – has approximately 1M. Both networks achieve comparable accuracy, with Mag-NetXL performing slightly better in difficult situations. For normal cases, and especially on mobile devices, MagNetS, which is three times smaller, is preferable. Table I shows TABLE I: Comparison of magnetic localization approaches from [22] and [4] to MagNetXL on original MagPie set without rotation.              
+
+> Building [22] (CNN+RNN) MAE (m) [4] MAE (m) MagNetS MAE (m) MagNetXL MAE (m)
+> CSL 0.30 0.22 0.22 0.21
+> Talbot 1.06 0.82 0.66 0.64
+> Loomis 1.07 1.98 2.13 1.96
+
+that both MagNet networks outperform [4] and most reference networks considered in [22]. In contrast to the CNN+RNN ver-sion from [22], the networks in [4], MagNetS and MagNetXL, also solve the lost robot problem as no starting position is fed into the network. V. R ESULTS 
+
+In the following section, we show the advantage of rotation invariant input data. In subsection V-A, we apply a fixed rotation on the three different axes of the 3D test data separately, to analyze the dependence of the axis of rotation on the MAE. In subsection V-B and subsection V-C, we compare the MAE dependence on fixed and varying rotations of 2D
+
+and 3D input data. 
+
+A. The dependence of the Mean Absolute Error on the axis of rotation 
+
+The results of fixed rotations around all axis to the 3D
+
+test data are shown in Table II for MagNetS. This simulates a user carrying their cell phone upright in their pocket. The rotation of the test data by a fixed angle represents a device in localization mode, with a permanently different device direction than during recording. Rotation by almost 90 ◦
+
+around all three axes individually and also together shows an approximate error of 14 m in all cases. There is no directional dependence, i.e., the error is significant and isotropic. 
+
+B. The dependence of the Mean Absolute Error on random rotations for the CNN presented in [4] 
+
+The results of fixed (Option 1) and random (Options 2 and 3) rotations of the 3D input data (Mx, M y , M z ) for the reference CNN architecture by [4] in the smallest building CSL are shown in Figure 1a. The graph 3D test shows the result for the 3D input data (Mx, M y , M z ), with only the test data rotated by N(0, σ) distributed angles around all axes (Option 2). Option 3 where test and train data are rotated by N(0, σ) is shown by 3D test+train . The random rotations are drawn from normal distribution N (0 , σ ). This simulates the natural behavior of a user who performs many small wobbles and a few larger turns. The time interval between two random rotations is T = 1 s . Linear interpolation is used between the random rotation times. In 3D fix the test and train data are rotated by a fixed angle σ and applied over the entire time period (Option 1). The 2D input data (Mg , M n) are used in the rotation invariant case 2D inv . The input data and thus the results are invariant with respect to rotations. TABLE II: Dependence of the Mean Absolute Error (in m) on the axis of rotation. Building: CSL, Network: MagNetS with 
+
+3D input, test data rotated by 88 ◦ around the x-, y-, z-axis and all three axes simultaneously. In any case, the error is approximately 14 m , i.e., there is no directional dependence — the error is isotropic.           
+
+> x MAE (m) y MAE (m) z MAE (m) xyz MAE (m)
+> 13.60 13.44 14.38 13.45 0510 15 20
+> [degrees]
+> 2
+> 4
+> 6
+> 8
+> 10
+> MAE [m]
+> 3D_test
+> 3D_test+train
+> 3D_fix
+> 2D_inv
+
+(a) The dependence of the Mean Absolute Error on random rotations with the CNN by [4]. Building: CSL, Network: CNN by [4]. 3D test: 3D input data (Mx, M y , M z ), only test data rotated by N(0, σ) distributed angles around all axes. 3D test+train: test and train data rotated by N(0, σ). 3D fix: test and train data rotated by a fixed angle σ. 2D inv: 2D input data 
+
+(Mg , M n), which are invariant with respect to rotations. 0 5 10 15 20 
+
+> [degrees]
+> 0
+> 1
+> 2
+> 3
+> 4
+> 5
+> MAE [m]
+> 3D-MagNetS
+> 3D-MagNetXL
+> 2D-MagNetS
+> 2D-MagNetXL
+
+(b) The dependence of the Mean Absolute Error on ran-dom rotations with MagNetS/XL. Building: CSL, Network: MagNetS and MagNetXL. 3D MagNetS/XL: 3D input data 
+
+(Mx, M y , M z ), test and train data rotated by N(0, σ) dis-tributed angles around all axes. 2D MagNetS/XL: 2D input data 
+
+(Mg , M n), which are invariant with respect to rotations. 
+
+Fig. 1: Comparison of the dependence of the Mean Absolute Error on random rotations with the CNN by [4] and MagNetS/XL. 0 5 10 15 20     
+
+> [degrees]
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> MAE [m]
+> 3D-Loomis
+> 3D-Talbot
+> 3D-CSL
+> 0510 15 20
+> [degrees]
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> 1.4
+> MAE [m]  2D-Loomis
+> 2D-Talbot
+> 2D-CSL
+
+(a) 3D input data (Mx, M y , M z ), test and train data rotated by N(0, σ) distributed angles around all axes. 0 5 10 15 20     
+
+> [degrees]
+> 0
+> 2
+> 4
+> 6
+> 8
+> 10
+> 12
+> 14
+> MAE [m]
+> 3D-Loomis
+> 3D-Talbot
+> 3D-CSL
+> 0510 15 20
+> [degrees]
+> 0.4
+> 0.6
+> 0.8
+> 1.0
+> 1.2
+> 1.4
+> MAE [m]  2D-Loomis
+> 2D-Talbot
+> 2D-CSL
+
+(b) 2D input data (Mg , M n), which are invariant with respect to rotations. 
+
+Fig. 2: The dependence of the Mean Absolute Error on building size. Building: Loomis-big, Talbot-medium, CSL-small, Network: MagNetXL. Note the different scales for MAE with 3D input data in Figure 2a and 2D input data in Figure 2b. It is clearly visible that the more the input data are rotated, the higher the MAE gets, using the 3-dimensional rotation variant features. At the same time, of course the MAE of the rotation invariant features solution stays constant over all rotations σ. Case 3D test shows the largest increase in error, up to 11m for random rotations with σ = 20 ◦. From an angle of 4◦, we can see that the advantage of rotation invariant 2D input data with M AE = 1 .61 m surpasses the non-invariant 3D data with M AE = 1 .76 m .If both the training and test data are rotated (case 
+
+3D test+train ), the error increases more gradually up to approximately 8 m . The threshold angle at which the rotation invariant 2D data performs better than the 3D input data is 
+
+5◦, which is similar to the 3D test case. This means that random disturbance of the data during data acquisition and application only results in a slightly slower increase in error than a disturbance of the application alone. The threshold angle at which the disturbance becomes effective remains approximately the same in both cases from 5◦.TABLE III: Threshold value of the rotation angle for the advantage of rotation invariant 2D input data (Mn, M g ) of MagNetXL for different building sizes.             
+
+> Building Threshold angle ( ◦)3D MAE (m) 2D MAE (m)
+> Loomis-big 01.96 1.46 Talbot-medium 51.32 1.22 CSL-small 60.36 0.36
+
+The case of a fixed rotation ( 3D fix ) has a linear dependency comparable to that in case 3D test+train . This shows that the randomness of the disturbance is not decisive, but only the magnitude of the rotation angle influences the error. Also in this case, the threshold value is approximately 5◦.
+
+C. The dependence of the Mean Absolute Error on random rotations for MagNet 
+
+Figure 1b shows the results of random rotations of the 3D input data (Mx, M y , M z ) and the invariant 2D input data 
+
+(Mg , M n) in the smallest building CSL for MagNet. In all cases the test and training data are randomly rotated by a nor-mal distribution N (0 , σ ). As before, the time interval between two random rotations is T = 1 s and a linear interpolation is used between the random rotation times. The rotations are applied for both networks MagNetS and MagNetXL. The cases 
+
+3D-MagNetS/XL show the dependency of the error for the non-invariant input data (Mx, M y , M z ) and 2D-MagNetS/XL for the rotation invariant 2D input data (Mg , M n).In the non-invariant cases 3D-MagNetS/XL , the error in-creases more slowly than in the case of the CNN in [4]. Here, we have a maximal error of approximately 4.5 m instead of 
+
+8 m . The larger network MagNetXL outperforms the smaller one (MagNetS), but the maximal gain in error is only 1.2 m .at an angle of 15 ◦. For small rotation angles (up to 5◦) both networks perform similarly well with an error of 0.3 m at 5◦.For the rotation invariant 2D input data (Mg , M n), the larger MagNetXL network performs slightly better, with an error of 0.36 m , than the smaller MagNetS, with 0.44 m . Because of the invariance, the error is constant over the full range. The threshold angle, at which the rotation invariant 2D data performs better than the 3D input data, with 5.5◦, is very similar to the case of the CNN in [4]. 
+
+D. The Advantage of Rotation Invariance 
+
+The results of the dependence of accuracy on rotational disturbances in the input data of the CNN in [4] and MagNet clearly show that, above a threshold rotation angle, the rotation invariant 2D input data (Mg , M n) enable better accuracy in magnetic localization. Figure 2 and Table III show the dependence of this threshold angle on the size of the building. For the largest building (Loomis), the rotation invariant 2D input data (Mg , M n) achieve better accuracy than the 3D data 
+
+(Mx, M y , M z ), even without rotation disturbances, i.e., the threshold value of the rotation angle is 0◦. In addition, the invariant 2D data for both the large and medium-sized building (Talbot) achieve a comparatively small error of around 1.3 m .For the small building (CSL), the error is around 0.4 m , which is three times smaller. The results show (see Table III) that the threshold value of the rotation angle is inversely proportional to the size of the building. This indicates that in the case of smaller buildings, the networks are still able to easily learn small rotational disturbances and thus compensate for their influence below the threshold angle. This is possible up to an angle of 6◦
+
+for the small building (CSL) and 5◦ for the medium-sized building (Talbot). In the case of the large building, the network is no longer able to learn all rotation disturbances in the data, and thus the rotation invariant 2D data (Mg , M n) always outperform the rotation-disturbed 3D data (Mx, M y , M z ).VI. C ONCLUSION 
+
+This work examines the rotation invariance of magnetic input data for CNNs in the task of magnetic indoor localization to answer the question: How effectively can the use of rotation invariant 2D input data compensate for rotation errors and thus achieve increased localization accuracy, and how large is the impact of the loss of dimensionality from the raw 3D data 
+
+(Mx, M y , M z ) to the rotation invariant 2D data (Mn, M g )?We introduced two rotation invariant features derived from the 3D magnetometer signal – the norm of the magnetic field ( Mn) and its projection onto the gravity axis ( Mg ) – and trained a lightweight 7-layer CNN (MagNetS/XL) on sequences of length W = 200 . Across the MagPie dataset buildings, we showed that models using raw 3D inputs 
+
+(Mx, M y , M z ) are highly sensitive to device orientation. Fixed rotations near 90 ◦ lead to isotropic error increases (e.g., ∼4 m 
+
+MAE), and even small random rotations degrade accuracy. In contrast, using the features (Mn, M g ) keeps the error constant across rotations and surpasses 3D inputs once the device rotation exceeds a building size-dependent threshold: 
+
+0◦ for Loomis (large), 5◦ for Talbot (medium), and 6◦ for CSL (small). Additionally, MagNetXL achieves or exceeds the state-of-the-art accuracy on MagPie, while MagNetS of-fers similar performance with substantially lower complexity, making it preferable for mobile deployment. Practically, rotation invariant inputs remove the need to align device orientation between mapping and localization, improve robustness for handheld usage, and simplify system setup without extra infrastructure. The results indicate that the gain from rotational robustness outweighs the loss of dimensionality in most realistic scenarios, especially in larger environments where learning orientation disturbances becomes harder. Our current solution faces certain limitations, including re-liance on sufficiently distinctive magnetic fingerprints, poten-tial errors in gravity estimation, device-specific magnetometer biases, and the focus on a single public dataset (handheld tra-jectories). Performance still depends on coverage and quality of mapping data and may vary with building construction and dynamic changes. However, as most of them affect the position certainty, they can be mitigated by sensor fusion, e.g., with accelerometers. Future work will address trajectory-level inference and un-certainty estimation to achieve higher robustness and accuracy. For usage in an indoor navigation system [1], also extension to floor detection and further on-device optimization for real-time application can be considered. REFERENCES [1] J. Wortmann, B. Schaeufele, K. Klipp, I. Radusch, K. Blaß, and T. Jung, “Enhanced Accessibility for Mobile Indoor Navigation,” in 2024 14th International Conference on Indoor Positioning and Indoor Navigation (IPIN) , IEEE, 2024. [2] C. G. Maloney, D. Wolfe, P. H. Gesteland, J. W. Hales, and F. L. Nkoy, “A tool for improving patient discharge process and hospital commu-nication practices: the Patient Tracker,” in AMIA Annual Symposium Proceedings , vol. 2007, p. 493, 2007. [3] J. Schyga, J. Hinckeldeyn, and J. Kreutzfeldt, “Meaningful test and eval-uation of indoor localization systems in semi-controlled environments,” 
+
+Sensors , vol. 22, no. 7, p. 2797, 2022. [4] K. Klipp, E. Blumenthal, M. Eckardt, J. Windirsch, B. Sch¨ aufele, J. Wortmann, and I. Radusch, “Comparing CNN and LSTM Networks for Magnetic Localization of IoT Devices and Pedestrian Tracking,” in 2025 11th International Conference on Computing and Artificial Intelligence (ICCAI) , pp. 549–555, 2025. [5] D. Hanley, Magnetic-field-based navigation: Empirical evidence of robust methods over contemporary methods . PhD thesis, University of Illinois at Urbana-Champaign, 2022. [6] Y. Zhang, J. Guo, F. Wang, R. Zhu, and L. Wang, “An Indoor Localiza-tion Method Based on the Combination of Indoor Map Information and Inertial Navigation with Cascade Filter,” Journal of Sensors , vol. 2021, no. 1, p. 7621393, 2021. [7] K. Klipp, A. Kisand, J. Wortmann, and I. Radusch, “Multidimensional In-and outdoor pedestrian tracking using OpenStreetMap data,” in 2021 International Conference on Indoor Positioning and Indoor Navigation (IPIN) , pp. 1–8, IEEE, 2021. [8] A. Kendall, M. Grimes, and R. Cipolla, “PoseNet: A Convolutional Network for Real-Time 6-DOF Camera Relocalization,” in Proceedings of the IEEE International Conference on Computer Vision (ICCV) , 2015. [9] S. Wang, Z. Laskar, I. Melekhov, X. Li, and J. Kannala, “Continual learning for image-based camera localization,” in Proceedings of the IEEE/CVF International Conference on Computer Vision , pp. 3252– 3262, 2021. [10] S. Chen, X. Li, Z. Wang, and V. A. Prisacariu, “DFNet: Enhance Abso-lute Pose Regression with Direct Feature Matching Supplementary,” in 
+
+European Conference on Computer Vision , pp. 1–17, Springer, 2022. [11] D. Li, B. Zhang, and C. Li, “A Feature-Scaling-Based k-Nearest Neighbor Algorithm for Indoor Positioning Systems,” IEEE Internet of Things Journal , vol. 3, no. 4, pp. 590–597, 2016. [12] A. S. Abdou, M. A. Aziem, and A. Aboshosha, “An efficient indoor localization system based on Affinity Propagation and Support Vector Regression,” in 2016 Sixth International Conference on Digital Infor-mation Processing and Communications (ICDIPC) , pp. 1–7, 2016. [13] A. Chriki, H. Touati, and H. Snoussi, “SVM-based indoor localization in Wireless Sensor Networks,” in 2017 13th International Wireless Commu-nications and Mobile Computing Conference (IWCMC) , pp. 1144–1149, 2017. [14] J. Yim, “Introducing a decision tree-based indoor positioning technique,” 
+
+Expert Syst. Appl. , vol. 34, p. 1296–1302, Feb. 2008. [15] G. Ouyang, K. Abed-Meraim, and Z. Ouyang, “Magnetic-field-based indoor positioning using temporal convolutional networks,” Sensors ,vol. 23, no. 3, p. 1514, 2023. [16] I. Ashraf, M. Kang, S. Hur, and Y. Park, “MINLOC: Magnetic field patterns-based indoor localization using convolutional neural networks,” 
+
+IEEE Access , vol. 8, pp. 66213–66227, 2020. [17] M. Abid, P. Compagnon, and G. Lefebvre, “Improved CNN-based magnetic indoor positioning system using attention mechanism,” in 2021 International Conference on Indoor Positioning and Indoor Navigation (IPIN) , pp. 1–8, IEEE, 2021. [18] H. J. Jang, J. M. Shin, and L. Choi, “Geomagnetic field based indoor localization using recurrent neural networks,” in GLOBECOM 2017-2017 IEEE Global Communications Conference , pp. 1–6, IEEE, 2017. [19] W. Son and L. Choi, “Universal Vector Calibration for Orientation-Invariant 3D Sensor Data,” Sensors , vol. 25, no. 15, p. 4609, 2025. [20] R. K. Yadav, B. Bhattarai, L. Jiao, M. Goodwin, and O.-C. Granmo, “Indoor space classification using cascaded LSTM,” in 2020 15th IEEE Conference on Industrial Electronics and Applications (ICIEA) ,pp. 1110–1114, IEEE, 2020. [21] L. Wang, H. Luo, Q. Wang, W. Shao, and F. Zhao, “A hierarchical LSTM-based indoor geomagnetic localization algorithm,” IEEE Sensors Journal , vol. 22, no. 2, pp. 1227–1237, 2021. [22] L. Antsfeld and B. Chidlovskii, “Magnetic field sensing for pedestrian and robot indoor positioning,” in 2021 International Conference on Indoor Positioning and Indoor Navigation (IPIN) , pp. 1–8, IEEE, 2021. [23] L. Fernandes, S. Santos, M. Barandas, D. Folgado, R. Leonardo, R. San-tos, A. Carreiro, and H. Gamboa, “An infrastructure-free magnetic-based indoor positioning system with deep learning,” Sensors , vol. 20, no. 22, p. 6664, 2020. [24] K. Klipp, H. Ros´ e, J. Willaredt, O. Sawade, and I. Radusch, “Rotation-invariant magnetic features for inertial indoor-localization,” in 2018 International Conference on Indoor Positioning and Indoor Navigation (IPIN) , pp. 1–10, IEEE, 2018. [25] J. Haverinen, “Utilizing magnetic field based navigation,” US Patent US2013/0179074, 2013.
