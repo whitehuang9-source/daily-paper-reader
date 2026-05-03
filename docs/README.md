@@ -6,29 +6,29 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-02
-- 运行时间：2026-05-02 20:09:40 UTC
+- 最新运行日期：2026-05-03
+- 运行时间：2026-05-03 20:24:13 UTC
 - 运行状态：成功
 - 本次总论文数：2
 - 精读区：0
 - 速读区：2
 
 ### 今日简报（AI）
-今日聚焦 AI 在室内定位与车载电力系统优化中的前沿应用。
-重点关注利用 CNN 实现旋转不变的地磁定位，以及通过强化学习提升电动汽车 EMI 滤波器的自整定性能。
-建议关注深度学习如何解决复杂物理环境下的硬件干扰与精准感知难题。
-- 详情：[/202605/02/README](/202605/02/README)
+今日聚焦信号处理领域的“统一框架”研究，涵盖稀疏恢复与柔性天线系统两大前沿。
+重点关注分数阶正则化对稀疏恢复的性能优化，以及感知辅助技术在柔性天线信道估计中的应用。
+建议对信号处理算法及下一代通信架构感兴趣的读者，深入了解这两项旨在提升效率与精度的统一建模方案。
+- 详情：[/202605/03/README](/202605/03/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Magnetic Indoor Localization through CNN Regression and Rotation Invariance](/202605/02/2604.22896v1-magnetic-indoor-localization-through-cnn-regression-and-rotation-invariance)  
+1. [A Unified Fractional Regularization Framework for Sparse Recovery](/202605/03/2604.23184v1-a-unified-fractional-regularization-framework-for-sparse-recovery)  
    标签：评分：6.0/10、query:tmr
-   evidence：基于磁场特征和3D磁力计数据处理
-2. [Intelligent Self-tuning Active EMI Filtering for Electrified Automotive Power Systems Using Reinforcement Learning](/202605/02/2604.28084v1-intelligent-self-tuning-active-emi-filtering-for-electrified-automotive-power-systems-using-reinforcement-learning)  
+   evidence：高相干感知矩阵的稀疏恢复算法
+2. [Sensing-Assisted Channel Estimation for Flexible-Antenna Systems: A Unified Framework](/202605/03/2604.27626v1-sensing-assisted-channel-estimation-for-flexible-antenna-systems-a-unified-framework)  
    标签：评分：6.0/10、query:tmr
-   evidence：电力电子有源电磁干扰滤波与干扰抑制
+   evidence：柔性天线/传感器阵列的重构算法
 
 
 <div class="dpr-home-promo-card">

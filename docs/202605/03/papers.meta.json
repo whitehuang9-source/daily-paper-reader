@@ -1,0 +1,37 @@
+{
+  "label": "2026-05-03",
+  "date": "2026-05-03",
+  "generated_at": "2026-05-03T20:24:20",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202605/03/2604.23184v1-a-unified-fractional-regularization-framework-for-sparse-recovery",
+      "section": "quick",
+      "title_en": "A Unified Fractional Regularization Framework for Sparse Recovery",
+      "authors": "Yinhao Zhao, Haoyu He, Chuanqi Ma, Hao Wang",
+      "date": "2026-04-25",
+      "pdf": "https://arxiv.org/pdf/2604.23184v1",
+      "score": "6.0",
+      "evidence": "高相干感知矩阵的稀疏恢复算法",
+      "tldr": "本研究针对稀疏信号恢复问题，提出了一个基于 l1/lp^q 模型的统一分数正则化框架。理论上证明了该模型与减法 l1-αlp 模型的一阶驻点等价性，并建立了受限等距性质（RIP）下的新恢复条件。通过主算子最小化（MM）算法求解，并在核磁共振成像（MRI）等实验中验证了其在处理高相干感知矩阵时的优越性能。",
+      "tags": "query:tmr",
+      "abstract_en": "We propose a unified fractional regularization framework for sparse signal recovery based on the $\\ell_1/\\ell_p^q$ model. Our main theoretical contribution is the characterization of the equivalence between the first-order stationary points of the $\\ell_1/\\ell_p^q$ formulation and the subtractive $\\ell_1 - α\\ell_p$ model, providing a unified perspective on these nonconvex regularizers. In addition, we establish a new sufficient recovery condition under the Restricted Isometry Property (RIP), showing that the framework's robustness even under high-coherence sensing matrices. To solve the resulting problem, we develop a majorization-minimization (MM) algorithm and prove its convergence via the Kurdyka-Lojasiewicz (KL) property. Numerical experiments on different sensing matrices and MRI reconstruction demonstrate that the proposed approach consistently outperforms existing methods.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/03/2604.27626v1-sensing-assisted-channel-estimation-for-flexible-antenna-systems-a-unified-framework",
+      "section": "quick",
+      "title_en": "Sensing-Assisted Channel Estimation for Flexible-Antenna Systems: A Unified Framework",
+      "authors": "Ruoxiao Cao, Wentao Yu, Zixin Wang, Shenghui Song, Jun Zhang, Yi Gong, Khaled B. Letaief",
+      "date": "2026-04-30",
+      "pdf": "https://arxiv.org/pdf/2604.27626v1",
+      "score": "6.0",
+      "evidence": "柔性天线/传感器阵列的重构算法",
+      "tldr": "针对6G柔性天线系统信道估计开销大的问题，本文提出一种统一的感知辅助框架。该框架通过两阶段处理，先利用上行数据符号解析波达方向（DOA），再用极少量导频校准增益。针对不同环境提出SOC-Newton-MUSIC和FOC-Newton-MUSIC算法，利用高阶统计量扩展自由度，并采用牛顿优化替代网格搜索，在降低导频开销的同时保证了估计精度。",
+      "tags": "query:tmr",
+      "abstract_en": "Flexible-antenna systems, which use a small number of radio frequency (RF) chains to dynamically access a large set of candidate antenna locations, have emerged as a hardware-efficient architecture for 6G networks. Acquiring accurate channel state information (CSI) is critical for these systems, but it typically incurs a prohibitive pilot overhead that scales with the massive number of candidate locations. To address this bottleneck, we propose a unified sensing-assisted channel estimation framework tailored for flexible-antenna systems. It reduces the full CSI reconstruction problem to a consistent two-stage process: it first resolves the dominant DOAs from the uplink data symbols by exploiting the spatial geometry, requiring no dedicated sensing pilot, and then calibrates the associated path gains using a minimal number of calibration pilots. Building on this pipeline, we develop two Newton-MUSIC algorithms tailored to different propagation environments. For line-of-sight (LOS)-dominant environments with uncorrelated sources, we propose SOC-Newton-MUSIC, which leverages second-order covariance (SOC) for low-complexity DOA sensing. For non-line-of-sight (NLOS) environments with coherent multipath, where the number of sources may exceed the number of activated RF chains, we propose FOC-Newton-MUSIC, which exploits fourth-order cumulants (FOC) to restore source identifiability and structurally expand the available spatial degrees of freedom (DOFs) through a continuous difference co-array. In both cases, by reformulating the spatial spectrum search as a continuous optimization problem, we replace exhaustive dense grid searches with parallelized Newton refinements.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
