@@ -6,29 +6,29 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-03
-- 运行时间：2026-05-03 20:24:13 UTC
+- 最新运行日期：2026-05-04
+- 运行时间：2026-05-04 20:21:53 UTC
 - 运行状态：成功
 - 本次总论文数：2
 - 精读区：0
 - 速读区：2
 
 ### 今日简报（AI）
-今日聚焦信号处理领域的“统一框架”研究，涵盖稀疏恢复与柔性天线系统两大前沿。
-重点关注分数阶正则化对稀疏恢复的性能优化，以及感知辅助技术在柔性天线信道估计中的应用。
-建议对信号处理算法及下一代通信架构感兴趣的读者，深入了解这两项旨在提升效率与精度的统一建模方案。
-- 详情：[/202605/03/README](/202605/03/README)
+今日聚焦电力网络拓扑估算与参数依赖型信号解混的几何特性研究。
+重点探讨了利用相量测量数据重构电网结构，以及最小二乘法在复杂信号分离中的局部几何表现。
+建议关注高精度测量技术在能源互联网与信号处理领域的交叉应用。
+- 详情：[/202605/04/README](/202605/04/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [A Unified Fractional Regularization Framework for Sparse Recovery](/202605/03/2604.23184v1-a-unified-fractional-regularization-framework-for-sparse-recovery)  
+1. [Electric Grid Topology and Admittance Estimation using Phasor Measurements](/202605/04/2605.00404v1-electric-grid-topology-and-admittance-estimation-using-phasor-measurements)  
    标签：评分：6.0/10、query:tmr
-   evidence：高相干感知矩阵的稀疏恢复算法
-2. [Sensing-Assisted Channel Estimation for Flexible-Antenna Systems: A Unified Framework](/202605/03/2604.27626v1-sensing-assisted-channel-estimation-for-flexible-antenna-systems-a-unified-framework)  
+   evidence：用于电网参数估计的电流相量测量
+2. [Local Geometry of Least Squares for Unmixing Signals with Parameter-Dependent Dictionaries](/202605/04/2605.00585v1-local-geometry-of-least-squares-for-unmixing-signals-with-parameter-dependent-dictionaries)  
    标签：评分：6.0/10、query:tmr
-   evidence：柔性天线/传感器阵列的重构算法
+   evidence：基于参数相关字典的信号最小二乘重构
 
 
 <div class="dpr-home-promo-card">

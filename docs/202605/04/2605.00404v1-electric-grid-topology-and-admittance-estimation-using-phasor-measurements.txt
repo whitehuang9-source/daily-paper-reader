@@ -1,0 +1,753 @@
+Title: Electric Grid Topology and Admittance Estimation using Phasor Measurements
+
+URL Source: https://arxiv.org/pdf/2605.00404v1
+
+Published Time: Mon, 04 May 2026 00:30:08 GMT
+
+Number of Pages: 12
+
+Markdown Content:
+# Electric Grid Topology and Admittance Estimation using Phasor Measurements 
+
+Norak Rin a,d, ∗, Iman Shames b, Ian R. Petersen a, Elizabeth L. Ratnam c,d 
+
+> aSchool of Engineering, The Australian National University, Australia, 108 North Rd, Acton, 2601, ACT, Australia
+> bDepartment of Electrical and Electronic Engineering, The University of Melbourne, Grattan Street, Parkville, 3010, Victoria, Australia
+> cDepartment of Electrical and Computer Systems Engineering, Monash University, 14 Alliance Lane, Clayton, 3800, Victoria, Australia
+> dCSIRO, 10 Murray Dwyer Circuit, Mayfield West, 2304, NSW, Australia
+
+Abstract 
+
+Recent advances in precise phasor measurement units are enabling new approaches to estimate distribution and transmission grid parameters in real-time. In this paper, we investigate voltage and current phasor measurement requirements to estimate the electric grid topology and admittance parameters. We show necessary and su ffi cient conditions for the number of independent operating points (measurements) required to determine the topology and admittance of a completely unknown electric grid. With prior topology information, we also show that there is a minimum number of measurements required to uniquely determine the admittance matrix and corresponding grid topology. In the presence of noisy phasor measurements, we show that the admittance matrix can be estimated using a structured total least squares approach. By means of numerical simulations on the IEEE 13-node distribution feeder, the IEEE 14-node transmission network, and the IEEE 123-node distribution feeder, we demonstrate our approach is suitable for applications in radial and mesh grid topologies in the presence of measurement noise. 
+
+Keywords: Admittance estimation, Grid Topology, Rank conditions, Structured total least squares. 
+
+1. Introduction 
+
+The rapid uptake of distributed and renewable energy tech-nology across the globe is driving a transformation of the elec-tric grid [1, 2]. At the same time, precise phasor measurement units are being dispatched to measure and observe power sys-tems behavior from the transmission-level [3] to the distribution grid [4, 5]. Accordingly, new approaches to real-time estima-tion of the grid topology, admittance parameters, and conductor loadings under new and evolving grid conditions are possible — supporting power systems operators as the grid transforms to meet net-zero operations [6, 7]. Topology identification of both the transmission and distri-bution grid supports power system operators in times such as severe weather events (e.g. storms) when extensive damage to electrical infrastructure is possible. That is, grid operators are responsible for the restoration of the power grid in the aftermath of a storm — and a key element of the restoration process is topology identification [8]. Combining topology identification with admittance estimation can enhance grid operation under evolving conditions — that is, grid controllers and impedance protection settings can be updated to reduce the risk of misop-eration [9, 10, 11]. Several authors have proposed methods to estimate the elec-tric grid topology and admittance parameters in distribution grids [12, 13, 14]. For instance, Mo ff at et al. in [12] show that, with phasor measurements unavailable at every node of the distribution grid, admittance estimation is generally limited   
+
+> ∗Corresponding author.
+> Email address: Norak.rin@anu.edu.au (Norak Rin )
+
+to e ff ective impedance between measured nodes. However, for radial networks, the topology and admittance can be uniquely recovered. The authors in [12] introduce a subKron represen-tation and Complex Recursive Grouping algorithm to improve estimation in the presence of noise. Similarly, Yuan et al. in [13] show that the admittance matrix can be uniquely recov-ered from phasor measurements when all nodes are observed, and that only a Kron-reduced matrix is identifiable with hidden nodes. For radial networks, they establish theoretical conditions enabling exact recovery of the admittance matrix from its Kron reduction. Ardakanian et al. in [14] employ phasor measure-ments to estimate the grid topology and admittance parameters by formulating a convex optimization problem using sparsity-based regularization. They also propose algorithms to mitigate low-rank measurement issues and enable timely detection of grid topology changes. Many existing regression-based approaches to estimate the grid topology and admittance parameters using synchrophasor measurements assume prior knowledge of the grid topology. For example, Lang et al. in [15] propose an admittance param-eter estimation problem using a structured total least squares approach that presumes prior knowledge of the grid topology. Similarly, Mishra and de Callafon in [16] assume prior knowl-edge of the grid topology in their proposed least squares ap-proach to estimate three-phase line admittance parameters in the grid. In contrast, Zhang et al. in [17] does not incorporate prior topology information in their proposed linear regression approach to estimate the admittance parameters of a distribution grid. However, with the exception of [8] and [16], none of the aforementioned approaches [12, 14, 13, 15, 17] provide a quan-
+
+> arXiv:2605.00404v1 [eess.SY] 1 May 2026
+
+tification of the number of measurements required to estimate the grid topology and admittance parameters. In fact, although [8] and [16] discuss the required number of measurements, nei-ther provides a proof of the necessary and su ffi cient conditions to substantiate their claims. Furthermore, the authors in [8] do not clearly state whether the proposed condition applies to both radial and meshed power grids, thereby limiting the generality and applicability of the results. In this paper, we present a fundamental new result giving necessary and su ffi cient conditions for the number of indepen-dent operating points (i.e., measurements) required to estimate the topology and admittance parameters of a completely un-known electric grid. A single measurement (i.e., an operating point) corresponds to the collection of time-synchronised volt-age and current phasor measurements at all grid nodes. That is, we assume a phasor measurement unit (PMU) is located at each node and measures the state variables; i.e., the voltage and cur-rent phasors for each phase. To estimate the grid topology and admittance parameters, we first construct an admittance matrix. We then use Kirchho ff ’s laws to derive a set of equations in-volving the admittance matrix, and we examine the invertibility of the equations to determine the admittance parameters. Next, we show that there is a minimum number of measurements re-quired to uniquely estimate the grid topology and admittance parameters with and without prior topology information. The prior topology information includes knowledge that the grid has a tree topology, or that a single edge is non-existent in the graph defining the grid. We also consider the case of noisy synchrophasor measure-ments where, we formulate a structured total least squares prob-lem to estimate the grid topology and admittance parameters. Our results are applicable to transmission, distribution, bal-anced or unbalanced, radial or meshed topologies, providing an analytical foundation for quantifying the measurement require-ments in topology and admittance estimation. This paper extends our conference paper [18] in a number of ways. First, we provide a fundamental limit on the infor-mation required to uniquely determine a completely unknown network. The result is applicable regardless of the network size. Second, we also show that there is a minimum number of measurements required for topology and admittance esti-mation when there is certain prior topology information. We provide the proofs for all our theorems and lemmas, support-ing the reproducibility of our contributions. Third, we propose new methods for grid topology and admittance estimation in the presence of noisy synchrophasor measurements, considering a structured total least squares problem. Also, our numerical sim-ulations are more realistic and extensive and consider the case of noisy synchrophasor data using the IEEE 13-node distribu-tion feeder, and the IEEE 14-node network. Furthermore, we consider the IEEE 123-node feeder with prior topology infor-mation to demonstrate the scalability of our approach to larger networks. To implement our approach to electric grid topology and ad-mittance estimation, we take the following steps. First, we en-sure all grid nodes are equipped with a PMU. Second, we col-lect a minimum number of voltage and current phasor measure-ments at each node in the electric grid according to whether prior topology information is available. Next, if there is no (or limited) prior topology information, we assume all the nodes are connected, that is, we consider a complete graph (or a com-plete graph minus one edge). Then, we seek to obtain a unique solution to a system of equations as derived from Kirchho ff ’s laws for the graph. Once the unique solution is obtained, the admittance parameters for each edge in the graph are known. Accordingly, edges with non-zero admittance parameters rep-resent the true electric grid topology. In the case of noisy synchrophasor measurements, we extend our approach after collecting PMU measurements. Specifically, we solve a structured total least squares problem to obtain ad-mittance parameters for each edge of the complete graph. Then, we seek to identify which edges of the complete graph do not exist in the true graph via a thresholding process. The organization of this paper is as follows. In Section 2, we introduce some graph preliminaries and the system of equa-tions for an electric grid based on Kirchho ff ’s laws. In Sec-tion 3, we derive the minimum number of phasor measurements required to estimate the electric grid topology and admittance parameters both with and without prior topology information. In Section 4, we consider noisy synchrophasor measurements and construct a structured total least squares problem. In Sec-tion 5, we present numerical simulations for both distribution and transmission networks, which is followed by Conclusions in Section 6. 
+
+Notation 
+
+Let Rn and Cn denote the sets of n-dimensional vectors of real and complex numbers, respectively. Let Sn denote the set of n×n complex symmetric matrices. For a matrix X ∈ Rm×n (or 
+
+Cm×n) with m-by-n dimensions, Xi, j denotes the element cor-responding to row i and column j, and X⊤ ∈ Rn×m (or X† ∈
+
+Cm×n) denotes its transpose (or Hermitian transpose). Let 1n
+
+and 0n ∈ Rn denote n-dimensional vectors which have all ele-ments equal to 1 and 0. Let D = diag ( a1, a2, . . . , an) ∈ Rn×n (or 
+
+Cn×n) denote a diagonal matrix where 
+
+Di, j =
+
+
+
+ai if i = j ∈ { 1, 2, . . . , n},
+
+0 if i , j.Throughout, boldface represents vector or matrix quantities whereas scalar quantities are non-bold. 
+
+2. Preliminaries 
+
+We now introduce notation and concepts that underpin our approach to estimate the topology and admittance parameters of an electric grid. Our approach assumes no prior information, is underpinned by graph theory, and can be applied to any kind of power grid topology (e.g., radial, meshed, unbalanced, etc). Consider a complete graph G(N, E) that consists of the node set N = {1, 2, . . . , n} and the edge set E = {(i, j)|i ∈ N , j ∈N, i < j}, where edge ( i, j) ∈ E connects node i and node 
+
+j. Note that we use the ordered pair convention for ease of 2Figure 1: An example graph G(N, E), where n = 3. Admittance parameters are represented by y1,3, y1,2, y2,3.
+
+presentation and the underlying graph is assumed to be undi-rected. The graph G(N, E) is also assumed to be a weighted graph where each edge ( i, j) ∈ E is assigned a weight αi, j. Let 
+
+e denote the cardinality of the set E, such that |E| = e. Then, by definition of a complete graph for G(N, E), e = n(n − 1) /2. Let 
+
+H ∈ Rn×e denote the incidence matrix of the undirected graph 
+
+G(N, E). The il -th element of H, denoted by Hi,l, with i ∈ N 
+
+and l ∈ E , is defined by 
+
+Hi,l :=
+
+
+
+1 if edge l leaves node i,
+
+−1 if edge l enters node i,
+
+0 otherwise .
+
+(1) In what follows, we will use the graph G(N, E) to represent any complete network of admittance. Fig. 1 illustrates an exam-ple of a complete graph G(N, E), where n = 3. Here, the weight of each edge ( i, j) ∈ E corresponds to an admittance parameter ,
+
+yi, j ∈ C; e.g., the admittance of a transmission line or a trans-former. The voltage at node j ∈ N is denoted by V j ∈ C, and it is measured with respect to the ground. Each current source injects current I j ∈ C into node j ∈ N .To develop the relationship between V j and I j, where j ∈ N ,consider the graph G(N, E). For all nodes in G(N, E), the volt-age vector is denoted by V = [V1, V2, . . . , Vn]⊤ ∈ Cn and the 
+
+current vector is denoted by I = [I1, I2, . . . , In]⊤ ∈ Cn. Accord-ingly, the admittance matrix is denoted by Y ∈ Sn, where each element of Y is defined by 
+
+Yi, j :=
+
+
+
+> n
+
+P
+
+> k=1,
+> k,i
+
+yi,k if i = j,
+
+−yi, j if i , j.
+
+According to [19, Chapter 10], the relationship between V and 
+
+I, as derived from Kirchho ff ’s laws, is 
+
+I = YV , (2) where Y1n = 0n.In (2), we considered a single measurement of the voltage vector V and the current vector I. Next, we consider a series of voltage and current measurements V and I in order to uniquely identify the grid topology and admittance parameters. Suppose that di ff erent measurements of V and I are indexed by k ∈ T =
+
+{1, 2, . . . , τ }, ( τ ≤ n). That is, V(k) ∈ Cn denotes the voltage vector measured corresponding to k ∈ T and I(k) ∈ Cn denotes the current vector measured corresponding to k ∈ T . In the sequel, we assume that the vector pairs ( I(k), V(k)) are known exactly for all k ∈ T and that the measurements are such that each voltage vector V(1) , V(2) , . . . , V(τ) and each current vector 
+
+I(1) , I(2) , . . . , I(τ) are distinct from one another, that is, V(k) 
+
+> j
+
+,
+
+V(˜ k) 
+
+> j
+
+and I(k) 
+
+> j
+
+, I(˜ k) 
+
+> j
+
+, where j ∈ N , k ∈ T , ˜ k ∈ T , and k ,
+
+˜k. Considering measurements corresponding to all k ∈ T , the 
+
+voltage matrix u ∈ Cn×τ and the current matrix i ∈ Cn×τ are formed as u = hV(1) , V(2) , . . . , V(τ)i and i = hI(1) , I(2) , . . . , I(τ)i,respectively. We rewrite (2) as 
+
+i = Yu . (3) 
+
+3. Problem Formulation 
+
+In this section, we show that there is a minimum number of measurements required to uniquely estimate the grid topol-ogy and admittance parameters. In Section 3.1, we consider the case where we have no prior information of the electric grid. In Section 3.2, we consider the case where we have prior topol-ogy information of the electric grid; i.e., we consider a general graph. We show the minimum number of measurements re-quired when the general graph reduces to a rooted tree. Then in Section 3.3, we consider a special case where we have limited prior topology information, i.e., a single edge is non-existent in the electric grid topology. 
+
+3.1. Admittance matrix estimation with a complete graph 
+
+We consider the case where we have no prior information of the electric grid; i.e., we consider the complete graph G(N, E). We assume that sinusoidal currents are applied at the same fre-quency and τ synchrophasor measurements (both current and voltage phasors) are collected at each node via PMUs. 
+
+Problem 1. Consider an admittance network as defined by 
+
+G(N, E) with an unknown admittance matrix Y ∈ Cn×n. Sup-pose that τ measurements are carried out where for each mea-surement index k ∈ T , the current vector applied to the network is defined by I(k) ∈ Cn and the corresponding voltage vector 
+
+V(k) ∈ Cn is measured. We seek to find the minimum number of measurements τ required to uniquely determine the unknown admittance matrix Y.
+
+In electric grid analysis, particularly distribution grid analy-sis, the first node is typically a substation node which is repre-sented by a slack bus. The voltage of the slack bus is usually assumed V1 = 1 p.u., or otherwise, V1 is known. We remove the slack bus node from our analysis, and redefine the voltage and current matrices as follows. The reduced voltage matrix ¯u ∈
+
+C(n−1) ×τ and the reduced current matrix ¯i ∈ C(n−1) ×τ, each con-taining one fewer row than u and i, respectively, as in (3). Cor-respondingly, the reduced admittance matrix ¯Y ∈ C(n−1) ×(n−1) 
+
+has one fewer row and column than the original admittance ma-trix Y. The relationship expressed in (3) can therefore be refor-mulated as ¯i = ¯Y ¯v, (4) where ¯ v = ¯u − V11(n−1) ×τ ∈ C(n−1) ×τ; see also [8]. 3Remark 1. Once the reduced admittance matrix ¯Y is identi-fied, the original admittance matrix Y is determined via Y ="Y1,1 y⊤
+
+> 1
+
+y1 ¯Y
+
+#
+
+, where y1 = ¯Y1n−1.
+
+In the following theorem, we provide the solution to Prob-lem 1. That is, we specify the necessary and su ffi cient condi-tions for the minimum number of measurements τ required to uniquely determine the reduced admittance matrix ¯ Y.
+
+Theorem 1. The reduced admittance matrix ¯Y can be uniquely determined if and only if the number of measurements τ ≥ n − 1
+
+and ¯v ∈ C(n−1) ×τ is of full rank. Proof. If τ = n − 1 and ¯ v ∈ C(n−1) ×τ is invertible, then ¯ Y can be uniquely determined from (4) via the formula ¯Y = ¯i¯v−1.
+
+If τ > n − 1 and ¯ v ∈ C(n−1) ×τ is of full rank, then ¯ Y can be uniquely determined from (4) via the formula ¯Y = ¯i¯v†(¯ v¯v†)−1.
+
+We have now proved the su ffi cient part of the theorem. If τ < 
+
+n − 1 or τ ≥ n − 1 and ¯ v ∈ C(n−1) ×τ is not of full rank, then there exists a non-zero vector w ∈ Cn−1 such that w⊤ ¯v = 0. Let ˜Y = ¯Y − ww ⊤. (5) Right-multiplying both sides of (5) by ¯ v, we have ˜Y ¯v = ¯Y ¯v − ww ⊤ ¯v. (6) Since ¯ i = ¯Y ¯v and w⊤ ¯v = 0, equation (6) becomes ˜Y ¯v = ¯i. (7) Thus, ¯ Y is not uniquely determined from (4). This establishes the necessary part of the theorem. ■
+
+3.2. Admittance matrix estimation with a general graph 
+
+We consider the case where we have prior topology infor-mation of the electric grid; i.e., we consider a general graph denoted by bG(N, bE), where bE ⊆ E . The cardinality of bE is denoted by be. We assume sinusoidal currents are applied at the same frequency and τ synchrophasor measurements (cur-rent and voltage phasors) are collected at each node via PMUs. Next, we introduce additional preliminary notation. We rewrite the relationship between V and I by incorporating the incidence matrix H. Corresponding to the complex symmetric matrix Y, we define a complex admittance vector by 
+
+y := [−Y2,1, −Y3,1, . . . , −Yn,1, −Y3,2, . . . , −Yn,n−1]⊤ ∈ Cbe.
+
+Note that in the definition of y, we have used the fact that Y1n =
+
+0n to remove the redundant diagonal elements of Y; see also [13]. Using this notation, we can rewrite (2) as 
+
+I = Hdiag( H⊤V)y. (8) We denote by ˜ A(V) = Hdiag( H⊤V) ∈ Cn×be, the voltage coe ffi -cient matrix . Then, (8) can be equivalently written as 
+
+I = ˜A(V)y. (9) For a series of voltage and current measurements k ∈ T =
+
+{1, 2, . . . , τ }, ( τ ≤ n), we can rewrite (9) as 
+
+I(k) = ˜A(V(k))y, ∀k ∈ T , (10) where ˜A(V(k)) denotes the voltage coe ffi cient matrix con-structed from the voltage vector measured corresponding to 
+
+k ∈ T . Considering measurements corresponding to all k ∈ T ,the voltage and current vectors are stacked as follows: 
+
+v =
+
+
+
+V(1) 
+
+V(2) 
+
+...
+
+V(τ)
+
+
+
+∈ Cnτ and ˜ i =
+
+
+
+I(1) 
+
+I(2) 
+
+...
+
+I(τ)
+
+
+
+∈ Cnτ.
+
+We then rewrite (10) as ˜i = A(v)y, (11) where 
+
+A(v) =
+
+
+
+˜A(V(1) )˜A(V(2) )
+
+...
+
+˜A(V(τ))
+
+
+
+∈ Cnτ×be.
+
+The A(v) matrix is also referred to as the voltage coe ffi cient ma-trix . That is, both A(v) and ˜ A(V) contain the incidence matrix, 
+
+H, and the voltage vector, V.A nodal voltage vector for node i ∈ N is denoted by 
+
+Vi and defined by Vi = [V(1)  
+
+> i
+
+, V(2)  
+
+> i
+
+, . . . , V(τ) 
+
+> i
+
+]⊤ ∈ Cτ, where 
+
+{1, 2, . . . , τ } ∈ T . Likewise, A nodal current vector for node 
+
+i ∈ N is denoted by Ii and defined by Ii = [I(1)  
+
+> i
+
+, I(2)  
+
+> i
+
+, . . . , I(τ) 
+
+> i
+
+]⊤ ∈
+
+Cτ, where {1, 2, . . . , τ } ∈ T .
+
+Theorem 2. A unique solution to (11) exists if and only if the rank of the voltage coe ffi cient matrix A(v) is equal to the num-ber of unknown admittance parameters be. Proof. The proof follows directly from the Rouché-Capelli Theorem in [20, Chapter 2] regarding the existence of a unique solution to an overdetermined system of linear equations. ■
+
+Remark 2. The condition in Theorem 2 holds for a general graph bG representing any kind of network topology; i.e., a com-plete or incomplete graph. 
+
+Theorem 3. For a rooted tree denoted by eG(N, eE) ⊆ bG(N, bE)
+
+where eE ⊆ bE; e.g, a radial distribution feeder, the minimum number of measurements τ such that (11) has a unique solution is τ = 1.Proof. The cardinality of eE is denoted by ee. According to [21], the number of edges for the graph ˜ G is ee = n − 1. For the graph 
+
+eG, when τ = 1, rank( A(v)) = rank( H) = n − 1 [22]. Thus, a unique solution to (11) exists since rank( A(v)) = ee. ■
+
+43.3. Admittance matrix estimation with a complete graph mi-nus one edge 
+
+We now consider a special case where we have limited prior information of the electric grid topology, i.e., a single edge is non-existent in the graph corresponding to the electric grid topology. Specifically, the electric grid in this special case cor-responds to a complete graph with one edge removed. We de-fine a subgraph G(N, E) ⊂ G (N, E) by removing one edge from 
+
+E. Here, |E| = ¯e = e − 1. Again, we assume that sinusoidal cur-rents are applied at the same frequency and τ synchrophasor measurements (both current and voltage phasors) are collected at each node via PMUs. 
+
+Problem 2. Consider an admittance network as defined by a graph G(N, E) with an unknown admittance matrix Y. Suppose that τ phasor measurements are carried out where for each measurement index k ∈ T the current applied to the network is I(k) ∈ Cn and the corresponding voltage V(k) ∈ Cn is mea-sured. We seek to find the minimum number of measurements τ
+
+required to uniquely determine the unknown admittance matrix 
+
+Y.
+
+Solving Problem 2 is equivalent to finding conditions on A(v)that produce a unique solution to (11). From Theorem 2, a unique solution exists if and only if rank( A(v)) = e = e − 1. For a complete graph, e is equal to n(n − 1) /2. Thus, we seek to find the minimum value of τ for which rank( A(v)) = n(n − 1) 2 − 1. (12) Next, we introduce the concept of genericity in order to find the minimum number of measurements τ such that the electric grid topology and admittance parameters can be uniquely de-termined. See the Appendix for further details on genericity. 
+
+Definition 1. [23, Definition 6] The nodal voltage vectors 
+
+[V1, V2, . . . , Vn] are generic if they do not satisfy any non-zero algebraic equation with rational coe ffi cients. 
+
+Remark 3. If the nodal voltage vectors [V1, V2, . . . , Vn] are linearly dependent, then they are not generic. 
+
+In the following theorem, we derive a formula for the mini-mum number of measurements τ required to uniquely identify the electric grid topology and admittance parameters when one edge is non-existent in the complete graph. That is, we know that one edge does not exist in the grid topology. 
+
+Theorem 4. For graph G(N, E), where the number of nodes n ≥ 4, assume the nodal voltage vectors [V1, V2, . . . , Vn] are generic. Assume the electric grid topology can be represented by G(N, E). Then the grid topology and admittance parameters can be uniquely determined if and only if τ ≥ n − 2.Proof. See the Appendix. ■
+
+Remark 4. We outline our approach to estimate the electric grid topology. At each node in the electric grid, collect τ mea-surements to find a unique solution y. Following Theorem 1, 3 or 4, the unique solution y corresponds to τ = n − 1, τ = 1,or τ = n − 2, respectively. Then, find the edge (i, j) such that the admittance parameters Y i, j = 0. Here, edge (i, j) ∈ E , eE,or E in the graph G, eG, or G, respectively. Edges with non-zero admittance parameters represent the true grid topology. 
+
+Remark 5. Our approach to electric grid topology and ad-mittance estimation can be applied to any kind of electrical network (e.g., radial, meshed, three-phase, single-phase, etc). We initially consider a complete graph as it reflects the case of not having any prior information of the yet-to-be-estimated true grid topology. Our estimation process reveals edges with non-zero admittance parameters which define the true electric grid topology (that is typically not a complete graph). 
+
+4. Admittance matrix estimation in the presence of noise 
+
+In the previous section, we showed that, in the absence of noisy measurements, there is a minimum number of voltage and current measurements required for admittance matrix iden-tification. In practice, synchrophasor measurements are noisy. Accordingly, in this section, we consider the case where both the measured currents and voltages are noisy. Consider equation (10) at measurement index k ∈ T and re-write it to include measurement noise as 
+
+I(k) + ∆ I(k) = [ ˜ A(V(k)) + ∆ ˜A(V(k))] y, ∀k ∈ T , (13) where ∆I(k) ∈ Cn and ∆ ˜A(V(k)) ∈ Cn×be are the measurement noises, corresponding to measurement index k ∈ T , in I(k) and ˜A(V(k)), respectively. Specifically, ∆ ˜A(V(k)) consists of the inci-dence matrix H and the measurement noise in the voltage vector 
+
+∆V(k) ∈ Cn. For the measurement index k ∈ T , by equating real and imaginary terms, (13) can be rewritten as follows: 
+
+"I(k)
+
+> Re
+
+I(k)
+
+> Im
+
+#
+
++
+
+"∆I(k)
+
+> Re
+
+∆I(k)
+
+> Im
+
+#
+
+=
+
+"Hdiag( H⊤V(k) 
+
+> Re
+
+) −Hdiag( H⊤V(k)
+
+> Im
+
+)
+
+Hdiag( H⊤V(k)
+
+> Im
+
+) Hdiag( H⊤V(k) 
+
+> Re
+
+)
+
+#
+
++
+
+"Hdiag( H⊤∆V(k) 
+
+> Re
+
+) −Hdiag( H⊤∆V(k)
+
+> Im
+
+)
+
+Hdiag( H⊤∆V(k)
+
+> Im
+
+) Hdiag( H⊤∆V(k) 
+
+> Re
+
+)
+
+#! " yRe 
+
+yIm 
+
+#
+
+, ∀k ∈ T ,
+
+(14) where subscripts Re and Im represent the real and imaginary parts of the corresponding complex matrices, respectively. Next, our goal is to estimate yRe and yIm since there are many choices due to a larger number of equations than un-knowns (i.e., nτ > be). In this case, we have an overde-termined system of equations. Since there is measurement noise in both the dependent I(k) and independent ˜ A(V(k)) vari-ables, ∀k ∈ T , we can express the problem as a total least squares problem. The measurement noise ∆ ˜A(V(k)) will have the same structure as ˜ A(V(k)) according to the incidence matrix 
+
+H in ˜ A(V(k)), ∀k ∈ T . Accordingly, this type of total least square problem is known as a structured total least squares 
+
+problem; see [24]. Define a noise vector s(k) ∈ C2( n+be) by 
+
+s(k) := [( ∆V(k) 
+
+> Re
+
+)⊤, (∆V(k)
+
+> Im
+
+)⊤, (∆I(k) 
+
+> Re
+
+)⊤, (∆I(k)
+
+> Im
+
+)⊤]⊤, ∀k ∈ T . If the vector s(k) is regarded as deterministic unknowns, the structured 5total least squares problem can be formulated as an equality constrained optimization problem as follows: min 
+
+> (s(k))τ
+> k=1,yRe ,yIm
+
+12
+
+> τ
+
+X
+
+> k=1
+
+(s(k))⊤Ws(k)
+
+s.t. 
+
+"I(k)
+
+> Re
+
+I(k)
+
+> Im
+
+#
+
++
+
+"∆I(k)
+
+> Re
+
+∆I(k)
+
+> Im
+
+#
+
+=
+
+"Hdiag( H⊤V(k) 
+
+> Re
+
+) −Hdiag( H⊤V(k)
+
+> Im
+
+)
+
+Hdiag( H⊤V(k)
+
+> Im
+
+) Hdiag( H⊤V(k) 
+
+> Re
+
+)
+
+#
+
++
+
+"Hdiag( H⊤∆V(k) 
+
+> Re
+
+) −Hdiag( H⊤∆V(k)
+
+> Im
+
+)
+
+Hdiag( H⊤∆V(k)
+
+> Im
+
+) Hdiag( H⊤∆V(k) 
+
+> Re
+
+)
+
+#! " yRe 
+
+yIm 
+
+#
+
+, ∀k ∈ T ,
+
+(15) where W is a weighting matrix in R2( n+be) × 2( n + be) that is de-signed to penalize the error terms. The optimization problem (15) is non-convex due to the non-linear equality constraint. There are many approaches to finding local solutions to non-convex problems [25]. In [15], Newton’s method is used to locally solve the Karush-Kuhn-Tucker (KKT) conditions associated with the problem. We follow [15, Section 3] to solve the problem and find the admittance parameters. 
+
+Remark 6. The structured total least squares problem (15) 
+
+cannot be readily solved using o ff -the-shelf solvers and stan-dard computing hardware for networks larger than 34 nodes (translating to 561 decision variables). To address this, one can take advantage of collecting multiple measurements of the voltage coe ffi cient matrix ˜A(V(k)) and the current vector I(k) cor-responding to each measurement index k ∈ T under the as-sumption that the rate of the change in the operating condition is much lower than the rate at which the measurements can be collected. One then can use the average of the collected mea-surements as “surrogate" measurements ˜A(V(k)) and I(k). The averaged values ˜A(V(k)) and I(k) are then concatenated corre-spondingly for all k ∈ T to obtain A(v) and ˜i. The admit-tance parameters can then be determined by solving the ordi-nary least squares corresponding to solving (11) , rather than the structured total least squares problem (15) . The procedure above relies on the plug-in principle to estimate the admittance parameters [26]. 
+
+In Algorithm 1, we determine the estimated grid topology ,ˆG(N, ˆE) and the estimated admittance vector , ˆ y, using noisy measurements. Specifically, for a given set of nodes N, we es-timate the set of edges ˆ E of the graph ˆ G(N, ˆE). Prior topology information is an input to Algorithm 1, which we denote by β.Specifically, prior topology information includes: (1) we know the grid topology is a tree, i.e., β = eG; or (2) we know one edge is non-existent in the electric grid, i.e., β = G. Otherwise, with no prior topology information, we estimate the grid topology with a complete graph G, i.e., β = 0. In Algorithm 1 (line 1), we determine the minimum number of measurements accord-ing to whether or not we have prior topology information (see Theorems 1, 3 and 4). In Line 2, we collect noisy voltage and current measurements up to the required minimum number τ.In Line 3, we construct the incidence matrix H for the graph corresponding to the prior topology information input, β, as de-fined in (1). In Line 4, we solve the optimization problem (15) to obtain yRe and yIm . In Lines 5-9, we seek to estimate the ad-mittance vector ˆ y. More specifically, in Lines 6-8 we set to zero the admittance parameters with a magnitude that is less than a design threshold, α. In Line 10, we determine the set of edges with nonzero admittance parameters ˆ E. In Line 11, we return the estimated topology ˆ G(N, ˆE). 
+
+Algorithm 1 Returning the Estimated Grid Topology ˆ G and Es-timated Admittance Vector ˆ y using Noisy Measurements. 
+
+Input: β = {0, eG, G} , n, α = 10 −5, {V(k), I(k)}n−1 
+
+> k=1
+
+, W. 
+
+> 1:
+
+{τ, be} ← 
+
+
+
+if β = 0; τ = n − 1,be = n(n−1) 2 ;
+
+if β = eG; τ = 1,be = n − 1; 
+
+if β = G; τ = n − 2,be = n(n−1) 2 − 1. 
+
+> 2:
+
+Collect V(k) and I(k) for all k = {1, 2, . . . , τ }. 
+
+> 3:
+
+Construct H ∈ Rn×be. 
+
+> 4:
+
+Solve (15) to obtain yRe , yIm . 
+
+> 5:
+
+Construct ˆ y = [yRe + iyIm ] = [ˆ y1,2, ˆy1,3, . . . , ˆyn−1,n].  
+
+> 6:
+
+for edge ( i, j) = 1 : be do  
+
+> 7:
+
+|ˆyi, j| < α → ˆyi, j = 0.  
+
+> 8:
+
+end for  
+
+> 9:
+
+return ˆy = [ˆ y1,2, ˆy1,3, . . . , ˆyn−1,n].  
+
+> 10:
+
+ˆE ← { (i, j) : ˆ yi, j , 0}. 
+
+> 11:
+
+return ˆG(N, ˆE). 
+
+5. Numerical simulation 
+
+In this section, we illustrate our theorems for the cases where the electric grid is defined by a complete graph G(N, E), a tree eG(N, eE), and a complete graph minus one edge G(N, E). Specifically, without measurement noise, we illustrate the min-imum number τ of voltage and current phasor measurements required to uniquely estimate the topology and admittance pa-rameters of the grid. In the presence of measurement noise, we estimate the topology and admittance parameters with τ voltage and current phasor measurements using the proposed structured total least squares approach. Note that each node is equipped with a PMU and, for each measurement, voltage and current phasors are collected from each node in the grid. 
+
+5.1. Admittance matrix estimation without prior topology in-formation 
+
+In the absence of measurement noise, we uniquely estimate the topology and admittance parameters of a modified version of the IEEE 13-node feeder [27]. The IEEE 13-node feeder represents a three-phase unbalanced distribution feeder, with single-phase and two-phase laterals. We modify the IEEE 13-node feeder by replacing the transformer between nodes 5 and 6, and the switch between nodes 7 and 10 with the admittance reported between nodes 2 and 5, and between nodes 10 and 11, respectively. We also remove the capacitors between nodes 9 and 11 as done in [29]. In Fig. 2 (a), we present the modified IEEE 13-node feeder. Each of the 13 nodes of the modified IEEE 13-node feeder represent phases a, b, c, or a combination of the three phases, 6Figure 2: Topology of: (a) a radial distribution feeder represented by a modified version of the IEEE 13-node feeder [27] and; (b) a transmission system repre-sented by an IEEE 14-node network [28]. The three-phase balanced nature of the IEEE 14-node network is reflected by the use of single lines. 
+
+that is, each node is either a single-phase node, a two-phase node or a three-phase node. More specifically, there are three-phase laterals from nodes 1–2–7–12, from nodes 2–5– 6, from nodes 7–10–11, and two-phase laterals from nodes 2– 4, nodes 7-8, and single-phase laterals from nodes 8–9 and nodes 8–13. In total, the IEEE 13-node feeder can be repre-sented by 32 single phase nodes. In what follows, the 32 single phase nodes in the modified IEEE 13-node feeder are represented by a complete graph. That is, we consider an admittance network defined by G(N, E), with 
+
+n = 32. To identify the topology and admittance parameters of the modified IEEE 13-node feeder, we first collect voltage and current phasor measurements at each of the 32 nodes. We consider τ voltage measurements [ V(1) , V(2) , . . . , V(τ)] and cor-responding current measurements [ I(1) , I(2) , . . . , I(τ)]. Our approach to collect voltage and corresponding current measurements in order to obtain the admittance parameters for the graph G(N, E) follows. For the first measurements corre-sponding to k = 1, where k ∈ T , we construct the current I j at each node j ∈ N , adhering to Kirchho ff ’s current and voltage laws, where the voltage V j at each node j ∈ N is as specified by the IEEE 13-node feeder [27]. For the following measure-ments ( k > 1), the voltage vectors V(k) are selected by adding the voltage vector at k = 1, V(1) , to vectors of pseudorandom values between −0.05 |V(1) | and 0 .05 |V(1) |. The current vectors 
+
+I(k) are obtained similarly as in the first measurement. The volt-age and current phasor measurements for each of the nodes in the modified IEEE 13-node feeder are then applied to the re-spective nodes in the subgraph G(N, E). We obtain the admittance vector y in (11) by multiplying ˜ i
+
+by the pseudo-inverse of A(v). We observe that the identified admittance vector y corresponds to the admittance vector of the        
+
+> Table 1: Number of measurements required to uniquely identify the admittance vector yin (11) for graph G(N,E), where n=32.
+
+Number of measurements ( τ) rank( A(v)) Number of unknowns Solution 
+
+τ = 29 493 496 Not unique 
+
+τ = 30 495 496 Not unique 
+
+τ = 31 496 496 Unique modified IEEE 13-node feeder [27]. The identified grid topol-ogy as illustrated in Fig. 2 (a) is not a complete graph. Table 1 presents the number of measurements τ required for a unique solution of (11) for the radial distribution feeder as illustrated in Fig. 2 (a). At τ = 30 the solution remains non-unique, whereas at τ = 31 the rank of A(v) equals the number of unknowns, ensuring uniqueness. This is in agreement with Theorem 1 and 2, where at least 31 measurements ( τ = n − 1) are required to uniquely determine the admittance vector y.
+
+5.2. Admittance matrix estimation without prior topology in-formation and with noisy measurements 
+
+In the presence of noisy synchrophasor measurements, we estimate the topology and admittance parameters with τ volt-age and corresponding current phasor measurements using the proposed structured total least squares approach. That is, we apply the approach to the modified IEEE 13-node radial feeder that is represented by a complete graph G(N, E), with n = 32. As outlined in Algorithm 1, we first collect τ voltage and cur-rent phasor measurements. Then, the admittance vector is esti-mated by solving the equality constrained optimization (15) via Newton’s method as described in [15]. Note that the MATLAB ‘\’ command is used to solve the linear system of equations in [15, Equation (15)]. Next, we estimate the grid topology as in Algorithm 1, using a stopping criterion of 10 −5. All simula-tions are carried out on a MacBook Pro with 16GB RAM and 2.3 GHz Quad-Core Intel Core i7 processor. In what follows, we outline our approach to collecting noisy voltage and current measurements for each node. First, the volt-age vectors corresponding to k = 1, V(1) , for the IEEE 13-node are as reported in [27]. The following measurements ( k > 1) for the voltage vectors V(k) are obtained by adding the voltage vec-tor at k = 1, V(1) , to vectors of pseudorandom values between 
+
+−0.05 |V(1) | and 0 .05 |V(1) |. The current vectors I(k) are then ob-tained by multiplying ˜ A(V(k)) by the actual admittance param-eters y. Next, we introduce measurement noise to the modified IEEE 13-node feeder. Specifically, we represent the measure-ment noises ∆V(k) 
+
+> Re
+
+, ∆V(k)
+
+> Im
+
+, ∆I(k) 
+
+> Re
+
+, ∆I(k) 
+
+> Im
+
+using a standard normal distribution with zero mean and variance σ = 0.001 |V(1) |[30]. In Fig. 3, we present the total absolute error between the esti-mated admittance parameters and the actual admittance param-eters of the IEEE 13-node feeder in accordance with the number of measurements. According to Fig. 3, we observe a larger er-ror when the number of measurements is less than the minimum required of τ = n − 1 = 31, as per Theorem 1. Additionally, the error decreases with an increased number of measurements. 7Figure 3: Total absolute error between the estimated admittance (represented by the conductance and susceptance) and the actual admittance of the: (a) IEEE 13-node feeder with the number of nodes n = 32. The shaded area represents the area where the number of measurements is below our minimum thresholds,     
+
+> τ=31, resulting in large errors in estimated admittance parameters.
+> Figure 4: Nodes 2–3 of the IEEE 13-node network: 3-phase topology identifi-cation. The shaded area represents the case when the number of measurements is below our minimum threshold ( τ=32) resulting in large errors.
+
+Our approach to topology and admittance estimation can be applied to identify networks with a combination of single-phase, two-phase and three-phase laterals. That is, we consider the problem of 3-phase topology identification 1. To solve the 3-phase topology identification problem, first we assume all three phases are connected at each node. Then, we solve (15) to es-timate the admittance parameters. If the estimated admittance parameter between two nodes for any of the three-phase laterals is zero, then we determine that lateral is not electrically con-nected. For example, consider the three-phase IEEE 13-node feeder in Fig. 2 (a), which contains three-phase, two-phase and single-phase laterals and has 32 nodes that connect each of the laterals. To solve the 3-phase topology identification problem on the two-phase lateral from nodes 2–4, our approach is as fol-lows. First, consider lateral 2–3 includes all three phases (i.e., consider a 33 node network). Then, solve (15) to identify which two of the three phases at node 2 extend to node 3. By identi-fying which two of the three-phase laterals extend to node 3, it is clear (from the grid physics) that the same two-phase laterals 
+
+> 1Extensions to a 4-wire system are straightforward and result in increasing the number of nodes and thus the number of unknown admittance parameters.
+
+can extend to node 4. Extensions to identify other single-phase, and two-phase laterals in the IEEE 13-node feeder are straight-forward, and follow the same approach. In Fig. 4, we present the admittance parameters of the mod-ified IEEE 13-node network between nodes 2–3. As this is a two-phase lateral, phase ‘ a’ is represented by an admittance parameter of zero. In Fig. 4, we also present the estimated admittance parameters using our approach to 3-phase topol-ogy identification. According to Fig. 4, we observe that when the number of measurements k < τ , the estimated admittance parameters (conductances) of the three-phase laterals between nodes 2–3 are far from the actual values. However, when the number of measurements k > τ , the estimated admittance pa-rameters closely track the actual values. We also observe that when the number of measurements k > τ , the estimated ad-mittance parameter, yR2a3a, for the phase ‘ a’ lateral approaches zero. This indicates that the phase a lateral between nodes 2–3 is not connected. Thus, a two-phase lateral connects node 3 to node 2, which is composed of phases ‘ b’ and ‘ c’. 
+
+5.3. Admittance matrix estimation with noisy measurements for a complete graph minus one edge 
+
+In this section, we estimate the topology and admittance pa-rameters of the IEEE 14-node meshed transmission network [28] using our proposed structured total least squares approach. In more detail, consider the three-phase balance IEEE 14-node feeder as depicted by its single-phase (positive sequence) rep-resentation in Fig. 2(b). To validate Theorem 4, we remove a single non-existent edge from the complete graph representa-tion of the IEEE 14-node feeder, thereby rendering the graph incomplete. That is, we represent the (balanced) IEEE 14-node transmission feeder by G(N, E), with n = 14. We collect noisy synchrophasor measurements and apply the structured total least squares approach as in the previous section (see the example for the IEEE 13-node feeder). The admittance parameters and corresponding nominal voltages for the IEEE 14-node feeder are as reported in [28].       
+
+> Figure 5: Total absolute error between estimated admittance and actual admit-tance of the IEEE 14-node feeder with the number of nodes n=14. The shaded area represents the area where the number of measurements is below our mini-mum thresholds, τ=12, resulting in large errors.
+
+In Fig. 5, we present the total absolute error between the es-timated admittance parameters and the actual admittance pa-rameters of the IEEE 14-node network in accordance with the 8number of measurements. According to Fig. 5, we observe a larger error when the number of measurements is less than the minimum requirement, τ = n − 2 = 12, as per Theorem 4. Additionally, the error decreases with an increased number of measurements. Our results confirm that Algorithm 1 is applica-ble to any kind of electrical network including radial, meshed, three-phase, and single-phase configurations. 
+
+5.4. Admittance matrix estimation with noisy measurements for a rooted tree graph 
+
+In the previous sections, we considered the case of no or very limited prior grid topology information. That is, we initially represented the electric grid by a complete (or a complete mi-nus one edge) graph, see Remark 5. Accordingly, the proce-dure to estimate the grid topology and admittance parameters was computationally intensive as it involved a large number of unknown edge variables. In practice, full or partial knowledge of the grid topology is available — such as a subset of known connections from utility records. In what follows, we leverage prior knowledge of the grid topology to reduce the computa-tional complexity of our estimation method, improving scala-bility to larger networks. We apply our estimation method to incorporate full prior knowledge of the grid topology, considering the IEEE 123-node feeder. The IEEE 123-node feeder, as in [31], is assumed to be balanced and is described with positive sequence impedance data. In what follows, since the IEEE 123-node feeder has a tree topology, we consider a single-phase representation of the IEEE 123-node feeder defined by eG(N, eE), with n = 123. Also, we collect synchrophasor measurements as per the pre-viously described approach (see the example for the IEEE 13-node feeder). To apply our estimation method we remove non-existent edges from the complete graph representation of the IEEE 123-node feeder. As per Theorem 3, the minimum number of mea-surements required is τ = 1. Then, as per Algorithm 1, we estimate the admittance parameters by solving equation (15). In Fig 6, we present the total absolute error between the estimated and actual admittance parameters of the IEEE 123-node feeder, corresponding to the number of measurements col-lected. In Fig 6, the total absolute error reduces as the num-ber of measurements increases, noting the minimum measure-ment threshold is τ = 1. We anticipate our adapted estimation method would support extensions to larger networks, consider-ing prior topology information, as it significantly reduces the required measurements as per Algorithm 1. 
+
+6. Conclusion 
+
+In this paper, we established necessary and su ffi cient con-ditions for the number of independent operating points (mea-surements) required to estimate the topology and admittance parameters of a completely unknown electric grid. The neces-sity result provides a fundamental limit on the required number of independent operating points, that holds irrespective of net-work size. The su ffi ciency result is also valid for networks of    
+
+> Figure 6: Total absolute error between estimated admittance (represented by the conductance and susceptance) and actual admittance of the IEEE 123-node feeder when there is prior topology information. The minimum measurement threshold for this case is τ=1.
+
+any scale, but computational feasibility is reduced for very large networks such as the entire bulk grid. Nonetheless, it remains broadly applicable to practical partitions of the grid. Our approach considered all kinds of electric grids, including radial distribution feeders and meshed transmission networks. Without measurement noise, the admittance matrix and grid topology can be uniquely estimated when the number of mea-surements τ, is equal to the number of single-phase (or three-phase balanced) nodes n, less one (i.e., τ = n − 1). When we know a certain edge is non-existent in the grid, the required minimum number of measurements τ, is equal to the number of nodes n, less two (i.e., τ = n − 2), provided that the network has at least 4 nodes. In the presence of measurement noise, the admittance matrix is estimated using a structured total least squares approach. Accordingly, we no longer obtain unique admittance parameters, however, the minimum number of mea-surements τ required to approximately estimate the admittance matrix and grid topology is consistent. That is, without prior topology information of the grid, τ ≥ n − 1, when a single edge is non-existent in the grid, τ ≥ n − 2, ( n ≥ 4), and when the grid has a tree topology, τ ≥ 1. Our estimation method is demonstrated on the IEEE 14-node transmission network and the IEEE 13-node distribution feeder, including phase identifi-cation of a two-phase lateral. We also demonstrate the scalabil-ity of our method using the IEEE 123-node feeder, leveraging prior topology information. 
+
+Acknowledgment 
+
+The first author would like to thank Dr. Nanduni Nimalsiri from CSIRO for her helpful comments. 
+
+Appendix 
+
+Following Definition 1, we include more definitions related to genericity and rigid frameworks in order to show that com-plete graphs are globally and redundantly rigid and to establish the rank of A(v); see [32, 33, 34, 23, 35, 36] for more details. 
+
+Definition 2 (Graph Realization [33, Section 1]) . A realization 
+
+of a graph G is a mapping x from the nodes of G to points in Euclidean space. 
+
+9Definition 3 (Framework [36, Section 1.2]) . A τ-dimensional 
+
+framework is a pair (G, x), where G is a graph and x is a real-ization that maps the nodes of G to points in the τ-dimensional Euclidean space Rτ.
+
+Definition 4 (Generic Frameworks [23, Defintion 6]) . A frame-work (G, x) is generic if the realization of the nodes do not sat-isfy any non-zero algebraic equation with rational coe ffi cients. 
+
+Remark 7 (Number of trivial infinitesimal motions) . From [33, Section 2.1] we know that, for a framework in τ-dimension, there are τ translations and τ(τ − 1) /2 rotations. 
+
+Remark 8 (Complete graphs are globally and redundantly rigid) . Following from [36, Theorem 4.1.2], a graph G is glob-ally rigid if and only if G is a complete graph. This implies that, if G is a complete graph in Rτ, then G is generically globally rigid as well as redundantly rigid in Rτ.
+
+Definition 5 (Redundantly rigid graphs [34, Section 2.1]) . Agraph G is redundantly rigid in a given dimension if it remains rigid after deleting any edge. 
+
+Next, we introduce R(x) ∈ R¯e×nτ as the rigidity matrix of a framework ( G, x) [33]. Algebraically, the rigidity matrix is constructed to capture how the graph’s edge length con-straints depend on the relative positions of nodes. For the framework ( G, x), the rigidity matrix R(x) is formed by as-signing a row to each edge ( i, j) ∈ E. This row contains nonzero elements only in the columns corresponding to the coordinates of nodes i and j. Specifically, for the row corre-sponding to an edge connecting node i to j in a 2-dimensional plane, the nonzero entries in column 2 i − 1, 2i, 2 j − 1, 2 j are 
+
+x(1)  
+
+> i
+
+− x(1)  
+
+> j
+
+, x(2)  
+
+> i
+
+− x(2)  
+
+> j
+
+, x(1)  
+
+> j
+
+− x(1)  
+
+> i
+
+, x(2)  
+
+> j
+
+− x(2)  
+
+> i
+
+, respectively. There-fore, R(x) is an ¯ e×nτ matrix that encodes the relative geometric relationships among nodes rather than their absolute locations. 
+
+Remark 9. We can define the concept of rigid frameworks in the complex space the same way as in the real space. Here, a realization of a graph G is a mapping x from the nodes of G
+
+to points in the complex space. Accordingly, the rigidity matrix can also be in the complex space, that is, R(x) ∈ C¯e×nτ. See [18] for more detail. 
+
+The following lemma shows the relationship between the ma-trices R(x) and A(v)⊤ when we choose x = v.
+
+Lemma 1. The matrix A(v)⊤ ∈ C¯e×nτ has the same rank as the rigidity matrix R(x) ∈ C¯e×nτ when v = x.Proof. We observe that by letting v = x we can rearrange the entries of the A(v)⊤ matrix so that A(v)⊤ becomes R(x). Specifically, A(k−1) n+i(v)⊤ = R(i−1) τ+k(x) where i ∈ N , k ∈ T ,and A j(v)⊤ and R j(x) are the j-th columns of A(v)⊤ and R(x), respectively. Such a permutation does not a ff ect the rank of 
+
+A(v)⊤ ∈ R¯e×nτ. Hence, A(v)⊤ has the same rank as the rigidity matrix R(x) ∈ R¯e×nτ when v = x. ■
+
+Lemma 1 implies that both A(v)⊤ and R(x) have the same rank. Therefore, to investigate the rank of A(v)⊤ we can equiv-alently study the rank of R(x) as in Lemma 2. 
+
+Lemma 2. Consider a framework in Cτ which corresponds to a complete graph with one edge removed, where n ≥ 4. Assume that the vectors [x1, x2, . . . , xn] are generic in the sense of Def-inition 4. Then the rank of the corresponding rigidity matrix 
+
+R(x) is equal to n τ − τ(τ + 1) /2 when n ≥ τ.Proof. According to [33, Theorem 2.2], all infinitesimal mo-tions must be in the null space of R(x). Since G corresponds to a complete graph, which is redundantly rigid (see Remark 8), 
+
+G (which has one edge less than G) is also rigid for n ≥ 4. Thus, the null space of R(x) contains only the trivial infinites-imal motions which are translations and rotations (see Remark 7). Thus, rank( R(x)) is the number of columns of the rigidity matrix minus the number of trivial infinitesimal motions. That is, rank( R(x)) = nτ − τ(τ + 1) /2 when n ≥ τ. ■
+
+Proof of Theorem 4. The electric grid topology and admittance parameters y can be uniquely determined when equation (11) has a unique solution. From Rouché-Capelli Theorem in [20, Chapter 2], the overdetermined system of equation (11) has a unique solution y if and only if rank( A(v)) equals the num-ber of elements in y, which is the number of edges e − 1. Accordingly, (11) will have a unique solution if and only if rank( A(v)) = n(n−1) 2 − 1. From Lemma 1 and Lemma 2, we obtain rank( A(v)⊤) = rank( R(x)) = nτ − τ(τ+1) 2 when n ≥ τ.Thus, (11) will have a unique solution if and only if 
+
+nτ − τ(τ + 1) 2 = n(n − 1) 2 − 1. (16) The minimum value of τ such that (16) is satisfied is τ = n − 2. Also, this value of τ satisfies n ≥ τ. Therefore, the minimum number of measurements τ such that the electric grid topology and admittance parameters can be uniquely determined occurs if and only if τ = n − 2, when n ≥ 4. ■
+
+References 
+
+[1] M. O. Qays, I. Ahmad, D. Habibi, M. A. Ma-soum, T. Mahmoud, Addressing system strength and reliability concerns in renewable energy-based weak grids using synchronous condensers determined by hybrid gru-classical optimization method, Sustainable Energy, Grids and Networks 45 (2026) 102111. doi:https: // doi.org /10.1016 /j.segan.2025.102111. [2] K. M. Muttaqi, M. R. Islam, D. Sutanto, Future power dis-tribution grids: Integration of renewable energy, energy storage, electric vehicles, superconductor, and magnetic bus, IEEE Trans. Appl. Supercond. 29 (2) (2019) 1–5. doi:10.1109 /TASC.2019.2895528. [3] J. De La Ree, V. Centeno, J. S. Thorp, A. G. Phadke, Synchronized phasor measurement applications in power systems, IEEE Trans. Smart Grid 1 (1) (2010) 20–27. doi:10.1109 /TSG.2010.2044815. [4] D. O. Amoateng, R. Yan, M. Mosadeghy, T. K. Saha, Topology detection in power distribution networks: A10 PMU based deep learning approach, IEEE Trans. Power Syst. 37 (4) (2021) 2771–2782. [5] A. Von Meier, E. Stewart, A. McEachern, M. Ander-sen, L. Mehrmanesh, Precision micro-synchrophasors for distribution systems: A summary of applications, IEEE Trans. Smart Grid 8 (6) (2017) 2926–2936. [6] W. He, H. Zhenning, L. Shiqiang, Y. Huanan, B. Jing, Physics-data hybrid driven based topology and line pa-rameter identification for ac /dc distribution network, Sus-tainable Energy, Grids and Networks 42 (2025) 101698. doi:https: // doi.org /10.1016 /j.segan.2025.101698. [7] F. Dalavi, M. E. H. Golshan, N. D. Hatziargyriou, A review on topology identification methods and applica-tions in distribution networks, Electric Power Systems Re-search 234 (2024). doi:10.1016 /j.epsr.2024.110538. [8] D. Deka, V. Kekatos, G. Cavraro, Learning distribution grid topologies: A tutorial, IEEE Trans. Smart Grid 15 (1) (2023) 999–1013. [9] H. Ma, W. Sheng, S. Wang, S. Wu, A state-parameter joint estimation approach for distribution net-works based on dual extended kalman filter, Sustain-able Energy, Grids and Networks 43 (2025) 101884. doi:https: // doi.org /10.1016 /j.segan.2025.101884. [10] M. Vanin, R. D’hulst, D. Van Hertem, Distribution sys-tem state estimation for system identification and network model validation: An experience on a real low voltage net-work, Sustainable Energy, Grids and Networks 42 (2025) 101710. doi:https: // doi.org /10.1016 /j.segan.2025.101710. [11] S. Jang, N. Ozay, J. L. Mathieu, Probabilistic con-straint construction for network-safe load coordination, IEEE Trans. Power Syst. 39 (2) (2024) 4473–4485. doi:10.1109 /TPWRS.2023.3309131. [12] K. Mo ff at, M. Bariya, A. Von Meier, Unsupervised impedance and topology estimation of distribution net-works—limitations and tools, IEEE Trans. Smart Grid 11 (1) (2020) 846–856. doi:10.1109 /TSG.2019.2956706. [13] Y. Yuan, S. H. Low, O. Ardakanian, C. J. Tom-lin, Inverse power flow problem, IEEE Trans. Control Netw. Syst. 10 (1) (2023) 261–273. doi:10.1109 /TCNS.2022.3199084. [14] O. Ardakanian, V. W. S. Wong, R. Dobbe, S. H. Low, A. von Meier, C. J. Tomlin, Y. Yuan, On identification of distribution grids, IEEE Trans. Control Netw. Syst. 6 (3) (2019) 950–960. doi:10.1109 /TCNS.2019.2891002. [15] A. Lang, I. Shames, M. Cantoni, Structure in total least squares parameter estimation for electrical networks, IFAC-PapersOnLine 51 (23) (2018) 420–425. [16] A. Mishra, R. A. de Callafon, Recursive estimation of three phase line admittance in electric power networks, IFAC-PapersOnLine 53 (2) (2020) 34–39. [17] J. Zhang, P. Wang, N. Zhang, Distribution network admittance matrix estimation with linear regression, IEEE Trans. Power Syst. 36 (5) (2021) 4896–4899. doi:10.1109 /TPWRS.2021.3090250. [18] N. Rin, I. Shames, I. R. Petersen, E. L. Rat-nam, Electric grid topology and admittance esti-mation: Quantifying phasor-based measurement re-quirements, in: 2025 American Control Conference (ACC), Denver, CO, USA, 2025, pp. 2122–2127. doi:10.23919 /ACC63710.2025.11107735. [19] C. A. Desoer, E. S. Kuh, Basic Circuit Theory, McGraw-Hill, 1969. [20] I. R. Shafarevich, A. Remizov, Linear Algebra and Geom-etry, Springer Science & Business Media, 2012. [21] R. Diestel, Graph theory, Springer Nature, 2025. [22] C. Van Nu ff elen, On the incidence matrix of a graph, IEEE Transactions on Circuits and Systems 23 (9) (1976) 572– 572. doi:10.1109 /TCS.1976.1084251. [23] S. J. Gortler, D. P. Thurston, Generic global rigidity in complex and pseudo-euclidean spaces, Rigidity and sym-metry (2014) 131–154. [24] S. V. Hu ff el, P. Lemmerling, Total Least Squares and Errors-in-Variables Modeling: Analysis, Algorithms and Applications, Dordrecht: Springer Netherlands, 2002. [25] P. Jain, P. Kar, et al., Non-convex optimization for ma-chine learning, Foundations and Trends ® in Machine Learning 10 (3-4) (2017) 142–363. [26] D. B. Wright, K. London, A. P. Field, Using bootstrap estimation and the plug-in principle for clinical psychol-ogy data, Journal of Experimental Psychopathology 2 (2) (2011) 252–270. [27] IEEE PES Distribution System Analysis Sub-committee, IEEE 13 Node Test Feeder, 
+
+http://ewh.ieee.org/soc/pes/dsacom/testfeeders/ ,accessed: 03.06.2023 (2010). [28] University of Washington Power Systems Test Case Archive, IEEE 14 Bus Test Case, 
+
+https://labs.ece.uw.edu/pstca/pf14/pg_tca14bus.htm ,accessed: 03.06.2023 (1993). [29] D. B. Arnold, M. Sankur, R. Dobbe, K. Brady, D. S. Call-away, A. Von Meier, Optimal dispatch of reactive power for voltage regulation and balancing in unbalanced distri-bution systems, in: 2016 IEEE Power and Energy Society General Meeting (PESGM), MA, USA, 2016, pp. 1–5. [30] K. W. Brady, Phasor-based control on islanded networks, Ph.D. thesis, University of California, Berkeley (2020). 11 [31] IEEE PES Distribution System Analysis Sub-committee, IEEE 123-Node Test Feeder, 
+
+http://ewh.ieee.org/soc/pes/dsacom/testfeeders/ ,accessed: 03.06.2023 (2010). [32] L. Asimow, B. Roth, The rigidity of graphs, Trans. Amer. Math. Soc. 245 (1978) 279–289. [33] B. Hendrickson, Conditions for unique graph realization, SIAM journal on computing 21 (1992) 65–84. [34] D. Garamvölgyi, S. J. Gortler, T. Jordán, Globally rigid graphs are fully reconstructible, Forum of Mathematics, Sigma 10 (2022) e51. [35] T. Jordán, W. Whiteley, Global rigidity, in: Handbook of Discrete and Computational Geometry, Chapman and Hall /CRC, 2017, pp. 1661–1694. [36] T. Jordán, II–combinatorial rigidity: Graphs and matroids in the theory of rigid frameworks, in: Discrete geometric analysis, Vol. 34, Mathematical Society of Japan, 2016, pp. 33–113. 12

@@ -1,0 +1,91 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-04T20:21:36.638754+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 2,
+    "quick_skim_target": 11,
+    "quick_selected": 2
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2605.00404v1",
+      "title": "Electric Grid Topology and Admittance Estimation using Phasor Measurements",
+      "abstract": "Recent advances in precise phasor measurement units are enabling new approaches to estimate distribution and transmission grid parameters in real-time. In this paper, we investigate voltage and current phasor measurement requirements to estimate the electric grid topology and admittance parameters. We show necessary and sufficient conditions for the number of independent operating points (measurements) required to determine the topology and admittance of a completely unknown electric grid. With prior topology information, we also show that there is a minimum number of measurements required to uniquely determine the admittance matrix and corresponding grid topology. In the presence of noisy phasor measurements, we show that the admittance matrix can be estimated using a structured total least squares approach. By means of numerical simulations on the IEEE 13-node distribution feeder, the IEEE 14-node transmission network, and the IEEE 123-node distribution feeder, we demonstrate our approach is suitable for applications in radial and mesh grid topologies in the presence of measurement noise.",
+      "authors": [
+        "Norak Rin",
+        "Iman Shames",
+        "Ian Petersen",
+        "Elizabeth Ratnam"
+      ],
+      "primary_category": "eess.SY",
+      "categories": [
+        "eess.SY"
+      ],
+      "published": "2026-05-01T04:52:25+00:00",
+      "link": "https://arxiv.org/pdf/2605.00404v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "current phasor measurement for grid parameter estimation",
+      "llm_evidence_cn": "用于电网参数估计的电流相量测量",
+      "llm_evidence": "用于电网参数估计的电流相量测量",
+      "canonical_evidence": "用于电网参数估计的电流相量测量",
+      "llm_tldr_en": "Investigates requirements for voltage and current phasor measurements to estimate grid topology and admittance.",
+      "llm_tldr_cn": "研究了利用电压和电流相量测量来估计电网拓扑和导纳参数的要求。",
+      "llm_tldr": "研究了利用电压和电流相量测量来估计电网拓扑和导纳参数的要求。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.00585v1",
+      "title": "Local Geometry of Least Squares for Unmixing Signals with Parameter-Dependent Dictionaries",
+      "abstract": "Modeling signals as linear combinations of atoms from a dictionary is ubiquitous in modern signal processing. In the finite-dimensional setting, whenever atoms depend nonlinearly upon unknown parameters, the signal model is said to be separable. In this work, we study least-squares reconstruction of separable signals and establish a unified theoretical framework for their analysis. We introduce the unmixing metric, a distance that captures the distinct roles and sensitivities of linear and nonlinear parameters, and establish local convergence and stability guarantees under its topology. We then analyze variable projection from a geometric perspective, showing that it corresponds to restricting the optimization to the manifold of optimal linear parameters. This viewpoint provides a principled explanation for the improved algorithmic behavior of variable projection observed in practice, and produces sharp theoretical guarantees. The generic theory for separable problems is specialized to the case of point spread function (PSF) unmixing. We introduce a parametric notion of coherence and show that support separation directly controls both the size of the convergence region and the stability of recovery. Numerical experiments corroborate the theoretical predictions and demonstrate the practical relevance of the proposed framework.",
+      "authors": [
+        "Santos Michelena",
+        "Maxime Ferreira Da Costa",
+        "José Picheral"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP",
+        "math.NA"
+      ],
+      "published": "2026-05-01T11:48:37+00:00",
+      "link": "https://arxiv.org/pdf/2605.00585v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "least-squares reconstruction of signals from parameter-dependent dictionaries",
+      "llm_evidence_cn": "基于参数相关字典的信号最小二乘重构",
+      "llm_evidence": "基于参数相关字典的信号最小二乘重构",
+      "canonical_evidence": "基于参数相关字典的信号最小二乘重构",
+      "llm_tldr_en": "Establishes a theoretical framework for signal reconstruction that could apply to sensor array unmixing.",
+      "llm_tldr_cn": "建立了信号重构的理论框架，可应用于传感器阵列的信号解耦。",
+      "llm_tldr": "建立了信号重构的理论框架，可应用于传感器阵列的信号解耦。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

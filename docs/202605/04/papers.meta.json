@@ -1,0 +1,37 @@
+{
+  "label": "2026-05-04",
+  "date": "2026-05-04",
+  "generated_at": "2026-05-04T20:22:01",
+  "count": 2,
+  "papers": [
+    {
+      "paper_id": "202605/04/2605.00404v1-electric-grid-topology-and-admittance-estimation-using-phasor-measurements",
+      "section": "quick",
+      "title_en": "Electric Grid Topology and Admittance Estimation using Phasor Measurements",
+      "authors": "Norak Rin, Iman Shames, Ian Petersen, Elizabeth Ratnam",
+      "date": "2026-05-01",
+      "pdf": "https://arxiv.org/pdf/2605.00404v1",
+      "score": "6.0",
+      "evidence": "用于电网参数估计的电流相量测量",
+      "tldr": "本研究利用相量测量单元（PMU）的进展，探讨了实时估计输配电网拓扑和导纳参数的方法。文章确定了在完全未知或部分已知拓扑情况下，唯一确定导纳矩阵所需的独立运行点（测量值）的充要条件。针对含噪声的测量数据，提出了一种结构化总体最小二乘法（STLS）。通过对IEEE 13、14和123节点系统的仿真，证明了该方法在径向和网状拓扑中的有效性，为电网实时监控提供了理论支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "Recent advances in precise phasor measurement units are enabling new approaches to estimate distribution and transmission grid parameters in real-time. In this paper, we investigate voltage and current phasor measurement requirements to estimate the electric grid topology and admittance parameters. We show necessary and sufficient conditions for the number of independent operating points (measurements) required to determine the topology and admittance of a completely unknown electric grid. With prior topology information, we also show that there is a minimum number of measurements required to uniquely determine the admittance matrix and corresponding grid topology. In the presence of noisy phasor measurements, we show that the admittance matrix can be estimated using a structured total least squares approach. By means of numerical simulations on the IEEE 13-node distribution feeder, the IEEE 14-node transmission network, and the IEEE 123-node distribution feeder, we demonstrate our approach is suitable for applications in radial and mesh grid topologies in the presence of measurement noise.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/04/2605.00585v1-local-geometry-of-least-squares-for-unmixing-signals-with-parameter-dependent-dictionaries",
+      "section": "quick",
+      "title_en": "Local Geometry of Least Squares for Unmixing Signals with Parameter-Dependent Dictionaries",
+      "authors": "Santos Michelena, Maxime Ferreira Da Costa, José Picheral",
+      "date": "2026-05-01",
+      "pdf": "https://arxiv.org/pdf/2605.00585v1",
+      "score": "6.0",
+      "evidence": "基于参数相关字典的信号最小二乘重构",
+      "tldr": "本研究探讨了具有参数依赖字典的可分离信号解混问题，提出了一种统一的最小二乘重建理论框架。通过引入“解混度量”来捕捉线性和非线性参数的不同敏感性，并从几何角度分析了变量投影法（VarPro）的优越性。研究进一步应用于点扩散函数（PSF）解混，证明了支撑集分离度对收敛性和稳定性的关键作用，为复杂信号处理提供了坚实的理论支撑。",
+      "tags": "query:tmr",
+      "abstract_en": "Modeling signals as linear combinations of atoms from a dictionary is ubiquitous in modern signal processing. In the finite-dimensional setting, whenever atoms depend nonlinearly upon unknown parameters, the signal model is said to be separable. In this work, we study least-squares reconstruction of separable signals and establish a unified theoretical framework for their analysis. We introduce the unmixing metric, a distance that captures the distinct roles and sensitivities of linear and nonlinear parameters, and establish local convergence and stability guarantees under its topology. We then analyze variable projection from a geometric perspective, showing that it corresponds to restricting the optimization to the manifold of optimal linear parameters. This viewpoint provides a principled explanation for the improved algorithmic behavior of variable projection observed in practice, and produces sharp theoretical guarantees. The generic theory for separable problems is specialized to the case of point spread function (PSF) unmixing. We introduce a parametric notion of coherence and show that support separation directly controls both the size of the convergence region and the stability of recovery. Numerical experiments corroborate the theoretical predictions and demonstrate the practical relevance of the proposed framework.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
