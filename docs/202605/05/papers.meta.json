@@ -1,0 +1,23 @@
+{
+  "label": "2026-05-05",
+  "date": "2026-05-05",
+  "generated_at": "2026-05-05T20:51:23",
+  "count": 1,
+  "papers": [
+    {
+      "paper_id": "202605/05/2605.01434v1-high-speed-scalable-sensor-readout-for-dexterous-robotic-hands-via-shift-register-multiplexing",
+      "section": "quick",
+      "title_en": "High-Speed, Scalable Sensor Readout for Dexterous Robotic Hands via Shift-Register Multiplexing",
+      "authors": "Jaehoon Kim, Lazaros Christoforidis, Michalis Papadakis, Victor Kartsch, Robert K. Katzschmann",
+      "date": "2026-05-02",
+      "pdf": "https://arxiv.org/pdf/2605.01434v1",
+      "score": "6.0",
+      "evidence": "用于多传感器阵列的可扩展传感器读取架构",
+      "tldr": "针对灵巧机器人手在多模态感知中面临的传感器数量、布线复杂度和采样带宽之间的权衡问题，本文提出了一种基于串入并出（SIPO）移位寄存器原理的可扩展模拟传感器读取架构。该架构仅需三根信号线即可实现模块化扩展，支持异构传感器集成。在腱驱动机器人手上的实验表明，该系统能以1kHz频率稳定采集20个通道数据，在关节角度和触觉力估计方面表现优异，为全传感器化灵巧手提供了高效方案。",
+      "tags": "query:tmr",
+      "abstract_en": "Dexterous robotic hands require high-speed multimodal sensing across many degrees of freedom, yet existing readout architectures often impose trade-offs between sensor count, wiring complexity, and sampling bandwidth. This paper presents a scalable analog sensor readout architecture based on a serial-in parallel-out (SIPO) shift-register principle. The proposed architecture supports versatile integration of heterogeneous analog-output sensors, scalable expansion using only three signal lines between sensor modules, and fast, configurable sampling. We validate the approach on a tendon-driven robotic hand integrating 16 joint sensor modules and one four-channel tactile sensor module, enabling acquisition of 20 sensor channels at a full-scan rate of 1 kHz, with stable operation up to 1.5 kHz. Joint sensor characterization showed a maximum slope absolute percentage error (APE) of 0.446% and sub-degree estimation error, indicating that the proposed readout system does not significantly degrade sensing performance. For tactile sensing, LSTM-based models achieved an RMSE of 0.125 N for force estimation and 93.4% accuracy for five-class contact-location classification, and were deployed for real-time inference at 1 kHz. System-level experiments showed that the joint sensors provide more accurate feedback than motor-based estimation during interaction, while the tactile sensor enables responsive force estimation in contact. The proposed architecture offers a practical path toward fully sensorized robotic hands for dexterous manipulation.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

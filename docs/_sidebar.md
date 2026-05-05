@@ -1,6 +1,9 @@
 * <a class="dpr-sidebar-root-link" href="#/">首页</a>
 * <a class="dpr-sidebar-root-link dpr-sidebar-noactive-link" href="javascript:void(0)" data-dpr-hash="#/tutorial/README">使用教程</a>
 * Daily Papers
+  * 2026-05-05 <!--dpr-date:20260505-->
+    * 速读区
+      * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202605/05/2605.01434v1-high-speed-scalable-sensor-readout-for-dexterous-robotic-hands-via-shift-register-multiplexing" data-sidebar-item="{&quot;title&quot;: &quot;High-Speed, Scalable Sensor Readout for Dexterous Robotic Hands via Shift-Register Multiplexing&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2605.01434v1-high-speed-scalable-sensor-readout-for-dexterous-robotic-hands-via-shift-register-multiplexing&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;用于多传感器阵列的可扩展传感器读取架构&quot;}">High-Speed, Scalable Sensor Readout for Dexterous Robotic Hands via Shift-Register Multiplexing</a>
   * 2026-05-04 <!--dpr-date:20260504-->
     * 速读区
       * <a class="dpr-sidebar-item-link dpr-sidebar-item-structured" href="#/202605/04/2605.00404v1-electric-grid-topology-and-admittance-estimation-using-phasor-measurements" data-sidebar-item="{&quot;title&quot;: &quot;Electric Grid Topology and Admittance Estimation using Phasor Measurements&quot;, &quot;link&quot;: &quot;https://arxiv.org/abs/2605.00404v1-electric-grid-topology-and-admittance-estimation-using-phasor-measurements&quot;, &quot;score&quot;: &quot;6.0&quot;, &quot;tags&quot;: [{&quot;kind&quot;: &quot;query&quot;, &quot;label&quot;: &quot;tmr&quot;}], &quot;evidence&quot;: &quot;用于电网参数估计的电流相量测量&quot;}">Electric Grid Topology and Admittance Estimation using Phasor Measurements</a>

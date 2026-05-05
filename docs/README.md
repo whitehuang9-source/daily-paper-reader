@@ -6,29 +6,26 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-04
-- 运行时间：2026-05-04 20:21:53 UTC
+- 最新运行日期：2026-05-05
+- 运行时间：2026-05-05 20:51:15 UTC
 - 运行状态：成功
-- 本次总论文数：2
+- 本次总论文数：1
 - 精读区：0
-- 速读区：2
+- 速读区：1
 
 ### 今日简报（AI）
-今日聚焦电力网络拓扑估算与参数依赖型信号解混的几何特性研究。
-重点探讨了利用相量测量数据重构电网结构，以及最小二乘法在复杂信号分离中的局部几何表现。
-建议关注高精度测量技术在能源互联网与信号处理领域的交叉应用。
-- 详情：[/202605/04/README](/202605/04/README)
+今日聚焦灵巧手触觉感知瓶颈，重点关注基于移位寄存器复用的高速传感器读取方案。
+该技术通过硬件复用实现了传感器阵列的高扩展性与实时反馈，有效提升了机器人手部的感知效率。
+建议关注机器人硬件架构与触觉集成的读者深入了解其电路设计思路。
+- 详情：[/202605/05/README](/202605/05/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [Electric Grid Topology and Admittance Estimation using Phasor Measurements](/202605/04/2605.00404v1-electric-grid-topology-and-admittance-estimation-using-phasor-measurements)  
+1. [High-Speed, Scalable Sensor Readout for Dexterous Robotic Hands via Shift-Register Multiplexing](/202605/05/2605.01434v1-high-speed-scalable-sensor-readout-for-dexterous-robotic-hands-via-shift-register-multiplexing)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于电网参数估计的电流相量测量
-2. [Local Geometry of Least Squares for Unmixing Signals with Parameter-Dependent Dictionaries](/202605/04/2605.00585v1-local-geometry-of-least-squares-for-unmixing-signals-with-parameter-dependent-dictionaries)  
-   标签：评分：6.0/10、query:tmr
-   evidence：基于参数相关字典的信号最小二乘重构
+   evidence：用于多传感器阵列的可扩展传感器读取架构
 
 
 <div class="dpr-home-promo-card">
