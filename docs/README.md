@@ -6,26 +6,32 @@
 </div>
 
 ## 每次日报
-- 最新运行日期：2026-05-05
-- 运行时间：2026-05-05 20:51:15 UTC
+- 最新运行日期：2026-05-06
+- 运行时间：2026-05-06 21:07:14 UTC
 - 运行状态：成功
-- 本次总论文数：1
+- 本次总论文数：3
 - 精读区：0
-- 速读区：1
+- 速读区：3
 
 ### 今日简报（AI）
-今日聚焦灵巧手触觉感知瓶颈，重点关注基于移位寄存器复用的高速传感器读取方案。
-该技术通过硬件复用实现了传感器阵列的高扩展性与实时反馈，有效提升了机器人手部的感知效率。
-建议关注机器人硬件架构与触觉集成的读者深入了解其电路设计思路。
-- 详情：[/202605/05/README](/202605/05/README)
+今日速览柔性传感、信号定位与物理增强神经网络的三项前沿进展。
+重点关注可实现实时形变监测的类皮肤传感器，以及利用互相关 PINN 提升逆散射成像鲁棒性的新方法。
+建议深入了解物理模型与深度学习融合的逆问题求解思路，以应对复杂环境下的高精度感知挑战。
+- 详情：[/202605/06/README](/202605/06/README)
 
 ### 精读区论文标签
 - 本次无精读推荐。
 
 ### 速读区论文标签
-1. [High-Speed, Scalable Sensor Readout for Dexterous Robotic Hands via Shift-Register Multiplexing](/202605/05/2605.01434v1-high-speed-scalable-sensor-readout-for-dexterous-robotic-hands-via-shift-register-multiplexing)  
+1. [A skin-like conformal sensor for real-time shape mapping](/202605/06/2605.01170v1-a-skin-like-conformal-sensor-for-real-time-shape-mapping)  
    标签：评分：6.0/10、query:tmr
-   evidence：用于多传感器阵列的可扩展传感器读取架构
+   evidence：用于分布式测量实时重建的二维传感器阵列
+2. [AULAs: A Novel Family of Augmented ULAs for Enhanced Localization of Non-Circular Sources with Reduced Mutual Coupling Effects](/202605/06/2605.01228v1-aulas-a-novel-family-of-augmented-ulas-for-enhanced-localization-of-non-circular-sources-with-reduced-mutual-coupling-effects)  
+   标签：评分：6.0/10、query:tmr
+   evidence：用于增强定位并减少互耦的稀疏阵列设计
+3. [Beyond Data-Physics Consistency: A Cross-Correlated Physics-Informed Neural Network for Robust Inverse Scattering](/202605/06/2605.01851v1-beyond-data-physics-consistency-a-cross-correlated-physics-informed-neural-network-for-robust-inverse-scattering)  
+   标签：评分：6.0/10、query:tmr
+   evidence：用于逆散射和微波成像的物理信息神经网络
 
 
 <div class="dpr-home-promo-card">

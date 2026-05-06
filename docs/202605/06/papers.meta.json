@@ -1,0 +1,51 @@
+{
+  "label": "2026-05-06",
+  "date": "2026-05-06",
+  "generated_at": "2026-05-06T21:07:52",
+  "count": 3,
+  "papers": [
+    {
+      "paper_id": "202605/06/2605.01170v1-a-skin-like-conformal-sensor-for-real-time-shape-mapping",
+      "section": "quick",
+      "title_en": "A skin-like conformal sensor for real-time shape mapping",
+      "authors": "Kaiping Yin, Sooik Im, Chaorui Qiu, Yun Bai, Xiangyu Lu, Chenhang Li, Junjie Yao, Xiaoyue Ni",
+      "date": "2026-05-02",
+      "pdf": "https://arxiv.org/pdf/2605.01170v1",
+      "score": "6.0",
+      "evidence": "用于分布式测量实时重建的二维传感器阵列",
+      "tldr": "针对柔性系统在遮挡或受限空间内难以进行实时3D形状感知的难题，本研究开发了一种类皮肤柔性传感器。该传感器通过在弹性薄膜中嵌入液态金属（o-EGaIn）应变计阵列，结合力学模型和快速优化算法，实现了对拉伸、弯曲和压痕等复杂形变的实时重构。该系统具有高精度和低延迟特性，在人体运动追踪、触觉交互及医疗监测等领域展现出巨大潜力。",
+      "tags": "query:tmr",
+      "abstract_en": "Reliable real-time 3D shape sensing is essential for robust control and interpretation of deformable systems during motion. Existing vision-based approaches require line-of-sight and complex instrumentation, limiting operation in occluded and space-constrained settings. Here, we introduce a scalable, skin-like sensor that reconstructs its continuous 3D deformation in real time from distributed strain measurements. The device embeds a 2D array of mirror-stacked, printed oxidized eutectic gallium-indium (o-EGaIn) strain gauges within an elastomeric film to measure off-neutral-axis strains. Combined with a mechanics-informed observation model and a fast optimization routine, the system estimates local curvature, elongation, offset, and orientation under concurrent stretching, bending, and indentation, enabling reconstruction of complex surfaces. A 5-by-5 array with a 12 mm pitch achieves a mean surface reconstruction error of 0.62 mm with 0.1s latency across all tested scenarios. When conforming to complex surfaces, the sensor provides fast 3D shape mapping of the underlying geometry. Demonstrations involving palm gesturing, finger indentation, and contact-induced balloon deformation highlight utility for epidermal motion tracking, haptic interaction, and intraoperative monitoring.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/06/2605.01228v1-aulas-a-novel-family-of-augmented-ulas-for-enhanced-localization-of-non-circular-sources-with-reduced-mutual-coupling-effects",
+      "section": "quick",
+      "title_en": "AULAs: A Novel Family of Augmented ULAs for Enhanced Localization of Non-Circular Sources with Reduced Mutual Coupling Effects",
+      "authors": "Abdul Hayee Shaikh, Xiaoguang Liu",
+      "date": "2026-05-02",
+      "pdf": "https://arxiv.org/pdf/2605.01228v1",
+      "score": "6.0",
+      "evidence": "用于增强定位并减少互耦的稀疏阵列设计",
+      "tldr": "本文提出AULAs系列稀疏阵列，旨在优化非圆形信号的定位性能。针对现有设计忽视和共阵利用及互耦影响的问题，AULAs通过整合稀疏与稠密阵列，实现了差分与和共阵的完美拼接，显著提升了虚拟孔径和自由度。其变体SAULAs和TSAULAs进一步减少了冗余并降低了互耦效应。该统一框架为高精度多目标定位提供了理论支撑和灵活的扩展方案。",
+      "tags": "query:tmr",
+      "abstract_en": "In this paper, we introduce a family of novel sparse array designs called the augmented ULAs (AULAs) for the localization of non-circular signals (NCS). Accurate direction of arrival (DOA) estimation and the ability to resolve multiple targets are critical in modern wireless communication systems. Most existing sparse arrays are optimized solely for the difference co-array, making them less efficient at utilizing the sum co-array resulting from the non-zero pseudo-covariance of NCS. Meanwhile, state-of-the-art designs for joint optimization of the sum and difference co-arrays remain constrained by a three-way performance trade-off. The proposed AULAs configure single sparse and two dense ULAs alongside two separate elements to achieve a perfect splicing of holes and lags in the difference and sum co-array. This results in a larger virtual aperture and increased DOFs for NCS. Building on this structure, other variants of AULAs are developed, each exhibiting distinct characteristics. The shifted AULAs (SAULAs) judiciously displace the AULAs structure to minimize co-array redundancy and further enhance the DOFs. A transformed SAULAs (TSAULAs) design is proposed, which mitigates mutual coupling effects by converting the dense ULAs of SAULAs into sparse ULAs. By reconfiguring the elements of TSAULAs, the complementary TSAULAs (Co-TSAULAs) design inherits the desirable properties of SAULAs and TSAULAs.All these structures belong to a unified design framework, within which one configuration can be adapted into another during the design phase to meet different performance requirements. Meanwhile, they provide in-built physical locations for convenient extension to a larger aperture. Closed-form expressions for precise element placements, DOFs, and weight functions are derived. Simulation results validate the effectiveness of the proposed approach.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/06/2605.01851v1-beyond-data-physics-consistency-a-cross-correlated-physics-informed-neural-network-for-robust-inverse-scattering",
+      "section": "quick",
+      "title_en": "Beyond Data-Physics Consistency: A Cross-Correlated Physics-Informed Neural Network for Robust Inverse Scattering",
+      "authors": "Shilong Sun",
+      "date": "2026-05-03",
+      "pdf": "https://arxiv.org/pdf/2605.01851v1",
+      "score": "6.0",
+      "evidence": "用于逆散射和微波成像的物理信息神经网络",
+      "tldr": "针对电磁逆散射问题中物理信息神经网络（PINN）易陷入局部最优且效率低的问题，本文提出了一种互相关物理信息神经网络（CC-PINN）。该方法通过引入互相关残差项直接耦合介电参数、内部总场与外部观测场，打破了传统方法中的解耦限制，并结合傅里叶特征MLP架构与2D-FFT加速算法，显著提升了高对比度目标重建的鲁棒性与计算效率。",
+      "tags": "query:tmr",
+      "abstract_en": "The electromagnetic inverse scattering problem (ISP), due to its inherent strong nonlinearity and severe ill-posedness, has long been a core challenge in microwave imaging. In recent years, physics-informed neural networks (PINNs) have provided a novel paradigm for solving ISPs by embedding Maxwell's equations into the deep learning optimization process. However, conventional PINN methods rely solely on independent data-equation and state-equation residuals to construct the consistency loss, which easily causes them to fall into local minima and suffer from low computational efficiency when facing high-contrast targets or multi-frequency observation data. To transcend the traditional data-physics consistency framework, this paper proposes a novel cross-correlated physics-informed neural network (CC-PINN). The core innovations of this work include: (1) constructing a Fourier feature MLP network architecture based on weight normalization, which possesses excellent capability for solving inverse scattering problems; (2) introducing a cross-correlated residual term that directly couples the reconstructed dielectric parameters and the predicted internal total field to the external observation field, breaking the decoupling between the contrast source and the permittivity optimization in traditional PINNs and significantly enhancing the robustness of PINNs for ISP; (3) introducing a zero-padding-based 2D-FFT acceleration algorithm, which reduces the computational complexity of the forward Green's function integration. Experimental results on synthetic and measured data demonstrate that CC-PINN can reconstruct high-contrast dielectric targets with high fidelity, and its convergence robustness far exceeds that of PINN algorithms using classical cost functions, regardless of whether simultaneous multi-frequency processing or frequency-hopping strategies are employed.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}
