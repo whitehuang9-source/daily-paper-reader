@@ -1,0 +1,65 @@
+{
+  "label": "2026-05-07",
+  "date": "2026-05-07",
+  "generated_at": "2026-05-07T20:44:08",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202605/07/2605.04951v1-scalar-and-vector-airborne-platform-calibration-using-quantum-and-classical-magnetometers-and-inertial-sensors",
+      "section": "quick",
+      "title_en": "Scalar and Vector Airborne Platform Calibration Using Quantum and Classical Magnetometers and Inertial Sensors",
+      "authors": "Antonia Hager, Torleiv H. Bryne, Mia Jukić",
+      "date": "2026-05-06",
+      "pdf": "https://arxiv.org/pdf/2605.04951v1",
+      "score": "7.0",
+      "evidence": "用于平台磁场补偿的矢量磁力计校准",
+      "tldr": "本研究探讨了航空磁力测量中的平台校准问题，对比了传统的标量光泵磁力计与新兴的高灵敏度金刚石氮-空位（NV）矢量磁力计。通过理论分析和仿真，研究揭示了矢量校准模型对姿态误差具有一阶敏感性，而标量模型则更具鲁棒性。研究评估了不同传感器配置及惯导系统（INS）的作用，指出NV传感器虽不能完全解决矢量校准的姿态瓶颈，但在简化硬件同步和提升标量校准精度方面具有显著优势。",
+      "tags": "query:tmr",
+      "abstract_en": "Airborne magnetometry requires rigorous calibration to isolate geomagnetic signals from sensor errors and platform magnetic fields. This magnetic compensation is needed for applications like geophysical exploration and magnetic anomaly navigation. The standard approach utilizes a quantum scalar Optically Pumped Magnetometer (OPM) and a less sensitive fluxgate vector sensor for attitude information. This configuration typically results in a scalar approximation of the platform field.   Advancements in high-sensitivity Diamond Nitrogen-Vacancy (NV) vector magnetometers now enable a re-evaluation of the standard hardware configuration and full vector calibration models. We show through rigorous theoretical analysis that scalar calibration models are robust to misalignment. Vector calibration models, however, are intrinsically first-order sensitive to attitude errors, irrespective of the accuracy of the magnetic field measurements. These errors arise from inaccurate representation of the background field direction in the body frame, and can amplify small orientation errors into noticeable calibration residuals.   Using realistic sensor models and flight trajectories, we evaluate different sensor configurations for magnetic calibration and assess the use of onboard Inertial Navigation Systems (INS) as an independent attitude reference to enable stable compensation. Our results suggest that quantum vector magnetometers like NV sensors are not sufficient to solve the attitude bottleneck for airborne vector magnetic calibration. However, as a single sensor capable of providing both absolute field and directional measurements, they may offer benefits regarding sensor placement, synchronization, and scalar calibration accuracy.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/07/2604.27352v1-array-zooming-optimization-for-near-field-localization-with-movable-antennas",
+      "section": "quick",
+      "title_en": "Array Zooming Optimization for Near-Field Localization With Movable Antennas",
+      "authors": "Yuxin Duan, Boyu Teng, Xiaojun Yuan, Rui Wang",
+      "date": "2026-04-30",
+      "pdf": "https://arxiv.org/pdf/2604.27352v1",
+      "score": "6.0",
+      "evidence": "阵列优化与空间自由度",
+      "tldr": "本文针对近场定位中稀疏阵列导致的分辨率与模糊性矛盾，提出了一种基于可移动天线（MA）的阵列缩放（AZ）优化方案。通过动态调整天线间距并融合多次测量信息，该系统在保持高分辨率的同时有效抑制了空间混叠。研究还推导了考虑误检概率的性能下界，并设计了优化算法以最小化定位误差。实验证明，该策略在不同信噪比下均显著优于传统固定阵列和基于CRB的基准方案。",
+      "tags": "query:tmr",
+      "abstract_en": "The emergence of movable antenna (MA) technology provides a promising way to enhance wireless sensing and communication by introducing spatial degrees of freedom through dynamic array reconfiguration. In near-field localization, achieving high resolution at low cost necessitates the adoption of sparse arrays. However, such sparsity tends to introduce spatial ambiguity due to aliasing effects. To resolve this resolution-ambiguity dilemma, this paper proposes an MA-enabled array zooming (AZ) system. First, we design a multi-measurement array zooming system that dynamically adjusts antenna spacings. By fusing the observational information from different measurements, the proposed AZ system effectively mitigates spatial aliasing while maintaining spatial resolution. Second, to quantify the performance limits under the severe multi-modal distributions inherent in sparse near-field sensing, we theoretically analyze the false peak distribution and derive a tighter performance lower bound, which incorporates the false detection probability. Third, considering that multiple false peaks may exist in practical multi-modal distributions, we propose an optimization algorithm for the AZ system to suppress false peaks and minimize the localization error. Extensive numerical results demonstrate that the proposed AZ strategy adaptively optimizes array configurations under varying signal-to-noise ratios (SNRs), substantially outperforming both conventional fixed-spacing arrays and Cramer-Rao bound (CRB)-based AZ benchmarks in localization accuracy.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/07/2605.01937v1-snnf-an-snn-based-near-sensor-noise-filter-for-dynamic-vision-sensors",
+      "section": "quick",
+      "title_en": "SNNF: An SNN-based Near-Sensor Noise Filter for Dynamic Vision Sensors",
+      "authors": "Yahan Yang, Pradeep Kumar Gopalakrishnan, Chang Chip Hong, Arindam Basu",
+      "date": "2026-05-03",
+      "pdf": "https://arxiv.org/pdf/2605.01937v1",
+      "score": "6.0",
+      "evidence": "传感器阵列的近传感器噪声过滤器",
+      "tldr": "针对动态视觉传感器（DVS）中背景活动噪声导致的计算开销问题，本文提出了一种名为SNNF的近传感器噪声滤波器。该方案结合了事件二值图像表示、并行存储架构和单层脉冲神经网络（SNN）分类器。SNNF通过脉冲计算替代高功耗乘法，显著降低了硬件资源消耗和功耗，在保持高过滤精度的同时，实现了极高的硬件效率，非常适合资源受限的边缘部署。",
+      "tags": "query:tmr",
+      "abstract_en": "Dynamic Vision Sensors (DVS) exhibit exceptional dynamic range and low power consumption, making them ideal for edge applications in the Internet of Video Things (IoVT). However, their output is often degraded by spurious Background Activity (BA) noise, leading to unnecessary computational overhead. This paper proposes SNNF, a near-sensor BA noise filter that integrates a compact Event-Based Binary Image (EBBI) representation, a parallel memory architecture, and a single-layer Spiking Neural Network (SNN) classifier. Trained on representative DVS data, the SNN distinguishes signal events from noise with an AUC of 0.89 on standard datasets. The binary-array-based EBBI eliminates timestamp dependency, significantly reducing memory footprint. Moreover, the SNN's spike-based computation replaces power-hungry multipliers with simple accumulation logic and minimizes inter-neuron data width, resulting in an extremely hardware-efficient design. FPGA implementation results show that SNNF reduces memory and logic resources to approximately 11% and 40%, respectively of state-of-the-art filters, while achieving a throughput of 29 Mega events per second (Meps). In a 65 nm CMOS ASIC implementation, SNNF achieves 44.4 Meps with an area and power consumption of only ~13% and <5% of the corresponding ANN-based designs. These results demonstrate that SNNF provides an excellent balance between filtering accuracy and hardware efficiency, making it highly suitable for resource-constrained, near-sensor deployment.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/07/2605.03888v1-multipath-exploitation-in-highly-reflective-environments-for-enhanced-microwave-imaging-via-inverse-source-reconstruction",
+      "section": "quick",
+      "title_en": "Multipath Exploitation in Highly Reflective Environments for Enhanced Microwave Imaging via Inverse Source Reconstruction",
+      "authors": "Quanfeng Wang, Mei Song Tong, Thomas F. Eibert",
+      "date": "2026-05-05",
+      "pdf": "https://arxiv.org/pdf/2605.03888v1",
+      "score": "6.0",
+      "evidence": "用于成像的逆源重建",
+      "tldr": "针对高反射环境下微波成像受物理孔径限制导致分辨率不足的问题，本文提出一种利用多径效应增强成像的方法。通过镜像理论将反射场等效为虚拟源，利用单频逆源求解器重构并分离原始源与镜像源，经相位修正后相干叠加，实现了等效孔径扩展。该方法在提升分辨率的同时显著减少了干扰伪影，为复杂反射环境下的高精度成像提供了新思路。",
+      "tags": "query:tmr",
+      "abstract_en": "Multipath effects significantly influence the quality of microwave imaging in highly reflective environments, while the physical measurement aperture size constrains resolution. It is shown that by exploiting multipath reflections, improved resolution can be achieved while maintaining acceptable artifact levels. Based on image theory, strong scattered fields from an ideal reflection plane can be represented by virtual image sources. Using a single-frequency inverse source solver, the spatially distributed original and image sources are reconstructed and separated, which allows separate application of the imaging algorithm for both of them. The coherent combination of both sets of sources together with appropriate phase correction results in an effective aperture expansion that yields superior resolution. Furthermore, this separation strategy significantly mitigates interference artifacts. Simulation results, supported by theoretical analysis and comparison with a ray-tracing enhanced backprojection algorithm are presented to verify the effectiveness of the proposed approach.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

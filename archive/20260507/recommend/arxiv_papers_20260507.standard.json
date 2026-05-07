@@ -1,0 +1,164 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-07T20:43:34.636518+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2605.04951v1",
+      "title": "Scalar and Vector Airborne Platform Calibration Using Quantum and Classical Magnetometers and Inertial Sensors",
+      "abstract": "Airborne magnetometry requires rigorous calibration to isolate geomagnetic signals from sensor errors and platform magnetic fields. This magnetic compensation is needed for applications like geophysical exploration and magnetic anomaly navigation. The standard approach utilizes a quantum scalar Optically Pumped Magnetometer (OPM) and a less sensitive fluxgate vector sensor for attitude information. This configuration typically results in a scalar approximation of the platform field.   Advancements in high-sensitivity Diamond Nitrogen-Vacancy (NV) vector magnetometers now enable a re-evaluation of the standard hardware configuration and full vector calibration models. We show through rigorous theoretical analysis that scalar calibration models are robust to misalignment. Vector calibration models, however, are intrinsically first-order sensitive to attitude errors, irrespective of the accuracy of the magnetic field measurements. These errors arise from inaccurate representation of the background field direction in the body frame, and can amplify small orientation errors into noticeable calibration residuals.   Using realistic sensor models and flight trajectories, we evaluate different sensor configurations for magnetic calibration and assess the use of onboard Inertial Navigation Systems (INS) as an independent attitude reference to enable stable compensation. Our results suggest that quantum vector magnetometers like NV sensors are not sufficient to solve the attitude bottleneck for airborne vector magnetic calibration. However, as a single sensor capable of providing both absolute field and directional measurements, they may offer benefits regarding sensor placement, synchronization, and scalar calibration accuracy.",
+      "authors": [
+        "Antonia Hager",
+        "Torleiv H. Bryne",
+        "Mia Jukić"
+      ],
+      "primary_category": "quant-ph",
+      "categories": [
+        "quant-ph",
+        "physics.app-ph"
+      ],
+      "published": "2026-05-06T14:15:10+00:00",
+      "link": "https://arxiv.org/pdf/2605.04951v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 7.0,
+      "llm_evidence_en": "Calibration of vector magnetometers for platform magnetic field compensation",
+      "llm_evidence_cn": "用于平台磁场补偿的矢量磁力计校准",
+      "llm_evidence": "用于平台磁场补偿的矢量磁力计校准",
+      "canonical_evidence": "用于平台磁场补偿的矢量磁力计校准",
+      "llm_tldr_en": "Evaluates vector calibration models for high-sensitivity magnetometers to isolate magnetic signals.",
+      "llm_tldr_cn": "评估了高灵敏度磁力计的矢量校准模型，以隔离磁信号并补偿平台干扰。",
+      "llm_tldr": "评估了高灵敏度磁力计的矢量校准模型，以隔离磁信号并补偿平台干扰。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "magnetic field sensor array for current sensing",
+      "matched_requirement_id": "req-2",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "7"
+    },
+    {
+      "id": "2604.27352v1",
+      "title": "Array Zooming Optimization for Near-Field Localization With Movable Antennas",
+      "abstract": "The emergence of movable antenna (MA) technology provides a promising way to enhance wireless sensing and communication by introducing spatial degrees of freedom through dynamic array reconfiguration. In near-field localization, achieving high resolution at low cost necessitates the adoption of sparse arrays. However, such sparsity tends to introduce spatial ambiguity due to aliasing effects. To resolve this resolution-ambiguity dilemma, this paper proposes an MA-enabled array zooming (AZ) system. First, we design a multi-measurement array zooming system that dynamically adjusts antenna spacings. By fusing the observational information from different measurements, the proposed AZ system effectively mitigates spatial aliasing while maintaining spatial resolution. Second, to quantify the performance limits under the severe multi-modal distributions inherent in sparse near-field sensing, we theoretically analyze the false peak distribution and derive a tighter performance lower bound, which incorporates the false detection probability. Third, considering that multiple false peaks may exist in practical multi-modal distributions, we propose an optimization algorithm for the AZ system to suppress false peaks and minimize the localization error. Extensive numerical results demonstrate that the proposed AZ strategy adaptively optimizes array configurations under varying signal-to-noise ratios (SNRs), substantially outperforming both conventional fixed-spacing arrays and Cramer-Rao bound (CRB)-based AZ benchmarks in localization accuracy.",
+      "authors": [
+        "Yuxin Duan",
+        "Boyu Teng",
+        "Xiaojun Yuan",
+        "Rui Wang"
+      ],
+      "primary_category": "eess.SP",
+      "categories": [
+        "eess.SP"
+      ],
+      "published": "2026-04-30T03:06:24+00:00",
+      "link": "https://arxiv.org/pdf/2604.27352v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "array optimization and spatial degrees of freedom",
+      "llm_evidence_cn": "阵列优化与空间自由度",
+      "llm_evidence": "阵列优化与空间自由度",
+      "canonical_evidence": "阵列优化与空间自由度",
+      "llm_tldr_en": "Optimizes sparse arrays using movable antennas to enhance resolution and mitigate spatial aliasing.",
+      "llm_tldr_cn": "利用可移动天线优化稀疏阵列，以提高分辨率并减轻空间混叠。",
+      "llm_tldr": "利用可移动天线优化稀疏阵列，以提高分辨率并减轻空间混叠。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.01937v1",
+      "title": "SNNF: An SNN-based Near-Sensor Noise Filter for Dynamic Vision Sensors",
+      "abstract": "Dynamic Vision Sensors (DVS) exhibit exceptional dynamic range and low power consumption, making them ideal for edge applications in the Internet of Video Things (IoVT). However, their output is often degraded by spurious Background Activity (BA) noise, leading to unnecessary computational overhead. This paper proposes SNNF, a near-sensor BA noise filter that integrates a compact Event-Based Binary Image (EBBI) representation, a parallel memory architecture, and a single-layer Spiking Neural Network (SNN) classifier. Trained on representative DVS data, the SNN distinguishes signal events from noise with an AUC of 0.89 on standard datasets. The binary-array-based EBBI eliminates timestamp dependency, significantly reducing memory footprint. Moreover, the SNN's spike-based computation replaces power-hungry multipliers with simple accumulation logic and minimizes inter-neuron data width, resulting in an extremely hardware-efficient design. FPGA implementation results show that SNNF reduces memory and logic resources to approximately 11% and 40%, respectively of state-of-the-art filters, while achieving a throughput of 29 Mega events per second (Meps). In a 65 nm CMOS ASIC implementation, SNNF achieves 44.4 Meps with an area and power consumption of only ~13% and <5% of the corresponding ANN-based designs. These results demonstrate that SNNF provides an excellent balance between filtering accuracy and hardware efficiency, making it highly suitable for resource-constrained, near-sensor deployment.",
+      "authors": [
+        "Yahan Yang",
+        "Pradeep Kumar Gopalakrishnan",
+        "Chang Chip Hong",
+        "Arindam Basu"
+      ],
+      "primary_category": "cs.NE",
+      "categories": [
+        "cs.NE"
+      ],
+      "published": "2026-05-03T15:35:05+00:00",
+      "link": "https://arxiv.org/pdf/2605.01937v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "near-sensor noise filter for sensor arrays",
+      "llm_evidence_cn": "传感器阵列的近传感器噪声过滤器",
+      "llm_evidence": "传感器阵列的近传感器噪声过滤器",
+      "canonical_evidence": "传感器阵列的近传感器噪声过滤器",
+      "llm_tldr_en": "Proposes an SNN-based near-sensor noise filter to distinguish signal events from background activity noise.",
+      "llm_tldr_cn": "提出了一种基于SNN的近传感器噪声滤波器，用于区分信号事件和背景活动噪声。",
+      "llm_tldr": "提出了一种基于SNN的近传感器噪声滤波器，用于区分信号事件和背景活动噪声。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.03888v1",
+      "title": "Multipath Exploitation in Highly Reflective Environments for Enhanced Microwave Imaging via Inverse Source Reconstruction",
+      "abstract": "Multipath effects significantly influence the quality of microwave imaging in highly reflective environments, while the physical measurement aperture size constrains resolution. It is shown that by exploiting multipath reflections, improved resolution can be achieved while maintaining acceptable artifact levels. Based on image theory, strong scattered fields from an ideal reflection plane can be represented by virtual image sources. Using a single-frequency inverse source solver, the spatially distributed original and image sources are reconstructed and separated, which allows separate application of the imaging algorithm for both of them. The coherent combination of both sets of sources together with appropriate phase correction results in an effective aperture expansion that yields superior resolution. Furthermore, this separation strategy significantly mitigates interference artifacts. Simulation results, supported by theoretical analysis and comparison with a ray-tracing enhanced backprojection algorithm are presented to verify the effectiveness of the proposed approach.",
+      "authors": [
+        "Quanfeng Wang",
+        "Mei Song Tong",
+        "Thomas F. Eibert"
+      ],
+      "primary_category": "eess.IV",
+      "categories": [
+        "eess.IV"
+      ],
+      "published": "2026-05-05T15:47:00+00:00",
+      "link": "https://arxiv.org/pdf/2605.03888v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "inverse source reconstruction for imaging",
+      "llm_evidence_cn": "用于成像的逆源重建",
+      "llm_evidence": "用于成像的逆源重建",
+      "canonical_evidence": "用于成像的逆源重建",
+      "llm_tldr_en": "Uses inverse source solvers to reconstruct spatially distributed sources in reflective environments.",
+      "llm_tldr_cn": "使用逆源求解器在反射环境中重建空间分布的源。",
+      "llm_tldr": "使用逆源求解器在反射环境中重建空间分布的源。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}
