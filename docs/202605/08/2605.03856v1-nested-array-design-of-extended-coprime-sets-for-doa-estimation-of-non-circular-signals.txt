@@ -1,0 +1,240 @@
+Title: Nested array design of extended coprime sets for DOA estimation of non-circular signals
+
+URL Source: https://arxiv.org/pdf/2605.03856v1
+
+Published Time: Wed, 06 May 2026 01:25:58 GMT
+
+Number of Pages: 4
+
+Markdown Content:
+# Nested array design of extended coprime sets for DOA estimation of non-circular signals 
+
+Dongqi Chen 1, Kun Ye 2, Chuanxi Xing 3, Waqas Khalid 4, Huiping Huang 5
+
+> 1,2,3
+
+School of Electrical and Information Technology, Yunnan Minzu University, Kunming, China Yunnan Key Laboratory of Unmanned Autonomous System, Kunming, China chenliangfaer@163.com, yekun@stu.xmu.edu.cn, xingchuanxi@163.com 
+
+> 4
+
+Department of Electrical and Electronic Engineering, University of Nottingham Ningbo China, Ningbo, China Waqas.Khalid@nottingham.edu.cn 
+
+> 5
+
+Department of Electrical Engineering, Chalmers University of Technology, Gothenburg, Sweden huiping@chalmers.se 
+
+Abstract —In recent years, direction of arrival estimation uti-lizing non-circular signals has become a focal point for scholarly research. To enhance the degrees of freedom (DOF) in receiver arrays specifically for non-circular signal DOA estimation, this study introduces a novel array configuration. This design lever-ages an extended coprime framework, applying a sliding trans-lation technique to optimize sensor placement. Crucially, this rearranged structure preserves the continuity of the difference co-array (DCA). Furthermore, the sum co-array (SCA) is shifted to merge seamlessly with the DCA, eliminating redundancy and substantially expanding both the virtual aperture array (VAA) and the DOF. Consequently, the proposed array demonstrates superior performance in practical DOA estimation tasks involving non-circular signals. Simulation results and comparative analyses confirm that, relative to traditional Nested Arrays (NA), Extended Sliding Nested Array (ESNA), and other benchmark structures, the proposed array achieves better DOF and VAA, leading to enhanced estimation accuracy in practical scenarios. 
+
+Index Terms —Direction of arrival estimation, Non-circular signal, Nested array, Sum difference co-array, Degrees of freedom 
+
+I. I NTRODUCTION 
+
+With the increasingly widespread application of direction of arrival (DOA) in military and commercial fields, it has also attracted more and more attention in array signal pro-cessing [1]–[7]. Although the traditional subspace algorithms based on uniform linear arrays can solve the problem, they have significant limitations. Firstly, underdetermined DOA estimation cannot be achieved. That is, for an array composed of N sensors, at most N − 1 source signals can be estimated. Secondly, the separation of the array sensors is constrained to half a wavelength, which impacts the aperture enlargement of the array and introduces the consequences of mutual cou-pling effects. To solve the above problems, sparse arrays have gradu-ally come into the view of researchers, and their research has developed rapidly [8]–[13]. Minimum redundancy arrays (MRA), coprime array (CPA) and nested arrays (NA) are ex-amples of traditional sparse arrays. The MRA array can break through the sensor spacing of half wavelength and achieve underdetermined DOA estimation. However, no closed-form expression can be given for its sensor position. The NA array not only retains its advantages but also can obtain the closed-form expression of its sensor position, thus receiving much attention in the research of sparse arrays. In addition to the classic NA arrays, a series of variants of NA arrays such as augmented nested arrays (ANAs) [13], super nested arrays (SNAs) [14], and generalized nested array (GNA) [15] have emerged, further improving the accuracy of DOA estimation. Most of the arrays mentioned above are studies for circular signals. In recent years, research on DOA estimation for non-circular signals has also developed rapidly [16]–[18]. Two relocating sparse nested array (RSNA) structures, RSNA-I and RSNA-II, were presented in [16]. They can, respectively, reach the degrees of freedom (DOF) of 4M1M2 + 2( M1 + M2) + 1 
+
+and 4M1M2 + 2 M1(2 − mod( M1, 2)) + 2 M2 + 1 − mod (M1, 2) .In [17], the extended sliding nested array (ESNA) array was designed based on the sliding strategy and can achieve 
+
+2N1N2 + 2( N1 + N2) − 2J + 1 + 4 ⌊(N1N2 + N2 + 2 J)/2⌋
+
+DOF, where J = ⌈N1/2⌉ − 1.This paper begins by laying out the fundamental principles of the sum-difference co-array (SDCA) concept. Building on this foundation, we’ve developed and put forward a novel nested array employing a sliding strategy, specifically tailored to handle DOA estimation for non-circular signals. Through the analysis and numerical simulation, and compared with NA, ESNA, and RSNA-I arrays. The findings indicate that the array developed in this research has superior accuracy of DOA estimation. The following are the paper’s primary contributions: 1) We design a sliding extended coprime nested array utilizing a sliding methodology. Provide the closed-form expression for the sensor position of the array and the generic formula for DOF. 2) Through the analysis and numerical simulation, com-pared with NA, ESNA, and RSNA-I arrays, the novel array configuration detailed in this research paper boasts a better DOF, which translates to more accuracy of DOA estimation outcomes while demonstrating superior performance in challenging low signal-to-noise ratio (SNR) scenarios. 
+
+> arXiv:2605.03856v1 [cs.NI] 5 May 2026
+
+The remaining structure of the paper is as follows: The section II introduces the array receiving model of non-circular signals and the concept of SDCA. The section III presents the array structure and specific details designed in this paper. Sec-tion IV is numerical simulation and analysis. The conclusion is given in Section V. II. T HEORETICAL PREMISE 
+
+A. Receiving Signal Model 
+
+Suppose there are Q signals incident on a receiving ar-ray in space. The signal satisfies the assumption of a far-field narrowband signal, with the incident direction being 
+
+{θ1, θ 2, · · · , θ Q}. The receiving array comprises M sensors, with their positions denoted by W.
+
+W = {w1d, w 2d, · · · , w M d} (1) where d = λ/ 2 and λ represents the wavelength of the source signal. The array received signal at time t can be articulated as: 
+
+x(t) = As (t) + e(t), (2) where x(t) = [ x1(t), x 2(t), · · · , x M (t)] T is the observed value vector at time t. A = [ a(θ1), a(θ2), · · · , a(θQ)] is the matrix of the array manifold of dimension M × Q and 
+
+a(θq ) = [ ejπw 1d sin( θq ), e jπw 2d sin( θq ), · · · , e jπw M d sin( θq )]T
+
+(3) is the q-th source steering vector. s(t) =[s1(t), s 2(t), · · · , s Q(t)] T is the source signal vector at time t. e(t) = [ e1(t), e 2(t), · · · , e M (t)] T is the noise vector at time t, it is assumed to be Gaussian white noise, with variance δ2 
+
+> n
+
+and mean zero. In this paper, we define the received signal as a non-circular signal and represent it as [19]: 
+
+sN C (t) = Ψs R(t), (4) where Ψ = diag {e−jϕ 1 , e −jϕ 2 , · · · , e −jϕ Q } represents the diagonal matrix of signal delay. ϕq represents the phase of the signal with an incident angle of θq . When the number of snapshots is t, the signal vector is represented as sR(t).Note that the pseudo covariance matrix of the non-circular signals is nonzero [19]. In order to fully exploit the information conveyed by the non-circular signals, the combination of the original received signal and its conjugate is known as an extended received signal, and it can be written as follows: 
+
+xN C (t) = 
+
+ x(t)
+
+x∗(t)
+
+
+
+=
+
+ AΨ A∗Ψ∗
+
+
+
+sR(t) + 
+
+ e(t)
+
+e∗(t)
+
+
+
+. (5) The received signal’s extended covariance matrix can be written as: 
+
+RN C = E[XN C XHN C ]= AN C E[SRSHR ]AHN C + δ2
+
+> n
+
+I2M
+
+= AN C RSR AHN C + δ2
+
+> n
+
+I2M ,
+
+(6) where XN C = [xN C (1) , xN C (2) , · · · , xN C (T )] . AN C =[( AΨ )T , (AΨ )H ]T is defined as the array manifold matrix of the extended signal of dimension 2M × Q. RSR =
+
+E[SRSHR ] = diag {δ21 , δ 22 , · · · , δ 2
+
+> Q
+
+} is the covariance matrix of the source signal, δ2 
+
+> q
+
+is the energy of the source signal in the q-th direction. Vectorization of RN C yields the following equation as: 
+
+z = vec( RN C ) = ( A∗ 
+
+> N C
+
+⊙ AN C )s + δ2 
+
+> n
+
+vec( I2M )= BN C s + δ2 
+
+> n
+
+vec( I2M ), (7) where s = [δ21 , δ 22 , · · · , δ 2
+
+> Q
+
+]T . BN C is the array manifold matrix of the SDCA. However, the phase information in BN C is disordered, so a selection matrix P is constructed to organize the phase information in BN C .
+
+zU = Pz = B′ 
+
+> N C
+
+s + δ2
+
+> n
+
+P vec( I2M ). (8) At this point, zU can be thought of as the received signal of an array that has LU sensors. LU is the number of array elements of the maximum continuous segment of the SDCA virtual array of the original array. However, its snapshot number is 1. The full-rank covariance matrix is obtained by applying the spatial smoothing procedure for zU based on [8]. The off-grid sparse Bayesian inference (OGSBI) approach is then used to estimate DOA [20]. 
+
+B. Sum-Difference Co-Array Theoretical Models 
+
+To enable an array with a specific quantity of sensors to achieve better DOF for underdetermined DOA estimation, ex-tending the length of its virtual array with Sum co-array (SCA) and Difference co-array (DCA) is an effective approach. 
+
+Definition 1: For an array whose sensor locations set is 
+
+W, the sensors locations set WSCA of its SCA is defined as follows: 
+
+WSCA = {± (Wi + Wj ) | Wi ∈ W, W j ∈ W}. (9) 
+
+Definition 2: For an array with sensor locations denoted as 
+
+W, the sensor locations set WDCA of its DCA is defined as follows: 
+
+WDCA = {Wi − Wj | Wi ∈ W, W j ∈ W}. (10) 
+
+Definition 3: For an array whose sensor locations set is W,the sensors locations set WSDCA of its SDCA is defined as follows: 
+
+WSDCA = WSCA ∪ WDCA . (11) In subsequent research, DOF specifically refers to the length of the maximum continuous segment of the SDCA in an array. Virtual aperture array (VAA) specifically refers to the SDCA length of the array, that is, V AA = max( WSDCA ) −
+
+min( WSDCA ).III. T HE PROPOSED SLIDING EXTEND COPRIME NESTED 
+
+ARRAY 
+
+A. Structure of the Sliding Extend Coprime Nested Array 
+
+A sliding extended nested array (SECNA) based on coprime sets will be presented in this section. Firstly, the physical position of the array sensor is given, and then the closed-form expression of the DOF of its SDCA is presented. The SECNA array consists of three subarrays, and the specific position expressions are as follows: 
+
+S = [
+
+> p=1 ,2,3
+
+Array( p), (12) 
+
+
+
+Array(1) = N ⟨0 : M − 1⟩ + S
+
+Array(2) = M ⟨0 : N ⟩ + S
+
+Array(3) = ( N + M )⟨1 : N + M − 1⟩ + M N + S,
+
+(13) where N and M are a set of coprime numbers. S =(M + N )2/2 is the horizontal sliding length using the sliding strategy. There are 2( M + N ) − 1 physical sensors in total. The SECNA structure when the coprime set is M = 5 
+
+and N = 3 is depicted in Fig. 1. The three subarrays are respectively: Array(1) = {32 , 35 , 38 , 41 , 44 }, Array(2) =
+
+{32 , 37 , 42 , 47 } and Array(3) = {55 , 63 , 71 , 79 , 87 , 95 , 103 }.There are fifteen physical sensors in all. As can be seen from Fig. 1(c), the length of the maximum continuous segment of the positive half-axis of the virtual SDCA array of this array is 142. Therefore, the DOF of the virtual SDCA array composed of 15 physical sensors in the SECNA array can reach 285. 
+
+Definition 4: The DOF of SECNA can be calculated in terms of the difference in parity between M and N :
+
+DOF = 4( M + N )2 + 2 M N − 1, (14) 
+
+B. Comparison of Degrees of Freedom 
+
+This subsection presents a comparison between the DOF of the NA, ESNA, and RSNA arrays and the SECNA array suggested in this paper.                           
+
+> TABLE I DOF C OMPARISON OF DIFFERENT ARRAYS
+> Numbers of sensors NA ESNA RSNA SECNA 961 57 99 111 13 113 121 195 219 19 221 427 399 441 23 313 609 575 645 27 421 823 783 873
+
+Table I presents the specific values of DOF for different arrays, with the number of sensors ranging from 9 to 27. Table I makes it fairly evident that the DOF of the SDCA of various arrays varies depending on the number of sensors. Among them, the DOF of ESNA and RSNA arrays each have their advantages and disadvantages when the number of elements of array is different. However, the DOF of the SECNA array designed and proposed in this paper are superior to those of NA, ESNA and RSNA when the number of sensors varies. Therefore, the SECNA array is bound to have better working performance when actually conducting DOA estimation. IV. N UMERICAL SIMULATION 
+
+In this section, the performance of DOA estimation of dif-ferent array structures are compared by numerical simulation in terms of root mean square error (RMSE): 
+
+RM SE =
+
+vuut 1
+
+QK 
+
+> K
+
+X
+
+> k=1
+> Q
+
+X
+
+> q=1
+
+(ˆθqk − θq )2, (15) where K is the total number of Monte Carlo simulation trials. ˆθqk is the DOA estimate of the signal from direction θq
+
+in the k-th Monte Carlo simulation trials. In all simulations in this section, K is set to 200 runs. The SECNA array created in this study will be compared with the current arrays (including NA, ESNA, and RSNA) in terms of DOA simulation performance. Thirteen physical sensors are included in the array. The estimated number of DOA sources is 31, with an angle ranging from −60 ◦ to 
+
+60 ◦, following a uniform distribution. Furthermore, the OGSBI method is used in all of the simulations in this research. The comparison of the RMSE of various arrays under various SNRs can be seen in Fig. 2. The snapshot count is established at 2000. The SNR range is established between 
+
+−5dB and 20 dB. It is evident that the RMSE of the SECNA ar-ray is much lower than that of other arrays under various SNR. RMSE continues to decline as SNR rises. This shows that SECNA has more prominent DOA estimation performance and stronger anti-noise ability. The RMSE of various arrays under various snapshots is compared in Fig. 3. The SNR is set to 20 dB. The snapshots range is set to 300 to 2600. It is evident that the SECNA array’s RMSE is substantially lower than those of other arrays under various snapshots. As snapshot increases, RMSE further decreases. This shows that SECNA has more prominent DOA estimation performance.       
+
+> Fig. 1. (a) The ECNA array structure with M= 5 and N= 3 ; (b) SECNA: ECNA array structure with sliding strategy; (c) Virtual SDCA on the positive side.
+
+Fig. 2. RMSE versus SNR 
+
+Fig. 3. RMSE versus snapshots 
+
+V. C ONCLUSION 
+
+In this paper, we proposed a novel nested array, better DOF are achieved by using the SDCA in this array, which is based on the sliding strategy. Through numerical analysis and simulation verification, the proposed array has a better DOF and superior estimate performance in DOA estimation where the number of physical sensors is equal to that of NA, ESNA, and RSNA arrays. ACKNOWLEDGMENT 
+
+This work was supported by the National Natural Science Foundation of China (No. 61971362). REFERENCES [1] C. Zhou, Y. Gu, Z. Shi and Y. D. Zhang, “Off-Grid Direction-of-Arrival Estimation Using Coprime Array Interpolation,” in IEEE Signal Processing Letters , vol. 25, pp. 1710-1714, Nov. 2018. [2] X. Han, M. Liu, S. Zhang, R. Zheng and J. Lan, “A Passive DOA Estimation Algorithm of Underwater Multipath Signals via Spatial Time-Frequency Distributions,” in IEEE Transactions on Vehicular Technol-ogy , vol. 70, pp. 3439-3455, April 2021. [3] H. Krim and M. Viberg, “Two decades of array signal processing re-search: the parametric approach,” in IEEE Signal Processing Magazine ,vol. 13, pp. 67-94, July 1996. [4] Z. Zhang, Z. Shi and Y. Gu, “Ziv-Zakai Bound for DOAs Estimation,” in IEEE Transactions on Signal Processing , vol. 71, pp. 136-149, 2023. [5] G. J. Foschini, G. D. Golden, R. A. Valenzuela and P. W. Wolniansky, “Simplified processing for high spectral efficiency wireless communi-cation employing multi-element arrays,” in IEEE Journal on Selected Areas in Communications , vol. 17, pp. 1841-1852, Nov. 1999. [6] R. Roy and T. Kailath, “ESPRIT-estimation of signal parameters via rotational invariance techniques,” in IEEE Transactions on Acoustics, Speech, and Signal Processing , vol. 37, pp. 984-995, July 1989. [7] R. G. Lorenz and S. P. Boyd, “Robust minimum variance beamforming,” in IEEE Transactions on Signal Processing , vol. 53, pp. 1684-1696, May 2005. [8] P. Pal and P. P. Vaidyanathan, “Nested Arrays: A Novel Approach to Array Processing With Enhanced Degrees of Freedom,” in IEEE Transactions on Signal Processing , vol. 58, pp. 4167-4181, Aug. 2010. [9] P. P. Vaidyanathan and P. Pal, “Sparse Sensing With Co-Prime Samplers and Arrays,” in IEEE Transactions on Signal Processing , vol. 59, pp. 573-586, Feb. 2011. [10] A. Raza, W. Liu and Q. Shen, “Thinned Coprime Array for Second-Order Difference Co-Array Generation With Reduced Mutual Coupling,” in IEEE Transactions on Signal Processing , vol. 67, no. 8, pp. 2052-2065, April 2019. [11] W. Wang, S. Ren, Z. Chen, “Unified coprime array with multi-period subarrays for direction-of-arrival estimation,” in Digital Signal Process-ing , Vol. 74, pp. 30-42, March 2018. [12] X. Wang and X. Wang, “Hole Identification and Filling in k-Times Extended Co-Prime Arrays for Highly Efficient DOA Estimation,” in 
+
+IEEE Transactions on Signal Processing , vol. 67, pp. 2693-2706, May 2019. [13] J. Liu, Y. Zhang, Y. Lu, S. Ren and S. Cao, “Augmented Nested Arrays With Enhanced DOF and Reduced Mutual Coupling,” in IEEE Transactions on Signal Processing , vol. 65, pp. 5549-5563, Nov. 2017. [14] C.-L. Liu and P. P. Vaidyanathan, “Super Nested Arrays: Linear Sparse Arrays With Reduced Mutual Coupling—Part I: Fundamentals,” in IEEE Transactions on Signal Processing , pp. 3997-4012, Aug. 2016. [15] J. Shi, G. Hu, X. Zhang and H. Zhou, “Generalized Nested Array: Optimization for Degrees of Freedom and Mutual Coupling,” in IEEE Communications Letters , vol. 22, pp. 1208-1211, June 2018. [16] L. Zhou, Z. Feng, K. Ye, “Design of relocating sparse nested arrays for DOA estimation of non-circular signals,” in AEU-International Journal of Electronics and Communications , vol. 173, pp. 154976, January 2024. [17] X. Zhang, X. Lai, W. Zheng and Y. Wang, “Sparse Array Design for DOA Estimation of Non-Circular Signals: Reduced Co-Array Redun-dancy and Increased DOF,” in IEEE Sensors Journal , vol. 21, pp. 27928-27937, Dec. 2021. [18] K. Ye, L. Zhou, Z. Chen, “DOA estimation based on a novel shifted coprime array structure,” in AEU-International Journal of Electronics and Communications , vol. 179, pp. 155308, May 2024. [19] H. Abeida and J.-P. Delmas, “MUSIC-like estimation of direction of arrival for noncircular sources,” in IEEE Transactions on Signal Processing , vol. 54, pp. 2678-2690, July 2006. [20] Z. Yang, L. Xie and C. Zhang, “Off-Grid Direction of Arrival Estimation Using Sparse Bayesian Inference,” in IEEE Transactions on Signal Processing , vol. 61, pp. 38-43, Jan. 2013.

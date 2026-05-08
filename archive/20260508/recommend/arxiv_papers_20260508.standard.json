@@ -1,0 +1,164 @@
+{
+  "mode": "standard",
+  "generated_at": "2026-05-08T20:06:45.176428+00:00",
+  "stats": {
+    "mode": "standard",
+    "tag_count": 1,
+    "deep_divecandidates": 0,
+    "deep_cap": 6,
+    "deep_selected": 0,
+    "quick_candidates": 4,
+    "quick_skim_target": 11,
+    "quick_selected": 4
+  },
+  "deep_dive": [],
+  "quick_skim": [
+    {
+      "id": "2605.03856v1",
+      "title": "Nested array design of extended coprime sets for DOA estimation of non-circular signals",
+      "abstract": "In recent years, direction of arrival estimation utilizing non-circular signals has become a focal point for scholarly research. To enhance the degrees of freedom (DOF) in receiver arrays specifically for non-circular signal DOA estimation, this study introduces a novel array configuration. This design leverages an extended coprime framework, applying a sliding translation technique to optimize sensor placement. Crucially, this rearranged structure preserves the continuity of the difference co-array (DCA). Furthermore, the sum co-array (SCA) is shifted to merge seamlessly with the DCA, eliminating redundancy and substantially expanding both the virtual aperture array (VAA) and the DOF. Consequently, the proposed array demonstrates superior performance in practical DOA estimation tasks involving non-circular signals. Simulation results and comparative analyses confirm that, relative to traditional Nested Arrays (NA), Extended Sliding Nested Array (ESNA), and other benchmark structures, the proposed array achieves better DOF and VAA, leading to enhanced estimation accuracy in practical scenarios.",
+      "authors": [
+        "Dongqi Chen",
+        "Kun Ye",
+        "Chuanxi Xing",
+        "Waqas Khalid",
+        "Huiping Huang"
+      ],
+      "primary_category": "cs.NI",
+      "categories": [
+        "cs.NI"
+      ],
+      "published": "2026-05-05T15:20:32+00:00",
+      "link": "https://arxiv.org/pdf/2605.03856v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "nested array design and sensor placement optimization",
+      "llm_evidence_cn": "嵌套阵列设计和传感器布局优化",
+      "llm_evidence": "嵌套阵列设计和传感器布局优化",
+      "canonical_evidence": "嵌套阵列设计和传感器布局优化",
+      "llm_tldr_en": "Introduces a novel nested array configuration to optimize sensor placement for DOA estimation.",
+      "llm_tldr_cn": "引入一种新型嵌套阵列配置，以优化DOA估计中的传感器布局。",
+      "llm_tldr": "引入一种新型嵌套阵列配置，以优化DOA估计中的传感器布局。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "TMR current sensor array design and optimization",
+      "matched_requirement_id": "req-6",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.05276v1",
+      "title": "On Unbiased Parameter Estimation and Signal Reconstruction",
+      "abstract": "In this paper, we expand the theory of depth-unbiased source localization to unbiased parameter estimation and signal reconstruction of an arbitrary number of non-zero parameters to be recovered. The topic touches on the concept of exact reconstructibility, most commonly known in compressed sensing and multisource estimation in various imaging problems. The theoretical results derive upper bounds on the number of recoverable parameters in the noiseless case, and a probability measure is defined to assess the probability of obtaining all non-zero parameters with correct magnitude order. The work provides a mathematical explanation of the open question regarding the noise robustness of standardized and unbiased methods. Also, the paper reveals a trade-off between the number of sensors and the signal-to-noise ratio. Numerical experiments demonstrate the theoretical findings.",
+      "authors": [
+        "Joonas Lahtinen"
+      ],
+      "primary_category": "cs.IT",
+      "categories": [
+        "cs.IT",
+        "math.OC",
+        "math.PR"
+      ],
+      "published": "2026-05-06T14:37:20+00:00",
+      "link": "https://arxiv.org/pdf/2605.05276v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "theory of unbiased parameter estimation and signal reconstruction for multisource problems",
+      "llm_evidence_cn": "多源问题的无偏参数估计与信号重建理论",
+      "llm_evidence": "多源问题的无偏参数估计与信号重建理论",
+      "canonical_evidence": "多源问题的无偏参数估计与信号重建理论",
+      "llm_tldr_en": "Develops theoretical bounds for unbiased signal reconstruction and parameter estimation in noisy environments.",
+      "llm_tldr_cn": "开发了噪声环境下无偏信号重建和参数估计的理论边界。",
+      "llm_tldr": "开发了噪声环境下无偏信号重建和参数估计的理论边界。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.06336v1",
+      "title": "Nonlinear RMM-GKS for Large-Scale Dynamic and Streaming Inverse Problems with Uncertain Forward Operators",
+      "abstract": "Many practical imaging systems suffer from uncertainty in acquisition geometry -- such as projection angles in computed tomography or sensor positions in photoacoustic tomography -- leading to nonlinear inverse problems that require joint estimation of both the image and the forward model parameters. Standard approaches that assume a known linear forward operator fail to account for these uncertainties, resulting in significant reconstruction artifacts.   We propose a nonlinear recycled majorization-minimization generalized Krylov subspace (NL-RMM-GKS) framework for large-scale inverse problems with uncertain forward operators. The method extends MM-GKS to nonlinear settings by combining majorization-minimization for nonsmooth regularization with Krylov subspace projection and subspace recycling, ensuring bounded memory usage.   Two complementary formulations are developed: an alternating minimization approach that alternates between image updates and Gauss-Newton parameter estimation, and a variable projection approach that eliminates the image variable and optimizes directly over the parameters using inexact inner solves. We further introduce streaming variants that process data sequentially, enabling reconstruction from large or dynamically acquired datasets without storing the full operator. For dynamic problems, we incorporate two temporal regularization strategies -- optical flow and anisotropic total variation -- as plug-in choices within the framework.   We carry out rigorous numerical experiments in fan-beam computed tomography and photoacoustic tomography to demonstrate that our proposed framework achieves high-quality reconstructions with bounded memory requirements, making it suitable for large-scale dynamic imaging problems.",
+      "authors": [
+        "Toluwani Okunola",
+        "Mirjeta Pasha",
+        "Misha E. Kilmer",
+        "James G. Nagy",
+        "Eric de Sturler"
+      ],
+      "primary_category": "math.NA",
+      "categories": [
+        "math.NA"
+      ],
+      "published": "2026-05-07T14:27:48+00:00",
+      "link": "https://arxiv.org/pdf/2605.06336v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "Inverse problem framework for sensor position uncertainty",
+      "llm_evidence_cn": "针对传感器位置不确定性的反演问题框架",
+      "llm_evidence": "针对传感器位置不确定性的反演问题框架",
+      "canonical_evidence": "针对传感器位置不确定性的反演问题框架",
+      "llm_tldr_en": "Proposes a framework for solving large-scale inverse problems with uncertain sensor geometries.",
+      "llm_tldr_cn": "提出了一种解决具有不确定传感器几何形状的大规模反演问题的框架。",
+      "llm_tldr": "提出了一种解决具有不确定传感器几何形状的大规模反演问题的框架。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "algorithms for current reconstruction using sensor arrays",
+      "matched_requirement_id": "req-3",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    },
+    {
+      "id": "2605.06358v1",
+      "title": "Edge Triggering in IoT Mesh Networks: A Comparative Monte Carlo Study of Seven Detection Algorithms",
+      "abstract": "Real-time event detection in Internet of Things (IoT) mesh sensor networks presents significant challenges due to time-varying noise conditions, limited computational resources at edge nodes, and the need for autonomous operation without centralised coordination. This paper presents a comprehensive Monte Carlo simulation study comparing the Temporal Spectral Noise-Floor Adaptation (TSNFA) method against six alternative detection algorithms, evaluated across a 200-node mesh network over 24 hours with realistic noise models including 60 Hz electromagnetic interference (EMI), sinusoidally drifting noise power (+/- 6 dB), and intermittent digital switching bursts. TSNFA achieves 100% detection rate with zero false positives, uniquely combining three interlocking defences: spectral band selection, temporal persistence filtering, and adaptive noise-floor tracking. Every competing algorithm omits at least one of these three defences and fails correspondingly, with false-positive rates ranging from 0 (Send-on-Delta, which also detects nothing) to 13,387,930 (broadband energy ratio). These results identify the three-defence combination as necessary and sufficient for autonomous edge triggering in resource-constrained IoT deployments.",
+      "authors": [
+        "Sergii Makovetskyi",
+        "Lars Thomsen"
+      ],
+      "primary_category": "cs.NI",
+      "categories": [
+        "cs.NI"
+      ],
+      "published": "2026-05-07T14:36:20+00:00",
+      "link": "https://arxiv.org/pdf/2605.06358v1",
+      "tags": [
+        "keyword:TMR",
+        "query:TMR"
+      ],
+      "llm_score": 6.0,
+      "llm_evidence_en": "interference suppression including 60 Hz EMI in sensor networks",
+      "llm_evidence_cn": "传感器网络中的干扰抑制，包括60Hz电磁干扰",
+      "llm_evidence": "传感器网络中的干扰抑制，包括60Hz电磁干扰",
+      "canonical_evidence": "传感器网络中的干扰抑制，包括60Hz电磁干扰",
+      "llm_tldr_en": "Evaluates detection algorithms in IoT mesh networks under realistic noise and electromagnetic interference.",
+      "llm_tldr_cn": "评估了物联网网状网络在现实噪声和电磁干扰下的检测算法。",
+      "llm_tldr": "评估了物联网网状网络在现实噪声和电磁干扰下的检测算法。",
+      "llm_tags": [
+        "query:tmr"
+      ],
+      "matched_query_tag": "query:tmr",
+      "matched_query_text": "interference suppression techniques for TMR current sensor arrays",
+      "matched_requirement_id": "req-5",
+      "selection_source": "fresh_fetch",
+      "quick_tier": "6"
+    }
+  ]
+}

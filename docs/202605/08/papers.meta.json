@@ -1,0 +1,65 @@
+{
+  "label": "2026-05-08",
+  "date": "2026-05-08",
+  "generated_at": "2026-05-08T20:06:53",
+  "count": 4,
+  "papers": [
+    {
+      "paper_id": "202605/08/2605.03856v1-nested-array-design-of-extended-coprime-sets-for-doa-estimation-of-non-circular-signals",
+      "section": "quick",
+      "title_en": "Nested array design of extended coprime sets for DOA estimation of non-circular signals",
+      "authors": "Dongqi Chen, Kun Ye, Chuanxi Xing, Waqas Khalid, Huiping Huang",
+      "date": "2026-05-05",
+      "pdf": "https://arxiv.org/pdf/2605.03856v1",
+      "score": "6.0",
+      "evidence": "嵌套阵列设计和传感器布局优化",
+      "tldr": "引入一种新型嵌套阵列配置，以优化DOA估计中的传感器布局。",
+      "tags": "query:tmr",
+      "abstract_en": "In recent years, direction of arrival estimation utilizing non-circular signals has become a focal point for scholarly research. To enhance the degrees of freedom (DOF) in receiver arrays specifically for non-circular signal DOA estimation, this study introduces a novel array configuration. This design leverages an extended coprime framework, applying a sliding translation technique to optimize sensor placement. Crucially, this rearranged structure preserves the continuity of the difference co-array (DCA). Furthermore, the sum co-array (SCA) is shifted to merge seamlessly with the DCA, eliminating redundancy and substantially expanding both the virtual aperture array (VAA) and the DOF. Consequently, the proposed array demonstrates superior performance in practical DOA estimation tasks involving non-circular signals. Simulation results and comparative analyses confirm that, relative to traditional Nested Arrays (NA), Extended Sliding Nested Array (ESNA), and other benchmark structures, the proposed array achieves better DOF and VAA, leading to enhanced estimation accuracy in practical scenarios.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/08/2605.05276v1-on-unbiased-parameter-estimation-and-signal-reconstruction",
+      "section": "quick",
+      "title_en": "On Unbiased Parameter Estimation and Signal Reconstruction",
+      "authors": "Joonas Lahtinen",
+      "date": "2026-05-06",
+      "pdf": "https://arxiv.org/pdf/2605.05276v1",
+      "score": "6.0",
+      "evidence": "多源问题的无偏参数估计与信号重建理论",
+      "tldr": "开发了噪声环境下无偏信号重建和参数估计的理论边界。",
+      "tags": "query:tmr",
+      "abstract_en": "In this paper, we expand the theory of depth-unbiased source localization to unbiased parameter estimation and signal reconstruction of an arbitrary number of non-zero parameters to be recovered. The topic touches on the concept of exact reconstructibility, most commonly known in compressed sensing and multisource estimation in various imaging problems. The theoretical results derive upper bounds on the number of recoverable parameters in the noiseless case, and a probability measure is defined to assess the probability of obtaining all non-zero parameters with correct magnitude order. The work provides a mathematical explanation of the open question regarding the noise robustness of standardized and unbiased methods. Also, the paper reveals a trade-off between the number of sensors and the signal-to-noise ratio. Numerical experiments demonstrate the theoretical findings.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/08/2605.06336v1-nonlinear-rmm-gks-for-large-scale-dynamic-and-streaming-inverse-problems-with-uncertain-forward-operators",
+      "section": "quick",
+      "title_en": "Nonlinear RMM-GKS for Large-Scale Dynamic and Streaming Inverse Problems with Uncertain Forward Operators",
+      "authors": "Toluwani Okunola, Mirjeta Pasha, Misha E. Kilmer, James G. Nagy, Eric de Sturler",
+      "date": "2026-05-07",
+      "pdf": "https://arxiv.org/pdf/2605.06336v1",
+      "score": "6.0",
+      "evidence": "针对传感器位置不确定性的反演问题框架",
+      "tldr": "提出了一种解决具有不确定传感器几何形状的大规模反演问题的框架。",
+      "tags": "query:tmr",
+      "abstract_en": "Many practical imaging systems suffer from uncertainty in acquisition geometry -- such as projection angles in computed tomography or sensor positions in photoacoustic tomography -- leading to nonlinear inverse problems that require joint estimation of both the image and the forward model parameters. Standard approaches that assume a known linear forward operator fail to account for these uncertainties, resulting in significant reconstruction artifacts.   We propose a nonlinear recycled majorization-minimization generalized Krylov subspace (NL-RMM-GKS) framework for large-scale inverse problems with uncertain forward operators. The method extends MM-GKS to nonlinear settings by combining majorization-minimization for nonsmooth regularization with Krylov subspace projection and subspace recycling, ensuring bounded memory usage.   Two complementary formulations are developed: an alternating minimization approach that alternates between image updates and Gauss-Newton parameter estimation, and a variable projection approach that eliminates the image variable and optimizes directly over the parameters using inexact inner solves. We further introduce streaming variants that process data sequentially, enabling reconstruction from large or dynamically acquired datasets without storing the full operator. For dynamic problems, we incorporate two temporal regularization strategies -- optical flow and anisotropic total variation -- as plug-in choices within the framework.   We carry out rigorous numerical experiments in fan-beam computed tomography and photoacoustic tomography to demonstrate that our proposed framework achieves high-quality reconstructions with bounded memory requirements, making it suitable for large-scale dynamic imaging problems.",
+      "selection_source": "fresh_fetch"
+    },
+    {
+      "paper_id": "202605/08/2605.06358v1-edge-triggering-in-iot-mesh-networks-a-comparative-monte-carlo-study-of-seven-detection-algorithms",
+      "section": "quick",
+      "title_en": "Edge Triggering in IoT Mesh Networks: A Comparative Monte Carlo Study of Seven Detection Algorithms",
+      "authors": "Sergii Makovetskyi, Lars Thomsen",
+      "date": "2026-05-07",
+      "pdf": "https://arxiv.org/pdf/2605.06358v1",
+      "score": "6.0",
+      "evidence": "传感器网络中的干扰抑制，包括60Hz电磁干扰",
+      "tldr": "评估了物联网网状网络在现实噪声和电磁干扰下的检测算法。",
+      "tags": "query:tmr",
+      "abstract_en": "Real-time event detection in Internet of Things (IoT) mesh sensor networks presents significant challenges due to time-varying noise conditions, limited computational resources at edge nodes, and the need for autonomous operation without centralised coordination. This paper presents a comprehensive Monte Carlo simulation study comparing the Temporal Spectral Noise-Floor Adaptation (TSNFA) method against six alternative detection algorithms, evaluated across a 200-node mesh network over 24 hours with realistic noise models including 60 Hz electromagnetic interference (EMI), sinusoidally drifting noise power (+/- 6 dB), and intermittent digital switching bursts. TSNFA achieves 100% detection rate with zero false positives, uniquely combining three interlocking defences: spectral band selection, temporal persistence filtering, and adaptive noise-floor tracking. Every competing algorithm omits at least one of these three defences and fails correspondingly, with false-positive rates ranging from 0 (Send-on-Delta, which also detects nothing) to 13,387,930 (broadband energy ratio). These results identify the three-defence combination as necessary and sufficient for autonomous edge triggering in resource-constrained IoT deployments.",
+      "selection_source": "fresh_fetch"
+    }
+  ],
+  "errors": []
+}

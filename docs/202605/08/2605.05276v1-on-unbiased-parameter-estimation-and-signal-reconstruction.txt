@@ -1,0 +1,1246 @@
+Title: On Unbiased Parameter Estimation and Signal Reconstruction
+
+URL Source: https://arxiv.org/pdf/2605.05276v1
+
+Published Time: Fri, 08 May 2026 00:08:16 GMT
+
+Number of Pages: 28
+
+Markdown Content:
+# On Unbiased Parameter Estimation and Signal Reconstruction 
+
+Joonas Lahtinen 
+
+Mathematics & Computing Sciences, Tampere University, Tampere 33720, Finland E-mail: joonas.j.lahtinen@tuni.fi 
+
+Abstract. In this paper, we expand the theory of depth-unbiased source localization to unbiased parameter estimation and signal reconstruction of an arbitrary number of non-zero parameters to be recovered. The topic touches on the concept of exact reconstructibility, most commonly known in compressed sensing and multisource estimation in various imaging problems. The theoretical results derive upper bounds on the number of recoverable parameters in the noiseless case, and a probability measure is defined to assess the probability of obtaining all non-zero parameters with correct magnitude order. The work provides a mathematical explanation of the open question regarding the noise robustness of standardized and unbiased methods. Also, the paper reveals a trade-off between the number of sensors and the signal-to-noise ratio. Numerical experiments demonstrate the theoretical findings. 
+
+Keywords : Linear forward problem, Parameter estimation, Signal reconstruction, Solution bias 
+
+Submitted to: Inverse Problems 
+
+> arXiv:2605.05276v1 [cs.IT] 6 May 2026
+
+On Unbiased Source Parameter Estimation 2
+
+1. Introduction 
+
+In inverse problems where the objective is to recover data that explains parameters or to reconstruct a signal or image from indirect observations, one can ask whether it is possible to exactly reconstruct the source from a limited amount of data. On some occasions, when the observed signal depends on the source type and the distance between the source and the sensor, an estimation bias may arise. A biased estimate arises from cheap but non-realistic solutions of a given optimization problem that reduce the data error, i.e., the likelihood in the Bayesian sense. The bias could be reduced by introducing a highly sophisticated regularization scheme or a priori; however, when the number of model parameters to be estimated is high, as in the reconstruction of high-resolution images or the neuroelectromagnetic inverse source problem [1, 2, 3], electrocardiography inverse problem [4], hydrogeology [5], and electrical resistance tomography [6, 7], advanced prior models are not computationally feasible, even when Monte Carlo methods are employed. A technique called standardization [8] was first introduced for the static neuroelectromagnetic inverse source problem, which aims to determine the location, magnitude, and orientation of the source, and was later generalized to localization problems arising from the Poisson equations with Neumann boundary conditions [9], as well as to time-varying localization problems [10]. The technique uses Gaussian random fields to infer the source’s unbiased location, i.e., unbiased depth. In practice, it is a linear transformation from biased source estimation to depth-unbiased Z-scores [11, 12]. As a unbiasing strategy, it provides unbiased localization only if the observations are noiseless, and it can find only one source as the location is determined to be the one with the highest Z-score. Standardized methods have been among the most successful for localizing the epileptic focus in the human brain [13, 14, 15, 16, 17, 18]. Partially, the success can be explained by the unbiased localization that allows the source to be estimated everywhere within the given domain, but standardized methods are also highly robust against additive measurement noise due to yet an unknown reason. An obvious limitation of the technique is that it recovered one of the parameters needed to define the source. In this paper, we further generalize the transformation to yield unbiased sparse estimates by considering unbiased parameters rather than a single parameter, the location. We take a particular interest in models in which multiple parameters define a source, as well as in multisource scenarios. We address the conditions required for exact source and multisource reconstructions in the noiseless case and in the presence of observation noise. The findings of this study provide a complete explanation of why the standardization technique yields unbiased, noise-robust estimates and why it sometimes seems beneficial to use fewer sensors to estimate the source. In the experiments, we demonstrate the properties of unbiased estimation in compressive sensing and 2- and 3-dimensional electrical source imaging, using a realistic multicompartment head model in the 3-dimensional case. On Unbiased Source Parameter Estimation 3
+
+2. Preliminary 
+
+We consider the following observation model: 
+
+y = Lx, (1) where observations y ∈ Rm, the lead field or system matrix L ∈ Rm×dn is built as 
+
+L =
+
+h
+
+L1 · · · Ln
+
+i
+
+, (2) where any submatrix Lk, k = 1 , · · · , n belongs to Rm×d, where d is the number of parameters describing a source and n is the number of possible distinct sources. As previously established, exact reconstructions are not guaranteed in the presence of random noise [9]; therefore, we do not consider noise-contaminated observations yet. In the paper, it has been proved that in the one-dimensional case, where d = 1, one source can be recovered exactly by 
+
+k = arg max  
+
+> i=1 ,··· ,n
+
+(
+
+LTi Σ−1y
+
+pLTi Σ−1Li
+
+)
+
+, (3) where Σ = LL T + C, and C is the observation noise covariance stemming from the assumed Gaussian likelihood model, and computing ˆxk = L†
+
+> k
+
+y, (4) where ( ·)† is the pseudoinverse. Now, by simply expanding the index to a parameter variable θk ∈ Sd ⊂ Rd such that ( ˆθ, k ) = arg max   
+
+> i=1 ,··· ,n, θ∈Sd
+
+(
+
+θT LTi Σ−1y
+
+pθT LTi Σ−1Liθ
+
+)
+
+, (5) the estimate ˆ xk = L†
+
+> k
+
+y 2
+
+ˆθ end up being biased. This can be shown to be true by denoting ˆ y = Σ −1/2y and using the compact singular value decomposition Σ −1/2Lk =ˇUk ˇSk ˇV Tk , where ˇSk is a square diagonal matrix with non-zero diagonals. Since there exists v ∈ Sd, i.e., on the d-dimensional hypersphere, such that θ = ˇVkv, hence, the solution can be written as ˇUk ˇSkv = rˆy, for some r ∈ R. Because the solution depends on the nonzero entries of ˇSk, it is biased. Namely, the solution is biased on the normalized parameter space Sd. However, this consideration reveals to us that unbiased solutions can be obtained by the following weighting of the individual source estimates: 
+
+zk = ( ˇVk ˇSk ˇV Tk )−1 ˇVk ˇSk ˇU Tk ˆy = ˇVk ˇS−1 
+
+> k
+
+ˇV Tk ˇVk ˇSk ˇU Tk ˆy
+
+= ˇVk ˇU Tk ˆy. (6) By denoting Ak = ˇUk ˇV Tk , we obtain 
+
+zk = A† 
+
+> k
+
+ˆy. (7) On Unbiased Source Parameter Estimation 4Moreover, Theorem 5.1 in [9], shows that if there is an index k such that the observations are y = Lkxk for any xk ∈ Rd, the highest Z-score is obtained for all vectors from the preimage of Lk. Now, by writing the minimization problem used in the proof with A:maximize zT AT ˆy subject to √zT AT Az = c, (8) for some c > 0, we get the same solution for zk once the observations comes from the range of Σ −1/2Lk. The next theorem shows that the estimate is indeed unbiased. 
+
+Theorem 2.1. Let 
+
+A =
+
+h ˇU1 ˇV T 
+
+> 1
+
+· · · ˇUn ˇV Tn
+
+i
+
+, (9) 
+
+where the submatrices are originated from the compact singular value decompositions of modified sub-lead fields Σ−1/2LkPk = ˇUk ˇSk ˇV Tk , and Σ = LP L T + C with source covariance P and measurement covariance C. Then 
+
+zk = A†
+
+> k
+
+Σ−1/2y (10) 
+
+gives unbiased estimation for the problem y = Lx if there is one source generating the observations y.Proof. Assume that the source has magnitude a > 0 and parameters θ ∈ Rd and is at the 
+
+kth position, then the modified observations are Σ −1/2y = aΣ−1/2LkPkθ = a ˇUk ˇSk ˇV Tk θ.Let there be a sub-matrix such that Σ −1/2Lj Pj = ˇUk ˇSj ˇV Tj , then, on one hand 
+
+zj = A† 
+
+> j
+
+Σ−1/2y = a ˇVj ˇSk ˇV Tk θ,
+
+and on the other hand zk = a ˇVk ˇSk ˇV Tk θ. This yields ∥zj ∥2 = ∥zk∥2, thus proving that the solution is unbiased. From the result above, we note that instead of weighting source estimates, we can use the modified forward matrix A to derive the unbiased estimates. Moreover, we conclude that the matrices ˇUk are most important for achieving unbiased estimation, as the matrices ˇVk introduce isometric mappings between some normalized parametrization on Sd. In addition, we have a linear and invertible map Tj = ˇSj ˇV Tj to map each source 
+
+aj θj to signal strengths wj . Therefore, we can now focus on solving the following equation ˆy = U w, (11) where 
+
+U =
+
+h ˇU1 · · · ˇUn
+
+i
+
+∈ Rm×dn . (12) 
+
+3. Multisource estimation 
+
+In this section, we consider observations caused by multiple simultaneous sources such that ˆy =
+
+> N
+
+X
+
+> j=1
+
+UIj wIj . (13) On Unbiased Source Parameter Estimation 5This type of inverse problem arises when there are multiple sources, the sources have a spatial distribution modeled as active neighboring sources, or when reconstructing images from incomplete data. In this section, we aim to determine how many active elements (e.g., sources or pixels) we can reconstruct exactly. The following theorem lays the foundation for this exploration: 
+
+Theorem 3.1. Let such N sources described by d parameters cause observations 
+
+ˆy =
+
+> N
+
+X
+
+> j=1
+
+UIj wIj (14) 
+
+that 
+
+N < nd − dim(null( U )) + 1 2d , (15) 
+
+where the forward model U ∈ Rm×nd . Then the sources can be reconstructed uniquely. Proof. Within the null space, we have dim(null( U )) units of nd -dimensional orthogonal vectors. We desire to find a vector from that null space that has the smallest nonzero 0-norm. By using linear algebraic deduction, we can find a unique non-zero null vector u0 that has the first dim(null( U )) − 1 components as zero. Therefore, 
+
+∥u0∥0 = nd − dim(null( U )) + 1. Now the map U u0 = 0 represents geometrically a cycle of vectors [ U u0]i backs to the origin. Hence, if ∥u0∥0 is even, there are at least two vectors of 0-norm ∥u0∥0 /2 providing the same observations. On the other hand, if ∥u0∥0 is odd, the 0-norm of these non-unique observations is less than ∥u0∥0 /2 + 1, but larger than ∥u0∥0 /2 − 1. Because ∥u0∥0 ∈ Z, we can conclude that any vector with 0-norm strictly less than ∥u0∥0 /2 will have a unique solution. Since in our scheme, d
+
+orthogonal vectors are tied to one source, the 0-norms of the solution appear in multiples of d.The theorem above can be used to derive the uniqueness result in [19], considering Fourier transforms on the prime cyclic group Z/p Z: We know that the restricted Fourier transform A ∈ Cm×p has no linearly dependent columns, therefore dim(null(( A)) = p−m
+
+yieldeing N < (m + 1) /2, equivalently N ≤ m/ 2. Furthermore, we can deduce easily that a unique solution is not always obtainable: If a source pair described by index pair ( i, j ) causes non-orthogonal observations, i.e., 
+
+U Ti Uj̸ = O, there is no way to decide which amount of the overlapping signal strength belong to wi and which to wj . Additional information about the relationships among source strengths can yield an exact solution to the problem: By requiring |wi| = c, for some c > 0, we can consider U as a map from Rdn to the zero-centric hyperspherical surface Sm(0, c ) with radius c. Due to this interpretation, we can estimate how dense 
+
+U can map to the hypersphere by considering the geometrical interpretation of the sum yij = Uiwi + Uj wj for arbitrary wi and wj but fixed yij . Hence the intersecting hypersurface of these maps U w ∈ Sm(0, c ) and yij − U w ∈ Sm(yij , c ) provides all the possible source pairs that cause the exact observation yij . The geometrical deduction leads us to the following theorem: On Unbiased Source Parameter Estimation 6
+
+Lemma 3.2. The following sparse minimization problem 
+
+min 
+
+> w∈Rdn
+
+∥ˆy − U w∥22 + |N d − ∥ w∥0|
+
+subject to χ∥wj ∥2>0 ∥wi∥2 = ρij χ∥wi∥2>0 ∥wj ∥2 ,
+
+(16) 
+
+where ρij = ρ−1 
+
+> ji
+
+for all i, j = 1 , · · · , n , find the exact N source reconstruction if for any separate column vectors of U hold: 
+
+UTi Uj ≤ 12 ˆρ4 − 2ˆ ρ2 + 1 , (17) 
+
+where 
+
+ˆρ = sup {ρij : ρij ≤ 1} (18) 
+
+and 
+
+N ≤
+
+p4 − ˆρ2
+
+2 − ˆρ2 + 1 (19) 
+
+Proof. The condition under which we are operating limits each image Uiwi to the boundary of an m-hypersphere. Therefore, we can conclude the image Uiwi + Uj wj to be equal with Ukwk + Uj wj for some wk if Uk maps to hyperpsherical spherical zone, that is the surface of hyperspherical cap. If there is no Uk to map on the hyperspherical zone, there is a unique ( i, j ) that produces Uiwi + Uj wj . By defining ˆρ = sup {ρij : ρij ≤ 1, i, j = 1 , · · · , n. } ,
+
+and denoting the ratios for each source in ascending order as 1 ≥ · · · ≥ ρN −1, we can estimate that the maximal zone surface is achieved when the following holds for the polar angle θ:tan( θ/ 2) = 
+
+PNk=2 ρk
+
+1 ≤ (N − 1)ˆ ρ. 
+
+Yielding 
+
+UTi Uj = cos( θ) ≤ 1 − ˆρ2(N − 1) 2
+
+ˆρ2(N − 1) 2 + 1 .
+
+Now, considering any subsequent sources ih, i k ρhUih wih + ρkUik wik = yhk . The maps 
+
+U w and yhk − U w define two intersecting hyperspheres, and then any mapping on the boundaries inside that rejection would produce the observations yhk . From this, we can deduce the maximal zone surface by the law of cosines: cos( θ/ 2) = (1 − ρ2
+
+> k
+
+)ρ2 
+
+> h
+
++ ∥yhk ∥22
+
+2ρh ∥yhk ∥2
+
+≥ 2 − ρ2
+
+> k
+
+2 ≥ 2 − ˆρ2
+
+2 ,
+
+giving 
+
+UTi Uj ≤ 12 ˆρ4 − 2ˆ ρ2 + 1 .On Unbiased Source Parameter Estimation 7The condition above provides a smaller upper bound when 
+
+N ≤
+
+p4 − ˆρ2
+
+2 − ˆρ2 + 1 .
+
+To complete the conditions, we take care that there is no such index k that Uk = −Ui
+
+such that 
+
+−UTk Uj > 12 ˆρ4 − 2ˆ ρ2 + 1 .
+
+From the previous theorem and the proof, we can conclude the following: 
+
+Corollary 3.3. For N ≥ 3 sources, the inversion problem ˆy = U w has always exact reconstruction with 
+
+min 
+
+> w∈Rn
+
+∥ˆy − U w∥22 + |N d − ∥ w∥0|
+
+subject to χ∥wj ∥2>0 ∥wi∥2 = ρij χ∥wi∥2>0 ∥wj ∥2 ,
+
+(20) 
+
+where ρji = ρ−1 
+
+> ij
+
+for all i, j = 1 , · · · , n , if for any two separate column vectors of U hold: 
+
+UTi Uj ≤ 1 − ˆρ2(N − 1) 2
+
+ˆρ2(N − 1) 2 + 1 . (21) By the lemma, corollaries, and the theorem above, we aim for the highest generality where we do not take a stance about each column vector of U nor the values of ρij .There, indeed, are edge cases where for suitable U and ρij , there is only one possible way to produce certain observations ˆ y.The conditions of the optimization problem can alternatively, for convenience, be written in terms of the sources T −1 
+
+> i
+
+wi. Let ˆ w be the estimation, where ∥ ˆwi∥2 > 0 and 
+
+∥ ˆwj ∥2 > 0, then T −1 
+
+> i
+
+ˆwi 2 = ˇSi 
+
+> −1
+
+∥ ˆwi∥2. If we require the sources having the same strength, then we can define ρij = ˇSi / ˇSj .
+
+4. Estimation with noisy data 
+
+Let the random variable x follow Gaussian distribution N (0, P ) and measurement noise follows Gaussian N (0, C ). Then, the measurements are distributed by 
+
+p(y) = 
+
+Z
+
+> Ω
+
+N (Lx, C )N (x | 0, P ) d x = N (0, L ΓLT + C) = N (0, Σ) . (22) Hence, the modified observations ˆ y = Σ −1/2y follows standard Gaussian N (0, I ). Since the columns of the forward model U are m-dimensional unit vectors, then if U ∈ Rm×m
+
+and invertible, the column that explains the observations are uniformly random. This follows from the fact that if we express the observation space in a hyperspherical coordinate system, the radial distance is χ-distributed while the direction on Sm is uniformly distributed. On Unbiased Source Parameter Estimation 8The observation model in an unbiased setting can be written as ˆy = U˜I ˜wI + ˜ η, (23) where ˜ wI ∈ RN and ˜ η are drawn from continuous distributions and signal component index set ˜I is drawn from a discrete distribution with probabililities πI assigned for each index set I of length N . The corresponding Bayesian model for N source estimation is 
+
+p(ˆ y | w) = (nN )X
+
+> j=1
+
+πIj N
+
+
+
+UIj w, ˆC
+
+
+
+, (24) where ˆC = Σ −1/2CΣ−1/2. Since the Gaussian prior model is encoded into ˆ y and U , we can solve the maximum a posteriori (MAP) like we would solve maximum likelihood estimation, which is easy to check by solving the Σ-standardized observation model. Hence, by denoting 
+
+hIk = πIk p(ˆ y | UIk wIk , ˆC)
+
+P   
+
+> I:|I|=N d
+
+πI p(ˆ y | UI wI , ˆC), (25) we can write ˆw = X  
+
+> I:|I|=N d
+
+hI
+
+P   
+
+> I:|I|=N d
+
+hI
+
+End ;I ( ˆC−1/2UI )† ˆC−1/2 ˆy, (26) where End ;I ∈ Rnd ×N d projection matrix from sub-index set I to the full nd -dimensional parameter space to the corresponding element slots. Within the model, we promote unbiased estimation by setting all πIk equal. Furthermore, since in the model ( ˆC−1/2U , ˆC−1/2 ˆy) both objects are standardized by noise, we can use the previously introduced change of variables by redefining the observations and source-wise computing singular value decomposition of C−1/2L and use the left singular matrix as the representation of the forward model. For the readers’ convenience we keep the notation ( U , ˆy). The following theorem sets the limits for unbiased multisource estimation with noisy data: 
+
+Theorem 4.1. Exact multisource reconstruction is not possible with the Bayesian model (24) with πI > 0 for all index sets I.Proof. Let us have observations ˆ y = UI wI + η, where |I| < m and η ∈ R(UI )⊥ for drawn observation noise. Then, for arbitrary UJ such that R(UJ ) ⊆ R(UI ) ⊕ R(UI )⊥
+
+and UTj1 Uj2 < 1 for any j1, j 2 ∈ J , then there is ˆ wJ that minimize the following object function 
+
+F (w; S) = ∥ˆy − US w∥2 + ∥η − US w∥2 , (27) such that F ( ˆ wJ , J ) = 0 < F ( ˆ wI , I). Moreover, if U T 
+
+> J
+
+η < δ , then due the fact that 
+
+F ( ˆ wJ , J ) = 0, we get 
+
+∥η − UJ ˆwJ ∥2 = ∥η∥2 − 2 ˆ wT 
+
+> J
+
+U T 
+
+> J
+
+η + ∥UJ ˆwJ ∥2 = 0 On Unbiased Source Parameter Estimation 9yielding 
+
+∥η∥2 + ∥UJ ˆwJ ∥2 = 2 ˆ wT 
+
+> J
+
+U T 
+
+> J
+
+η < 2δ ∥ ˆwJ ∥ ,
+
+which then shows that the norm of ˆwJ is unbounded from above. Hence, there is always an index set J such that F ( ˆ wJ , J ) < F ( ˆ wI , I) and ∥ ˆwJ ∥ > ∥ ˆwI ∥, making the concluding of the correct index set impossible as the probability P ( ˜ η ∈ R(UI )) = 0 unless dim( UI ) = m in which case any set of m component minimizes the object function and have the same norm for reconstruction. The theorem reveals that we cannot correctly determine the relationships among sources of different strengths when noise is present. For example, if two different sources can explain the same part of the measured noisy signal, it is impossible to tell which part belongs to which source and how much the noise smears these partial source estimates. For image reconstruction, it means in practice that we could get the image outlines correctly, but the colors may vary from the original image or blend with each other. Due to this reason, we introduce new terminology: 
+
+Definition 4.2. A source is strongly reconstructible if we can get the exact reconstruction of the source. We say that the source is weakly reconstructible if we can recover the correct partial ordering of the source magnitudes, i.e., ∥wi1 ∥2 ≥∥wi2 ∥2 ≥ · · · ≥ ∥ win ∥2.
+
+Using the concept above, we can say that the section 3 considered strongly reconstructible sources. From now on, we will proceed with weakly reconstructible sources from a probabilistic point of view. The noncentral F -distribution has a major role in the upcoming results: 
+
+Definition 4.3. The noncentral F -distribution is continuous distribution defined in R+
+
+with the following cumulative distribution: 
+
+F ′
+
+> a,b
+
+(x | λ) = 
+
+> ∞
+
+X
+
+> j=1
+
+(λ/ 2) j
+
+j! e−λ/ 2 B   ax b+ax ; a/ 2 + j, b/ 2
+
+B(a/ 2 + j, b/ 2) , (28) 
+
+where B(·, ·) is the beta function and B(· ; ·, ·) is the incomplete beta function. a and b
+
+are the degrees of freedom and λ ≥ 0 is noncentral parameter. 
+
+Using the noncentral F -distribution, we can conclude the following: 
+
+Lemma 4.4. When U is orthogonal, the probability of reconstruct N sources weakly is 
+
+p = P
+
+ ˜X > m − N d 
+
+
+
+, ˜X ∼ F ′
+
+> 1, m −N d
+
+
+
+min  
+
+> i∈I
+
+U Ti ˆy 2
+
+
+
+. (29) 
+
+Proof. Let us have the following basis representation of the noisy observations ˜y = X
+
+> i∈I
+
+ˆyiψi +
+
+> m
+
+X
+
+> j=1
+
+˜ηj ψj ,On Unbiased Source Parameter Estimation 10 then we assume arg min {| ˜yi|} = k, then the correct reconstruction by source indices is found when 
+
+|ˆyk + ˜ ηk|2 > ∥ ˜η∥2  
+
+> R(UI)⊥
+
+.
+
+Noticing that ˜X = |ˆyk + ˜ ηk|2
+
+∥ ˜η∥2  
+
+> R(UI)⊥
+
+(m − N d )−1 ∼ F ′
+
+> 1, m −N d
+
+ |ˆyk|2 ,
+
+where F ′
+
+> a,b
+
+(λ) is the noncentral F -distribution. Therefore, the probability of the exact reconstruction being achievable is 
+
+p = P
+
+ ˜X > m − N d 
+
+
+
+.
+
+And as the conclusion: 
+
+Theorem 4.5. The estimation of the Bayesian model (24) weakly reconstructs the source with probability 
+
+p = P
+
+ ˜X > 2( m − N d )
+
+
+
+, ˜X ∼ F ′
+
+> 1, m −N d
+
+
+
+min  
+
+> i∈I
+
+U Ti ˆy 2
+
+
+
+. (30) 
+
+Proof. Let us have observations ˆ y = ˆ yI + ˆ yJ + ˜ η, where J ∩ I = ∅ and |I ∪ J | < m ,then consider proposed minimizer ˆw(θ) = 
+
+
+
+U † 
+
+> I
+
+(ˆ yI + ˜ ηI )cos( θ)U † 
+
+> J
+
+(ˆ yJ + ˜ ηJ )sin( θ)U †⊥ ˜η⊥
+
+
+
+then 
+
+∥ ˆw(θ)∥2 = U † 
+
+> I
+
+ˆy 2
+
++ 1 − ∥η⊥∥2
+
+∥(ˆ yJ + ˜ ηJ )∥2 cot( θ)
+
+!2
+
++ ∥η⊥∥2
+
+∥(ˆ yJ + ˜ ηJ )∥2 csc( θ)2,
+
+and the following holds for the norm: 
+
+∥ ˆw(θ)∥2 ≤ U † 
+
+> I
+
+ˆy 2
+
++ ∥˜n⊥∥2 + ∥˜yk∥2
+
+2 .
+
+Since, the diagonal prior enforces the solution with minimal norm, we can require 
+
+∥ ˆwI∪J ∥ > min θ ∥ ˆw(θ)∥, yielding 
+
+∥(ˆ yJ + ˜ ηJ )∥2
+
+∥η⊥∥2 > 2.
+
+Now we notice that 
+
+X = ∥ˆyJ + ˜ ηJ ∥2 |J|−1
+
+∥η⊥∥2 (m − N d )−1 ∼ F ′|J|, m −N d 
+
+ ∥ˆyJ ∥2 ,On Unbiased Source Parameter Estimation 11 where F ′ 
+
+> a,b
+
+is the noncentral F -distribution. Therefore, the probability of the exact reconstruction is P (X > 2 ( m − N d ) / |J |). Because the estimation needs to have correct standard vector basis components, we set J to be a singleton, i.e., |J | = 1. In some applications, the observation noise is assumed to be independent and identically distributed, and the signal-to-noise ratio is known. In such a case, we can obtain SNR = E ∥˜y∥2
+
+E ∥˜n∥2 = ∥y∥2 + mσ mσ = ∥y∥2
+
+mσ + 1 , (31) and hence the probability of exact localization of one source can be written in terms of SNR: 
+
+p = P
+
+ ˜X > 2( m − d)
+
+
+
+, ˜X ∼ F ′ 
+
+> 1, m −d
+
+(m(SNR − 1)) . (32) From the result, we note that, contrary to the results above, the noncentral parameter does not depend on the weakest contributor to the data. This indicates that the localization accuracy is not depth-dependent in such a case. 
+
+5. Experiments 
+
+5.1. Experiment set 1 
+
+Our first experiment examines the consequences of the mathematical lemmas and theorems in the settings of compressive sensing with tomographic Fourier sampling. In experiment set 1, we follow the experiment of Candes et al. [19] to reconstruct a 256 ×256 Shepp-Logan phantom from 22 tomographic line samples. The experiment setup is suitable for this article’s themes, not only because of the topic of exact reconstruction. but also due to the image ”source” not being sparse, as the image content occupies about 42 % of the black canvas. Therefore, the phantom image cannot be reconstructed using solely standardized methods specialized for locating a sparse source. Since the noiseless case is well established, we conduct Experiment 1.A., where the image is corrupted by 30 % of independent and identically distributed (i.i.d.) Gaussian noise, and Experiment 1.B, where the data is contaminated by 30 % of spatially correlated Gaussian noise. Due to the computational limitations regarding full covariance matrices, the phantom in Experiment 1.B is the size of 128 × 128. As 22-line samples violate the unique reconstruction condition presented in Theorem 3.1, we conduct Experiment 1.C. with 10 % i.i.d. Gaussian noise and 320 lines, which is the minimal amount that fulfills the condition. In addition, Experiment 1.B is redone with 320 line samples. It has been demonstrated by [20] that tomographic line sampling is preferable over random sampling for total variation minimizing methods, so we decided to stick with this sampling approach. To avoid the large memory consumption caused by the construction of the forward model of the restricted Fourier transform with 256 2 complex parameters, we compute the Fourier transform and its inverse directly while utilizing Split Bregman iterations On Unbiased Source Parameter Estimation 12 [21]. The Gaussian mixture approach was modified for this experiment to use the Gaussian prior p(w) ∝ exp( − ∥ Dw∥22), where D is the cyclic image derivative. This approach has been shown to be highly efficient for image reconstruction from sparse data [19]. As the prior requires a rectangular spatial structure in the ”spatial” image space, we use random cyclic 250 × 250, and 96 × 96 spatial sets in Experiment 1.B, as the candidate space for the image content. 1,000 random spatial samples were used to reconstruct the image. As the phantom image contains only black, white, and five different shades of gray, we demonstrate the reconstruction approach of a method that has the prior knowledge of the relative differences of the discrete source amplitudes, likewise in Lemma 3.2. Applying the said lemma and Theorem 3.1, we can derive the expectation that the method reconstructs the phantom image nearly perfectly with overwhelmingly high probability in Experiment 1.C with 10 % noise. As it was discussed in the previous section, exact amplitudes cannot be expected unless the forward model forms an orthogonal basis. The methods are compared with the Spatial Total Variation Split Bregman (STVSB) method [22]. Because restricted Fourier transforms meet the criterion for an unbiased forward matrix, we can expect the reconstruction to be highly noise-robust; as such, the observation noise was set particularly high to demonstrate the effects. Especially the spatially correlated noise in Experiment 1.B is disadvantageous to the selected prior- and total-variation-based approaches in general. Given the Bayesian framework and appropriate likelihood modeling, the differences in accuracy among the methods considered in this paper should not be striking, while STVSB could perform worse in Experiment 1.B. 
+
+5.2. Experiment set 2 
+
+In the second experimental set, we focus on source estimation for a homogeneous conductivity disk. Namely, we demonstrate practical consequences of Theorem 4.5 for reconstructions of sources at different depths and how known signal-to-noise ratios impact the probability to perfectly reconstruct sources with a different number of sensors. Moreover, we examine one source estimation and a couple of source scenarios: simultaneous superficial (near-field) sources and a combination of superficial and far-field sources. The sources are placed in such a way that the source is a deep source, which is hard to estimate; the second case has two sources that produce orthogonal contributions in the observation space, and the third setup contains a cortical and a deep source with similar contributions to observations, and as such is the hardest setup of these three. The observations were corrupted by five percent of additive Gaussian noise. The purpose of this experiment set is to extend the results obtained with the same model in [9], where a lower bound for exact reconstruction was introduced as evidence about the possible reasons for the high noise robustness of unbiased methods. Sources are estimated using Minimum Norm Estimate (MNE) [23], Unbiased Gaussian Estimate (UGE) from Theorem 4.5, a classical standardized low-resolution electromagnetic brain On Unbiased Source Parameter Estimation 13 tomography (sLORETA) [8] method that standardizes each parameter individually; it is a 1-parameter model and its extension, in which we associate a 2-dimensional orientation with each source. We call this extension sLORETA2D. In a theoretical sense, there is no ”correct” variant of sLORETA. The sLORETA variants just approach the inversion problem differently. 
+
+5.3. Experiment set 3 
+
+The third and final set of experiments was conducted using a realistic, volumetric, multicompartment model of the human brain. The used MRI is obtained from the Ernie subject provided by SimNIBS ‡ 4 software [24]. The mesh has 743,575 tetrahedral elements joined in 136,868 nodes. Four tissue compartments were used (scalp, skull, cerebrospinal fluid, and brain), and 76 electrodes were placed on the scalp layer according to the international 10-10 system. The lead field matrix used in this study was constructed using custom software that employed the Finite Element Method with linear basis functions, as in [25]. The tissue electric conductivity values were 0.43 S/m for the scalp, 0.0103 S/m for the skull, 1.79 S/m for cerebrospinal fluid, and 0.33 S/m for the brain (gray matter and white matter) [26]. The realistic geometries are extracted from MRI images, and a linear forward model is built by approximately solving quasi-static Maxwell’s equations using the finite element method. The problem is to solve for 3-dimensional dipolar moments, i.e., basis coefficients for basis functions that represent the dipolar term causing the electric potential field inside the head. The observations are generated synthetically using a separate forward model with different source locations from those used in the inversion to avoid inverse crime. Both models have approximately 10,000 fixed source locations. The true source placement follows the idea of Experiment 2.B, where one source is in the near-field, and the other one is a far-field source. We qualitatively assess the reconstructions from sLORETA, sLORETA3D (3-dimensionally extended sLORETA), and UGE by visualizing the Z-score distributions on the MRI slices of the true sources, separately. Moreover, we compute the 2-cluster dipole localization errors (DLE), where 2 clusters are identified from the spatial Z-score distributions, and the cluster means are used as estimates of the source location. To validate the spatial spread of distributions, we use the Earth Mover’s Distance (EMD). 
+
+6. Results 
+
+6.1. Experiment set 1 
+
+The results of Shepp-Logan phantom image reconstruction from 22 radial lines are presented in Figure 1. Reconstructed images with 30 % i.i.d. noise are recognizable. However, the amplitude, i.e., the shade, of the darkest gray is too weak and dark  
+
+> ‡https://simnibs.github.io/simnibs/build/html/index.html
+
+On Unbiased Source Parameter Estimation 14 for STVSB. UGE has similar problems, but to a lesser extent, while the method knowledgeable about shade ratios gets the darkest gray right, but is missing all the lighter gray features. From the error highlight, we see that both STVSB and UGE reconstruct a notable amount of noise. Based on the reconstructions, STVSB seems to maintain sharper edges around the white ellipse than UGE, which produces blurrier reconstructions due to its Gaussian nature.  
+
+> Figure 1. Reconstructions of noisy Shepp-Logan phantoms from 22 radial samples and the highlights of the errors in the nebula color map plotted over the clean phantom. Reconstructions are computed with Spatial Total Variation Split Bregman (STVSB), Unbiased Gaussian Estimate (UGE), and Exact Coloring Bayesian method EC Bayesian, which has the prior information about the ratio of all seven colors appearing in the true picture.
+
+On the one hand, maintaining the drastic color changes from the content of the image is a desirable property; on the other hand, it makes the method prone to introducing noise into the reconstruction. The drawback is more pronounced when On Unbiased Source Parameter Estimation 15          
+
+> 30 % i.i.d. 10 010 110 2
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 130 % spatially correlated 10 010 110 2
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+> Figure 2. Relative errors of the method for each foremost iteration. Iterations are presented on a logarithmic x-axis and errors on a y-axis. STVSB (light blue) is computed over 100 split Bregman iterations. UGE (red) and EC Bayesian (violet) are computed over 500 samples.
+
+the noise is correlated, indicating that the STVSB reconstruction is essentially a reconstruction of the noisy image. In contrast, Bayesian methods utilizing a better model of the noise can reduce it. The graphs in Figure 2 show the relative error of STVSB for the default 100 iterations and the two other methods up to 500 sampled partial reconstruction. STVSB error stabilizes at 0.3, EC Bayesian achieves a lower error around 500 samples, and UGE error is slightly below 0.4. The sampling-based methods stabilized around 500 samples. The results with 320 radial sampling lines in Figure 3 are computed up to 1000 samples for UGE and EC Bayesian. The result shows nearly perfect reconstruction with EC Bayesian, with errors only at the black inner boundaries. Error is higher with 30 % of the noise, but still less than 0.1 (Figure 4). The worst EC Bayesian reconstruction is obtained with spatially correlated 30 % noise. Moreover, compared to the 22 radial line case, the quality of STVSB reconstructions remains about the same, unlike UGE, which provides significant improvement. Based on the relative error graphs, both Bayesian methods eventually perform better than STVBS. In cases with 30 % of noise, UGE and EC Bayesian stabilized around 500 samples. However, with 10 % of i.i.d. noise, the UGE’s and EC Bayesian’s errors did not stabilize during those 1000 samples, so the errors could end up lower after a couple thousand iterations. On Unbiased Source Parameter Estimation 16 
+
+6.2. Experiment set 2 
+
+The probability contour plotted in the homogeneous conductivity disk in Figure 5 shows that, without information about the observation noise, the estimates will have less luck in reconstructing the far-field sources even if the method is theoretically unbiased. This is because a deep source produces almost equal, weak signals in the sensor space. Thus, sensitivity to noise increases with depth. However, we can see that the source is almost guaranteed to be found from relatively deep, even if there is 15 % of noise. From the figure, we can see that once the probability starts to decrease, it decreases rapidly around 0.2. This lower-hemisphere region is significantly smaller with 5 % noise than with 15 % noise. By applying the notion of the signal-to-noise ratio (SNR) according to Eq. (31) to the probability formula, we can observe completely depth-free, but SNR, sensor, and source parameter amount dependent behavior shown in Figure 6, where the probability to weakly reconstruct the source is plotted against SNR for four different sensor count; 16, 32, 61, and 128 for one and three-parameter models. Unsurprisingly, comparing the two graphs shows that more parameters require a higher SNR to be reconstructed successfully. A more interesting observation is that at the lower SNR, fewer sensors would give more reliable results: with one parameter model, SNR less than 3 (33 % of noise), 16 sensors are preferable over 128, and less than 7.5 (13 % of noise) with the three parameter model. In addition, without much exaggeration, we can say that there are SNR limits beyond which one can or cannot reconstruct a source with high-density sensor systems. The estimated (A) one deep source, (B) highly superficial source pair causing orthogonal observations, and (C) near- and far-field source pair are presented in Figure 7, where a red cross indicates the location and an arrow the 2D orientation of the source. The results show that MNE and both sLORETA variants mislocalize the source, whereas UGE estimates the source at the nearest location allowed by the inversion model’s mesh. The orientation of the source is almost correct as well. MNE localizes the source at the nearest observation boundary of the model with respect to the true source location due to the depth bias. sLORETA estimate is superficial, but not at the vicinity of the sensors. The mislocalization of sLORETA can be explained by the near-tangential orientation of the source relative to the nearest source. The source is radial for sources on the left part of the disk; however, the distance between the source and these sensors is high. sLORETA2D has the second-best performance, with a slight orientation error and a smaller localization error, as the estimate is farther from the boundary in the correct direction. By looking at the Z-score distribution in Figure 8, the Z-scores of both sLORETAs are over 0.8. Estimation task (B) demonstrates that only sLORETA fails to distinguish between the two distant sources, as expected given the method’s 1-parameter nature. Interestingly, the 2-orientation extension of the classical sLORETA, sLORETA2D, can obtain two sources. If one looks at the Z-score distribution, it indicates the presence of another source on the right side of the model; On Unbiased Source Parameter Estimation 17 
+
+Figure 3. The figure follows the same logic as Figure 1, but now we have 320 line samples, which is the minimum amount to reconstruct the noiseless phantom exactly. On Unbiased Source Parameter Estimation 18 
+
+10 % i.i.d. 10 0 10 1 10 2 10 3 
+
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+
+30 % i.i.d. 10 0 10 1 10 2 10 3 
+
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+
+30 % spatially correlated 10 0 10 1 10 2
+
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1
+
+Figure 4. Relative errors of the method for each foremost iteration. Iterations are presented on a logarithmic x-axis and errors on the y-axis. STVSB (light blue) is computed over 100 split Bregman iterations. UGE (red) and EC Bayesian (violet) are computed over 1,000 samples in 10 % Gaussian i.i.d. noise case and otherwise limited to 500 samples due to the convergence. 
+
+5 % noise 0.25  
+
+> 0.25
+> 0.5
+> 0.5
+> 0.5
+> 0.75
+> 0.75
+> 0.75
+> 0.9
+> 0.9
+> 0.9
+
+15 % noise 0.25 
+
+> 0.25
+> 0.25
+> 0.5
+> 0.5
+> 0.5
+> 0.75
+> 0.75
+> 0.75
+> 0.9
+> 0.9
+> 0.9
+> 0.9
+
+Figure 5. Probability contour map to reconstruct exactly the source in the conductivity disk without knowledge about the observation noise, where the sensors lie only on one half of the disk (gray circles on the upper half). 
+
+however, that inference requires human input. Orientation estimate is the best with sLORETA2D. In scenario C, most methods indicate two sources near each other, with the more superficial one closer. In contrast, UGE indicates two far-field sources that are spatially relatively close to the true sources. By ignoring the significant localization error of the deep source with sLORETA2D, its orientation estimate is nearly exact. Based on the distributions, both sources have Z-scores above 0.8 for UGE, while sLORETA provides an almost 0.9 score for the cortex and over 0.6 for the deep source. From the sLORETA2D distribution, it may not be apparent that a source lies deeper than the disk’s midpoint. On Unbiased Source Parameter Estimation 19 3 parameter Signal-to-noise ratio               
+
+> 0246810 12
+> Probability
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1m = 16
+> m = 32
+> m = 64
+> m = 128 1 parameter Signal-to-noise ratio
+> 0246810 12
+> Probability
+> 0
+> 0.2
+> 0.4
+> 0.6
+> 0.8
+> 1m = 16
+> m = 32
+> m = 64
+> m = 128
+
+Figure 6. Reconstruction probability under different levels of signal-to-noise ratio as defined in Eq. (31). Probability curves are plotted for four different number of sensors, 16, 32, 64, 128, as displayed in the legend. Top graph shows the probabilities for a model, where the source is described by three parameters, e.g., sources have free orientation in a three-dimensional space, and bottom graph shows the same for 1 parameter per source model. On Unbiased Source Parameter Estimation 20 True source 
+
+> MNE
+> sLORETA
+> 2D sLORETA
+> Unbiased Bayes True source
+> MNE
+> sLORETA
+> sLORETA2D
+> UGE True source
+> MNE
+> sLORETA
+> sLORETA2D
+> UGE
+
+Figure 7. Dipolar source estimations of MNE, sLORETA, sLORETA2D, and Unbiased Bayesian method (UGE) in the homogeneous conductivity disk in three different source scenarios A, B, and C. The red cross indicates the location of the true source, and the red arrow represents the 2-dimensional source orientation. Locations of the source estimates are represented by colored circles and orientations by the arrows of the same color. The connections between different colors and methods are presented in the legend. On Unbiased Source Parameter Estimation 21 MNE 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.6 0.8 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+> 0.2
+> 0.2
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.2 
+
+0.4 
+
+0.4 
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+
+0.4 
+
+0.4 
+
+0.6 
+
+0.6 
+
+0.6 
+
+> 0.6
+> 0.6
+> 0.6
+> 0.6
+
+0.8 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.2 
+
+0.2 
+
+> 0.2
+> 0.2
+
+0.4 
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+
+0.6 
+
+> 0.6
+> 0.6
+> 0.8 sLORETA
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 0.2 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.8 
+
+0.8 
+
+> 0.8
+> 0.8
+> 0.99
+
+10.2 
+
+0.2 
+
+> 0.2
+
+0.2 
+
+0.2 
+
+> 0.2
+> 0.2
+
+0.2 
+
+> 0.2
+
+0.4 
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+
+0.4 
+
+> 0.4
+
+0.4 
+
+0.4 
+
+0.4 
+
+> 0.4
+
+0.4 
+
+> 0.6
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+> 0.6
+
+0.6 
+
+0.6 
+
+0.8 
+
+> 0.8
+
+0.8 
+
+0.8 
+
+0.8 0.2 
+
+> 0.2
+> 0.2
+
+0.2 
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+
+0.4 
+
+0.4 0.4 
+
+0.4 
+
+0.6 
+
+> 0.6
+> 0.6
+> 0.6
+> 0.6
+> 0.6
+> 0.6
+> 0.6
+> 0.8
+> 0.8
+> 0.8
+
+0.8 
+
+> 0.8
+> 0.8
+
+0.8 
+
+> 0.99
+> 0.99 sLORETA2D 0.2
+
+0.2 
+
+> 0.2
+
+0.2 
+
+> 0.2
+> 0.2
+> 0.2
+> 0.4
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+
+0.4 
+
+0.4 
+
+> 0.4
+
+0.4 
+
+0.4 
+
+0.6 
+
+0.6 
+
+0.6 
+
+0.6 
+
+> 0.6
+> 0.6
+
+0.6 
+
+0.8 
+
+0.8 
+
+0.8 
+
+> 0.8
+> 0.8
+
+0.99 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 0.2 
+
+> 0.4
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+0.4 
+
+> 0.6
+
+0.6 
+
+0.6 
+
+> 0.8
+
+0.8 
+
+0.99 
+
+0.99 
+
+0.99 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+> 0.2
+
+0.2 
+
+> 0.2
+
+0.4 
+
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+> 0.4
+
+0.6 
+
+> 0.6
+
+0.6 
+
+0.6 
+
+> 0.6
+> 0.8
+> 0.8
+
+0.8 
+
+> 0.8
+
+0.99 UGE 0.2 
+
+> 0.4 0.2
+> 0.2
+> 0.2
+
+0.2 
+
+> 0.4
+> 0.4
+> 0.4
+
+0.6 
+
+0.6 
+
+0.8 0.2 
+
+0.2 
+
+0.2 
+
+0.2 
+
+0.4 
+
+0.4 
+
+> 0.4
+
+0.4 
+
+0.4 
+
+0.4 
+
+> 0.4
+> 0.4
+
+0.4 
+
+> 0.6
+
+0.6 
+
+> 0.6
+
+0.6 
+
+> 0.6
+
+0.6 
+
+> 0.6
+
+0.6 
+
+0.6 
+
+0.8 
+
+> 0.8
+
+0.8 
+
+0.8 
+
+> 0.8
+> 0.8
+> 0.8
+> 0.99
+
+Figure 8. The distributed source estimate of MNE and Z-score distribution of standardized methods and unbiased Gaussian estimate (UGE) displayed as contours on the conductivity disk for three different source scenarios. The true source is depicted by a red cross and arrow. On Unbiased Source Parameter Estimation 22 
+
+6.3. Experiment set 3 
+
+In this experiment, we aim to estimate two simultaneous sources corresponding to Experiment 2.B, in which one source is at a superficial location and the other lies within deep brain structures. In Figure 9, the Z-score distributions are plotted over the transversal, coronal, and sagittal plane cuts of MRI images. The images are split into two rows for each method. The upper row presents the score distribution at the planes where the superficial, near-field, source is located, and the second row displays the score distribution at the planes of the deep, far-field, source. As we see from the Z-score distributions, neither sLORETA nor sLORETA3D can form separate clusters of highest score values around the true sources; instead, the distribution of the highest values, depicted in yellow, forms a continuous region that cover both sources. The highly similar score distributions of these two cover a large region around both sources, thus making the estimation of the exact source location difficult. However, sLORETA3D appears to yield a slightly higher score in the region adjacent to the deep source at the posterior end of the thalamus. Contrary to the other two methods, we obtain separate blobs at the superficial source and in the vicinity of the deep source for UGE. The maximum score in the deep structures is less at the posterior end of the thalamus, as it is with both sLORETA variants. On Unbiased Source Parameter Estimation 23 
+
+Transversal Coronal Sagittal 
+
+> sLORETA
+> Near-field Far-field
+> sLORETA3D
+> Near-field Far-field
+> UGE
+> Near-field Far-field
+
+Figure 9. Z-score distributions of sLORETA, sLORETA3D, and UGE interpolated over the MRI slices, where the superficial near-field source and deep far-field source are located in subsequent image rows. The turquoise circle indicates the location of the corresponding source. On Unbiased Source Parameter Estimation 24 
+
+7. Discussion 
+
+In this paper, we have generalized the theory of unbiased localization achieved by standardization [8, 9] to unbiased parameter estimation and signal reconstruction, i.e., generalizing the unbiased outputs from one to an arbitrary number. The generalization provides an answer to the common criticism of standardized methods, namely that the Z-scores are not the actual solution to the inverse problem: The new perspective shows us that if we think of the recoverable object as a sparse vector field, the unbiased estimate provides the regions where the field is non-zero, while a fitting strategy must be used to recover the actual solution. This is congruent with the classical dipole fitting approach, where a vector from the field is recovered by the fitting procedure, and the most likely vectors are decided by the goodness-of-fit measure. In fact, it has been proven that there exists an isomorphism between sLORETA and any dipole fitting approach [27]. Moreover, a least square fitting or a Gaussian fitting approach has no depth-bias if the covariance structure of the corresponding Bayesian model’s innovation covariance matches with the observation covariance, i.e., cov [ y] ∝ cov (x,n) [Lx + n]. After that, we presented theorems that outline how many parameters can be recovered exactly in noiseless cases, based on the properties of the system matrix or lead field. The exact reconstruction under observation noise was doomed; hence, the conditions for exact reconstruction were divided into strongly and weakly reconstructible parameters, with the latter relaxing the requirements away from the exact reconstruction. In addition, we found the probability measure for weakly reconstructing parameters, meaning that the partial ordering of the non-zero elements is preserved. Coupling the measure with the concept of signal-to-noise ratio, we derive the final conclusion that standardized methods endure significant measurement noise because the signal-to-noise ratio equalizes the probability at every depth to the same value, which should be overwhelmingly high in most practical cases. However, our results show that there is a trade-off between the number of sensors and the signal-to-noise ratio. This could give the mathematical explanation for the conflicting results with practical brain source imaging and the recommended number of electroencephalography electrodes [28, 29, 30] as well as the motivation for the equal or improved source estimation with well-targeted sensors over a high-density sensors [31, 32] when the measurements are highly noisy. The assumption of the Gaussian model and fixed discrete source positions yields a new unbiased method we call the Unbiased Gaussian Estimate (UGE), a generalization of sLORETA. The method was tested against the Spatial Total Variation Split Bregman (STVSB) algorithm [22] for noisy phantom image reconstruction, and against sLORETA and its parameter variants for source estimation in a two-dimensional conductivity disk and a 3-dimensional multicompartment head model. The results demonstrate the properties of UGE predicted by the given theorems. While UGE is highly impractical for recovering images, unlike STVSB, it can produce a distinguishable phantom even when the problem is not sparse, and it does not reconstruct as much noise back into the On Unbiased Source Parameter Estimation 25 image as STVSB. Moreover, the variation with a priori knowledge of the ratios between colors is able to recover the phantom from highly noisy data, almost exactly, once the noise is identically and independently distributed, and the number of line samples agrees with the requirements for unique recovery in the noiseless case. Interestingly, the number of samples provided to STVSB has a vanishingly small impact on the quality of the recovery, which could be a byproduct of its emphasis on maintaining sharp edges between neighboring contrast pixels. The source imaging results highlight the challenges that standardized methodologies face in estimating multiple sources [9]. While the region of high Z-score most often covers both source locations, deducing the exact locations of those sources is hard or even impossible. Since UGE’s multiparameter framework allows for a notion of multisource reconstruction, it provides significantly clearer source estimation and is more accurate than both sLORETA estimates. The superiority of UGE is not surprising, as the Bayesian model of UGE agrees better with the problem of recovering sources with multidimensional orientation. The paradigm shift from post-hoc weighting to modifying the system matrix also has consequences for the development and software implementations of unbiased methods: the previous scheme focused on transforming a regular estimate into a standardized estimate via post-hoc weights. Defining the transformation can be complicated when the Bayesian formulation is unknown or not Gaussian; for example, SSLOFO [33] uses fixed-point iterations and a shrinkage operation to determine the post-hoc weights for a non-Gaussian model. The spatiotemporal standardization used with Kalman filtering is known to be the major computational bottleneck [34, 35]. The theoretical and computational difficulties can now be bypassed by making the system matrix unbiased using singular value decomposition. Furthermore, recent developments in Bayesian source imaging already make use of the right-hand-side singular sub-matrices to improve grouped parameter estimation for non-Gaussian priors [36], such as Laplace-distributed dipolar sources with 2- or 3-dimensional orientations. Modifying the system matrix with a large spectrum for sparsity-promoting inverse algorithms could be numerically more accurate than using an iterative algorithm to incrementally reduce bias and correct the transformation. As future work, we are looking for new applications where unbiased estimation could be useful. In addition, we are developing a new method that utilizes singular value decomposition both to find an unbiased solution and to refine the parameter estimation. Technically speaking, extending unbiased estimation to continuous problems looks more promising than ever. 
+
+Data availability statement 
+
+The data that support the findings of this study are available upon reasonable request from the author. The Dataset of the Ernie subject is available at the SimNIBS 4 GitHub page: https://simnibs.github.io/simnibs/build/html/index.html .On Unbiased Source Parameter Estimation 26 
+
+Funding 
+
+The work of J. Lahtinen was supported by the Research Council of Finland (RCF) through the Flagship of Advanced Mathematics for Sensing, Imaging and modeling (FAME) (359185), and Doctoral Education Pilot on Advanced Mathematics for Modelling, Sensing, and Imaging (DREAM), Ministry of Education and Culture, Finland, VN/3137/2024. 
+
+References 
+
+[1] Roberta Grech, Tracey Cassar, Joseph Muscat, Kenneth P Camilleri, Simon G Fabri, Michalis Zervakis, Petros Xanthopoulos, Vangelis Sakkalis, and Bart Vanrumste. Review on solving the inverse problem in EEG source analysis. Journal of neuroengineering and rehabilitation ,5(1):25–25, 2008. [2] Daniela Calvetti, Harri Hakula, Sampsa Pursiainen, and Erkki Somersalo. Conditionally Gaussian Hypermodels for Cerebral Source Localization. SIAM Journal on Imaging Sciences , 2(3):879– 909, 2009. [3] Rolando Grave de Peralta, Olaf Hauk, Sara L. Gonzalez, and Fabio Babiloni. The neuroelectromagnetic inverse problem and the zero dipole localization error. Computational Intelligence and Neuroscience , 2009(1):137–147, 2009. [4] Guofa Shou, Ling Xia, and Mingfeng Jiang. Solving the Electrocardiography Inverse Problem by Using an Optimal Algorithm Based on the Total Least Squares Theory. In Third International Conference on Natural Computation (ICNC 2007) , volume 5, pages 115–119. IEEE, 2007. [5] Jes s Carrera, Andr s Alcolea, Agust n Medina, Juan Hidalgo, and Luit J. Slooten. Inverse problem in hydrogeology. Hydrogeology journal , 13(1):206–222, 2005. [6] T.C Johnson and D Wellman. Accurate modelling and inversion of electrical resistivity data in the presence of metallic infrastructure with known location and dimension. Geophysical journal international , 202(2):1096–1108, 2015. [7] Wenyang Shi, Guangzhi Yin, Mi Wang, Lei Tao, Mengjun Wu, Zhihao Yang, Jiajia Bai, Zhengxiao Xu, and Qingjie Zhu. Progress of electrical resistance tomography application in oil and gas reservoirs for development dynamic monitoring. Processes , 11(10):2950–, 2023. [8] R D Pascual-Marqui. Standardized low-resolution brain electromagnetic tomography (sLORETA): technical details. Methods and findings in experimental and clinical pharmacology , 24:5–12, 2002. [9] Joonas Lahtinen. On bias and its reduction via standardization in discretized electromagnetic source localization problems. Inverse Problems , 40(9):095002, July 2024. [10] Joonas Lahtinen, Paavo Ronni, Narayan Puthanmadam Subramaniyam, Alexandra Koulouri, Carsten Wolters, and Sampsa Pursiainen. Standardized Kalman filtering for time serial source localization of simultaneous subcortical and cortical brain activity. www.techrxiv.org/722443/ UqPLPdTHCJ-oxYE2bCoI6Q , 2024. [11] Michael Wagner, Manfred Fuchs, and J¨ orn Kastner. Evaluation of sLORETA in the presence of noise and multiple sources. Brain topography , 16(4):277–280, 2004. [12] Alberto J.R Leal, Ana I Dias, Jos´ e P Vieira, Ana Moreira, Lu´ ıs T´ avora, and Eul´ alia Calado. Analysis of the dynamics and origin of epileptic activity in patients with tuberous sclerosis evaluated for surgery of epilepsy. Clinical neurophysiology , 119(4):853–861, 2008. [13] Matthias D¨ umpelmann, Tonio Ball, and Andreas Schulze-Bonhage. sLORETA allows reliable distributed source reconstruction based on subdural strip and grid recordings. Human brain mapping , 33(5):1172–1188, 2012. [14] Karin L. de Gooijer-van de Groep, Frans S.S. Leijten, Cyrille H. Ferrier, and Geertjan J.M. Huiskamp. Inverse modeling in magnetic source imaging: Comparison of MUSIC, SAM(g2), and sLORETA to interictal intracranial EEG. Human brain mapping , 34(9):2032–2044, 2013. On Unbiased Source Parameter Estimation 27 
+
+[15] Ana Coito, Silke Biethahn, Janina Tepperberg, Margherita Carboni, Ulrich Roelcke, Margitta Seeck, Pieter Mierlo, Markus Gschwind, and Serge Vulliemoz. Interictal epileptogenic zone localization in patients with focal epilepsy using electric source imaging and directed functional connectivity from low-density EEG. Epilepsia open , 4(2):281–292, 2019. [16] Rui Li, Chris Plummer, Simon J. Vogrin, William P. Woods, Levin Kuhlmann, Ray Boston, David T.J. Liley, Mark J. Cook, and David B. Grayden. Interictal spike localization for epilepsy surgery using magnetoencephalography beamforming. Clinical neurophysiology , 132(4):928–937, 2021. [17] Kwang Yeon Kim, Ja-Un Moon, Joo-Young Lee, Tae-Hoon Eom, Young-Hoon Kim, and In-Goo Lee. Distributed source localization of epileptiform discharges in juvenile myoclonic epilepsy: Standardized low-resolution brain electromagnetic tomography (sloreta) study. Medicine (Baltimore) , 101(26):e29625–e29625, 2022. [18] Daniel van de Velden, Ev-Christin Heide, Caroline Bouter, Jan Bucerius, Christian H. Riedel, and Niels K. Focke. Effects of inverse methods and spike phases on interictal high-density EEG source reconstruction. Clinical neurophysiology , 156:4–13, 2023. [19] E.J. Candes, J. Romberg, and T. Tao. Robust uncertainty principles: exact signal reconstruction from highly incomplete frequency information. IEEE transactions on information theory ,52(2):489–509, 2006. [20] R. Chartrand. Nonconvex compressive sensing and reconstruction of gradient-sparse images: Random vs. tomographic fourier sampling. In 2008 15th IEEE International Conference on Image Processing , pages 2624–2627. IEEE, 2008. [21] Tom Goldstein and Stanley Osher. The split bregman method for l1-regularized problems. SIAM journal on imaging sciences , 2(2):323–343, 2009. [22] Paula Montesinos, Juan Felipe P.J. Abascal, Lorena Cuss´ o, Juan Jos´ e Vaquero, and Manuel Desco. Application of the compressed sensing technique to self-gated cardiac cine sequences in small animals. Magnetic resonance in medicine , 72(2):369–380, 2014. [23] M.S H¨ am¨ al¨ ainen and R.J Ilmoniemi. Interpreting magnetic fields on the brain: minimum norm estimates. Medical & biological engineering & computing , 32(1):35–42, 1994. [24] Oula Puonti, Koen Van Leemput, Guilherme B. Saturnino, Hartwig R. Siebner, Kristoffer H. Madsen, and Axel Thielscher. Accurate and robust whole-head segmentation from magnetic resonance images for individualized head modeling. NeuroImage , 219:117044, 2020. [25] C. H. Wolters, L. Grasedyck, and W. Hackbusch. Efficient computation of lead field bases and influence matrix for the FEM-based EEG and MEG inverse problem. Inverse Problems ,20(4):1099–1116, 2004. [26] C. Ramon, P. H. Schimpf, and J. Haueisen. Influence of head models on EEG simulations and inverse source localizations. Biomed. Eng. Online , 5(10), 2006. [27] Malte B. H¨ oltershinken, Tim Erdbr¨ ugger, and Carsten H. Wolters. sloreta is equivalent to single dipole scanning, 2024. [28] Abbas Sohrabpour, Yunfeng Lu, Pongkiat Kankirawatana, Jeffrey Blount, Hyunmi Kim, and Bin He. Effect of EEG electrode number on epileptic source localization in pediatric patients. 
+
+Clinical neurophysiology , 126(3):472–480, 2015. [29] Jair Montoya-Mart´ ınez, Jonas Vanthornhout, Alexander Bertrand, and Tom Francart. Effect of number and placement of EEG electrodes on measurement of neural tracking of speech. PloS one , 16(2):e0246769–, 2021. [30] Moritz Tacke, Katharina Janson, Katharina Vill, Florian Heinen, Lucia Gerstl, Karl Reiter, and Ingo Borggraefe. Effects of a reduction of the number of electrodes in the EEG montage on the number of identified seizure patterns. Scientific reports , 12(1):4621–7, 2022. [31] Andres Soler, Luis Alfredo Moctezuma, Eduardo Giraldo, and Marta Molinas. Automated methodology for optimal selection of minimum electrode subsets for accurate EEG source estimation based on genetic algorithm optimization. Scientific reports , 12(1):11221–18, 2022. [32] A. Horrillo-Maysonnial, T. Avigdor, C. Abdallah, D. Mansilla, J. Thomas, N. von Ellenrieder, On Unbiased Source Parameter Estimation 28 
+
+J. Royer, B. Bernhardt, C. Grova, J. Gotman, and B. Frauscher. Targeted density electrode placement achieves high concordance with traditional high-density EEG for electrical source imaging in epilepsy. Clinical neurophysiology , 156:262–271, 2023. [33] Hesheng Liu, P.H Schimpf, Guoya Dong, Xiaorong Gao, Fusheng Yang, and Shangkai Gao. Standardized shrinking LORETA-FOCUSS (SSLOFO): a new algorithm for spatio-temporal EEG source reconstruction. IEEE transactions on biomedical engineering , 52(10):1681–1691, 2005. [34] Joonas Lahtinen. Stable EEG source estimation for standardized Kalman filter using rate-of-change tracking. Computer methods and programs in biomedicine , 278:109280–, 2026. [35] Dilshanie Prasikala, Joonas Lahtinen, Alexandra Koulouri, and Sampsa Pursiainen. The effect of prior parameters on standardized Kalman filter-based EEG source localization. Biomedical signal processing and control , 121:110233–, 2026. [36] Joonas Lahtinen and Alexandra Koulouri. Enhanced localization and orientation estimations in focal EEG source imaging using SVD-based coordinate transform. Brain Topography , 38(6):78, Oct 2025.
